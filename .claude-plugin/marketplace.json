@@ -1,0 +1,36 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "atomic-design-toolkit",
+  "version": "1.0.0",
+  "description": "Flutter Atomic Design widget generator — decompose features into atoms, molecules, organisms, templates, and pages. Audit mode, 14+ design system lenses.",
+  "owner": {
+    "name": "Luis Andres Pena Castillo",
+    "email": "lapc506@users.noreply.github.com"
+  },
+  "plugins": [
+    {
+      "name": "atomic-design-toolkit",
+      "description": "Generate production-ready Flutter widget hierarchies following Atomic Design methodology. Audit your codebase for decomposable widgets. Cross-reference against 14+ design systems (Material 3, Cupertino, Carbon, Primer, Polaris, shadcn, etc.). 2 commands, 2 auto-activating skills.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Luis Andres Pena Castillo",
+        "email": "lapc506@users.noreply.github.com"
+      },
+      "source": "./",
+      "homepage": "https://github.com/chimeranext/atomic-design-toolkit",
+      "category": "frontend",
+      "keywords": [
+        "claude-code",
+        "claude-code-plugin",
+        "flutter",
+        "atomic-design",
+        "widget",
+        "design-system",
+        "material3",
+        "cupertino",
+        "widgetbook",
+        "ui-components"
+      ]
+    }
+  ]
+}

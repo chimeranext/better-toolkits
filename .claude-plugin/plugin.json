@@ -1,0 +1,24 @@
+{
+  "name": "atomic-design-toolkit",
+  "version": "1.0.0",
+  "description": "Flutter Atomic Design widget generator — decompose features into atoms, molecules, organisms, templates, and pages. Audit mode, 14+ design system lenses.",
+  "author": {
+    "name": "Luis Andres Pena Castillo",
+    "url": "https://github.com/chimeranext"
+  },
+  "homepage": "https://github.com/chimeranext/atomic-design-toolkit",
+  "repository": "https://github.com/chimeranext/atomic-design-toolkit",
+  "license": "BSL-1.1",
+  "keywords": [
+    "claude-code",
+    "claude-code-plugin",
+    "flutter",
+    "atomic-design",
+    "widget",
+    "design-system",
+    "material3",
+    "cupertino",
+    "widgetbook",
+    "ui-components"
+  ]
+}
