@@ -46,7 +46,7 @@ flutter-go-to-market-toolkit install --force    # Overwrite unmanaged conflicts
 /flutter-go-to-market:ship --gate 2       # Jump to specific gate
 ```
 
-### Skills (9)
+### Skills (10)
 
 Auto-activate by context — you can also invoke them directly.
 
@@ -60,6 +60,7 @@ Auto-activate by context — you can also invoke them directly.
 | `store-setup` | 3 | Say "create app in Play Console", "App Store Connect setup" |
 | `store-listing` | 3 | Say "store screenshots", "app description", "ASO", "feature graphic" |
 | `testing-tracks` | 3 | Say "beta testing", "TestFlight", "internal testing", "pre-launch report" |
+| `alt-distribution` | 3 | Say "F-Droid", "GitHub Releases", "Obtainium", "distribute without Play Store" |
 | `launch-plan` | 4 | Say "launch timeline", "24h plan", "release strategy", "ship my app" |
 
 ### Agents (2)

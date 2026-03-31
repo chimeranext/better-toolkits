@@ -47,12 +47,36 @@ This is the most important gate. Every decision downstream depends on the answer
 
 1. **Where is your Flutter project?** (path to pubspec.yaml)
 2. **Targeting Android, iOS, or both?**
-3. **First time publishing to stores, or updating an existing app?**
-4. **Do you have Google Play Console and Apple Developer accounts?**
-5. **Do you have CI/CD set up already?** (Codemagic, GitHub Actions, or none)
-6. **Will you monetize with subscriptions/in-app purchases?**
-7. **Do you have a privacy policy URL published?**
-8. **Is your bundle ID / package name finalized?**
+3. **Where do you want to distribute?** Present options:
+   - Google Play Store (mainstream Android)
+   - Apple App Store / TestFlight (iOS)
+   - F-Droid (FOSS community)
+   - GitHub Releases / Obtainium (developer audience, direct APK)
+   - IzzyOnDroid (FOSS-friendly, lighter requirements than F-Droid)
+   - Multiple (e.g., F-Droid + Google Play with flavors)
+4. **First time publishing, or updating an existing app?**
+5. **Do you already have store accounts?** (Google Play Console, Apple Developer, GitLab for fdroiddata)
+6. **Do you have CI/CD set up already?** (Codemagic, GitHub Actions, or none)
+7. **Will you monetize with subscriptions/in-app purchases?**
+8. **Do you have a privacy policy URL published?**
+9. **Is your bundle ID / package name finalized?**
+
+### Distribution Path Routing
+
+Based on the answer to question 3, route the lifecycle:
+
+| Distribution target | Skills activated | Build format | Store setup |
+|--------------------|-----------------|-------------|-------------|
+| Google Play | `store-setup`, `store-listing`, `testing-tracks` | AAB | Play Console |
+| App Store | `store-setup`, `store-listing`, `testing-tracks` | IPA | App Store Connect |
+| F-Droid | `alt-distribution` | APK (from source) | fdroiddata MR |
+| GitHub Releases | `alt-distribution` | Signed APK | GitHub Release |
+| IzzyOnDroid | `alt-distribution` | APK | Submission form |
+| F-Droid + Google Play | `alt-distribution` + `store-setup` | APK + AAB (flavors) | Both |
+
+If F-Droid is selected, warn: "F-Droid requires fully open source with no proprietary dependencies. I'll check your pubspec.yaml for compatibility."
+
+If GitHub Releases only, the process is significantly shorter — Spaces 3 and 4 simplify to just building a signed APK and creating a release.
 
 ### Blocker Detection
 
@@ -64,6 +88,7 @@ After all questions, check for multi-day blockers and surface them immediately:
 | No Apple Developer enrollment | Up to 48h | Enroll now, continue with Android |
 | No D-U-N-S number (org account) | 5-14 days | Request from Dun & Bradstreet |
 | Bundle ID not finalized | Immediate decision required | Cannot change after first upload |
+| Proprietary deps + F-Droid target | Requires refactoring or flavors | Invoke `alt-distribution` for guidance |
 
 ### Gate 0 Validation
 
