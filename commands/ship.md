@@ -57,10 +57,17 @@ This is the most important gate. Every decision downstream depends on the answer
    - Multiple (e.g., F-Droid + Google Play with flavors)
 4. **First time publishing, or updating an existing app?**
 5. **Do you already have store accounts?** (Google Play Console, Apple Developer, GitLab for fdroiddata)
-6. **Do you have CI/CD set up already?** (Codemagic, GitHub Actions, or none)
-7. **Will you monetize with subscriptions/in-app purchases?**
-8. **Do you have a privacy policy URL published?**
-9. **Is your bundle ID / package name finalized?**
+6. **Do you have CI/CD set up already?** Options:
+   - GitHub Actions + custom runners (Blacksmith, Buildjet, self-hosted)
+   - GitHub Actions + hosted runners
+   - Codemagic
+   - None
+7. **Do you have a design system or design tokens?** (Style Dictionary `tokens.json`, Figma tokens, Tailwind config, or none)
+   - If yes: tokens will be used to generate consistent theming across platforms
+   - If no: we'll set up a base `tokens.json` following the Style Dictionary format
+8. **Will you monetize with subscriptions/in-app purchases?**
+9. **Do you have a privacy policy URL published?**
+10. **Is your bundle ID / package name finalized?**
 
 ### Distribution Path Routing
 
@@ -98,8 +105,10 @@ After all questions, check for multi-day blockers and surface them immediately:
 GATE 0 — Assessment
   [ ] Project location confirmed
   [ ] Target platforms defined
+  [ ] Distribution channels selected
   [ ] Store accounts status known (and blockers flagged)
-  [ ] CI/CD current state assessed
+  [ ] CI/CD current state assessed (existing runners vs new setup)
+  [ ] Design tokens status assessed (Style Dictionary tokens.json, Figma tokens, or none)
   [ ] Monetization decision made
   [ ] Bundle ID / package name confirmed as final
   [ ] All multi-day blockers identified and started in parallel

@@ -114,31 +114,39 @@ Read `references/timeline-24h.md` for detailed time breakdowns per step.
 Choose based on the user's context:
 
 ```
-Need native mobile CI/CD with minimal config?
-├── Yes → Codemagic (Priority 1)
-│         - Native Flutter support, no Docker overhead
-│         - Built-in code signing management
-│         - Mac machines for iOS without extra config
-│         - 500 free build minutes/month
+Already have CI/CD with custom runners (Blacksmith, Buildjet, self-hosted)?
+├── Yes → GitHub Actions + your existing runners
+│         - Add Flutter via subosito/flutter-action
+│         - Same dashboard, secrets, billing as your other projects
+│         - Fastest builds (dedicated hardware)
 │
-└── No, already invested in GitHub ecosystem?
-    └── Yes → GitHub Actions (Priority 2)
-              - Free 2000 min/month (Linux), 200 min (macOS)
-              - Native repo integration, PR checks
-              - Larger ecosystem of actions
-              - More manual signing setup required
+└── No existing CI/CD?
+    ├── Android only? → GitHub Actions (hosted runners)
+    │                    - Free 2000 min/month (Linux)
+    │                    - Sufficient for Android builds
+    │
+    └── Need iOS builds? → Codemagic
+                           - Mac Mini M2 included
+                           - Automatic iOS code signing
+                           - 500 free build minutes/month
 ```
 
-**When to recommend Codemagic:**
-- New project with no existing CI/CD
-- Team unfamiliar with YAML pipeline config
-- Need iOS builds without managing macOS runners
-- Want built-in Flutter tooling (version management, signing UI)
+**When to recommend existing runners (Blacksmith, etc.):**
+- Already paying for custom runners for backend/web CI
+- Team knows GitHub Actions
+- Android-only for now (no macOS needed)
+- Want everything in one platform
 
-**When to recommend GitHub Actions:**
-- Already using GitHub Actions for backend/infra
-- Need monorepo path-filtered workflows
-- Want to keep everything in one platform
+**When to recommend Codemagic:**
+- Need iOS builds without managing macOS infrastructure
+- New project with no existing CI/CD
+- Want built-in code signing UI
+- Small team that benefits from managed Flutter tooling
+
+**When to recommend GitHub Actions (hosted):**
+- Budget-conscious, starting from scratch
+- Android-only builds
+- Want monorepo path-filtered workflows
 - Cost-sensitive (GitHub free tier is generous for Linux builds)
 
 ## SRE Integration Points

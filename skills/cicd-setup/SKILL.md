@@ -17,18 +17,27 @@ Every Flutter CI/CD setup needs these three workflows, regardless of platform:
 
 ## Platform Selection
 
-**Codemagic (recommended for most Flutter projects):**
+**GitHub Actions + Custom Runners (recommended when you already have CI/CD infra):**
+- Read `references/github-actions.md` for complete workflow files
+- If your org already uses custom runners (Blacksmith, Buildjet, self-hosted), use them for Flutter too
+- Add Flutter via `subosito/flutter-action@v2` — works on any Ubuntu runner
+- Path filtering for monorepo setups
+- Same dashboard, secrets, and billing as your existing CI/CD
+- Signing: manual (keystore in secrets, key.properties generated in CI)
+
+**GitHub Actions + GitHub-hosted runners (starting from scratch, budget-conscious):**
+- Read `references/github-actions.md` for complete workflow files
+- 2000 free Linux minutes/month, 200 macOS minutes
+- Larger action ecosystem but slower than custom runners
+- Good for small projects without existing CI infra
+
+**Codemagic (recommended for iOS releases or teams without CI/CD):**
 - Read `references/codemagic.md` for the complete `codemagic.yaml` configuration
 - Native Flutter support — no Docker images or custom setup
 - Built-in code signing UI for both Android and iOS
-- Mac Mini M2 instances for iOS builds
+- Mac Mini M2 instances for iOS builds — no macOS runner management
 - 500 free build minutes/month on the free tier
-
-**GitHub Actions (recommended when already using GitHub ecosystem):**
-- Read `references/github-actions.md` for complete workflow files
-- Path filtering for monorepo setups
-- 2000 free Linux minutes/month, 200 macOS minutes
-- Larger action ecosystem but more manual signing setup
+- Best value when you need iOS builds without managing macOS infrastructure
 
 ## Common Architecture
 
