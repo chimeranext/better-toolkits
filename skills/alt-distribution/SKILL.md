@@ -241,37 +241,25 @@ If your startup was incubated or accelerated through a community-marketplace hac
 - Your app appears in Droid-ify / Neo Store for all users who add the repo
 - Resilient against Google's Developer Verification Program (September 2026)
 
-### Submission Process
+### How It Works
 
-1. **Build a signed APK:**
+You publish on **your own repo**. The marketplace fetches from there.
+
+1. **Publish a signed release APK** on your GitHub repo:
    ```bash
    flutter build apk --release
+   git tag -a v1.0.0 -m "Release 1.0.0"
+   git push origin v1.0.0
+   gh release create v1.0.0 build/app/outputs/flutter-apk/app-release.apk
    ```
 
-2. **Fork** [community-marketplace/startups-android-marketplace](https://github.com/community-marketplace/startups-android-marketplace)
+2. **Open an issue** on [community-marketplace/startups-android-marketplace](https://github.com/community-marketplace/startups-android-marketplace/issues/new?template=app-submission.yml) with your repo URL
 
-3. **Add your APK** to `apks/<your.package.name>/`
+3. **A maintainer adds your app** to the marketplace index — you never touch the marketplace repo
 
-4. **Create metadata** at `metadata/<your.package.name>.yml`:
-   ```yaml
-   Categories:
-     - Utilities
-   License: MIT
-   AuthorName: Your Startup
-   AutoName: Your App
-   Description: |
-     What your app does.
-   X-communityLaunchpad: true
-   X-communityHackathon: "Hackathon 2026-Q1"
-   CurrentVersion: 1.0.0
-   CurrentVersionCode: 1
-   ```
+4. **Future updates are automatic** — publish a new release on your repo, the marketplace picks it up
 
-5. **Open a PR** — CI validates automatically (signature, metadata, trackers)
-
-6. **Maintainer merges** — your app is live in the marketplace
-
-See the [full submission guide](https://github.com/community-marketplace/startups-android-marketplace/blob/main/docs/SUBMISSION_GUIDE.md) for detailed instructions.
+See the [full submission guide](https://github.com/community-marketplace/startups-android-marketplace/blob/main/docs/SUBMISSION_GUIDE.md) for details.
 
 ### Keep Android Open
 
