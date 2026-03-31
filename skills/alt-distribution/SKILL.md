@@ -230,12 +230,60 @@ fdroid update
 
 Users add your repo URL in their F-Droid client to access apps.
 
+## community-marketplace Startups Marketplace
+
+If your startup was incubated or accelerated through a community-marketplace hackathon or the community Launchpad, you can distribute through the [community-marketplace Startups Marketplace](https://github.com/community-marketplace/startups-android-marketplace) — a curated F-Droid-compatible repository.
+
+### Why Use It
+
+- Zero cost (no Google Play Console account needed)
+- No review queue — maintainer-approved, published in minutes
+- Your app appears in Droid-ify / Neo Store for all users who add the repo
+- Resilient against Google's Developer Verification Program (September 2026)
+
+### Submission Process
+
+1. **Build a signed APK:**
+   ```bash
+   flutter build apk --release
+   ```
+
+2. **Fork** [community-marketplace/startups-android-marketplace](https://github.com/community-marketplace/startups-android-marketplace)
+
+3. **Add your APK** to `apks/<your.package.name>/`
+
+4. **Create metadata** at `metadata/<your.package.name>.yml`:
+   ```yaml
+   Categories:
+     - Utilities
+   License: MIT
+   AuthorName: Your Startup
+   AutoName: Your App
+   Description: |
+     What your app does.
+   X-communityLaunchpad: true
+   X-communityHackathon: "Hackathon 2026-Q1"
+   CurrentVersion: 1.0.0
+   CurrentVersionCode: 1
+   ```
+
+5. **Open a PR** — CI validates automatically (signature, metadata, trackers)
+
+6. **Maintainer merges** — your app is live in the marketplace
+
+See the [full submission guide](https://github.com/community-marketplace/startups-android-marketplace/blob/main/docs/SUBMISSION_GUIDE.md) for detailed instructions.
+
+### Keep Android Open
+
+Starting September 2026, Google's Android Developer Verification Program may restrict sideloading on stock Android. The community-marketplace marketplace continues working on custom ROMs (GrapheneOS, CalyxOS, LineageOS) without restrictions. See the [impact assessment](https://github.com/community-marketplace/startups-android-marketplace/blob/main/docs/KEEP_ANDROID_OPEN.md).
+
 ## Distribution Strategy Matrix
 
 Choose based on your goals:
 
 | Goal | Primary | Secondary |
 |------|---------|-----------|
+| community-marketplace startup | community-marketplace Marketplace | GitHub Releases |
 | Maximum FOSS reach | F-Droid | IzzyOnDroid + GitHub Releases |
 | Privacy-first, some proprietary deps | IzzyOnDroid | GitHub Releases |
 | Developer audience | GitHub Releases | F-Droid |
