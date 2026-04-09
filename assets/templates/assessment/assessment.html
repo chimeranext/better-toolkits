@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Takeover Assessment</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+
+    <!-- Sidebar: wizard steps + risk badge -->
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <h1>Takeover Assessment</h1>
+        <div class="project-name" id="spn">-</div>
+        <div class="project-type" id="spt">&nbsp;</div>
+      </div>
+      <ul class="step-list" id="sl"></ul>
+      <div class="risk-badge" id="rbd">
+        <div class="risk-badge__label">Nivel de riesgo</div>
+        <div class="risk-badge__value" id="rbv">-</div>
+      </div>
+    </nav>
+
+    <!-- Main content: rendered per step -->
+    <main class="main" id="mc"></main>
+
+  </div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
