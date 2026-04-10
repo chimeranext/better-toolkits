@@ -1,0 +1,55 @@
+{
+  "standupChannel": {
+    "id": "C09BD6W95GC",
+    "name": "#daily-status-updates"
+  },
+  "_standupFileNote": "The standup file path is fixed at ~/Escritorio/daily-standup.md and cannot be configured. The standupFile key is deprecated and will be ignored.",
+  "repos": {
+    "chimera-os": {
+      "org": "chimeranext",
+      "linearProject": "chimera OS",
+      "displayName": "chimera OS"
+    },
+    "freedom-academy-moodle-plugins": {
+      "org": "chimeranext",
+      "linearProject": "Freedom Academy — Moodle Plug-ins",
+      "displayName": "Freedom Academy"
+    },
+    "freedom-academy-admin": {
+      "org": "chimeranext",
+      "linearProject": "Freedom Academy — Admin Panel",
+      "displayName": "Freedom Academy Admin"
+    },
+    "chimera-agent-openclaw-plugin": {
+      "org": "chimeranext",
+      "linearProject": "chimera Agent",
+      "displayName": "OpenClaw"
+    },
+    "chimera-marketplace-mcp": {
+      "org": "chimeranext",
+      "linearProject": "chimera OS",
+      "displayName": "chimera Marketplace MCP"
+    }
+  },
+  "linearPrefixes": ["DOJ", "CIV", "SEC"],
+  "linearOrgSlug": "chimera-coding",
+  "greeting": {
+    "options": [
+      "Gm Gm! :sunny::shinto_shrine:",
+      "Buenas chimera! :shinto_shrine:",
+      "GM! :shinto_shrine:",
+      "Gm! :shinto_shrine:"
+    ]
+  },
+  "emojis": {
+    "prOpen": ":github-pr:",
+    "prMerged": ":github-merged:",
+    "prClosed": ":github-closed:",
+    "ciSuccess": ":github-actions-success:",
+    "ciFailure": ":github-actions-failure:",
+    "linear": ":linear:",
+    "repo": ":github:",
+    "greptile": ":greptile:",
+    "claude": ":claude-code:"
+  }
+}
