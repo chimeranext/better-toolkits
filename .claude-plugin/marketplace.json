@@ -1,8 +1,8 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "app-gtm-release-toolkit",
-  "version": "2.0.0",
-  "description": "Multi-platform app go-to-market toolkit — ship Flutter, KMP, Swift, .NET MAUI, and PWAs to Google Play, App Store, Microsoft Store, Snap Store, and alternative channels. Three-tier architecture: strategic advisor + per-framework ship commands + mass publish.",
+  "version": "2.1.0",
+  "description": "Multi-platform app go-to-market toolkit — ship Flutter, KMP, Swift, .NET MAUI, and PWAs to Google Play, App Store, Microsoft Store, Snap Store, and alternative channels. Three-tier architecture: strategic advisor + per-framework ship commands + mass publish. Phase 1 production-ready: /ship-pwa, /ship-msstore, /ship-snap, /ship-everywhere.",
   "owner": {
     "name": "Luis Andres Pena Castillo",
     "email": "lapc506@users.noreply.github.com"
@@ -10,8 +10,8 @@
   "plugins": [
     {
       "name": "app-gtm-release",
-      "description": "Guided multi-platform app release lifecycle. Three-tier command architecture: /ship-advisor (strategic router), per-framework execution (/ship-flutter today; /ship-pwa, /ship-snap, /ship-msstore, /ship-kmp, /ship-maui, /ship-swift in roadmap), and /ship-everywhere (Phase 1 mass-publish). 9 commands, 10 skills (6 framework-agnostic, 4 Flutter-coupled with TODO markers), 2 agents. Covers Codemagic/GitHub Actions CI/CD, Google Play + App Store + Microsoft Store + Snap Store setup, RevenueCat monetization, Shorebird code push (Flutter), and pre-launch checklist based on Andrea Bizzotto's methodology.",
-      "version": "2.0.0",
+      "description": "Guided multi-platform app release lifecycle. Three-tier command architecture: /ship-advisor (strategic router), per-framework execution (/ship-flutter, /ship-pwa, /ship-snap, /ship-msstore production-ready; /ship-kmp, /ship-maui, /ship-swift roadmap stubs), and /ship-everywhere (mass-publish orchestrator). 10 commands, 13 skills (6 framework-agnostic, 4 Flutter-coupled with TODO markers, 3 new Phase 1 skills: pwa-quality, msstore-submission, snap-build), 2 agents. Covers Codemagic/GitHub Actions CI/CD, Google Play + App Store + Microsoft Store + Snap Store + alternative distribution, RevenueCat monetization, Shorebird code push (Flutter), Workbox/Lighthouse PWA quality, MSIX packaging via PWA Builder or native, snapcraft authoring, and pre-launch checklist based on Andrea Bizzotto's methodology.",
+      "version": "2.1.0",
       "author": {
         "name": "Luis Andres Pena Castillo",
         "email": "lapc506@users.noreply.github.com"

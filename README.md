@@ -50,16 +50,17 @@ app-gtm-release-toolkit install --force    # Overwrite unmanaged conflicts
 ╚════════════════════════════════════════════╝
 ```
 
-### Commands Today (9)
+### Commands Today (10)
 
 | Command | Status | Description |
 |---------|--------|-------------|
 | `/app-gtm-release:audit` | ✅ Phase 0 | Detect framework + run pre-launch readiness audit (Flutter coverage today, others routed to advisor) |
 | `/app-gtm-release:ship-advisor` | ✅ Phase 0 | Strategic advisor — picks the right ship command for your stack and stores |
-| `/app-gtm-release:ship-flutter` | ✅ Phase 0 | Full guided lifecycle — 4 spaces with validation gates and persistent checkpoints (Flutter → Play + App Store) |
-| `/app-gtm-release:ship-pwa` | ⏳ Phase 1 stub | PWA → multi-store via PWA Builder |
-| `/app-gtm-release:ship-snap` | ⏳ Phase 1 stub | Linux desktop → Snap Store |
-| `/app-gtm-release:ship-msstore` | ⏳ Phase 1 stub | App → Microsoft Store (PWA Builder MSIX or native) |
+| `/app-gtm-release:ship-flutter` | ✅ Phase 0 | Full guided lifecycle for Flutter → Play + App Store (4 spaces with validation gates) |
+| `/app-gtm-release:ship-pwa` | ✅ Phase 1 | PWA → Microsoft Store + Google Play (TWA) + App Store via PWA Builder (5 gates) |
+| `/app-gtm-release:ship-msstore` | ✅ Phase 1 | App → Microsoft Store (path A PWA Builder MSIX or path B native MSIX, 5 gates) |
+| `/app-gtm-release:ship-snap` | ✅ Phase 1 | Linux desktop → Snap Store with channels strategy (5 gates) |
+| `/app-gtm-release:ship-everywhere` | ✅ Phase 1 | Mass-publish orchestrator — runs all applicable ship-X children in sequence |
 | `/app-gtm-release:ship-kmp` | ⏳ Phase 2 stub | Kotlin Multiplatform → Play + App Store |
 | `/app-gtm-release:ship-maui` | ⏳ Phase 2 stub | .NET MAUI → multi-store |
 | `/app-gtm-release:ship-swift` | ⏳ Phase 2.5 stub | Swift native iOS → App Store |
@@ -83,9 +84,9 @@ app-gtm-release-toolkit install --force    # Overwrite unmanaged conflicts
 | **2.5** | Swift native iOS | — | `/ship-swift` |
 | **3** | Tauri, Electron | Mac App Store | `/ship-webview-native` (possible merge) |
 
-## Skills (10)
+## Skills (13)
 
-Auto-activate by context — you can also invoke them directly. Six are framework-agnostic; four are Flutter-coupled and marked with `<!-- TODO: framework-agnostic split -->` for refactor in Phase 2+.
+Auto-activate by context — you can also invoke them directly. Six are framework-agnostic; four are Flutter-coupled (marked with `<!-- TODO: framework-agnostic split -->` for refactor in Phase 2+); three are Phase 1 framework-specific.
 
 | Skill | Status | Triggers when you... |
 |-------|--------|---------------------|
@@ -99,6 +100,9 @@ Auto-activate by context — you can also invoke them directly. Six are framewor
 | `testing-tracks` | Agnostic | Say "beta testing", "TestFlight", "internal testing", "pre-launch report" |
 | `alt-distribution` | Android-coupled | Say "F-Droid", "GitHub Releases", "Obtainium", "distribute without Play Store" |
 | `launch-plan` | Flutter-coupled | Say "launch timeline", "24h plan", "release strategy", "ship my app" |
+| `pwa-quality` | PWA-specific (Phase 1) | Say "validate manifest", "Lighthouse PWA", "Workbox setup", "PWA readiness" |
+| `msstore-submission` | Microsoft Store-specific (Phase 1) | Say "Microsoft Store", "Partner Center", "MSIX", "MS Store certification" |
+| `snap-build` | Snap-specific (Phase 1) | Say "snapcraft", "Snap Store", "Ubuntu Store", "Linux desktop distribution" |
 
 ## Agents (2)
 

@@ -1,6 +1,6 @@
 {
   "name": "@lapc506/app-gtm-release-toolkit",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Multi-platform app go-to-market and release toolkit — ship Flutter, KMP, Swift, .NET MAUI, and PWAs to Google Play, App Store, Microsoft Store, Snap Store, and alternative channels. OpenCode + Claude Code plugin.",
   "type": "module",
   "main": "./dist/index.js",
