@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ux-research-toolkit/schemas/layers/actions.schema.json",
+  "title": "UX Research Toolkit — Actions Layer",
+  "description": "Layer schema extending each phase with behavioral and cognitive data. Corresponds to NN/g Zone B rows: what the user does, thinks, is frustrated by, and what opportunities emerge.",
+  "type": "object",
+  "properties": {
+    "actions": {
+      "type": "string",
+      "description": "What the persona physically does during this phase. Observable behaviour, written in present tense. Can include multiple actions separated by ellipses or semicolons.",
+      "examples": ["Observa a Rocky levantarse con dificultad y le prepara su medicamento"]
+    },
+    "thoughts": {
+      "type": "string",
+      "description": "Internal monologue or questions running through the persona's mind. Written in first-person or close third-person.",
+      "examples": ["¿Le dolerá más hoy? No sé si estoy haciendo suficiente por él"]
+    },
+    "frustrations": {
+      "type": "string",
+      "description": "Specific friction points, blockers, or sources of negative emotion the persona encounters in this phase.",
+      "examples": ["No puede medir el nivel de dolor objetivamente; depende de señales visuales ambiguas"]
+    },
+    "opportunities": {
+      "type": "string",
+      "description": "Design or product opportunities surfaced by the frustrations and unmet needs in this phase.",
+      "examples": ["Herramienta de evaluación diaria de dolor/movilidad con escala visual"]
+    }
+  },
+  "required": ["actions", "thoughts", "frustrations", "opportunities"]
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ux-research-toolkit/schemas/layers/scenes.schema.json",
+  "title": "UX Research Toolkit — Scenes Layer",
+  "description": "Layer schema extending each phase with storyboard scene data. Each phase maps to a visual frame in a narrative comic-style sequence capturing the story of the user experience.",
+  "type": "object",
+  "properties": {
+    "scene_description": {
+      "type": "string",
+      "description": "What is happening in this storyboard frame. The action, event, or key moment being illustrated.",
+      "examples": ["María intenta registrarse en la app pero el formulario le pide demasiados datos"]
+    },
+    "scene_setting": {
+      "type": "string",
+      "description": "Where and/or when this scene takes place. Provides spatial and temporal context for the frame.",
+      "examples": ["Cocina de su apartamento, martes por la mañana, antes de ir al trabajo"]
+    },
+    "scene_dialogue": {
+      "type": "string",
+      "description": "Any speech or thought bubbles appearing in this frame. Direct quotes, internal monologue, or exclamations.",
+      "examples": ["¿Por qué me piden mi número de pasaporte para registrarme?"]
+    },
+    "scene_mood": {
+      "type": "string",
+      "description": "The overall emotional atmosphere or tone of the scene. Describes how the scene feels visually and emotionally.",
+      "examples": ["tense", "hopeful", "frustrated", "relieved", "excited", "confused"]
+    }
+  },
+  "required": ["scene_description", "scene_setting", "scene_mood"]
+}

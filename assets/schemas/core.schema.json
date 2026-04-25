@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ux-research-toolkit/schemas/core.schema.json",
+  "title": "UX Research Toolkit — Core Schema",
+  "description": "Core data model shared by all UX map types (experience maps, journey maps, etc.)",
+  "type": "object",
+  "required": ["meta", "persona", "phases", "analysis"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "description": "Document metadata and map type identification",
+      "required": ["type", "profile", "title", "created", "updated", "version"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Canonical map type identifier",
+          "examples": ["experience-map", "journey-map"]
+        },
+        "profile": {
+          "type": "string",
+          "description": "Profile manifest name used to render this document",
+          "examples": ["experience-map", "journey-map"]
+        },
+        "variant": {
+          "type": "string",
+          "description": "Optional sub-variant within the profile",
+          "examples": ["day-in-the-life"]
+        },
+        "title": {
+          "type": "string",
+          "description": "Human-readable title for the map",
+          "examples": ["A Day in the Life: María", "Customer Journey: Rocky App"]
+        },
+        "created": {
+          "type": "string",
+          "format": "date",
+          "description": "ISO 8601 date the document was first created"
+        },
+        "updated": {
+          "type": "string",
+          "format": "date",
+          "description": "ISO 8601 date the document was last modified"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Monotonically increasing version counter"
+        }
+      },
+      "additionalProperties": false
+    },
+    "persona": {
+      "type": "object",
+      "description": "The primary user persona this map centers on",
+      "required": ["name", "role", "primary_pain", "context"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Full name of the persona",
+          "examples": ["María González"]
+        },
+        "age": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 120,
+          "description": "Age of the persona in years"
+        },
+        "role": {
+          "type": "string",
+          "description": "Professional role or life role of the persona",
+          "examples": ["Diseñadora gráfica", "Pet owner", "Product Manager"]
+        },
+        "location": {
+          "type": "string",
+          "description": "City, country or region of the persona",
+          "examples": ["San José, Costa Rica"]
+        },
+        "avatar_emoji": {
+          "type": "string",
+          "description": "Single emoji representing the persona visually",
+          "examples": ["👩", "👨", "🧑"]
+        },
+        "primary_pain": {
+          "type": "string",
+          "description": "The central unresolved pain or worry driving the persona's behaviour"
+        },
+        "context": {
+          "type": "string",
+          "description": "One-sentence situational context: who they are and what circumstance grounds this map"
+        }
+      },
+      "additionalProperties": false
+    },
+    "phases": {
+      "type": "array",
+      "description": "Ordered list of phases or stages that make up the map timeline",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/phase"
+      }
+    },
+    "analysis": {
+      "type": "object",
+      "description": "Synthesized insights derived from the full map",
+      "required": ["pain_points", "moments_of_truth"],
+      "properties": {
+        "pain_points": {
+          "type": "array",
+          "description": "Concise list of the most significant user pain points identified across all phases",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 0
+        },
+        "moments_of_truth": {
+          "type": "array",
+          "description": "Critical inflection points where user perception of the experience shifts decisively",
+          "items": {
+            "type": "object",
+            "required": ["phase", "description"],
+            "properties": {
+              "phase": {
+                "type": "string",
+                "description": "The phase id where this moment occurs"
+              },
+              "description": {
+                "type": "string",
+                "description": "What happens and why it is a decisive moment"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "recommended_next_map": {
+          "type": ["string", "null"],
+          "description": "Canonical map type identifier for the suggested follow-up research artifact, or null if none",
+          "examples": ["customer-journey-map", null]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "phase": {
+      "type": "object",
+      "description": "A single phase or stage in the map timeline",
+      "required": ["id", "label"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "URL-safe unique identifier for this phase",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "examples": ["early-morning", "awareness", "onboarding"]
+        },
+        "label": {
+          "type": "string",
+          "description": "Human-readable display name for the phase",
+          "examples": ["Mañana temprana", "Descubrimiento"]
+        },
+        "icon": {
+          "type": "string",
+          "description": "Single emoji used as a visual icon for this phase",
+          "examples": ["🌅", "🔍"]
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,255 @@
+<!-- comic-frames.html — Storyboard comic-style frame cards (one card per phase/scene) -->
+<!--
+  Renderer replaces per phase:
+    __PHASE_ID__          → phase.id
+    __PHASE_LABEL__       → phase.label
+    __PHASE_ICON__        → phase.icon
+    __SCENE_DESCRIPTION__ → phase.scene_description
+    __SCENE_SETTING__     → phase.scene_setting
+    __SCENE_DIALOGUE__    → phase.scene_dialogue  (optional)
+    __SCENE_MOOD__        → phase.scene_mood
+    __EMOTION_EMOJI__     → phase.emotion.emoji
+    __EMOTION_COLOR__     → color hex based on emotion.level
+
+  The renderer wraps ALL frame cards in .uxrt-comic-grid and emits one
+  .uxrt-comic-frame per phase. This file is the per-frame template.
+-->
+
+<style>
+  /* ── Comic grid container (renderer wraps all frames in this) ── */
+  .uxrt-comic-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px 0;
+  }
+
+  @media (max-width: 900px) {
+    .uxrt-comic-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .uxrt-comic-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ── Individual frame card ── */
+  .uxrt-comic-frame {
+    background: #222244;
+    border: 2px solid #333366;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    position: relative;
+  }
+
+  .uxrt-comic-frame:focus-within {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+  }
+
+  /* ── Frame header ── */
+  .uxrt-comic-frame__header {
+    background: #2a2a55;
+    border-bottom: 2px solid #333366;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .uxrt-comic-frame__scene-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #c0c0e0;
+    letter-spacing: 0.02em;
+  }
+
+  .uxrt-comic-frame__scene-icon {
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  /* ── Emotion badge (top-right corner) ── */
+  .uxrt-comic-frame__emotion {
+    font-size: 20px;
+    line-height: 1;
+    cursor: default;
+    flex-shrink: 0;
+  }
+
+  /* ── Frame body: scene description (main illustration area) ── */
+  .uxrt-comic-frame__body {
+    flex: 1;
+    padding: 14px;
+    min-height: 100px;
+    background: #1e1e40;
+    border-bottom: 1px solid #2d2d55;
+    font-size: 14px;
+    line-height: 1.55;
+    color: #d0d0f0;
+  }
+
+  .uxrt-comic-frame__body[contenteditable]:empty::before {
+    content: attr(data-placeholder);
+    color: #555580;
+    pointer-events: none;
+  }
+
+  /* ── Setting row ── */
+  .uxrt-comic-frame__setting-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 8px 14px;
+    border-bottom: 1px solid #2d2d55;
+    background: #222244;
+  }
+
+  .uxrt-comic-frame__setting-icon {
+    font-size: 12px;
+    color: #667eea;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .uxrt-comic-frame__setting {
+    font-size: 12px;
+    color: #8888bb;
+    flex: 1;
+    line-height: 1.4;
+  }
+
+  .uxrt-comic-frame__setting[contenteditable]:empty::before {
+    content: attr(data-placeholder);
+    color: #444466;
+    pointer-events: none;
+  }
+
+  /* ── Dialogue bubble ── */
+  .uxrt-comic-frame__dialogue-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 8px 14px;
+    border-bottom: 1px solid #2d2d55;
+    background: #252248;
+  }
+
+  .uxrt-comic-frame__dialogue-icon {
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .uxrt-comic-frame__dialogue {
+    font-size: 13px;
+    font-style: italic;
+    color: #b0b0dd;
+    flex: 1;
+    line-height: 1.4;
+  }
+
+  .uxrt-comic-frame__dialogue[contenteditable]:empty::before {
+    content: attr(data-placeholder);
+    color: #444466;
+    pointer-events: none;
+  }
+
+  /* ── Mood footer ── */
+  .uxrt-comic-frame__mood-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: #1c1c3a;
+  }
+
+  .uxrt-comic-frame__mood-label {
+    font-size: 11px;
+    color: #555580;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    flex-shrink: 0;
+  }
+
+  .uxrt-comic-frame__mood {
+    font-size: 12px;
+    font-weight: 600;
+    color: #9090cc;
+    flex: 1;
+  }
+
+  .uxrt-comic-frame__mood[contenteditable]:empty::before {
+    content: attr(data-placeholder);
+    color: #444466;
+    pointer-events: none;
+  }
+</style>
+
+
+<!-- ═══ COMIC FRAME (repeat per phase — renderer wraps in .uxrt-comic-grid) ═══ -->
+<div class="uxrt-comic-frame" data-phase="__PHASE_ID__">
+
+  <!-- Header: scene label + icon + emotion emoji -->
+  <div class="uxrt-comic-frame__header">
+    <div class="uxrt-comic-frame__scene-label">
+      <span class="uxrt-comic-frame__scene-icon">__PHASE_ICON__</span>
+      <span contenteditable="true"
+            data-field="label"
+            data-phase="__PHASE_ID__">__PHASE_LABEL__</span>
+    </div>
+    <div class="uxrt-comic-frame__emotion"
+         contenteditable="true"
+         data-field="emotion.emoji"
+         data-phase="__PHASE_ID__"
+         title="Emoción en esta escena">__EMOTION_EMOJI__</div>
+  </div>
+
+  <!-- Body: scene description (main frame content) -->
+  <div class="uxrt-comic-frame__body"
+       contenteditable="true"
+       data-field="scene_description"
+       data-phase="__PHASE_ID__"
+       data-placeholder="Describe lo que ocurre en esta escena...">__SCENE_DESCRIPTION__</div>
+
+  <!-- Setting row: where/when -->
+  <div class="uxrt-comic-frame__setting-row">
+    <span class="uxrt-comic-frame__setting-icon">📍</span>
+    <div class="uxrt-comic-frame__setting"
+         contenteditable="true"
+         data-field="scene_setting"
+         data-phase="__PHASE_ID__"
+         data-placeholder="¿Dónde y cuándo ocurre?">__SCENE_SETTING__</div>
+  </div>
+
+  <!-- Dialogue bubble (optional) -->
+  <div class="uxrt-comic-frame__dialogue-row">
+    <span class="uxrt-comic-frame__dialogue-icon">💬</span>
+    <div class="uxrt-comic-frame__dialogue"
+         contenteditable="true"
+         data-field="scene_dialogue"
+         data-phase="__PHASE_ID__"
+         data-placeholder="Diálogo o pensamiento (opcional)...">__SCENE_DIALOGUE__</div>
+  </div>
+
+  <!-- Mood footer -->
+  <div class="uxrt-comic-frame__mood-row">
+    <span class="uxrt-comic-frame__mood-label">Mood:</span>
+    <div class="uxrt-comic-frame__mood"
+         contenteditable="true"
+         data-field="scene_mood"
+         data-phase="__PHASE_ID__"
+         data-placeholder="tenso, esperanzador, frustrado...">__SCENE_MOOD__</div>
+  </div>
+
+</div>

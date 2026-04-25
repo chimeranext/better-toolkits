@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ux-research-toolkit/schemas/layers/touchpoints.schema.json",
+  "title": "UX Research Toolkit — Touchpoints Layer",
+  "description": "Layer schema extending each phase with touchpoint and channel data. Touchpoints are specific interaction moments; channels are the medium or platform through which interaction occurs.",
+  "type": "object",
+  "properties": {
+    "touchpoints": {
+      "type": "array",
+      "description": "Specific interaction points the persona encounters in this phase — physical objects, interfaces, people, or services they interact with.",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 0,
+      "examples": [
+        ["Medicamento veterinario", "Jardín", "Bowl de comida"],
+        ["App móvil", "Correo de confirmación", "Asesor de ventas"]
+      ]
+    },
+    "channels": {
+      "type": "array",
+      "description": "The medium or platform through which touchpoints are experienced — digital, physical, or human. More abstract than touchpoints.",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 0,
+      "examples": [
+        ["Presencial", "Aplicación móvil"],
+        ["Email", "Sitio web", "Llamada telefónica", "Tienda física"]
+      ]
+    }
+  },
+  "required": ["touchpoints", "channels"]
+}

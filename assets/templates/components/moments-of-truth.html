@@ -1,0 +1,21 @@
+<!-- moments-of-truth.html — Key moments panel (below the grid) -->
+<!--
+  Renderer replaces:
+    __MOT_ITEMS__ → rendered <div> items for each moment in analysis.moments_of_truth.
+                    Each item uses __MOT_PHASE__ (phase id) and __MOT_DESCRIPTION__.
+
+  Example emitted item:
+
+    <div class="uxrt-moments__item">
+      <strong class="uxrt-moments__phase-ref"
+              contenteditable="true"
+              data-field="analysis.moments_of_truth[0].phase">Atardecer</strong>
+      —
+      <span contenteditable="true"
+            data-field="analysis.moments_of_truth[0].description">Es el punto de quiebre...</span>
+    </div>
+-->
+<div class="uxrt-moments">
+  <div class="uxrt-moments__header">⚡ Momentos de Verdad</div>
+  __MOT_ITEMS__
+</div>

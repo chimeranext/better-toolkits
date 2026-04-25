@@ -1,0 +1,25 @@
+{
+  "name": "journey-map",
+  "display_name": "Customer Journey Map",
+  "layers": ["core", "emotions", "actions", "touchpoints"],
+  "components": [
+    "base-layout",
+    "persona-card",
+    "phase-table",
+    "emotion-curve",
+    "action-rows",
+    "touchpoint-map",
+    "pain-points-summary",
+    "moments-of-truth",
+    "editor-controls"
+  ],
+  "default_phases": [
+    {"id": "awareness", "label": "Descubrimiento", "icon": "🔍"},
+    {"id": "consideration", "label": "Consideración", "icon": "🤔"},
+    {"id": "acquisition", "label": "Adquisición", "icon": "🛒"},
+    {"id": "onboarding", "label": "Onboarding", "icon": "🚀"},
+    {"id": "usage", "label": "Uso", "icon": "⚡"},
+    {"id": "retention", "label": "Retención", "icon": "🔄"}
+  ],
+  "requires_product_context": true
+}

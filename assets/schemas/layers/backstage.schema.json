@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ux-research-toolkit/schemas/layers/backstage.schema.json",
+  "title": "UX Research Toolkit — Backstage Layer",
+  "description": "Layer schema extending each phase with service blueprint data. Captures what the customer sees employees doing, what happens behind the scenes, internal support systems, physical evidence, and the line of visibility boundary.",
+  "type": "object",
+  "properties": {
+    "frontstage_actions": {
+      "type": "string",
+      "description": "What the customer sees employees doing during this phase. Visible staff interactions, greetings, service delivery actions.",
+      "examples": ["El agente saluda al cliente y verifica su pedido en pantalla"]
+    },
+    "backstage_actions": {
+      "type": "string",
+      "description": "What employees do behind the scenes during this phase, invisible to the customer. Internal coordination, preparation, communication between staff.",
+      "examples": ["El equipo de logística actualiza el estado del envío en el sistema interno"]
+    },
+    "support_processes": {
+      "type": "string",
+      "description": "Internal systems, databases, tools, and automated processes that support the delivery of the service during this phase.",
+      "examples": ["CRM actualiza historial de cliente; sistema de inventario verifica disponibilidad"]
+    },
+    "physical_evidence": {
+      "type": "string",
+      "description": "Tangible items, artefacts, or environmental cues the customer encounters or perceives during this phase.",
+      "examples": ["Embalaje de marca, recibo impreso, uniforme del personal"]
+    },
+    "line_of_visibility": {
+      "type": "string",
+      "enum": ["visible", "partially-visible", "hidden"],
+      "description": "Indicates how visible this phase's service actions are to the customer. 'visible' = customer can see everything; 'partially-visible' = some actions are apparent; 'hidden' = all actions are invisible to the customer."
+    }
+  },
+  "required": ["frontstage_actions", "backstage_actions", "support_processes", "physical_evidence", "line_of_visibility"]
+}
