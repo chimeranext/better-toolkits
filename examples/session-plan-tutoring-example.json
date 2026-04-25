@@ -1,0 +1,50 @@
+{
+  "meta": {
+    "id": "session:maria-riverpod-tutoring-01",
+    "version": "1.0.0",
+    "type": "tutoring",
+    "date": "2026-04-19",
+    "duration_minutes": 45,
+    "profile": "session-plan-tutoring",
+    "language": "es"
+  },
+  "learner": {
+    "id": "learner:maria-fe",
+    "name": "María — estudiante del curso Flutter Full-Stack",
+    "context": "En el módulo 3 (Riverpod). Falló el quiz 2 veces con scores 0.62 y 0.68; el masteryScore está en 0.80. Confunde semántica de autoDispose vs keepAlive.",
+    "source": "xapi-flutter-fullstack-2026-cohort-01.csv"
+  },
+  "coach_mentor_tutor": {
+    "name": "Andrés",
+    "role": "Tutor técnico (instructor del curso)"
+  },
+  "objectives": [
+    "Aclarar la diferencia operacional entre autoDispose y keepAlive",
+    "Completar 3 ejercicios prácticos escalonados sin asistencia",
+    "Llegar al próximo intento de quiz con comprensión sólida (no solo memorización)"
+  ],
+  "pre_work": [
+    "Releer el mental model del M3 (5 min)",
+    "Intentar el quiz del M3 una vez más antes de la sesión (sin presión de aprobar) y marcar qué pregunta específica le confundió"
+  ],
+  "agenda": [
+    { "time": "0-5", "block": "Diagnóstico: qué parte del tema sentís más confusa", "notes": "Dejar que ella lo verbalice antes de inferir" },
+    { "time": "5-15", "block": "Walk-through guiado del concepto autoDispose vs keepAlive con código vivo", "notes": "Usar un repo de sandbox, ella ejecuta los snippets" },
+    { "time": "15-35", "block": "3 ejercicios escalonados (fácil, medio, difícil) con Claude como partner", "notes": "Si se traba >5 min sin avance, intervengo con pista socrática" },
+    { "time": "35-45", "block": "Rematar quiz del M3 + validación", "notes": "Si pasa con 80%+, success criterion alcanzado" }
+  ],
+  "reflection_questions": [
+    "¿Qué analogía propia te quedaste con vos para recordar cuándo usar autoDispose vs keepAlive?"
+  ],
+  "follow_up": {
+    "homework": [
+      "Pasar el quiz del M3 con 80%+ antes de iniciar M4 (self-paced)",
+      "Si en algún ejercicio del M4 te trabás de nuevo con providers, avisame antes de que se convierta en bloqueo"
+    ]
+  },
+  "tutoring_specific": {
+    "specific_topic": "Riverpod providers: autoDispose vs keepAlive — semántica de scope y lifecycle",
+    "diagnostic_result": "Confunde autoDispose con singleton (cree que solo previene memory leaks); no tiene mental model de lifecycle del provider relativo al widget tree",
+    "success_criterion": "Resuelve 3 ejercicios consecutivos sin preguntar + pasa quiz del M3 con 80%+ en el próximo intento"
+  }
+}

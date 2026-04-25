@@ -1,0 +1,141 @@
+# {{course.meta.title}}
+
+> {{course.meta.promise}}
+
+| Metric | Value |
+|---|---|
+| Version | {{course.meta.version}} |
+| Created | {{course.meta.created}} |
+| Updated | {{course.meta.updated}} |
+| Language | {{course.meta.language}} |
+| Estimated Hours | {{course.meta.estimated_hours}} |
+| Dedication | {{course.meta.estimated_dedication}} |
+| Modules | {{count modules}} |
+| Lessons | {{count lessons}} |
+| Classes (video/quiz/challenge) | {{count classes}} |
+
+## Business Context
+
+- Organization: {{course.business_context.organization}}
+- Brand voice: {{course.business_context.brand_voice}}
+- Industry: {{course.business_context.industry}}
+
+## Learner Profile
+
+**{{course.learner_profile.name}}**
+
+- Primary pain: {{course.learner_profile.primary_pain}}
+- Entry skills: {{course.learner_profile.entry_skills | join ", "}}
+- Source: {{course.learner_profile.source}}
+
+## Capstone (Ship-First Anchor)
+
+### {{course.capstone.title}}
+
+**Deliverable**: {{course.capstone.deliverable}}
+
+**Assessment Criteria**:
+
+{{#each course.capstone.assessment_criteria}}
+- `[{{this.id}}]` {{this.description}}
+{{/each}}
+
+**Hiring Test**: {{course.capstone.hiring_test}}
+
+## Module Map
+
+| # | Module | Type | Bloom's | Hours | Ship Milestone |
+|---|---|---|---|---|---|
+{{#each course.modules}}
+| {{this.order}} | {{this.title}} | {{this.type}} | {{this.bloom_level}} | {{this.estimated_hours}} | {{this.ship_milestone}} |
+{{/each}}
+
+---
+
+## Per-Module Breakdown
+
+{{#each course.modules}}
+
+### Module {{this.order}} — {{this.title}}
+
+> _{{this.philosophy_quote}}_
+
+- **AU ID**: `{{this.au_id}}` (immutable cmi5 identifier)
+- **Bloom's Level**: {{this.bloom_level}}
+- **Estimated Hours**: {{this.estimated_hours}}
+- **Ship Milestone**: {{this.ship_milestone}}
+
+#### cmi5 Metadata
+
+- masteryScore: {{this.classes_cmi5.masteryScore}}
+- moveOn: {{this.classes_cmi5.moveOn}}
+- launchMethod: {{this.classes_cmi5.launchMethod}}
+- activityType: `{{this.classes_cmi5.activityType}}`
+
+#### Lessons
+
+| # | Lesson | Minutes | ID |
+|---|---|---|---|
+{{#each this.lessons}}
+| {{this.order}} | {{this.title}} | {{this.estimated_minutes}} | `{{this.id}}` |
+{{/each}}
+
+#### Classes (video / quiz / challenge)
+
+{{#each this.classes}}
+- **{{this.type}}**: {{this.title}}{{#if this.minutes}} ({{this.minutes}} min){{/if}}{{#if this.passing_score}} — passing score {{this.passing_score}}{{/if}} — `{{this.id}}`
+{{/each}}
+
+#### Feedback Form (Kirkpatrick L1)
+
+{{#if this.feedback_form.tool}}
+- Tool: {{this.feedback_form.tool}}
+- Form ID: `{{this.feedback_form.form_id}}`
+- Embed URL: {{this.feedback_form.embed_url}}
+{{else}}
+- ⚠️ Pendiente — sin form configurado.
+{{/if}}
+
+{{/each}}
+
+---
+
+## Analysis
+
+### Bloom's Progression
+
+{{course.analysis.blooms_progression | join " → "}}
+
+### Ship Milestones Escalation
+
+{{#each course.analysis.ship_milestones_escalation}}
+{{@index}}. {{this}}
+{{/each}}
+
+### Complexity Curve
+
+{{course.analysis.complexity_curve | join ", "}} (1=easy, 5=hard)
+
+### Identified Risks
+
+{{#each course.analysis.identified_risks}}
+- {{this}}
+{{/each}}
+
+### Recommended Next Course
+
+{{course.analysis.recommended_next_course | default "(none)"}}
+
+---
+
+## Version Timeline
+
+{{#each course.meta.version_timeline}}
+- **{{this.version}}** ({{this.date}}, {{this.type}}) — {{this.summary}}
+{{/each}}
+
+---
+
+> Este syllabus se generó con el plugin
+> [instructional-design-toolkit](https://github.com/chimeranext/instructional-design-toolkit).
+> Source of truth: `course.json` en este mismo directorio.

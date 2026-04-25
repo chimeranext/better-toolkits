@@ -1,0 +1,58 @@
+---
+marp: true
+theme: default
+paginate: true
+header: "{{course_title}} — Módulo {{module_order}}: {{module_title}}"
+footer: "Lesson {{lesson_order}} — {{lesson_title}}"
+---
+
+<!-- _class: lead -->
+
+# {{lesson_title}}
+
+{{lesson_context}}
+
+---
+
+<!-- CONCEPT — el mental model. Puede tener múltiples slides separadas por \n---\n en el campo concept del JSON -->
+
+## El Modelo Mental
+
+{{lesson_concept}}
+
+---
+
+<!-- BUILD — 50-60% del contenido. Aplicación con Claude como partner, no como profesor -->
+
+## Construílo
+
+{{lesson_build}}
+
+> 💡 **Claude es tu partner de práctica, no tu profesor.** El concepto ya está arriba.
+> Acá lo aplicás.
+
+---
+
+<!-- SHIP — deliverable concreto -->
+
+## Compartí lo que hiciste
+
+{{lesson_ship}}
+
+---
+
+<!-- REFLECT — preguntas provocativas específicas a esta lección -->
+
+## Reflexioná
+
+{{lesson_reflect_bullets}}
+
+---
+
+<!-- Cierre + transición a siguiente lección -->
+
+## Siguiente
+
+{{next_lesson_or_module}}
+
+{{feedback_form_section}}

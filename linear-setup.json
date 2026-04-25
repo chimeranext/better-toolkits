@@ -1,0 +1,20 @@
+{
+  "team": {
+    "key": "DOJ",
+    "name": "chimeranext"
+  },
+  "git": {
+    "baseBranch": "main",
+    "branchPattern": "andres/{issue-id-lowercase}-{short-description}"
+  },
+  "defaults": {
+    "greptileReview": true,
+    "greptileMinConfidence": 3,
+    "squashMerge": true,
+    "slackNotify": true
+  },
+  "github": {
+    "org": "chimeranext",
+    "repo": "instructional-design-toolkit"
+  }
+}

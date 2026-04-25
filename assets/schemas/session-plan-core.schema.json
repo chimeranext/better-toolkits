@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chimeranext.github.io/instructional-design-toolkit/session-plan-core.schema.json",
+  "title": "SessionPlanCore",
+  "description": "Core fields shared by all 1-on-1 session plans (coaching, mentoring, tutoring). Type-specific fields live in profiles that extend this schema via allOf.",
+  "type": "object",
+  "required": ["meta", "learner", "coach_mentor_tutor", "objectives", "agenda"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["id", "version", "type", "date", "duration_minutes"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^session:[a-z0-9-]+$" },
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+        "type": { "type": "string", "enum": ["coaching", "mentoring", "tutoring"] },
+        "date": { "type": "string", "format": "date" },
+        "duration_minutes": { "type": "integer", "minimum": 15, "maximum": 240 },
+        "profile": { "type": "string" },
+        "language": { "type": "string", "enum": ["es", "en"] }
+      }
+    },
+    "learner": {
+      "type": "object",
+      "required": ["id", "name"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "context": { "type": "string" },
+        "source": { "type": "string", "description": "Where the learner data came from" }
+      }
+    },
+    "coach_mentor_tutor": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "role": { "type": "string" }
+      }
+    },
+    "objectives": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "What the session intends to achieve. Shape varies by type: coaching=KPI-related, mentoring=developmental, tutoring=topic-specific."
+    },
+    "pre_work": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "agenda": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["time", "block"],
+        "properties": {
+          "time": { "type": "string", "description": "e.g. '0-10' or '15-30'" },
+          "block": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "reflection_questions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Specific to THIS session — not generic '¿Qué aprendiste?'"
+    },
+    "follow_up": {
+      "type": "object",
+      "properties": {
+        "next_session_date": { "type": "string" },
+        "homework": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

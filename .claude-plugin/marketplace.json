@@ -1,0 +1,44 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "instructional-design-toolkit",
+  "version": "1.0.0",
+  "description": "Guided instructional design toolkit for cmi5-compliant course and 1-on-1 session plan creation.",
+  "owner": {
+    "name": "Luis Andres Pena Castillo",
+    "email": "lapc506@users.noreply.github.com"
+  },
+  "plugins": [
+    {
+      "name": "instructional-design-toolkit",
+      "description": "Guided instructional design: 12 skills (1 course entry point + 3 coach/mentor/tutor shortcuts + audit/visualize/revise/retro/diff), 7 agents (context detection + profile + session-type + visualizer + slides + cmi5 validator + changelog), cmi5-ready JSON, Markdown dense syllabus export, interactive HTML visualization with Bloom's + ship milestones, Marp deck per lesson, Tally/Typeform feedback embeds, CSV adapters for xAPI + feedback (Ralph/SCORM Cloud/Learning Locker/Tally API/Typeform API stubs for v2), iteration commands with semantic versioning. Imports personas from SRD, business-model-toolkit, and ux-research-toolkit maps. Based on SAM (Allen), Builder's Bloom's (chimera Academy), Ship-First Design, Kirkpatrick L1-L4, Atomic Habits (Clear), Irby 2018 coach/mentor/tutor distinction.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Luis Andres Pena Castillo",
+        "email": "lapc506@users.noreply.github.com"
+      },
+      "source": "./",
+      "homepage": "https://github.com/chimeranext/instructional-design-toolkit",
+      "category": "productivity",
+      "keywords": [
+        "claude-code",
+        "claude-code-plugin",
+        "instructional-design",
+        "course-design",
+        "cmi5",
+        "xapi",
+        "scorm",
+        "blooms-taxonomy",
+        "sam-methodology",
+        "ship-first-design",
+        "kirkpatrick",
+        "coaching",
+        "mentoring",
+        "tutoring",
+        "marp",
+        "atomic-habits",
+        "learning-record-store",
+        "ralph-lrs"
+      ]
+    }
+  ]
+}

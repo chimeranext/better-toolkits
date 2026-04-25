@@ -1,0 +1,50 @@
+{
+  "meta": {
+    "id": "session:daniel-mentoring-04",
+    "version": "1.0.0",
+    "type": "mentoring",
+    "date": "2026-04-25",
+    "duration_minutes": 90,
+    "profile": "session-plan-mentoring",
+    "language": "es"
+  },
+  "learner": {
+    "id": "learner:daniel-dev",
+    "name": "Daniel — Mid-level Developer",
+    "context": "Aspira a transicionar a senior en ~18 meses. Técnicamente sólido, falta visibilidad externa y narrativa profesional.",
+    "source": "mentoring-history-daniel.md"
+  },
+  "coach_mentor_tutor": {
+    "name": "Andrés",
+    "role": "Mentor (relación de 2+ años, iniciada en hackathon)"
+  },
+  "objectives": [
+    "Revisar progreso en construcción de identidad profesional (últimos 3 meses)",
+    "Explorar una oportunidad concreta de exposición externa (conf talk, blog post, open source)",
+    "Mantener la relación sana y bidireccional (qué está aprendiendo el mentor también)"
+  ],
+  "pre_work": [
+    "Traer 1 artefacto del que esté orgulloso de los últimos 3 meses (no importa si es código, una decisión de diseño, o un proceso que mejoró)"
+  ],
+  "agenda": [
+    { "time": "0-15", "block": "Check-in personal y contexto vital", "notes": "No saltarse esto — mentoría es relación primero" },
+    { "time": "15-50", "block": "Revisión del artefacto + feedback sobre narrativa profesional", "notes": "¿Cómo lo contaría en una entrevista? ¿Qué parte puede capitalizarse externamente?" },
+    { "time": "50-75", "block": "Brainstorm de oportunidades externas concretas", "notes": "CFPs abiertos, blogs del equipo, meetups locales, OSS contributions" },
+    { "time": "75-90", "block": "Commitments suaves + cuándo nos volvemos a ver", "notes": "Mentoría no exige deliverables duros; son propuestas para que Daniel elija" }
+  ],
+  "reflection_questions": [
+    "¿Qué parte de tu trabajo reciente querés que se vea más afuera del equipo?",
+    "¿A quién admirás que haya hecho este salto mid → senior con visibilidad? ¿Qué hizo diferente?"
+  ],
+  "follow_up": {
+    "next_session_date": "2026-07-25",
+    "homework": [
+      "Mandar 3 propuestas a conferences o publicar 1 blog post (lo que sea más natural)"
+    ]
+  },
+  "mentoring_specific": {
+    "long_term_goal": "Transición de mid a senior en ~18 meses con red profesional visible externa",
+    "relationship_history": "Nos conocimos en el hackathon de chimeranext 2024; mentoría formal desde 2025 con cadencia trimestral",
+    "focus_area": "Identidad profesional + exposición externa + narrativa de carrera"
+  }
+}

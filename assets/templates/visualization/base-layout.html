@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{course.meta.title}} — Course Visualization</title>
+<style>
+:root {
+  --bg: #0f1419;
+  --panel: #1a2332;
+  --text: #e6e6e6;
+  --muted: #8a99ad;
+  --accent: #7dd3fc;
+  --good: #4ade80;
+  --warn: #fbbf24;
+  --bad: #f87171;
+  --line: #2d3a4f;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 0;
+  background: var(--bg); color: var(--text);
+  font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+header {
+  padding: 24px 32px; border-bottom: 1px solid var(--line);
+  background: var(--panel);
+}
+header h1 { margin: 0 0 8px; font-size: 24px; }
+header .meta { color: var(--muted); font-size: 13px; }
+header .promise { margin-top: 12px; font-style: italic; }
+main { padding: 24px 32px; max-width: 1400px; margin: 0 auto; }
+section {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+section h2 { margin: 0 0 16px; font-size: 18px; color: var(--accent); }
+.module-card {
+  border-left: 3px solid var(--accent);
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  background: rgba(125, 211, 252, 0.05);
+}
+.bloom-recognize { border-left-color: #94a3b8; }
+.bloom-explain { border-left-color: #60a5fa; }
+.bloom-build { border-left-color: var(--good); }
+.bloom-debug { border-left-color: var(--warn); }
+.bloom-decide { border-left-color: #c084fc; }
+.bloom-ship { border-left-color: var(--accent); }
+table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); }
+th { color: var(--muted); font-weight: normal; font-size: 12px; text-transform: uppercase; }
+iframe { border: 1px solid var(--line); border-radius: 4px; width: 100%; }
+.svg-container { background: rgba(0,0,0,0.2); padding: 16px; border-radius: 4px; }
+.legend { display: flex; gap: 16px; margin-top: 8px; font-size: 12px; color: var(--muted); }
+.legend span::before { content: "●"; margin-right: 4px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>{{course.meta.title}}</h1>
+  <div class="meta">
+    Version {{course.meta.version}} · {{course.meta.estimated_hours}}h estimadas · {{course.meta.language}} · {{count modules}} módulos · {{count lessons}} lessons
+  </div>
+  <div class="promise">{{course.meta.promise}}</div>
+</header>
+
+<main>
+
+<section id="learner">
+  <h2>Learner Profile</h2>
+  <p><strong>{{course.learner_profile.name}}</strong></p>
+  <p>Primary pain: {{course.learner_profile.primary_pain}}</p>
+</section>
+
+<section id="capstone">
+  <h2>Capstone (Ship-First Anchor)</h2>
+  <p><strong>{{course.capstone.title}}</strong></p>
+  <p>Deliverable: {{course.capstone.deliverable}}</p>
+  <p>Hiring test: <em>{{course.capstone.hiring_test}}</em></p>
+</section>
+
+<!-- Inject sections from visualization templates here -->
+<!-- {{INJECT_BLOOMS_PROGRESSION}} -->
+<!-- {{INJECT_SHIP_MILESTONES}} -->
+<!-- {{INJECT_CCBSR_DISTRIBUTION}} -->
+<!-- {{INJECT_KIRKPATRICK_EMBEDS}} -->
+
+</main>
+
+<script type="application/json" id="course-data">
+{{COURSE_JSON}}
+</script>
+
+<script>
+const courseData = JSON.parse(document.getElementById('course-data').textContent);
+console.log('Course data loaded:', courseData.meta.title, 'v' + courseData.meta.version);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chimeranext.github.io/instructional-design-toolkit/profiles/session-plan-coaching.profile.json",
+  "title": "SessionPlanCoachingProfile",
+  "description": "Coaching session plan per Irby (2018): performance-focused, time-bound, with KPI and withdrawal trigger. Coach retires when KPI is reached.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "../session-plan-core.schema.json" }
+  ],
+  "required": ["coaching_specific"],
+  "properties": {
+    "coaching_specific": {
+      "type": "object",
+      "required": ["target_kpi", "withdrawal_trigger"],
+      "properties": {
+        "target_kpi": {
+          "type": "string",
+          "description": "Measurable KPI the coaching sessions aim to move"
+        },
+        "session_n_of_m": {
+          "type": "string",
+          "pattern": "^\\d+ of \\d+$",
+          "description": "e.g. '3 of 6' — time-bound coaching engagement"
+        },
+        "withdrawal_trigger": {
+          "type": "string",
+          "description": "Explicit condition under which the coach withdraws (e.g., 'KPI sustained in 1d during 2 consecutive cycles')"
+        }
+      }
+    }
+  }
+}
