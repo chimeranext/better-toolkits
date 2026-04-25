@@ -37,12 +37,12 @@ app-gtm-release-toolkit install --force    # Overwrite unmanaged conflicts
 ║    Pick the right ship-X for your stack    ║
 ╠════════════════════════════════════════════╣
 ║  TIER 2 — EXECUTION (per framework)        ║
-║  /app-gtm-release:ship-flutter   ← Phase 0 ║
-║  /app-gtm-release:ship-pwa       ← Phase 1 ║
-║  /app-gtm-release:ship-snap      ← Phase 1 ║
-║  /app-gtm-release:ship-msstore   ← Phase 1 ║
-║  /app-gtm-release:ship-kmp       ← Phase 2 ║
-║  /app-gtm-release:ship-maui      ← Phase 2 ║
+║  /app-gtm-release:ship-flutter   ← Phase 0 ✅ ║
+║  /app-gtm-release:ship-pwa       ← Phase 1 ✅ ║
+║  /app-gtm-release:ship-snap      ← Phase 1 ✅ ║
+║  /app-gtm-release:ship-msstore   ← Phase 1 ✅ ║
+║  /app-gtm-release:ship-kmp       ← Phase 2 ✅ ║
+║  /app-gtm-release:ship-maui      ← Phase 2 ✅ ║
 ║  /app-gtm-release:ship-swift     ← Phase 2.5 ║
 ╠════════════════════════════════════════════╣
 ║  TIER 3 — MASS PUBLISH                     ║
@@ -61,8 +61,8 @@ app-gtm-release-toolkit install --force    # Overwrite unmanaged conflicts
 | `/app-gtm-release:ship-msstore` | ✅ Phase 1 | App → Microsoft Store (path A PWA Builder MSIX or path B native MSIX, 5 gates) |
 | `/app-gtm-release:ship-snap` | ✅ Phase 1 | Linux desktop → Snap Store with channels strategy (5 gates) |
 | `/app-gtm-release:ship-everywhere` | ✅ Phase 1 | Mass-publish orchestrator — runs all applicable ship-X children in sequence |
-| `/app-gtm-release:ship-kmp` | ⏳ Phase 2 stub | Kotlin Multiplatform → Play + App Store |
-| `/app-gtm-release:ship-maui` | ⏳ Phase 2 stub | .NET MAUI → multi-store |
+| `/app-gtm-release:ship-kmp` | ✅ Phase 2 | Kotlin Multiplatform → Play + App Store with iOS framework integration (5 gates) |
+| `/app-gtm-release:ship-maui` | ✅ Phase 2 | .NET MAUI multi-target → Play + App Store + Microsoft Store + macOS Catalyst (5 gates) |
 | `/app-gtm-release:ship-swift` | ⏳ Phase 2.5 stub | Swift native iOS → App Store |
 
 **Ship-flutter flags:**
@@ -78,15 +78,15 @@ app-gtm-release-toolkit install --force    # Overwrite unmanaged conflicts
 
 | Phase | Frameworks added | Stores added | Headline commands |
 |---|---|---|---|
-| **0 (now)** | Flutter | Google Play, App Store, F-Droid, GitHub Releases, IzzyOnDroid | `/audit`, `/ship-advisor`, `/ship-flutter` |
+| **0** | Flutter | Google Play, App Store, F-Droid, GitHub Releases, IzzyOnDroid | `/audit`, `/ship-advisor`, `/ship-flutter` |
 | **1** | PWA standalone | Microsoft Store, Snap Store | `/ship-pwa`, `/ship-msstore`, `/ship-snap`, `/ship-everywhere` |
-| **2** | KMP, .NET MAUI, Capacitor | Flathub | `/ship-kmp`, `/ship-maui` |
+| **2 (now)** | KMP, .NET MAUI | Flathub (in alt-distribution) | `/ship-kmp`, `/ship-maui` |
 | **2.5** | Swift native iOS | — | `/ship-swift` |
-| **3** | Tauri, Electron | Mac App Store | `/ship-webview-native` (possible merge) |
+| **3** | Tauri, Electron, Capacitor | Mac App Store | `/ship-webview-native` (possible merge) |
 
-## Skills (13)
+## Skills (15)
 
-Auto-activate by context — you can also invoke them directly. Six are framework-agnostic; four are Flutter-coupled (marked with `<!-- TODO: framework-agnostic split -->` for refactor in Phase 2+); three are Phase 1 framework-specific.
+Auto-activate by context — you can also invoke them directly. Six are framework-agnostic; four are Flutter-coupled (marked with `<!-- TODO: framework-agnostic split -->` for refactor in Phase 3+); five are framework-specific (Phase 1+2).
 
 | Skill | Status | Triggers when you... |
 |-------|--------|---------------------|
@@ -98,11 +98,13 @@ Auto-activate by context — you can also invoke them directly. Six are framewor
 | `store-setup` | Agnostic | Say "create app in Play Console", "App Store Connect setup", "Microsoft Partner Center" |
 | `store-listing` | Agnostic | Say "store screenshots", "app description", "ASO", "feature graphic" |
 | `testing-tracks` | Agnostic | Say "beta testing", "TestFlight", "internal testing", "pre-launch report" |
-| `alt-distribution` | Android-coupled | Say "F-Droid", "GitHub Releases", "Obtainium", "distribute without Play Store" |
+| `alt-distribution` | Multi-platform alt | Say "F-Droid", "GitHub Releases", "Obtainium", "Flathub", "AppImage", "distribute without Play Store" |
 | `launch-plan` | Flutter-coupled | Say "launch timeline", "24h plan", "release strategy", "ship my app" |
 | `pwa-quality` | PWA-specific (Phase 1) | Say "validate manifest", "Lighthouse PWA", "Workbox setup", "PWA readiness" |
 | `msstore-submission` | Microsoft Store-specific (Phase 1) | Say "Microsoft Store", "Partner Center", "MSIX", "MS Store certification" |
 | `snap-build` | Snap-specific (Phase 1) | Say "snapcraft", "Snap Store", "Ubuntu Store", "Linux desktop distribution" |
+| `kmp-build` | KMP-specific (Phase 2) | Say "Kotlin Multiplatform", "KMM", "iOS framework integration", "Compose Multiplatform" |
+| `maui-publishing` | MAUI-specific (Phase 2) | Say ".NET MAUI", "MAUI publishing", "dotnet workload maui", "Xamarin migration" |
 
 ## Agents (2)
 

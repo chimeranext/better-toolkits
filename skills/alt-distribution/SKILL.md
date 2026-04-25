@@ -1,13 +1,17 @@
 ---
 name: alt-distribution
-description: "Distribute Flutter Android apps through alternative channels: F-Droid, GitHub Releases (Obtainium-compatible), IzzyOnDroid, and direct APK distribution. Use this skill when the user asks about F-Droid publishing, open source app distribution, APK distribution outside Play Store, Obtainium, reproducible builds, FOSS app stores, fdroiddata, IzzyOnDroid, self-hosted repos, sideloading, or distributing without Google Play. Also triggers on: 'publish to F-Droid', 'distribute APK', 'alternative app stores', 'FOSS distribution', 'GitHub releases for my app', or 'I dont want to use Google Play'."
+description: "Distribute apps through alternative channels beyond mainstream stores. Android: F-Droid, GitHub Releases (Obtainium-compatible), IzzyOnDroid, direct APK. Linux desktop: Flathub (Phase 2). Covers reproducible builds, fdroiddata metadata, AppStream metadata for Flathub, flatpak-builder manifests, and PR workflow to flathub/flathub. Use this skill when the user asks about F-Droid publishing, open source app distribution, APK distribution outside Play Store, Obtainium, reproducible builds, FOSS app stores, fdroiddata, IzzyOnDroid, self-hosted repos, sideloading, distributing without Google Play, Flathub, flatpak, flatpak-builder, AppStream, 'publish to Flathub', or 'Linux desktop FOSS distribution'."
 ---
 
-<!-- TODO: framework-agnostic split — Android-focused (F-Droid, Obtainium, IzzyOnDroid). Phase 2: add Linux desktop alternatives (Flathub) when /ship-snap lands. Most Android-side guidance applies to KMP/MAUI Android targets unchanged. -->
+<!-- TODO: framework-agnostic split for Android-focused sections (F-Droid, Obtainium, IzzyOnDroid) — Phase 3+ when MAUI/KMP need Android alt-distribution. The Flathub section (Phase 2) is already framework-agnostic since Flatpak builds anything that compiles on Linux. -->
 
-# Alternative Distribution: Beyond Google Play
+# Alternative Distribution: Beyond Google Play, Beyond Snap
 
-Not every Android app belongs on Google Play. FOSS projects, privacy-focused apps, and developers who want to avoid Google's 30% commission or review process have several established distribution channels.
+Not every app belongs on the mainstream stores. FOSS projects, privacy-focused apps, and developers who want to avoid commission/review processes have several established distribution channels.
+
+This skill covers two domains:
+1. **Android alternatives** (F-Droid, Obtainium, IzzyOnDroid, direct APK) — Phase 0+
+2. **Linux desktop alternatives** (Flathub, AppImage) — Phase 2 addition
 
 ## Distribution Channel Decision
 
@@ -267,9 +271,255 @@ See the [full submission guide](https://github.com/community-marketplace/startup
 
 Starting September 2026, Google's Android Developer Verification Program may restrict sideloading on stock Android. The community-marketplace marketplace continues working on custom ROMs (GrapheneOS, CalyxOS, LineageOS) without restrictions. See the [impact assessment](https://github.com/community-marketplace/startups-android-marketplace/blob/main/docs/KEEP_ANDROID_OPEN.md).
 
+---
+
+## Flathub (Linux Desktop)
+
+Flathub is the de facto Linux desktop app store. Unlike Snap (centralized, Canonical-controlled, requires `snapd`), Flatpak (the underlying tech) is decentralized and bundle-portable. Most major Linux distros ship with Flathub support out of the box (Fedora, Ubuntu via PPA, Linux Mint, Pop!_OS, Endless OS, elementary OS).
+
+### When Flathub vs Snap?
+
+Pair, don't pick:
+
+| Property | Flathub | Snap Store |
+|---|---|---|
+| Distros pre-shipped with support | Fedora, Mint, Pop!_OS, Endless, elementary, EndeavorOS, Manjaro | Ubuntu, Ubuntu Core |
+| Sandboxing | Bubblewrap + portals | AppArmor + seccomp |
+| Update model | Decentralized (anyone can host a remote) | Centralized (snapcraft.io only) |
+| Submission gate | Manual review by Flathub maintainers (PR-based) | Automated review (strict) or 1-2 weeks (classic) |
+| Confinement override | "permissions" in manifest | "classic" confinement (manual approval) |
+| Format | OCI container with Flatpak runtime | SquashFS image with snapd metadata |
+
+For maximum Linux desktop reach: **ship to both** Flathub AND Snap Store. Different audiences, different distros.
+
+### Flatpak manifest (key concepts)
+
+A Flatpak app is defined by a manifest in YAML or JSON. Filename convention: `com.example.MyApp.yml` (reverse-DNS).
+
+```yaml
+# com.example.MyApp.yml — minimal Flutter desktop example
+app-id: com.example.MyApp
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'  # Flatpak runtime; check https://docs.flatpak.org/en/latest/available-runtimes.html
+sdk: org.freedesktop.Sdk
+command: myapp
+
+finish-args:
+  - --share=network          # outbound network
+  - --socket=wayland         # Wayland display
+  - --socket=fallback-x11    # X11 fallback
+  - --socket=pulseaudio      # audio
+  - --device=dri             # GPU
+  - --filesystem=home        # home dir access
+  - --talk-name=org.freedesktop.Notifications  # desktop notifications via D-Bus
+
+modules:
+  - name: myapp
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 myapp -t /app/bin/
+      - install -Dm644 myapp.desktop -t /app/share/applications/
+      - install -Dm644 com.example.MyApp.appdata.xml -t /app/share/metainfo/
+      - install -Dm644 icon-256.png /app/share/icons/hicolor/256x256/apps/com.example.MyApp.png
+    sources:
+      - type: archive
+        url: https://github.com/example/myapp/releases/download/v1.0.0/myapp-linux-x86_64.tar.gz
+        sha256: <sha256 of the release archive>
+```
+
+Key fields:
+
+| Field | Purpose |
+|---|---|
+| `app-id` | Reverse-DNS unique identifier (matches Flathub repo name) |
+| `runtime` | Base runtime (Freedesktop, GNOME, KDE) |
+| `runtime-version` | Pinned version (24.08 = Sep 2024 release) |
+| `sdk` | SDK matching the runtime |
+| `command` | Executable name |
+| `finish-args` | Sandbox permissions (analogous to snap plugs) |
+| `modules` | Build steps + sources |
+
+### Required: AppStream metadata
+
+Flathub requires an AppStream `.appdata.xml` (or `.metainfo.xml`) file describing the app for the store listing. This is shared with KDE Discover, GNOME Software, and other Linux app browsers.
+
+`com.example.MyApp.appdata.xml`:
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.example.MyApp</id>
+  <name>My App</name>
+  <summary>Short tagline, ≤ 80 chars</summary>
+  <description>
+    <p>First paragraph. Markdown not supported; use plain text or HTML-like inline.</p>
+    <p>Second paragraph if needed.</p>
+  </description>
+
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>BSL-1.1</project_license>
+
+  <developer id="com.example">
+    <name>Example Inc.</name>
+  </developer>
+
+  <url type="homepage">https://example.com</url>
+  <url type="bugtracker">https://github.com/example/myapp/issues</url>
+  <url type="help">https://example.com/help</url>
+  <url type="vcs-browser">https://github.com/example/myapp</url>
+
+  <launchable type="desktop-id">com.example.MyApp.desktop</launchable>
+
+  <screenshots>
+    <screenshot type="default">
+      <image>https://example.com/screenshots/main.png</image>
+      <caption>Main view</caption>
+    </screenshot>
+  </screenshots>
+
+  <releases>
+    <release version="1.0.0" date="2026-04-25">
+      <description>
+        <p>Initial Flathub release.</p>
+      </description>
+    </release>
+  </releases>
+
+  <content_rating type="oars-1.1" />
+
+  <categories>
+    <category>Office</category>
+    <category>Productivity</category>
+  </categories>
+
+  <provides>
+    <binary>myapp</binary>
+  </provides>
+</component>
+```
+
+Validate with `appstreamcli`:
+```bash
+appstreamcli validate com.example.MyApp.appdata.xml
+```
+
+### Required: .desktop file
+
+Standard freedesktop.org `.desktop` file:
+
+```ini
+[Desktop Entry]
+Name=My App
+Comment=Tagline
+Exec=myapp
+Icon=com.example.MyApp
+Terminal=false
+Type=Application
+Categories=Office;Productivity;
+StartupWMClass=myapp
+```
+
+Filename matches `app-id`: `com.example.MyApp.desktop`.
+
+### Local build
+
+Install flatpak + flatpak-builder:
+
+```bash
+sudo apt install flatpak flatpak-builder
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak install flathub org.freedesktop.Platform//24.08 org.freedesktop.Sdk//24.08
+```
+
+Build:
+
+```bash
+flatpak-builder --user --install --force-clean build-dir com.example.MyApp.yml
+flatpak run com.example.MyApp
+```
+
+Output: app installed locally for testing.
+
+For a `.flatpak` bundle (single-file install):
+
+```bash
+flatpak-builder --repo=repo --force-clean build-dir com.example.MyApp.yml
+flatpak build-bundle repo myapp.flatpak com.example.MyApp
+```
+
+### Submission to Flathub (PR workflow)
+
+Flathub does NOT have a dashboard. Submission is via GitHub PR:
+
+1. **Fork** [flathub/flathub](https://github.com/flathub/flathub) (the new-app submissions repo)
+2. **Create a new directory** with your app-id name: `com.example.MyApp/`
+3. **Add the manifest + AppStream + .desktop + icons + screenshots** to that directory
+4. **Open a PR** with the title format: `Add com.example.MyApp`
+5. **Review process** (1-4 weeks):
+   - Automated CI builds the manifest on Flathub's infrastructure
+   - Human reviewers check: package quality, sandbox permissions are minimal/justified, AppStream metadata complete, license metadata correct, no anti-features
+   - Reviewers leave comments; you iterate via additional commits to your PR
+6. **Merge** = listing goes live on flathub.org within hours
+
+### Updates after launch
+
+Flathub gives you a dedicated repo `flathub/com.example.MyApp` (separate from the submissions repo) once your initial PR merges. Updates flow through that repo:
+
+1. Edit your `com.example.MyApp.yml` in `flathub/com.example.MyApp`
+2. Update version, sources, etc.
+3. Open a PR (or push directly if you have access)
+4. Buildbot rebuilds and publishes within an hour
+
+### Sandbox permissions strategy
+
+`finish-args` declares what your app can access. Like snap plugs, but more granular. Common args:
+
+| finish-arg | What it grants |
+|---|---|
+| `--share=network` | Outbound network |
+| `--share=ipc` | X11 IPC (most apps need) |
+| `--socket=wayland` | Wayland display |
+| `--socket=fallback-x11` | X11 fallback |
+| `--socket=pulseaudio` | Audio |
+| `--device=dri` | GPU access |
+| `--device=all` | All devices (avoid; use specific) |
+| `--filesystem=home` | Read/write home dir |
+| `--filesystem=xdg-documents` | XDG Documents only |
+| `--filesystem=host` | Full filesystem (avoid; reviewers will reject) |
+| `--talk-name=org.freedesktop.Notifications` | D-Bus notifications |
+| `--system-talk-name=org.freedesktop.UPower` | System D-Bus access |
+
+Reviewers reject overly broad args. Default minimal; add only what you need.
+
+### Flathub vs Snap comparison for shipping
+
+| Concern | Flathub | Snap Store |
+|---|---|---|
+| Build system | flatpak-builder + manifest | snapcraft + snapcraft.yaml |
+| Submission | GitHub PR (1-4 week review) | snapcraft upload (automated review minutes; classic 1-2 weeks) |
+| Sandbox | finish-args (granular) | plugs (named capabilities) |
+| Default audiences | Fedora, Pop!_OS, Mint users | Ubuntu users |
+| Auto-update | Yes (via flatpak update) | Yes (snapd refresh) |
+| Centralized hosting | Yes (flathub.org) | Yes (snapcraft.io) |
+| Self-hosted alternative | Yes (any HTTP server can host a Flatpak repo) | No (snapd only trusts snapcraft.io) |
+
+For maximum Linux desktop reach, ship to **both**.
+
+### Phase 2 integration with /ship-snap
+
+When the user has a Linux desktop app:
+
+1. Run `/app-gtm-release:ship-snap` (Phase 1) for Snap Store
+2. Reuse build artifacts (often the binary from `snap/local/...` is similar to Flatpak's input)
+3. Author Flatpak manifest separately (different dependencies, different sandbox model)
+4. Open Flathub PR
+
+In Phase 3+, `/ship-everywhere` may add Flathub as a parallel child to ship-snap when Linux desktop is detected.
+
 ## Distribution Strategy Matrix
 
 Choose based on your goals:
+
+### Android
 
 | Goal | Primary | Secondary |
 |------|---------|-----------|
@@ -280,6 +530,16 @@ Choose based on your goals:
 | Global reach, no geo-restrictions | Uptodown | GitHub Releases |
 | Enterprise internal | Self-hosted F-Droid | — |
 | Maximum reach (FOSS + mainstream) | F-Droid + Google Play (flavors) | GitHub Releases |
+
+### Linux desktop
+
+| Goal | Primary | Secondary |
+|------|---------|-----------|
+| Maximum reach across distros | Flathub + Snap Store | AppImage on GitHub Releases |
+| Ubuntu-only audience | Snap Store | Flathub |
+| Fedora / non-Ubuntu audience | Flathub | AppImage |
+| FOSS purist with hand-curation | Flathub + AppImage | Self-hosted Flatpak repo |
+| Single-file portable | AppImage on GitHub Releases | — |
 
 ## Integration with app-gtm-release Lifecycle
 
