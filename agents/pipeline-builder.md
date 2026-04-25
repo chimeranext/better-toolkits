@@ -76,7 +76,7 @@ After generating files, provide:
 ## Guidelines
 
 - Generate complete, runnable files — not fragments or pseudocode
-- Use the exact YAML from the reference files in `flutter-go-to-market:cicd-setup` references
+- Use the exact YAML from the reference files in `app-gtm-release:cicd-setup` references
 - Adapt paths for monorepo layouts (working-directory, paths filters)
 - Include concurrency groups to cancel redundant runs
 - Always include artifact uploads for debugging failed builds

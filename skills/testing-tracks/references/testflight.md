@@ -7,7 +7,7 @@ TestFlight is Apple's beta testing platform. Builds uploaded to App Store Connec
 ## Build Upload
 
 ### Via CI/CD (recommended)
-Codemagic and GitHub Actions workflows handle this automatically. See `flutter-go-to-market:cicd-setup`.
+Codemagic and GitHub Actions workflows handle this automatically. See `app-gtm-release:cicd-setup`.
 
 ### Via Xcode
 1. Archive the app: **Product > Archive**

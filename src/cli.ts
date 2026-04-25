@@ -83,7 +83,7 @@ function printHumanResult(result: Record<string, unknown>): void {
 async function main(): Promise<void> {
   const packageRoot = resolvePackageRoot(import.meta.url);
   const metadata = await readPackageMetadata(packageRoot);
-  const binaryName = basename(process.argv[1] || "flutter-go-to-market-toolkit");
+  const binaryName = basename(process.argv[1] || "app-gtm-release-toolkit");
   const args = parseArgs(process.argv.slice(2));
 
   if (args.version) {

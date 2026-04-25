@@ -3,6 +3,8 @@ name: alt-distribution
 description: "Distribute Flutter Android apps through alternative channels: F-Droid, GitHub Releases (Obtainium-compatible), IzzyOnDroid, and direct APK distribution. Use this skill when the user asks about F-Droid publishing, open source app distribution, APK distribution outside Play Store, Obtainium, reproducible builds, FOSS app stores, fdroiddata, IzzyOnDroid, self-hosted repos, sideloading, or distributing without Google Play. Also triggers on: 'publish to F-Droid', 'distribute APK', 'alternative app stores', 'FOSS distribution', 'GitHub releases for my app', or 'I dont want to use Google Play'."
 ---
 
+<!-- TODO: framework-agnostic split — Android-focused (F-Droid, Obtainium, IzzyOnDroid). Phase 2: add Linux desktop alternatives (Flathub) when /ship-snap lands. Most Android-side guidance applies to KMP/MAUI Android targets unchanged. -->
+
 # Alternative Distribution: Beyond Google Play
 
 Not every Android app belongs on Google Play. FOSS projects, privacy-focused apps, and developers who want to avoid Google's 30% commission or review process have several established distribution channels.
@@ -279,7 +281,7 @@ Choose based on your goals:
 | Enterprise internal | Self-hosted F-Droid | — |
 | Maximum reach (FOSS + mainstream) | F-Droid + Google Play (flavors) | GitHub Releases |
 
-## Integration with flutter-go-to-market Lifecycle
+## Integration with app-gtm-release Lifecycle
 
 Alternative distribution fits into the existing gates:
 

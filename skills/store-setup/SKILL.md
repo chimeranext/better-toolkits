@@ -23,7 +23,7 @@ This skill guides the configuration of both store dashboards so they are ready t
 
 ### Step 2: Store Listing
 
-Invoke `flutter-go-to-market:store-listing` for detailed asset preparation. At minimum:
+Invoke `app-gtm-release:store-listing` for detailed asset preparation. At minimum:
 
 | Asset | Requirement |
 |-------|------------|
@@ -128,7 +128,7 @@ For each version submitted:
 | Marketing URL (optional) | |
 | Privacy Policy URL | Required |
 
-Invoke `flutter-go-to-market:store-listing` for screenshot specifications and strategy.
+Invoke `app-gtm-release:store-listing` for screenshot specifications and strategy.
 
 ### Step 5: App Review Information
 

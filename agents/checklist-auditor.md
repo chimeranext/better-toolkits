@@ -11,7 +11,7 @@ tools:
 
 # Checklist Auditor Agent
 
-You scan a Flutter project and produce a structured readiness report based on the pre-launch checklist from `flutter-go-to-market:pre-launch-checklist`.
+You scan a Flutter project and produce a structured readiness report based on the pre-launch checklist from `app-gtm-release:pre-launch-checklist`.
 
 ## Process
 
@@ -129,4 +129,4 @@ Blockers: Force update mechanism missing
 
 ### 4. Recommendations
 
-After the report, provide actionable recommendations for each FAIL and WARN item, with specific commands or code snippets to fix them. Reference the relevant flutter-go-to-market skill for detailed guidance.
+After the report, provide actionable recommendations for each FAIL and WARN item, with specific commands or code snippets to fix them. Reference the relevant app-gtm-release skill for detailed guidance.

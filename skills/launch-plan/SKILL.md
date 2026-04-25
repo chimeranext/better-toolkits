@@ -3,9 +3,11 @@ name: launch-plan
 description: "Master orchestration for launching a Flutter app to Google Play and App Store in 24 hours. Use this skill when the user wants to ship a Flutter app, plan a mobile release, create a launch timeline, or asks about the steps to publish to app stores. Also triggers when the user mentions 'release plan', 'launch checklist', 'ship my app', 'publish to stores', 'go live', or 'release strategy'. Even if they just say 'I want to launch my app' — this is the skill to use."
 ---
 
+<!-- TODO: framework-agnostic split — orchestration timeline assumes Flutter (pubspec, Codemagic Flutter workflow, Shorebird code-push). Phase 2+: parameterize the 24h timeline by target framework so KMP/MAUI/Swift can reuse the orchestrator with their own toolchain steps. -->
+
 # Launch Plan: Flutter App to Stores in 24 Hours
 
-You are orchestrating the launch of a Flutter app to Google Play Store and Apple App Store. This skill provides the master timeline, decision framework, and coordination across all other flutter-go-to-market skills.
+You are orchestrating the launch of a Flutter app to Google Play Store and Apple App Store. This skill provides the master timeline, decision framework, and coordination across all other app-gtm-release skills.
 
 ## Before You Start
 
@@ -43,7 +45,7 @@ If any prerequisite is missing, help the user resolve it before starting the tim
 **Goal:** Automated builds that produce signed, store-ready artifacts on every push.
 
 1. **Choose CI/CD platform** — use the decision tree below
-2. **Invoke `flutter-go-to-market:cicd-setup`** to configure the pipeline
+2. **Invoke `app-gtm-release:cicd-setup`** to configure the pipeline
 3. **Set up code signing:**
    - Android: generate upload keystore, configure Gradle signing
    - iOS: create distribution certificate + provisioning profile in Apple Developer portal
@@ -61,23 +63,23 @@ Read `references/timeline-24h.md` for detailed time breakdowns per step.
 
 **Goal:** Both store dashboards configured, ready to receive builds.
 
-1. **Invoke `flutter-go-to-market:store-setup`** for guided setup
+1. **Invoke `app-gtm-release:store-setup`** for guided setup
 2. **Google Play Console:**
    - Create app, set default language
-   - Complete store listing (invoke `flutter-go-to-market:store-listing`)
+   - Complete store listing (invoke `app-gtm-release:store-listing`)
    - Content rating questionnaire
    - Pricing and distribution (countries, free/paid)
    - Data safety section
 3. **App Store Connect:**
    - Create app record with bundle ID
    - Fill app information (category, content rights, age rating)
-   - Prepare store listing (invoke `flutter-go-to-market:store-listing`)
+   - Prepare store listing (invoke `app-gtm-release:store-listing`)
 
 ### Phase 3: Testing (Hours 10-18)
 
 **Goal:** App validated by real users on real devices before production release.
 
-1. **Invoke `flutter-go-to-market:testing-tracks`** for the full testing progression
+1. **Invoke `app-gtm-release:testing-tracks`** for the full testing progression
 2. **Internal testing (both platforms simultaneously):**
    - Google Play: internal testing track (100 testers, available in seconds, no review)
    - Apple TestFlight: internal testing (100 App Store Connect users, no review)
@@ -155,27 +157,27 @@ These reliability practices are woven into the pipeline, not bolted on after:
 
 | Practice | Where it applies | Skill reference |
 |----------|-----------------|-----------------|
-| Coverage threshold | PR quality gate | `flutter-go-to-market:cicd-setup` |
-| Sentry symbol upload | Production build step | `flutter-go-to-market:cicd-setup` |
-| Pre-launch crash detection | Testing phase | `flutter-go-to-market:testing-tracks` |
+| Coverage threshold | PR quality gate | `app-gtm-release:cicd-setup` |
+| Sentry symbol upload | Production build step | `app-gtm-release:cicd-setup` |
+| Pre-launch crash detection | Testing phase | `app-gtm-release:testing-tracks` |
 | Staged rollout | Production release | This skill (Phase 4) |
-| Structured build logging | All CI/CD steps | `flutter-go-to-market:cicd-setup` |
+| Structured build logging | All CI/CD steps | `app-gtm-release:cicd-setup` |
 
 ## Coordinating Skills
 
 When orchestrating a full launch, invoke skills in this order:
 
-1. `flutter-go-to-market:pre-launch-checklist` — verify readiness (flavors, error monitoring, force update, security)
-2. `flutter-go-to-market:cicd-setup` — pipeline and signing
-3. `flutter-go-to-market:app-security` — Firebase App Check + hardening
-4. `flutter-go-to-market:store-setup` — console/connect configuration
-5. `flutter-go-to-market:store-listing` — assets and descriptions
-6. `flutter-go-to-market:monetization` — RevenueCat / Lemon Squeezy (if applicable)
-7. `flutter-go-to-market:testing-tracks` — progressive testing
-8. `flutter-go-to-market:code-push` — Shorebird setup for post-launch patching
+1. `app-gtm-release:pre-launch-checklist` — verify readiness (flavors, error monitoring, force update, security)
+2. `app-gtm-release:cicd-setup` — pipeline and signing
+3. `app-gtm-release:app-security` — Firebase App Check + hardening
+4. `app-gtm-release:store-setup` — console/connect configuration
+5. `app-gtm-release:store-listing` — assets and descriptions
+6. `app-gtm-release:monetization` — RevenueCat / Lemon Squeezy (if applicable)
+7. `app-gtm-release:testing-tracks` — progressive testing
+8. `app-gtm-release:code-push` — Shorebird setup for post-launch patching
 9. Come back here for Phase 4 (production release)
 
-Each skill is independently usable — a user may invoke `flutter-go-to-market:testing-tracks` alone if their pipeline is already set up.
+Each skill is independently usable — a user may invoke `app-gtm-release:testing-tracks` alone if their pipeline is already set up.
 
 ## Reference Architecture: flutter_ship_app
 

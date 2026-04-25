@@ -1,11 +1,11 @@
 ---
-description: "Guided Flutter app launch — full lifecycle from code readiness through production release with validation gates and persistent checkpoints"
+description: "Guided Flutter app launch to Google Play + App Store — full lifecycle from code readiness through production release with validation gates and persistent checkpoints"
 argument-hint: "[--what-if | --gate N | --resume]"
 ---
 
-# /ship — Guided Flutter App Launch
+# /ship-flutter — Guided Flutter App Launch
 
-You are the **flutter-go-to-market** orchestrator.
+You are the **app-gtm-release** orchestrator for the Flutter target.
 
 Your job is to guide the user through a complete app launch lifecycle using an interactive dialogue. You manage the flow across 4 spaces, each backed by specialized skills, with validation gates that block advancement until requirements are met.
 
@@ -254,7 +254,7 @@ Ask: "Ready to start with Gate 0 (assessment), or do you want to jump to a speci
 
 5. **Adapt to context** — If the user only targets Android, skip all iOS steps. If they don't monetize, skip the monetization skill.
 
-6. **Announce save points** — After each gate, announce: "Checkpoint saved. You can resume later with `/flutter-go-to-market:ship --resume`."
+6. **Announce save points** — After each gate, announce: "Checkpoint saved. You can resume later with `/app-gtm-release:ship --resume`."
 
 ## Checkpoint Resume
 
@@ -273,9 +273,9 @@ If `checkpoints.md` does not exist, start fresh.
 
 ### Skills to invoke:
 
-1. **`flutter-go-to-market:pre-launch-checklist`** — Verify flavors, error monitoring, force update, analytics, feedback, in-app review
-2. **`flutter-go-to-market:app-security`** — Firebase App Check, network security, secure storage
-3. **`flutter-go-to-market:monetization`** (if applicable) — RevenueCat or Lemon Squeezy setup
+1. **`app-gtm-release:pre-launch-checklist`** — Verify flavors, error monitoring, force update, analytics, feedback, in-app review
+2. **`app-gtm-release:app-security`** — Firebase App Check, network security, secure storage
+3. **`app-gtm-release:monetization`** (if applicable) — RevenueCat or Lemon Squeezy setup
 
 ### GATE 1: Is the code production-ready?
 
@@ -301,8 +301,8 @@ After gate passes: update `checkpoints.md`, save decisions to `notes/space-1-rea
 
 ### Skills to invoke:
 
-1. **`flutter-go-to-market:cicd-setup`** — Choose Codemagic or GitHub Actions, configure 3 workflows, set up signing
-2. **`flutter-go-to-market:code-push`** — Shorebird setup for post-launch OTA patching
+1. **`app-gtm-release:cicd-setup`** — Choose Codemagic or GitHub Actions, configure 3 workflows, set up signing
+2. **`app-gtm-release:code-push`** — Shorebird setup for post-launch OTA patching
 
 ### GATE 2: Can you produce signed artifacts automatically?
 
@@ -328,9 +328,9 @@ After gate passes: update `checkpoints.md`, save decisions to `notes/space-2-pip
 
 ### Skills to invoke:
 
-1. **`flutter-go-to-market:store-setup`** — Create apps in Google Play Console and App Store Connect
-2. **`flutter-go-to-market:store-listing`** — Prepare screenshots, descriptions, icons, feature graphics
-3. **`flutter-go-to-market:testing-tracks`** — Internal testing → pre-launch report → closed/open testing
+1. **`app-gtm-release:store-setup`** — Create apps in Google Play Console and App Store Connect
+2. **`app-gtm-release:store-listing`** — Prepare screenshots, descriptions, icons, feature graphics
+3. **`app-gtm-release:testing-tracks`** — Internal testing → pre-launch report → closed/open testing
 
 ### GATE 3: Are stores ready and builds validated?
 
@@ -356,7 +356,7 @@ After gate passes: update `checkpoints.md`, save decisions to `notes/space-3-sto
 
 ### Skill to invoke:
 
-1. **`flutter-go-to-market:launch-plan`** (Phase 4 section)
+1. **`app-gtm-release:launch-plan`** (Phase 4 section)
 
 ### Actions:
 
@@ -401,14 +401,14 @@ Launch Progress:
   Space 3 (Store Preparation):  GATE 3 IN PROGRESS — testing tracks
   Space 4 (Launch):             PENDING
 
-Checkpoint saved. Resume anytime with: /flutter-go-to-market:ship --resume
+Checkpoint saved. Resume anytime with: /app-gtm-release:ship --resume
 ```
 
 ## Usage
 
 ```bash
-/flutter-go-to-market:ship                # Full guided flow (plan → execute)
-/flutter-go-to-market:ship --what-if      # Generate plan only, no execution
-/flutter-go-to-market:ship --resume       # Resume from last checkpoint
-/flutter-go-to-market:ship --gate 2       # Jump to Gate 2 (pipeline)
+/app-gtm-release:ship                # Full guided flow (plan → execute)
+/app-gtm-release:ship --what-if      # Generate plan only, no execution
+/app-gtm-release:ship --resume       # Resume from last checkpoint
+/app-gtm-release:ship --gate 2       # Jump to Gate 2 (pipeline)
 ```

@@ -3,6 +3,8 @@ name: pre-launch-checklist
 description: "Comprehensive pre-launch checklist for Flutter apps covering code quality, environment setup, error monitoring, analytics, force updates, security, store compliance, and production readiness. Based on Andrea Bizzotto's Flutter release methodology. Use this skill when the user asks about release readiness, pre-launch review, production checklist, 'am I ready to launch', 'what am I missing before release', app review preparation, or final checks before submitting to stores. Also triggers on: 'checklist before launch', 'production readiness', 'release preparation', 'review my app before submitting'."
 ---
 
+<!-- TODO: framework-agnostic split — checklist assumes Flutter conventions (flavors, pubspec.yaml, build modes). Phase 2+: abstract into "target config readiness" with per-framework adapters (Flutter, KMP, MAUI, Swift, PWA). -->
+
 # Pre-Launch Checklist
 
 A structured checklist to verify your Flutter app is production-ready before submitting to stores. Based on the methodology from [Andrea Bizzotto's Flutter in Production course](https://codewithandrea.com/articles/key-steps-before-releasing-flutter-app/) and the [flutter_ship_app](https://github.com/bizz84/flutter_ship_app) reference implementation, combined with practical startup shipping patterns.
@@ -65,7 +67,7 @@ You cannot fix bugs you do not know about. Error monitoring must be in the first
 Source: Andrea Bizzotto recommends Sentry or Firebase Crashlytics. The flutter_ship_app uses Sentry with per-flavor DSN configuration.
 
 - [ ] **[BLOCKER]** Crash reporting SDK integrated (Sentry or Firebase Crashlytics)
-- [ ] **[BLOCKER]** Debug symbols uploaded for obfuscated builds (see `flutter-go-to-market:cicd-setup`)
+- [ ] **[BLOCKER]** Debug symbols uploaded for obfuscated builds (see `app-gtm-release:cicd-setup`)
 - [ ] **[RECOMMENDED]** Breadcrumbs configured (events leading to crashes)
 - [ ] **[RECOMMENDED]** User identification linked (to correlate crashes with users)
 - [ ] **[RECOMMENDED]** Performance monitoring enabled (slow frames, startup time)
@@ -137,7 +139,7 @@ Future<void> checkForUpdate() async {
 
 ### Shorebird Alternative
 
-For Dart-only fixes, Shorebird Code Push can patch without store submission. See `flutter-go-to-market:code-push`. But force update is still needed for native changes.
+For Dart-only fixes, Shorebird Code Push can patch without store submission. See `app-gtm-release:code-push`. But force update is still needed for native changes.
 
 ## 5. In-App Feedback [RECOMMENDED]
 
@@ -180,7 +182,7 @@ Future<void> requestReview() async {
 
 ## 7. App Security [BLOCKER]
 
-See `flutter-go-to-market:app-security` for detailed implementation.
+See `app-gtm-release:app-security` for detailed implementation.
 
 - [ ] **[BLOCKER]** Firebase App Check enabled (Play Integrity + App Attest)
 - [ ] **[BLOCKER]** No API keys or secrets hardcoded in Dart source
@@ -226,7 +228,7 @@ Source: Startup shipping guide (widgettricks) recommends focusing tests on frequ
 
 ## 11. CI/CD Pipeline [BLOCKER]
 
-See `flutter-go-to-market:cicd-setup` for full implementation.
+See `app-gtm-release:cicd-setup` for full implementation.
 
 - [ ] **[BLOCKER]** Automated builds on push (Codemagic or GitHub Actions)
 - [ ] **[BLOCKER]** Code signing configured for both platforms

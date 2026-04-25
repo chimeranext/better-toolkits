@@ -3,14 +3,14 @@
 License text copyright (c) 2023 MariaDB plc, All Rights Reserved.
 "Business Source License" is a trademark of MariaDB plc.
 
-"flutter-go-to-market-toolkit" is licensed under the Business Source License agreement below.
+"app-gtm-release-toolkit" is licensed under the Business Source License agreement below.
 
-"flutter-go-to-market-toolkit" occasionally includes source code that is derived from third-party code.
+"app-gtm-release-toolkit" occasionally includes source code that is derived from third-party code.
 This situation is noted in the license header at the top of the affected files.
 Full authorship information can be derived from the version control history.
 ---
 
-"flutter-go-to-market-toolkit" BUSINESS SOURCE LICENSE AGREEMENT
+"app-gtm-release-toolkit" BUSINESS SOURCE LICENSE AGREEMENT
 
 Parameters
 
@@ -21,7 +21,7 @@ Luis Andres Pena Castillo
 
 ## Licensed Work
 
-"flutter-go-to-market-toolkit" Version 1.0.0 or later.
+"app-gtm-release-toolkit" Version 2.0.0 or later.
 The Licensed Work is (c) 2026 Andres Pena
 
 ### Additional Use Grant

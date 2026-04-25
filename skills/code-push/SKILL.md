@@ -3,6 +3,8 @@ name: code-push
 description: "Set up over-the-air (OTA) updates for Flutter apps using Shorebird Code Push. Use this skill when the user asks about hot updates, OTA updates, code push, patching without store review, instant updates, bypassing store releases, Shorebird setup, or deploying Dart code changes without going through the app store submission process. Also triggers on: 'push a fix without store update', 'update without releasing', 'Shorebird', 'patch my app', or 'instant deploy'."
 ---
 
+<!-- TODO: framework-agnostic split — Shorebird is Dart-only. When a second framework lands (e.g., MAUI Hot Reload, Capacitor Live Updates, EAS Update for RN), fork this into per-framework skills (code-push-flutter, code-push-maui, etc.) routed by /ship-{framework}. -->
+
 # Code Push: Over-The-Air Updates with Shorebird
 
 Shorebird Code Push lets you deploy Dart code changes instantly to users without going through the app store review process. Fix bugs, update logic, and ship improvements in minutes instead of days.
@@ -220,7 +222,7 @@ This outputs a token. Add it as `SHOREBIRD_TOKEN` in your CI secrets.
 
 ## Workflow Integration
 
-### With the flutter-go-to-market Pipeline
+### With the app-gtm-release Pipeline
 
 The recommended flow integrates Shorebird into the existing CI/CD pipeline:
 

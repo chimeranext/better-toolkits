@@ -1,40 +1,52 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "flutter-go-to-market-toolkit",
-  "version": "1.0.0",
-  "description": "Launch your Flutter app to Google Play Store and Apple App Store in 24 hours — guided lifecycle with CI/CD pipelines, testing tracks, store listings, monetization, code push, and validation gates.",
+  "name": "app-gtm-release-toolkit",
+  "version": "2.0.0",
+  "description": "Multi-platform app go-to-market toolkit — ship Flutter, KMP, Swift, .NET MAUI, and PWAs to Google Play, App Store, Microsoft Store, Snap Store, and alternative channels. Three-tier architecture: strategic advisor + per-framework ship commands + mass publish.",
   "owner": {
     "name": "Luis Andres Pena Castillo",
     "email": "lapc506@users.noreply.github.com"
   },
   "plugins": [
     {
-      "name": "flutter-go-to-market",
-      "description": "Guided Flutter app launch lifecycle: 4 spaces (Code Readiness, Pipeline & Signing, Store Preparation, Launch) with validation gates. 1 command, 8 auto-activating skills, 2 agents. Covers Codemagic/GitHub Actions CI/CD, Google Play + App Store setup, RevenueCat monetization, Shorebird code push, TestFlight, BrowserStack, and pre-launch checklist based on Andrea Bizzotto's methodology.",
-      "version": "1.0.0",
+      "name": "app-gtm-release",
+      "description": "Guided multi-platform app release lifecycle. Three-tier command architecture: /ship-advisor (strategic router), per-framework execution (/ship-flutter today; /ship-pwa, /ship-snap, /ship-msstore, /ship-kmp, /ship-maui, /ship-swift in roadmap), and /ship-everywhere (Phase 1 mass-publish). 9 commands, 10 skills (6 framework-agnostic, 4 Flutter-coupled with TODO markers), 2 agents. Covers Codemagic/GitHub Actions CI/CD, Google Play + App Store + Microsoft Store + Snap Store setup, RevenueCat monetization, Shorebird code push (Flutter), and pre-launch checklist based on Andrea Bizzotto's methodology.",
+      "version": "2.0.0",
       "author": {
         "name": "Luis Andres Pena Castillo",
         "email": "lapc506@users.noreply.github.com"
       },
       "source": "./",
-      "homepage": "https://github.com/lapc506/flutter-go-to-market-toolkit",
+      "homepage": "https://github.com/lapc506/app-gtm-release-toolkit",
       "category": "productivity",
       "keywords": [
         "claude-code",
         "claude-code-plugin",
+        "gtm",
+        "go-to-market",
+        "release",
+        "deployment",
+        "multi-store",
+        "cross-platform",
         "flutter",
-        "cicd",
-        "codemagic",
-        "github-actions",
+        "kmp",
+        "swift",
+        "maui",
+        "pwa",
+        "pwa-builder",
+        "snapcraft",
+        "microsoft-store",
         "google-play",
         "app-store",
         "testflight",
+        "cicd",
+        "codemagic",
+        "github-actions",
         "revenuecat",
         "shorebird",
-        "go-to-market",
         "mobile",
-        "release",
-        "deployment"
+        "desktop",
+        "web"
       ]
     }
   ]
