@@ -1,0 +1,66 @@
+# Churn rescue — detección + reactivación automática.
+# Se activa cuando churn-detector reporta crecimiento >15% MoM en bucket D60.
+
+name: aaarrr-churn-rescue
+description: >
+  Detecta churn que acelera, lanza campaña de reactivación con offer agresivo,
+  mide reactivation rate, mata si no funciona.
+
+inputs:
+  trigger_threshold_mom:
+    description: "% de crecimiento MoM en bucket D60 que dispara el rescue"
+    default: 15
+  rescue_offer:
+    description: "Offer del rescue. 30%+ recommended"
+    default: "30% off + free shipping"
+  budget:
+    description: "Daily budget rescue"
+    default: 15
+
+steps:
+  - day: 0
+    name: Detect churn
+    command: /retain
+    args: "--check-churn"
+    requires_human_ok: false
+    notes: |
+      Si churn D60 MoM >= {{ inputs.trigger_threshold_mom }}%, continúa.
+      Si no, abort el workflow.
+
+  - day: 0
+    name: Diagnose root cause
+    command: /revenue
+    args: "--cohort"
+    requires_human_ok: false
+    notes: |
+      ¿Qué cohorte de adquisición está churneando peor? Si es uniforme,
+      problema producto. Si es un mes específico, problema de calidad ese mes.
+
+  - day: 1
+    name: Launch reactivation campaign
+    command: /retain
+    args: "--day 60 --offers '{{ inputs.rescue_offer }}'"
+    requires_human_ok: true
+    notes: |
+      Audience: churned_60d. Excluye buyers_d30 (no spam a recientes).
+      Creative: testimonial fuerte + urgencia + offer agresivo.
+
+  - day: 7
+    name: Mid-rescue check
+    command: /aaarrr-analyze
+    args: "--last 7d"
+    requires_human_ok: false
+    notes: |
+      Reactivation rate target: >5%. Si <2% a día 7, abort y haz handoff a
+      revenue-analyst para evaluar si el problema raíz es producto, no media.
+
+  - day: 14
+    name: Final verdict
+    command: /revenue
+    args: "--report"
+    requires_human_ok: false
+
+guardrails:
+  - rule: "Si CPA del rescue > 0.5x acquisition CPA, mata. Churn maduro no tiene rescue rentable."
+  - rule: "Si reactivation rate < 2% a día 7, mata y diagnostica producto"
+  - rule: "Total spend cap rescue: {{ inputs.budget }} * 14 * 1.2"

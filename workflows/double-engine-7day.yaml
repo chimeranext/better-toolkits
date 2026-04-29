@@ -1,0 +1,98 @@
+# AAARRR Funnel + Flywheel — 7 day launch sequence
+# Lanza Acquisition funnel y arranca el Retention/Referral flywheel en una semana.
+# Cada step se ejecuta como /loop o como cron, siempre con confirmación humana antes de gastar.
+
+name: aaarrr-double-engine-7day
+description: >
+  Acquisition funnel start → Activation optimization → Retention seeding →
+  Referral activation → primer LTV:CAC report. 7 días, todo PAUSED hasta OK humano.
+
+inputs:
+  product:
+    description: "Nombre del producto"
+    required: true
+  cpa_target:
+    description: "Target CPA en USD"
+    default: 25
+  ltv_target:
+    description: "Target LTV 12mo en USD"
+    default: 75
+  platform:
+    description: "fb | ig | both"
+    default: both
+  budget:
+    description: "Daily budget total en USD"
+    default: 50
+
+steps:
+  - day: 0
+    name: Launch Acquisition + Retention seed + Referral plan
+    command: /aaarrr-launch
+    args: "--product '{{ inputs.product }}' --cpa-target {{ inputs.cpa_target }} --ltv-target {{ inputs.ltv_target }} --platform {{ inputs.platform }} --budget {{ inputs.budget }}"
+    requires_human_ok: true
+    notes: |
+      Crea TODO en PAUSED. Acquisition se activa manualmente al final del Day 0.
+      Retention y Referral siguen PAUSED hasta tener masa crítica.
+
+  - day: 2
+    name: First analyze + kill losers
+    command: /aaarrr-analyze
+    args: "--last 2d --auto-flag"
+    requires_human_ok: false
+    notes: |
+      Lista adsets con CPA > 1.5x target. Propone pausa con comandos exactos.
+      Tu OK manual ejecuta las pausas.
+
+  - day: 3
+    name: Activation optimization
+    command: /activate
+    args: "--diagnose"
+    requires_human_ok: false
+    notes: |
+      Diagnóstica funnel de activation. Si hay leak en Lead → Activation,
+      propone 3 intervenciones priorizadas.
+
+  - day: 7
+    name: Retention D7 launch (si Acquisition healthy)
+    command: /retain
+    args: "--day 7"
+    condition: "purchases_count >= 100"
+    requires_human_ok: true
+    notes: |
+      Solo si Acquisition trajo ≥100 buyers. Sino, espera otra semana.
+
+  - day: 7
+    name: First Revenue report
+    command: /revenue
+    args: "--report"
+    requires_human_ok: false
+    notes: |
+      Primer LTV:CAC con 7 días de data. Confidence interval ±40% (es poco data).
+      Si LTV:CAC < 2 a este punto, puede ser temprano o problema serio — analizar.
+
+  - day: 14
+    name: Mid-point Revenue check + Referral plan launch (si calificado)
+    command: /revenue
+    args: "--report --include-referral"
+    requires_human_ok: false
+
+  - day: 14
+    name: Referral campaign launch
+    command: /refer
+    args: "--launch"
+    condition: "buyers_high_ltv_size >= 200"
+    requires_human_ok: true
+
+  - day: 30
+    name: First cohort analysis + scale decisions
+    command: /revenue
+    args: "--cohort"
+    requires_human_ok: false
+    notes: |
+      Primera cohorte de 30 días. Permite decisión informada de scale +50% o pivot.
+      Output va a /aaarrr-analyze que sugiere siguiente jugada.
+
+guardrails:
+  - rule: "Si CPA > target * 2 con $200 gastados en cualquier punto, abort el workflow y switchea a kill-check"
+  - rule: "Si LTV:CAC < 1.5 en el día 14 report, recomienda /kill-funnel y detén el workflow"
+  - rule: "Total spend cap 7 días: {{ inputs.budget }} * 7 * 1.2 (20% buffer). Excederlo dispara warning."

@@ -1,0 +1,77 @@
+# Pure IG funnel + flywheel — Stories/Reels/Feed only, no Facebook positions.
+# Útil cuando el target audience es Gen Z / millenial, o cuando IG históricamente
+# tiene CPM 20%+ menor que FB en tu cuenta.
+
+name: aaarrr-ig-only
+description: >
+  Todo el sistema AAARRR sobre Instagram exclusivamente. Excluye facebook_positions.
+  Force-prioritiza creatives 9:16 (Stories/Reels). Ideal para producto visual.
+
+inputs:
+  product:
+    required: true
+  cpa_target:
+    default: 22
+  ltv_target:
+    default: 75
+  budget:
+    default: 50
+
+prerequisites:
+  - "Mínimo 5 creatives 9:16 (1080x1920) listas. Si no, /aaarrr-launch generará specs primero."
+  - "Instagram actor ID configurado en .aaarrr/config.json (meta.instagram_actor_id)"
+  - "Pixel debe disparar Purchase con value+currency"
+
+steps:
+  - day: 0
+    name: Launch IG-only Acquisition + plans Retention/Referral
+    command: /aaarrr-launch
+    args: "--product '{{ inputs.product }}' --cpa-target {{ inputs.cpa_target }} --ltv-target {{ inputs.ltv_target }} --platform ig --budget {{ inputs.budget }}"
+    requires_human_ok: true
+
+  - day: 0
+    name: Verify creative 9:16 readiness
+    command: /acquire
+    args: "--platform ig --validate-creatives"
+    requires_human_ok: false
+    notes: |
+      Detente si <5 creatives 9:16 en el plan. Sin volumen creativo, IG no funciona —
+      el algoritmo de Reels necesita freshness alta.
+
+  - day: 2
+    name: First IG kill losers
+    command: /aaarrr-analyze
+    args: "--last 2d --platform ig --auto-flag --breakdown placement"
+    requires_human_ok: false
+    notes: |
+      Breakdown por placement: Reels vs Stories vs Feed pueden tener CPA muy distinto.
+      Mata el peor placement antes que el peor adset.
+
+  - day: 7
+    name: Refresh creative — IG fatigue cycle es ~5 días
+    command: /acquire
+    args: "--platform ig --refresh-creative"
+    requires_human_ok: true
+    notes: |
+      IG fatiga rápido. Frequency >3 mata el funnel. Refrescar creatives cada 5-7 días.
+
+  - day: 14
+    name: First Revenue report IG-only
+    command: /revenue
+    args: "--report --breakdown placement"
+    requires_human_ok: false
+
+  - day: 14
+    name: Retention launch (D7 ladder con UGC IG)
+    command: /retain
+    args: "--day 7"
+    condition: "purchases_count >= 100"
+    requires_human_ok: true
+    notes: |
+      Las creatives Retention IG deben usar UGC del cliente original — no las
+      mismas de Acquisition.
+
+guardrails:
+  - rule: "Si frequency > 4 en cualquier adset, refresh creatives ANTES de gastar más"
+  - rule: "Si CPM IG sube >30% en 7 días, fatiga creativa — refresh obligatorio"
+  - rule: "Si Reels CTR < 0.5% por 5 días, mata Reels y aloca a Stories"
