@@ -46,7 +46,7 @@ app-gtm-release-toolkit install --force    # Overwrite unmanaged conflicts
 ║  /app-gtm-release:ship-swift     ← Phase 2.5 ║
 ╠════════════════════════════════════════════╣
 ║  TIER 3 — MASS PUBLISH                     ║
-║  /app-gtm-release:ship-everywhere ← Phase 1 ║
+║  /app-gtm-release:ship-everywhere ← Phase 1 ✅ ║
 ╚════════════════════════════════════════════╝
 ```
 
@@ -86,7 +86,7 @@ app-gtm-release-toolkit install --force    # Overwrite unmanaged conflicts
 
 ## Skills (15)
 
-Auto-activate by context — you can also invoke them directly. Six are framework-agnostic; four are Flutter-coupled (marked with `<!-- TODO: framework-agnostic split -->` for refactor in Phase 3+); five are framework-specific (Phase 1+2).
+Auto-activate by context — you can also invoke them directly. Seven are framework-agnostic; three are Flutter-coupled (marked with `<!-- TODO: framework-agnostic split -->` for refactor in Phase 3+); five are framework-specific (Phase 1+2).
 
 | Skill | Status | Triggers when you... |
 |-------|--------|---------------------|
@@ -210,30 +210,39 @@ app-gtm-release-toolkit/
 ├── .claude-plugin/
 │   ├── plugin.json
 │   └── marketplace.json
-├── commands/                 # 9 commands (3 real, 6 stubs)
-│   ├── audit.md              # framework detection + Flutter audit
+├── commands/                 # 10 commands (9 real, 1 stub)
+│   ├── audit.md              # framework detection + Flutter audit (real)
 │   ├── ship-advisor.md       # strategic router (real)
-│   ├── ship-flutter.md       # full Flutter lifecycle (real)
-│   ├── ship-pwa.md           # stub — Phase 1
-│   ├── ship-snap.md          # stub — Phase 1
-│   ├── ship-msstore.md       # stub — Phase 1
-│   ├── ship-kmp.md           # stub — Phase 2
-│   ├── ship-maui.md          # stub — Phase 2
+│   ├── ship-flutter.md       # full Flutter lifecycle, 4 spaces (real)
+│   ├── ship-pwa.md           # PWA → MS Store + Play TWA + App Store, 5 gates (real — Phase 1)
+│   ├── ship-snap.md          # Linux desktop → Snap Store, 5 gates (real — Phase 1)
+│   ├── ship-msstore.md       # MSIX → Microsoft Store, 5 gates (real — Phase 1)
+│   ├── ship-everywhere.md    # mass-publish orchestrator (real — Phase 1)
+│   ├── ship-kmp.md           # KMP → Play + App Store, 5 gates (real — Phase 2)
+│   ├── ship-maui.md          # MAUI → Play + App Store + MS Store + macOS, 5 gates (real — Phase 2)
 │   └── ship-swift.md         # stub — Phase 2.5
 ├── agents/                   # 2 autonomous agents
 │   ├── pipeline-builder.md
 │   └── checklist-auditor.md
-├── skills/                   # 10 auto-activating skills
-│   ├── pre-launch-checklist/
-│   ├── app-security/
-│   ├── monetization/
-│   ├── cicd-setup/
-│   ├── code-push/
-│   ├── store-setup/
-│   ├── store-listing/
-│   ├── testing-tracks/
-│   ├── alt-distribution/
-│   └── launch-plan/
+├── skills/                   # 15 auto-activating skills
+│   ├── pre-launch-checklist/    # Flutter-coupled
+│   ├── app-security/            # agnostic
+│   ├── monetization/            # agnostic
+│   ├── cicd-setup/              # agnostic (YAML differs per framework)
+│   ├── code-push/               # Flutter/Dart-coupled
+│   ├── store-setup/             # agnostic
+│   ├── store-listing/           # agnostic
+│   ├── testing-tracks/          # agnostic
+│   ├── alt-distribution/        # multi-platform alt channels
+│   ├── launch-plan/             # Flutter-coupled
+│   ├── pwa-quality/             # PWA-specific (Phase 1)
+│   ├── msstore-submission/      # Microsoft Store-specific (Phase 1)
+│   ├── snap-build/              # Snap-specific (Phase 1)
+│   ├── kmp-build/               # KMP-specific (Phase 2)
+│   └── maui-publishing/         # MAUI-specific (Phase 2)
+├── src/                      # OpenCode CLI installer (TypeScript, builds to dist/)
+├── dist/                     # Built CLI — distributed via npm @lapc506/app-gtm-release-toolkit
+├── package.json
 └── README.md
 ```
 
