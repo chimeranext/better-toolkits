@@ -76,14 +76,24 @@ Wait for user approval before generating code.
 
 ## Step 4: Generate Widget Files
 
-**Shared widgets** go in `core/widgets/{atoms|molecules|organisms}/`
-**Feature widgets** go in `features/{feature}/presentation/{templates|pages}/`
+**The canonical home for shared widgets is the shared UI package** (`packages/{app}_ui` or `libs/{app}_ui`) — the app and the `apps/widgetbook` catalog are consumers via path dependencies, never the source. Detect it first:
+
+```bash
+ls packages/*_ui/pubspec.yaml libs/*_ui/pubspec.yaml 2>/dev/null
+```
+
+| Layout found | Target for atoms/molecules/organisms |
+|--------------|--------------------------------------|
+| Shared UI package exists | `{app}_ui/lib/src/{atoms\|molecules\|organisms}/`, re-exported from the package barrel (`lib/{app}_ui.dart`) |
+| No shared UI package | **Offer to scaffold one** (`packages/{app}_ui` with pubspec, barrel, and atomic folders) before generating — this is the default path, not an extra. Only if the user declines, fall back to the legacy in-app layout `core/widgets/{atoms\|molecules\|organisms}/` and flag the gap in the summary |
+
+**Feature widgets** (templates and pages) stay in the app: `features/{feature}/presentation/{templates|pages}/` — they bind app state and routes, so they don't belong in the UI package.
 
 Follow existing patterns — read 2-3 existing widgets at each level before generating.
 
 ## Step 5: Generate Widgetbook Entries
 
-For each widget, create `{widget_name}.widgetbook.dart` alongside it with `@widgetbook.UseCase` annotations. At minimum: Default + All Variants use cases.
+If the monorepo has an `apps/widgetbook` catalog (see `/atomic-design-toolkit:widgetbook-setup`), generate one use case per shared widget under `apps/widgetbook/lib/use_cases/{atoms|molecules|organisms}/{widget_name}_use_case.dart`, importing the widget from the UI package. Otherwise create `{widget_name}.widgetbook.dart` alongside the widget with `@widgetbook.UseCase` annotations. At minimum: Default + All Variants use cases.
 
 After generating, remind to run:
 ```bash
@@ -106,3 +116,4 @@ Present files created, design tokens used, and next steps.
 - Never put business logic in atoms or molecules — that belongs in providers
 - Never create a page without a template — templates define layout, pages bind data
 - Never use `setState` in organisms — use the project's state management
+- Never generate a shared widget into the app when a shared UI package exists — the package is the canonical home; the app and the widgetbook are consumers
