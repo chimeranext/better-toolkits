@@ -1,7 +1,7 @@
 {
   "name": "atomic-design-toolkit",
-  "version": "1.0.0",
-  "description": "Flutter Atomic Design widget generator — decompose features into atoms, molecules, organisms, templates, and pages. Audit mode, 14+ design system lenses.",
+  "version": "1.2.0",
+  "description": "Atomic Design toolkit for Flutter and Vite — decompose features into atoms, molecules, organisms, templates, and pages. Audit mode scans components, Vite bundle health (10 signals: duplicates, hashless assets, mixed majors, dual lockfiles, and more), and atomic-design enforcement hooks (V7: 7 cure-presence checks for future-drift exposure) across 18+ design system lenses. Migrate mode consumes audit reports to drive phased remediation.",
   "author": {
     "name": "Luis Andres Pena Castillo",
     "url": "https://github.com/chimeranext"
@@ -13,12 +13,22 @@
     "claude-code",
     "claude-code-plugin",
     "flutter",
+    "vite",
+    "react",
+    "vue",
+    "svelte",
     "atomic-design",
     "widget",
+    "component",
     "design-system",
     "material3",
     "cupertino",
+    "bootstrap5",
+    "tailwind",
+    "shadcn",
     "widgetbook",
-    "ui-components"
+    "storybook",
+    "ui-components",
+    "bundle-health"
   ]
 }

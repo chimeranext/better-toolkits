@@ -1,8 +1,8 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "atomic-design-toolkit",
-  "version": "1.0.0",
-  "description": "Flutter Atomic Design widget generator — decompose features into atoms, molecules, organisms, templates, and pages. Audit mode, 14+ design system lenses.",
+  "version": "1.2.0",
+  "description": "Atomic Design toolkit for Flutter and Vite — decompose features into atoms, molecules, organisms, templates, and pages. Audit mode scans components, Vite bundle health (duplicates, hashless assets, mixed majors), and atomic-design enforcement hooks (V7: future-drift exposure via hook/CI/ownership cure presence) across 16+ design system lenses. Migrate mode consumes audit reports to drive phased remediation.",
   "owner": {
     "name": "Luis Andres Pena Castillo",
     "email": "lapc506@users.noreply.github.com"
@@ -10,8 +10,8 @@
   "plugins": [
     {
       "name": "atomic-design-toolkit",
-      "description": "Generate production-ready Flutter widget hierarchies following Atomic Design methodology. Audit your codebase for decomposable widgets. Cross-reference against 14+ design systems (Material 3, Cupertino, Carbon, Primer, Polaris, shadcn, etc.). 2 commands, 2 auto-activating skills.",
-      "version": "1.0.0",
+      "description": "Generate production-ready component hierarchies for Flutter and Vite (React / Vue / Svelte / Solid / vanilla) following Atomic Design methodology. Audit your codebase for decomposable components plus Vite bundle health (10 signals derived from real modernization: duplicate deps, legacy public/ assets, mixed majors, vendorized libs, hashless assets, outdated deps, CI audit coverage, HMR, visual regression, dual lockfiles) and atomic-design enforcement hooks (V7: 7 cure-presence checks measuring future-drift exposure — hooks, CI guards, ownership docs, agent rules). Emit structured reports; drive phased remediation with /migrate. Cross-reference against 16+ design systems (Material 3, Cupertino, Carbon, Bootstrap 5, Tailwind + shadcn, Primer, Polaris, Spectrum, etc.). 3 commands, 2 auto-activating skills.",
+      "version": "1.2.0",
       "author": {
         "name": "Luis Andres Pena Castillo",
         "email": "lapc506@users.noreply.github.com"
@@ -23,13 +23,26 @@
         "claude-code",
         "claude-code-plugin",
         "flutter",
+        "vite",
+        "react",
+        "vue",
+        "svelte",
         "atomic-design",
         "widget",
+        "component",
         "design-system",
         "material3",
         "cupertino",
+        "bootstrap5",
+        "tailwind",
+        "shadcn",
         "widgetbook",
-        "ui-components"
+        "storybook",
+        "ui-components",
+        "bundle-health",
+        "migration",
+        "enforcement-hooks",
+        "atomic-design-rules"
       ]
     }
   ]
