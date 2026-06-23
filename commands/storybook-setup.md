@@ -129,3 +129,12 @@ Present: coverage table (before → after) per pillar, taxonomy decisions made, 
 - Never retitle silently — retitles break permalinks; list them
 - Never declare green because the build passed — build + served smoke + repo gates, all of them
 - Never deploy or wire CI gates unasked — prepare configs, leave the gates to the human
+
+## Relationship to /audit and /storybook-audit
+
+`/storybook-setup` is a **one-time bootstrap** — it stands up (or realigns) Storybook IA, design tokens, and title enforcement for a repo that has none or a drifted one. The recurring concerns live elsewhere; do not re-implement them here:
+
+- **Ongoing story coverage** (which components still lack a `.stories.tsx`, per pillar) → `/atomic-design-toolkit:storybook-audit`.
+- **Full component inventory + decomposition + design-system gap** → `/atomic-design-toolkit:audit`.
+
+Run `storybook-setup` once to stand up the catalog, then `storybook-audit` on a cadence to drive coverage to 100% and hold it.
