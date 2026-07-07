@@ -83,9 +83,10 @@ respondidas y el usuario haya aprobado la seccion. Preguntar UNA A LA VEZ. Esper
 
 ```
 ESPACIO 2: SOLUCION-VALIDACION (Fases 6-8)
-  |-- Fase 6: Modelo de Negocio Canvas -> 02-solucion-validacion/00 + 14 modulos
-  |-- Fase 7: Entrevista de Solucion   -> 02-solucion-validacion/15-entrevista-solucion.md
-  |-- Fase 8: Experimento MVP          -> 02-solucion-validacion/16-experimento-mvp.md
+  |-- Fase 6: Modelo de Negocio Canvas       -> 02-solucion-validacion/00 + 14 modulos
+  |-- Fase 7: Entrevista de Solucion         -> 02-solucion-validacion/15-entrevista-solucion.md
+  |              + Scorecard Validacion      -> 02-solucion-validacion/15a-scorecard-validacion-hipotesis.md
+  |-- Fase 8: Experimento MVP (6 tipos)      -> 02-solucion-validacion/16-experimento-mvp.md
   +-- PUERTA 2: La solucion resuelve el problema y alguien pagaria?
 ```
 
@@ -107,15 +108,76 @@ del cliente, fuerzas del cliente, investigacion de mercado) como insumos directo
 
 ## Fase 7: Entrevista de la Solucion (Solution Interview) -- 2-3 preguntas
 
-Leer plantilla: `${CLAUDE_PLUGIN_ROOT}/assets/templates/entrevista-solucion.md`
+Leer plantillas:
+- `${CLAUDE_PLUGIN_ROOT}/assets/templates/entrevista-solucion.md` -- guia estructurada con Commitment Ladder
+- `${CLAUDE_PLUGIN_ROOT}/assets/templates/hypothesis-validation-scorecard.md` -- NUEVO: scorecard de 4 criterios de Alvarez
 
-Generar `02-solucion-validacion/15-entrevista-solucion.md`. Presentar. Esperar aprobacion.
+**Proceso enriquecido**:
+
+1. **Ejecutar la Entrevista de Solucion** usando la guia `entrevista-solucion.md` + invocando
+   `business-model-toolkit:customer-interview-system` para cada entrevista individual
+   (outreach + notes per-interview + V/I/AI summary + speech pattern analysis).
+
+2. **Generar el archivo estructurado** `02-solucion-validacion/15-entrevista-solucion.md`
+   consolidando hallazgos del set de entrevistas.
+
+3. **Evaluar con el Hypothesis Validation Scorecard** (nuevo): despues de al menos 5
+   entrevistas de solucion, aplicar los **4 criterios de Alvarez** (LCD cap. 6) para decidir
+   si la hipotesis esta validada, parcialmente validada, invalidada, o indeterminada:
+   - **Criterio 1**: Problema real confirmado
+   - **Criterio 2**: El cliente cree que el problema debe resolverse
+   - **Criterio 3**: El cliente ya ha invertido (tiempo/dinero/esfuerzo) intentando resolverlo
+   - **Criterio 4**: No hay bloqueo externo insuperable
+   - **Umbral de validacion**: los 4 criterios se cumplen en >=70% de las entrevistas
+
+4. **Identificar earlyvangelists** (pyramid de Steve Blank) del pool de entrevistados:
+   candidatos ideales para el MVP experiment (Fase 8).
+
+Generar ademas `02-solucion-validacion/15a-scorecard-validacion-hipotesis.md` usando el
+template. Routing por veredicto (debe coincidir con la guidance del scorecard template):
+
+- **VALIDADA** (≥70%): avanzar a Fase 8 (MVP Experiment) con earlyvangelists identificados como candidates para el test inicial.
+- **PARCIALMENTE VALIDADA** (40-69%): NO avanzar a Fase 8. Refinar la hipótesis (probablemente ICP demasiado amplio — considerar split en sub-segmentos) y re-validar con mínimo 5 entrevistas adicionales post-refinamiento. Solo si tras refinamiento el veredicto sigue PARCIAL, considerar volver a Fase 6 (BMC) o Fase 2a (Lluvia de Supuestos) para reformular más profundamente.
+- **INVALIDADA** (<40%): NO avanzar a Fase 8. **Pivot**: volver a Fase 2a (Lluvia de Supuestos) y revisar qué supuestos del cuadrante B (alto riesgo + desconocido) fallaron; reformular la hipótesis desde ahí. No construir el producto mientras esto no se resuelva.
+- **INDETERMINADA** (N<5): realizar más entrevistas antes de concluir.
+
+Presentar. Esperar aprobacion.
 
 ## Fase 8: Experimento con Producto Minimo Viable (MVP -- Minimum Viable Product) -- 3-4 preguntas
 
-Leer plantilla: `${CLAUDE_PLUGIN_ROOT}/assets/templates/experimento-mvp.md`
+Leer plantillas:
+- `${CLAUDE_PLUGIN_ROOT}/assets/templates/experimento-mvp.md` -- ciclo Hipotesis -> Test -> Aprendizaje
+- `${CLAUDE_PLUGIN_ROOT}/assets/templates/mvp-type-selector.md` -- NUEVO: selector de 6 tipos de MVP (LCD cap. 7)
 
-Generar `02-solucion-validacion/16-experimento-mvp.md`. Presentar. Esperar aprobacion.
+**Proceso enriquecido**:
+
+1. **Seleccionar el tipo de MVP** (paso nuevo antes de disenar el experimento). Los 6 tipos:
+   - **Pre-Order MVP**: valida disposicion a pagar
+   - **Audience Building MVP**: valida interes y engagement
+   - **Concierge MVP**: valida demanda + logistica (servicio manual)
+   - **Wizard of Oz MVP**: valida comportamiento real (interfaz real, backend manual)
+   - **Single Use Case MVP**: valida direccion / feature focus
+   - **Other People's Product MVP**: valida demanda usando infraestructura existente
+
+   Recorrer el decision flow del selector:
+   - **Paso 1**: identificar cual es el supuesto principal a validar (A-F)
+   - **Paso 2**: responder las 4 preguntas de contexto (restriccion principal, construccion
+     significativa, audiencia previa, criticidad de confianza)
+   - **Paso 3**: revisar el catalogo de los 6 tipos con pros/cons
+   - **Paso 4**: elegir el tipo + justificar + reconocer blind spots
+
+2. **Generar** `02-solucion-validacion/16-experimento-mvp.md` con:
+   - Tipo de MVP seleccionado y razon
+   - Hipotesis que valida
+   - Diseno del experimento segun el tipo elegido
+   - **Criterios de exito cuantificados** definidos ANTES de lanzar (umbral que VALIDA
+     vs umbral que INVALIDA) -- regla critica anti-confirmation-bias
+   - Timeline y recursos
+   - Fecha de Go/No-Go decision (sin postergar)
+
+3. **Earlyvangelists identificados en Fase 7** son el target prioritario del MVP.
+
+Presentar. Esperar aprobacion.
 
 ---
 
@@ -153,4 +215,6 @@ Plan de Ejecucion (Execution Plan) -- Fases 9-13.
 
 ### Archivos de plantilla (leer antes de generar)
 - **`${CLAUDE_PLUGIN_ROOT}/assets/templates/entrevista-solucion.md`** -- Entrevista de la solucion + escalera de compromiso
+- **`${CLAUDE_PLUGIN_ROOT}/assets/templates/hypothesis-validation-scorecard.md`** -- Scorecard de 4 criterios de Alvarez (LCD cap. 6)
 - **`${CLAUDE_PLUGIN_ROOT}/assets/templates/experimento-mvp.md`** -- Ciclo de experimento MVP
+- **`${CLAUDE_PLUGIN_ROOT}/assets/templates/mvp-type-selector.md`** -- Selector de 6 tipos de MVP con decision tree (LCD cap. 7)

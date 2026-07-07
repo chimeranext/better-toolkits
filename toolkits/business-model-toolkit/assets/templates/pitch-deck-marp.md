@@ -46,12 +46,15 @@ style: |
 ---
 
 <!--
+PLANTILLA: Pitch Deck alineado con "Los 10 Mandamientos de los Grandes Pitch Decks"
+REFERENCIA: ${CLAUDE_PLUGIN_ROOT}/references/pitch-deck-10-commandments.md
+
 Instrucciones:
-- Esta plantilla está alineada con "Los 10 Mandamientos de los Grandes Pitch Decks"
-- Usa la extensión MARP para VS Code para visualizar y exportar
-- Reemplaza el texto con tu información
-- Personaliza los colores y estilos según tu marca
-- Añade imágenes relevantes en la carpeta /assets
+- Usa la extension MARP para VS Code para visualizar y exportar
+- Reemplaza TODOS los marcadores con informacion real del proyecto
+- Personaliza colores y estilos segun la marca del emprendimiento
+- Anade imagenes relevantes donde se indique
+- NUNCA dejar marcadores genericos en el entregable final
 -->
 
 # **TU EMPRESA**
@@ -59,7 +62,7 @@ Instrucciones:
 ## Pitch Deck
 
 <div style="text-align: center; margin-top: 2em;">
-Tu eslogan aquí
+Tu eslogan aqui
 </div>
 
 <div style="position: absolute; bottom: 2em; width: 100%; text-align: center;">
@@ -72,20 +75,20 @@ Nombre del Presentador | Cargo | Fecha
 
 # **EL PROBLEMA**
 
-## <span class="urgent">Problema urgente que necesita solución</span>
+## <span class="urgent">Problema urgente que necesita solucion</span>
 
 <div class="columns">
 <div>
 
-### ¿Porqué?
+### Por que?
 
-- Punto específico del problema 1
-- Punto específico del problema 2
+- Punto especifico del problema 1
+- Punto especifico del problema 2
 
-### ¿Quién se ve afectado?
+### Quien se ve afectado?
 
-- Afectación del problema 1
-- Afectación del problema 2
+- Afectacion del problema 1
+- Afectacion del problema 2
 
 ### Impacto del Problema
 
@@ -100,97 +103,103 @@ Nombre del Presentador | Cargo | Fecha
 
 <div class="evidence">
   <ul>
-    <li>Dato/estadística que respalde el problema</li>
-    <li>Investigación de mercado específica</li>
+    <li>Dato/estadistica que respalde el problema</li>
+    <li>Investigacion de mercado especifica</li>
     <li>Testimonios de clientes potenciales</li>
   </ul>
 </div>
 
+<!-- Imagen que ilustre el problema de forma clara -->
+<!-- ![Imagen del problema](./assets/problema.jpg) -->
+
 </div>
 
 </div>
 
 ---
 
-<!-- MANDAMIENTO 2: SOLUCIÓN -->
+<!-- MANDAMIENTO 2: SOLUCION - Aborda directamente el problema con un enfoque unico -->
 
-# **LA SOLUCIÓN**
+# **LA SOLUCION**
 
 <div class="columns">
 <div>
 
-## Nuestra propuesta única
+## Nuestra propuesta unica
 
-- Característica principal que resuelve el problema 1
-- Característica principal que resuelve el problema 2
-- Característica principal que resuelve el problema 3
+- Caracteristica principal que resuelve el problema 1
+- Caracteristica principal que resuelve el problema 2
+- Caracteristica principal que resuelve el problema 3
 
-### Conexión directa con el problema
+### Conexion directa con el problema
 
-- Problema 1 → Solución específica
-- Problema 2 → Solución específica
-- Problema 3 → Solución específica
+- Problema 1 -> Solucion especifica
+- Problema 2 -> Solucion especifica
+- Problema 3 -> Solucion especifica
 
 </div>
 <div>
 
-### Insight único
+### Insight unico
 
 <div class="evidence">
-  Explica aquí tu perspectiva única que hace diferente tu solución
+  Explica aqui tu perspectiva unica que hace diferente tu solucion
 </div>
+
+<!-- Imagen o diagrama claro de tu solucion -->
+<!-- ![Imagen de la solucion](./assets/solucion.jpg) -->
 
 </div>
 </div>
 
 ---
 
-<!-- MANDAMIENTO 3: PROPUESTA DE VALOR -->
+<!-- MANDAMIENTO 3: PROPUESTA DE VALOR - Demuestra que eres 10x mejor -->
 
 # **PROPUESTA DE VALOR 10X**
 
-## ¿Por qué somos 10 veces mejores?
+## Por que somos 10 veces mejores?
+
 <div class="evidence">
-  <span class="highlight"> Mensaje de valor único:</span>
-  Tu mensaje conciso y poderoso que comunica tu diferenciación 10x.
+  <span class="highlight">Mensaje de valor unico:</span>
+  Tu mensaje conciso y poderoso que comunica tu diferenciacion 10x.
 </div>
 
 <div class="columns">
   <div style="text-align: center; width: 30%;">
     <h3>Producto</h3>
-    <p>Explica cómo tu producto es sustancialmente mejor</p>
+    <p>Explica como tu producto es sustancialmente mejor que las alternativas actuales</p>
     <p class="highlight">Mejora cuantificable: ____%</p>
   </div>
   <div style="text-align: center; width: 30%;">
     <h3>Modelo de Negocio</h3>
-    <p>Explica cómo tu modelo ofrece ventajas significativas</p>
+    <p>Explica como tu modelo de negocio ofrece ventajas significativas</p>
     <p class="highlight">Ventaja cuantificable: ____%</p>
   </div>
   <div style="text-align: center; width: 30%;">
     <h3>Estrategia de Precios</h3>
-    <p>Explica cómo ofrece un valor excepcional</p>
+    <p>Explica como ofrece un valor excepcional</p>
     <p class="highlight">Ahorro/Beneficio: ____%</p>
   </div>
-</div>
 </div>
 
 ---
 
-<!-- MANDAMIENTO 4: TAM -->
+<!-- MANDAMIENTO 4: TAM - Calcula de abajo hacia arriba -->
 
-# **TAMAÑO DE MERCADO**
+# **TAMANO DE MERCADO**
 
 <div class="columns">
 <div>
 
-## Análisis de mercado bottom-up
+## Analisis de mercado bottom-up
 
 - **TAM (Mercado Total Disponible):**
-  - **\_ millones × $\_\_** = $\_\_\_\_ mil millones
-- **SAM (Mercado Disponible Serviceable):**
-  - **\_ millones × $\_\_** = $\_\_\_\_ mil millones
-- **SOM (Mercado Obtenible Serviceable):**
-  - **\_ millones × $\_\_** = $\_\_\_\_ millones
+  - **\_ clientes potenciales x $\_\_** precio promedio = $\_\_\_\_
+- **SAM (Mercado Disponible Servible):**
+  - **\_ clientes accesibles x $\_\_** precio promedio = $\_\_\_\_
+- **SOM (Mercado Obtenible Servible):**
+  - **\_ clientes objetivo x $\_\_** precio promedio = $\_\_\_\_
 
 </div>
 <div>
@@ -199,24 +208,27 @@ Nombre del Presentador | Cargo | Fecha
 
 <div class="evidence">
   <ul>
-    <li>Fuente específica 1</li>
-    <li>Fuente específica 2</li>
+    <li>Fuente especifica 1</li>
+    <li>Fuente especifica 2</li>
   </ul>
 </div>
+
+<!-- Grafico claro de TAM-SAM-SOM -->
+<!-- ![Grafico TAM-SAM-SOM](./assets/mercado.jpg) -->
 
 </div>
 </div>
 
 ---
 
-<!-- MANDAMIENTO 5: COMPETENCIA -->
+<!-- MANDAMIENTO 5: COMPETENCIA - Usa una tabla con beneficios medibles -->
 
 # **COMPETENCIA**
 
-## Análisis competitivo
+## Analisis competitivo
 
 <div class="evidence" style="margin-top: 1em;">
-  <strong>Ventaja competitiva clave:</strong> Explica tu beneficio diferenciador.
+  <strong>Ventaja competitiva clave:</strong> Explica aqui el beneficio mas importante que te diferencia de la competencia y por que es relevante para los clientes.
 </div>
 
 <table style="width: 100%; border-collapse: collapse; margin-top: 1em;">
@@ -225,85 +237,106 @@ Nombre del Presentador | Cargo | Fecha
     <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">Nosotros</th>
     <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">Competidor 1</th>
     <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">Competidor 2</th>
+    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">Competidor 3</th>
   </tr>
   <tr>
-    <td style="border: 1px solid #ddd; padding: 8px;"><strong>Beneficio 1</strong></td>
+    <td style="border: 1px solid #ddd; padding: 8px;"><strong>Beneficio medible 1</strong></td>
     <td style="border: 1px solid #ddd; padding: 8px; background-color: #e6ffe6;">100%</td>
     <td style="border: 1px solid #ddd; padding: 8px;">60%</td>
     <td style="border: 1px solid #ddd; padding: 8px;">40%</td>
+    <td style="border: 1px solid #ddd; padding: 8px;">30%</td>
   </tr>
   <tr>
-    <td style="border: 1px solid #ddd; padding: 8px;"><strong>Beneficio 2</strong></td>
+    <td style="border: 1px solid #ddd; padding: 8px;"><strong>Beneficio medible 2</strong></td>
     <td style="border: 1px solid #ddd; padding: 8px; background-color: #e6ffe6;">$X</td>
     <td style="border: 1px solid #ddd; padding: 8px;">$Y</td>
     <td style="border: 1px solid #ddd; padding: 8px;">$Z</td>
+    <td style="border: 1px solid #ddd; padding: 8px;">$W</td>
+  </tr>
+  <tr>
+    <td style="border: 1px solid #ddd; padding: 8px;"><strong>Beneficio medible 3</strong></td>
+    <td style="border: 1px solid #ddd; padding: 8px; background-color: #e6ffe6;">Si</td>
+    <td style="border: 1px solid #ddd; padding: 8px;">No</td>
+    <td style="border: 1px solid #ddd; padding: 8px;">No</td>
+    <td style="border: 1px solid #ddd; padding: 8px;">Si</td>
+  </tr>
+  <tr>
+    <td style="border: 1px solid #ddd; padding: 8px;"><strong>Beneficio medible 4</strong></td>
+    <td style="border: 1px solid #ddd; padding: 8px; background-color: #e6ffe6;">Si</td>
+    <td style="border: 1px solid #ddd; padding: 8px;">No</td>
+    <td style="border: 1px solid #ddd; padding: 8px;">Si</td>
+    <td style="border: 1px solid #ddd; padding: 8px;">No</td>
   </tr>
 </table>
 
 ---
 
-<!-- MANDAMIENTO 6: GO-TO-MARKET -->
+<!-- MANDAMIENTO 6: GO-TO-MARKET - Se especifico sobre como llegaras a los clientes -->
 
 # **ESTRATEGIA DE MERCADO**
 
 <div class="columns">
 <div>
 
-## Cliente objetivo
+## Caracteristicas del cliente objetivo
 
-- Perfil demográfico: **\_**
-- Comportamiento: **\_**
-- Necesidad: **\_**
-- Disposición a pagar: **\_**
+- Perfil demografico especifico: **\_**
+- Comportamiento especifico: **\_**
+- Necesidad especifica: **\_**
+- Disposicion a pagar: **\_**
 
 ### Segmentos prioritarios
 
-1. **Primario:** **\_**
-2. **Secundario:** **\_**
-3. **Terciario:** **\_**
+1. **Segmento primario:** **\_** (Razon de prioridad)
+2. **Segmento secundario:** **\_** (Razon de prioridad)
+3. **Segmento terciario:** **\_** (Razon de prioridad)
 
-### Canales específicos
+### Canales especificos
 
-- Canal 1: **\_**
-- Canal 2: **\_**
-- Canal 3: **\_**
+- Canal 1: **\_** (Estrategia especifica)
+- Canal 2: **\_** (Estrategia especifica)
+- Canal 3: **\_** (Estrategia especifica)
 
 </div>
 <div>
 
-### Métricas de adquisición:
+### Metricas de adquisicion:
 
 <div class="evidence">
   <ul>
-    <li>CAC: $_____</li>
-    <li>LTV: $_____</li>
+    <li>CAC (Costo de Adquisicion): $_____</li>
+    <li>LTV (Valor de Vida del Cliente): $_____</li>
     <li>Ratio LTV:CAC: _____:1</li>
   </ul>
 </div>
+
+<!-- Diagrama de estrategia de adquisicion de clientes -->
+<!-- ![Estrategia de adquisicion](./assets/marketing.jpg) -->
 
 </div>
 </div>
 
 ---
 
-<!-- MANDAMIENTO 7: PRODUCTO -->
+<!-- MANDAMIENTO 7: PRODUCTO - Demuestra casos de uso especificos -->
 
 # **DEMO DEL PRODUCTO**
 
 <div class="columns">
 <div>
 
-## Casos de uso
+## Casos de uso especificos
 
 1. **Rol de usuario 1:**
-   - Problema: **\_**
-   - Cómo lo resolvemos: **\_**
-   - Beneficio: **\_**
+
+   - Problema especifico: **\_**
+   - Como nuestro producto lo resuelve: **\_**
+   - Beneficio principal: **\_**
 
 2. **Rol de usuario 2:**
-   - Problema: **\_**
-   - Cómo lo resolvemos: **\_**
-   - Beneficio: **\_**
+   - Problema especifico: **\_**
+   - Como nuestro producto lo resuelve: **\_**
+   - Beneficio principal: **\_**
 
 </div>
 <div>
@@ -312,10 +345,11 @@ Nombre del Presentador | Cargo | Fecha
 
 - Beneficio 1: **\_** (Impacto cuantificable)
 - Beneficio 2: **\_** (Impacto cuantificable)
+- Beneficio 3: **\_** (Impacto cuantificable)
 
 <div class="evidence">
-  <strong>Testimonios:</strong>
-  <p class="quote">"Cita de un usuario"</p>
+  <strong>Testimonios de usuarios:</strong>
+  <p class="quote">"Cita especifica de un usuario sobre como el producto resolvio su problema"</p>
 </div>
 
 </div>
@@ -323,22 +357,33 @@ Nombre del Presentador | Cargo | Fecha
 
 ---
 
-<!-- MANDAMIENTO 8: FINANCIALS -->
+# **DEMOSTRACION**
+
+<!-- Capturas de pantalla o mockups del producto en accion -->
+<!-- ![Demo del producto](./assets/producto.jpg) -->
+
+---
+
+<!-- MANDAMIENTO 8: FORECASTS & FINANCIALS - Se realista y transparente -->
 
 # **PROYECCIONES FINANCIERAS**
+
+<div class="evidence">
+  <strong>Nivel de confianza:</strong> Explicacion de por que creemos en estas proyecciones y que factores podrian alterarlas.
+</div>
 
 <div class="columns">
 <div>
 
 ## Proyecciones realistas
 
-- **Ingresos Año 1:** $**\_**
-- **Ingresos Año 2:** $**\_**
-- **Ingresos Año 3:** $**\_**
+- **Ingresos Ano 1:** $**\_** (\_\_\_% de confianza)
+- **Ingresos Ano 2:** $**\_** (\_\_\_% de confianza)
+- **Ingresos Ano 3:** $**\_** (\_\_\_% de confianza)
 
-## Métricas clave
+## Metricas financieras clave
 
-- Margen bruto: **\_**%
+- Margen bruto: **\_**% -> **\_**% (Ano 3)
 - Burn rate mensual: $**\_**
 - Punto de equilibrio: **\_** meses
 
@@ -347,70 +392,82 @@ Nombre del Presentador | Cargo | Fecha
 
 ### Supuestos clave
 
-1. Tasa de conversión: **\_**%
-2. Precio promedio: $**\_**
-3. Tasa de retención: **\_**%
-4. Costo de adquisición: $**\_**
+1. Tasa de conversion: **\_**% (Basado en: **\_**)
+2. Precio promedio: $**\_** (Basado en: **\_**)
+3. Tasa de retencion: **\_**% (Basado en: **\_**)
+4. Costo de adquisicion: $**\_** (Basado en: **\_**)
+
+<!-- Grafico de proyecciones con escenarios -->
+<!-- ![Proyecciones financieras](./assets/proyecciones.jpg) -->
 
 </div>
 </div>
 
 ---
 
-<!-- MANDAMIENTO 9: FUNDRAISING ASK -->
+<!-- MANDAMIENTO 9: FUNDRAISING ASK - Enfocate en hitos medibles -->
 
-# **SOLICITUD DE FINANCIACIÓN**
+# **SOLICITUD DE FINANCIACION**
 
 <div class="columns">
 <div>
 
-## Inversión solicitada
+## Inversion solicitada
 
-- **Monto:** $**\_** millones
-- **Valoración:** $**\_** millones
+- **Monto:** $**\_**
+- **Valoracion:** $**\_**
 
-### Distribución de fondos
+### Distribucion de fondos
 
 - Desarrollo de producto: \_\_\_\_%
 - Marketing y ventas: \_\_\_\_%
 - Operaciones: \_\_\_\_%
+- Otros: \_\_\_\_%
+
+<div class="highlight">
+  Retorno esperado para inversores: _____x en _____ anos
+</div>
 
 </div>
 <div>
 
-### Hitos medibles
+### Hitos medibles a alcanzar
 
-1. **Hito 1:** **\_** (Fecha)
-   - Métrica: **\_**
+1. **Hito 1:** **\_** (Fecha especifica)
+   - Metrica de exito: **\_**
+   - Impacto en el negocio: **\_**
 
-2. **Hito 2:** **\_** (Fecha)
-   - Métrica: **\_**
+2. **Hito 2:** **\_** (Fecha especifica)
+   - Metrica de exito: **\_**
+   - Impacto en el negocio: **\_**
 
-3. **Hito 3:** **\_** (Fecha)
-   - Métrica: **\_**
+3. **Hito 3:** **\_** (Fecha especifica)
+   - Metrica de exito: **\_**
+   - Impacto en el negocio: **\_**
 
 </div>
 </div>
 
 ---
 
-<!-- TRACCIÓN -->
+<!-- BONUS: TRACCION - Si tienes traccion, muestrala primero -->
 
-# **TRACCIÓN**
+# **TRACCION**
 
 <div class="columns">
 <div>
 
-## Evidencia
+## Evidencia de traccion
 
-- **Usuarios/Clientes:** **\_**
-- **Ingresos:** $**\_**
-- **Retención:** **\_**%
-- **NPS:** **\_**
+- **Usuarios/Clientes:** **\_** (Crecimiento: **\_**%)
+- **Ingresos:** $**\_** (Crecimiento: **\_**%)
+- **Retencion:** **\_**% (Benchmark industria: **\_**%)
+- **Engagement:** **\_** (Benchmark industria: **\_**)
 
-### Validación
+### Validacion del mercado
 
 - Pilotos completados: **\_**
+- NPS (Net Promoter Score): **\_**
 - Testimonios destacados: **\_**
 
 </div>
@@ -420,67 +477,85 @@ Nombre del Presentador | Cargo | Fecha
 
 <div class="evidence">
   <ul>
-    <li>Logro 1</li>
-    <li>Logro 2</li>
-    <li>Logro 3</li>
+    <li>Logro especifico 1</li>
+    <li>Logro especifico 2</li>
+    <li>Logro especifico 3</li>
   </ul>
 </div>
+
+<!-- Grafico de crecimiento con datos reales -->
+<!-- ![Metricas de traccion](./assets/traccion.jpg) -->
 
 </div>
 </div>
 
 ---
 
-<!-- EQUIPO -->
+<!-- BONUS: EQUIPO - Se claro sobre la composicion del equipo -->
 
 # **EQUIPO**
 
 <table style="width: 100%; border-collapse: collapse; margin-top: 2em;">
   <tr>
     <td style="width: 33%; text-align: center; padding: 10px; vertical-align: top;">
+      <!-- <img src="./assets/team/persona1.jpg" style="border-radius: 50%; width: 150px; height: 150px; object-fit: cover;"> -->
       <h3>Nombre Completo</h3>
       <p><strong>CEO & Co-fundador</strong></p>
-      <p>Experiencia relevante</p>
+      <p>(Tiempo completo)</p>
+      <p>Experiencia especifica relevante para este negocio</p>
     </td>
     <td style="width: 33%; text-align: center; padding: 10px; vertical-align: top;">
+      <!-- <img src="./assets/team/persona2.jpg" style="border-radius: 50%; width: 150px; height: 150px; object-fit: cover;"> -->
       <h3>Nombre Completo</h3>
       <p><strong>CTO & Co-fundador</strong></p>
-      <p>Experiencia relevante</p>
+      <p>(Tiempo completo)</p>
+      <p>Experiencia especifica relevante para este negocio</p>
     </td>
     <td style="width: 33%; text-align: center; padding: 10px; vertical-align: top;">
+      <!-- <img src="./assets/team/persona3.jpg" style="border-radius: 50%; width: 150px; height: 150px; object-fit: cover;"> -->
       <h3>Nombre Completo</h3>
       <p><strong>Asesor</strong></p>
-      <p>Experiencia relevante</p>
+      <p>(Parcial)</p>
+      <p>Experiencia especifica relevante para este negocio</p>
     </td>
   </tr>
 </table>
 
+<div class="evidence" style="margin-top: 1em;">
+  <strong>Por que este equipo?</strong> Explica por que este equipo especifico esta excepcionalmente calificado para ejecutar esta idea de negocio.
+</div>
+
 ---
 
-<!-- MANDAMIENTO 10: VISIÓN -->
+<!-- MANDAMIENTO 10: VISION - Muestra como dominaras el mercado -->
 
-# **VISIÓN del 1er al 3er AÑO**
+# **VISION del 1er al 3er ANO**
 
 <div class="columns">
 <div>
 
-## Cómo dominaremos el mercado
+## Como dominaremos el mercado
 
-- Cuota de mercado objetivo: **\_**%
-- Expansión: **\_**
-- Productos adicionales: **\_**
+- Cuota de mercado objetivo: **\_**% en 3 anos
+- Expansion a nuevos segmentos: **\_**
+- Desarrollo de productos adicionales: **\_**
+- Ventajas competitivas sostenibles: **\_**
 
 ### Impacto en la industria
 
-- Transformación del sector: **\_**
-- Tendencias liderando: **\_**
+- Como transformaremos el sector: **\_**
+- Tendencias que estamos liderando: **\_**
+- Posicionamiento futuro: **\_**
 
 </div>
 <div>
 
 <div class="highlight" style="margin-top: 1em; text-align: center; font-size: 1.2em;">
-  Declaración de visión poderosa y ambiciosa
+  Declaracion de vision poderosa y ambiciosa
 </div>
+
+<!-- Imagen que represente la vision futura -->
+<!-- ![Vision de futuro](./assets/vision.jpg) -->
 
 </div>
 </div>
@@ -490,11 +565,11 @@ Nombre del Presentador | Cargo | Fecha
 # **GRACIAS**
 
 <div style="text-align: center; margin-top: 4em;">
-  <h2>¿Preguntas?</h2>
+  <h2>Preguntas?</h2>
   <p style="margin-top: 2em;">
     Nombre del Presentador<br>
     Email: tu@email.com<br>
-    Teléfono: +XX XXX XXX XXXX<br>
+    Telefono: +XX XXX XXX XXXX<br>
     www.tuempresa.com
   </p>
 </div>
