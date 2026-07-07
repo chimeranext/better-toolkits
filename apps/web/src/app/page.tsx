@@ -198,9 +198,10 @@ export default function Page() {
         </div>
 
         <div className="relative">
-          <h1 className="mx-auto max-w-[30ch] font-heading font-extrabold leading-[1.06] tracking-tight text-[clamp(2.1rem,1rem+3vw,4.75rem)]">
-            <span className="text-foreground/85">{t.s2.h1a}</span>{" "}
-            <span className="bg-brand-gradient bg-clip-text text-transparent">{t.s2.h1b}</span>
+          {/* Full-bleed: the display headline escapes the content container so each sentence fits one line at display size. */}
+          <h1 className="relative left-1/2 w-[94vw] -translate-x-1/2 font-heading font-extrabold leading-[1.08] tracking-tight text-[clamp(2.1rem,0.8rem+3.1vw,4.5rem)]">
+            <span className="block text-foreground/85">{t.s2.h1a}</span>
+            <span className="block bg-brand-gradient bg-clip-text text-transparent">{t.s2.h1b}</span>
           </h1>
           <p className="mt-3 text-xs uppercase tracking-[0.2em] text-muted-foreground sm:text-sm">{t.s2.source}</p>
           <p className="mx-auto mt-5 max-w-[58ch] text-[clamp(1rem,0.92rem+0.4vw,1.3rem)] leading-relaxed text-foreground/90">{t.s2.sub}</p>
