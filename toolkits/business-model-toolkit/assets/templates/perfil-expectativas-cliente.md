@@ -31,6 +31,77 @@ Esta sección captura el perfil completo del cliente como persona, incluyendo su
 
 ---
 
+### Espectros de Comportamiento (Traits Continuum)
+
+> Basado en *Lean Customer Development* (Cindy Alvarez, O'Reilly 2014), cap. 2.
+>
+> A diferencia de la demografía dura (edad, profesión, residencia), los **espectros de comportamiento** predicen cómo decide, compra y usa soluciones esta persona. Mapear dónde cae nuestro cliente objetivo en cada eje revela supuestos críticos que de otra forma quedan implícitos.
+>
+> Marcar con `●` la posición aproximada en cada continuo (1 = extremo izquierdo, 5 = extremo derecho). Justificar brevemente.
+
+---
+
+#### Seleccione el tipo de cliente
+
+- [ ] **B2C** (consumidor final) → usar espectros 1.1 a 1.8
+- [ ] **B2B** (empresa/organización) → usar espectros 2.1 a 2.6
+- [ ] **B2G** (gobierno/sector público) → usar espectros 2.1 a 2.6 + notas regulatorias
+- [ ] **B2B2C** (marketplace de dos lados) → mapear AMBOS lados por separado
+
+---
+
+#### 1. Espectros B2C (Consumidores)
+
+| # | Extremo Izquierdo | 1 | 2 | 3 | 4 | 5 | Extremo Derecho | Justificación |
+|---|---|---|---|---|---|---|---|---|
+| 1.1 | Valora el dinero (optimiza precio) | ☐ | ☐ | ☐ | ☐ | ☐ | Valora el tiempo (paga por ahorrar tiempo) | `[¿Por qué?]` |
+| 1.2 | Prefiere predictibilidad (rutina, marcas conocidas) | ☐ | ☐ | ☐ | ☐ | ☐ | Prueba cosas nuevas (early adopter) | `[¿Por qué?]` |
+| 1.3 | Sigue órdenes/indicaciones (ej. recetas, tutoriales) | ☐ | ☐ | ☐ | ☐ | ☐ | Toma decisiones propias/improvisa | `[¿Por qué?]` |
+| 1.4 | Decide por sí mismo/a | ☐ | ☐ | ☐ | ☐ | ☐ | Le importa qué pensarán los demás (familia, redes) | `[¿Por qué?]` |
+| 1.5 | Prefiere más control (hacer él/ella mismo/a) | ☐ | ☐ | ☐ | ☐ | ☐ | Prefiere más conveniencia (delegar, automatizar) | `[¿Por qué?]` |
+| 1.6 | Baja comodidad con tecnología (`low-tech`) | ☐ | ☐ | ☐ | ☐ | ☐ | Alta comodidad (`tech-savvy`, usa CLI/Beta) | `[¿Por qué?]` |
+| 1.7 | Reemplaza frecuentemente (gadgets, ropa, suscripciones) | ☐ | ☐ | ☐ | ☐ | ☐ | Compra a largo plazo (durabilidad, mantener) | `[¿Por qué?]` |
+| 1.8 | Consciente de salud/bienestar | ☐ | ☐ | ☐ | ☐ | ☐ | Consciente de sabor/placer inmediato | `[¿Por qué?]` |
+
+#### 2. Espectros B2B (Empresas) y B2G (Sector Público)
+
+| # | Extremo Izquierdo | 1 | 2 | 3 | 4 | 5 | Extremo Derecho | Justificación |
+|---|---|---|---|---|---|---|---|---|
+| 2.1 | `Low-tech` (procesos en papel, Excel) | ☐ | ☐ | ☐ | ☐ | ☐ | `Tech-savvy` (SaaS, APIs, integraciones) | `[¿Por qué?]` |
+| 2.2 | Baja autonomía (requiere aprobación de N niveles) | ☐ | ☐ | ☐ | ☐ | ☐ | Alta autonomía (compra discrecional del área) | `[¿Por qué?]` |
+| 2.3 | Cultura corporativa conservadora (resistencia al cambio) | ☐ | ☐ | ☐ | ☐ | ☐ | Cultura progresista (fomenta experimentación) | `[¿Por qué?]` |
+| 2.4 | Aversión al riesgo (se evita fallar) | ☐ | ☐ | ☐ | ☐ | ☐ | Riesgo recompensado (se premia apostar) | `[¿Por qué?]` |
+| 2.5 | Valora estabilidad (prevenir caídas a toda costa) | ☐ | ☐ | ☐ | ☐ | ☐ | Valora recuperabilidad (aceptar fallos, recuperarse rápido) | `[¿Por qué?]` |
+| 2.6 | Prefiere soluciones llave en mano (`turnkey`) | ☐ | ☐ | ☐ | ☐ | ☐ | Prefiere piezas best-of-breed ensambladas a medida | `[¿Por qué?]` |
+
+> **Nota B2G**: En contextos de sector público, 2.3 y 2.4 suelen caer 1-2 hacia la izquierda (más conservador / averso al riesgo) por presión política/mediática. 2.2 depende de si el comprador tiene potestad discrecional o requiere licitación pública.
+
+---
+
+#### Perfil Psicológico Complementario
+
+Completar con respuesta larga, usando lenguaje del cliente (no jerga):
+
+- **¿Qué es lo que MÁS le preocupa a esta persona en su rol/vida?** `[Respuesta]`
+- **¿Qué éxitos/reconocimientos lo/la motivan?** `[Respuesta]` *(ej. para B2B: promoción interna, visibilidad ante el jefe, premio de la industria; para B2C: estatus social, logro personal, tiempo con familia)*
+- **Si es B2B: título exacto del rol + nivel jerárquico:** `[Respuesta]` *(ej. "Gerente de Operaciones" vs "Director de Operaciones" vs "Jefe de Logística")*
+- **Identidad social con la que se identifica:** `[Respuesta]` *(ej. "emprendedor tico", "dev senior remoto", "mamá trabajadora", "líder ágil")*
+
+---
+
+#### Implicaciones estratégicas
+
+Basándose en la posición del cliente en cada espectro, responder:
+
+1. **Canal de adquisición más probable**: `[Derivado de 1.6/2.1 (tech-savvy) + 1.4 (peer influence)]`
+2. **Ciclo de decisión estimado**: `[Derivado de 2.2 autonomía + 2.3 cultura + 2.4 aversión riesgo — B2B solo]`
+3. **Nivel de fricción aceptable en onboarding**: `[Derivado de 1.5/2.6 (control vs. conveniencia) + 1.6/2.1 (tech-savvy)]`
+4. **Mensaje principal en landing page**: `[Derivado de 1.1 (valor dinero vs. tiempo) + preocupación principal del perfil psicológico]`
+
+> 💡 **Anti-patrón común**: Intentar servir a un cliente en `3` (medio del espectro) en todos los ejes = producto genérico que no emociona a nadie. Los mejores clientes iniciales están en los extremos (1-2 o 4-5) en al menos 2-3 espectros clave.
+
+---
+
 ### Sobre Mí (Basado en Ikigai)
 
 Pídale al cliente que se describa en un párrafo considerando los cuatro pilares de su Ikigai:

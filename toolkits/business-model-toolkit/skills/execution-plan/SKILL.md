@@ -121,7 +121,18 @@ Cual tiene mejor tasa de conversion (Conversion Rate)?"
 
 Generar `03-ejecucion-aceleracion/02-economia-unitaria.md`. Presentar. Esperar aprobacion.
 
-## Fase 11: Modelo Financiero (Financial Model) -- 2-3 preguntas
+## Fase 11: Modelo Financiero (Financial Model) -- 4-6 preguntas
+
+Leer plantilla: `${CLAUDE_PLUGIN_ROOT}/assets/templates/financial-model-beyond-budgeting.md`
+
+**Fundamento metodologico**: Basado en *Lean Enterprise* (Humble, Molesky, O'Reilly, 2015)
+cap. 13 "Evolving Financial Management". La tesis: **el presupuesto anual tradicional**
+combina tres propositos distintos en un solo numero, creando incentivos perversos
+(sandbagging, forecasts politicos, asignacion rigida). La solucion: **separar en 3 procesos
+distintos con cadencias distintas**: Target (ambicioso) + Forecast (honesto) + Resource
+Allocation (dinamico, evidence-driven).
+
+### Preguntas base (costos + runway)
 
 **MF-1**: "Cuales son tus costos fijos y variables mensuales?
 (equipo, infraestructura, herramientas, servicios)"
@@ -136,7 +147,55 @@ Generar `03-ejecucion-aceleracion/02-economia-unitaria.md`. Presentar. Esperar a
   d) Capital de riesgo (VC -- Venture Capital)
   e) Subvenciones o premios (Grants)"
 
-Generar `03-ejecucion-aceleracion/03-modelo-financiero.md`. Presentar. Esperar aprobacion.
+### Preguntas Beyond Budgeting (nuevo)
+
+**MF-4 (Target)**: "Definamos el Target -- que queres lograr en los proximos 12-18 meses?
+Esto es **aspiracional**, sin penalizacion por no alcanzarlo. Metricas clave:
+  - MRR (Monthly Recurring Revenue) target a 12 y 18 meses
+  - Usuarios activos / clientes pagos
+  - North Star metric del negocio"
+
+**MF-5 (Forecast)**: "Ahora definamos el Forecast -- que *realmente* esperas que pase?
+Esto es **honesto y privado**, sin politica. Rolling 18 meses con supuestos claros
+(growth rate MoM, churn, CAC payback). **Regla critica**: el forecast puede ser menor
+que el target y no pasa nada -- son herramientas distintas.
+
+**Herramienta operacional recomendada**: **Slidebean Financial Model Template**
+(gratuito, Google Sheets/Excel) -- provee la estructura de 14 sheets (Settings, Team &
+Salaries, Projections, Revenue, COGS, SG&A, WK+CAPEX, etc.) para construir el forecast.
+Beyond Budgeting aporta el framework estrategico, Slidebean la estructura operacional.
+
+Link: https://slidebean.com/free-startup-financial-model-template
+Video tutorial: https://www.youtube.com/watch?v=rwUxqjnksAc
+
+Variantes por industria disponibles en Slidebean: Subscription/SaaS, E-commerce,
+Marketplace, Mobile App, Blog/Content -- si tu negocio encaja en una, arrancar con
+esa variante ahorra horas de formulas. Detalles completos en el template
+`financial-model-beyond-budgeting.md`."
+
+**MF-6 (Resource Allocation)**: "Que iniciativas vas a financiar este trimestre y con
+que gate de evidencia? En lugar de pre-asignar 12 meses de presupuesto, vamos a asignar
+tramos trimestrales con metrica clara para desbloquear el siguiente tramo.
+
+Definir 3-5 iniciativas, cada una con:
+  - Monto asignado al tramo actual
+  - Metrica que debe cumplirse para siguiente tramo
+  - Fecha del gate de decision (go / pivot / kill / scale)"
+
+### Reglas de los 3 propositos
+
+| | Target | Forecast | Resource Allocation |
+|---|---|---|---|
+| Pregunta | Que queremos lograr? | Que esperamos que pase? | Cuanto gastamos y donde? |
+| Cadencia | Anual (revision Q) | Rolling 18 meses | Trimestral con gates |
+| Sesgo | Ambicioso (up-bias OK) | Neutral (cero sesgo) | Conservador (kill libre) |
+| Publico | Todo el equipo | Leadership + board | Lideres + finanzas |
+
+**Output**: Generar `03-ejecucion-aceleracion/03-modelo-financiero.md` con las 3 secciones
+(Target / Forecast / Resource Allocation) claramente separadas, siguiendo la estructura
+del template `financial-model-beyond-budgeting.md`.
+
+Presentar. Esperar aprobacion.
 
 ## Fase 12: Marca e Identidad (Branding) -- 2-3 preguntas
 
@@ -160,6 +219,36 @@ Propiedad Intelectual (IP Assignment), contrato laboral, Acuerdo Estandar de Ase
 del Founder Institute (FAST -- Founder Advisor Standard Template))"
 
 Generar `03-ejecucion-aceleracion/05-fundacion-legal.md`. Presentar. Esperar aprobacion.
+
+### Si tenes multiples ventures (N >= 3) -- cross-plugin reference
+
+BMT cubre legal structure para UN venture individual. Si sos serial entrepreneur
+con multiples ventures activas + shared services, considerar usar el plugin complementario
+**venture-studio-toolkit** (https://github.com/chimeranext/venture-studio-toolkit).
+
+Skills relevantes del venture-studio-toolkit:
+
+- **`structure-decision`**: elegir estructura macro (Skip-CR / Tostada / Cayman Sandwich /
+  Services Hub / Multi-LLC + Holding) -- 7 patrones cubiertos
+- **`services-hub-setup`**: si eleges Services Hub (patron #6), setup de MSAs (Master
+  Service Agreements) + transfer pricing methodology + IP assignment rider
+- **`liability-contagion-analysis`**: validar que las ventures NO se contaminan entre si
+  bajo single-LLC (critico si hay ventures high-liability como fintech o health)
+- **`when-to-become-studio`**: assessment de 3 modos (serial entrepreneur puro /
+  Services Hub operator / formal studio con fund)
+- **`cap-table-per-venture`**: gestion de cap tables independent cuando hay multiples LLCs
+- **`sweat-equity-agreement`**: vesting + cliff + 83(b) + clawback (extiende el FAST
+  agreement cubierto en Fase 17 de BMT)
+
+**BMT Fase 13 sigue siendo relevante por-venture**, pero la arquitectura macro (como
+multiples ventures coexisten legal y operacionalmente) la decide el venture-studio-toolkit.
+
+Typical flow combinado:
+1. BMT Fase 13 -- define legal structure DE ESTA venture (LLC Delaware, SRL CR, etc.)
+2. venture-studio-toolkit `structure-decision` -- define como ESTA venture encaja en el
+   portfolio broader (standalone? bajo Services Hub? subsidiary de Holding?)
+3. venture-studio-toolkit `services-hub-setup` (opcional) -- si Services Hub elegido,
+   setup del framework MSA entre Services LLC y esta venture
 
 ---
 
@@ -194,3 +283,6 @@ Aceleracion del Crecimiento (Growth Acceleration) -- Fases 14-17.
 - **`${CLAUDE_PLUGIN_ROOT}/references/methodology.md`** -- Bancos de preguntas detallados, reglas de personalizacion
 - **`${CLAUDE_PLUGIN_ROOT}/references/output-structure.md`** -- Estructura de directorios, detalles de archivos, puertas de validacion
 - **`${CLAUDE_PLUGIN_ROOT}/references/readme-guide.md`** -- Patrones de generacion de README
+
+### Archivos de plantilla (leer antes de generar)
+- **`${CLAUDE_PLUGIN_ROOT}/assets/templates/financial-model-beyond-budgeting.md`** -- Framework Beyond Budgeting (Target / Forecast / Resource Allocation) basado en Lean Enterprise cap. 13
