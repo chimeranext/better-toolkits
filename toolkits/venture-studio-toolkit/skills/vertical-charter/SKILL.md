@@ -3,7 +3,7 @@ name: vertical-charter
 version: 1.0.0
 description: >
   Defines mission, scope, success criteria, and resource allocation for each
-  vertical within a studio (e.g., chimeranext, Civic Tech, B2B Factory). Integrates
+  vertical within a studio (e.g., Acme Platform, Civic Tech, B2B Factory). Integrates
   with Linear teams as the operational home of each vertical. Use when the user
   asks "vertical charter", "team charter", "vertical mission", "studio vertical",
   "Linear team mission", "define vertical scope", "/vertical-charter".
@@ -12,8 +12,8 @@ description: >
 # Vertical Charter
 
 Define la **misión, scope, success criteria, y resource allocation** de cada vertical
-dentro del studio. Cada vertical suele mapear a un Linear team (ej. chimeranext, Civic Tech,
-B2B Factory en chimeranext Labs).
+dentro del studio. Cada vertical suele mapear a un Linear team (ej. Acme Platform, Civic Tech,
+B2B Factory en Acme Studio).
 
 ## ⚠️ DISCLAIMER
 
@@ -45,11 +45,11 @@ Español. Términos organizacionales en "español (English)" primera vez.
 Un **vertical** es una unidad organizacional dentro del studio que agrupa ventures por
 **tema común** (industria, customer type, technology layer).
 
-### Ejemplos (chimeranext Labs)
+### Ejemplos (Acme Studio)
 
-- **chimeranext**: product pillar — operating system para developers (Launchpad, Forum, Marketplace, Chimera Score, etc.)
+- **Acme Platform**: product pillar — operating system para developers (Acme Launchpad, Acme Forum, Acme Marketplace, Acme Score, etc.)
 - **Civic Tech**: tech para sector público / govtech
-- **B2B Factory**: custom software development para clientes enterprise (Software Factory + Chimera Projects)
+- **B2B Factory**: custom software development para clientes enterprise (Software Factory + Acme Projects)
 
 ### Cuándo crear vertical nueva
 
@@ -72,7 +72,7 @@ Un **vertical** es una unidad organizacional dentro del studio que agrupa ventur
 
 Una oración que articula el purpose de la vertical.
 
-Ejemplo: *"chimeranext construye el sistema operativo para developers — desde aprender el craft hasta emprender con comunidad."*
+Ejemplo: *"Acme Platform construye el sistema operativo para developers — desde aprender el craft hasta emprender con comunidad."*
 
 ### 2. Scope (in + out)
 
@@ -81,7 +81,7 @@ Ejemplo: *"chimeranext construye el sistema operativo para developers — desde 
 **Out of scope**: qué NO pertenece (ventures similares que deliberately NO se incluyen)
 
 Ejemplo:
-- In scope chimeranext: Launchpad, Forum, Marketplace, Chimera Score, Pathways, Agent Doji
+- In scope Acme Platform: Acme Launchpad, Acme Forum, Acme Marketplace, Acme Score, Acme Academy, Acme Agent
 - Out of scope: consulting services (están en B2B Factory), hackathons para clientes externos (están en otra vertical)
 
 ### 3. Success criteria
@@ -117,7 +117,7 @@ Linear team correspondiente + labels/projects usados.
 ### Paso 1 — Inventario de verticals actuales
 
 **VC-1**: "¿Cuáles son las verticals existentes del studio?
-- Ej. chimeranext, Civic Tech, B2B Factory (chimeranext Labs ejemplo)
+- Ej. Acme Platform, Civic Tech, B2B Factory (Acme Studio ejemplo)
 - Si no hay definidas explícitamente, identificar cuáles emergerían naturalmente
   agrupando las ventures por tema"
 
