@@ -22,6 +22,7 @@
     --destructive: 351 95% 71%;      /* #FB7185 */
     --destructive-foreground: 0 0% 100%;
     --success: 160 84% 52%;          /* #34D399 */
+    --success-foreground: 257 38% 5%; /* near-black on bright mint (dark theme) */
     --warning: 43 96% 56%;           /* #FBBF24 */
     --ring: 252 100% 68%;
   }
@@ -98,6 +99,7 @@
   --destructive: 347 77% 41%;     /* rose-700 — 5.9:1 on white (dark token was 2.72:1) */
   --destructive-foreground: 0 0% 100%;
   --success: 160 90% 27%;         /* darkened: ≥4.5:1 even over the success/15 tint */
+  --success-foreground: 0 0% 100%; /* white on dark green (light theme) */
   --warning: 38 92% 40%;
   --ring: 252 90% 60%;
   background-color: hsl(var(--background));
