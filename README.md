@@ -7,7 +7,7 @@ Plugin de Claude Code complementario a [`business-model-toolkit`](https://github
 ## ¿Cuándo usar este plugin?
 
 - **Sos fundador con múltiples startups personales** y necesitás decidir: ¿single-LLC para todas o multi-LLC + holding?
-- **Operás un venture studio** (tipo chimeranext Labs) y necesitás estructurar thesis, focus, secret sauce
+- **Operás un venture studio** (tipo Acme Studio) y necesitás estructurar thesis, focus, secret sauce
 - **Estás evaluando aceleradoras externas** (YC, Techstars, RevTech Labs, SOSA, Plug and Play, etc.) y querés saber cuál aplica a tu stage/vertical/geografía
 - **Estás en LATAM** y necesitás decidir si Skip-CR pattern (US incorp + freelancers LATAM), Delaware Tostada, Cayman Sandwich, o Delaware C-Corp es lo correcto
 - **Gestionás portafolio de ventures** y necesitás aplicar Three Horizons (H1/H2/H3), Innovation Scorecard, Cost of Delay, Improvement Kata
@@ -18,7 +18,7 @@ El plugin funciona en **dos modos** configurables vía `.venture-studio-toolkit.
 
 ### Studio mode
 
-Para venture studios tipo chimeranext Labs (startup studios sistemáticos). Incluye:
+Para venture studios tipo Acme Studio (startup studios sistemáticos). Incluye:
 
 - `studio-thesis` — govclab 37-word template
 - `studio-focus` — Stage × Geography × Industry framework
@@ -190,8 +190,6 @@ Si necesitás stability garantizada, esperar a v2.0.0. Para exploración activa 
 ### Reference docs (4)
 
 - `jurisdiction-matrix.md` — 16 jurisdicciones (LATAM 8 + US 3 + Offshore 3 + EU 2)
-- `chimeranext-labs-canonical-thesis.md` — canonical studio thesis case
-- `lapc506-services-hub-canonical.md` (nuevo en v1.1) — canonical Services Hub @lapc506
 - `bilingual-output-guide.md` (nuevo en v1.2) — YAML config schema + translation rules
 - `mcp-integrations-guide.md` (nuevo en v1.2) — MCPs que enhance qué skills
 

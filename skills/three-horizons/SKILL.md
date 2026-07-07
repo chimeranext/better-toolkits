@@ -179,7 +179,7 @@ Dar recomendación específica al caso, NO genérica 70/20/10:
 
 ### Acciones concretas
 
-1. [Acción específica, ej. "reasignar 15% del tiempo de Pathways a Agent Doji"]
+1. [Acción específica, ej. "reasignar 15% del tiempo de Acme Academy a Acme Agent"]
 2. [Acción específica]
 3. [Acción específica]
 ```
@@ -197,33 +197,33 @@ Generar `horizons-review-YYYY-QN.md` cada trimestre.
 
 ---
 
-## Aplicación al caso chimeranext Labs
+## Aplicación al caso Acme Studio
 
 Ejemplo con ventures reales (snapshot estimado Q2 2026):
 
 | Venture | Stage actual | Horizon | Razón |
 |---|---|---|---|
-| Pathways | Launching | H2 | Tiene revenue pero aún escalando; bootcamp VibeCoding en growth |
-| chimeranext Platform | Production | H1 | Core product, usuarios activos, revenue recurring |
-| Agent Doji | Production-beta | H2 | Integraciones crecen, buscando scale |
-| Launchpad (chimeranext) | MVP | H3 | En validación, sin revenue significativo |
-| Forum (chimeranext) | MVP | H3 | Early adoption, métricas de engagement |
-| Marketplace | MVP | H3 | Curación activa, no revenue directo |
-| Chimera Score | Production | H2 | Métrica core, usuarios comprometidos |
-| Hackathons | Production | H2 | Events running, revenue from tickets/sponsors |
+| Acme Academy | Launching | H2 | Tiene revenue pero aún escalando; bootcamp insignia en growth |
+| Acme Platform | Production | H1 | Core product, usuarios activos, revenue recurring |
+| Acme Agent | Production-beta | H2 | Integraciones crecen, buscando scale |
+| Acme Launchpad | MVP | H3 | En validación, sin revenue significativo |
+| Acme Forum | MVP | H3 | Early adoption, métricas de engagement |
+| Acme Marketplace | MVP | H3 | Curación activa, no revenue directo |
+| Acme Score | Production | H2 | Métrica core, usuarios comprometidos |
+| Acme Hackathons | Production | H2 | Events running, revenue from tickets/sponsors |
 | Software Factory | Revenue | H1 | Client work steady, margin estable |
-| doj-projects marketplace | MVP | H3 | Experimental, early community |
+| Acme Projects marketplace | MVP | H3 | Experimental, early community |
 
 **Allocation observada** (estimado):
-- H1: ~40% (chimeranext Platform + Software Factory)
-- H2: ~35% (Pathways + Doji + Score + Hackathons)
-- H3: ~25% (Launchpad + Forum + Marketplace + Chimera Projects)
+- H1: ~40% (Acme Platform + Software Factory)
+- H2: ~35% (Acme Academy + Acme Agent + Acme Score + Acme Hackathons)
+- H3: ~25% (Acme Launchpad + Acme Forum + Acme Marketplace + Acme Projects)
 
 **Evaluación**: balance razonable para early-stage studio. Recomendaría:
 
 - Consolidar H3 — 4 bets simultáneas es mucha dispersión. Decidir cuál 1-2 graduar a H2 y cuáles pausar/matar.
 - Reforzar H1 revenue — Software Factory debería crecer % de allocation para financiar H3 bets.
-- Vigilar que Pathways no se estanque en H2 — clear path to H1.
+- Vigilar que Acme Academy no se estanque en H2 — clear path to H1.
 
 ---
 

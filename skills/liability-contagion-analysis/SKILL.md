@@ -363,19 +363,19 @@ Generar `./portfolio/{founder}/liability-contagion-analysis.md`:
 
 **Razón**: combinar la fintech con la edtech = contagion catastrófico. Combinar el SaaS con cualquiera = contamination.
 
-### Caso 3: chimeranext Labs scenario (referencia)
+### Caso 3: Acme Studio scenario (referencia)
 
-- chimeranext Platform, Pathways, Forum, Marketplace — 🟢 (B2B SaaS low-risk)
-- Hackathons — 🟡 (liability por eventos presenciales; insurance required)
+- Acme Platform, Acme Academy, Acme Forum, Acme Marketplace — 🟢 (B2B SaaS low-risk)
+- Acme Hackathons — 🟡 (liability por eventos presenciales; insurance required)
 - Software Factory — 🟡 (B2B contracts with SLAs; E&O insurance needed)
-- Chimera Score — 🟢
+- Acme Score — 🟢
 
 **Matriz**: mayoría 🟢, algunas 🟡, ninguna 🔴
 
 **Recomendación**: Opción B — Single-LLC para los 🟢, LLC separada para Hackathons
 (por event liability), y E&O insurance robusto para Software Factory.
 
-Actualmente chimeranext Labs opera con una sola Texas LLC (Skip-CR pattern). Este es
+Actualmente Acme Studio opera con una sola Texas LLC (Skip-CR pattern). Este es
 **relativamente safe** dado que las ventures son mayoritariamente 🟢, pero:
 - Hackathons debería tener insurance específica para eventos (general liability + event cancellation)
 - Software Factory contracts deberían tener liability caps negociados

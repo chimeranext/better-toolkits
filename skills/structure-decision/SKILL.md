@@ -68,12 +68,12 @@ completa en la conversación sin escribir archivos.
 
 | # | Patrón | Capas | Costo | Cuándo | Tax |
 |---|---|---|---|---|---|
-| 1 | **Skip-CR Pattern** (caso chimeranext) | DE/WY/TX LLC + freelancers LATAM | $ | Bootstrapped, no vende al mercado LATAM local, no empleados formales locales | Pass-through |
+| 1 | **Skip-CR Pattern** (caso Acme Studio) | DE/WY/TX LLC + freelancers LATAM | $ | Bootstrapped, no vende al mercado LATAM local, no empleados formales locales | Pass-through |
 | 2 | **Single-LLC multi-brand** | 1 LLC + múltiples DBAs/marcas | $$ | Serial founder early-stage, low liability, no fundraising por venture | Pass-through (consolidado) |
 | 3 | **Delaware Tostada** | DE LLC → LATAM OpCo | $$ | Pre-seed/seed con SAFEs/convertibles | Pass-through |
 | 4 | **Cayman Sandwich** | Cayman HoldCo → DE LLC → LATAM OpCo | $$$$ | Series A+ con VCs internacionales | No Cayman corporate tax |
 | 5 | **Delaware C-Corp** | DE C-Corp → LATAM OpCo | $$$ | Exit US acquirer, QSBS elegibilidad | 21% federal + withholding (21-48% en exit) |
-| 6 | **Services Hub + Independent Ventures** (caso @lapc506) | Services LLC + N Venture LLCs (bilateral MSAs) | $$$ | Serial founder con 3+ ventures, shared services, independent VC raises per venture, sin plan fund | Pass-through per venture; Services LLC consolida personal income |
+| 6 | **Services Hub + Independent Ventures** (caso serial-founder) | Services LLC + N Venture LLCs (bilateral MSAs) | $$$ | Serial founder con 3+ ventures, shared services, independent VC raises per venture, sin plan fund | Pass-through per venture; Services LLC consolida personal income |
 | 7 | **Multi-LLC + Holding** (futuro) | Holding → múltiples LLCs de ventures | $$$$$ | Studio operator o serial founder con ventures maduras buscando VC + plan de fund atado | Depende de holding jurisdiction |
 
 ---
@@ -276,14 +276,14 @@ Para cada alternativa evaluada, una línea del por qué NO se eligió:
 
 ---
 
-## Casos canónicos (ejemplos internos)
+## Casos canónicos (ejemplos)
 
-### Caso 1: chimeranext (operado por @lapc506)
+### Caso 1: Acme Studio
 
-- **Contexto**: Studio LATAM con múltiples iniciativas (Pathways, chimeranext, Agent Doji, Launchpad, Forum, etc.) operado con empleados US + freelancers CR
+- **Contexto**: Studio LATAM con múltiples iniciativas (Acme Academy, Acme Platform, Acme Agent, Acme Launchpad, Acme Forum, etc.) operado con empleados US + freelancers CR
 - **Estructura actual**: Texas LLC (Skip-CR pattern)
 - **Por qué**: Mercado no es CR local, no necesita empleados formales locales, simplicidad operativa, Mercury banking
-- **Migration trigger**: Si chimeranext Labs formaliza como studio con fondo atado → evolucionar a Cayman Sandwich (HoldCo) + Delaware midco + LATAM OpCos por venture
+- **Migration trigger**: Si Acme Studio formaliza como studio con fondo atado → evolucionar a Cayman Sandwich (HoldCo) + Delaware midco + LATAM OpCos por venture
 
 ### Caso 2: Serial founder con 3 startups personales
 
@@ -299,15 +299,15 @@ Para cada alternativa evaluada, una línea del por qué NO se eligió:
 - **Por qué**: VC necesita priced round, operación local requiere compliance regulatorio, tax efficiency en exit
 - **Migration trigger**: Pre-IPO si planean listar en NASDAQ → considerar flip a Delaware C-Corp
 
-### Caso 4: Serial founder con 4 ventures mixed liability (caso @lapc506)
+### Caso 4: Serial founder con 4 ventures mixed liability (caso serial-founder)
 
-- **Contexto**: Residente CR, 4 ventures personales (Altrupets animal welfare, Vertivolatam hardware+SaaS, Habitanexus proptech con escrow, Aduanext customs SaaS), liability mix 2×🔴 + 2×🟡, plan VC raises independent per venture, sin plan fund atado
+- **Contexto**: Residente CR, 4 ventures personales (Acme Pets animal welfare, Acme Robotics hardware+SaaS, Acme Realty proptech con escrow, Acme Customs customs SaaS), liability mix 2×🔴 + 2×🟡, plan VC raises independent per venture, sin plan fund atado
 - **Estructura recomendada**: **Services Hub + Independent Ventures** (patrón #6)
 - **Por qué**: Multi-LLC mandatory por liability contagion; shared services (devs, legal, marketing) worth centralizar; VC raises per venture requieren cap tables limpios independientes; holding formal prematuro hasta que 2+ ventures hit Series A
-- **Estructura específica**: LAPC506 Services LLC (Delaware) + 4 Venture LLCs (Delaware Tostada per venture) + bilateral MSAs + transfer pricing cost-plus 10%
+- **Estructura específica**: Acme Services LLC (Delaware) + 4 Venture LLCs (Delaware Tostada per venture) + bilateral MSAs + transfer pricing cost-plus 10%
 - **Setup cost**: ~$6-8k (5 LLCs) + MSA templates via skill `services-hub-setup`
 - **Migration trigger**: cuando 2+ ventures hit Series A → evolucionar a Multi-LLC + Holding (patrón #7)
-- **Referencia**: `references/lapc506-services-hub-canonical.md` para ejemplo completo
+- **Referencia**: skill `services-hub-setup` para el pattern completo con ejemplo
 
 ---
 
