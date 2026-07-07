@@ -81,7 +81,7 @@ Write to `.atomic-design-toolkit/plans/migration-{YYYYMMDD-HHMM}.md` — same ti
 generated: 2026-04-18T16:00:00-06:00
 toolkit-version: 1.1.0
 source-report: .atomic-design-toolkit/reports/audit-20260418-1530-vite.md
-project-name: chimera-os
+project-name: example-platform
 stack: vite
 framework: react
 total-findings: 3
@@ -223,6 +223,6 @@ If any expectation fails, print the regression and do not close the migration.
 - **Never delete the plan file on completion** — it is historical evidence and the source of re-audit comparison.
 - **Never proceed to Phase N+1 if Phase N's re-audit command failed** — fix Phase N first.
 
-## Example Run (chimera-os)
+## Example Run (example-platform)
 
-Given the chimera-os audit report (0 blockers, 2 warnings, 1 new finding), an invocation of `/atomic-design-toolkit:migrate` produces a plan with three phases in use: 0 (N1 lockfile cleanup, effort S), 2 (W1 Stripe SDK upgrade, effort M), 5 (W2 bun audit in CI, effort S). Total rollup: ~1.5 days of engineering work, split into three independent branches, each with its own re-audit command.
+Given the example-platform audit report (0 blockers, 2 warnings, 1 new finding), an invocation of `/atomic-design-toolkit:migrate` produces a plan with three phases in use: 0 (N1 lockfile cleanup, effort S), 2 (W1 Stripe SDK upgrade, effort M), 5 (W2 bun audit in CI, effort S). Total rollup: ~1.5 days of engineering work, split into three independent branches, each with its own re-audit command.

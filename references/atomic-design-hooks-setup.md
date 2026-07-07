@@ -1,6 +1,6 @@
 # Atomic-Design Enforcement Hooks — Setup Guide
 
-How to install **write-time enforcement hooks** for atomic-design structure in a consumer repository. This is **Cure 4** of the four-cure defense-in-depth pattern documented in the legacy-ticket component-layer premortem (chimera-os, 2026-05-14).
+How to install **write-time enforcement hooks** for atomic-design structure in a consumer repository. This is **Cure 4** of the four-cure defense-in-depth pattern documented in the legacy-ticket component-layer premortem (example-platform, 2026-05-14).
 
 The audit command surfaces missing hooks as `E{n}` findings. This guide explains what to install and why.
 
@@ -8,7 +8,7 @@ The audit command surfaces missing hooks as `E{n}` findings. This guide explains
 
 ## Why hooks matter — the $394K anchor
 
-The premortem that motivates this reference cites a forensic finding from the chimera-os engagement:
+The premortem that motivates this reference cites a forensic finding from the example-platform engagement:
 
 > "ChimeraNext lleva 7.3 meses sin shipping. ~37% de effort wasted (~$394K)." — legacy-ticket, quoted verbatim in the legacy-ticket spike body, 2026-05-08.
 
@@ -251,7 +251,7 @@ make-no-mistakes-toolkit/
 
 The toolkit's `plugin.json` should register these hooks so every consumer inherits them automatically. The hooks read `.atomic-design-rules.json` from the consumer's repo root, so the same hook code enforces whatever pillar list each consumer declares.
 
-This is what catches the cross-repo Conway's Law multiplication described in the premortem §7.4.2: if chimera-os installs the cure but the next product in the same organization (chimera-agent-openclaw-plugin, future repos) does not, the structural anti-pattern reproduces in the new repo. Toolkit-level hooks scale the discipline to every consumer.
+This is what catches the cross-repo Conway's Law multiplication described in the premortem §7.4.2: if example-platform installs the cure but the next product in the same organization (example-plugin, future repos) does not, the structural anti-pattern reproduces in the new repo. Toolkit-level hooks scale the discipline to every consumer.
 
 ---
 
@@ -301,5 +301,5 @@ The "compounded risk" override is intentional: a repo with active drift AND no h
 - `references/vite-audit-checklist.md` — full bundle-health checks (V4) plus enforcement signals (V7).
 - `references/audit-report-schema.md` — E-finding schema, frontmatter, and example output.
 - `references/atomic-methodology.md` — atomic-level definitions.
-- legacy-ticket premortem (chimera-os) — the full forensic narrative, $394K / $324K / $718K math, 4-cure pattern.
-- Existing precedent in chimera-os: `.claude/hooks/pre-write-decision-record-location.sh` (legacy-ticket) — the OpenSpec-convention enforcement hook this pattern is modeled on.
+- legacy-ticket premortem (example-platform) — the full forensic narrative, $394K / $324K / $718K math, 4-cure pattern.
+- Existing precedent in example-platform: `.claude/hooks/pre-write-decision-record-location.sh` (legacy-ticket) — the OpenSpec-convention enforcement hook this pattern is modeled on.

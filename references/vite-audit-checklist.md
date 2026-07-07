@@ -249,13 +249,13 @@ If the count of lockfiles is greater than one, or the surviving lockfile does no
 
 **Remediation:** Keep only the lockfile matching `packageManager`. Delete the others, add them to `.gitignore`, and document the single package manager in README / CLAUDE.md. Run a clean install from the chosen tool immediately after to regenerate a fresh authoritative lockfile.
 
-**Added:** discovered during the chimera-os audit (April 2026) — `bun.lock` + `package-lock.json` coexisted under `"packageManager": "bun@1.3.10"`.
+**Added:** discovered during the example-platform audit (April 2026) — `bun.lock` + `package-lock.json` coexisted under `"packageManager": "bun@1.3.10"`.
 
 ---
 
 ## Atomic-Design Enforcement Signals (V7)
 
-Bundle health (signals 1-10) measures *what is broken today*. The seven enforcement signals below measure *whether the project will drift again tomorrow*. Codified from the legacy-ticket component-layer Conway's Law premortem (chimera-os, 2026-05-14) and the four-cure defense-in-depth pattern documented in `references/atomic-design-hooks-setup.md`.
+Bundle health (signals 1-10) measures *what is broken today*. The seven enforcement signals below measure *whether the project will drift again tomorrow*. Codified from the legacy-ticket component-layer Conway's Law premortem (example-platform, 2026-05-14) and the four-cure defense-in-depth pattern documented in `references/atomic-design-hooks-setup.md`.
 
 Each enforcement signal is reported in the audit with a stable ID `E{n}` (distinct from `B`/`W`/`I` so the migrate command can route them to a different remediation phase).
 
@@ -345,7 +345,7 @@ rg -l 'components-guard|atomic-design-guard|structural-guard|atomic-design-rules
 jq -r '.scripts | keys[]' package.json 2>/dev/null | grep -iE 'atomic|components.*lint|lint.*components'
 ```
 
-**Remediation:** Add a CI step that runs the structural guard script (analog of chimera-os's `primitives-guard.ts` for legacy-ticket). Fail the build on violations; require an approved exception comment to override.
+**Remediation:** Add a CI step that runs the structural guard script (analog of example-platform's `primitives-guard.ts` for legacy-ticket). Fail the build on violations; require an approved exception comment to override.
 
 ### 17. Pre-commit hook with atomic-design guard (E7)
 
