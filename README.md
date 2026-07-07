@@ -53,7 +53,7 @@ claude plugin install make-no-mistakes@better-toolkits
 
 BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
-### [atomic-design-toolkit](toolkits/atomic-design-toolkit/) `v1.2.0`
+### [atomic-design-toolkit](toolkits/atomic-design-toolkit/) `v1.3.0`
 
 Atomic Design for Flutter and Vite — decompose features into atoms, molecules, organisms, templates, and pages.
 
@@ -61,9 +61,11 @@ Atomic Design for Flutter and Vite — decompose features into atoms, molecules,
 
 - **Generate** production-ready component hierarchies for Flutter and Vite (React / Vue / Svelte / Solid / vanilla) following Atomic Design methodology.
 - **Audit** your codebase for decomposable components plus Vite bundle health (10 signals: duplicate deps, legacy `public/` assets, mixed majors, vendorized libs, hashless assets, outdated deps, CI audit coverage, HMR, visual regression, dual lockfiles).
+- **WCAG-audit** (v1.3) — WCAG 2.2 AA conformance (contrast, keyboard/focus, ARIA, target-size, forms) plus a design-quality / anti-AI-slop layer, scored across five dimensions 0-4 → /20 with P0-P3 severity and `file:line` + the exact WCAG criterion. Optional runtime pass via a browser MCP.
+- **Tokens-consolidate** (v1.3) — extract design tokens from N repos, flag where they diverge (never merge silently), propose a canonical set, and materialize a shared `tokens.css` + `tokens.ts` + `tailwind-preset.js`.
 - **Enforcement hooks** — V7 cure-presence checks (hooks, CI guards, ownership docs, agent rules) that measure future-drift exposure.
-- **Migrate** — consume audit reports to drive phased remediation, cross-referenced against 16+ design systems (Material 3, Cupertino, Carbon, Bootstrap 5, Tailwind + shadcn, Primer, Polaris, Spectrum, …).
-- 3 commands, 2 auto-activating skills. Storybook and Widgetbook setup included.
+- **Migrate** — consume audit reports (from `/audit`, `/wcag-audit`, or `/tokens-consolidate`) to drive phased remediation, cross-referenced against 16+ design systems (Material 3, Cupertino, Carbon, Bootstrap 5, Tailwind + shadcn, Primer, Polaris, Spectrum, …).
+- 5 commands, 2 auto-activating skills. Storybook and Widgetbook setup included.
 
 #### Install
 
