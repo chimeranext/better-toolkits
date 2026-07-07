@@ -31,8 +31,8 @@
     },
     {
       "name": "atomic-design-toolkit",
-      "description": "Atomic Design toolkit for Flutter and Vite — decompose features into atoms, molecules, organisms, templates, and pages. Audit mode scans components, Vite bundle health (10 signals: duplicates, hashless assets, mixed majors, dual lockfiles, and more), and atomic-design enforcement hooks (V7: 7 cure-presence checks for future-drift exposure) across 18+ design system lenses. Migrate mode consumes audit reports to drive phased remediation.",
-      "version": "1.2.0",
+      "description": "Atomic Design toolkit for Flutter and Vite — decompose features into atoms, molecules, organisms, templates, and pages. Audit mode scans components, Vite bundle health (10 signals: duplicates, hashless assets, mixed majors, dual lockfiles, and more), and atomic-design enforcement hooks (V7: 7 cure-presence checks for future-drift exposure) across 18+ design system lenses. Migrate mode consumes audit reports to drive phased remediation. v1.3 adds /wcag-audit (WCAG 2.2 AA conformance + design-quality anti-AI-slop, scored /20) and /tokens-consolidate (extract + reconcile divergent design tokens across repos into a shared tokens package) — both siblings of /audit feeding /migrate.",
+      "version": "1.3.0",
       "source": "./toolkits/atomic-design-toolkit",
       "category": "frontend",
       "keywords": [
