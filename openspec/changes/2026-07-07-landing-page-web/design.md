@@ -115,7 +115,7 @@ Que founders/CTOs con Claude Code instalen el marketplace con un comando, y que 
 ### Sección 9: Prueba social — "Standing on the shoulders of giants" (gris claro)
 - **Stats grid:** 10 toolkits · 75 commands · 96 skills · 22 agents · 131 templates · 65k líneas
 - **Dogfooding callout:** "This landing was designed by the toolkit's own /landing-page command" + better-microservices como hermano
-- **Franja de ventures:** AltruPets · Vertivol Latam · HabitaNexus · Keiko · AduaNext · LicitaNext
+- **Franja de ventures:** AltruPets _(animal welfare)_ · Vertivo _(agri-tech)_ · HabitaNexus _(proptech)_ · Keiko _(ed-tech)_ · AduaNext _(customs SaaS)_ · LicitaNext _(govtech)_
 - **GRID DE METODOLOGÍAS (50+, agrupadas por disciplina — inventario completo en scratchpad/methodology-inventory.md):**
   - *Architecture & Code Health:* Strangler Fig (Fowler) · DDD (Evans) · Explicit Architecture (Graça) · Hexagonal (Cockburn) · Onion (Palermo) · Clean (Martin) · CQRS (Young) · Conway's Law · 1NF (Codd) · Premortem (Klein, HBR)
   - *Design & UX:* Atomic Design (Frost) · NN/g Zone Model · Service Blueprint (Shostack) · User Story Mapping (Patton) · JTBD · 16+ design systems (Material 3, HIG, Carbon, Polaris…)
