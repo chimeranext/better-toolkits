@@ -373,7 +373,7 @@ export default function Page() {
                   </td>
                   <td className="px-5 py-3.5 text-foreground/90">{tk.oneLiner[lang]}</td>
                   <td className="px-5 py-3.5 font-mono text-xs text-muted-foreground">{tk.license}</td>
-                  <td className="px-5 py-3.5"><span className="rounded-full bg-success/15 px-2 py-0.5 text-xs font-medium text-success">{tk.status}</span></td>
+                  <td className="px-5 py-3.5"><span className="rounded-full bg-success px-2 py-0.5 text-xs font-semibold text-white">{tk.status}</span></td>
                 </tr>
               ))}
             </tbody>
@@ -478,7 +478,7 @@ export default function Page() {
                   <span className="h-2 w-2 rounded-full bg-destructive/70" />
                   <span className="h-2 w-2 rounded-full bg-warning/70" />
                   <span className="h-2 w-2 rounded-full bg-success/70" />
-                  <span className="ml-auto rounded-full bg-success/15 px-1.5 py-px font-mono text-[9px] font-semibold uppercase text-success">live</span>
+                  <span className="ml-auto rounded-full bg-success px-1.5 py-px font-mono text-[9px] font-bold uppercase text-white">live</span>
                 </div>
                 <div className="px-3 py-2.5">
                   <div className="font-heading text-sm font-bold text-card-foreground">{v.name}</div>
@@ -508,8 +508,8 @@ export default function Page() {
                   style={{ borderColor: `${accent}55`, boxShadow: `inset 0 3px 0 0 ${accent}` }}
                 >
                   <div className="flex items-baseline justify-between gap-2">
-                    <h4 className="font-heading text-lg font-bold" style={{ color: accent }}>{g.label[lang]}</h4>
-                    <span className="rounded-full px-2 py-0.5 font-mono text-[10px] font-semibold" style={{ backgroundColor: `${accent}1f`, color: accent }}>
+                    <h4 className="font-heading text-xl font-bold" style={{ color: accent }}>{g.label[lang]}</h4>
+                    <span className="rounded-full bg-muted px-2 py-0.5 font-mono text-[11px] font-semibold text-card-foreground/80">
                       {g.items.length}
                     </span>
                   </div>
