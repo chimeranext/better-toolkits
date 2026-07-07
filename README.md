@@ -7,7 +7,7 @@ A Claude Code plugin by [Luis Andres Pena Castillo](https://github.com/lapc506).
 ## Install (Claude Code)
 
 ```bash
-claude plugin add lapc506/business-model-toolkit
+claude plugin add chimeranext/business-model-toolkit
 ```
 
 ## Install (OpenCode)
@@ -30,24 +30,28 @@ business-model-toolkit install --force    # Overwrite unmanaged conflicts
 
 ## What's Inside
 
-### Commands (2)
+### Commands (4)
 
 | Command | Description |
 |---------|-------------|
 | `/business-model-toolkit:brainstorm` | Full guided lifecycle — 21 phases across 3 spaces with validation gates |
 | `/business-model-toolkit:simulate` | Simulation mode — same flow but nothing is saved, everything shown in conversation |
+| `/business-model-toolkit:product-vision-audit` | Gap analysis de un modulo vs. su vision PIBER + IDCF — audita codebase contra Design Theses, Capabilities y Features declarados en el spike |
+| `/business-model-toolkit:linear-projects-setup` | Bootstrap a Linear workspace with label taxonomy, projects, milestones, and reviewer integrations. Modes: labels, projects, audit, sync, or clean slate |
 
-### Skills (5)
+### Skills (7)
 
-Auto-activate by lifecycle phase — you can also invoke them directly.
+Auto-activate by lifecycle phase or invocation trigger — you can also invoke them directly.
 
 | Skill | Phases | Triggers when you... |
 |-------|--------|---------------------|
 | `problem-validation` | 1-5 | Say "validate my idea", "founder profile", "customer forces" |
 | `solution-design` | 6-8 | Say "business model canvas", "BMC", "MVP experiment" |
-| `execution-plan` | 9-13 | Say "revenue model", "unit economics", "financial model" |
+| `execution-plan` | 9-13 | Say "revenue model", "unit economics", "financial model", "OKRs", "KPI dashboard" |
+| `brand-identity` | deepens 12 | Say "brand identity", "brand steering wheel", "limbic map", "tone of voice" |
 | `growth-acceleration` | 14-17 | Say "go-to-market", "product roadmap", "hiring plan" |
 | `pitch-deck` | 18 | Say "pitch deck", "investor presentation" |
+| `product-vision-audit` | post-18 / ongoing | Say "product vision audit", "PIBER audit", "IDCF gap analysis", "auditar vision de producto" |
 
 ### Agent (1)
 

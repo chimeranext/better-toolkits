@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 export const PACKAGE_NAME = "@lapc506/business-model-toolkit";
 export const CLI_NAME = "business-model-toolkit";
 export const CONFIG_SCHEMA_URL = "https://opencode.ai/config.json";
-export const MANIFEST_FILE_NAME = ".lapc506-business-model-toolkit.manifest.json";
+export const MANIFEST_FILE_NAME = ".chimeranext-business-model-toolkit.manifest.json";
 
 export interface PackageMetadata {
   name: string;

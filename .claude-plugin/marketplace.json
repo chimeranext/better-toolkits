@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "business-model-toolkit",
-  "version": "2.0.0",
+  "version": "2.2.0",
   "description": "Interactive business model brainstorming — guided dialogue covering the full startup lifecycle from problem validation through execution and investor pitch.",
   "owner": {
     "name": "Luis Andres Pena Castillo",
@@ -10,14 +10,14 @@
   "plugins": [
     {
       "name": "business-model-toolkit",
-      "description": "Guided startup lifecycle brainstorming: 21 phases across 3 spaces (Problem-Hypothesis, Solution-Validation, Execution-Acceleration). 2 commands, 5 auto-activating skills by lifecycle phase, 1 background market research agent. Combines Running Lean, Lean Canvas, and Founder Institute methodology.",
-      "version": "2.0.0",
+      "description": "Guided startup lifecycle brainstorming: 21 phases across 3 spaces (Problem-Hypothesis, Solution-Validation, Execution-Acceleration). Auto-activating skills by lifecycle phase — now including a dedicated brand-identity skill (Brand Steering Wheel + Limbic Map emotional positioning + tone of voice) and an OKR + KPI-reporting operational layer in execution-plan. Combines Running Lean, Lean Canvas, and Founder Institute methodology.",
+      "version": "2.2.0",
       "author": {
         "name": "Luis Andres Pena Castillo",
         "email": "lapc506@users.noreply.github.com"
       },
       "source": "./",
-      "homepage": "https://github.com/lapc506/business-model-toolkit",
+      "homepage": "https://github.com/chimeranext/business-model-toolkit",
       "category": "productivity",
       "keywords": [
         "claude-code",

@@ -1,13 +1,13 @@
 {
   "name": "business-model-toolkit",
-  "version": "2.0.0",
+  "version": "2.2.0",
   "description": "Interactive business model brainstorming — guided dialogue covering the full startup lifecycle from problem validation through execution and investor pitch.",
   "author": {
     "name": "Luis Andres Pena Castillo",
-    "url": "https://github.com/lapc506"
+    "url": "https://github.com/chimeranext"
   },
-  "homepage": "https://github.com/lapc506/business-model-toolkit",
-  "repository": "https://github.com/lapc506/business-model-toolkit",
+  "homepage": "https://github.com/chimeranext/business-model-toolkit",
+  "repository": "https://github.com/chimeranext/business-model-toolkit",
   "license": "BSL-1.1",
   "keywords": [
     "claude-code",
