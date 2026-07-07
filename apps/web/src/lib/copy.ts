@@ -132,7 +132,7 @@ export const COPY: Record<Lang, Content> = {
     s8: {
       title: "Pricing",
       col1: { name: "The stack", price: "$0", body: "Everything included. Source-available under BSL-1.1 — read it, audit it, modify it, use it. No seats. No tiers. No telemetry. Each version converts to full open source five years after publication." },
-      col2: { name: "The studio behind it", body: "Fractional CTO · venture building · GTM execution. The muscle that built this stack, applied to your startup.", whatsapp: "WhatsApp us", calendar: "Book 30 min" },
+      col2: { name: "Need more than tools?", body: "Everything on this page is free — that's the deal. The paid tier is people, not software: the team that built this stack working inside your startup as fractional CTO, venture builders and hands-on GTM operators. Install the toolkits today; call us when you hit the problems tools can't solve.", whatsapp: "WhatsApp us", calendar: "Book 30 min" },
     },
     s9: {
       title: "Standing on the shoulders of giants",
@@ -203,7 +203,7 @@ export const COPY: Record<Lang, Content> = {
     s8: {
       title: "Pricing",
       col1: { name: "El stack", price: "$0", body: "Todo incluido. Source-available bajo BSL-1.1 — léelo, audítalo, modifícalo, úsalo. Sin seats. Sin tiers. Sin telemetría. Cada versión convierte a open source pleno a los cinco años." },
-      col2: { name: "El estudio detrás", body: "CTO fraccional · venture building · ejecución GTM. El músculo que construyó este stack, aplicado a tu startup.", whatsapp: "Escríbenos por WhatsApp", calendar: "Agenda 30 min" },
+      col2: { name: "¿Necesitas más que herramientas?", body: "Todo lo de esta página es gratis — ese es el trato. Lo pago son personas, no software: el equipo que construyó este stack trabajando dentro de tu startup como CTO fraccional, venture builders y operadores GTM. Instala los toolkits hoy; llámanos cuando llegues a los problemas que las herramientas no resuelven.", whatsapp: "Escríbenos por WhatsApp", calendar: "Agenda 30 min" },
     },
     s9: {
       title: "Sobre hombros de gigantes",
