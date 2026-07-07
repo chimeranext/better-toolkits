@@ -337,7 +337,7 @@ export default function Page() {
               <div className={cn(i % 2 === 1 && "lg:order-2")}>
                 <p className="font-heading font-semibold leading-snug text-destructive text-[clamp(1.25rem,1rem+0.9vw,1.9rem)]">{p.problem}</p>
                 <p className="mt-5 text-[clamp(1rem,0.95rem+0.3vw,1.2rem)] leading-relaxed text-card-foreground">
-                  <span className="select-none text-primary">→ </span>
+                  <span className="font-heading font-bold text-primary">{t.s4.fixLead}</span>{" "}
                   <code className="font-mono font-semibold text-primary">{p.toolkit}</code>: {p.solution}
                 </p>
               </div>
