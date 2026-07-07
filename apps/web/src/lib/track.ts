@@ -8,6 +8,7 @@ export type LandingEvent =
   | "cta_whatsapp"
   | "cta_calendar"
   | "cta_github"
+  | "cta_learn_more"
   | "scroll_depth"
   | "faq_expand"
   | "lang_toggle";
