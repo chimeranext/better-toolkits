@@ -3,7 +3,7 @@
 # pre-atomic.sh — PreToolUse hook that enforces atomic-design ownership.
 #
 # Cure 4 of the 4-cure pattern for the ChimeraNext ownership-drift problem
-# (premortem 2026-05-doj-3946-atomic-design-pillar-mapping). Where the
+# (premortem 2026-05-acme-3946-atomic-design-pillar-mapping). Where the
 # manifest rules.yaml engine handles stateless single-file regex checks,
 # this hook adds:
 #

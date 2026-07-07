@@ -54,7 +54,7 @@ Good morning! Found X next-day file(s):
 | # | Label | Date | Topic | Status | Branch | Pending | Location |
 |---|-------|------|-------|--------|--------|---------|----------|
 | 1 | openclaw | 2026-03-15 | Hook refactor | pending | feat/hooks | 3 | Desktop |
-| 2 | doj-1234 | 2026-03-14 | Auth fix | resumed | fix/auth | 1 | .claude/next-day |
+| 2 | ACME-1234 | 2026-03-14 | Auth fix | resumed | fix/auth | 1 | .claude/next-day |
 
 Which one do you want to resume? (number, "all" to see all, or "none" to start fresh)
 ```
