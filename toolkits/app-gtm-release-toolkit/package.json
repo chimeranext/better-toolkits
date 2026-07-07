@@ -1,0 +1,55 @@
+{
+  "name": "@lapc506/app-gtm-release-toolkit",
+  "version": "2.2.0",
+  "description": "Multi-platform app go-to-market and release toolkit — ship Flutter, KMP, Swift, .NET MAUI, and PWAs to Google Play, App Store, Microsoft Store, Snap Store, and alternative channels. OpenCode + Claude Code plugin.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": { "app-gtm-release-toolkit": "dist/cli.js" },
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
+    "./cli": { "import": "./dist/cli.js" }
+  },
+  "files": ["dist/", "commands/", "agents/", "skills/", "README.md", "LICENSE"],
+  "engines": { "node": ">=20.11.0" },
+  "publishConfig": { "access": "public" },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean && tsup src/cli.ts --format esm --clean false",
+    "test": "echo 'no tests yet' && exit 0",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "opencode",
+    "plugin",
+    "claude-code",
+    "claude-code-plugin",
+    "gtm",
+    "go-to-market",
+    "release",
+    "multi-store",
+    "cross-platform",
+    "flutter",
+    "kmp",
+    "swift",
+    "maui",
+    "pwa",
+    "pwa-builder",
+    "snapcraft",
+    "microsoft-store",
+    "google-play",
+    "app-store",
+    "cicd"
+  ],
+  "repository": { "type": "git", "url": "git+https://github.com/chimeranext/app-gtm-release-toolkit.git" },
+  "author": "Luis Andres Pena Castillo",
+  "license": "BSL-1.1",
+  "dependencies": {
+    "@opencode-ai/plugin": "^0.7.0",
+    "jsonc-parser": "^3.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2"
+  }
+}
