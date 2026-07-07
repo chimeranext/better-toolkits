@@ -37,14 +37,10 @@ its `toolkits/<name>/` and the per-toolkit sections below.
 | 4 | [`business-model-toolkit`](toolkits/business-model-toolkit) | Interactive business-model brainstorming across the full startup lifecycle. | BSL-1.1 | Available |
 | 5 | [`app-gtm-release-toolkit`](toolkits/app-gtm-release-toolkit) | Multi-platform app go-to-market and release across Flutter, KMP, MAUI, Swift, PWA. | BSL-1.1 | Available |
 | 6 | [`aaarrr-flywheel-toolkit`](toolkits/aaarrr-flywheel-toolkit) | Growth-engineering funnel + flywheel: pricing → landing design → instrumentation → AAARRR over the Meta Marketing API. | BSL-1.1 | Available |
-| 7 | [`fractional-cto-toolkit`](toolkits/fractional-cto-toolkit) | Operational SOPs and workflows for freelance and fractional CTOs. | BSL-1.1 ⚠️ | Available |
+| 7 | [`fractional-cto-toolkit`](toolkits/fractional-cto-toolkit) | Operational SOPs and workflows for freelance and fractional CTOs. | BSL-1.1 | Available |
 | 8 | [`instructional-design-toolkit`](toolkits/instructional-design-toolkit) | Design cmi5-compliant courses and 1-on-1 session plans. | BSL-1.1 | Available |
 | 9 | [`launchpad-toolkit`](toolkits/launchpad-toolkit) | Founder-operations lab — intake, cap table, matching, demo-day, stage tracking. | BSL-1.1 | Available |
 | 10 | [`venture-studio-toolkit`](toolkits/venture-studio-toolkit) | Macro portfolio management for venture studios and serial founders. | BSL-1.1 | Available |
-
-> ⚠️ `fractional-cto-toolkit` declares `BSL-1.1` in its `plugin.json`, but the `LICENSE`
-> file was never committed in the source repository, so it is **absent** from this monorepo.
-> See its section below.
 
 Every declared license is **BSL-1.1** (Business Source License 1.1), which converts to the
 **Non-Profit Open Software License 3.0** five years after each version is published.
@@ -201,10 +197,7 @@ claude plugin install fractional-cto-toolkit@better-toolkits
 
 #### License
 
-**BSL-1.1 declared, LICENSE file missing.** The `plugin.json` declares `BSL-1.1`, but the
-`LICENSE` file was never committed in the source repository, so it is absent here. The
-intended terms match the other toolkits (BSL-1.1 → Non-Profit OSL 3.0 after 5 years);
-committing the license text is pending.
+BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
 ### 8. instructional-design-toolkit `v1.0.0`
 
