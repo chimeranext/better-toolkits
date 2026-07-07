@@ -1,0 +1,6 @@
+# Eval workspaces (may contain client-specific data)
+*-workspace/
+
+# OS
+.DS_Store
+Thumbs.db

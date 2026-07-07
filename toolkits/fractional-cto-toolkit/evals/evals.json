@@ -1,0 +1,26 @@
+{
+  "skill_name": "project-takeover",
+  "evals": [
+    {
+      "id": 1,
+      "name": "sabotage-risk",
+      "prompt": "Anoche un nuevo lead me contactó, su proyecto se llama AcmeLegal y es una web app de servicios legales. El dev anterior no le dio ownership del repo (está en la cuenta personal del dev en GitHub) y no ha sido transparente. La relación es contenciosa. No hay documentación. Hay usuarios activos.",
+      "expected_output": "SOP con riesgo ALTO, énfasis en legal primero, fork de seguridad, timeline agresivo (días no semanas). 3 documentos: SOP técnico, guía cliente, solicitud de entrega.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "cooperative-mobile",
+      "prompt": "Tengo un cliente nuevo que quiere que le maneje su app de delivery en Flutter llamada 'RapidEats'. El dev actual es cooperativo y quiere hacer una transición ordenada. La app ya está en producción con ~2000 usuarios en Google Play y App Store. El código está en un repo del dev pero dice que lo transfiere sin problema.",
+      "expected_output": "SOP con riesgo MEDIO-BAJO, incluye secciones de Apple Developer + Google Play + app signing keys, timeline relajado (semanas). 3 documentos.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "dev-disappeared",
+      "prompt": "Un lead me dice que su desarrollador desapareció hace 2 meses. Tiene un SaaS B2B llamado 'InvoiceFlow' con API en Node.js. No sabe dónde está el código ni qué servicios cloud usa. Tiene clientes pagando y el servicio sigue corriendo pero nadie lo mantiene.",
+      "expected_output": "SOP con riesgo ALTO (sin contacto + no sabe donde está el código + usuarios activos pagando), énfasis en continuidad de servicio y recuperación de accesos. Guía cliente debe explicar el peor caso.",
+      "files": []
+    }
+  ]
+}

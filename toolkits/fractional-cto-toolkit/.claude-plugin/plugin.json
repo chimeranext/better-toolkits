@@ -1,0 +1,25 @@
+{
+  "name": "fractional-cto-toolkit",
+  "version": "1.0.0",
+  "description": "Operational toolkit for freelance and fractional CTOs — SOPs, checklists, and guided workflows for project takeovers, technical audits, client onboarding, and vendor evaluation.",
+  "author": {
+    "name": "Luis Andres Pena Castillo",
+    "url": "https://github.com/lapc506"
+  },
+  "homepage": "https://github.com/lapc506/fractional-cto-toolkit",
+  "repository": "https://github.com/lapc506/fractional-cto-toolkit",
+  "license": "BSL-1.1",
+  "keywords": [
+    "claude-code",
+    "claude-code-plugin",
+    "fractional-cto",
+    "freelance-cto",
+    "project-takeover",
+    "handover",
+    "technical-audit",
+    "due-diligence",
+    "sop",
+    "checklist",
+    "client-onboarding"
+  ]
+}
