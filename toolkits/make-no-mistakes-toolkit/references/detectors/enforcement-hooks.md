@@ -20,7 +20,7 @@ the severity ladder come from the contract:
 
 ## Anti-pattern
 
-The chimera-os **drift thesis** holds that structural drift is never cured by a
+The example-platform **drift thesis** holds that structural drift is never cured by a
 one-time fix: detection and remediation buy a clean snapshot, but the same drift
 returns the moment the next change lands unguarded. The 4-cure model names the
 durable cures, and the load-bearing one is **Cure 4 — PreToolUse/PostToolUse

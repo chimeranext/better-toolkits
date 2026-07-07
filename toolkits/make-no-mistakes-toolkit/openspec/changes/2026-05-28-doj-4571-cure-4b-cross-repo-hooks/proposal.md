@@ -3,7 +3,7 @@
 ## Why
 
 [legacy-ticket](https://linear.app/ChimeraNext/issue/legacy-ticket) shipped **Cure
-4a** in `chimera-agent-openclaw-plugin` — 6 PreToolUse hooks lived in the
+4a** in `example-plugin` — 6 PreToolUse hooks lived in the
 repo's own `.claude/hooks/` directory, each tightly bound to that repo's
 specific schemas (`openclaw.json`, gateway version pins, plugin-side
 migration paths).
@@ -137,11 +137,11 @@ the only opt-in.
 Apply the new hooks to two consumer repos in the same change cycle to
 prove the cross-cutting model:
 
-- `chimera-os` — populate `.claude/config/cross-cutting-hooks.json` with
+- `example-platform` — populate `.claude/config/cross-cutting-hooks.json` with
   `owned_tables: ["chat_sessions", "chat_messages", ...]` so the
   schema-ownership hook fires when the gateway repo (after its config
-  is also set) attempts to add a migration for a chimera-os-owned table.
-- `chimera-agent-openclaw-plugin` — populate
+  is also set) attempts to add a migration for a example-platform-owned table.
+- `example-plugin` — populate
   `.claude/config/cross-cutting-hooks.json` with `defer_to_local_hook:
   true` for all three surfaces (the gateway's existing 4a hooks own
   enforcement). The config still declares `owned_tables: []`,
@@ -178,11 +178,11 @@ deliverables under legacy-ticket acceptance.
 
 - Repo-specific Cure 4a hooks remain in their repos. This PR does not
   delete them from the gateway repo; the toolkit hooks are additive.
-- The OpenSpec convention hook (legacy-ticket) stays in `chimera-os` —
+- The OpenSpec convention hook (legacy-ticket) stays in `example-platform` —
   different concern, not generalizable until more repos adopt
   `openspec/changes/`.
 - The remaining 3 gateway-specific hooks (catalog,
   required-fields, persona-injection-tag) are not candidates for 4b.
-- Consumer-repo enablement PRs (`chimera-os` + `chimera-agent-openclaw-plugin`
+- Consumer-repo enablement PRs (`example-platform` + `example-plugin`
   config files) are tracked as sibling PRs after this one merges; this
   PR ships the toolkit-side infrastructure only.

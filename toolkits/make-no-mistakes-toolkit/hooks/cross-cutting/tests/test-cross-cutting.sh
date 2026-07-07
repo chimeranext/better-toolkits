@@ -239,7 +239,7 @@ rm -rf "$repo"
 repo="$(make_repo)"
 write_config "$repo" '{"version":1,"schema_ownership":{"enabled":true,"owned_tables":[],"migration_paths":["supabase/migrations"]}}'
 input="$(jq -nc --arg fp "$repo/supabase/migrations/20260528_001.sql" \
-  '{tool_name:"Edit",tool_input:{file_path:$fp,old_string:"CREATE TABLE chat_sessions",new_string:"-- moved to chimera-os\n-- CREATE TABLE chat_sessions"}}')"
+  '{tool_name:"Edit",tool_input:{file_path:$fp,old_string:"CREATE TABLE chat_sessions",new_string:"-- moved to example-platform\n-- CREATE TABLE chat_sessions"}}')"
 actual="$(drive_hook "$HOOK_SCHEMA" "$repo" "$input")"
 assert_case "schema-ownership/passes-edit" "0" "$actual"
 rm -rf "$repo"
