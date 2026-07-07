@@ -330,7 +330,7 @@ If ANY red flag = **DISQUALIFY o approach con caution**.
 
 ## Integración con chimeranext (via chimeranext-api-consumer agent)
 
-**Disponible desde v0.5.0** — este skill puede invocar al agent `chimeranext-api-consumer` con las operaciones `get_investor_database` (listado candidate investors) y `get_investor_profile` (detail por investor). Ambas retornan `SPEC_GAP` hoy (los endpoints no están en la OpenAPI spec todavía) y el skill continúa con sources manuales (NVCA, Crunchbase, LAVCA, CSV upload). Cuando los endpoints lancen, el agente retornará `LIVE_DATA` sin cambios acá — el target list inicial se pre-popula con investors + check history + portfolio fit + chimera Score weighting automáticamente. Cada `SPEC_GAP` que retorna el agente viene con un `SPIKE_SUGGESTION` listo para alimentar el skill `feature-to-spike`.
+**Disponible desde v0.5.0** — este skill puede invocar al agent `chimeranext-api-consumer` con las operaciones `get_investor_database` (listado candidate investors) y `get_investor_profile` (detail por investor). Ambas retornan `SPEC_GAP` hoy (los endpoints no están en la OpenAPI spec todavía) y el skill continúa con sources manuales (NVCA, Crunchbase, LAVCA, CSV upload). Cuando los endpoints lancen, el agente retornará `LIVE_DATA` sin cambios acá — el target list inicial se pre-popula con investors + check history + portfolio fit + Chimera Score weighting automáticamente. Cada `SPEC_GAP` que retorna el agente viene con un `SPIKE_SUGGESTION` listo para alimentar el skill `feature-to-spike`.
 
 ## Integración con otras skills
 

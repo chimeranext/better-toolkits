@@ -37,7 +37,7 @@ v0.5 was originally scoped as "blocked on @garbanzo's API implementation". Re-ev
 1. The OpenAPI spec **already exists** (legacy-ticket closed 2026-04-14) — the agent can be implemented against contract, not infrastructure.
 2. The agent does not require every endpoint to be live — it handles `SPEC_GAP` (no endpoint) and `NOT_IMPLEMENTED` (endpoint stubbed) as first-class outcomes, so it ships useful on day one and becomes progressively more useful as @william + @garbanzo expose Launchpad-specific endpoints.
 
-Today the agent unlocks `LIVE_DATA` for the 12 general-purpose endpoints already in the spec (Agent chat, course progress, certificates, B2B leads, billing, role switch, admin analytics, media tokens, email). Launchpad-specific operations (cofounder pool, investor DB, demo-day queue, stage sync, chimera Score) return `SPEC_GAP` today — by design — and each SPEC_GAP auto-seeds a SPIKE proposal for William via the `feature-to-spike` loop.
+Today the agent unlocks `LIVE_DATA` for the 12 general-purpose endpoints already in the spec (Agent chat, course progress, certificates, B2B leads, billing, role switch, admin analytics, media tokens, email). Launchpad-specific operations (cofounder pool, investor DB, demo-day queue, stage sync, Chimera Score) return `SPEC_GAP` today — by design — and each SPEC_GAP auto-seeds a SPIKE proposal for William via the `feature-to-spike` loop.
 
 ## [0.4.0] — 2026-04-16
 

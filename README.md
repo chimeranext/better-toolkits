@@ -67,7 +67,7 @@ Sub-issue de ejecución bootstrap: [legacy-ticket](https://linear.app/chimera-co
 - **`cofounder-matching`** — rubric 6-axis (domain / skill / values / equity / time / track record) con weighted scoring ajustado por stage. Kill-switches override score.
 - **`investor-matching`** — 5-axis scoring (stage / check / thesis / geography / value-add) con priority configurable. Pipeline tracker incluido.
 - **`demo-day-prep`** — 4 artefactos: application, 10-slide deck outline, 3-min script, 50+ Q&A bank. Rehearsal best practices 5-5-5.
-- **`stage-tracker`** — 6 stages (Ideation → Scaling) con exit criteria + chimera Score (5-axis, 0-100). Evidence-over-claim principle.
+- **`stage-tracker`** — 6 stages (Ideation → Scaling) con exit criteria + Chimera Score (5-axis, 0-100). Evidence-over-claim principle.
 
 ### Commands (v0.4)
 
@@ -85,7 +85,7 @@ Sub-issue de ejecución bootstrap: [legacy-ticket](https://linear.app/chimera-co
 
 El spec expone 12 endpoints (Agent, Courses, Projects, Billing, Users, Admin, Media, Email). El agente les da acceso via semantic aliases (`get_user_courses`, `switch_role`, `submit_b2b_lead`, `create_checkout_session`, etc.).
 
-Los endpoints **launchpad-specific** (cofounder pool, investor DB, demo-day queue, stage sync, chimera Score, document templates, cap-table platform link) NO están en el spec todavía — el agente los retorna como `SPEC_GAP` y auto-sugiere SPIKES para William. Expected trajectory: conforme William + Daniel shipping endpoints, los `SPEC_GAP` convierten a `LIVE_DATA` sin cambios en el agente (es spec-driven, no endpoint-hardcoded).
+Los endpoints **launchpad-specific** (cofounder pool, investor DB, demo-day queue, stage sync, Chimera Score, document templates, cap-table platform link) NO están en el spec todavía — el agente los retorna como `SPEC_GAP` y auto-sugiere SPIKES para William. Expected trajectory: conforme William + Daniel shipping endpoints, los `SPEC_GAP` convierten a `LIVE_DATA` sin cambios en el agente (es spec-driven, no endpoint-hardcoded).
 
 ### Bearer token — cómo autenticar
 

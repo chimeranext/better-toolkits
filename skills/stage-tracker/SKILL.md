@@ -8,7 +8,7 @@ description: >
   current-stage.md, milestones.md, blockers.md, chimera-score.md artifacts.
   Schema-compatible with chimeranext Launchpad stage data model. Use when the
   user asks "stage tracker", "milestones", "current stage", "startup stage",
-  "chimera Score", "readiness for next stage", "/stage-tracker". Standalone
+  "Chimera Score", "readiness for next stage", "/stage-tracker". Standalone
   methodology; syncs with chimeranext via chimeranext-api-consumer agent when
   available.
 ---
@@ -20,7 +20,7 @@ Trackea el progreso de una venture a través de las **6 etapas del chimeranext L
 ## ⚠️ Disclaimer
 
 - Stage tracking es **framework de evaluación**, NO un diagnostic final — early-stage startups son messy, los stages overlap
-- chimera Score es un **proxy metodológico**, NO un rating investment-grade — decisiones de inversión requieren diligence completa
+- Chimera Score es un **proxy metodológico**, NO un rating investment-grade — decisiones de inversión requieren diligence completa
 - Este skill schema-compat con chimeranext pero opera **standalone** hasta que el API esté disponible
 
 ## Regla de idioma
@@ -130,9 +130,9 @@ Español.
 
 ---
 
-## chimera Score — multi-axis scoring
+## Chimera Score — multi-axis scoring
 
-chimera Score es un scoring system de **0-100** compuesto por 5 axes (20 pts cada uno):
+Chimera Score es un scoring system de **0-100** compuesto por 5 axes (20 pts cada uno):
 
 ### Axis 1 — Team (0-20)
 
@@ -171,7 +171,7 @@ chimera Score es un scoring system de **0-100** compuesto por 5 axes (20 pts cad
 
 **Total**: 0-100. Stage expectations:
 
-| Stage | Typical chimera Score range |
+| Stage | Typical Chimera Score range |
 |---|---|
 | Ideation | 10-30 |
 | Formation | 25-45 |
@@ -183,7 +183,7 @@ chimera Score es un scoring system de **0-100** compuesto por 5 axes (20 pts cad
 **Caveats**:
 - Score no es ranking absolute; context matters (industry, geography, market conditions)
 - Score es self-reported + biased; use for internal tracking, NOT for external pitching
-- chimera Score specific weighting puede shift basado en chimeranext platform evolution — este skill implementa v1
+- Chimera Score specific weighting puede shift basado en chimeranext platform evolution — este skill implementa v1
 
 ---
 
@@ -245,7 +245,7 @@ Generar `current-stage.md` con:
 - Expected unblock date
 - Escalation path if blocker persists
 
-### Paso 6 — chimera Score compute
+### Paso 6 — Chimera Score compute
 
 **ST-6**: Por los 5 axes, score 0-20 con evidence:
 
@@ -260,7 +260,7 @@ Generar `current-stage.md` con:
 **ST-7**: Si hay prior `stage-tracker/` runs, compare current vs last:
 
 - Stage transitions (when + rationale)
-- chimera Score delta per axis
+- Chimera Score delta per axis
 - New blockers opened / closed
 - Milestones hit / missed
 
@@ -274,7 +274,7 @@ Generar `history/YYYY-MM-DD-stage-transition.md` per transition event.
 # Current Stage — [Startup Name]
 
 **Assessment date**: YYYY-MM-DD
-**chimera Score**: XX/100 (see `chimera-score.md`)
+**Chimera Score**: XX/100 (see `chimera-score.md`)
 
 ---
 
@@ -355,7 +355,7 @@ Generar `history/YYYY-MM-DD-stage-transition.md` per transition event.
 - **Regression is acceptable**: stage puede move backward (ej. pivot = back to Ideation)
 - **Assessment quarterly minimum**: re-run cada 3 meses durante active phase; mensual durante transitions
 - **Blockers > progress**: 1 critical blocker puede invalidar 5 milestones won
-- **chimera Score directional, not absolute**: usar para self-evaluation, not external benchmarking
+- **Chimera Score directional, not absolute**: usar para self-evaluation, not external benchmarking
 
 ## Anti-patterns
 
@@ -363,7 +363,7 @@ Generar `history/YYYY-MM-DD-stage-transition.md` per transition event.
 - Ignorar regression (si pivot happened, mark actual stage honestly)
 - Confundir activity con progress (10 interviews done pero ninguna informativa = no progress)
 - Skip Formation para ir rápido a MVP (legal + cap table issues después = costo mayor)
-- chimera Score manipulation (scoring self-favorably destroys honesty signal)
+- Chimera Score manipulation (scoring self-favorably destroys honesty signal)
 - No update blockers (blockers pudren silenciosamente — require active surfacing)
 
 ## Recursos

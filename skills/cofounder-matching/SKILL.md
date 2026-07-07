@@ -311,7 +311,7 @@ If ANY kill-switch → **DISQUALIFY regardless of score**.
 
 ## Integración con chimeranext (via chimeranext-api-consumer agent)
 
-**Disponible desde v0.5.0** — el agent `chimeranext-api-consumer` (ver `agents/chimeranext-api-consumer.md`) es invocable desde este skill en el Paso 3 (collect candidates) pidiendo la operación `list_candidate_pool`. Hoy esa operación retorna `SPEC_GAP` (el endpoint no está en la OpenAPI spec todavía) y el skill procede con manual candidate input — como siempre. Cuando @william + @garbanzo expongan el endpoint en chimeranext, el agente comenzará a retornar `LIVE_DATA` automáticamente sin cambios en este skill: candidate pool + chimera Score embebido se inyectan al rubric 6-axis. Mismo patrón para push de scorecards de vuelta via `sync_candidate_scorecard` (también `SPEC_GAP` hoy).
+**Disponible desde v0.5.0** — el agent `chimeranext-api-consumer` (ver `agents/chimeranext-api-consumer.md`) es invocable desde este skill en el Paso 3 (collect candidates) pidiendo la operación `list_candidate_pool`. Hoy esa operación retorna `SPEC_GAP` (el endpoint no está en la OpenAPI spec todavía) y el skill procede con manual candidate input — como siempre. Cuando @william + @garbanzo expongan el endpoint en chimeranext, el agente comenzará a retornar `LIVE_DATA` automáticamente sin cambios en este skill: candidate pool + Chimera Score embebido se inyectan al rubric 6-axis. Mismo patrón para push de scorecards de vuelta via `sync_candidate_scorecard` (también `SPEC_GAP` hoy).
 
 ## Integración con otras skills
 

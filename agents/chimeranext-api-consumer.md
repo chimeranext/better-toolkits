@@ -10,7 +10,7 @@ description: >
   calling skill can decide whether to use live data or fall back to its
   standalone methodology. Use when a launchpad-toolkit skill needs data from
   chimeranext (candidate pools, investor DB, demo-day queue, stage sync, spike
-  filing, document templates, chimera Score).
+  filing, document templates, Chimera Score).
 model: sonnet
 tools:
   - Read
@@ -157,9 +157,9 @@ SPIKE_SUGGESTION: |
   launchpad-toolkit's cofounder-matching skill currently rubric-scores
   manually-entered candidates. Repeated dog-food sessions show founders
   spend 30-60min populating candidate data that likely already exists in
-  chimeranext (connections, chimera Score, profile). Propose a SPIKE to expose
+  chimeranext (connections, Chimera Score, profile). Propose a SPIKE to expose
   GET /cofounder-matching/candidates returning a paginated candidate pool
-  scoped to the founder's profile, with chimera Score embedded — this would
+  scoped to the founder's profile, with Chimera Score embedded — this would
   let the agent pre-populate scorecards instead of requiring manual entry.
 ```
 
