@@ -465,6 +465,7 @@ export default function Page() {
           {t.s9.dogfooding}{" "}
           <a href={LINKS.betterMicroservices} target="_blank" rel="noreferrer" onClick={() => track("cta_github")}
              className="font-medium not-italic text-primary hover:underline">{t.s9.sibling}</a>
+          {t.s9.dogfoodingTail}
         </p>
 
         {/* ventures: window-chrome chips with LIVE badge */}
