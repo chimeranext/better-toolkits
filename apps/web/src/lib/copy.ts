@@ -96,7 +96,7 @@ export const COPY: Record<Lang, Content> = {
     s1: "10 battle-tested toolkits · One command · Source-available",
     s2: {
       h1a: "62% of startups now ship AI-written code.",
-      h1b: "The ones winning operate with a system.",
+      h1b: "The winning ones operate with a system.",
       source: "Supabase Startups Survey 2026 — 2,000+ founders",
       sub: "Every week without an operating system is runway spent reinventing one. Install yours in 60 seconds ↓",
       copy: "Copy", copied: "Copied ✓",
