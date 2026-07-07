@@ -39,7 +39,7 @@ Inferido del spike + audit:
 
 | Valor | Significado | Ejemplo |
 |-------|-------------|---------|
-| 9 | Every user del producto | "All Pathways graduates", "every cert generated" |
+| 9 | Every user del producto | "All Acme Academy graduates", "every cert generated" |
 | 3 | Pillar users (subset) | "Active Pathway enrollees", "builders con Score > X" |
 | 1 | Admin / internal only | "Internal dashboard", "admin metrics view" |
 

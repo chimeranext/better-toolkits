@@ -5,7 +5,7 @@
  * `ENF` is the **meta-audit that closes the loop**: the other five families
  * (`SCH`, `CDC`, `DDD`, `ARC`, `STR`) *detect* structural drift and *recommend*
  * cures, but detection without enforcement lets the drift return. Per the
- * chimera-os drift thesis 4-cure model, **Cure 4 — PreToolUse/PostToolUse hooks**
+ * example-platform drift thesis 4-cure model, **Cure 4 — PreToolUse/PostToolUse hooks**
  * is what makes a structural rule stick: a hook intercepts the offending tool
  * call before (or telemeters after) it lands. `ENF` checks whether those hooks
  * are actually installed.

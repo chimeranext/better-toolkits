@@ -144,7 +144,7 @@ Matching es case-insensitive + stem-based. Si el keyword aparece >= 1 vez, consi
 
 ---
 
-## Ejemplos (dogfooded contra Pathways audit 2026-04-17)
+## Ejemplos (contra un Acme Academy audit 2026-04-17)
 
 ### Ejemplo 1: MUST-1 killshot-thesis-match
 

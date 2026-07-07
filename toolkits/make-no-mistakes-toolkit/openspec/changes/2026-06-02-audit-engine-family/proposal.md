@@ -2,7 +2,7 @@
 
 **Date**: 2026-06-02
 **Status**: Proposed — pending review
-**Citing**: chimera-os drift thesis (`docs/repo-health/atomic-design-drift-thesis.md`, legacy-ticket / legacy-ticket / legacy-ticket) · `atomic-design-toolkit` (component-layer audit) · `premortem` skill
+**Citing**: example-platform drift thesis (`docs/repo-health/atomic-design-drift-thesis.md`, legacy-ticket / legacy-ticket / legacy-ticket) · `atomic-design-toolkit` (component-layer audit) · `premortem` skill
 **Anti-patterns in scope**: 1NF (Codd 1970), DRY (Hunt & Thomas), Conway's Law (Conway 1968), DDD bounded contexts (Evans), CDC contracts, Strangler Fig (Fowler), Explicit Architecture — Hexagonal / Ports & Adapters / Onion / Clean / CQRS (Graça 2017)
 
 ## Why
@@ -14,13 +14,13 @@ over 7.3 months**), and **component** (atomic-design absence, legacy-ticket). Th
 root cause is identical at every layer: *absence of single-source-of-truth
 ownership enforcement at the structural level.*
 
-We keep **hand-rolling** these audits one repo at a time. `chimera-os` accumulated
+We keep **hand-rolling** these audits one repo at a time. `example-platform` accumulated
 ~25 one-off `docs/repo-health/` documents (`domain-purity`, `clean-arch-findings`,
 `supabase-boundary`, the `*-api-split` series) with no reusable command behind
 them. The only audit that *was* productized — atomic-design — lives in a
 separate plugin (`atomic-design-toolkit`) and only covers the component layer.
 
-Meanwhile the org now runs a **polyglot fleet** (chimera-os Supabase/TS,
+Meanwhile the org now runs a **polyglot fleet** (example-platform Supabase/TS,
 vertivolatam Serverpod/Dart, habitanexus, better-microservices). Each new repo
 re-discovers the same drift from scratch. The drift thesis itself names the cure
 shape — *detection feeding 4-cure defense-in-depth* — but there is no portable
