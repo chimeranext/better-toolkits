@@ -16,10 +16,31 @@ Comando para evaluar la salud económica del sistema completo. No mide CTR, CPM,
 - `--breakdown placement|platform`: default `platform`. `placement` desagrega por Stories/Reels/Feed.
 - `--window 30d|90d|6m`: default `30d`. Para cohort, default `6m`.
 - `--track-ltv`: solo incluye en el report la sección de LTV expandida (12mo proyectado + intervalo de confianza).
+- `--unit-economics`: emite la vista de unit economics standalone — CAC blended vs paid, LTV gross-margin-based, payback en meses, y la tabla de benchmarks saludables por modelo de negocio. Útil para diligence o para chequear consistencia con `business-model-toolkit:execution-plan` y `launchpad-toolkit:financial-model`.
+
+## Referencia de definiciones
+
+Todo cálculo de CAC (blended vs paid), LTV (gross-margin-based), payback (en meses) y sus benchmarks
+por modelo de negocio vive en **`references/unit-economics.md`** — es el libro de definiciones que
+`revenue-analyst` sigue. No redefinir métricas fuera de ahí.
 
 ## Workflow
 
 Toda la operación se delega a `revenue-analyst`. Tu trabajo aquí es traducir flags a la instrucción correcta.
+
+### Modo `--unit-economics`
+
+```
+Lee references/unit-economics.md como libro de definiciones.
+Emite la vista de unit economics:
+  - CAC blended = (spend + tooling + people + overhead) / new_customers_all_channels
+  - CAC paid-only (solo para comparar canales) y ratio blended/paid
+  - LTV = gross_margin% × ARPA × avg_lifetime_months (NUNCA sobre revenue)
+  - Payback en MESES = CAC_blended / (gross_margin% × ARPA_mensual)
+  - LTV:CAC contra CAC blended
+Compara cada métrica contra la tabla de benchmarks del modelo de negocio (SaaS/DTC/Marketplace).
+Output tabla con semáforo por métrica + verdict + próximo paso.
+```
 
 ### Modo `--report` (default)
 

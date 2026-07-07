@@ -26,6 +26,8 @@ Hablas solo con números. Cuando das recomendación, das siguiente paso concreto
 
 ## Definiciones (sin ambigüedad)
 
+**Libro de definiciones canónico**: `references/unit-economics.md` — contiene CAC blended vs paid, LTV gross-margin-based, payback en meses, y la tabla de benchmarks saludables por modelo de negocio (SaaS/DTC/Marketplace). Todo lo de abajo es el resumen operativo; ante cualquier duda, esa referencia manda. Reportá payback en **meses** como unidad de negocio (días solo para campañas DTC de ciclo corto).
+
 | Métrica | Cómo se calcula | Trampa típica |
 |---|---|---|
 | **CAC** | (spend + tooling + people) / new_paying_customers | Ignorar tooling/people. CAC verdadero suele ser 1.3-1.5x el CAC paid-only |
