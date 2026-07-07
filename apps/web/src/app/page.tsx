@@ -337,51 +337,86 @@ export default function Page() {
         </div>
       </Section>
 
-      {/* S9 — social proof */}
+      {/* S9 — social proof (cards-as-artifacts treatment) */}
       <Section tone="light">
         <h2 className={H2}>{t.s9.title}</h2>
+
+        {/* stats: gradient numbers */}
         <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
           {STATS.map((s) => (
-            <div key={s.value} className="rounded-xl border border-border bg-card p-5 text-center">
-              <div className="font-heading font-extrabold text-brand-primary text-[clamp(1.5rem,1.1rem+1vw,2.5rem)]">{s.value}</div>
-              <div className="mt-1 text-xs text-muted-foreground lg:text-sm">{s.label[lang]}</div>
+            <div key={s.value} className="rounded-xl border border-border bg-card p-5 text-center transition-transform hover:-translate-y-0.5">
+              <div className="bg-brand-gradient bg-clip-text font-heading font-extrabold text-transparent text-[clamp(1.75rem,1.2rem+1.4vw,3rem)]">{s.value}</div>
+              <div className="mt-1 text-xs font-medium uppercase tracking-wide text-muted-foreground lg:text-[13px]">{s.label[lang]}</div>
             </div>
           ))}
         </div>
 
-        <div className="mt-10 rounded-xl border border-primary/30 bg-primary/5 p-6 text-center">
-          <p className="text-[15px] text-card-foreground">
-            {t.s9.dogfooding}{" "}
-            <a href={LINKS.betterMicroservices} target="_blank" rel="noreferrer" onClick={() => track("cta_github")}
-               className="font-medium text-brand-primary hover:underline">{t.s9.sibling}</a>
-          </p>
+        {/* dogfooding: the claim rendered as the artifact itself — a terminal */}
+        <div className="terminal-dark mx-auto mt-10 max-w-[52rem] overflow-hidden rounded-xl border border-primary/25 text-left shadow-[0_18px_50px_-18px_rgba(124,92,255,0.35)]">
+          <div className="flex items-center gap-1.5 border-b border-white/10 px-4 py-2.5">
+            <span className="h-3 w-3 rounded-full bg-destructive/80" />
+            <span className="h-3 w-3 rounded-full bg-warning/80" />
+            <span className="h-3 w-3 rounded-full bg-success/80" />
+            <span className="ml-3 font-mono text-xs text-[#837C99]">aaarrr-flywheel — /landing-page</span>
+            <span className="ml-auto rounded-full bg-success/15 px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wide text-success">live</span>
+          </div>
+          <div className="p-4 font-mono text-[13px] leading-relaxed sm:text-sm">
+            <div><span className="select-none text-brand-tertiary">$ </span>/landing-page --b2b better-toolkits</div>
+            <div className="mt-1 text-[#837C99]">
+              <span className="select-none text-success">✓ </span>{t.s9.dogfooding}{" "}
+              <a href={LINKS.betterMicroservices} target="_blank" rel="noreferrer" onClick={() => track("cta_github")}
+                 className="font-medium text-brand-primary hover:underline">{t.s9.sibling}</a>
+            </div>
+          </div>
         </div>
 
-        <div className="mt-10 text-center">
+        {/* ventures: window-chrome chips with LIVE badge */}
+        <div className="mt-12 text-center">
           <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{t.s9.venturesLabel}</p>
-          <div className="mt-4 flex flex-wrap justify-center gap-2.5">
+          <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-6">
             {VENTURES.map((v) => (
-              <span key={v} className="rounded-full border border-border bg-card px-4 py-1.5 text-sm font-medium text-card-foreground">{v}</span>
+              <div key={v} className="overflow-hidden rounded-lg border border-border bg-card text-left transition-transform hover:-translate-y-0.5">
+                <div className="flex items-center gap-1 border-b border-border/60 bg-muted/40 px-3 py-1.5">
+                  <span className="h-2 w-2 rounded-full bg-destructive/70" />
+                  <span className="h-2 w-2 rounded-full bg-warning/70" />
+                  <span className="h-2 w-2 rounded-full bg-success/70" />
+                  <span className="ml-auto rounded-full bg-success/15 px-1.5 py-px font-mono text-[9px] font-semibold uppercase text-success">live</span>
+                </div>
+                <div className="px-3 py-2.5 font-heading text-sm font-bold text-card-foreground">{v}</div>
+              </div>
             ))}
           </div>
         </div>
 
-        {/* methodology grid */}
+        {/* methodology bento: one accent per discipline */}
         <div className="mt-14">
-          <p className="mx-auto max-w-[70ch] text-center text-[15px] text-card-foreground/90">{t.s9.methodTagline}</p>
+          <p className="mx-auto max-w-[70ch] text-center text-[clamp(1rem,0.9rem+0.4vw,1.25rem)] font-medium text-card-foreground">{t.s9.methodTagline}</p>
           <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6">
-            {METHOD_GROUPS.map((g) => (
-              <div key={g.label.en} className="rounded-xl border border-border bg-card p-6">
-                <h4 className="font-heading text-sm font-bold text-brand-primary">{g.label[lang]}</h4>
-                <ul className="mt-3 space-y-1.5">
-                  {g.items.map((it) => (
-                    <li key={it} className="text-[13px] leading-snug text-card-foreground/90">
-                      <span className="select-none text-brand-accent">· </span>{it}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+            {METHOD_GROUPS.map((g, gi) => {
+              const accents = ["#7C5CFF", "#3B82F6", "#22D3EE", "#EC4899", "#34D399", "#FBBF24"];
+              const accent = accents[gi % accents.length];
+              return (
+                <div
+                  key={g.label.en}
+                  className="rounded-xl border bg-card p-6 transition-transform hover:-translate-y-1"
+                  style={{ borderColor: `${accent}55`, boxShadow: `inset 0 3px 0 0 ${accent}` }}
+                >
+                  <div className="flex items-baseline justify-between gap-2">
+                    <h4 className="font-heading text-sm font-bold" style={{ color: accent }}>{g.label[lang]}</h4>
+                    <span className="rounded-full px-2 py-0.5 font-mono text-[10px] font-semibold" style={{ backgroundColor: `${accent}1f`, color: accent }}>
+                      {g.items.length}
+                    </span>
+                  </div>
+                  <ul className="mt-3 space-y-1.5">
+                    {g.items.map((it) => (
+                      <li key={it} className="text-[13px] leading-snug text-card-foreground/90">
+                        <span className="select-none" style={{ color: accent }}>· </span>{it}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
           </div>
         </div>
       </Section>
