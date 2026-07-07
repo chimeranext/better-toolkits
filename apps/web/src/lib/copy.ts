@@ -84,7 +84,7 @@ type Content = {
   s6: { a: string; b: string };
   s7: { title: string; steps: { title: string; cmd: string; note?: string }[]; demo: string };
   s8: { title: string; col1: { name: string; price: string; body: string }; col2: { name: string; body: string; whatsapp: string; calendar: string } };
-  s9: { title: string; dogfooding: string; sibling: string; dogfoodingTail: string; venturesLabel: string; methodTagline: string };
+  s9: { title: string; dogfooding: string; sibling: string; dogfoodingTail: string; venturesLabel: string; methodTitle: string; methodTagline: string };
   s10: { title: string; faqs: { q: string; a: string }[] };
   s11: { h2: string; sub: string; copy: string; guarantee: string; studioPrompt: string; whatsapp: string; calendar: string };
   s12: { license: string; rights: string };
@@ -135,11 +135,12 @@ export const COPY: Record<Lang, Content> = {
       col2: { name: "Need more than tools?", body: "Everything on this page is free — that's the deal. The paid tier is people, not software: the team that built this stack working inside your startup as fractional CTO, venture builders and hands-on GTM operators. Install the toolkits today; call us when you hit the problems tools can't solve.", whatsapp: "WhatsApp us", calendar: "Book 30 min" },
     },
     s9: {
-      title: "Standing on the shoulders of giants",
-      dogfooding: "None of these commands were designed on a whiteboard. They were forged operating ChimeraNext's real ventures — and building",
+      title: "None of these commands were designed on a whiteboard.",
+      dogfooding: "Every command was forged operating ChimeraNext's real ventures — and building",
       sibling: "better-microservices",
       dogfoodingTail: ", the shared services platform every venture runs on. Even this landing page was produced by the toolkit's own /landing-page command.",
       venturesLabel: "Battle-tested across the ChimeraNext portfolio",
+      methodTitle: "Standing on the shoulders of giants",
       methodTagline: "50+ named methodologies encoded into commands — from McKinsey's Three Horizons to Fowler's Strangler Fig to LATAM's Cayman Sandwich.",
     },
     s10: {
@@ -207,11 +208,12 @@ export const COPY: Record<Lang, Content> = {
       col2: { name: "¿Necesitas más que herramientas?", body: "Todo lo de esta página es gratis — ese es el trato. Lo pago son personas, no software: el equipo que construyó este stack trabajando dentro de tu startup como CTO fraccional, venture builders y operadores GTM. Instala los toolkits hoy; llámanos cuando llegues a los problemas que las herramientas no resuelven.", whatsapp: "Escríbenos por WhatsApp", calendar: "Agenda 30 min" },
     },
     s9: {
-      title: "Sobre hombros de gigantes",
-      dogfooding: "Ninguno de estos comandos se diseñó en una pizarra. Se forjaron operando los ventures reales de ChimeraNext — y construyendo",
+      title: "Ninguno de estos comandos se diseñó en una pizarra.",
+      dogfooding: "Cada comando se forjó operando los ventures reales de ChimeraNext — y construyendo",
       sibling: "better-microservices",
       dogfoodingTail: ", la plataforma de servicios compartidos sobre la que corren todos los ventures. Hasta esta landing se produjo con el propio comando /landing-page del toolkit.",
       venturesLabel: "Probado en el portfolio de ChimeraNext",
+      methodTitle: "Sobre hombros de gigantes",
       methodTagline: "Más de 50 metodologías con nombre y apellido codificadas en comandos — de Three Horizons de McKinsey al Strangler Fig de Fowler y el Cayman Sandwich del venture LATAM.",
     },
     s10: {

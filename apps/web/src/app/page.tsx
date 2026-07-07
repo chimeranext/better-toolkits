@@ -488,7 +488,8 @@ export default function Page() {
 
         {/* methodology bento: one accent per discipline */}
         <div className="mt-14">
-          <p className="mx-auto max-w-[70ch] text-center text-[clamp(1rem,0.9rem+0.4vw,1.25rem)] font-medium text-card-foreground">{t.s9.methodTagline}</p>
+          <h3 className="text-center font-heading font-bold text-[clamp(1.4rem,1rem+1.2vw,2.25rem)]">{t.s9.methodTitle}</h3>
+          <p className="mx-auto mt-4 max-w-[70ch] text-center text-[clamp(1rem,0.9rem+0.4vw,1.25rem)] font-medium text-card-foreground">{t.s9.methodTagline}</p>
           {/* Bento: spans tile the 6-col grid exactly — the 10-framework card anchors 2 rows. */}
           <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-6">
             {METHOD_GROUPS.map((g, gi) => {
