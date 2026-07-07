@@ -19,7 +19,7 @@
     "prepublishOnly": "npm run build"
   },
   "keywords": ["opencode", "plugin", "business-model", "startup", "lean-canvas"],
-  "repository": { "type": "git", "url": "git+https://github.com/lapc506/business-model-toolkit.git" },
+  "repository": { "type": "git", "url": "git+https://github.com/chimeranext/business-model-toolkit.git" },
   "author": "Luis Andres Pena Castillo",
   "license": "BSL-1.1",
   "dependencies": {
