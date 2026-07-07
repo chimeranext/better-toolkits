@@ -39,7 +39,7 @@ Founders individuales que necesitan:
 
 ## Estado actual
 
-**v0.5.0 — chimeranext-api-consumer agent shipped. All v0.x scope items delivered.**
+**v0.6.0 — `financial-model` skill shipped (5-year projection model). All prior v0.x scope items delivered.**
 
 Sub-issue de ejecución bootstrap: [legacy-ticket](https://linear.app/chimera-coding/issue/legacy-ticket) ✓ Done (parent SPIKE: [legacy-ticket](https://linear.app/chimera-coding/issue/legacy-ticket)).
 
@@ -51,9 +51,10 @@ Sub-issue de ejecución bootstrap: [legacy-ticket](https://linear.app/chimera-co
 | v0.2.0 | ✓ | `cap-table-builder` + `founder-documents` skills |
 | v0.3.0 | ✓ | `cofounder-matching` + `investor-matching` + `demo-day-prep` + `stage-tracker` skills |
 | v0.4.0 | ✓ | `/propose-spike` command |
-| **v0.5.0** | ✓ | **`chimeranext-api-consumer` agent** — final v0.x scope item |
+| v0.5.0 | ✓ | `chimeranext-api-consumer` agent |
+| **v0.6.0** | ✓ | **`financial-model` skill** — 5-year projection model (Setup → Assumptions → Calculations → Statements → Charts) |
 
-### Skills (8 — full v0.x scope)
+### Skills (9)
 
 **Core (v0.1)**:
 - **`startup-intake`** — AI intake interview que produce un `startup-profile.md` compatible schema-wise con chimeranext Startup Profile
@@ -68,6 +69,9 @@ Sub-issue de ejecución bootstrap: [legacy-ticket](https://linear.app/chimera-co
 - **`investor-matching`** — 5-axis scoring (stage / check / thesis / geography / value-add) con priority configurable. Pipeline tracker incluido.
 - **`demo-day-prep`** — 4 artefactos: application, 10-slide deck outline, 3-min script, 50+ Q&A bank. Rehearsal best practices 5-5-5.
 - **`stage-tracker`** — 6 stages (Ideation → Scaling) con exit criteria + Chimera Score (5-axis, 0-100). Evidence-over-claim principle.
+
+**Financial modeling (v0.6)**:
+- **`financial-model`** — modelo de proyección financiera a 5 años: Setup (moneda / fiscal year / business-model preset) → Assumptions (revenue drivers, costos fijos/variables, hiring plan, growth/churn) → Calculations (P&L mensual años 1-2 + anual 3-5, cash flow, runway) → Financial Statements → Executive Summary con chart specs. Presets SaaS / DTC / Marketplace / Services / Fintech con sanity checks (gross margin por modelo, burn multiple, Rule of 40, CAC payback, runway post-raise). Output CSV-ready. Alimenta el ask del `cap-table-builder` y el slide financiero de `demo-day-prep`.
 
 ### Commands (v0.4)
 
