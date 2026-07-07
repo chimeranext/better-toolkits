@@ -87,8 +87,8 @@
     },
     {
       "name": "business-model-toolkit",
-      "description": "Interactive business model brainstorming — guided dialogue covering the full startup lifecycle from problem validation through execution and investor pitch.",
-      "version": "2.1.0",
+      "description": "Interactive business model brainstorming — guided dialogue covering the full startup lifecycle from problem validation through execution and investor pitch. Includes a dedicated brand-identity skill (Brand Steering Wheel + Limbic Map emotional positioning + tone of voice) and an OKR + KPI-reporting operational layer.",
+      "version": "2.2.0",
       "source": "./toolkits/business-model-toolkit",
       "category": "productivity",
       "keywords": [
