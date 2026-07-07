@@ -1,0 +1,142 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "better-toolkits",
+  "description": "Source-available Claude Code toolkits monorepo — pick the toolkits your startup needs. One marketplace, ten toolkits.",
+  "owner": {
+    "name": "Luis Andres Pena Castillo",
+    "email": "lapc506@users.noreply.github.com"
+  },
+  "plugins": [
+    {
+      "name": "aaarrr-flywheel-toolkit",
+      "description": "Growth-engineering toolkit. Funnel + flywheel completo: pricing strategy → landing-page design → instrumentation (Pixel + GA4 + PostHog + UTM) → AAARRR ejecución sobre Meta Marketing API. Awareness/Acquisition/Activation/Revenue como funnel lineal; Retention/Referral cierran el loop como flywheel que retroalimenta Acquisition con LAL audiences y K-factor real. Mantra: fail fast, fail often, fail cheap, fail forward.",
+      "version": "0.2.0",
+      "source": "./toolkits/aaarrr-flywheel-toolkit"
+    },
+    {
+      "name": "app-gtm-release",
+      "description": "Multi-platform app go-to-market and release toolkit — ship Flutter, Kotlin Multiplatform, .NET MAUI, Swift, and PWAs to Google Play, App Store, Microsoft Store, Snap Store, Flathub, and alternative channels. Three-tier command architecture: ship-advisor (strategy), per-framework ship-X commands (execution), ship-everywhere (mass publish). v2.3 adds the gtm-fit skill — GTM strategy layer (SLIP framework, minimum viable segment, organic presence system) so shipped apps also sell.",
+      "version": "2.3.0",
+      "source": "./toolkits/app-gtm-release-toolkit",
+      "category": "productivity",
+      "keywords": [
+        "claude-code",
+        "claude-code-plugin",
+        "gtm",
+        "go-to-market",
+        "release",
+        "deployment",
+        "multi-store",
+        "cross-platform",
+        "flutter",
+        "kmp",
+        "swift",
+        "maui",
+        "pwa",
+        "pwa-builder",
+        "snapcraft",
+        "microsoft-store",
+        "google-play",
+        "app-store",
+        "testflight",
+        "cicd",
+        "codemagic",
+        "github-actions",
+        "revenuecat",
+        "shorebird",
+        "mobile",
+        "desktop",
+        "web"
+      ]
+    },
+    {
+      "name": "business-model-toolkit",
+      "description": "Interactive business model brainstorming — guided dialogue covering the full startup lifecycle from problem validation through execution and investor pitch.",
+      "version": "2.1.0",
+      "source": "./toolkits/business-model-toolkit",
+      "category": "productivity",
+      "keywords": [
+        "claude-code",
+        "claude-code-plugin",
+        "business-model",
+        "lean-canvas",
+        "startup",
+        "brainstorming",
+        "running-lean",
+        "founder-institute",
+        "pitch-deck",
+        "mvp",
+        "unit-economics"
+      ]
+    },
+    {
+      "name": "fractional-cto-toolkit",
+      "description": "Operational toolkit for freelance and fractional CTOs — SOPs, checklists, and guided workflows for project takeovers, technical audits, client onboarding, and vendor evaluation.",
+      "version": "1.0.0",
+      "source": "./toolkits/fractional-cto-toolkit"
+    },
+    {
+      "name": "instructional-design-toolkit",
+      "description": "Guided instructional design toolkit — design cmi5-compliant courses and 1-on-1 session plans using CONTEXT→CONCEPT→BUILD→SHIP→REFLECT formula, Builder's Bloom's progression, Ship-First Design, and Kirkpatrick L1-L4 evaluation. Produces JSON + Markdown + HTML visualization + Marp slide decks.",
+      "version": "1.0.0",
+      "source": "./toolkits/instructional-design-toolkit",
+      "category": "productivity",
+      "keywords": [
+        "claude-code",
+        "claude-code-plugin",
+        "instructional-design",
+        "course-design",
+        "cmi5",
+        "xapi",
+        "scorm",
+        "blooms-taxonomy",
+        "sam-methodology",
+        "ship-first-design",
+        "kirkpatrick",
+        "coaching",
+        "mentoring",
+        "tutoring",
+        "marp",
+        "atomic-habits",
+        "learning-record-store",
+        "ralph-lrs"
+      ]
+    },
+    {
+      "name": "launchpad-toolkit",
+      "description": "Methodology prototype laboratory for chimeranext Launchpad pillar — AI intake, cap table, co-founder matching, investor matching, demo day prep, stage tracker, plus a chimeranext-api-consumer agent that enriches skills with live chimeranext API data when endpoints are available and degrades gracefully when they are not. Dual-purpose: external CLI for founders without chimeranext + internal validation lab for productizing patterns into the chimeranext Launchpad product.",
+      "version": "0.5.0",
+      "source": "./toolkits/launchpad-toolkit"
+    },
+    {
+      "name": "ux-research-toolkit",
+      "description": "Guided UX research map creation — experience maps, customer journey maps, service blueprints, storyboards, and user story maps. Helps non-experts create professional UX artifacts through dialogue, JSON data, and interactive HTML visualization.",
+      "version": "2.1.0",
+      "source": "./toolkits/ux-research-toolkit",
+      "category": "productivity",
+      "keywords": [
+        "claude-code",
+        "claude-code-plugin",
+        "ux-research",
+        "experience-map",
+        "journey-map",
+        "customer-journey",
+        "service-blueprint",
+        "storyboard",
+        "user-story-map",
+        "user-experience",
+        "design-thinking",
+        "service-design",
+        "user-persona",
+        "agile-planning",
+        "nielsen-norman"
+      ]
+    },
+    {
+      "name": "venture-studio-toolkit",
+      "description": "Macro portfolio management for venture studios and serial founders — LATAM corporate structures (Cayman Sandwich, Delaware Tostada, Skip-CR), Services Hub pattern with MSA templates, accelerator matching, govclab frameworks (studio thesis, focus, secret sauce), and Three Horizons portfolio allocation. Spanish-first; bilingual output framework documented for v1.3+.",
+      "version": "1.2.0",
+      "source": "./toolkits/venture-studio-toolkit"
+    }
+  ]
+}
