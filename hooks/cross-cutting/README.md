@@ -17,7 +17,7 @@ absence → all three hooks no-op. Minimal opt-in:
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/chimeranext/make-no-mistakes-toolkit/main/schemas/cross-cutting-hooks.schema.json",
+  "$schema": "https://raw.githubusercontent.com/ChimeraNext/make-no-mistakes-toolkit/main/schemas/cross-cutting-hooks.schema.json",
   "version": 1,
   "cleartext_secrets": { "enabled": true }
 }
@@ -27,7 +27,7 @@ Full example (every surface enabled, every override demonstrated):
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/chimeranext/make-no-mistakes-toolkit/main/schemas/cross-cutting-hooks.schema.json",
+  "$schema": "https://raw.githubusercontent.com/ChimeraNext/make-no-mistakes-toolkit/main/schemas/cross-cutting-hooks.schema.json",
   "version": 1,
   "cleartext_secrets": {
     "enabled": true,

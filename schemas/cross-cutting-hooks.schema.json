@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://raw.githubusercontent.com/chimeranext/make-no-mistakes-toolkit/main/schemas/cross-cutting-hooks.schema.json",
+  "$id": "https://raw.githubusercontent.com/ChimeraNext/make-no-mistakes-toolkit/main/schemas/cross-cutting-hooks.schema.json",
   "title": "make-no-mistakes cross-cutting hooks — per-repo config",
   "description": "Per-repo configuration for the toolkit's Cure 4b cross-cutting PreToolUse hooks. Lives at the consumer-repo root as .claude/config/cross-cutting-hooks.json. File absence → all 4b hooks no-op (opt-in). legacy-ticket.",
   "type": "object",

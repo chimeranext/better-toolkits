@@ -1,6 +1,6 @@
 # Bilingual Format — Human + Agent Layer
 
-This is the standard template for implementation briefs produced by the make-no-mistakes toolkit. It is a **business rule** of the chimeranext methodology and must not be altered or skipped.
+This is the standard template for implementation briefs produced by the make-no-mistakes toolkit. It is a **business rule** of the ChimeraNext methodology and must not be altered or skipped.
 
 ## Structure
 

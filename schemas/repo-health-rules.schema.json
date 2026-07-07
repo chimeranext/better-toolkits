@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://raw.githubusercontent.com/chimeranext/make-no-mistakes-toolkit/main/schemas/repo-health-rules.schema.json",
+  "$id": "https://raw.githubusercontent.com/ChimeraNext/make-no-mistakes-toolkit/main/schemas/repo-health-rules.schema.json",
   "title": "Repo Health Rules",
   "description": "Unified per-repo enforcement config consumed by the make-no-mistakes repo-health hooks (PreToolUse: structural blocking; PostToolUse: drift telemetry). Drop this file at consumer repo root as `.repo-health-rules.json`. SUPERSET of `schemas/atomic-design-rules.schema.json`: that file's junk-drawer / exception-marker concepts generalize here to per-family `pattern`+`exemptionMarker` rules keyed by the six audit-engine namespaces (SCH|CDC|DDD|ARC|STR|ENF). The atomic-design component layer (E### findings) stays owned by `atomic-design-toolkit` and is NOT a family here (composition, not fusion). IN THIS SLICE the schema + the `proposeHookRule` emitter that targets it are delivered; the live PreToolUse/PostToolUse `.sh` hooks that READ this file and the 4-cure apply step are Phase-2-later.",
   "type": "object",

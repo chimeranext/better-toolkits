@@ -191,7 +191,7 @@ Generate a visual HTML report and save it to the user's workspace.
 
 **Report design principles** (single self-contained HTML file with inline CSS):
 
-- Dark background (`#0a0e1a` or similar — match chimeranext aesthetic if the project is one of theirs), clean typography, easy to scan
+- Dark background (`#0a0e1a` or similar — match ChimeraNext aesthetic if the project is one of theirs), clean typography, easy to scan
 - The synthesis section (most likely failure, most dangerous failure, hidden assumption, revised plan, checklist) should be **prominently displayed at the top** since that's what most people will read first
 - One visual card per failure reason showing the deep-dive analysis. Each card should display the failure reason as a header, the failure story, the underlying assumption, and the early warning signs. Use distinct accent colors for each card so they're visually scannable
 - A clear visual indicator of severity/likelihood for each failure mode

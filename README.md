@@ -10,7 +10,7 @@ A Claude Code plugin by [Luis Andres Pena Castillo](https://github.com/lapc506).
 
 ```bash
 # Add the marketplace (one-time)
-claude plugin marketplace add chimeranext/make-no-mistakes-toolkit
+claude plugin marketplace add ChimeraNext/make-no-mistakes-toolkit
 
 # Install the plugin
 claude plugin install make-no-mistakes
