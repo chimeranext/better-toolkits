@@ -15,15 +15,15 @@ claude plugin add chimeranext/atomic-design-toolkit
 ### OpenCode (npm)
 
 ```bash
-npx @chimeranext/atomic-design-toolkit install
+npx @lapc506/atomic-design-toolkit install
 ```
 
 Other commands:
 
 ```bash
-npx @chimeranext/atomic-design-toolkit update      # Sync assets to latest version
-npx @chimeranext/atomic-design-toolkit doctor       # Health check
-npx @chimeranext/atomic-design-toolkit uninstall    # Remove all managed files
+npx @lapc506/atomic-design-toolkit update      # Sync assets to latest version
+npx @lapc506/atomic-design-toolkit doctor       # Health check
+npx @lapc506/atomic-design-toolkit uninstall    # Remove all managed files
 ```
 
 ## Quickstart

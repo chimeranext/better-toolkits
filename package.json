@@ -1,5 +1,5 @@
 {
-  "name": "@chimeranext/atomic-design-toolkit",
+  "name": "@lapc506/atomic-design-toolkit",
   "version": "1.2.0",
   "description": "Flutter Atomic Design widget generator — decompose features into atoms, molecules, organisms, templates, and pages. OpenCode + Claude Code plugin.",
   "type": "module",

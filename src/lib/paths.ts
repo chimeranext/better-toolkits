@@ -3,10 +3,10 @@ import os from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-export const PACKAGE_NAME = "@chimeranext/atomic-design-toolkit";
+export const PACKAGE_NAME = "@lapc506/atomic-design-toolkit";
 export const CLI_NAME = "atomic-design-toolkit";
 export const CONFIG_SCHEMA_URL = "https://opencode.ai/config.json";
-export const MANIFEST_FILE_NAME = ".chimeranext-atomic-design-toolkit.manifest.json";
+export const MANIFEST_FILE_NAME = ".lapc506-atomic-design-toolkit.manifest.json";
 
 export interface PackageMetadata {
   name: string;
