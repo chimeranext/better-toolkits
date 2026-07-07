@@ -334,9 +334,9 @@ export default function Page() {
         <div className="mt-14 space-y-12 lg:space-y-16">
           {t.s4.pairs.map((p, i) => (
             <div key={i} className="grid items-center gap-8 lg:grid-cols-2 lg:gap-14">
-              <div className={cn(i % 2 === 1 && "lg:order-2")}>
+              <div className={cn("grid items-start gap-5 md:grid-cols-2 md:gap-8", i % 2 === 1 && "lg:order-2")}>
                 <p className="font-heading font-semibold leading-snug text-destructive text-[clamp(1.25rem,1rem+0.9vw,1.9rem)]">{p.problem}</p>
-                <p className="mt-5 text-[clamp(1rem,0.95rem+0.3vw,1.2rem)] leading-relaxed text-card-foreground">
+                <p className="text-[clamp(1rem,0.95rem+0.3vw,1.2rem)] leading-relaxed text-card-foreground">
                   <span className="font-heading font-bold text-primary">{t.s4.fixLead}</span>{" "}
                   <code className="font-mono font-semibold text-primary">{p.toolkit}</code>: {p.solution}
                 </p>
@@ -470,17 +470,20 @@ export default function Page() {
 
         {/* ventures: window-chrome chips with LIVE badge */}
         <div className="mt-12 text-center">
-          <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{t.s9.venturesLabel}</p>
-          <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-6">
+          <h3 className="text-center font-heading font-bold text-[clamp(1.4rem,1rem+1.2vw,2.25rem)]">{t.s9.venturesLabel}</h3>
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-6">
             {VENTURES.map((v) => (
-              <div key={v} className="overflow-hidden rounded-lg border border-border bg-card text-left transition-transform hover:-translate-y-0.5">
+              <div key={v.name} className="overflow-hidden rounded-lg border border-border bg-card text-left transition-transform hover:-translate-y-0.5">
                 <div className="flex items-center gap-1 border-b border-border/60 bg-muted/40 px-3 py-1.5">
                   <span className="h-2 w-2 rounded-full bg-destructive/70" />
                   <span className="h-2 w-2 rounded-full bg-warning/70" />
                   <span className="h-2 w-2 rounded-full bg-success/70" />
                   <span className="ml-auto rounded-full bg-success/15 px-1.5 py-px font-mono text-[9px] font-semibold uppercase text-success">live</span>
                 </div>
-                <div className="px-3 py-2.5 font-heading text-sm font-bold text-card-foreground">{v}</div>
+                <div className="px-3 py-2.5">
+                  <div className="font-heading text-sm font-bold text-card-foreground">{v.name}</div>
+                  <div className="text-xs italic text-muted-foreground">({v.industry})</div>
+                </div>
               </div>
             ))}
           </div>
@@ -544,7 +547,7 @@ export default function Page() {
           <div className="absolute left-1/2 top-1/2 h-[60vh] w-[70vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(124,92,255,0.18),transparent_62%)] blur-2xl" />
         </div>
         <div className="relative">
-          <h2 className="mx-auto max-w-[26ch] font-heading font-extrabold leading-tight text-[clamp(2rem,1.2rem+2.4vw,4rem)]">{t.s11.h2}</h2>
+          <h2 className="relative left-1/2 w-[94vw] -translate-x-1/2 font-heading font-extrabold leading-tight text-[clamp(2rem,1rem+2.9vw,4.5rem)]">{t.s11.h2}</h2>
           <p className="mt-4 text-[clamp(1.05rem,0.95rem+0.4vw,1.35rem)] text-foreground/90">{t.s11.sub}</p>
           <div className="mx-auto mt-9 max-w-[min(48rem,92vw)]"><Terminal cmd={MARKETPLACE_ADD} label={t.s11.copy} copied={t.s2.copied} /></div>
           <p className="mt-5 text-sm text-muted-foreground">{t.s11.guarantee}</p>

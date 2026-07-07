@@ -24,7 +24,14 @@ export const STATS = [
   { value: "65,000", label: { en: "lines of methodology", es: "líneas de metodología" } },
 ];
 
-export const VENTURES = ["AltruPets", "Vertivol Latam", "HabitaNexus", "Keiko", "AduaNext", "LicitaNext"];
+export const VENTURES: { name: string; industry: string }[] = [
+  { name: "AltruPets", industry: "animal welfare" },
+  { name: "Vertivo", industry: "agri-tech" },
+  { name: "HabitaNexus", industry: "proptech" },
+  { name: "Keiko", industry: "ed-tech" },
+  { name: "AduaNext", industry: "customs SaaS" },
+  { name: "LicitaNext", industry: "govtech" },
+];
 
 export const METHOD_GROUPS: { label: { en: string; es: string }; items: string[] }[] = [
   {
