@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chimeranext.github.io/instructional-design-toolkit/profiles/session-plan-mentoring.profile.json",
+  "title": "SessionPlanMentoringProfile",
+  "description": "Mentoring session plan per Irby (2018): developmental, long-term relationship, focuses on growth and network. Mentee typically selects the mentor.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "../session-plan-core.schema.json" }
+  ],
+  "required": ["mentoring_specific"],
+  "properties": {
+    "mentoring_specific": {
+      "type": "object",
+      "required": ["long_term_goal"],
+      "properties": {
+        "long_term_goal": {
+          "type": "string",
+          "description": "Developmental goal over months/years (not a specific KPI)"
+        },
+        "relationship_history": {
+          "type": "string",
+          "description": "Context of the mentoring relationship"
+        },
+        "focus_area": {
+          "type": "string",
+          "description": "e.g., 'Professional identity + network exposure', 'Career transition', 'Leadership development'"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chimeranext.github.io/instructional-design-toolkit/profiles/course.profile.json",
+  "title": "CourseProfile",
+  "description": "Default course profile. v1 has one profile; placeholder for workshop.profile.json, masterclass.profile.json in v2+.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "../course.schema.json" }
+  ]
+}

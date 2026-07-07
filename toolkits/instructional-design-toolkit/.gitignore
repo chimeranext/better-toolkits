@@ -1,0 +1,12 @@
+node_modules/
+.DS_Store
+*.log
+.env
+.env.local
+dist/
+.claude/plan.md
+.claude/*.local.md
+.claude/worktrees/
+examples/**/dist/
+examples/**/*.html
+!examples/**/course.html

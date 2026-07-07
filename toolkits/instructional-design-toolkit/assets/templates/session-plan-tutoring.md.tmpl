@@ -1,0 +1,59 @@
+# Sesión de Tutoría — {{session.learner.name}}
+
+**Fecha**: {{session.meta.date}}
+**Duración**: {{session.meta.duration_minutes}} min
+**Tutor**: {{session.coach_mentor_tutor.name}}
+
+## Specific Topic
+
+{{session.tutoring_specific.specific_topic}}
+
+**Diagnostic result**: {{session.tutoring_specific.diagnostic_result}}
+
+**Success criterion**: {{session.tutoring_specific.success_criterion}}
+
+## Contexto del Learner
+
+{{session.learner.context}}
+
+## Objetivos de la Sesión
+
+{{#each session.objectives}}
+- {{this}}
+{{/each}}
+
+## Pre-work
+
+{{#each session.pre_work}}
+- {{this}}
+{{/each}}
+
+## Agenda
+
+| Time | Block | Notes |
+|---|---|---|
+{{#each session.agenda}}
+| {{this.time}} | {{this.block}} | {{this.notes}} |
+{{/each}}
+
+## Reflection Questions
+
+{{#each session.reflection_questions}}
+- {{this}}
+{{/each}}
+
+## Follow-up
+
+{{#if session.follow_up.next_session_date}}
+- **Próxima sesión**: {{session.follow_up.next_session_date}}
+{{/if}}
+- **Homework**:
+{{#each session.follow_up.homework}}
+  - {{this}}
+{{/each}}
+
+---
+
+> Plan generado por
+> [instructional-design-toolkit](https://github.com/chimeranext/instructional-design-toolkit).
+> Source: `session-plan.json` adyacente.

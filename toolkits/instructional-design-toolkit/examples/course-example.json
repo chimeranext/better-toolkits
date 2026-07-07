@@ -1,0 +1,87 @@
+{
+  "meta": {
+    "id": "course:first-pull-request",
+    "version": "1.0.0",
+    "language": "es",
+    "title": "Escribiendo tu Primer Pull Request",
+    "slug": "first-pull-request",
+    "promise": "Abrís tu primer PR colaborativo con estructura profesional y lo mergeás",
+    "estimated_hours": 3,
+    "estimated_dedication": "2-3 horas una sola vez",
+    "created": "2026-04-18",
+    "updated": "2026-04-18",
+    "version_timeline": [
+      { "version": "1.0.0", "date": "2026-04-18", "type": "major", "summary": "Release inicial — ejemplo mínimo que valida schema" }
+    ]
+  },
+  "learner_profile": {
+    "id": "persona:new-contributor",
+    "name": "Dev nuevo en trabajo colaborativo con Git",
+    "primary_pain": "Sé hacer commits locales pero me da miedo abrir un PR en un repo de otros",
+    "entry_skills": ["Git básico (add, commit, push)", "Una cuenta de GitHub"],
+    "context": "Puede venir de proyectos personales o universidad; nunca abrió un PR en un repo colaborativo con reviewers reales",
+    "source": "Generic example for schema validation — not tied to a specific dog-fooding domain"
+  },
+  "capstone": {
+    "id": "capstone:first-pr-merged",
+    "title": "Un PR propio mergeado en un repo open source",
+    "deliverable": "URL del PR mergeado + captura de pantalla del merge commit + breve retro de la experiencia",
+    "assessment_criteria": [
+      { "id": "crit:pr-merged", "description": "El PR fue mergeado (no solo abierto) en un repo que no es tuyo" },
+      { "id": "crit:pr-description", "description": "La descripción del PR sigue una estructura clara (context, changes, test plan)" },
+      { "id": "crit:reviewer-feedback", "description": "Atendiste al menos una ronda de feedback de un reviewer sin defensividad" }
+    ],
+    "hiring_test": "Sí — un dev que abre su primer PR colaborativo con esta calidad ya es contratable como junior."
+  },
+  "modules": [
+    {
+      "id": "module:prepare-contribution",
+      "au_id": "au:prepare-contribution-001",
+      "order": 1,
+      "slug": "prepare-contribution",
+      "title": "Preparando tu Contribución",
+      "type": "standard",
+      "philosophy_quote": "Un buen PR empieza antes del primer commit.",
+      "bloom_level": "Explain",
+      "estimated_hours": 1,
+      "ship_milestone": "Issue identificado + fork creado + branch local con cambio propuesto",
+      "classes_cmi5": {
+        "masteryScore": 0.75,
+        "moveOn": "Completed",
+        "launchMethod": "AnyWindow",
+        "activityType": "http://adlnet.gov/expapi/activities/lesson"
+      },
+      "lessons": [
+        {
+          "id": "lesson:identify-good-first-issue",
+          "order": 1,
+          "slug": "identify-good-first-issue",
+          "title": "Identificar un Good First Issue apto para tu nivel",
+          "estimated_minutes": 30,
+          "context": "Mirar el repo de un proyecto grande por primera vez es abrumador. Hay miles de issues, cientos de PRs abiertos, convenciones que no conocés, conversaciones técnicas en hilos de hace años. La trampa clásica es elegir un issue demasiado ambicioso por entusiasmo y frustrarte en el medio. Lo que vamos a aprender acá es filtrar issues con criterio hasta encontrar uno que (a) podés resolver de punta a punta y (b) el maintainer realmente necesita.",
+          "concept": "Los issues con label `good first issue` son curados por maintainers para nuevos contributors. Pero no todos son realmente aptos — algunos están stale, otros ya tienen alguien trabajando sin marcarlo. Un good first issue viable cumple 4 criterios: (1) tiene menos de 3 meses de actividad reciente, (2) nadie lo reclamó en comentarios, (3) el scope está explícito en el issue (no 'mejorar X'), (4) el maintainer respondió activamente en los últimos PRs del repo. Si los 4 se cumplen, es una buena señal. Si falla alguno, pasa al siguiente. No te enamores del primer issue que te parece interesante.",
+          "build": "Elegí 3 repos open source que usés en tu trabajo (no proyectos teóricos). Para cada uno: filtrá issues por label `good first issue` + estado `open`. Abrí los primeros 5 de cada repo. Con Claude como partner, evaluá cada uno contra los 4 criterios del mental model. Tu objetivo no es que Claude te diga cuál elegir — es que vos practicás el filtrado en voz alta. Al final, elegí UNO. Si ninguno pasa los 4 criterios, pasa al siguiente repo.",
+          "ship": "Un comment en el issue elegido del tipo: 'Hola! Estoy interesado en trabajar en este issue. ¿Sigue disponible? ¿Puedo preguntarte un par de cosas antes de arrancar?' — con tu handle de GitHub visible.",
+          "reflect": [
+            "¿Cuál fue el criterio más difícil de aplicar? ¿Por qué?",
+            "¿Qué red flag viste en un issue que otros novatos podrían haber ignorado?"
+          ],
+          "marp_slide_count": 7
+        }
+      ],
+      "classes": []
+    }
+  ],
+  "analysis": {
+    "blooms_progression": ["Explain"],
+    "ship_milestones_escalation": [
+      "Comment en el issue elegido"
+    ],
+    "complexity_curve": [2],
+    "identified_risks": [
+      "Ejemplo deliberadamente mínimo (1 módulo, 1 lección) — es una semilla para validar schema, no un curso real",
+      "Dogfooding real (cursos completos) se diseñará fuera del toolkit en repos dedicados por curso"
+    ],
+    "recommended_next_course": null
+  }
+}

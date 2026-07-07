@@ -1,0 +1,247 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chimeranext.github.io/instructional-design-toolkit/course.schema.json",
+  "title": "Course",
+  "description": "A cmi5-compliant course design produced by instructional-design-toolkit. IDs (id, au_id, capstone.id, assessment_criteria[].id, classes[].id) are IMMUTABLE once created — changing them breaks xAPI history for enrolled learners. Slugs and titles are mutable.",
+  "type": "object",
+  "required": ["meta", "learner_profile", "capstone", "modules"],
+  "additionalProperties": false,
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["id", "version", "title", "slug", "language", "created"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^course:[a-z0-9-]+$", "description": "Immutable course identifier" },
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$", "description": "Semantic version. MAJOR=breaking (AU removed, masteryScore up, moveOn hardened), MINOR=additive, PATCH=cosmetic" },
+        "language": { "type": "string", "enum": ["es", "en"] },
+        "title": { "type": "string", "minLength": 5 },
+        "slug": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "promise": { "type": "string", "description": "One-sentence promise: what the student achieves" },
+        "estimated_hours": { "type": "number", "minimum": 0 },
+        "estimated_dedication": { "type": "string", "description": "e.g. '6-8 horas/semana'" },
+        "created": { "type": "string", "format": "date" },
+        "updated": { "type": "string", "format": "date" },
+        "version_timeline": {
+          "type": "array",
+          "description": "Append-only log of versions",
+          "items": {
+            "type": "object",
+            "required": ["version", "date", "type", "summary"],
+            "additionalProperties": false,
+            "properties": {
+              "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+              "date": { "type": "string", "format": "date" },
+              "type": { "type": "string", "enum": ["major", "minor", "patch"] },
+              "summary": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "business_context": {
+      "type": "object",
+      "description": "Auto-detected from business/ or business-model/ via business-context-detector agent",
+      "additionalProperties": false,
+      "properties": {
+        "organization": { "type": "string" },
+        "brand_voice": { "type": "string" },
+        "values": { "type": "array", "items": { "type": "string" } },
+        "industry": { "type": "string" },
+        "source_files": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "learner_profile": {
+      "type": "object",
+      "required": ["id", "name", "primary_pain"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "description": "Stable persona identifier" },
+        "name": { "type": "string" },
+        "primary_pain": { "type": "string" },
+        "entry_skills": { "type": "array", "items": { "type": "string" } },
+        "context": { "type": "string" },
+        "source": { "type": "string", "description": "Where the persona came from (srd/personas.yml, business-model/*, dialogue)" }
+      }
+    },
+    "capstone": {
+      "type": "object",
+      "description": "Ship-First Design anchor: defined BEFORE modules",
+      "required": ["id", "title", "deliverable", "assessment_criteria"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^capstone:[a-z0-9-]+$", "description": "Immutable" },
+        "title": { "type": "string" },
+        "deliverable": { "type": "string", "description": "Concrete artifact (URL, repo, document, physical artifact)" },
+        "assessment_criteria": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 7,
+          "items": {
+            "type": "object",
+            "required": ["id", "description"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string", "pattern": "^crit:[a-z0-9-]+$", "description": "Immutable criterion identifier" },
+              "description": { "type": "string", "minLength": 10 }
+            }
+          }
+        },
+        "hiring_test": { "type": "string", "description": "Honest answer: would you hire someone who produced this?" }
+      }
+    },
+    "modules": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/module" }
+    },
+    "analysis": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "blooms_progression": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/bloomLevel" },
+          "description": "Array parallel to modules[]: Bloom level per module order"
+        },
+        "ship_milestones_escalation": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "complexity_curve": {
+          "type": "array",
+          "items": { "type": "integer", "minimum": 1, "maximum": 5 }
+        },
+        "identified_risks": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "recommended_next_course": { "type": ["string", "null"] }
+      }
+    }
+  },
+  "$defs": {
+    "bloomLevel": {
+      "type": "string",
+      "enum": ["Recognize", "Explain", "Build", "Debug", "Decide", "Ship"],
+      "description": "Builder's Bloom's Taxonomy (adapted from chimera-academy)"
+    },
+    "module": {
+      "type": "object",
+      "required": ["id", "au_id", "order", "slug", "title", "bloom_level", "ship_milestone", "lessons"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^module:[a-z0-9-]+$", "description": "IMMUTABLE. Changing breaks xAPI history." },
+        "au_id": { "type": "string", "pattern": "^au:[a-z0-9-]+(-\\d{3})?$", "description": "IMMUTABLE cmi5 AU identifier." },
+        "order": { "type": "integer", "minimum": 0 },
+        "slug": { "type": "string", "pattern": "^[a-z0-9-]+$", "description": "Mutable" },
+        "title": { "type": "string", "description": "Mutable" },
+        "type": { "type": "string", "enum": ["standard", "bridge", "unique"] },
+        "philosophy_quote": { "type": "string", "description": "One-sentence ethos quote for the module" },
+        "bloom_level": { "$ref": "#/$defs/bloomLevel" },
+        "estimated_hours": { "type": "number", "minimum": 0 },
+        "ship_milestone": { "type": "string", "description": "What gets shipped at end of this module" },
+        "classes_cmi5": {
+          "type": "object",
+          "description": "cmi5 metadata for this module's AU",
+          "additionalProperties": false,
+          "properties": {
+            "masteryScore": { "type": "number", "minimum": 0, "maximum": 1, "description": "Default 0.75" },
+            "moveOn": {
+              "type": "string",
+              "enum": ["Passed", "Completed", "CompletedAndPassed", "CompletedOrPassed", "NotApplicable"],
+              "description": "Default CompletedAndPassed if quiz present, Completed otherwise"
+            },
+            "launchMethod": {
+              "type": "string",
+              "enum": ["AnyWindow", "OwnWindow"],
+              "description": "Default AnyWindow"
+            },
+            "activityType": {
+              "type": "string",
+              "format": "uri",
+              "description": "e.g. http://adlnet.gov/expapi/activities/lesson"
+            }
+          }
+        },
+        "feedback_form": {
+          "type": "object",
+          "description": "Kirkpatrick L1 embed for this module",
+          "additionalProperties": false,
+          "properties": {
+            "tool": { "type": "string", "enum": ["tally", "typeform"] },
+            "form_id": { "type": "string" },
+            "embed_url": { "type": "string", "format": "uri" },
+            "questions_l1": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "lessons": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/lesson" }
+        },
+        "classes": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/class" }
+        }
+      }
+    },
+    "lesson": {
+      "type": "object",
+      "required": ["id", "order", "slug", "title", "context", "concept", "build", "ship", "reflect"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^lesson:[a-z0-9-]+$", "description": "IMMUTABLE" },
+        "au_id": { "type": "string", "description": "Optional cmi5 sub-AU" },
+        "order": { "type": "integer", "minimum": 1 },
+        "slug": { "type": "string" },
+        "title": { "type": "string" },
+        "estimated_minutes": { "type": "integer", "minimum": 5 },
+        "context": {
+          "type": "string",
+          "minLength": 100,
+          "description": "100-200 word hook that makes the student FEEL the urgency"
+        },
+        "concept": {
+          "type": "string",
+          "minLength": 200,
+          "description": "300-500 word mental model. Use \\n---\\n to split across Marp slides."
+        },
+        "build": {
+          "type": "string",
+          "minLength": 200,
+          "description": "50-60% of lesson content. Apply the concept with Claude as partner (NOT teacher)."
+        },
+        "ship": {
+          "type": "string",
+          "minLength": 30,
+          "description": "50-100 word deliverable — what the student saves/creates/deploys"
+        },
+        "reflect": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "description": "1-2 provocative questions specific to THIS lesson"
+        },
+        "marp_slide_count": { "type": "integer", "minimum": 3 }
+      }
+    },
+    "class": {
+      "type": "object",
+      "required": ["type", "id", "title"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "type": "string", "enum": ["video", "quiz", "challenge"] },
+        "id": { "type": "string", "description": "IMMUTABLE" },
+        "title": { "type": "string" },
+        "minutes": { "type": "integer", "minimum": 1 },
+        "passing_score": { "type": "number", "minimum": 0, "maximum": 1, "description": "For quizzes" },
+        "criteria": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "For challenges"
+        }
+      }
+    }
+  }
+}

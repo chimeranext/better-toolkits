@@ -1,0 +1,32 @@
+{
+  "name": "instructional-design-toolkit",
+  "version": "1.0.0",
+  "description": "Guided instructional design toolkit — design cmi5-compliant courses and 1-on-1 session plans using CONTEXT→CONCEPT→BUILD→SHIP→REFLECT formula, Builder's Bloom's progression, Ship-First Design, and Kirkpatrick L1-L4 evaluation. Produces JSON + Markdown + HTML visualization + Marp slide decks.",
+  "author": {
+    "name": "Luis Andres Pena Castillo",
+    "url": "https://github.com/chimeranext"
+  },
+  "homepage": "https://github.com/chimeranext/instructional-design-toolkit",
+  "repository": "https://github.com/chimeranext/instructional-design-toolkit",
+  "license": "BSL-1.1",
+  "keywords": [
+    "claude-code",
+    "claude-code-plugin",
+    "instructional-design",
+    "course-design",
+    "cmi5",
+    "xapi",
+    "scorm",
+    "blooms-taxonomy",
+    "sam-methodology",
+    "ship-first-design",
+    "kirkpatrick",
+    "coaching",
+    "mentoring",
+    "tutoring",
+    "marp",
+    "atomic-habits",
+    "learning-record-store",
+    "ralph-lrs"
+  ]
+}

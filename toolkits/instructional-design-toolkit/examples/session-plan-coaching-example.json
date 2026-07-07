@@ -1,0 +1,53 @@
+{
+  "meta": {
+    "id": "session:juan-pr-review-coaching-03",
+    "version": "1.0.0",
+    "type": "coaching",
+    "date": "2026-04-20",
+    "duration_minutes": 60,
+    "profile": "session-plan-coaching",
+    "language": "es"
+  },
+  "learner": {
+    "id": "learner:juan-dev",
+    "name": "Juan — Senior Developer",
+    "context": "Tarda 3 días en promedio en revisar PRs del equipo, causa bottleneck notable en el flujo de merges",
+    "source": "performance-plan-juan-2026Q2.md"
+  },
+  "coach_mentor_tutor": {
+    "name": "Andrés",
+    "role": "Coach (peer senior, no manager)"
+  },
+  "objectives": [
+    "Definir un ritual personal de PR review que baje el lead time promedio de 3d a 1d",
+    "Identificar los 2 bloqueadores cognitivos principales que están estirando las reviews hoy",
+    "Acordar un mecanismo de accountability para las próximas 2 semanas"
+  ],
+  "pre_work": [
+    "Medir lead time promedio de las últimas 10 PRs que Juan revisó (usar GitHub API o Graphite)",
+    "Llegar con una hipótesis propia de qué está fallando (no vaciar la sesión en diagnóstico)"
+  ],
+  "agenda": [
+    { "time": "0-10", "block": "Check-in + revisión de métricas de PR review", "notes": "Juan presenta su lead time baseline y su hipótesis" },
+    { "time": "10-30", "block": "Identificación de bloqueadores (ejercicio Five Whys)", "notes": "No saltar a soluciones hasta terminar el diagnóstico" },
+    { "time": "30-50", "block": "Diseño del ritual (cuándo, dónde, cuánto tiempo)", "notes": "Debe ser compatible con su calendar actual, no idealizado" },
+    { "time": "50-60", "block": "Commitments específicos + próxima sesión", "notes": "Máximo 3 commitments, cada uno con deadline" }
+  ],
+  "reflection_questions": [
+    "¿Qué tenés que dejar de hacer para que este ritual funcione?",
+    "¿A quién vas a rendirle cuentas de este cambio semana a semana?"
+  ],
+  "follow_up": {
+    "next_session_date": "2026-05-04",
+    "homework": [
+      "Aplicar el ritual diseñado durante 2 semanas sin excepción",
+      "Registrar lead times diarios en planilla compartida",
+      "Avisar por Slack si un día el ritual no se pudo ejecutar + razón"
+    ]
+  },
+  "coaching_specific": {
+    "target_kpi": "Lead time promedio de PR review: de 3d a 1d",
+    "session_n_of_m": "3 of 6",
+    "withdrawal_trigger": "KPI sostenido en 1d durante 2 ciclos (2 semanas) consecutivos"
+  }
+}

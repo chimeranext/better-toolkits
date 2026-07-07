@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chimeranext.github.io/instructional-design-toolkit/profiles/session-plan-tutoring.profile.json",
+  "title": "SessionPlanTutoringProfile",
+  "description": "Tutoring session plan per Irby (2018): topic-specific, problem-focused, short-term. Focused on improvement in a specific skill or concept.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "../session-plan-core.schema.json" }
+  ],
+  "required": ["tutoring_specific"],
+  "properties": {
+    "tutoring_specific": {
+      "type": "object",
+      "required": ["specific_topic", "success_criterion"],
+      "properties": {
+        "specific_topic": {
+          "type": "string",
+          "description": "The precise topic being tutored (e.g., 'Riverpod providers: autoDispose vs keepAlive')"
+        },
+        "diagnostic_result": {
+          "type": "string",
+          "description": "What the tutor identified as the specific gap/confusion"
+        },
+        "success_criterion": {
+          "type": "string",
+          "description": "Concrete measurable outcome (e.g., 'Solves 3 exercises without asking + passes quiz')"
+        }
+      }
+    }
+  }
+}
