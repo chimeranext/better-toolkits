@@ -25,7 +25,7 @@ function CopyButton({ text, label, copied, className }: { text: string; label: s
       aria-label={label}
       className={cn(
         "shrink-0 rounded-md px-4 py-2 text-sm font-semibold transition-colors",
-        done ? "bg-success text-black" : "bg-primary text-primary-foreground hover:bg-primary/90",
+        done ? "bg-success text-black" : "bg-[hsl(var(--primary-strong))] text-white hover:opacity-90",
         className,
       )}
     >
@@ -103,7 +103,7 @@ function CtaLink({
       rel={href.startsWith("http") ? "noreferrer" : undefined}
       className={cn(
         "inline-flex items-center justify-center rounded-md px-5 py-2.5 text-sm font-semibold transition-colors",
-        variant === "solid" && "bg-primary text-primary-foreground hover:bg-primary/90",
+        variant === "solid" && "bg-[hsl(var(--primary-strong))] text-white hover:opacity-90",
         variant === "outline" && "border border-primary/60 text-foreground hover:bg-primary/10",
         variant === "ghost" && "text-brand-accent hover:underline",
         className,
@@ -303,7 +303,7 @@ export default function Page() {
               href="#stack"
               data-event="cta_learn_more"
               onClick={() => track("cta_learn_more")}
-              className="inline-flex items-center justify-center rounded-lg bg-primary px-9 py-4 text-base font-bold text-primary-foreground shadow-[0_10px_40px_-8px_rgba(124,92,255,0.65)] transition-transform hover:-translate-y-0.5 hover:bg-primary/90 sm:text-lg"
+              className="inline-flex items-center justify-center rounded-lg bg-[hsl(var(--primary-strong))] px-9 py-4 text-base font-bold text-white shadow-[0_10px_40px_-8px_rgba(124,92,255,0.65)] transition-transform hover:-translate-y-0.5 hover:bg-primary/90 sm:text-lg"
             >
               {t.s2.learnMore}
             </a>
@@ -413,7 +413,7 @@ export default function Page() {
           {t.s7.steps.map((s, i) => (
             <li key={i} className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6 lg:flex-row lg:items-center">
               <div className="flex shrink-0 items-center gap-3 lg:w-[24rem]">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-base font-bold text-primary-foreground">{i + 1}</span>
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[hsl(var(--primary-strong))] text-base font-bold text-white">{i + 1}</span>
                 <div>
                   <span className="font-heading text-lg font-semibold text-card-foreground">{s.title}</span>
                   {s.note && <p className="text-sm text-muted-foreground">{s.note}</p>}
@@ -508,14 +508,14 @@ export default function Page() {
                   style={{ borderColor: `${accent}55`, boxShadow: `inset 0 3px 0 0 ${accent}` }}
                 >
                   <div className="flex items-baseline justify-between gap-2">
-                    <h4 className="font-heading text-sm font-bold" style={{ color: accent }}>{g.label[lang]}</h4>
+                    <h4 className="font-heading text-lg font-bold" style={{ color: accent }}>{g.label[lang]}</h4>
                     <span className="rounded-full px-2 py-0.5 font-mono text-[10px] font-semibold" style={{ backgroundColor: `${accent}1f`, color: accent }}>
                       {g.items.length}
                     </span>
                   </div>
-                  <ul className="mt-3 space-y-1.5">
+                  <ul className="mt-4 space-y-2.5">
                     {g.items.map((it) => (
-                      <li key={it} className="text-[13px] leading-snug text-card-foreground/90">
+                      <li key={it} className="text-[15px] leading-normal text-card-foreground/90 lg:text-base">
                         <span className="select-none" style={{ color: accent }}>· </span>{it}
                       </li>
                     ))}
