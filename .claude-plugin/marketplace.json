@@ -182,8 +182,8 @@
     },
     {
       "name": "launchpad-toolkit",
-      "description": "Methodology prototype laboratory for chimeranext Launchpad pillar — AI intake, cap table, co-founder matching, investor matching, demo day prep, stage tracker, plus a chimeranext-api-consumer agent that enriches skills with live chimeranext API data when endpoints are available and degrades gracefully when they are not. Dual-purpose: external CLI for founders without chimeranext + internal validation lab for productizing patterns into the chimeranext Launchpad product.",
-      "version": "0.5.0",
+      "description": "Methodology prototype laboratory for chimeranext Launchpad pillar — AI intake, cap table, co-founder matching, investor matching, demo day prep, stage tracker, a 5-year financial-model generator (Setup → Assumptions → Calculations → Statements → charts, with per-business-model sanity checks), plus a chimeranext-api-consumer agent that enriches skills with live chimeranext API data when endpoints are available and degrades gracefully when they are not. Dual-purpose: external CLI for founders without chimeranext + internal validation lab for productizing patterns into the chimeranext Launchpad product.",
+      "version": "0.6.0",
       "source": "./toolkits/launchpad-toolkit"
     },
     {
