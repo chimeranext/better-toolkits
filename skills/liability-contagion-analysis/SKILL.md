@@ -368,7 +368,7 @@ Generar `./portfolio/{founder}/liability-contagion-analysis.md`:
 - chimeranext Platform, Pathways, Forum, Marketplace — 🟢 (B2B SaaS low-risk)
 - Hackathons — 🟡 (liability por eventos presenciales; insurance required)
 - Software Factory — 🟡 (B2B contracts with SLAs; E&O insurance needed)
-- chimera Score — 🟢
+- Chimera Score — 🟢
 
 **Matriz**: mayoría 🟢, algunas 🟡, ninguna 🔴
 

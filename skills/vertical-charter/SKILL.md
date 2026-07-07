@@ -47,9 +47,9 @@ Un **vertical** es una unidad organizacional dentro del studio que agrupa ventur
 
 ### Ejemplos (chimeranext Labs)
 
-- **chimeranext**: product pillar — operating system para developers (Launchpad, Forum, Marketplace, chimera Score, etc.)
+- **chimeranext**: product pillar — operating system para developers (Launchpad, Forum, Marketplace, Chimera Score, etc.)
 - **Civic Tech**: tech para sector público / govtech
-- **B2B Factory**: custom software development para clientes enterprise (Software Factory + chimera Projects)
+- **B2B Factory**: custom software development para clientes enterprise (Software Factory + Chimera Projects)
 
 ### Cuándo crear vertical nueva
 
@@ -81,7 +81,7 @@ Ejemplo: *"chimeranext construye el sistema operativo para developers — desde 
 **Out of scope**: qué NO pertenece (ventures similares que deliberately NO se incluyen)
 
 Ejemplo:
-- In scope chimeranext: Launchpad, Forum, Marketplace, chimera Score, Pathways, Agent Doji
+- In scope chimeranext: Launchpad, Forum, Marketplace, Chimera Score, Pathways, Agent Doji
 - Out of scope: consulting services (están en B2B Factory), hackathons para clientes externos (están en otra vertical)
 
 ### 3. Success criteria

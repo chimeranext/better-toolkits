@@ -22,7 +22,7 @@
 - **Año de inicio**: 2025 (según Linear workspace creation)
 - **Verticals actuales** (Linear teams): chimeranext, Civic Tech, B2B Factory
 - **Ventures activas en portfolio**:
-  - chimeranext (Platform, Launchpad, Agent Doji, Pathways, Forum, Hackathons, Social, Marketplace, chimera Score)
+  - chimeranext (Platform, Launchpad, Agent Doji, Pathways, Forum, Hackathons, Social, Marketplace, Chimera Score)
   - chimeraProjects B2B
   - Software Factory (premium client work)
   - doj-projects marketplace (community-grade)
@@ -59,7 +59,7 @@ si chimeranext Labs decide captar LPs en los próximos 12 meses.
 
 > **"chimeranext Labs is launching a venture studio in Costa Rica to back LATAM open-source
 > and community-driven SaaS companies leveraging [VALIDAR: a 1,000+ developer community
-> across Pathways bootcamps and chimera Score leaderboards]."**
+> across Pathways bootcamps and Chimera Score leaderboards]."**
 
 Palabras: 36. Secret sauce usa métrica #5 (network size — community). Enfoque más estrecho
 (open-source + community-driven) — puede ser más defendible pero también más limitante.
@@ -98,7 +98,7 @@ Data points a validar antes de usar con LPs reales:
 - [ ] Número de developers entrenados vía Pathways (Supabase query necesaria)
 - [ ] Número de hackathons delivered (Linear / Supabase)
 - [ ] Revenue total del studio (operaciones + Software Factory)
-- [ ] chimera Score total activos (medición de engagement)
+- [ ] Chimera Score total activos (medición de engagement)
 - [ ] Exits de ventures del portfolio (si alguna salió)
 - [ ] Track records individuales de GPs (@lapc506 LinkedIn + CertiProf SPOPC/USFC/SFPC, etc.)
 

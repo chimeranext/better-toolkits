@@ -209,7 +209,7 @@ Ejemplo con ventures reales (snapshot estimado Q2 2026):
 | Launchpad (chimeranext) | MVP | H3 | En validación, sin revenue significativo |
 | Forum (chimeranext) | MVP | H3 | Early adoption, métricas de engagement |
 | Marketplace | MVP | H3 | Curación activa, no revenue directo |
-| chimera Score | Production | H2 | Métrica core, usuarios comprometidos |
+| Chimera Score | Production | H2 | Métrica core, usuarios comprometidos |
 | Hackathons | Production | H2 | Events running, revenue from tickets/sponsors |
 | Software Factory | Revenue | H1 | Client work steady, margin estable |
 | doj-projects marketplace | MVP | H3 | Experimental, early community |
@@ -217,7 +217,7 @@ Ejemplo con ventures reales (snapshot estimado Q2 2026):
 **Allocation observada** (estimado):
 - H1: ~40% (chimeranext Platform + Software Factory)
 - H2: ~35% (Pathways + Doji + Score + Hackathons)
-- H3: ~25% (Launchpad + Forum + Marketplace + chimera Projects)
+- H3: ~25% (Launchpad + Forum + Marketplace + Chimera Projects)
 
 **Evaluación**: balance razonable para early-stage studio. Recomendaría:
 
