@@ -1,0 +1,62 @@
+[
+  {
+    "plugin": "make-no-mistakes",
+    "dir": "make-no-mistakes-toolkit",
+    "version": "1.33.0",
+    "category": "workflow"
+  },
+  {
+    "plugin": "atomic-design-toolkit",
+    "dir": "atomic-design-toolkit",
+    "version": "1.2.0",
+    "category": "frontend"
+  },
+  {
+    "plugin": "ux-research-toolkit",
+    "dir": "ux-research-toolkit",
+    "version": "2.1.0",
+    "category": "productivity"
+  },
+  {
+    "plugin": "business-model-toolkit",
+    "dir": "business-model-toolkit",
+    "version": "2.1.0",
+    "category": "productivity"
+  },
+  {
+    "plugin": "app-gtm-release",
+    "dir": "app-gtm-release-toolkit",
+    "version": "2.3.0",
+    "category": "productivity"
+  },
+  {
+    "plugin": "aaarrr-flywheel-toolkit",
+    "dir": "aaarrr-flywheel-toolkit",
+    "version": "0.2.0",
+    "category": null
+  },
+  {
+    "plugin": "fractional-cto-toolkit",
+    "dir": "fractional-cto-toolkit",
+    "version": "1.1.0",
+    "category": null
+  },
+  {
+    "plugin": "instructional-design-toolkit",
+    "dir": "instructional-design-toolkit",
+    "version": "1.0.0",
+    "category": "productivity"
+  },
+  {
+    "plugin": "launchpad-toolkit",
+    "dir": "launchpad-toolkit",
+    "version": "0.5.0",
+    "category": null
+  },
+  {
+    "plugin": "venture-studio-toolkit",
+    "dir": "venture-studio-toolkit",
+    "version": "1.2.0",
+    "category": null
+  }
+]
