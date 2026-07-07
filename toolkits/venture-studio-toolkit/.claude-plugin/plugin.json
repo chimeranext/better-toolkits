@@ -1,0 +1,30 @@
+{
+  "name": "venture-studio-toolkit",
+  "version": "1.2.0",
+  "description": "Macro portfolio management for venture studios and serial founders — LATAM corporate structures (Cayman Sandwich, Delaware Tostada, Skip-CR), Services Hub pattern with MSA templates, accelerator matching, govclab frameworks (studio thesis, focus, secret sauce), and Three Horizons portfolio allocation. Spanish-first; bilingual output framework documented for v1.3+.",
+  "author": {
+    "name": "Luis Andres Pena Castillo",
+    "url": "https://github.com/chimeranext"
+  },
+  "homepage": "https://github.com/chimeranext/venture-studio-toolkit",
+  "repository": "https://github.com/chimeranext/venture-studio-toolkit",
+  "license": "BSL-1.1",
+  "keywords": [
+    "claude-code",
+    "claude-code-plugin",
+    "venture-studio",
+    "startup-studio",
+    "portfolio-management",
+    "corporate-structure",
+    "cayman-sandwich",
+    "delaware-tostada",
+    "skip-cr-pattern",
+    "govclab",
+    "accelerators",
+    "three-horizons",
+    "lean-enterprise",
+    "latam-startups",
+    "holding-company",
+    "multi-venture"
+  ]
+}
