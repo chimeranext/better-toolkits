@@ -141,7 +141,7 @@ claude plugin install app-gtm-release@better-toolkits
 
 BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
-### [aaarrr-flywheel-toolkit](toolkits/aaarrr-flywheel-toolkit/) `v0.2.0`
+### [aaarrr-flywheel-toolkit](toolkits/aaarrr-flywheel-toolkit/) `v0.2.1`
 
 Growth-engineering toolkit — a complete funnel + flywheel from pricing to compounding growth.
 
