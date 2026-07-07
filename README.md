@@ -36,7 +36,7 @@ its `toolkits/<name>/` and the per-toolkit sections below.
 | 3 | [`ux-research-toolkit`](toolkits/ux-research-toolkit) | Guided UX-research maps — journeys, blueprints, storyboards, story maps, with HTML visualization. | BSL-1.1 | Available |
 | 4 | [`business-model-toolkit`](toolkits/business-model-toolkit) | Interactive business-model brainstorming across the full startup lifecycle. | BSL-1.1 | Available |
 | 5 | [`app-gtm-release-toolkit`](toolkits/app-gtm-release-toolkit) | Multi-platform app go-to-market and release across Flutter, KMP, MAUI, Swift, PWA. | BSL-1.1 | Available |
-| 6 | [`aaarrr-flywheel-toolkit`](toolkits/aaarrr-flywheel-toolkit) | AAARRR acquisition funnel + Retention/Referral flywheel over the Meta Marketing API. | BSL-1.1 | Available |
+| 6 | [`aaarrr-flywheel-toolkit`](toolkits/aaarrr-flywheel-toolkit) | Growth-engineering funnel + flywheel: pricing → landing design → instrumentation → AAARRR over the Meta Marketing API. | BSL-1.1 | Available |
 | 7 | [`fractional-cto-toolkit`](toolkits/fractional-cto-toolkit) | Operational SOPs and workflows for freelance and fractional CTOs. | BSL-1.1 ⚠️ | Available |
 | 8 | [`instructional-design-toolkit`](toolkits/instructional-design-toolkit) | Design cmi5-compliant courses and 1-on-1 session plans. | BSL-1.1 | Available |
 | 9 | [`launchpad-toolkit`](toolkits/launchpad-toolkit) | Founder-operations lab — intake, cap table, matching, demo-day, stage tracking. | BSL-1.1 | Available |
@@ -161,19 +161,17 @@ claude plugin install app-gtm-release@better-toolkits
 
 BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
-### 6. aaarrr-flywheel-toolkit `v0.1.0`
+### 6. aaarrr-flywheel-toolkit `v0.2.0`
 
-AAARRR acquisition funnel + Retention/Referral flywheel over the Meta Marketing API.
+Growth-engineering toolkit — a complete funnel + flywheel from pricing to compounding growth.
 
 #### What you get
 
-- **Funnel + flywheel** — Awareness / Acquisition / Activation / Revenue run as a linear funnel; Retention / Referral close the loop as a flywheel that feeds Acquisition back.
-- **Stage commands** — `/acquire`, `/activate`, `/revenue`, `/retain`, `/refer`, plus `/aaarrr-launch`, `/aaarrr-analyze`, and `/kill-funnel`.
-- **Meta Graph API** skill for execution against Meta's Marketing API.
+- **Full growth pipeline** — pricing strategy → landing-page design → instrumentation (Meta Pixel + GA4 + PostHog + UTM) → AAARRR execution over the Meta Marketing API.
+- **Funnel + flywheel** — Awareness / Acquisition / Activation / Revenue run as a linear funnel; Retention / Referral close the loop as a flywheel that feeds Acquisition back with lookalike audiences and real K-factor.
+- **Landing layer** — `/landing-page` (design) and `/landing-instrument` (wire Pixel/GA4/PostHog/UTM/Conversions API), with a landing-page-design skill, a landing-instrumentation skill, CRO methodology, and B2B/B2C/B2B2C references.
+- **Stage commands** — `/acquire`, `/activate`, `/revenue`, `/retain`, `/refer`, plus `/aaarrr-launch`, `/aaarrr-analyze`, and `/kill-funnel`; Meta Graph API skill for execution.
 - Mantra: *fail fast, fail often, fail cheap, fail forward.*
-
-> The pricing + landing-instrumentation expansion (v0.2.0) exists in the source repo but is
-> not yet committed, so this monorepo ships the committed **v0.1.0**.
 
 #### Install
 
