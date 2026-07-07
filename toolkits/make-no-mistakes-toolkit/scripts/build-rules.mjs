@@ -1,0 +1,186 @@
+#!/usr/bin/env node
+// =============================================================================
+// build-rules.mjs — Convert hooks/rules/rules.yaml → hooks/rules/rules.json
+//
+// rules.yaml is the SSoT humans edit. rules.json is the runtime artifact
+// hooks load via jq (no yaml parser needed at runtime).
+//
+// CI runs this script and fails if `git diff hooks/rules/rules.json` is
+// non-empty — this guarantees rules.json never drifts from rules.yaml.
+//
+// Usage:  node scripts/build-rules.mjs
+// =============================================================================
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
+import yaml from 'js-yaml';
+
+const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
+const yamlPath = join(repoRoot, 'hooks', 'rules', 'rules.yaml');
+const jsonPath = join(repoRoot, 'hooks', 'rules', 'rules.json');
+
+// IP-leak guard. The plugin is BSL-1.1 public-source, so we cannot hardcode
+// client / org names anywhere in committed code (that itself would be a leak).
+// Instead, each dev maintains a gitignored .private/forbidden-names.txt with
+// one regex per line. If the file exists, the build fails when any of those
+// names appear in rules.yaml. If the file doesn't exist, the check is skipped.
+// The check is opt-in and reusable for any user of this toolkit who works
+// with private clients. See hooks/rules/README.md.
+const forbiddenFile = join(repoRoot, '.private', 'forbidden-names.txt');
+let FORBIDDEN_PATTERNS = [];
+if (existsSync(forbiddenFile)) {
+  FORBIDDEN_PATTERNS = readFileSync(forbiddenFile, 'utf8')
+    .split('\n')
+    .map((l) => l.trim())
+    .filter((l) => l.length > 0 && !l.startsWith('#'))
+    .map((l) => new RegExp(l, 'i'));
+  console.log(
+    `IP-leak guard active (${FORBIDDEN_PATTERNS.length} pattern(s) loaded from .private/forbidden-names.txt)`,
+  );
+}
+
+// Optional per-install substitution layer. Lets each consumer of this toolkit
+// specialize project-specific values (e.g., Supabase project refs) without
+// committing them to the public source tree. The file maps UPPER_SNAKE token
+// names to literal replacement strings; for each pair, every "__TOKEN__"
+// occurrence in rules.yaml is replaced before YAML parsing.
+//
+// When the file is absent, "__TOKEN__" remains in the output verbatim. The
+// rule still fires for any command that literally contains "__TOKEN__"
+// (i.e., effectively inert — a marketplace consumer who hasn't configured a
+// substitution gets a documented no-op rule, not a silent broken protection).
+//
+// Token names must be UPPER_SNAKE_CASE so they can't be confused with regex
+// metacharacters or with the existing kebab-case rule / bypass identifiers.
+// See hooks/rules/README.md for the full opt-in workflow.
+const substFile = join(repoRoot, '.private', 'substitutions.json');
+let SUBSTITUTIONS = {};
+if (existsSync(substFile)) {
+  try {
+    SUBSTITUTIONS = JSON.parse(readFileSync(substFile, 'utf8'));
+  } catch (err) {
+    console.error(`Failed to parse ${substFile}: ${err.message}`);
+    process.exit(1);
+  }
+  if (typeof SUBSTITUTIONS !== 'object' || Array.isArray(SUBSTITUTIONS)) {
+    console.error(`${substFile} must be a JSON object of {TOKEN: value} pairs`);
+    process.exit(1);
+  }
+  for (const token of Object.keys(SUBSTITUTIONS)) {
+    if (!/^[A-Z][A-Z0-9_]*$/.test(token)) {
+      console.error(
+        `Invalid substitution token "${token}" in ${substFile}: must be UPPER_SNAKE_CASE`,
+      );
+      process.exit(1);
+    }
+  }
+  console.log(
+    `Substitutions active (${Object.keys(SUBSTITUTIONS).length} token(s) loaded from .private/substitutions.json)`,
+  );
+}
+
+let source = readFileSync(yamlPath, 'utf8');
+for (const [token, value] of Object.entries(SUBSTITUTIONS)) {
+  if (typeof value !== 'string') {
+    console.error(
+      `Substitution value for "${token}" must be a string, got ${typeof value}`,
+    );
+    process.exit(1);
+  }
+  // Use split+join (not regex replace) so the value is treated as a literal
+  // string — no risk of $-backref interpolation in the replacement.
+  source = source.split(`__${token}__`).join(value);
+}
+const rules = yaml.load(source);
+
+if (!Array.isArray(rules)) {
+  console.error('rules.yaml must be an array of rule objects');
+  process.exit(1);
+}
+
+const ids = new Set();
+for (const rule of rules) {
+  if (!rule.id) {
+    console.error('rule missing id field:', rule);
+    process.exit(1);
+  }
+  if (ids.has(rule.id)) {
+    console.error(`duplicate rule id: ${rule.id}`);
+    process.exit(1);
+  }
+  ids.add(rule.id);
+
+  if (!rule.applies_to || !Array.isArray(rule.applies_to) || rule.applies_to.length === 0) {
+    console.error(`rule ${rule.id} missing applies_to (non-empty array required)`);
+    process.exit(1);
+  }
+  if (!rule.match || !Array.isArray(rule.match) || rule.match.length === 0) {
+    console.error(`rule ${rule.id} missing match (non-empty array required)`);
+    process.exit(1);
+  }
+  if (!['block', 'warn'].includes(rule.action)) {
+    console.error(`rule ${rule.id} action must be block or warn, got: ${rule.action}`);
+    process.exit(1);
+  }
+  if (!rule.tests || !Array.isArray(rule.tests) || rule.tests.length === 0) {
+    console.error(`rule ${rule.id} missing tests (non-empty array required)`);
+    process.exit(1);
+  }
+  if (typeof rule.message !== 'string' || rule.message.trim().length === 0) {
+    console.error(`rule ${rule.id} missing required message (non-empty string)`);
+    process.exit(1);
+  }
+  // bypass_marker is optional, but when present must be kebab-case.
+  // Without this constraint, an author could pick a marker containing
+  // ERE-special characters (., +, (, [, etc.), which eval-rule.sh would
+  // interpolate verbatim into a grep pattern — leading to silent
+  // mismatches or grep errors that escalate to unintended blocks.
+  if (rule.bypass_marker !== undefined && rule.bypass_marker !== null) {
+    if (
+      typeof rule.bypass_marker !== 'string' ||
+      !/^[a-z0-9-]+$/.test(rule.bypass_marker)
+    ) {
+      console.error(
+        `rule ${rule.id} has invalid bypass_marker: must be kebab-case (^[a-z0-9-]+$) or null, got: ${JSON.stringify(rule.bypass_marker)}`,
+      );
+      process.exit(1);
+    }
+  }
+
+  // disable_if_repo_file is optional. When present it must be a flat
+  // filename (no slashes, no leading dot-only sentinels) so the runtime
+  // check `[ -f "./<name>" ]` cannot reach outside the cwd. Mirrors the
+  // safety contract in eval-rule.sh.
+  if (rule.disable_if_repo_file !== undefined && rule.disable_if_repo_file !== null) {
+    if (
+      typeof rule.disable_if_repo_file !== 'string' ||
+      !/^[a-zA-Z0-9._-]+$/.test(rule.disable_if_repo_file) ||
+      rule.disable_if_repo_file === '.' ||
+      rule.disable_if_repo_file === '..'
+    ) {
+      console.error(
+        `rule ${rule.id} has invalid disable_if_repo_file: must be a flat filename matching ^[a-zA-Z0-9._-]+$ and not "." or "..", got: ${JSON.stringify(rule.disable_if_repo_file)}`,
+      );
+      process.exit(1);
+    }
+  }
+
+  // IP-leak guard: scan the entire rule (serialized) for forbidden patterns.
+  // This catches leaks in references, messages, test fixtures, anywhere.
+  const serialized = JSON.stringify(rule);
+  for (const forbidden of FORBIDDEN_PATTERNS) {
+    if (forbidden.test(serialized)) {
+      console.error(
+        `rule ${rule.id} contains a forbidden client/org name (pattern: ${forbidden}).`,
+      );
+      console.error(
+        '  Public toolkit rules must be agnostic. Use generic placeholders like',
+      );
+      console.error('  acme-prod, myproject-dev, example.com, etc.');
+      process.exit(1);
+    }
+  }
+}
+
+writeFileSync(jsonPath, JSON.stringify(rules, null, 2) + '\n');
+console.log(`Generated ${jsonPath} (${rules.length} rules)`);

@@ -1,0 +1,72 @@
+{
+  "name": "@lapc506/make-no-mistakes",
+  "version": "1.33.0",
+  "description": "The disciplined dev lifecycle — implement issues, review PRs, sync releases, test E2E, manage sessions, stash secrets, and enforce manifest-driven tool-call hooks (no SSH+DB, no manual prod, no minified build, no secret leaks, Slack format). OpenCode + Claude Code plugin.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "make-no-mistakes": "dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./cli": {
+      "import": "./dist/cli.js"
+    }
+  },
+  "files": [
+    "dist/",
+    "commands/",
+    "agents/",
+    "skills/",
+    "scripts/",
+    "hooks/",
+    "schemas/",
+    "references/",
+    "slack-config.example.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20.11.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean && tsup src/cli.ts --format esm --clean false",
+    "build-rules": "node scripts/build-rules.mjs",
+    "test-hooks": "bash hooks/test-hooks.sh",
+    "test": "vitest run",
+    "prepublishOnly": "npm run build && npm run build-rules"
+  },
+  "keywords": [
+    "opencode",
+    "plugin",
+    "claude-code",
+    "workflow",
+    "linear",
+    "hooks"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chimeranext/make-no-mistakes-toolkit.git"
+  },
+  "author": "Luis Andres Pena Castillo",
+  "license": "BSL-1.1",
+  "dependencies": {
+    "@opencode-ai/plugin": "^0.7.0",
+    "jsonc-parser": "^3.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "ajv": "^8.17.1",
+    "js-yaml": "^4.1.1",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  }
+}

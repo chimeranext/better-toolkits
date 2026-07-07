@@ -1,0 +1,44 @@
+{
+  "standupChannel": {
+    "id": "C0123456789",
+    "name": "#daily-status-updates"
+  },
+  "_standupFileNote": "The standup file path is fixed at ~/Escritorio/daily-standup.md and cannot be configured. The standupFile key is deprecated and will be ignored.",
+  "repos": {
+    "myapp-mobile": {
+      "org": "yourorg",
+      "linearProject": "MyApp Mobile",
+      "displayName": "MyApp Mobile"
+    },
+    "myapp-backend": {
+      "org": "yourorg",
+      "linearProject": "MyApp Backend",
+      "displayName": "MyApp Backend"
+    },
+    "myapp-admin": {
+      "org": "yourorg",
+      "linearProject": "MyApp Admin",
+      "displayName": "MyApp Admin"
+    }
+  },
+  "linearPrefixes": ["APP", "BACK", "SEC"],
+  "linearOrgSlug": "yourorg",
+  "greeting": {
+    "options": [
+      "Gm Gm! :sunny:",
+      "Good morning team!",
+      "GM!"
+    ]
+  },
+  "emojis": {
+    "prOpen": ":github-pr:",
+    "prMerged": ":github-merged:",
+    "prClosed": ":github-closed:",
+    "ciSuccess": ":github-actions-success:",
+    "ciFailure": ":github-actions-failure:",
+    "linear": ":linear:",
+    "repo": ":github:",
+    "greptile": ":greptile:",
+    "claude": ":claude-code:"
+  }
+}
