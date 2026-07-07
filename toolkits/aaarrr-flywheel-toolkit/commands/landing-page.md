@@ -84,6 +84,11 @@ Lee la metodologia CRO antes de iniciar:
 ${CLAUDE_PLUGIN_ROOT}/references/cro-methodology.md
 ```
 
+Sistema visual (design tokens: tipografia fluida, sistema de animacion de 3 capas, spec bento/masonry, tokens de superficie) para la fase de diseno visual del spec:
+```
+${CLAUDE_PLUGIN_ROOT}/references/visual-language.md
+```
+
 Usa el template de spec:
 ```
 ${CLAUDE_PLUGIN_ROOT}/assets/templates/landing-page-spec.md

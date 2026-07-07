@@ -224,6 +224,8 @@ Con todas las respuestas anteriores, generar el copy seccion por seccion siguien
 ### Spec
 Generar el documento completo usando el template `${CLAUDE_PLUGIN_ROOT}/assets/templates/landing-page-spec.md`. Guardar en `./business/04-landing-pages/[audiencia]-landing-spec.md`.
 
+**Design tokens:** Al definir la seccion de diseno visual del spec (tipografia, motion, layout, superficies), NO inventar valores ad hoc. Sembrar desde `${CLAUDE_PLUGIN_ROOT}/references/visual-language.md` — escala tipografica `--text-*` + reglas de tracking para display/eyebrow, los tres estratos de animacion (entrance one-shot / ambient loop / hover) con tokens `.15/.3/.5/.8s` y `prefers-reduced-motion` obligatorio, la spec bento (`auto-rows-fr`, aspect ratios 1:1 / 2:1 / 3:5, gaps 8-40px) para secciones de features y prueba social, y los tokens de superficie (spacing 4/8pt, radios, sombras, glass como opcion documentada-con-advertencia). Mantener los colores y fuentes de la marca; `visual-language.md` aporta la estructura, la marca aporta la identidad.
+
 ### ADR
 Generar un ADR con todas las decisiones tomadas (audiencia, CTA, secuencia emocional, pricing, stack, urgencia) y las alternativas descartadas. Guardar en `./business/04-landing-pages/[audiencia]-landing-adr.md`.
 
@@ -256,6 +258,7 @@ Antes de cerrar, verificar:
 ## Recursos
 
 - Metodologia CRO: `${CLAUDE_PLUGIN_ROOT}/references/cro-methodology.md`
+- Sistema visual (design tokens): `${CLAUDE_PLUGIN_ROOT}/references/visual-language.md`
 - Guia B2B: `${CLAUDE_PLUGIN_ROOT}/references/landing-b2b.md`
 - Guia B2B2C: `${CLAUDE_PLUGIN_ROOT}/references/landing-b2b2c.md`
 - Guia B2C: `${CLAUDE_PLUGIN_ROOT}/references/landing-b2c.md`
