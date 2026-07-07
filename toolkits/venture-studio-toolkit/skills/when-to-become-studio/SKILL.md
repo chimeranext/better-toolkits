@@ -50,8 +50,8 @@ venture, sin plan de fund atado.
 **Structure**: `structure-decision` patrón #6 (Services Hub + Independent Ventures) +
 `services-hub-setup` skill para MSAs + transfer pricing.
 
-**Ejemplo**: caso @lapc506 — 4 ventures personales (Altrupets, Vertivolatam, Habitanexus,
-Aduanext) + LAPC506 Services LLC proveyendo shared dev/design/marketing/legal con MSA
+**Ejemplo**: un serial founder — 4 ventures personales (Acme Pets, Acme Robotics, Acme Realty,
+Acme Customs) + Acme Services LLC proveyendo shared dev/design/marketing/legal con MSA
 bilateral per venture.
 
 ### Modo 3 — Formal venture studio con fund

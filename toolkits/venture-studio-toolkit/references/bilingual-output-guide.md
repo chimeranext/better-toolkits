@@ -120,7 +120,7 @@ Al traducir ES → EN, **NO traducir**:
   "Sociedade Anônima (S.A.)" — estos son términos legales específicos
 - **Nombres de estructuras**: "Delaware Tostada", "Cayman Sandwich", "Skip-CR Pattern" (son
   términos de la industria LATAM, no traducciones literales)
-- **Nombres propios**: "chimeranext Labs", "chimeranext", "Pathways", "Altrupets", etc.
+- **Nombres propios**: "Acme Studio", "Acme Platform", "Acme Academy", "Acme Pets", etc.
 - **Acrónimos financieros**: MRR, LTV, CAC, NPS, CSAT, AARRR — internacionalmente usados
 - **Frameworks**: "Three Horizons", "Pirate Metrics", "Cost of Delay", "Improvement Kata"
 - **Referencias a libros/autores**: "Lean Enterprise", "Humble/Molesky/O'Reilly", "Toyota Kata"
