@@ -251,7 +251,7 @@ make-no-mistakes-toolkit/
 
 The toolkit's `plugin.json` should register these hooks so every consumer inherits them automatically. The hooks read `.atomic-design-rules.json` from the consumer's repo root, so the same hook code enforces whatever pillar list each consumer declares.
 
-This is what catches the cross-repo Conway's Law multiplication described in the premortem §7.4.2: if example-platform installs the cure but the next product in the same organization (example-plugin, future repos) does not, the structural anti-pattern reproduces in the new repo. Toolkit-level hooks scale the discipline to every consumer.
+This is what catches the cross-repo Conway's Law multiplication described in the premortem §7.4.2: if one product repo installs the cure but the next product in the same organization (future repos) does not, the structural anti-pattern reproduces in the new repo. Toolkit-level hooks scale the discipline to every consumer.
 
 ---
 
