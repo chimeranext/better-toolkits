@@ -143,8 +143,8 @@
     },
     {
       "name": "aaarrr-flywheel-toolkit",
-      "description": "Growth-engineering toolkit. Funnel + flywheel completo: pricing strategy → landing-page design → instrumentation (Pixel + GA4 + PostHog + UTM) → AAARRR ejecución sobre Meta Marketing API. Awareness/Acquisition/Activation/Revenue como funnel lineal; Retention/Referral cierran el loop como flywheel que retroalimenta Acquisition con LAL audiences y K-factor real. Mantra: fail fast, fail often, fail cheap, fail forward.",
-      "version": "0.2.1",
+      "description": "Growth-engineering toolkit. Funnel + flywheel completo: pricing strategy → landing-page design → instrumentation (Pixel + GA4 + PostHog + UTM) → AAARRR ejecución sobre Meta Marketing API. Awareness/Acquisition/Activation/Revenue como funnel lineal; Retention/Referral cierran el loop como flywheel que retroalimenta Acquisition con LAL audiences y K-factor real. Unit-economics doctrine (CAC blended vs paid, gross-margin LTV, payback en meses, benchmarks por modelo) y NPS + feedback loop (promoters/passives/detractors) integrados en revenue y retain. Mantra: fail fast, fail often, fail cheap, fail forward.",
+      "version": "0.3.0",
       "source": "./toolkits/aaarrr-flywheel-toolkit"
     },
     {
