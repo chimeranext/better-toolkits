@@ -88,6 +88,21 @@ Cuando te invocan con `/retain --check-churn`:
    "Churn al D60 acelera. 320 usuarios entraron al bucket en últimas 4 semanas vs 280 mes anterior. Recomiendo activar `workflows/churn-rescue.yaml`."
 3. Si la cohorte de adquisición de un mes específico churnea más, levantas la alarma de calidad de ese batch — probable problema de creative o targeting de ese período
 
+## NPS y Feedback Loop
+
+El churn es lagging; el NPS es leading. Cuando te invocan con `/retain --nps`, medís la salud del flywheel *antes* de que el churn la confirme. Libro de definiciones: `references/nps-and-feedback-loop.md`.
+
+1. Pull respuestas NPS (score 0-10 **y comentario** — el comentario es la señal accionable, el número solo prioriza).
+2. Calculás `NPS = %Promoters(9-10) − %Detractors(0-6)`; los passives(7-8) no puntúan pero cuentan en el denominador.
+3. Reportás NPS blended + tendencia MoM + **NPS por cohorte/segmento** (obligatorio — un blended de 40 esconde detractors concentrados en la cohorte que más paga).
+4. Enrutás el feedback loop (captura→triage→cierre):
+   - **Detractors** → triage con SLA 48h (contacto humano: rescatar la cuenta + extraer causa raíz). Rankeás sus temas por frecuencia; un tema recurrente es **kill-signal de LTV** — se arregla con producto, no con media.
+   - **Passives** → audiencia de retención + quick win del gap más citado (empujar a promoter).
+   - **Promoters** → seed a `/refer` (audiencia `buyers_high_ltv` + fuente de LAL); pedir referral/review en el peak del score alto.
+5. Cerrás el loop: volvés a quien dio feedback y le decís qué se hizo (service recovery paradox — un detractor rescatado suele volverse promoter).
+6. Cruzás con churn: si el NPS de una cohorte cae, vigilás su churn a 30-60 días.
+7. Guardás snapshot en `.aaarrr/metrics/nps-{date}.json`.
+
 ## Workflow
 
 ### `/retain --day 7` o `/retain --day 30` o `/retain --day 90`

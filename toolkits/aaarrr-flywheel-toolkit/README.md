@@ -144,9 +144,9 @@ aaarrr-flywheel-toolkit/
 │   ├── aaarrr-analyze.md          # Tabla AAARRR end-to-end
 │   ├── acquire.md                 # Solo Acquisition (launch/scale/kill-losers)
 │   ├── activate.md                # CRO focused
-│   ├── retain.md                  # Retention ladder
+│   ├── retain.md                  # Retention ladder + NPS/feedback loop (--nps)
 │   ├── refer.md                   # Referral loop
-│   ├── revenue.md                 # CFO dashboards
+│   ├── revenue.md                 # CFO dashboards + unit economics (--unit-economics)
 │   └── kill-funnel.md             # Emergency stop
 │
 ├── workflows/                     # Workflow YAMLs reutilizables
@@ -177,6 +177,13 @@ aaarrr-flywheel-toolkit/
 │   ├── hooks.json
 │   ├── spend-safety.sh            # Warning ante POST/DELETE a Graph API
 │   └── session-log.sh             # Auto-log de archivos modificados
+│
+├── references/                   # Libros de definiciones y metodología
+│   ├── cro-methodology.md         # CRO para landing pages
+│   ├── visual-language.md         # Sistema visual (typo/motion/bento)
+│   ├── unit-economics.md          # CAC blended vs paid, LTV gross-margin, payback en meses, benchmarks por modelo
+│   ├── nps-and-feedback-loop.md   # NPS (promoters/passives/detractors) + feedback loop captura→triage→cierre
+│   └── output-structure.md        # Estructura de artefactos generados
 │
 └── skills/
     └── meta-graph-api/            # Documentación exhaustiva de los endpoints usados

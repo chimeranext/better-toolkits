@@ -1,6 +1,6 @@
 {
   "name": "aaarrr-flywheel-toolkit",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "AAARRR Acquisition funnel + Retention/Referral flywheel sobre Meta Marketing API",
   "type": "module",
   "private": true,
