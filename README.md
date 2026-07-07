@@ -146,12 +146,14 @@ Catalogs marked ✅ are pre-compiled in `references/design-systems/`. The rest r
 
 ## What's Inside
 
-### Commands (3)
+### Commands (5)
 
 | Command | Description |
 |---------|-------------|
 | `/atomic-design-toolkit:generate <feature> [:<stack>]` | Generate a complete component hierarchy for a feature (Flutter and Vite) |
 | `/atomic-design-toolkit:audit [:<stack>] [:<system>] [:report]` | Scan codebase for decomposable components + bundle health + design system gap analysis. Optional `:report` emits a structured report file. |
+| `/atomic-design-toolkit:wcag-audit [:<stack>] [:runtime] [:report]` | Audit a UI for **WCAG 2.2 AA conformance** (Layer A) + **design quality / anti-AI-slop** (Layer B). Scores 5 dimensions 0-4 → /20 with P0-P3 severity, cites `file:line` + the exact WCAG criterion. Sibling of `/audit`; `:report` feeds `/migrate`. |
+| `/atomic-design-toolkit:tokens-consolidate <path>… [:report] [:materialize]` | Extract design tokens from N repos, flag where they diverge (never merge silently), propose a canonical set, and materialize a shared `tokens.css` + `tokens.ts` + `tailwind-preset.js` with a per-app migration plan. |
 | `/atomic-design-toolkit:migrate [report-path] [:plan\|:execute] [:phase=N] [:linear]` | Consume an audit report and generate a phased remediation plan with per-phase checkpoints and re-audit verification |
 
 ### Skills (2)
