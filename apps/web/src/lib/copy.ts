@@ -84,7 +84,7 @@ type Content = {
   s6: { a: string; b: string };
   s7: { title: string; steps: { title: string; cmd: string; note?: string }[]; demo: string };
   s8: { title: string; col1: { name: string; price: string; body: string }; col2: { name: string; body: string; whatsapp: string; calendar: string } };
-  s9: { title: string; dogfooding: string; sibling: string; venturesLabel: string; methodTagline: string };
+  s9: { title: string; dogfooding: string; sibling: string; dogfoodingTail: string; venturesLabel: string; methodTagline: string };
   s10: { title: string; faqs: { q: string; a: string }[] };
   s11: { h2: string; sub: string; copy: string; guarantee: string; studioPrompt: string; whatsapp: string; calendar: string };
   s12: { license: string; rights: string };
@@ -136,8 +136,9 @@ export const COPY: Record<Lang, Content> = {
     },
     s9: {
       title: "Standing on the shoulders of giants",
-      dogfooding: "This landing was designed by the toolkit's own /landing-page command.",
-      sibling: "Sibling project: better-microservices",
+      dogfooding: "None of these commands were designed on a whiteboard. They were forged operating ChimeraNext's real ventures — and building",
+      sibling: "better-microservices",
+      dogfoodingTail: ", the shared services platform every venture runs on. Even this landing page was produced by the toolkit's own /landing-page command.",
       venturesLabel: "Battle-tested across the ChimeraNext portfolio",
       methodTagline: "50+ named methodologies encoded into commands — from McKinsey's Three Horizons to Fowler's Strangler Fig to LATAM's Cayman Sandwich.",
     },
@@ -207,8 +208,9 @@ export const COPY: Record<Lang, Content> = {
     },
     s9: {
       title: "Sobre hombros de gigantes",
-      dogfooding: "Este landing se diseñó con el comando /landing-page del propio toolkit.",
-      sibling: "Proyecto hermano: better-microservices",
+      dogfooding: "Ninguno de estos comandos se diseñó en una pizarra. Se forjaron operando los ventures reales de ChimeraNext — y construyendo",
+      sibling: "better-microservices",
+      dogfoodingTail: ", la plataforma de servicios compartidos sobre la que corren todos los ventures. Hasta esta landing se produjo con el propio comando /landing-page del toolkit.",
       venturesLabel: "Probado en el portfolio de ChimeraNext",
       methodTagline: "Más de 50 metodologías con nombre y apellido codificadas en comandos — de Three Horizons de McKinsey al Strangler Fig de Fowler y el Cayman Sandwich del venture LATAM.",
     },
