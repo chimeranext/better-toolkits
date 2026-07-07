@@ -208,13 +208,14 @@ claude plugin install instructional-design-toolkit@better-toolkits
 
 BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
-### [launchpad-toolkit](toolkits/launchpad-toolkit/) `v0.5.0`
+### [launchpad-toolkit](toolkits/launchpad-toolkit/) `v0.6.0`
 
 Founder-operations lab — a methodology prototype laboratory for the ChimeraNext Launchpad pillar.
 
 #### What you get
 
 - **Founder workflows** — `startup-intake`, `cap-table-builder`, `cofounder-matching`, `investor-matching`, `demo-day-prep`, `stage-tracker`, and `founder-documents`.
+- **Financial model** — a `financial-model` skill builds a 5-year projection (Setup → Assumptions → Calculations → Statements → charts) with SaaS/DTC/Marketplace/Services/Fintech presets, sanity-check benchmarks (gross margin, burn multiple, Rule of 40, CAC payback, runway), and CSV-ready output that feeds the cap table's raise ask and the demo-day deck.
 - **Live-data agent** — a `chimeranext-api-consumer` agent enriches skills with live API data when endpoints exist and degrades gracefully (`SPEC_GAP`) when they don't.
 - **Dual-purpose** — external CLI for founders + internal validation lab that productizes patterns via the `feature-to-spike` loop.
 
