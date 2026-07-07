@@ -124,7 +124,7 @@ con el toolkit. Documentar resultados en una sección extendida acá.
 ## Acknowledgments
 
 - **Daniel Bejarano** — repo health setup (Greptile config pending).
-- **Equipo chimera Pathways** — context y direction sobre LRS target (Ralph
+- **Equipo Chimera Pathways** — context y direction sobre LRS target (Ralph
   self-hosted vía spike legacy-ticket).
 - **Equipo Freedom Academy / DemoLab** — caso de referencia para SCORM 2004 →
   cmi5 migration path.

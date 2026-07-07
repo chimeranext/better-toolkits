@@ -26,7 +26,7 @@ ese caso alcanza con `/course-visualize` + dogfooding manual.
 
 ## 2. Opciones de LRS
 
-### Ralph LRS (target principal para chimera Pathways)
+### Ralph LRS (target principal para Chimera Pathways)
 
 - Self-hosted, stack Python/Django + Postgres.
 - Open source (MIT), desarrollado por France Université Numérique.
