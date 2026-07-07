@@ -44,7 +44,7 @@ Jump buttons: **See how it installs ↓** · **What does it cost? ↓**
 ### S9 · Social proof — "Standing on the shoulders of giants"
 **Stats:** 10 toolkits · 75 commands · 96 skills · 22 agents · 131 templates · 65,000 lines of methodology
 **Dogfooding:** *This landing was designed by the toolkit's own `/landing-page` command.* Sibling project: better-microservices.
-**Ventures:** Battle-tested across the ChimeraNext portfolio — AltruPets · Vertivol Latam · HabitaNexus · Keiko · AduaNext · LicitaNext
+**Ventures:** Battle-tested across the ChimeraNext portfolio — AltruPets _(animal welfare)_ · Vertivo _(agri-tech)_ · HabitaNexus _(proptech)_ · Keiko _(ed-tech)_ · AduaNext _(customs SaaS)_ · LicitaNext _(govtech)_
 **Methodology grid (tagline):** 50+ named methodologies encoded into commands — from McKinsey's Three Horizons to Fowler's Strangler Fig to LATAM's Cayman Sandwich.
 *(6 grupos por disciplina — lista completa en la spec §7-S9)*
 
@@ -108,7 +108,7 @@ ChimeraNext · GitHub · better-microservices · License BSL-1.1 → Non-Profit 
 ### S9 · Prueba social — "Sobre hombros de gigantes"
 **Stats:** 10 toolkits · 75 comandos · 96 skills · 22 agentes · 131 plantillas · 65,000 líneas de metodología
 **Dogfooding:** *Este landing se diseñó con el comando `/landing-page` del propio toolkit.* Proyecto hermano: better-microservices.
-**Ventures:** Probado en el portfolio de ChimeraNext — AltruPets · Vertivol Latam · HabitaNexus · Keiko · AduaNext · LicitaNext
+**Ventures:** Probado en el portfolio de ChimeraNext — AltruPets _(animal welfare)_ · Vertivo _(agri-tech)_ · HabitaNexus _(proptech)_ · Keiko _(ed-tech)_ · AduaNext _(customs SaaS)_ · LicitaNext _(govtech)_
 **Tagline del grid:** Más de 50 metodologías con nombre y apellido codificadas en comandos — de Three Horizons de McKinsey al Strangler Fig de Fowler y el Cayman Sandwich del venture LATAM.
 
 ### S10 · FAQ
