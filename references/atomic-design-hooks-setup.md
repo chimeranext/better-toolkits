@@ -10,7 +10,7 @@ The audit command surfaces missing hooks as `E{n}` findings. This guide explains
 
 The premortem that motivates this reference cites a forensic finding from the chimera-os engagement:
 
-> "chimeranext lleva 7.3 meses sin shipping. ~37% de effort wasted (~$394K)." — legacy-ticket, quoted verbatim in the legacy-ticket spike body, 2026-05-08.
+> "ChimeraNext lleva 7.3 meses sin shipping. ~37% de effort wasted (~$394K)." — legacy-ticket, quoted verbatim in the legacy-ticket spike body, 2026-05-08.
 
 That $394K was already spent before the audit on 2026-05-14 surfaced the component-layer Conway's Law anti-pattern (57 root folders without ownership, 2 dead `DashboardHeader.tsx` files, 9 monoliths >1000 lines, `dashboard/` junk drawer). The 6-month extrapolation, conservatively modeled, adds **~$324K** of forward waste if the cure is not installed:
 
