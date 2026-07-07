@@ -156,7 +156,7 @@ Adding a new family is fine — just keep ids unique and follow the schema.
 - **Design System** (`ds-arbitrary-breakpoint`, `ds-deep-ui-import`,
   `ds-arbitrary-fixed-width-in-ds-component`,
   `ds-raw-hex-color-in-source`) — block / warn at write-time when AI
-  proposes Edit/Write/MultiEdit changes that violate the chimera Design
+  proposes Edit/Write/MultiEdit changes that violate the Chimera Design
   System contract (preset breakpoints, barrel imports, flexible widths,
   token-only colors). Added in legacy-ticket as the 4th enforcement layer
   alongside the runtime hook, pre-commit linter, and Storage upload

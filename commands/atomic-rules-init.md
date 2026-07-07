@@ -109,7 +109,7 @@ Minimum viable starter (replace placeholders with what you gathered above):
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/chimeranext/make-no-mistakes-toolkit/main/schemas/atomic-design-rules.schema.json",
+  "$schema": "https://raw.githubusercontent.com/ChimeraNext/make-no-mistakes-toolkit/main/schemas/atomic-design-rules.schema.json",
   "version": 1,
   "components_root": "src/components",
   "pillars": [

@@ -2,7 +2,7 @@
 
 ## Why
 
-[legacy-ticket](https://linear.app/chimera-coding/issue/legacy-ticket) shipped **Cure
+[legacy-ticket](https://linear.app/ChimeraNext/issue/legacy-ticket) shipped **Cure
 4a** in `chimera-agent-openclaw-plugin` — 6 PreToolUse hooks lived in the
 repo's own `.claude/hooks/` directory, each tightly bound to that repo's
 specific schemas (`openclaw.json`, gateway version pins, plugin-side
@@ -89,7 +89,7 @@ New file at consumer-repo root: `.claude/config/cross-cutting-hooks.json`.
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/chimeranext/make-no-mistakes-toolkit/main/schemas/cross-cutting-hooks.schema.json",
+  "$schema": "https://raw.githubusercontent.com/ChimeraNext/make-no-mistakes-toolkit/main/schemas/cross-cutting-hooks.schema.json",
   "version": 1,
   "cleartext_secrets": {
     "enabled": true,

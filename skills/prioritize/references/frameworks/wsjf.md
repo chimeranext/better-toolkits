@@ -14,12 +14,12 @@ Todas las variables en escala Fibonacci (1, 2, 3, 5, 8, 13, 21).
 
 ## Cuando se implementaria
 
-- Organizaciones que adoptan SAFe (poco probable en chimeranext pero util para clientes).
+- Organizaciones que adoptan SAFe (poco probable en ChimeraNext pero util para clientes).
 - Pillars con dependencies temporales (deadline-driven).
 
-## Incompatibilidad parcial con chimeranext
+## Incompatibilidad parcial con ChimeraNext
 
-- `Time Value` asume time pressure medible (deadlines). chimeranext tiene la regla `no time estimates`.
+- `Time Value` asume time pressure medible (deadlines). ChimeraNext tiene la regla `no time estimates`.
 - Adaptacion: usar `Opportunity Window` (high/med/low) en vez de weeks.
 
 ## Status actual

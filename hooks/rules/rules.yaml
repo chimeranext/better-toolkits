@@ -414,7 +414,7 @@
 # -----------------------------------------------------------------------------
 # Design System rules (legacy-ticket)
 #
-# These four rules implement AI-write-time enforcement for the chimera Design
+# These four rules implement AI-write-time enforcement for the Chimera Design
 # System. They are the 4th enforcement layer, complementing the chimera-os
 # repo's existing layers:
 #   1. useDsRules React hook (passive, runtime-only)

@@ -2,7 +2,7 @@
   "$schema": "../schemas/atomic-design-rules.schema.json",
   "version": 1,
   "components_root": "src/components",
-  "rules_doc_url": "https://linear.app/chimera-coding/issue/legacy-ticket",
+  "rules_doc_url": "https://linear.app/ChimeraNext/issue/legacy-ticket",
   "pillars": [
     {
       "slug": "platform",

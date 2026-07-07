@@ -1,6 +1,6 @@
 # Anti-Examples Block — Documenting False-Positive Examples in Spec Bodies
 
-This is a documentation discipline for implementation briefs and architectural specs produced by the make-no-mistakes toolkit. It is a **business rule** of the chimeranext methodology: when a spec lists categorical examples that were corrected during drafting, the rejected items must remain visible in the spec body as a durable artifact.
+This is a documentation discipline for implementation briefs and architectural specs produced by the make-no-mistakes toolkit. It is a **business rule** of the ChimeraNext methodology: when a spec lists categorical examples that were corrected during drafting, the rejected items must remain visible in the spec body as a durable artifact.
 
 ## What it is
 

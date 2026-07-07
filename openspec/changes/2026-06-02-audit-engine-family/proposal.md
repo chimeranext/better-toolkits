@@ -7,7 +7,7 @@
 
 ## Why
 
-chimeranext already proved — with a receipt — that the same Conway's Law
+ChimeraNext already proved — with a receipt — that the same Conway's Law
 anti-pattern produces "Drift Disease" at three layers: **schema** (1NF + DRY,
 legacy-ticket), **primitive** (multiple-writers-no-owner, legacy-ticket, **$394K wasted
 over 7.3 months**), and **component** (atomic-design absence, legacy-ticket). The

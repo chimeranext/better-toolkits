@@ -556,13 +556,13 @@ Verify the new behavior with the following invocations:
 
 1. **Update an existing Linear issue (no local file):**
    ```bash
-   claude /make-no-mistakes:spike-recommend https://linear.app/chimera-coding/issue/legacy-ticket
+   claude /make-no-mistakes:spike-recommend https://linear.app/ChimeraNext/issue/legacy-ticket
    ```
    Expected: Linear issue legacy-ticket's title + description are replaced with the generated brief. Labels, assignee, priority, comments are untouched. The Linear URL is echoed back. `./issue-briefs/legacy-ticket.md` is **not** created.
 
 2. **Update + keep a local mirror:**
    ```bash
-   claude /make-no-mistakes:spike-recommend --save-local https://linear.app/chimera-coding/issue/legacy-ticket
+   claude /make-no-mistakes:spike-recommend --save-local https://linear.app/ChimeraNext/issue/legacy-ticket
    ```
    Expected: same as (1), AND `./issue-briefs/legacy-ticket.md` is written with a banner at the top pointing at the canonical Linear URL.
 

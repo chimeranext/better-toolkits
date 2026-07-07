@@ -217,7 +217,7 @@ Expected: FAIL — cannot import missing `schemas/audit-report-schema.schema.jso
 ```json
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://raw.githubusercontent.com/chimeranext/make-no-mistakes-toolkit/main/schemas/audit-report-schema.schema.json",
+  "$id": "https://raw.githubusercontent.com/ChimeraNext/make-no-mistakes-toolkit/main/schemas/audit-report-schema.schema.json",
   "title": "Audit Report",
   "type": "object",
   "required": ["family", "repo", "stack", "date", "engine_version", "findings"],

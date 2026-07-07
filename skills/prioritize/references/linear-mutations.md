@@ -45,7 +45,7 @@ Reglas para todas las mutaciones que la skill `prioritize` aplica a Linear: desc
 
 ### Coexistencia con otros delimiters
 
-La skill respeta otros markers del ecosystem chimeranext:
+La skill respeta otros markers del ecosystem ChimeraNext:
 
 - `<!--chimera:component:TYPE:JSON-->` (PR #167 plugin) -- ignorar, no tocar.
 - `<!-- cursor:ignore -->` (si existe) -- ignorar.

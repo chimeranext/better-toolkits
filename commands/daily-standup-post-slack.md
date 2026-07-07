@@ -306,7 +306,7 @@ Standup posteado en #daily-status-updates
 - **All 3 sections are mandatory**: `:white_check_mark: Ayer completé:` + `:dart: Hoy trabajaré:` + `:construction: Blockers:`
 - **Spanish for all UI and message text**
 - **Keep it scannable** — busy people read this in 10 seconds
-- **Team emojis**: Use `:white_check_mark:`, `:dart:`, `:construction:` for the 3 sections (matching team convention), `:shinto_shrine:` in the greeting, and custom chimera workspace emojis (`:github-pr:`, `:github-merged:`, `:github:`, `:linear:`, `:claude-code:`, etc.) for inline item-level decoration per the emoji mapping above
+- **Team emojis**: Use `:white_check_mark:`, `:dart:`, `:construction:` for the 3 sections (matching team convention), `:shinto_shrine:` in the greeting, and custom Chimera workspace emojis (`:github-pr:`, `:github-merged:`, `:github:`, `:linear:`, `:claude-code:`, etc.) for inline item-level decoration per the emoji mapping above
 - **Natural language** — the output should read like a human wrote it, because a human co-wrote it
 - If the file is empty, missing, or has no completed items, the command still works — just relies more on user input
 - Do NOT post if the user cancels at any point

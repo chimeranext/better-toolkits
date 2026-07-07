@@ -569,7 +569,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.4.1] - 2026-05-05
 
 ### Changed
-- Genericize toolkit examples — strip chimera-specific references from
+- Genericize toolkit examples — strip Chimera-specific references from
   user-facing skill prompts and command docs so the toolkit installs cleanly
   in any org ([PR #8](https://github.com/chimeranext/make-no-mistakes-toolkit/pull/8)).
 
@@ -642,7 +642,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mandatory new branch + worktree enforcement for every issue worked through
   `/make-no-mistakes:implement`.
 - `slack-config.example.json` template for the standup commands.
-- Installation routes: `claude plugin marketplace add chimeranext/make-no-mistakes-toolkit`
+- Installation routes: `claude plugin marketplace add ChimeraNext/make-no-mistakes-toolkit`
   for Claude Code, and `npx @lapc506/make-no-mistakes install` for OpenCode.
 
 ### Fixed (shipped on the 1.1.0 line)
