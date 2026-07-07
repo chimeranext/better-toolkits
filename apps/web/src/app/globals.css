@@ -56,15 +56,28 @@
   .caret::after { animation: none; }
 }
 
-/* Light-surface sections (S4 problems, S7 process, S10 FAQ per design §7). */
+/* Light-surface sections (S4 problems, S7 process, S10 FAQ per design §7).
+   Canonical Chimera LIGHT theme — same values as lapc506 portfolio global.css:
+   brand-derived tints (hue 250-257 family) AND accents re-tuned for contrast
+   on white, so light and dark read as one system. */
 .surface-light {
   --background: 0 0% 100%;
-  --foreground: 257 30% 10%;
+  --foreground: 257 30% 12%;
   --card: 250 40% 98%;
-  --card-foreground: 257 30% 10%;
-  --muted: 250 30% 96%;
-  --muted-foreground: 252 12% 40%;
-  --border: 252 20% 88%;
+  --card-foreground: 257 30% 12%;
+  --muted: 250 30% 94%;
+  --muted-foreground: 252 10% 40%;
+  --border: 252 20% 86%;
+  --input: 252 20% 86%;
+  --primary: 252 90% 60%;          /* #7C5CFF tuned for light */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 217 91% 52%;
+  --secondary-foreground: 0 0% 100%;
+  --accent: 330 75% 52%;
+  --accent-foreground: 0 0% 100%;
+  --success: 160 70% 38%;
+  --warning: 38 92% 46%;
+  --ring: 252 90% 60%;
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
 }
