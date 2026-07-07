@@ -12,6 +12,24 @@ Claude Code plugin with SOPs, contracts, and guided workflows for freelance and 
 5. ONGOING             /contract-retainer      Retainer or Advisory+Equity
 ```
 
+## Process-Engineering Pipeline
+
+Beyond project takeovers, the toolkit turns any of a client's operational processes into a versioned,
+optionally-executable SOP. One pipeline over one shared artifact (`./fractional-cto/sops/{slug}/`):
+
+```
+/process-standardization  →  /automation-triage  →  /sop-authoring
+   discover + capture           decide the how         write the SOP
+   (inventory + capture)      (human/RPA/AI/hybrid)   (+ executable form)
+```
+
+- **process-standardization** — inventory a team's processes (Frequency × Variability × Pain) and
+  capture the current state of the ones worth standardizing.
+- **automation-triage** — decide, step by step, what stays human vs. RPA vs. AI agent vs. hybrid,
+  with an executive-legible rationale.
+- **sop-authoring** — write the structured Operational SOP from a template; when a step is
+  automatable, also emit a runnable executable SOP (proceda-style) with human-approval gates.
+
 ## Skills
 
 | # | Skill | Triggers | Output |
@@ -21,6 +39,9 @@ Claude Code plugin with SOPs, contracts, and guided workflows for freelance and 
 | 3 | `project-takeover` | "takeover", "handover", "el dev anterior" | 4 SOPs (tecnico, guia cliente, solicitud, ultimatum) |
 | 4 | `contract-psa` | "contrato de proyecto", "PSA", "scope of work" | PSA with shared risk model (A/B/C) |
 | 5 | `contract-retainer` | "retainer", "mensual", "equity", "advisory" | Retainer or Advisory+Equity contract |
+| 6 | `process-standardization` | "standardize a process", "document how we do X", "process inventory" | Ranked inventory + current-state capture |
+| 7 | `automation-triage` | "should we automate this", "RPA vs AI", "attended vs unattended" | Per-step verdict (human/RPA/AI/hybrid) + rationale |
+| 8 | `sop-authoring` | "write an SOP", "operational procedure", "make this SOP executable" | Structured SOP + executable SOP when automatable |
 
 ## Contract Templates
 
