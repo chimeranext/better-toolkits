@@ -1,7 +1,7 @@
 {
   "name": "aaarrr-flywheel-toolkit",
-  "version": "0.1.0",
-  "description": "AAARRR Acquisition funnel + Retention/Referral flywheel sobre Meta Marketing API. Awareness/Acquisition/Activation/Revenue se ejecutan como funnel lineal; Retention/Referral cierran el loop como flywheel que retroalimenta Acquisition. Mantra: fail fast, fail often, fail cheap, fail forward.",
+  "version": "0.3.0",
+  "description": "Growth-engineering toolkit. Funnel + flywheel completo: pricing strategy → landing-page design → instrumentation (Pixel + GA4 + PostHog + UTM) → AAARRR ejecución sobre Meta Marketing API. Awareness/Acquisition/Activation/Revenue como funnel lineal; Retention/Referral cierran el loop como flywheel que retroalimenta Acquisition con LAL audiences y K-factor real. Mantra: fail fast, fail often, fail cheap, fail forward.",
   "author": {
     "name": "Luis Andres Pena Castillo",
     "url": "https://github.com/lapc506"
@@ -14,6 +14,18 @@
     "pirate-funnel",
     "flywheel",
     "growth-hacking",
+    "growth-engineering",
+    "pricing-strategy",
+    "value-based-pricing",
+    "pricing-canvas",
+    "landing-page",
+    "cro",
+    "conversion-rate-optimization",
+    "meta-pixel",
+    "google-analytics",
+    "posthog",
+    "utm-tracking",
+    "conversions-api",
     "meta-ads",
     "facebook-ads",
     "instagram-ads",
