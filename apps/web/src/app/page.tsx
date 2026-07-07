@@ -230,8 +230,8 @@ export default function Page() {
             <div key={i} className="flex flex-col rounded-xl border border-border bg-card p-6 transition-transform hover:-translate-y-0.5">
               <p className="text-base font-semibold leading-snug text-destructive">{p.problem}</p>
               <p className="mt-4 text-[15px] leading-relaxed text-card-foreground">
-                <span className="select-none text-brand-primary">→ </span>
-                <code className="font-mono text-sm font-semibold text-brand-primary">{p.toolkit}</code>: {p.solution}
+                <span className="select-none text-primary">→ </span>
+                <code className="font-mono text-sm font-semibold text-primary">{p.toolkit}</code>: {p.solution}
               </p>
             </div>
           ))}
@@ -393,7 +393,9 @@ export default function Page() {
           <p className="mx-auto max-w-[70ch] text-center text-[clamp(1rem,0.9rem+0.4vw,1.25rem)] font-medium text-card-foreground">{t.s9.methodTagline}</p>
           <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6">
             {METHOD_GROUPS.map((g, gi) => {
-              const accents = ["#7C5CFF", "#3B82F6", "#22D3EE", "#EC4899", "#34D399", "#FBBF24"];
+              // Brand accents re-tuned for contrast on the light surface (same
+              // treatment as the canonical light theme: darker, same hues).
+              const accents = ["#6D4AF5", "#2563EB", "#0E93B5", "#DB2777", "#0F9D6B", "#D97706"];
               const accent = accents[gi % accents.length];
               return (
                 <div
@@ -432,8 +434,8 @@ export default function Page() {
               onToggle={(e) => { if ((e.currentTarget as HTMLDetailsElement).open) track("faq_expand", { question: f.q }); }}
             >
               <summary className="cursor-pointer list-none font-heading text-base font-semibold text-card-foreground marker:content-none">
-                <span className="select-none text-brand-primary group-open:hidden">+ </span>
-                <span className="hidden select-none text-brand-primary group-open:inline">− </span>
+                <span className="select-none text-primary group-open:hidden">+ </span>
+                <span className="hidden select-none text-primary group-open:inline">− </span>
                 {f.q}
               </summary>
               <p className="mt-3 text-[15px] leading-relaxed text-card-foreground/90">{f.a}</p>
