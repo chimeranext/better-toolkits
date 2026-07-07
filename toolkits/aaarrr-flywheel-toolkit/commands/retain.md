@@ -12,6 +12,7 @@ Primera mitad del flywheel. Toma a quien compró y lo trae de vuelta antes de qu
 - `--day 7|30|90`: lanza la campaña de ese escalón. Si no se especifica, hace refresh + diagnóstico.
 - `--refresh-audiences`: actualiza/crea las custom audiences core sin lanzar nada.
 - `--check-churn`: corre `churn-detector.ts` y reporta tendencias.
+- `--nps`: lee el NPS + segmentación (promoters/passives/detractors) + estado del feedback loop, y enruta cada segmento (detractors→triage, passives→campaña, promoters→`/refer`). Libro de definiciones: `references/nps-and-feedback-loop.md`.
 - `--offers stack`: confirma uso de stack offers (default). `--offers discount` para descuento plano (no recomendado).
 - `--audiences <list>`: override de las audiencias default (raro de usar).
 - `--what-if`: simulación, sin Graph API.
@@ -38,6 +39,25 @@ Si churn al D60 creció >15% MoM, flag al usuario con propuesta:
 Guarda snapshot en .aaarrr/metrics/churn-{date}.json.
 ```
 
+### Modo `--nps`
+
+Handoff a `retention-automator`:
+```
+Lee references/nps-and-feedback-loop.md.
+Pull respuestas NPS (score 0-10 + comentario) del window disponible.
+Calcula NPS = %Promoters(9-10) − %Detractors(0-6). Passives(7-8) no puntúan.
+Segmenta y reporta:
+  - NPS blended + tendencia MoM + NPS por cohorte/segmento (obligatorio; el blended esconde detractors)
+  - Conteo promoters / passives / detractors
+Enruta el feedback loop (captura→triage→cierre):
+  - Detractors → triage SLA 48h + top temas por frecuencia (kill-signal de LTV si recurrente)
+  - Passives → audiencia de retención + quick win del gap más citado
+  - Promoters → seed a /refer (buyers_high_ltv) + pedir referral/review en el peak
+Cruza con churn: si el NPS de una cohorte cae, vigilar su churn a 30-60 días (/retain --check-churn).
+Output: tabla de segmentos + NPS + verdict + próximos pasos por segmento.
+Guarda snapshot en .aaarrr/metrics/nps-{date}.json.
+```
+
 ### Modo `--day 7|30|90`
 
 ```
@@ -54,8 +74,9 @@ Deploy PAUSED. Devuelve comando de activación.
 
 1. `--refresh-audiences` primero
 2. `--check-churn` segundo
-3. Reporta qué escalones (D7/D30/D90) tienen audiencia suficiente para lanzar
-4. Sugiere al usuario el siguiente comando: `/retain --day 7` o el que aplique
+3. `--nps` tercero (leading indicator; si el NPS cae, el churn viene detrás)
+4. Reporta qué escalones (D7/D30/D90) tienen audiencia suficiente para lanzar
+5. Sugiere al usuario el siguiente comando: `/retain --day 7` o el que aplique
 
 ## Output Format
 

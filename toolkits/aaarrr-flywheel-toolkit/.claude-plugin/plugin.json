@@ -1,6 +1,6 @@
 {
   "name": "aaarrr-flywheel-toolkit",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Growth-engineering toolkit. Funnel + flywheel completo: pricing strategy → landing-page design → instrumentation (Pixel + GA4 + PostHog + UTM) → AAARRR ejecución sobre Meta Marketing API. Awareness/Acquisition/Activation/Revenue como funnel lineal; Retention/Referral cierran el loop como flywheel que retroalimenta Acquisition con LAL audiences y K-factor real. Mantra: fail fast, fail often, fail cheap, fail forward.",
   "author": {
     "name": "Luis Andres Pena Castillo",
