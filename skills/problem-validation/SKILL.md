@@ -91,11 +91,12 @@ respondidas y el usuario haya aprobado la seccion. Preguntar UNA A LA VEZ. Esper
 
 ```
 ESPACIO 1: PROBLEMA-HIPOTESIS (Fases 1-5)
-  |-- Fase 1: Perfil del Fundador      -> 01-problema-hipotesis/01-perfil-fundador.md
-  |-- Fase 2: Validacion del Problema  -> 01-problema-hipotesis/02-entrevista-problema.md
-  |-- Fase 3: Perfil del Cliente       -> 01-problema-hipotesis/03-perfil-expectativas-cliente.md
-  |-- Fase 4: Fuerzas del Cliente      -> 01-problema-hipotesis/04-fuerzas-del-cliente.md
-  |-- Fase 5: Investigacion de Mercado -> 01-problema-hipotesis/05-investigacion-mercado.md
+  |-- Fase 1:  Perfil del Fundador      -> 01-problema-hipotesis/01-perfil-fundador.md
+  |-- Fase 2a: Lluvia de Supuestos      -> 01-problema-hipotesis/02a-lluvia-supuestos.md
+  |-- Fase 2b: Entrevista del Problema  -> 01-problema-hipotesis/02-entrevista-problema.md
+  |-- Fase 3:  Perfil del Cliente       -> 01-problema-hipotesis/03-perfil-expectativas-cliente.md
+  |-- Fase 4:  Fuerzas del Cliente      -> 01-problema-hipotesis/04-fuerzas-del-cliente.md
+  |-- Fase 5:  Investigacion de Mercado -> 01-problema-hipotesis/05-investigacion-mercado.md
   +-- PUERTA 1: El problema es real y suficientemente doloroso?
 ```
 
@@ -126,9 +127,60 @@ Generar `01-problema-hipotesis/01-perfil-fundador.md` con insignias de shields.i
 habilidades, linea del tiempo profesional, portafolio de startups y todas las secciones
 de la plantilla. Presentar. Esperar aprobacion.
 
-## Fase 2: Validacion del Problema (Problem Validation) -- 4-6 preguntas
+## Fase 2a: Lluvia de Supuestos (Assumption Brainstorm) -- 10 minutos
+
+Leer plantilla: `${CLAUDE_PLUGIN_ROOT}/assets/templates/assumption-brainstorm.md`
+
+Basado en *Lean Customer Development* (Alvarez, 2014) cap. 2 -- "Where Should I Start?".
+Antes de salir a hablar con clientes, **externalizar los supuestos** que el fundador (o equipo)
+esta haciendo sobre producto, clientes y mercado. Cada supuesto se vuelve una hipotesis
+testeable que alimenta las entrevistas de Fase 2b.
+
+**Proceso**:
+
+1. Explicar al usuario el proposito: "Todo lo que 'creemos saber' es en realidad una apuesta
+   hasta que se valida. Este ejercicio saca a la luz esas apuestas antes de construir nada."
+2. Cronometrar 10 minutos (aprox) para completar los 12 prompts con tantos supuestos como pueda.
+   Si es equipo, cada persona completa por separado y luego se clusteriza.
+3. Despues de los 12 prompts:
+   - **Clusterizar** supuestos similares por tema
+   - **Clasificar** cada supuesto en la matriz Riesgo / Incertidumbre (4 cuadrantes)
+   - **Detectar contradicciones** (si fue ejercicio de equipo)
+4. Identificar Top 3 supuestos del Cuadrante B (alto riesgo + desconocido) -- esos son los
+   candidatos principales para testear con las entrevistas de Fase 2b
+5. Formular la **hipotesis de problema refinada** usando el formato estructurado:
+   > "Creemos que [tipo de persona] experimenta [tipo de problema] cuando [situacion/tarea]
+   > debido a [limitacion/contexto]."
+
+**Preguntas al usuario**:
+
+- **LS-1**: "Hagamos el ejercicio individual o en equipo? Si tenes co-fundadores o equipo
+  cercano, es mucho mas valioso hacerlo por separado y comparar."
+- **LS-2**: Para cada uno de los 12 prompts, invitar respuestas rapidas sin filtrar
+  (puede ser en una sola respuesta larga si el usuario prefiere, o prompt por prompt).
+- **LS-3**: Despues de completar los 12 prompts, guiar la clusterizacion y la matriz
+  Riesgo/Incertidumbre interactivamente.
+
+**Siempre Opcion B**: Reemplazar TODOS los marcadores genericos con contexto del proyecto.
+Los supuestos deben sonar como algo que el fundador diria en voz alta -- no como marcadores
+genericos.
+
+Generar `01-problema-hipotesis/02a-lluvia-supuestos.md` con:
+- Los 12 prompts completados con supuestos especificos del proyecto
+- Cluster de temas identificados
+- Matriz Riesgo/Incertidumbre con supuestos asignados a cada cuadrante
+- Top 3 supuestos prioritarios para testear en Fase 2b
+- Hipotesis de problema refinada
+
+Presentar. Esperar aprobacion.
+
+## Fase 2b: Entrevista del Problema (Problem Interview) -- 4-6 preguntas
 
 Leer plantilla: `${CLAUDE_PLUGIN_ROOT}/assets/templates/entrevista-problema.md`
+
+Usar la hipotesis refinada de Fase 2a como punto de partida. Las preguntas de la entrevista
+deben estar **orientadas a validar/invalidar los Top 3 supuestos prioritarios** identificados
+en la lluvia de supuestos.
 
 Explorar el problema usando los 4 componentes de Running Lean:
 Detonante, Frecuencia, Relevancia, Viabilidad Tecnica.
@@ -141,10 +193,29 @@ Generar `01-problema-hipotesis/02-entrevista-problema.md`. Presentar. Esperar ap
 
 Leer plantilla: `${CLAUDE_PLUGIN_ROOT}/assets/templates/perfil-expectativas-cliente.md`
 
-Cubrir: Demografia, Ikigai, Dolores y Ganancias (Pains/Gains), Trabajos por Hacer del
-Cliente (JTBD -- Jobs-to-be-Done) con dimensiones de complejidad.
+Cubrir: Demografia, **Espectros de Comportamiento (Traits Continuum)**, Ikigai,
+Dolores y Ganancias (Pains/Gains), Trabajos por Hacer del Cliente
+(JTBD -- Jobs-to-be-Done) con dimensiones de complejidad.
 
-Poblar las secciones 6-12 con respuestas de la Fase 2 -- no volver a preguntar.
+Poblar las secciones 6-12 con respuestas de la Fase 2b (Entrevista Problema) -- no volver a preguntar.
+
+**Traits Continuum (espectros de comportamiento)**: Basado en *Lean Customer Development*
+(Alvarez 2014) cap. 2. A diferencia de la demografia dura (edad, profesion), los espectros
+predicen COMO decide, compra y usa soluciones esta persona. Mapear donde cae el cliente
+objetivo en cada eje revela supuestos criticos implicitos.
+
+- **Paso 1**: Identificar el tipo (B2C / B2B / B2G / B2B2C). Cada tipo usa una tabla distinta.
+- **Paso 2**: Para cada espectro, preguntar al usuario en que posicion (1-5) cae su cliente objetivo
+  y pedir justificacion breve. Hacerlo UNA dimension a la vez, no bombardear con 8 preguntas.
+- **Paso 3**: Si el espectro NO aplica al proyecto, marcarlo como "N/A" -- no forzar.
+- **Paso 4**: Completar el perfil psicologico complementario (mayor preocupacion, motivadores,
+  identidad social).
+- **Paso 5**: Derivar las 4 **Implicaciones Estrategicas** (canal de adquisicion, ciclo de decision,
+  friccion aceptable, mensaje principal) a partir de las posiciones en los espectros.
+
+**Anti-patron**: Cliente en "3" (centro) en todos los ejes = producto generico que no emociona
+a nadie. Los mejores clientes iniciales estan en los extremos (1-2 o 4-5) en al menos 2-3
+espectros clave.
 
 **Regla de contextualizacion de las Dimensiones de Complejidad (Opcion B)**:
 Las 6 dimensiones de complejidad NO deben presentarse como preguntas genericas abstractas.
@@ -238,6 +309,7 @@ Diseno de Solucion (Solution Design) -- Fases 6-8.
 
 ### Archivos de plantilla (leer antes de generar)
 - **`${CLAUDE_PLUGIN_ROOT}/assets/templates/founder-profile.md`** -- Perfil del fundador estilo GitHub con insignias, linea del tiempo, portafolio
+- **`${CLAUDE_PLUGIN_ROOT}/assets/templates/assumption-brainstorm.md`** -- Lluvia de supuestos (12 prompts + matriz Riesgo/Incertidumbre) basada en Lean Customer Development cap. 2
 - **`${CLAUDE_PLUGIN_ROOT}/assets/templates/entrevista-problema.md`** -- Entrevista del problema (7 secciones)
 - **`${CLAUDE_PLUGIN_ROOT}/assets/templates/perfil-expectativas-cliente.md`** -- Perfil del cliente con JTBD (Jobs-to-be-Done)
 - **`${CLAUDE_PLUGIN_ROOT}/assets/templates/fuerzas-del-cliente.md`** -- Diagrama de las 4 fuerzas del cliente
