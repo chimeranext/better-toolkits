@@ -24,31 +24,14 @@ The authoritative list of installable names lives in
 [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json). A future documentation
 and configurator site is planned at **toolkits.chimeranext.dev**.
 
-## Toolkits at a glance
-
-Listed in priority order. Each keeps its **own license** — see the `LICENSE` file inside
-its `toolkits/<name>/` and the per-toolkit sections below.
-
-| # | Toolkit | What it does | License | Status |
-|---|---|---|---|---|
-| 1 | [`make-no-mistakes-toolkit`](toolkits/make-no-mistakes-toolkit) | Disciplined dev lifecycle — repo-health audit engine, issue execution, PR review, releases, E2E, secrets. | BSL-1.1 | Available |
-| 2 | [`atomic-design-toolkit`](toolkits/atomic-design-toolkit) | Atomic Design for Flutter and Vite — generate, audit, and migrate component hierarchies. | BSL-1.1 | Available |
-| 3 | [`ux-research-toolkit`](toolkits/ux-research-toolkit) | Guided UX-research maps — journeys, blueprints, storyboards, story maps, with HTML visualization. | BSL-1.1 | Available |
-| 4 | [`business-model-toolkit`](toolkits/business-model-toolkit) | Interactive business-model brainstorming across the full startup lifecycle. | BSL-1.1 | Available |
-| 5 | [`app-gtm-release-toolkit`](toolkits/app-gtm-release-toolkit) | Multi-platform app go-to-market and release across Flutter, KMP, MAUI, Swift, PWA. | BSL-1.1 | Available |
-| 6 | [`aaarrr-flywheel-toolkit`](toolkits/aaarrr-flywheel-toolkit) | Growth-engineering funnel + flywheel: pricing → landing design → instrumentation → AAARRR over the Meta Marketing API. | BSL-1.1 | Available |
-| 7 | [`fractional-cto-toolkit`](toolkits/fractional-cto-toolkit) | Operational SOPs and workflows for freelance and fractional CTOs. | BSL-1.1 | Available |
-| 8 | [`instructional-design-toolkit`](toolkits/instructional-design-toolkit) | Design cmi5-compliant courses and 1-on-1 session plans. | BSL-1.1 | Available |
-| 9 | [`launchpad-toolkit`](toolkits/launchpad-toolkit) | Founder-operations lab — intake, cap table, matching, demo-day, stage tracking. | BSL-1.1 | Available |
-| 10 | [`venture-studio-toolkit`](toolkits/venture-studio-toolkit) | Macro portfolio management for venture studios and serial founders. | BSL-1.1 | Available |
-
-Every declared license is **BSL-1.1** (Business Source License 1.1), which converts to the
-**Non-Profit Open Software License 3.0** five years after each version is published.
-© 2026 Luis Andres Pena Castillo.
-
 ## Toolkits
 
-### 1. make-no-mistakes-toolkit `v1.33.0`
+Listed in priority order. Each toolkit keeps its **own license** — see the `LICENSE` file
+inside its `toolkits/<name>/`. Every declared license is **BSL-1.1** (Business Source
+License 1.1), which converts to the **Non-Profit Open Software License 3.0** five years
+after each version is published. © 2026 Luis Andres Pena Castillo.
+
+### [make-no-mistakes-toolkit](toolkits/make-no-mistakes-toolkit/) `v1.33.0`
 
 The disciplined dev lifecycle — one plugin to make no mistakes.
 
@@ -70,7 +53,7 @@ claude plugin install make-no-mistakes@better-toolkits
 
 BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
-### 2. atomic-design-toolkit `v1.2.0`
+### [atomic-design-toolkit](toolkits/atomic-design-toolkit/) `v1.2.0`
 
 Atomic Design for Flutter and Vite — decompose features into atoms, molecules, organisms, templates, and pages.
 
@@ -92,7 +75,7 @@ claude plugin install atomic-design-toolkit@better-toolkits
 
 BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
-### 3. ux-research-toolkit `v2.1.0`
+### [ux-research-toolkit](toolkits/ux-research-toolkit/) `v2.1.0`
 
 Guided UX-research map creation for non-experts, based on NN/g methodology.
 
@@ -113,7 +96,7 @@ claude plugin install ux-research-toolkit@better-toolkits
 
 BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
-### 4. business-model-toolkit `v2.1.0`
+### [business-model-toolkit](toolkits/business-model-toolkit/) `v2.1.0`
 
 Interactive business-model brainstorming — guided dialogue covering the full startup lifecycle from problem validation through execution and investor pitch.
 
@@ -135,7 +118,7 @@ claude plugin install business-model-toolkit@better-toolkits
 
 BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
-### 5. app-gtm-release-toolkit `v2.3.0`
+### [app-gtm-release-toolkit](toolkits/app-gtm-release-toolkit/) `v2.3.0`
 
 Multi-platform app go-to-market and release — ship Flutter, Kotlin Multiplatform, .NET MAUI, Swift, and PWAs to Google Play, App Store, Microsoft Store, Snap Store, Flathub, and alternative channels.
 
@@ -158,7 +141,7 @@ claude plugin install app-gtm-release@better-toolkits
 
 BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
-### 6. aaarrr-flywheel-toolkit `v0.2.0`
+### [aaarrr-flywheel-toolkit](toolkits/aaarrr-flywheel-toolkit/) `v0.2.0`
 
 Growth-engineering toolkit — a complete funnel + flywheel from pricing to compounding growth.
 
@@ -180,7 +163,7 @@ claude plugin install aaarrr-flywheel-toolkit@better-toolkits
 
 BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
-### 7. fractional-cto-toolkit `v1.0.0`
+### [fractional-cto-toolkit](toolkits/fractional-cto-toolkit/) `v1.0.0`
 
 Operational toolkit for freelance and fractional CTOs — SOPs, checklists, and guided workflows for project takeovers, technical audits, client onboarding, and vendor evaluation.
 
@@ -200,7 +183,7 @@ claude plugin install fractional-cto-toolkit@better-toolkits
 
 BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
-### 8. instructional-design-toolkit `v1.0.0`
+### [instructional-design-toolkit](toolkits/instructional-design-toolkit/) `v1.0.0`
 
 Design cmi5-compliant courses and 1-on-1 session plans.
 
@@ -222,7 +205,7 @@ claude plugin install instructional-design-toolkit@better-toolkits
 
 BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
-### 9. launchpad-toolkit `v0.5.0`
+### [launchpad-toolkit](toolkits/launchpad-toolkit/) `v0.5.0`
 
 Founder-operations lab — a methodology prototype laboratory for the ChimeraNext Launchpad pillar.
 
@@ -242,7 +225,7 @@ claude plugin install launchpad-toolkit@better-toolkits
 
 BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
-### 10. venture-studio-toolkit `v1.2.0`
+### [venture-studio-toolkit](toolkits/venture-studio-toolkit/) `v1.2.0`
 
 Macro portfolio management for venture studios and serial founders. Spanish-first; bilingual output framework documented for v1.3+.
 
