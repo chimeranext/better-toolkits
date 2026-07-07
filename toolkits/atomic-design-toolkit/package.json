@@ -1,0 +1,35 @@
+{
+  "name": "@lapc506/atomic-design-toolkit",
+  "version": "1.2.0",
+  "description": "Flutter Atomic Design widget generator — decompose features into atoms, molecules, organisms, templates, and pages. OpenCode + Claude Code plugin.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": { "atomic-design-toolkit": "dist/cli.js" },
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
+    "./cli": { "import": "./dist/cli.js" }
+  },
+  "files": ["dist/", "commands/", "skills/", "references/", "README.md", "LICENSE"],
+  "engines": { "node": ">=20.11.0" },
+  "publishConfig": { "access": "public" },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean && tsup src/cli.ts --format esm --clean false",
+    "test": "echo 'no tests yet' && exit 0",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": ["opencode", "plugin", "flutter", "atomic-design", "widget", "design-system"],
+  "repository": { "type": "git", "url": "git+https://github.com/chimeranext/atomic-design-toolkit.git" },
+  "author": "Luis Andres Pena Castillo",
+  "license": "BSL-1.1",
+  "dependencies": {
+    "@opencode-ai/plugin": "^0.7.0",
+    "jsonc-parser": "^3.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  }
+}
