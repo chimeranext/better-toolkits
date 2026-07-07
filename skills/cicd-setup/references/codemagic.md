@@ -231,6 +231,79 @@ workflows:
         submit_to_app_store: false  # Manual promotion to production
 ```
 
+## Windows Pipeline (Microsoft Store via MSIX)
+
+Add this workflow only when the Flutter app also ships to the Microsoft Store. It runs on a Windows instance, builds the desktop app, packages it as MSIX with the `msix` pub package, and publishes to Partner Center.
+
+```yaml
+  # ── Workflow 4: Windows / Microsoft Store ────────────────
+  windows-msstore:
+    name: Windows Build & Microsoft Store
+    max_build_duration: 60
+    instance_type: windows_x2   # Visual Studio 2019 + "Desktop development with C++"
+
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: production
+          include: true
+
+    environment:
+      flutter: stable
+      groups:
+        - windows-signing   # PARTNER_CLIENT_SECRET (encrypted)
+
+    scripts:
+      - name: Enable Windows desktop
+        script: flutter config --enable-windows-desktop
+
+      - name: Install dependencies
+        script: flutter pub get
+
+      # 4th version digit MUST be 0 for Microsoft Store
+      - name: Build Windows
+        script: flutter build windows --release --build-number=0
+
+      - name: Package MSIX
+        script: flutter pub run msix:create
+
+    artifacts:
+      - build/windows/**/*.msix
+
+    publishing:
+      partner_center:
+        store_id: $STORE_ID
+        tenant_id: $PARTNER_TENANT_ID
+        client_id: $PARTNER_CLIENT_ID
+        client_secret: $PARTNER_CLIENT_SECRET
+```
+
+### `msix_config` in `pubspec.yaml`
+
+The `msix` package reads its config from `pubspec.yaml`. Add it under `dev_dependencies` and configure the block:
+
+```yaml
+dev_dependencies:
+  msix: ^2.6.5
+
+msix_config:
+  display_name: My App
+  publisher_display_name: My Company
+  identity_name: Publisher.AppName       # matches Partner Center product identity
+  msix_version: 1.0.0.0                   # 4-part; last digit 0
+  logo_path: assets/icons/logo_256.png   # 256×256
+```
+
+### Azure AD setup for `partner_center:`
+
+1. In Partner Center, create the Azure AD tenant association.
+2. Register an app (single tenant, empty redirect URI) and generate a client secret.
+3. Assign the app the **Developer** role.
+4. Store the secret encrypted in the `windows-signing` environment group as `PARTNER_CLIENT_SECRET`.
+
+> **⚠️ GOTCHA:** the app's **first version must be published manually** to Partner Center before this pipeline can publish updates (same constraint as the GitHub Actions path).
+
 ## Codemagic-Specific Setup
 
 ### Code Signing (Android)
@@ -267,6 +340,7 @@ Create these groups in **Codemagic UI > Teams > Environment variables**:
 | `firebase_credentials` | `FIREBASE_TOKEN`, `FIREBASE_ANDROID_APP_ID`, `FIREBASE_GROUPS` |
 | `app_store_credentials` | `APP_STORE_CONNECT_PRIVATE_KEY`, `APP_STORE_CONNECT_KEY_IDENTIFIER`, `APP_STORE_CONNECT_ISSUER_ID` |
 | `sentry_credentials` | `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT` |
+| `windows-signing` | `PARTNER_CLIENT_SECRET` (+ `STORE_ID`, `PARTNER_TENANT_ID`, `PARTNER_CLIENT_ID` for Microsoft Store publish) |
 
 ### $CM_ENV Special File
 

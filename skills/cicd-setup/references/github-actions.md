@@ -351,6 +351,66 @@ jobs:
           retention-days: 14
 ```
 
+## Workflow 4: Windows Microsoft Store (optional desktop target)
+
+Add this only when the Flutter app also ships to the Microsoft Store. It runs on a Windows runner, builds the desktop app, and publishes to Partner Center via the Microsoft Dev Store CLI.
+
+```yaml
+# .github/workflows/msstore.yml
+name: Microsoft Store Build & Publish
+
+on:
+  push:
+    branches: [production]
+
+concurrency:
+  group: msstore-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  msstore:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version-file: pubspec.yaml
+          channel: stable
+          cache: true
+
+      - name: Enable Windows desktop
+        run: flutter config --enable-windows-desktop
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Install Dev Store CLI
+        uses: microsoft/setup-msstore-cli@v1
+
+      - name: Configure credentials
+        run: >
+          msstore reconfigure
+          --tenantId ${{ secrets.AZURE_AD_TENANT_ID }}
+          --clientId ${{ secrets.AZURE_AD_CLIENT_ID }}
+          --clientSecret ${{ secrets.AZURE_AD_CLIENT_SECRET }}
+          --sellerId ${{ secrets.SELLER_ID }}
+
+      # 4th version digit MUST be 0 for Microsoft Store — force build-number to 0
+      - name: Package MSIX
+        run: msstore package . --build-number 0
+
+      - name: Publish to Partner Center
+        run: msstore publish -v
+```
+
+**Prerequisites (one-time, before this workflow can succeed):**
+1. App reserved in Partner Center with **at least one completed manual submission** (CI publishes updates, not the first release).
+2. Run `msstore init` once locally in the repo to generate the project association.
+3. Azure AD app registration (single tenant) with a client secret, assigned the Developer role in Partner Center — this supplies the four secrets above.
+
 ## Fastlane Setup (iOS)
 
 Required for GitHub Actions iOS distribution.
@@ -427,6 +487,10 @@ Configure in **Settings > Secrets and variables > Actions**:
 | `SENTRY_AUTH_TOKEN` | Sentry auth token |
 | `SENTRY_ORG` | Sentry org slug |
 | `SENTRY_PROJECT` | Sentry project slug |
+| `AZURE_AD_TENANT_ID` | Azure AD tenant ID (Microsoft Store publish) |
+| `AZURE_AD_CLIENT_ID` | Azure AD app registration client ID |
+| `AZURE_AD_CLIENT_SECRET` | Azure AD client secret |
+| `SELLER_ID` | Partner Center Seller ID (Account settings → Legal info) |
 
 ## Monorepo Considerations
 

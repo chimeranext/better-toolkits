@@ -13,6 +13,14 @@ Microsoft Store accepts apps in three packaging formats:
 
 This skill focuses on the **MSIX path** because it's modern, automatic-updating, and what PWA Builder produces.
 
+### Why MSIX (or PWA) beats a raw EXE/MSI
+
+If you're choosing a Windows distribution format, prefer **MSIX or PWA over EXE/MSI**: when you ship through the Store, **Microsoft signs the package for free** with a trusted cert tied to your publisher identity. A raw EXE/MSI installer instead requires you to buy your own code-signing certificate (OV/EV) to avoid SmartScreen warnings — an ongoing cost MSIX-via-Store sidesteps entirely.
+
+### Accepted upload formats
+
+Partner Center accepts `.msix` / `.msixbundle` / `.msixupload`, `.appx` / `.appxbundle` / `.appxupload`, and `.xap`. For submission, prefer the **upload file** variants (`.msixupload` / `.appxupload`): they bundle multiple architectures and embed the **symbol files** Partner Center uses for crash analytics. A **multi-arch app bundle** (x86 + x64 + ARM64) is preferred over a single-architecture package so one submission covers every device.
+
 ## When to invoke
 
 - During `/app-gtm-release:ship-msstore` Gates 0-4
@@ -25,8 +33,10 @@ Microsoft Partner Center is the dashboard. Two account types:
 
 | Type | Cost | Verification | Use case |
 |---|---|---|---|
-| Individual | $19 USD one-time | Email + phone | Solo devs, personal apps |
-| Company | $99 USD one-time | DUNS number + phone | Apps under a legal entity, paid apps with revenue split |
+| Individual | Free (2025+) | Email + phone | Solo devs, personal apps |
+| Company | Free registration (2025+) | Business verification | Apps under a legal entity, paid apps with revenue split |
+
+> **⚠️ Version-sensitive — registration fees were removed in 2025.** Microsoft's current docs (updated 2025-07) announce **zero registration fees**, with free developer registration for individual developers and a revamped company onboarding with no registration fee. Older guides still cite the historical **one-time $19 (individual) / $99 (company)** fee — that fee no longer applies. Re-verify the current policy at signup time, since Microsoft has flip-flopped on this before.
 
 Sign up: https://partner.microsoft.com/en-us/dashboard/registration/
 
@@ -48,14 +58,15 @@ Before uploading any package, reserve the app's name in Partner Center:
 2. Enter the desired name (max 256 chars). Microsoft checks for trademark conflicts.
 3. Once reserved, the name is yours for **1 year**. If you don't submit a package within that window, the reservation expires and the name returns to the pool.
 
-The reservation generates two critical identifiers:
+The reservation generates the **product identity** — find it under **Product management → Product identity** in Partner Center. Three values matter:
 
 ```
-Package family name: 12345MyCompany.MyApp_a1b2c3d4e5f6g
-Publisher identity:  CN=A1B2C3D4-E5F6-7890-1234-56789ABCDEF0
+Package/Identity/Name:  12345MyCompany.MyApp        # Package family name (minus the hash suffix)
+Publisher:              CN=A1B2C3D4-E5F6-7890-...   # Publisher identity
+Publisher display name: My Company                   # Human-readable publisher
 ```
 
-Both must match your MSIX package metadata exactly. Mismatches reject at upload.
+Inject all three into your packaging config (PWA Builder fields, `msix_config` in `pubspec.yaml`, or `Package.appxmanifest`). They must match the reservation exactly. Mismatches reject at upload.
 
 ## Bar 3 — Package preparation
 
@@ -71,6 +82,8 @@ PWA Builder generates an MSIX with the right metadata if you provide the Package
    - Publisher (use the Publisher identity from Partner Center, format: `CN=...`)
    - Version (4-part: `1.0.0.0` — Microsoft Store uses 4-part Windows versioning, NOT semver)
 5. Download the MSIX bundle
+
+> **⚠️ GOTCHA — the 4th version digit (revision) MUST be 0.** Microsoft Store reserves the revision field for its own use, so `1.0.0.1` is rejected. In Flutter, `version: 1.0.0+1` in `pubspec.yaml` maps to `build-name+build-number`, and the build-number becomes that 4th digit — so Flutter's default `1.0.0.1` fails the Store. Force it to zero when building the Windows package: `flutter build windows --build-number=0`. Increment the first three digits (`1.0.1.0`, `1.1.0.0`, …) for updates instead.
 
 The MSIX includes:
 - Your PWA's URL (loaded in WebView2 / Edge runtime)
@@ -115,12 +128,14 @@ Note: electron-builder produces `.appx` (legacy). Submit via Partner Center "App
 
 ### Signing the package
 
-MSIX must be signed. Two options:
+Every MSIX must be signed with a certificate. Two options:
 
 1. **Microsoft Store signing** (free, automatic): submit unsigned package; Microsoft signs it during certification using a Microsoft-issued cert tied to your Partner Center publisher identity. The signed package is what end-users install.
 2. **Self-signed for sideload testing**: use `signtool.exe sign /a /v /fd SHA256 mypackage.msix`. Self-signed packages CAN be sideloaded for testing but CANNOT be submitted to Microsoft Store.
 
 For PWA Builder MSIX: leave unsigned, submit as-is. Partner Center signs.
+
+> **Note — Visual Studio no longer generates a temporary cert.** Since **Visual Studio 2019**, the packaging wizard stopped auto-creating a temporary test certificate. For local dev/test signing you now supply your own cert: generate one with the PowerShell `New-SelfSignedCertificate` cmdlet, or (better for teams) sign against a cert stored in **Azure Key Vault** so the private key never lands on a dev machine. None of this is needed for the Store path — Microsoft signs on submission — only for sideloading and internal test builds.
 
 ## Bar 4 — Submission flow in Partner Center
 
@@ -157,6 +172,8 @@ Click "Submit to the Store".
 
 ## Bar 5 — Certification process
 
+> **WACK is deprecated.** The **Windows App Certification Kit** (`appcert.exe`) is no longer maintained — run it only for optional local sanity checks, not as a required gate. The **real certification runs automatically when you upload to Partner Center**; there is no separate pre-flight tool you must pass first. Older walkthroughs present WACK as a mandatory step — treat that as legacy.
+
 Microsoft runs:
 
 1. **Pre-processing** (minutes): metadata + package format validation
@@ -172,7 +189,7 @@ Microsoft runs:
    - Age rating matches actual content
    - Privacy policy URL valid
 
-Total: **1-7 calendar days** typical. PWAs are usually faster (3-5 days). New publishers face stricter review on first 1-2 submissions.
+Total: **2-3 calendar days** typical (up to ~7 in edge cases). PWAs are usually on the faster end. New publishers face stricter review on first 1-2 submissions.
 
 ### Common rejection reasons
 
@@ -220,22 +237,29 @@ Same as Google Play: choose a percentage (10% → 50% → 100%) over hours/days.
 
 For automated submissions, use:
 
+- **Microsoft Dev Store CLI** (`msstore`): the modern, CI-friendly path. Drive it via the `microsoft/setup-msstore-cli@v1` GitHub Action (see `cicd-setup` for the full workflow, secrets, and `reconfigure → package → publish` flow).
 - **Microsoft Store Submission API** (REST): create submissions, upload packages, update listings programmatically. Auth via Azure AD app registration. Docs: https://learn.microsoft.com/en-us/windows/apps/publish/store-submission-api
-- **GitHub Action**: `microsoft/setup-msstore-cli` and `microsoft/msstore-cli` for CLI-driven publishing
 
-Example GitHub Actions:
+> **⚠️ Version-sensitive — "Automate Store submissions" is gone from Visual Studio 2026.** The old VS wizard feature (Entra ID + Tenant ID / Client ID / Client key from Partner Center) that generated submission automation is **not supported in Visual Studio 2026**. The VS2019-era flow is still documented but legacy. For modern CI/CD, drive submissions with the **`msstore` CLI** instead — that's the path `cicd-setup` scaffolds.
+
+Example GitHub Actions (Dev Store CLI):
 
 ```yaml
-- name: Submit to Microsoft Store
-  uses: microsoft/[email protected]
-  with:
-    seller-id: ${{ secrets.MS_SELLER_ID }}
-    client-id: ${{ secrets.MS_CLIENT_ID }}
-    tenant-id: ${{ secrets.MS_TENANT_ID }}
-    cert-thumbprint: ${{ secrets.MS_CERT_THUMBPRINT }}
-- name: Publish package
-  run: msstore publish ./bin/Release/MyApp.msixbundle --product-id ${{ secrets.MS_PRODUCT_ID }}
+- name: Install Dev Store CLI
+  uses: microsoft/setup-msstore-cli@v1
+- name: Configure credentials
+  run: msstore reconfigure
+    --tenantId ${{ secrets.AZURE_AD_TENANT_ID }}
+    --clientId ${{ secrets.AZURE_AD_CLIENT_ID }}
+    --clientSecret ${{ secrets.AZURE_AD_CLIENT_SECRET }}
+    --sellerId ${{ secrets.SELLER_ID }}
+- name: Package and publish
+  run: |
+    msstore package .
+    msstore publish -v
 ```
+
+> **Prereq:** the app must already exist in Partner Center with at least one completed manual submission, and `msstore init` must have been run once in the repo. See `cicd-setup` for the full workflow.
 
 ## Pricing intelligence
 

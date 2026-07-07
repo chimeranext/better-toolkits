@@ -200,11 +200,30 @@ Organize secrets into logical groups in your CI platform:
 **Monitoring:**
 - `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT`
 
+## Desktop target: Windows / Microsoft Store
+
+When the Flutter app also ships to the Microsoft Store (desktop Windows build), add a fourth pipeline. It packages the Windows build as MSIX and publishes to Partner Center. Two paths, matching the two platforms above:
+
+**GitHub Actions — via Microsoft Dev Store CLI:**
+- Action `microsoft/setup-msstore-cli@v1`.
+- Secrets: `AZURE_AD_TENANT_ID`, `AZURE_AD_CLIENT_ID`, `AZURE_AD_CLIENT_SECRET`, `SELLER_ID` (Seller ID from Partner Center → Account settings → Organization profile → Legal info).
+- Flow: `msstore reconfigure …` → `flutter pub get` → `msstore package .` → `msstore publish -v`.
+- **Prereq:** the app must already exist in Partner Center with ≥1 completed submission; run `msstore init` once in the repo.
+
+**Codemagic — via `msix` pub package + Partner Center API:**
+- `instance_type: windows_x2` (Visual Studio 2019 with the "Desktop development with C++" workload).
+- `dev_dependencies: msix` + an `msix_config` block in `pubspec.yaml`.
+- Build: `flutter build windows` → `flutter pub run msix:create`; publish via a `partner_center:` block.
+
+> **⚠️ GOTCHA (both platforms):** the app's **first version must be published manually** to Partner Center before automation works. CI can only publish updates to an already-live app. See `msstore-submission` for the manual first-submission flow and the 4th-version-digit-must-be-0 rule.
+
+Full workflow files are in the reference files below.
+
 ## Implementation
 
 After understanding the architecture above, read the reference file for the chosen platform:
 
-- **Codemagic:** `references/codemagic.md` — complete `codemagic.yaml` with all three workflows
-- **GitHub Actions:** `references/github-actions.md` — complete `.github/workflows/*.yml` files
+- **Codemagic:** `references/codemagic.md` — complete `codemagic.yaml` with all three mobile workflows plus the Windows / Microsoft Store pipeline
+- **GitHub Actions:** `references/github-actions.md` — complete `.github/workflows/*.yml` files plus the Windows / Microsoft Store workflow
 
 Both references produce the same outcome: signed artifacts distributed to the right channel per environment.

@@ -243,6 +243,56 @@ The PWA category contains 14 audits. The first 6 are blockers; the rest improve 
 
 See **references/lighthouse-pwa-checks.md** for full audit details with code remediations.
 
+## Multi-Store Packaging: PWA Builder & Bubblewrap
+
+Once the three bars pass, the same PWA can be wrapped into native packages for four app stores. Two tools do this, and they're related.
+
+### Prerequisites (all stores)
+
+Before packaging, the PWA must have:
+- A **public HTTPS URL** (not localhost)
+- A **complete Web App Manifest** (see Bar 1)
+- **HTTPS** everywhere (no mixed content)
+
+### The four stores via PWA Builder
+
+PWA Builder (Microsoft) packages a single PWA URL for **four** stores. Workflow: enter your URL → get a report card (scores + action items) → pick a platform → fill metadata → download the package.
+
+| Store | Package type | Developer fee |
+|---|---|---|
+| Google Play | Android TWA (via Bubblewrap) | One-time |
+| Microsoft Store | MSIX | One-time |
+| Apple App Store | iOS wrapper | **Annual** (Apple Developer Program) |
+| Meta Quest Store | Android-based | Free |
+
+> **Trade-off to flag:** each store applies its own policies — some require your own payment system, take a commission, or restrict content. Packaging is the easy part; store policy compliance is where submissions get rejected.
+
+### Bubblewrap (PWA → Android TWA)
+
+**Bubblewrap** is Google's CLI (GoogleChromeLabs, an "unofficial Google product") that generates, builds, and updates an Android project which launches your PWA inside a **Trusted Web Activity (TWA)**. PWA Builder's Android packaging is **powered by Bubblewrap** — the GUI path if you'd rather not use the CLI.
+
+- **Prereq:** Node.js **14.15.0+**. Packages: `@bubblewrap/core`, `@bubblewrap/cli`, `@bubblewrap/validator`.
+- **Version-sensitive:** latest release **v1.24.1 (2025-09-29)**, Apache-2.0.
+
+```bash
+npm i -g @bubblewrap/cli
+bubblewrap init --manifest https://example.com/manifest.webmanifest
+bubblewrap build   # produces a signed APK/AAB
+```
+
+### Android TWA config (in PWA Builder)
+
+When packaging for Google Play, PWA Builder exposes the TWA options that Bubblewrap drives:
+
+- **Package ID**, version (string + version code), status/nav bar colors, splash screen (color + fade)
+- **Icons**: maskable + monochrome
+- **Display**: standalone / fullscreen
+- **Push notifications**: via **Android Notification Delegation** (the TWA delegates web push to the Android app)
+- **Web shortcuts**: W3C manifest `shortcuts` carry through into the generated APK
+- **Signing**: unsigned, generate a new key, or use an existing keystore
+
+> Both Microsoft (PWA Builder) and Google (Bubblewrap) contribute to **Project Fugu**, the effort to close the capability gap between web and native.
+
 ## Microsoft Store Specifics (for /ship-msstore handoff)
 
 If the user is targeting Microsoft Store via PWA Builder, additional requirements:

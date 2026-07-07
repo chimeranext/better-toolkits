@@ -9,9 +9,10 @@ description: "Distribute apps through alternative channels beyond mainstream sto
 
 Not every app belongs on the mainstream stores. FOSS projects, privacy-focused apps, and developers who want to avoid commission/review processes have several established distribution channels.
 
-This skill covers two domains:
+This skill covers three domains:
 1. **Android alternatives** (F-Droid, Obtainium, IzzyOnDroid, direct APK) — Phase 0+
 2. **Linux desktop alternatives** (Flathub, AppImage) — Phase 2 addition
+3. **Windows & Apple restricted/offline distribution** (WinGet, MSIX sideloading, Store private audience, Apple Unlisted) — non-public channels that still go through (or around) the mainstream stores
 
 ## Distribution Channel Decision
 
@@ -514,6 +515,56 @@ When the user has a Linux desktop app:
 4. Open Flathub PR
 
 In Phase 3+, `/ship-everywhere` may add Flathub as a parallel child to ship-snap when Linux desktop is detected.
+
+## Windows & Apple: Restricted and Offline Distribution
+
+Not every Windows or Apple app should be publicly listed. These channels reach a controlled audience — an enterprise fleet, a private beta group, or users who only get a direct link — while still leaning on (or bypassing) the official stores.
+
+### WinGet offline download (enterprise, Windows)
+
+**WinGet 1.8** added `winget download`, which pulls a Microsoft Store app's packages **for offline distribution** across a network. This **replaces the "Enterprise Offline" feature of Microsoft Store for Business** (which is winding down).
+
+```powershell
+winget download <App> -s msstore
+winget download Calculator -s msstore   # example
+```
+
+- `msstore` is a default WinGet source; target it with `--source msstore` in `search`/`install` too.
+- Requires an up-to-date WinGet — check `winget --version`; update via App Installer or `winget upgrade winget`.
+- Aimed at IT/enterprise scenarios with Store licensing. Not a consumer channel.
+
+### MSIX sideloading (Windows)
+
+Install an MSIX outside the Store: from your own website, via Intune / Configuration Manager, or by double-clicking the package (App Installer handles it). Requirements:
+
+- The MSIX **must be signed with a certificate the target machine trusts**. If it isn't, install the signing cert into **Trusted People** / **Trusted Publishers** on each machine first.
+- The `*_Test` output folder ships an `Add-AppDevPackage.ps1` script that installs the dev cert and the package together — convenient for internal test rings.
+
+See `msstore-submission` for how MSIX signing works (VS2019+ no longer generates a temporary cert; use PowerShell cmdlets or Azure Key Vault).
+
+### Microsoft Store private audience (Windows)
+
+To distribute through the Store but keep the app **invisible to the public**, use a private audience. This replaces Microsoft Store for Business / Intune / SCCM for simple cases.
+
+1. Partner Center → **Apps and Games** → your app → **Engage** tab → **Customer Groups**.
+2. Create a group ("Known user group" enabled): add individual Microsoft accounts, or upload a CSV.
+3. In the submission → **Pricing and availability** → **Visibility** → **Private audience** → select the group.
+4. Optionally set a date to flip from private to public later.
+
+Only the accounts in the group can see or install the app. (Package flights, promo codes, and Store for Education are out of scope here.)
+
+### Apple Unlisted App Distribution (iOS/macOS)
+
+Apple's **Unlisted App Distribution** (introduced 2022) puts an app on the App Store but **hidden**: it doesn't appear in search, recommendations, charts, or categories — it's reachable only via a **direct link**. Apple recommends adding in-app authentication to gate access.
+
+| Property | Unlisted | Enterprise Program | Private / ABM |
+|---|---|---|---|
+| Requires | Apple Developer Program only | Developer Enterprise Program | Developer Program + Apple Business Manager |
+| Apple review | Yes (standard, via request form) | No | Yes |
+| In-app purchases | **Supported** | N/A | Not via ABM |
+| Discoverable | No (link only) | Internal only | ABM org only |
+
+Key wins over the alternatives: Unlisted needs **only the standard Developer Program** (no Apple Business Manager), goes through **normal review** (so it's a legitimate public-store binary), and **supports in-app purchases** — which ABM distribution does not. Request it through the App Store Connect distribution form.
 
 ## Distribution Strategy Matrix
 
