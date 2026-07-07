@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "guardrails": {
+    "require_confirmation": true,
+    "auto_pause_mode": "flag_with_confirmation",
+    "max_daily_spend_usd": 300,
+    "max_total_spend_usd": 5000,
+    "spend_currency": "USD",
+    "auto_pause_rules": [
+      {
+        "name": "cpa_2x_target",
+        "metric": "cpa",
+        "comparator": ">",
+        "threshold_expr": "target_cpa * 2",
+        "min_spend_usd": 100,
+        "action": "flag_pause",
+        "message": "CPA superó 2x target con $100 gastados. Recomiendo pausa."
+      },
+      {
+        "name": "roas_below_1",
+        "metric": "roas",
+        "comparator": "<",
+        "threshold_value": 1,
+        "min_days": 3,
+        "action": "flag_pause",
+        "message": "ROAS < 1 por 3 días. Estás perdiendo plata. Recomiendo pausa."
+      },
+      {
+        "name": "frequency_overload",
+        "metric": "frequency",
+        "comparator": ">",
+        "threshold_value": 5,
+        "action": "flag_refresh_creative",
+        "message": "Frequency > 5. Audiencia saturada. Recomiendo refresh de creativos."
+      },
+      {
+        "name": "ltv_cac_collapse",
+        "metric": "ltv_cac",
+        "comparator": "<",
+        "threshold_value": 1.5,
+        "min_days": 7,
+        "action": "flag_kill_funnel",
+        "message": "LTV:CAC < 1.5 por 7 días. Funnel insostenible. Considera /kill-funnel."
+      }
+    ],
+    "aaarrr_targets": {
+      "cpm_max": 15,
+      "cpa_max": 25,
+      "ltv_min": 75,
+      "ltv_cac_min": 3,
+      "payback_days_max": 45,
+      "k_factor_min": 0.2,
+      "d30_repurchase_min": 0.15,
+      "activation_cvr_min": 0.02
+    },
+    "platform_preferences": {
+      "primary": "both",
+      "switch_to_ig_if": "fb_cpm > ig_cpm * 1.2",
+      "switch_to_fb_if": "ig_cpm > fb_cpm * 1.2"
+    }
+  },
+  "permissions": {
+    "allow": [
+      "Bash(curl:*graph.facebook.com*)",
+      "Bash(npm run *)",
+      "Bash(node scripts/*)",
+      "Bash(jq *)"
+    ],
+    "ask": [
+      "Bash(curl -X POST*)",
+      "Bash(curl -X DELETE*)",
+      "Bash(curl -X PUT*)"
+    ]
+  }
+}

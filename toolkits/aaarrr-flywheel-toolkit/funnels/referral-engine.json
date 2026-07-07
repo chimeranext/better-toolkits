@@ -1,0 +1,97 @@
+{
+  "$schema": "./schemas/funnel-config.json",
+  "name": "referral-engine",
+  "description": "Configuración default del programa de referidos. Two-sided por defecto.",
+  "version": "1.0",
+  "mechanic": {
+    "type": "two_sided",
+    "rationale": "El referido necesita razón para usar el link en vez de googlear. El referrer necesita reward por el esfuerzo.",
+    "rewards_by_product_type": {
+      "saas_subscription": {
+        "referrer": "1 mes free",
+        "referee": "1 mes free + 30% off primer mes pagado"
+      },
+      "ecommerce": {
+        "referrer": "$20 cash credit a su cuenta",
+        "referee": "$20 off primera compra > $50"
+      },
+      "info_product": {
+        "referrer": "Acceso a módulo bonus exclusivo",
+        "referee": "30% off + acceso a sesión Q&A live"
+      },
+      "marketplace": {
+        "referrer": "$10 crédito",
+        "referee": "$10 crédito"
+      },
+      "freemium": {
+        "referrer": "30 días Pro free",
+        "referee": "30 días Pro free"
+      }
+    }
+  },
+  "qualifying_action": {
+    "description": "Evento que dispara el reward del referrer",
+    "must_be": ["meaningful (no solo signup)", "measurable (PostHog event o DB state)", "time-bounded (máx 30 días post-signup)"],
+    "examples": {
+      "saas": "primer proyecto creado / primer integración OAuth",
+      "ecommerce": "primera compra completada (no solo addToCart)",
+      "info_product": "completó lección 1",
+      "marketplace": "primera transacción"
+    }
+  },
+  "audience": {
+    "default_seed": "buyers_high_ltv",
+    "fallback_seed": "buyers_d30",
+    "seed_min_size": 500,
+    "exclusions": ["churned_60d", "churned_120d"]
+  },
+  "creative": {
+    "default_format": "video_ugc",
+    "min_angles": 3,
+    "patterns_that_work": [
+      "Numeric proof: 'Joana invitó a 7 amigos y se ahorró $84'",
+      "Mutual benefit framing: 'Ambos ganan' > 'Tú ganas'",
+      "Low-friction CTA: 'Comparte un link' > 'Refiere un amigo'",
+      "Specific reward, not abstract: '$20 off' > 'Crédito de $20'",
+      "Time bound: 'Esta semana ambos ganan double' para crear pulse"
+    ]
+  },
+  "budget": {
+    "default_pct_of_acquisition": 10,
+    "minimum_daily_usd": 5
+  },
+  "tracking": {
+    "utm_convention": "utm_source=meta&utm_medium=referral&utm_campaign=referral-engine&utm_content={ad_id}&utm_referrer={user_id}",
+    "events": [
+      {
+        "name": "ReferralShare",
+        "fired_when": "User taps share / copies link"
+      },
+      {
+        "name": "ReferralClickReceived",
+        "fired_when": "Friend clicks the link (server-side log)"
+      },
+      {
+        "name": "ReferralPurchase",
+        "fired_when": "Friend completes qualifying action"
+      }
+    ]
+  },
+  "k_factor": {
+    "target": 0.20,
+    "checkpoints": {
+      "d14": "K ≥ target * 0.5 — keep iterating",
+      "d30": "K ≥ target * 0.7 — propose iteration if below",
+      "d60": "K ≥ target — kill if below threshold * 0.3",
+      "d90": "K ≥ target — propose scale if above target * 1.2"
+    },
+    "iterate_when": "K < target * 0.5 at d30",
+    "kill_when": "K < target * 0.3 at d60",
+    "scale_when": "K ≥ target * 1.2 sustained for 14 days"
+  },
+  "diagnostic_thresholds": {
+    "low_invite_rate": "buyers_who_invited / total_buyers < 10%  → problema awareness del program → iterar creative",
+    "low_click_through": "click_through < 50% → problema mensaje del referrer → iterar reward framing",
+    "low_convert": "click → buyer < 10% → problema landing del referido → iterar incentivo del referee"
+  }
+}

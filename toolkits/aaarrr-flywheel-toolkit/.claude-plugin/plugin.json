@@ -1,0 +1,27 @@
+{
+  "name": "aaarrr-flywheel-toolkit",
+  "version": "0.1.0",
+  "description": "AAARRR Acquisition funnel + Retention/Referral flywheel sobre Meta Marketing API. Awareness/Acquisition/Activation/Revenue se ejecutan como funnel lineal; Retention/Referral cierran el loop como flywheel que retroalimenta Acquisition. Mantra: fail fast, fail often, fail cheap, fail forward.",
+  "author": {
+    "name": "Luis Andres Pena Castillo",
+    "url": "https://github.com/lapc506"
+  },
+  "homepage": "https://github.com/lapc506/aaarrr-flywheel-toolkit",
+  "repository": "https://github.com/lapc506/aaarrr-flywheel-toolkit",
+  "license": "BSL-1.1",
+  "keywords": [
+    "aaarrr",
+    "pirate-funnel",
+    "flywheel",
+    "growth-hacking",
+    "meta-ads",
+    "facebook-ads",
+    "instagram-ads",
+    "ltv-cac",
+    "referral",
+    "retention",
+    "compounding-growth",
+    "claude-code",
+    "claude-code-plugin"
+  ]
+}

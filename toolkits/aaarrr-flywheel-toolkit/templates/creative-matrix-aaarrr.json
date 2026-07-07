@@ -1,0 +1,129 @@
+{
+  "$schema": "./schemas/creative-matrix.json",
+  "description": "Matriz de creatives Hook × Stage × Platform. Genera variantes consistentes para todo el sistema AAARRR.",
+  "version": "1.0",
+  "axes": {
+    "hooks": [
+      {
+        "id": "problem",
+        "name": "Pain-Agitate-Solve",
+        "description": "Lead con el problema antes de la solución",
+        "tone": "frustrated → empowered",
+        "best_for_stages": ["awareness", "acquisition"],
+        "example_opener": "¿Cansado de [problema]? Existe una manera mejor."
+      },
+      {
+        "id": "ugc",
+        "name": "UGC / User Story",
+        "description": "Cliente real cuenta su experiencia",
+        "tone": "authentic, conversational",
+        "best_for_stages": ["acquisition", "activation", "retention", "referral"],
+        "example_opener": "Hace 3 meses estaba [estado X]. Hoy [resultado Y]."
+      },
+      {
+        "id": "proof",
+        "name": "Social Proof / Authority",
+        "description": "Lead con credibilidad: usuarios, logos, números",
+        "tone": "confident, specific",
+        "best_for_stages": ["acquisition"],
+        "example_opener": "12,847 [tipo de cliente] eligen [producto]. Acá por qué."
+      },
+      {
+        "id": "curiosity",
+        "name": "Curiosity Gap",
+        "description": "Crea intriga sin spoiler",
+        "tone": "mysterious",
+        "best_for_stages": ["awareness"],
+        "example_opener": "El método que [resultado] sin [esfuerzo común]"
+      },
+      {
+        "id": "urgency",
+        "name": "Time-bound Offer",
+        "description": "Solo cuando hay urgencia REAL — no fake countdown",
+        "tone": "specific, direct",
+        "best_for_stages": ["acquisition", "retention"],
+        "example_opener": "Solo hasta [fecha]: [oferta específica]"
+      }
+    ],
+    "stages": [
+      {
+        "id": "awareness",
+        "audience_type": "broad / cold",
+        "creative_focus": "stop the scroll",
+        "duration_target": "<3s para hook",
+        "kpi": "CPM, CTR"
+      },
+      {
+        "id": "acquisition",
+        "audience_type": "interest, lookalike, broad with intent",
+        "creative_focus": "conversion narrative",
+        "duration_target": "15-30s",
+        "kpi": "CPA"
+      },
+      {
+        "id": "activation",
+        "audience_type": "leads no purchase 24h",
+        "creative_focus": "remove last friction",
+        "duration_target": "<15s",
+        "kpi": "Lead → Activation rate"
+      },
+      {
+        "id": "retention",
+        "audience_type": "buyers_d7, d30, d90",
+        "creative_focus": "next step / cross-sell",
+        "duration_target": "10-20s",
+        "kpi": "repurchase rate, AOV"
+      },
+      {
+        "id": "referral",
+        "audience_type": "buyers_high_ltv",
+        "creative_focus": "advocacy framing",
+        "duration_target": "10-15s",
+        "kpi": "K-factor"
+      }
+    ],
+    "platforms": [
+      {
+        "id": "fb",
+        "placements": ["feed", "video_feeds", "right_column"],
+        "preferred_aspect_ratios": ["1:1", "4:5"],
+        "max_video_duration_seconds": 60,
+        "text_density": "medium"
+      },
+      {
+        "id": "ig_feed",
+        "placements": ["feed"],
+        "preferred_aspect_ratios": ["1:1", "4:5"],
+        "max_video_duration_seconds": 60,
+        "text_density": "low"
+      },
+      {
+        "id": "ig_stories",
+        "placements": ["story"],
+        "preferred_aspect_ratios": ["9:16"],
+        "max_video_duration_seconds": 15,
+        "text_density": "minimal"
+      },
+      {
+        "id": "ig_reels",
+        "placements": ["reels"],
+        "preferred_aspect_ratios": ["9:16"],
+        "max_video_duration_seconds": 90,
+        "text_density": "minimal — depend on motion"
+      }
+    ]
+  },
+  "matrix_default_quotas": {
+    "description": "Por cada combinación (hook × stage × platform), cantidad mínima de creatives recomendadas",
+    "min_creatives_per_combo": 2,
+    "total_creatives_target": "min_creatives_per_combo × hooks × platforms para Acquisition",
+    "fb_only_low_budget": "5 hooks × 2 ratios = 10 creatives mínimo",
+    "ig_only_high_volume": "5 hooks × 4 placements × 2 = 40 creatives ideal"
+  },
+  "fatigue_rules": {
+    "frequency_threshold_acquisition": 3,
+    "frequency_threshold_retention": 5,
+    "ctr_decay_kill_threshold": "CTR cayó >40% vs primer 7d → refresh creative obligatorio",
+    "refresh_cycle_days": 7
+  }
+}

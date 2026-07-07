@@ -1,0 +1,121 @@
+{
+  "$schema": "./schemas/funnel-config.json",
+  "name": "tof-mof-bof",
+  "description": "Estructura clásica de 3 etapas para Acquisition. Distribución por presupuesto.",
+  "version": "1.0",
+  "tiers": [
+    {
+      "max_daily_budget_usd": 50,
+      "structure": "single-adset",
+      "description": "Andromeda segmenta interno. 1 campaña, 1 adset broad, 15-20 creatives.",
+      "adsets": [
+        {
+          "name": "TOF-Single",
+          "budget_pct": 100,
+          "targeting_type": "broad",
+          "min_creatives": 15,
+          "optimization_goal": "OFFSITE_CONVERSIONS",
+          "bid_strategy": "LOWEST_COST_WITH_BID_CAP",
+          "bid_cap_multiplier": 0.7
+        }
+      ]
+    },
+    {
+      "max_daily_budget_usd": 100,
+      "structure": "broad-plus-retargeting",
+      "description": "1 campaña, broad + retargeting. 20+ creatives en broad.",
+      "adsets": [
+        {
+          "name": "TOF-Broad",
+          "budget_pct": 75,
+          "targeting_type": "broad",
+          "min_creatives": 20,
+          "optimization_goal": "OFFSITE_CONVERSIONS",
+          "bid_strategy": "LOWEST_COST_WITH_BID_CAP",
+          "bid_cap_multiplier": 0.7
+        },
+        {
+          "name": "BOF-Retargeting",
+          "budget_pct": 25,
+          "targeting_type": "custom_audience",
+          "custom_audience_rule": "visitors_no_purchase_30d",
+          "min_creatives": 5,
+          "optimization_goal": "OFFSITE_CONVERSIONS",
+          "bid_strategy": "LOWEST_COST_WITHOUT_CAP"
+        }
+      ]
+    },
+    {
+      "max_daily_budget_usd": 500,
+      "structure": "tof-mof-bof",
+      "description": "3 capas: Broad prospecting + Lookalike de buyers + Retargeting.",
+      "adsets": [
+        {
+          "name": "TOF-Broad",
+          "budget_pct": 50,
+          "targeting_type": "broad",
+          "min_creatives": 10,
+          "optimization_goal": "OFFSITE_CONVERSIONS",
+          "bid_strategy": "LOWEST_COST_WITH_BID_CAP",
+          "bid_cap_multiplier": 0.7
+        },
+        {
+          "name": "MOF-LAL2",
+          "budget_pct": 30,
+          "targeting_type": "lookalike",
+          "lookalike_spec": {
+            "ratio": 0.02,
+            "country": "auto",
+            "source": "buyers_high_ltv"
+          },
+          "min_creatives": 8,
+          "optimization_goal": "OFFSITE_CONVERSIONS",
+          "bid_strategy": "LOWEST_COST_WITHOUT_CAP"
+        },
+        {
+          "name": "BOF-Retargeting",
+          "budget_pct": 20,
+          "targeting_type": "custom_audience",
+          "custom_audience_rule": "visitors_no_purchase_30d",
+          "min_creatives": 5,
+          "optimization_goal": "OFFSITE_CONVERSIONS",
+          "bid_strategy": "LOWEST_COST_WITHOUT_CAP"
+        }
+      ]
+    },
+    {
+      "max_daily_budget_usd": null,
+      "structure": "asc-plus-cbo-plus-retargeting",
+      "description": "$500+/día: ASC+ Shopping (60-70%) + CBO testing (20-30%) + Retargeting (10-15%). Existing customer cap 10-15%.",
+      "adsets": [
+        {
+          "name": "ASCPlus-Prospecting",
+          "budget_pct": 65,
+          "targeting_type": "advantage_plus",
+          "existing_customer_cap": 0.15,
+          "min_creatives": 15,
+          "optimization_goal": "OFFSITE_CONVERSIONS",
+          "bid_strategy": "LOWEST_COST_WITHOUT_CAP"
+        },
+        {
+          "name": "CBO-Testing",
+          "budget_pct": 25,
+          "targeting_type": "broad_with_creative_test",
+          "test_method": "flood_underbid",
+          "min_creatives": 100,
+          "bid_strategy": "LOWEST_COST_WITH_BID_CAP",
+          "bid_cap_multiplier": 0.7
+        },
+        {
+          "name": "BOF-Retargeting",
+          "budget_pct": 10,
+          "targeting_type": "custom_audience",
+          "custom_audience_rule": "visitors_no_purchase_30d",
+          "min_creatives": 5,
+          "optimization_goal": "OFFSITE_CONVERSIONS",
+          "bid_strategy": "LOWEST_COST_WITHOUT_CAP"
+        }
+      ]
+    }
+  ]
+}

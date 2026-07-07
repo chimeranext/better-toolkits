@@ -1,0 +1,93 @@
+{
+  "$schema": "./schemas/funnel-config.json",
+  "name": "retention-ladder",
+  "description": "Escalones D7/D30/D90 para LTV. Cada escalón ataca una causa distinta de churn.",
+  "version": "1.0",
+  "rungs": [
+    {
+      "rung": "D7",
+      "audience": "buyers_d7",
+      "exclusions": [],
+      "goal": "cross-sell o aumentar AOV",
+      "creative_brief": "Agradecimiento + producto complementario con descuento blando (10-15%)",
+      "offer_type": "stack",
+      "default_offer_examples": [
+        "free shipping en próxima compra > $X",
+        "10% off bundle 2-en-1",
+        "BOGO 50% en categoría B"
+      ],
+      "budget_pct_of_acquisition": 5,
+      "success_metric": "cross_sell_rate",
+      "success_target": 0.08,
+      "min_audience_size": 1000,
+      "kill_threshold": "CPA del rung > 0.4x acquisition CPA por 7 días"
+    },
+    {
+      "rung": "D30",
+      "audience": "buyers_d30",
+      "exclusions": ["buyers_d7"],
+      "goal": "segunda compra (reorder)",
+      "creative_brief": "Se acerca tu reorder time + UGC del cliente original. Stack: free shipping + 15% off",
+      "offer_type": "stack",
+      "default_offer_examples": [
+        "free shipping + 15% off",
+        "bundle 2+1",
+        "loyalty tier upgrade"
+      ],
+      "budget_pct_of_acquisition": 10,
+      "success_metric": "d30_repurchase_rate",
+      "success_target": 0.15,
+      "min_audience_size": 1000,
+      "kill_threshold": "CPA del rung > 0.5x acquisition CPA por 7 días"
+    },
+    {
+      "rung": "D90",
+      "audience": "buyers_d90",
+      "exclusions": ["buyers_d30"],
+      "goal": "win-back antes de churn consolidado",
+      "creative_brief": "Te extrañamos + nuevo producto/feature lanzado desde su última compra. Offer 20-25% off",
+      "offer_type": "stack",
+      "default_offer_examples": [
+        "20% off + free shipping + early access a launch nuevo",
+        "bundle exclusivo solo para win-back",
+        "concierge call (B2B)"
+      ],
+      "budget_pct_of_acquisition": 5,
+      "success_metric": "reactivation_rate",
+      "success_target": 0.05,
+      "min_audience_size": 500,
+      "kill_threshold": "CPA del rung > 0.6x acquisition CPA por 7 días"
+    },
+    {
+      "rung": "WIN-BACK-FINAL",
+      "audience": "churned_60d",
+      "exclusions": ["churned_120d"],
+      "goal": "última oportunidad antes de churn maduro",
+      "creative_brief": "Testimonial fuerte + offer agresivo (30%+) o bundle exclusivo",
+      "offer_type": "aggressive",
+      "default_offer_examples": [
+        "30% off + free shipping",
+        "buy 1 get 1 free de tu próxima orden",
+        "membership upgrade gratis 3 meses"
+      ],
+      "budget_pct_of_acquisition": 3,
+      "success_metric": "reactivation_rate",
+      "success_target": 0.03,
+      "min_audience_size": 500,
+      "kill_threshold": "CPA del rung > 0.5x acquisition CPA — churn maduro no tiene rescue rentable"
+    }
+  ],
+  "stack_offer_principles": [
+    "Free shipping > X umbral (empuja AOV en lugar de erosionar margen)",
+    "BOGO 50% (mueve inventario, sube AOV)",
+    "Bundle 2+1 (mueve inventario, no descuenta directo)",
+    "Loyalty tier upgrade (gamificación, no descuenta cash)",
+    "Early access a launch nuevo (sin descuento, valor percibido alto)"
+  ],
+  "rules": [
+    "Nunca lanzar Retention si Acquisition no está estable (CPA dentro target por 7+ días)",
+    "Audiencia mínima 1000 personas para D7 (Meta no entrega eficiente debajo)",
+    "Nunca usar misma creative en D7 y D30 — debe haber progression",
+    "Si churned_60d ya en audiencia, excluir de TODA campaña Acquisition (no pagues 2x por traerlo)"
+  ]
+}
