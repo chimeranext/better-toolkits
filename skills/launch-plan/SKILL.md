@@ -164,6 +164,8 @@ These reliability practices are woven into the pipeline, not bolted on after:
 | Staged rollout | Production release | This skill (Phase 4) |
 | Structured build logging | All CI/CD steps | `app-gtm-release:cicd-setup` |
 
+> **⚠️ Analytics/telemetry stack — avoid Visual Studio App Center (retired).** App Center hit **end of support on 2025-03-31**; its **Analytics & Diagnostics** remnant ends **2027-03-31**. When choosing the release monitoring stack, don't adopt it. Use **Sentry / Firebase Crashlytics** for crash reporting (this toolkit's default), or, if you specifically need a vendor-neutral telemetry pipeline, **OpenTelemetry → OTel Collector / Azure API Management → Azure Monitor (Application Insights)**. Note OTel has no cross-platform SDK for .NET MAUI or React Native (native bridge required) — a non-issue for the Flutter path here.
+
 ## Coordinating Skills
 
 When orchestrating a full launch, invoke skills in this order:

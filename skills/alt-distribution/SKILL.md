@@ -566,6 +566,33 @@ Apple's **Unlisted App Distribution** (introduced 2022) puts an app on the App S
 
 Key wins over the alternatives: Unlisted needs **only the standard Developer Program** (no Apple Business Manager), goes through **normal review** (so it's a legitimate public-store binary), and **supports in-app purchases** — which ABM distribution does not. Request it through the App Store Connect distribution form.
 
+## Web-to-Desktop Self-Distribution: Deno Desktop
+
+If the app is a web app (a JS/TS framework) and you want to ship it as a **desktop binary you host yourself** — no store, with your own update channel — `deno desktop` is a lightweight alternative to Electron/Tauri. It fits here because, like GitHub Releases + Obtainium, it's a self-hosted distribution channel with built-in auto-update.
+
+### What it produces
+
+`deno desktop <entrypoint>` (**Deno v2.9.0+**) builds a **single redistributable binary** that bundles your app code, the Deno runtime, and a web render engine. It **cross-compiles to macOS, Windows, and Linux from one machine** — no per-OS build farm.
+
+It **auto-detects** common web frameworks and wires them up: Next.js, Astro, Fresh, Remix, Nuxt, SvelteKit, SolidStart, TanStack Start, and Vite SSR.
+
+### Render backends
+
+| Backend | Trade-off |
+|---|---|
+| **WebView** (default) | Uses the OS's native web view → **small binaries**, render varies slightly per OS |
+| **CEF** (Chromium Embedded Framework) | Bundles Chromium → **consistent render everywhere**, larger binary |
+| **Raw** | Low-level; for custom rendering needs |
+
+### Auto-update
+
+Deno desktop ships a **binary-diff auto-updater** (bsdiff): you publish a `latest.json` manifest, clients download only the delta between their version and the latest, and a failed update **rolls back automatically**. This is the self-hosted equivalent of the Store's update mechanism — you own the endpoint that serves `latest.json` and the diffs.
+
+### Where it fits vs the alternatives
+
+- **vs Electron/Tauri:** simpler (one command, no separate build config), but younger and less battle-tested. Choose Deno desktop for a fast web-to-desktop path when you're already in the Deno/JS ecosystem.
+- **Sign it before shipping:** a self-distributed desktop binary still triggers SmartScreen/Gatekeeper unsigned. Run it through `desktop-signing` (Azure Trusted Signing on Windows, Developer ID + notarization on macOS) before publishing the binary.
+
 ## Distribution Strategy Matrix
 
 Choose based on your goals:

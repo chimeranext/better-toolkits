@@ -84,9 +84,9 @@ app-gtm-release-toolkit install --force    # Overwrite unmanaged conflicts
 | **2.5** | Swift native iOS | — | `/ship-swift` |
 | **3** | Tauri, Electron, Capacitor | Mac App Store | `/ship-webview-native` (possible merge) |
 
-## Skills (16)
+## Skills (17)
 
-Auto-activate by context — you can also invoke them directly. Eight are framework-agnostic; three are Flutter-coupled (marked with `<!-- TODO: framework-agnostic split -->` for refactor in Phase 3+); five are framework-specific (Phase 1+2).
+Auto-activate by context — you can also invoke them directly. Nine are framework-agnostic; three are Flutter-coupled (marked with `<!-- TODO: framework-agnostic split -->` for refactor in Phase 3+); five are framework-specific (Phase 1+2).
 
 | Skill | Status | Triggers when you... |
 |-------|--------|---------------------|
@@ -99,7 +99,8 @@ Auto-activate by context — you can also invoke them directly. Eight are framew
 | `store-setup` | Agnostic | Say "create app in Play Console", "App Store Connect setup", "Microsoft Partner Center" |
 | `store-listing` | Agnostic | Say "store screenshots", "app description", "ASO", "feature graphic" |
 | `testing-tracks` | Agnostic | Say "beta testing", "TestFlight", "internal testing", "pre-launch report" |
-| `alt-distribution` | Multi-platform alt | Say "F-Droid", "GitHub Releases", "Obtainium", "Flathub", "AppImage", "distribute without Play Store" |
+| `alt-distribution` | Multi-platform alt | Say "F-Droid", "GitHub Releases", "Obtainium", "Flathub", "AppImage", "WinGet", "Apple Unlisted", "Deno desktop", "distribute without Play Store" |
+| `desktop-signing` | Agnostic | Say "sign my Windows app", "notarize my Mac app", "Azure Trusted Signing", "Developer ID", "SmartScreen/Gatekeeper warning" |
 | `launch-plan` | Flutter-coupled | Say "launch timeline", "24h plan", "release strategy", "ship my app" |
 | `pwa-quality` | PWA-specific (Phase 1) | Say "validate manifest", "Lighthouse PWA", "Workbox setup", "PWA readiness" |
 | `msstore-submission` | Microsoft Store-specific (Phase 1) | Say "Microsoft Store", "Partner Center", "MSIX", "MS Store certification" |
@@ -227,7 +228,7 @@ app-gtm-release-toolkit/
 ├── agents/                   # 2 autonomous agents
 │   ├── pipeline-builder.md
 │   └── checklist-auditor.md
-├── skills/                   # 16 auto-activating skills
+├── skills/                   # 17 auto-activating skills
 │   ├── gtm-fit/                 # agnostic — GTM strategy (SLIP, MVS, organic presence)
 │   ├── pre-launch-checklist/    # Flutter-coupled
 │   ├── app-security/            # agnostic

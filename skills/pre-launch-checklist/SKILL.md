@@ -66,6 +66,8 @@ You cannot fix bugs you do not know about. Error monitoring must be in the first
 
 Source: Andrea Bizzotto recommends Sentry or Firebase Crashlytics. The flutter_ship_app uses Sentry with per-flavor DSN configuration.
 
+> **⚠️ Do not build on Visual Studio App Center — it's retired.** App Center reached **end of support on 2025-03-31**; only **Analytics & Diagnostics** linger, and those end on **2027-03-31** (telemetry ingestion stops). If you're migrating off it (or were about to adopt it), the successor stack is **OpenTelemetry (OTel) SDKs → a gateway (OTel Collector or Azure API Management) → Azure Monitor / Application Insights**. Caveat for mobile: OTel has **no cross-platform SDK for .NET MAUI or React Native**, so those need a native bridge. For a new Flutter app, Sentry/Crashlytics (above) is the simpler choice and sidesteps this entirely.
+
 - [ ] **[BLOCKER]** Crash reporting SDK integrated (Sentry or Firebase Crashlytics)
 - [ ] **[BLOCKER]** Debug symbols uploaded for obfuscated builds (see `app-gtm-release:cicd-setup`)
 - [ ] **[RECOMMENDED]** Breadcrumbs configured (events leading to crashes)
