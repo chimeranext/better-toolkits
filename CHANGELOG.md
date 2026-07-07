@@ -185,7 +185,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     `${...KEY|SECRET|TOKEN|PASSWORD|...}` placeholders without the
     cure-shape `_FILE` / `_PATH` suffix. Generalized from legacy-ticket's
     openclaw.json-specific version (PR #266 in
-    `chimera-agent-openclaw-plugin`).
+    `example-plugin`).
   - `pre-write-cross-repo-schema-ownership.sh` — blocks new SQL
     migrations for tables not owned by this repo, per a config-driven
     `owned_tables` allowlist + `migration_paths` glob. Empty allowlist
@@ -202,7 +202,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Per-surface `defer_to_local_hook` flag (belt-and-braces).** Repos
   that already have a tighter Cure 4a hook for one of these surfaces
-  (currently only `chimera-agent-openclaw-plugin`) set
+  (currently only `example-plugin`) set
   `defer_to_local_hook: true` on the matching config block. The 4b hook
   emits an info-stderr and fail-opens; the 4a hook owns enforcement.
   Lets the config block stay live (visible, documented, ready for the
@@ -250,11 +250,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `sed ... //I` with explicit bracket-class spelling (BSD sed
   compatibility on macOS); switched HIGH_IMPACT_RE / CURE_RE from
   quad-backslash escaping to single-quote-plus-interpolation convention.
-- Consumer-repo opt-in (config files in `chimera-os` and
-  `chimera-agent-openclaw-plugin`) lands in sibling PRs after `1.22.0`
+- Consumer-repo opt-in (config files in `example-platform` and
+  `example-plugin`) lands in sibling PRs after `1.22.0`
   publishes. Per legacy-ticket belt-and-braces decision,
-  `chimera-agent-openclaw-plugin` keeps its existing 4a hooks AND opts in
-  with `defer_to_local_hook: true` on all three surfaces; `chimera-os`
+  `example-plugin` keeps its existing 4a hooks AND opts in
+  with `defer_to_local_hook: true` on all three surfaces; `example-platform`
   opts in with the 4b hooks owning enforcement.
 - Refs: legacy-ticket (this work), legacy-ticket (Cure 4a foundation), legacy-ticket
   (4-cure thesis), legacy-ticket (the persistence-freeze incident the
@@ -329,7 +329,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Motivation
 - **2026-05-20 incident**: legacy-ticket atomic migration moved
   `src/components/agent/ChatWidget.tsx` → `src/components/agent/organisms/ChatWidget.tsx`
-  and updated a Vitest fixture in the same atomic merge. PRs in `chimera-os`
+  and updated a Vitest fixture in the same atomic merge. PRs in `example-platform`
   that were cut from `develop` BEFORE that merge (#2105 legacy-ticket accordion,
   #2107 VerificationBanner /home suppression, #1713 welcome flow) each kept
   the old test path, so their next CI run failed with
@@ -393,7 +393,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **Three new rules in `spike-recommend` (Rules 11, 12, 13) from the
-  legacy-ticket + legacy-ticket canonical-URL migration session in `chimera-os`
+  legacy-ticket + legacy-ticket canonical-URL migration session in `example-platform`
   (2026-05-20).** Briefs touching URL canonical migrations or coexisting
   with an in-flight PR must now satisfy:
   - **Rule 11 — Predict semantic conflicts, not just file conflicts.**
@@ -409,26 +409,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     When a brief covers a URL canonical migration, Acceptance Criteria must
     include an explicit `matchPath` check that `buildXxxUrl(...)` output is
     reachable via its declared `ROUTES.X` template. Reference test:
-    `src/utils/__tests__/url-builders-match-routes.test.ts` in `chimera-os`.
+    `src/utils/__tests__/url-builders-match-routes.test.ts` in `example-platform`.
     The motivating bug: Greptile P1 on legacy-ticket (commit `dbd8a1d04`) —
-    `courseBasePath = '/pathways/:slug'` produced URLs like
-    `/pathways/X/Y/workbook` that had NO matching `<Route>` mount.
+    `courseBasePath = '/courses/:slug'` produced URLs like
+    `/courses/X/Y/workbook` that had NO matching `<Route>` mount.
   - **Rule 13 — Use `useAuth().isAuthenticated` for chrome decisions, not
     URL-prefix string detection.** Briefs that propose auth-aware page
     chrome must require `useAuth()` branching inside a single wrapper
-    component (the PathwaysPage / PathwayDetailPage pattern), not a
+    component (the CoursePage / CourseDetailPage pattern), not a
     `PUBLIC_*_ROUTE_PREFIXES` string list. The motivating bug: legacy-ticket's
-    first attempt put `/pathways` in `PUBLIC_COURSE_ROUTE_PREFIXES` and
+    first attempt put `/courses` in `PUBLIC_COURSE_ROUTE_PREFIXES` and
     made every visitor — authed and anon — see the public layout, losing
-    the app shell for authed users on the canonical pathway-course URL.
-    Fix in `chimera-os` commit `dbd8a1d04`.
+    the app shell for authed users on the canonical course URL.
+    Fix in `example-platform` commit `dbd8a1d04`.
 - **`implement-advisor` CHANGELOG note** flagging that the redaction-quality
   gate is no longer sufficient on its own for canonical-URL migration
   issues with in-flight overlap — the brief must also satisfy spike-recommend
   Rules 11 + 12 to be considered "implementation-ready".
 
 ### Notes
-- These rules complement the parallel `chimera-os` PR
+- These rules complement the parallel `example-platform` PR
   (`andres/canonical-url-lessons-hooks`) which adds:
   - `.claude/hooks/pre-write-routes-yaml-canonical.sh` — pre-write hook
     blocking `content_types.<X>.canonical: /app/...` (the canonical URL
@@ -440,8 +440,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **Toolkit level (this PR)** — cross-repo enforcement; any toolkit
     consumer that runs `/spike-recommend` for a canonical-URL migration
     gets the gates above embedded in the brief.
-  - **Repo level (parallel `chimera-os` PR)** — local hook + Vitest test
-    enforce the same contracts in the chimera-os repo even if this toolkit
+  - **Repo level (parallel `example-platform` PR)** — local hook + Vitest test
+    enforce the same contracts in the example-platform repo even if this toolkit
     isn't installed.
 
 ## [1.15.0] - 2026-05-14
@@ -462,9 +462,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Defense-in-depth (legacy-ticket three-layer drift thesis, Cure 4):
   - **Toolkit level (this PR)** — cross-repo enforcement; any consumer of
     the toolkit inherits the rule and gets the warning on every manifest bump.
-  - **Repo level (parallel `chimera-os` PR)** — local `PostToolUse` hook
+  - **Repo level (parallel `example-platform` PR)** — local `PostToolUse` hook
     `.claude/hooks/post-write-version-readme-sync.sh` enforces the same
-    invariant in the chimera-os repo even if this toolkit isn't installed.
+    invariant in the example-platform repo even if this toolkit isn't installed.
 - Dogfooding: this version itself is being shipped via the rule it adds —
   `README.md` "Version" line and `CHANGELOG.md` entry are updated alongside
   the manifest bumps in the parent commits. If the rule were not warning,

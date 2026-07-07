@@ -2,8 +2,7 @@
 # Cure 4b cross-cutting hook (legacy-ticket #2): block creation of SQL
 # migrations for tables this repo does not own.
 #
-# Generalized from
-# chimera-agent-openclaw-plugin/.claude/hooks/pre-write-plugin-side-migration.sh
+# Generalized from a consumer repo's local plugin-side-migration hook
 # (legacy-ticket). The 4a hook hard-blocks ANY supabase/migrations/*.sql write
 # because the gateway repo has no migration pipeline; the 4b
 # generalization supports two modes via per-repo config:
@@ -13,7 +12,7 @@
 #                             at all belong in this repo)
 #   owned_tables: [...]     → block only writes that touch a CREATE/ALTER/
 #                             DROP for a table not in the allowlist
-#                             (chimera-os pattern: this repo owns chat_sessions,
+#                             (example-platform pattern: this repo owns chat_sessions,
 #                             chat_messages, ...; reject migrations for tables
 #                             owned by other repos)
 #
@@ -110,7 +109,7 @@ Why this hook exists (legacy-ticket / legacy-ticket / legacy-ticket):
   same failure mode in any repo that opts in.
 
 How to fix:
-  - Move the migration to the repo that owns the schema (e.g. chimera-os
+  - Move the migration to the repo that owns the schema (e.g. example-platform
     for chat_* tables: supabase/migrations/ + deploy-migrations.yml).
   - If this repo SHOULD own some tables, add them to
     .claude/config/cross-cutting-hooks.json → schema_ownership →

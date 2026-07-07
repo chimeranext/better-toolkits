@@ -4,10 +4,9 @@
 # placeholders without the cure-shape suffix (`_FILE`, `_PATH`, or
 # per-repo extras).
 #
-# Generalized from
-# chimera-agent-openclaw-plugin/.claude/hooks/pre-write-no-cleartext-secret-in-openclaw-json.sh
+# Generalized from a consumer repo's local cleartext-secret config hook
 # (legacy-ticket). Scope expansion: any JSON/YAML/TOML/env config file (not
-# just openclaw.json) — many runtimes substitute `${VAR}` at boot and
+# just one runtime's config) — many runtimes substitute `${VAR}` at boot and
 # write the SUBSTITUTED file back to disk, which leaks the secret to
 # every subprocess and crash log.
 #

@@ -3,7 +3,7 @@
 **Date**: 2026-06-02
 **Status**: Proposed — pending review
 **Builds on**: `openspec/changes/2026-06-02-audit-engine-family/` (Phase 1 — detection + cure *proposals*)
-**Citing**: chimera-os drift thesis (`docs/repo-health/atomic-design-drift-thesis.md`, the 4-cure model: ownership / CI guard / agent rule / PreToolUse+PostToolUse hooks) · chimera-os `.atomic-design-rules.json` + `pre-write-atomic-design-structure.sh` precedent · `references/audit-report-schema.md` (the report contract SSOT) · `schemas/atomic-design-rules.schema.json`
+**Citing**: example-platform drift thesis (`docs/repo-health/atomic-design-drift-thesis.md`, the 4-cure model: ownership / CI guard / agent rule / PreToolUse+PostToolUse hooks) · example-platform `.atomic-design-rules.json` + `pre-write-atomic-design-structure.sh` precedent · `references/audit-report-schema.md` (the report contract SSOT) · `schemas/atomic-design-rules.schema.json`
 **Anti-pattern in scope**: detection-without-enforcement — Phase 1 *proposes* cures but nothing *applies* them, so confirmed `hook`-curable findings never become live guardrails.
 
 ## Why
@@ -16,7 +16,7 @@ next step as **"hooks first"**: turn the confirmed findings whose `cure_map`
 includes `hook` into **applied enforcement**, backed by a unified rules config
 the PreToolUse/PostToolUse hooks read.
 
-chimera-os already proved the enforcement shape with `.atomic-design-rules.json` +
+example-platform already proved the enforcement shape with `.atomic-design-rules.json` +
 `pre-write-atomic-design-structure.sh` (the component layer). Phase 2
 generalizes that precedent across the other five families so drift is *blocked
 at write time*, not just *reported after the fact*.

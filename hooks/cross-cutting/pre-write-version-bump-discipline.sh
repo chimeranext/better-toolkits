@@ -2,9 +2,8 @@
 # Cure 4b cross-cutting hook (legacy-ticket #3): enforce single-version-step
 # bumps on any pinned dependency declared in the per-repo config.
 #
-# Generalized from
-# chimera-agent-openclaw-plugin/.claude/hooks/pre-write-openclaw-version-bump-discipline.sh
-# (legacy-ticket), which itself wraps scripts/check-openclaw-version-bump.sh
+# Generalized from a consumer repo's local version-bump hook (legacy-ticket),
+# which itself wraps a per-repo version-bump validator script
 # (PR #220 / legacy-ticket). This 4b version is content-shape-agnostic: per-repo
 # config names (a) which files are under discipline, (b) a regex to extract
 # the version literal, and (c) a validator script that decides whether the

@@ -126,7 +126,7 @@ mechanism inherited from the existing toolkit rules
 
 ### Belt-and-braces: `defer_to_local_hook`
 
-Per Andrés' Phase 0 decision, the 4a hooks in `chimera-agent-openclaw-plugin`
+Per Andrés' Phase 0 decision, the 4a hooks in `example-plugin`
 stay in place after Cure 4b ships. To prevent rare divergence between
 the tighter 4a hook and the looser 4b hook on the same surface, the
 config exposes a `defer_to_local_hook` boolean per surface (and per

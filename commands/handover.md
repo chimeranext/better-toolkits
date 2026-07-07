@@ -104,7 +104,7 @@ cc. <@UYYYY|Other stakeholder>
 5. **Emphasis conventions** (mirror the shipped handover):
     - **Header line**: the WHOLE line is bold, and the mention + Linear link live INSIDE it, at the front: `*<@id|Name> Handover <linear|KEY> — <title>*`. The Linear link comes right after the word "Handover", not as a trailing `· <link>`.
     - **Section headers** (`*Causa raíz …:*`, `*PRs listos …:*`, `*Lo que necesita …:*`) are bold.
-    - **Repo names, PR status chips, and inline emphasis** (`_chimera-os_`, `_· READY · base develop_`, `_Ready_`, `_tuyo_`, `_Review/merge_`) are italic `_…_`.
+    - **Repo names, PR status chips, and inline emphasis** (`_example-platform_`, `_· READY · base develop_`, `_Ready_`, `_tuyo_`, `_Review/merge_`) are italic `_…_`.
     - **Sub-point names** in Causa raíz use bold+italic: `_*Under-stripping:*_`.
     - **`Resumen:`** and any lead line under a section header are plain text (no bold, no bullet).
     - **`_Tracking:_`** is italic. Inline code stays in backticks.

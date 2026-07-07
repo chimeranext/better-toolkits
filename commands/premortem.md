@@ -30,7 +30,7 @@ The skill itself owns the full flow:
 Examples:
 
 ```
-/premortem launching the Pathways v1.6.0 masterclass tab on May 15
+/premortem launching the Acme Academy v1.6.0 masterclass tab on May 15
 /premortem hiring a second backend engineer on a 6-month contract
 /premortem switching from Stripe direct charges to Stripe Connect for course revenue sharing
 ```
