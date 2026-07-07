@@ -236,20 +236,22 @@ fdroid update
 
 Users add your repo URL in their F-Droid client to access apps.
 
-## community-marketplace Startups Marketplace
+## Curated Community Marketplaces
 
-If your startup was incubated or accelerated through a community-marketplace hackathon or the community Launchpad, you can distribute through the [community-marketplace Startups Marketplace](https://github.com/community-marketplace/startups-android-marketplace) — a curated F-Droid-compatible repository.
+Some communities — accelerators, incubators, dev collectives — run their own curated app repositories: maintainer-approved storefronts that users browse through third-party Android store clients such as Droid-ify or Neo Store. If a community you belong to runs one, it is usually the cheapest distribution channel available to you.
 
-### Why Use It
+<!-- TODO: ChimeraNext marketplace — link the concrete submission flow here once the repo exists -->
+
+### Why Use One
 
 - Zero cost (no Google Play Console account needed)
 - No review queue — maintainer-approved, published in minutes
-- Your app appears in Droid-ify / Neo Store for all users who add the repo
+- Your app appears in the community's store client for every user who added the repo
 - Resilient against Google's Developer Verification Program (September 2026)
 
-### How It Works
+### How They Typically Work
 
-You publish on **your own repo**. The marketplace fetches from there.
+You publish on **your own repo**. The marketplace indexes it.
 
 1. **Publish a signed release APK** on your GitHub repo:
    ```bash
@@ -259,17 +261,15 @@ You publish on **your own repo**. The marketplace fetches from there.
    gh release create v1.0.0 build/app/outputs/flutter-apk/app-release.apk
    ```
 
-2. **Open an issue** on [community-marketplace/startups-android-marketplace](https://github.com/community-marketplace/startups-android-marketplace/issues/new?template=app-submission.yml) with your repo URL
+2. **Submit your repo URL** through the marketplace's intake channel (usually an issue template on the marketplace repo)
 
 3. **A maintainer adds your app** to the marketplace index — you never touch the marketplace repo
 
-4. **Future updates are automatic** — publish a new release on your repo, the marketplace picks it up
-
-See the [full submission guide](https://github.com/community-marketplace/startups-android-marketplace/blob/main/docs/SUBMISSION_GUIDE.md) for details.
+4. **Future updates are automatic** — publish a new release on your repo, the index picks it up
 
 ### Keep Android Open
 
-Starting September 2026, Google's Android Developer Verification Program may restrict sideloading on stock Android. The community-marketplace marketplace continues working on custom ROMs (GrapheneOS, CalyxOS, LineageOS) without restrictions. See the [impact assessment](https://github.com/community-marketplace/startups-android-marketplace/blob/main/docs/KEEP_ANDROID_OPEN.md).
+Starting September 2026, Google's Android Developer Verification Program may restrict sideloading on stock Android. Community marketplaces continue working on custom ROMs (GrapheneOS, CalyxOS, LineageOS) without restrictions.
 
 ---
 
@@ -523,7 +523,7 @@ Choose based on your goals:
 
 | Goal | Primary | Secondary |
 |------|---------|-----------|
-| community-marketplace startup | community-marketplace Marketplace | GitHub Releases |
+| Community/accelerator startup | Curated community marketplace | GitHub Releases |
 | Maximum FOSS reach | F-Droid | IzzyOnDroid + GitHub Releases |
 | Privacy-first, some proprietary deps | IzzyOnDroid | GitHub Releases |
 | Developer audience | GitHub Releases | F-Droid |

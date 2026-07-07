@@ -50,7 +50,7 @@ This is the most important gate. Every decision downstream depends on the answer
 3. **Where do you want to distribute?** Present options:
    - Google Play Store (mainstream Android)
    - Apple App Store / TestFlight (iOS)
-   - community-marketplace Marketplace (startups from hackathons/Launchpad)
+   - Curated community marketplace (if your accelerator or collective runs one)
    - F-Droid (FOSS community)
    - GitHub Releases / Obtainium (developer audience, direct APK)
    - IzzyOnDroid (FOSS-friendly, lighter requirements than F-Droid)
@@ -77,7 +77,7 @@ Based on the answer to question 3, route the lifecycle:
 |--------------------|-----------------|-------------|-------------|
 | Google Play | `store-setup`, `store-listing`, `testing-tracks` | AAB | Play Console |
 | App Store | `store-setup`, `store-listing`, `testing-tracks` | IPA | App Store Connect |
-| community-marketplace Marketplace | `alt-distribution` | Signed APK | PR to startups-android-marketplace |
+| Community marketplace | `alt-distribution` | Signed APK | Submission to the marketplace index |
 | F-Droid | `alt-distribution` | APK (from source) | fdroiddata MR |
 | GitHub Releases | `alt-distribution` | Signed APK | GitHub Release |
 | IzzyOnDroid | `alt-distribution` | APK | Submission form |

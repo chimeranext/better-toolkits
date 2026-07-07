@@ -78,7 +78,7 @@ Ask: "Which stores do you want to ship to? (Multi-select. Default: all applicabl
 | Snap Store (Linux) | `ship-snap` | Full child lifecycle (review minutes for strict) |
 | Browser install (PWA only) | `ship-pwa` (built-in) | Just deploy + verify install prompt works |
 | F-Droid / Obtainium / IzzyOnDroid (Android FOSS) | `ship-flutter` (`alt-distribution` skill) | Sub-flow within ship-flutter |
-| community-marketplace Marketplace | `ship-flutter` or `ship-pwa` | Sub-flow within child |
+| Community marketplace | `ship-flutter` or `ship-pwa` | Sub-flow within child |
 | Mac App Store | Phase 3 | Decline if requested |
 | Flathub (Linux FOSS) | Phase 2 | Decline if requested |
 

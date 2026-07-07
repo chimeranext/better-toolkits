@@ -40,7 +40,7 @@ Ask: "Which stores do you want to publish to? Pick all that apply:"
 - Flathub (Linux desktop FOSS) — *Phase 2*
 - Mac App Store (macOS) — *Phase 3*
 - PWA browser-install only (no app store)
-- community-marketplace Marketplace (startup community)
+- Curated community marketplace (accelerator / dev-collective repo)
 
 ### Question 3 — Audience and constraints
 

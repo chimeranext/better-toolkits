@@ -78,7 +78,7 @@ This is the most important gate. Every decision downstream depends on the answer
    - Google Play (via TWA — Trusted Web Activity) — Phase 1
    - Apple App Store (via PWA Builder iOS wrapper) — Phase 1, high friction
    - Browser install only (Add to Home Screen)
-   - community-marketplace Marketplace
+   - Curated community marketplace
 
 6. **Audience priority?**
    - Mobile-first (iOS + Android via stores)
@@ -423,9 +423,9 @@ This is the highest-friction path.
 6. **TestFlight**: upload to internal testing first, then external
 7. **Submit for review**: typical 1-3 days. Have a written justification ready: "This app provides {unique value}. The PWA layer is one of multiple distribution channels for our existing service."
 
-### community-marketplace Marketplace (if selected)
+### Community marketplace (if selected)
 
-Refer to https://github.com/community-marketplace marketplace docs (out of scope for this command's deep guidance).
+Follow the marketplace's own submission docs (out of scope for this command's deep guidance) — see the "Curated Community Marketplaces" section of the `alt-distribution` skill.
 
 ### Output
 
