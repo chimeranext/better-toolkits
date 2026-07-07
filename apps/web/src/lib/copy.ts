@@ -107,10 +107,10 @@ export const COPY: Record<Lang, Content> = {
     s4: {
       title: "The chaos you're normalizing",
       pairs: [
-        { problem: "Hand-rolled releases, every one different, always past midnight", solution: "guided lifecycle with gates to Play, App Store, Microsoft Store, Snap", toolkit: "app-gtm-release" },
-        { problem: "Product decisions by gut feeling — no research, no framework", solution: "journeys, canvases, problem validation", toolkit: "ux-research + business-model" },
-        { problem: "Structural debt nobody audits until it explodes", solution: "repo-health audit engine + PR discipline", toolkit: "make-no-mistakes" },
-        { problem: "Growth = post and pray, zero instrumentation", solution: "full funnel over Pixel, GA4, PostHog", toolkit: "aaarrr-flywheel" },
+        { problem: "Release night is a ritual sacrifice — every deploy hand-rolled, different, and past midnight", solution: "one guided lifecycle with hard gates to Play, App Store, Microsoft Store and Snap. Boring on purpose.", toolkit: "app-gtm-release" },
+        { problem: "You're betting the roadmap on vibes — zero research, zero framework, pure adrenaline", solution: "journey maps, canvases and problem validation before a single sprint gets burned", toolkit: "ux-research + business-model" },
+        { problem: "Your repo is quietly compounding debt nobody measures — until it detonates in prod", solution: "a repo-health audit engine that names the rot before it ships", toolkit: "make-no-mistakes" },
+        { problem: "Marketing = post and pray. You couldn't name your CAC if it called you at 3am", solution: "the full AAARRR funnel, instrumented over Pixel, GA4 and PostHog from day one", toolkit: "aaarrr-flywheel" },
       ],
     },
     s5: {
@@ -177,10 +177,10 @@ export const COPY: Record<Lang, Content> = {
     s4: {
       title: "El caos que estás normalizando",
       pairs: [
-        { problem: "Releases artesanales, cada una distinta, siempre de madrugada", solution: "ciclo guiado con gates a Play, App Store, Microsoft Store, Snap", toolkit: "app-gtm-release" },
-        { problem: "Decisiones de producto por corazonada — sin research, sin framework", solution: "journeys, canvas, validación del problema", toolkit: "ux-research + business-model" },
-        { problem: "Deuda estructural que nadie audita hasta que explota", solution: "motor de auditoría de repo-health + disciplina de PRs", toolkit: "make-no-mistakes" },
-        { problem: "Growth = publicar y rezar, cero instrumentación", solution: "funnel completo sobre Pixel, GA4, PostHog", toolkit: "aaarrr-flywheel" },
+        { problem: "La noche de release es un ritual de sacrificio — cada deploy artesanal, distinto y de madrugada", solution: "un ciclo guiado con gates duros a Play, App Store, Microsoft Store y Snap. Aburrido a propósito.", toolkit: "app-gtm-release" },
+        { problem: "Estás apostando el roadmap a puro feeling — cero research, cero framework, pura adrenalina", solution: "journey maps, canvas y validación del problema antes de quemar un solo sprint", toolkit: "ux-research + business-model" },
+        { problem: "Tu repo acumula deuda que nadie mide — hasta que detona en producción", solution: "un motor de auditoría que le pone nombre a la podredumbre antes de que shippee", toolkit: "make-no-mistakes" },
+        { problem: "Marketing = publicar y rezar. No sabrías tu CAC ni aunque te llamara a las 3am", solution: "el funnel AAARRR completo, instrumentado sobre Pixel, GA4 y PostHog desde el día uno", toolkit: "aaarrr-flywheel" },
       ],
     },
     s5: {

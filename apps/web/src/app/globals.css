@@ -30,6 +30,32 @@
   h1, h2, h3 { @apply font-heading; }
 }
 
+/* Terminal surfaces stay dark and legible regardless of the section surface
+   (surface-light redefines --foreground, so terminals must not inherit it). */
+.terminal-dark {
+  background-color: #0b0912;
+  color: #ece8f2;
+}
+.terminal-dark code { color: #ece8f2; }
+
+/* Hero: staggered install lines + blinking caret. */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+.hero-line { opacity: 0; animation: fade-up 0.45s ease-out forwards; }
+@keyframes caret-blink { 50% { opacity: 0; } }
+.caret::after {
+  content: "▋";
+  margin-left: 3px;
+  color: hsl(var(--primary));
+  animation: caret-blink 1.1s steps(1) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-line { animation: none; opacity: 1; }
+  .caret::after { animation: none; }
+}
+
 /* Light-surface sections (S4 problems, S7 process, S10 FAQ per design §7). */
 .surface-light {
   --background: 0 0% 100%;

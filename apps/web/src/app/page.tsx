@@ -36,20 +36,54 @@ function CopyButton({ text, label, copied, className }: { text: string; label: s
 
 function Terminal({ cmd, label, copied }: { cmd: string; label: string; copied: string }) {
   return (
-    <div className="w-full overflow-hidden rounded-lg border border-border bg-[#0b0912] shadow-lg">
-      <div className="flex items-center gap-1.5 border-b border-border/60 px-4 py-2.5">
+    <div className="terminal-dark w-full overflow-hidden rounded-lg border border-border shadow-lg">
+      <div className="flex items-center gap-1.5 border-b border-white/10 px-4 py-2.5">
         <span className="h-3 w-3 rounded-full bg-destructive/80" />
         <span className="h-3 w-3 rounded-full bg-warning/80" />
         <span className="h-3 w-3 rounded-full bg-success/80" />
       </div>
       <div className="flex items-center gap-3 p-3 sm:p-4">
-        <div className="min-w-0 flex-1 overflow-x-auto">
-          <code className="whitespace-nowrap font-mono text-sm text-foreground">
+        <div className="min-w-0 flex-1">
+          <code className="block whitespace-pre-wrap font-mono text-sm leading-relaxed [overflow-wrap:anywhere]">
             <span className="select-none text-brand-tertiary">$ </span>
             {cmd}
           </code>
         </div>
         <CopyButton text={cmd} label={label} copied={copied} />
+      </div>
+    </div>
+  );
+}
+
+/** Signature element: the hero terminal "installs" the ten real toolkits. */
+function HeroTerminal({ label, copied, readyLine }: { label: string; copied: string; readyLine: string }) {
+  return (
+    <div className="terminal-dark w-full overflow-hidden rounded-xl border border-primary/25 text-left shadow-[0_0_80px_-12px_rgba(124,92,255,0.45)]">
+      <div className="flex items-center justify-between gap-3 border-b border-white/10 px-5 py-3">
+        <div className="flex items-center gap-1.5">
+          <span className="h-3 w-3 rounded-full bg-destructive/80" />
+          <span className="h-3 w-3 rounded-full bg-warning/80" />
+          <span className="h-3 w-3 rounded-full bg-success/80" />
+          <span className="ml-3 hidden font-mono text-xs text-[#837C99] sm:inline">chimeranext — ~/your-startup</span>
+        </div>
+        <CopyButton text={MARKETPLACE_ADD} label={label} copied={copied} />
+      </div>
+      <div className="p-5 font-mono text-[13px] leading-relaxed sm:text-sm lg:text-[15px]">
+        <div className="whitespace-pre-wrap [overflow-wrap:anywhere]">
+          <span className="select-none text-brand-tertiary">$ </span>
+          <span className="font-semibold">{MARKETPLACE_ADD}</span>
+        </div>
+        {TOOLKITS.map((tk, i) => (
+          <div key={tk.dir} className="hero-line whitespace-pre-wrap [overflow-wrap:anywhere]" style={{ animationDelay: `${0.55 + i * 0.22}s` }}>
+            <span className="select-none text-success">✓ </span>
+            <span className="text-brand-primary">{tk.dir}</span>
+            <span className="text-[#837C99]"> v{tk.version} — installed</span>
+          </div>
+        ))}
+        <div className="hero-line caret whitespace-pre-wrap pt-1" style={{ animationDelay: `${0.55 + TOOLKITS.length * 0.22 + 0.3}s` }}>
+          <span className="select-none text-brand-accent">➜ </span>
+          <span className="font-semibold">{readyLine}</span>
+        </div>
       </div>
     </div>
   );
@@ -80,10 +114,14 @@ function CtaLink({
   );
 }
 
+/** Fluid container: ~1440px at 1080p, breathes up to 4K instead of pinning at 1024. */
+const CONTAINER = "mx-auto w-full max-w-[min(90rem,94vw)]";
+const H2 = "text-center font-heading font-bold text-[clamp(1.75rem,1.1rem+1.7vw,3.25rem)] leading-tight";
+
 function Section({ id, tone = "dark", className, children }: { id?: string; tone?: "dark" | "light"; className?: string; children: React.ReactNode }) {
   return (
-    <section id={id} className={cn(tone === "light" ? "surface-light" : "bg-background", "px-5 py-16 sm:py-20", className)}>
-      <div className="mx-auto w-full max-w-5xl">{children}</div>
+    <section id={id} className={cn(tone === "light" ? "surface-light" : "bg-background", "px-[clamp(1.25rem,4vw,4rem)] py-[clamp(4rem,9vh,7.5rem)]", className)}>
+      <div className={CONTAINER}>{children}</div>
     </section>
   );
 }
@@ -122,6 +160,7 @@ export default function Page() {
   }, []);
 
   const t = COPY[lang];
+  const readyLine = lang === "es" ? "10 toolkits listos. Opera como un studio." : "10 toolkits ready. Operate like a studio.";
 
   return (
     <main>
@@ -131,7 +170,7 @@ export default function Page() {
       </div>
 
       {/* header */}
-      <header className="flex items-center justify-between gap-4 px-5 py-4">
+      <header className={cn(CONTAINER, "flex items-center justify-between gap-4 px-[clamp(1.25rem,4vw,4rem)] py-4")}>
         <a href="#top" className="font-heading text-lg font-extrabold tracking-tight">
           better<span className="text-brand-primary">-</span>toolkits
         </a>
@@ -149,39 +188,48 @@ export default function Page() {
         </nav>
       </header>
 
-      {/* S2 — hero */}
-      <Section id="top" className="pt-8 text-center">
-        <h1 className="mx-auto max-w-3xl font-heading text-3xl font-extrabold leading-tight sm:text-5xl">
-          <span className="text-muted-foreground">{t.s2.h1a}</span>{" "}
-          <span className="bg-brand-gradient bg-clip-text text-transparent">{t.s2.h1b}</span>
-        </h1>
-        <p className="mt-3 text-xs uppercase tracking-wide text-muted-foreground">{t.s2.source}</p>
-        <p className="mx-auto mt-6 max-w-2xl text-lg text-foreground/90">{t.s2.sub}</p>
-        <div className="mx-auto mt-8 max-w-2xl">
-          <Terminal cmd={MARKETPLACE_ADD} label={t.s2.copy} copied={t.s2.copied} />
+      {/* S2 — hero: the terminal is the thesis */}
+      <Section id="top" className="relative overflow-hidden pb-[clamp(3rem,6vh,5rem)] pt-[clamp(1.5rem,4vh,3.5rem)] text-center">
+        {/* brand glow field */}
+        <div aria-hidden className="pointer-events-none absolute inset-0">
+          <div className="absolute left-1/2 top-[6%] h-[55vh] w-[85vw] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(124,92,255,0.30),transparent_62%)] blur-2xl" />
+          <div className="absolute right-[-12%] top-[28%] h-[45vh] w-[45vw] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(34,211,238,0.16),transparent_60%)] blur-3xl" />
+          <div className="absolute bottom-[-18%] left-[-12%] h-[45vh] w-[45vw] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(236,72,153,0.14),transparent_60%)] blur-3xl" />
         </div>
-        <div className="mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm">
-          <CtaLink href={LINKS.github} event="cta_github" variant="ghost">{t.s2.github}</CtaLink>
-          <span className="text-muted-foreground">· {t.s2.audit}</span>
+
+        <div className="relative">
+          <h1 className="mx-auto max-w-[30ch] font-heading font-extrabold leading-[1.06] tracking-tight text-[clamp(2.1rem,1rem+3vw,4.75rem)]">
+            <span className="text-foreground/85">{t.s2.h1a}</span>{" "}
+            <span className="bg-brand-gradient bg-clip-text text-transparent">{t.s2.h1b}</span>
+          </h1>
+          <p className="mt-3 text-xs uppercase tracking-[0.2em] text-muted-foreground sm:text-sm">{t.s2.source}</p>
+          <p className="mx-auto mt-5 max-w-[58ch] text-[clamp(1rem,0.92rem+0.4vw,1.3rem)] leading-relaxed text-foreground/90">{t.s2.sub}</p>
+          <div className="mx-auto mt-7 max-w-[min(56rem,94vw)]">
+            <HeroTerminal label={t.s2.copy} copied={t.s2.copied} readyLine={readyLine} />
+          </div>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm">
+            <CtaLink href={LINKS.github} event="cta_github" variant="ghost">{t.s2.github}</CtaLink>
+            <span className="text-muted-foreground">· {t.s2.audit}</span>
+          </div>
+          <p className="mt-9 font-mono text-xs text-muted-foreground sm:text-sm">{t.s2.trust}</p>
         </div>
-        <p className="mt-8 font-mono text-xs text-muted-foreground sm:text-sm">{t.s2.trust}</p>
       </Section>
 
       {/* S3 — mantra 1 */}
-      <div className="bg-brand-accent px-5 py-12 text-center text-white">
-        <p className="mx-auto max-w-3xl font-heading text-2xl font-bold sm:text-3xl">
+      <div className="bg-brand-accent px-[clamp(1.25rem,4vw,4rem)] py-[clamp(3rem,7vh,5.5rem)] text-center text-white">
+        <p className="mx-auto max-w-[38ch] font-heading font-bold leading-snug text-[clamp(1.5rem,1rem+1.8vw,3rem)]">
           {t.s3.a} <span className="underline decoration-white/50 underline-offset-4">{t.s3.b}</span>
         </p>
       </div>
 
       {/* S4 — problems / solutions */}
       <Section tone="light">
-        <h2 className="text-center font-heading text-2xl font-bold sm:text-3xl">{t.s4.title}</h2>
-        <div className="mt-10 grid gap-4 sm:grid-cols-2">
+        <h2 className={H2}>{t.s4.title}</h2>
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 2xl:grid-cols-4">
           {t.s4.pairs.map((p, i) => (
-            <div key={i} className="rounded-lg border border-border bg-card p-5">
-              <p className="text-[15px] font-medium text-destructive">{p.problem}</p>
-              <p className="mt-3 text-[15px] text-card-foreground">
+            <div key={i} className="flex flex-col rounded-xl border border-border bg-card p-6 transition-transform hover:-translate-y-0.5">
+              <p className="text-base font-semibold leading-snug text-destructive">{p.problem}</p>
+              <p className="mt-4 text-[15px] leading-relaxed text-card-foreground">
                 <span className="select-none text-brand-primary">→ </span>
                 <code className="font-mono text-sm font-semibold text-brand-primary">{p.toolkit}</code>: {p.solution}
               </p>
@@ -192,29 +240,29 @@ export default function Page() {
 
       {/* S5 — the stack, at a glance */}
       <Section id="stack">
-        <h2 className="text-center font-heading text-2xl font-bold sm:text-3xl">{t.s5.title}</h2>
-        <div className="mt-8 hidden overflow-x-auto rounded-lg border border-border sm:block">
-          <table className="w-full text-left text-sm">
+        <h2 className={H2}>{t.s5.title}</h2>
+        <div className="mt-10 hidden overflow-x-auto rounded-xl border border-border sm:block">
+          <table className="w-full text-left text-sm lg:text-[15px]">
             <thead className="bg-muted/50 text-muted-foreground">
               <tr>
-                <th className="px-4 py-3 font-semibold">{t.s5.cols.n}</th>
-                <th className="px-4 py-3 font-semibold">{t.s5.cols.toolkit}</th>
-                <th className="px-4 py-3 font-semibold">{t.s5.cols.what}</th>
-                <th className="px-4 py-3 font-semibold">{t.s5.cols.license}</th>
-                <th className="px-4 py-3 font-semibold">{t.s5.cols.status}</th>
+                <th className="px-5 py-3.5 font-semibold">{t.s5.cols.n}</th>
+                <th className="px-5 py-3.5 font-semibold">{t.s5.cols.toolkit}</th>
+                <th className="px-5 py-3.5 font-semibold">{t.s5.cols.what}</th>
+                <th className="px-5 py-3.5 font-semibold">{t.s5.cols.license}</th>
+                <th className="px-5 py-3.5 font-semibold">{t.s5.cols.status}</th>
               </tr>
             </thead>
             <tbody>
               {TOOLKITS.map((tk) => (
-                <tr key={tk.dir} className="border-t border-border/60">
-                  <td className="px-4 py-3 text-muted-foreground">{tk.n}</td>
-                  <td className="px-4 py-3">
+                <tr key={tk.dir} className="border-t border-border/60 transition-colors hover:bg-primary/5">
+                  <td className="px-5 py-3.5 text-muted-foreground">{tk.n}</td>
+                  <td className="px-5 py-3.5">
                     <a href={tk.githubUrl} target="_blank" rel="noreferrer" onClick={() => track("cta_github")}
-                       className="font-mono text-[13px] font-semibold text-brand-primary hover:underline">{tk.dir}</a>
+                       className="font-mono text-[13px] font-semibold text-brand-primary hover:underline lg:text-sm">{tk.dir}</a>
                   </td>
-                  <td className="px-4 py-3 text-foreground/90">{tk.oneLiner[lang]}</td>
-                  <td className="px-4 py-3 font-mono text-xs text-muted-foreground">{tk.license}</td>
-                  <td className="px-4 py-3"><span className="rounded-full bg-success/15 px-2 py-0.5 text-xs font-medium text-success">{tk.status}</span></td>
+                  <td className="px-5 py-3.5 text-foreground/90">{tk.oneLiner[lang]}</td>
+                  <td className="px-5 py-3.5 font-mono text-xs text-muted-foreground">{tk.license}</td>
+                  <td className="px-5 py-3.5"><span className="rounded-full bg-success/15 px-2 py-0.5 text-xs font-medium text-success">{tk.status}</span></td>
                 </tr>
               ))}
             </tbody>
@@ -233,37 +281,37 @@ export default function Page() {
             </a>
           ))}
         </div>
-        <div className="mt-8 flex flex-wrap justify-center gap-3">
+        <div className="mt-10 flex flex-wrap justify-center gap-3">
           <a href="#process" className="rounded-md border border-primary/60 px-4 py-2 text-sm font-semibold hover:bg-primary/10">{t.s5.jumpProcess}</a>
           <a href="#pricing" className="rounded-md border border-primary/60 px-4 py-2 text-sm font-semibold hover:bg-primary/10">{t.s5.jumpPricing}</a>
         </div>
       </Section>
 
       {/* S6 — mantra 2 */}
-      <div className="bg-background px-5 py-12 text-center">
-        <p className="mx-auto max-w-3xl font-heading text-2xl font-bold sm:text-3xl">
+      <div className="bg-background px-[clamp(1.25rem,4vw,4rem)] py-[clamp(3rem,7vh,5.5rem)] text-center">
+        <p className="mx-auto max-w-[38ch] font-heading font-bold leading-snug text-[clamp(1.5rem,1rem+1.8vw,3rem)]">
           {t.s6.a} <span className="text-brand-primary">{t.s6.b}</span>
         </p>
       </div>
 
       {/* S7 — process */}
       <Section id="process" tone="light">
-        <h2 className="text-center font-heading text-2xl font-bold sm:text-3xl">{t.s7.title}</h2>
-        <ol className="mt-10 space-y-4">
+        <h2 className={H2}>{t.s7.title}</h2>
+        <ol className="mx-auto mt-12 grid max-w-[80rem] gap-5 lg:grid-cols-3">
           {t.s7.steps.map((s, i) => (
-            <li key={i} className="rounded-lg border border-border bg-card p-5">
+            <li key={i} className="flex flex-col rounded-xl border border-border bg-card p-6">
               <div className="flex items-center gap-3">
-                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">{i + 1}</span>
-                <span className="font-heading font-semibold text-card-foreground">{s.title}</span>
-                {s.note && <span className="text-xs text-muted-foreground">— {s.note}</span>}
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">{i + 1}</span>
+                <span className="font-heading text-lg font-semibold text-card-foreground">{s.title}</span>
               </div>
-              <div className="mt-3 overflow-x-auto rounded-md bg-[#0b0912] p-3">
-                <code className="whitespace-nowrap font-mono text-sm text-foreground"><span className="select-none text-brand-tertiary">$ </span>{s.cmd}</code>
+              {s.note && <p className="mt-2 text-sm text-muted-foreground">{s.note}</p>}
+              <div className="terminal-dark mt-4 rounded-md p-3.5">
+                <code className="block whitespace-pre-wrap font-mono text-sm leading-relaxed [overflow-wrap:anywhere]"><span className="select-none text-brand-tertiary">$ </span>{s.cmd}</code>
               </div>
             </li>
           ))}
         </ol>
-        <div className="mt-8 flex h-40 items-center justify-center rounded-lg border border-dashed border-border bg-[#0b0912] text-sm text-muted-foreground">
+        <div className="terminal-dark mx-auto mt-10 flex h-44 max-w-[80rem] items-center justify-center rounded-xl border border-dashed border-border text-sm text-[#837C99]">
           {/* TODO: replace with real asciinema/GIF terminal demo */}
           ▶ {t.s7.demo}
         </div>
@@ -271,16 +319,16 @@ export default function Page() {
 
       {/* S8 — pricing */}
       <Section id="pricing">
-        <div className="grid gap-6 md:grid-cols-2">
-          <div className="rounded-xl border border-border bg-card p-7">
-            <h3 className="font-heading text-lg font-bold">{t.s8.col1.name}</h3>
-            <p className="mt-2 font-heading text-5xl font-extrabold text-brand-primary">{t.s8.col1.price}</p>
-            <p className="mt-4 text-sm text-card-foreground/90">{t.s8.col1.body}</p>
+        <div className="mx-auto grid max-w-[80rem] gap-6 md:grid-cols-2">
+          <div className="rounded-xl border border-border bg-card p-8">
+            <h3 className="font-heading text-xl font-bold">{t.s8.col1.name}</h3>
+            <p className="mt-3 font-heading font-extrabold text-brand-primary text-[clamp(3rem,2rem+2vw,4.5rem)]">{t.s8.col1.price}</p>
+            <p className="mt-4 text-[15px] leading-relaxed text-card-foreground/90">{t.s8.col1.body}</p>
             <div className="mt-6"><Terminal cmd={MARKETPLACE_ADD} label={t.s2.copy} copied={t.s2.copied} /></div>
           </div>
-          <div className="rounded-xl border border-primary/40 bg-gradient-to-b from-primary/10 to-transparent p-7">
-            <h3 className="font-heading text-lg font-bold">{t.s8.col2.name}</h3>
-            <p className="mt-4 text-sm text-foreground/90">{t.s8.col2.body}</p>
+          <div className="rounded-xl border border-primary/40 bg-gradient-to-b from-primary/10 to-transparent p-8">
+            <h3 className="font-heading text-xl font-bold">{t.s8.col2.name}</h3>
+            <p className="mt-4 text-[15px] leading-relaxed text-foreground/90">{t.s8.col2.body}</p>
             <div className="mt-6 flex flex-wrap gap-3">
               <CtaLink href={LINKS.whatsapp} event="cta_whatsapp">{t.s8.col2.whatsapp}</CtaLink>
               <CtaLink href={LINKS.calendar} event="cta_calendar" variant="outline">{t.s8.col2.calendar}</CtaLink>
@@ -291,39 +339,39 @@ export default function Page() {
 
       {/* S9 — social proof */}
       <Section tone="light">
-        <h2 className="text-center font-heading text-2xl font-bold sm:text-3xl">{t.s9.title}</h2>
-        <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+        <h2 className={H2}>{t.s9.title}</h2>
+        <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
           {STATS.map((s) => (
-            <div key={s.value} className="rounded-lg border border-border bg-card p-4 text-center">
-              <div className="font-heading text-2xl font-extrabold text-brand-primary">{s.value}</div>
-              <div className="mt-1 text-xs text-muted-foreground">{s.label[lang]}</div>
+            <div key={s.value} className="rounded-xl border border-border bg-card p-5 text-center">
+              <div className="font-heading font-extrabold text-brand-primary text-[clamp(1.5rem,1.1rem+1vw,2.5rem)]">{s.value}</div>
+              <div className="mt-1 text-xs text-muted-foreground lg:text-sm">{s.label[lang]}</div>
             </div>
           ))}
         </div>
 
-        <div className="mt-8 rounded-lg border border-primary/30 bg-primary/5 p-5 text-center">
-          <p className="text-sm text-card-foreground">
+        <div className="mt-10 rounded-xl border border-primary/30 bg-primary/5 p-6 text-center">
+          <p className="text-[15px] text-card-foreground">
             {t.s9.dogfooding}{" "}
             <a href={LINKS.betterMicroservices} target="_blank" rel="noreferrer" onClick={() => track("cta_github")}
                className="font-medium text-brand-primary hover:underline">{t.s9.sibling}</a>
           </p>
         </div>
 
-        <div className="mt-8 text-center">
-          <p className="text-xs uppercase tracking-wide text-muted-foreground">{t.s9.venturesLabel}</p>
-          <div className="mt-3 flex flex-wrap justify-center gap-2">
+        <div className="mt-10 text-center">
+          <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{t.s9.venturesLabel}</p>
+          <div className="mt-4 flex flex-wrap justify-center gap-2.5">
             {VENTURES.map((v) => (
-              <span key={v} className="rounded-full border border-border bg-card px-3 py-1 text-sm font-medium text-card-foreground">{v}</span>
+              <span key={v} className="rounded-full border border-border bg-card px-4 py-1.5 text-sm font-medium text-card-foreground">{v}</span>
             ))}
           </div>
         </div>
 
         {/* methodology grid */}
-        <div className="mt-12">
-          <p className="mx-auto max-w-3xl text-center text-sm text-card-foreground/90">{t.s9.methodTagline}</p>
-          <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-14">
+          <p className="mx-auto max-w-[70ch] text-center text-[15px] text-card-foreground/90">{t.s9.methodTagline}</p>
+          <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6">
             {METHOD_GROUPS.map((g) => (
-              <div key={g.label.en} className="rounded-lg border border-border bg-card p-5">
+              <div key={g.label.en} className="rounded-xl border border-border bg-card p-6">
                 <h4 className="font-heading text-sm font-bold text-brand-primary">{g.label[lang]}</h4>
                 <ul className="mt-3 space-y-1.5">
                   {g.items.map((it) => (
@@ -340,41 +388,46 @@ export default function Page() {
 
       {/* S10 — FAQ */}
       <Section tone="light">
-        <h2 className="text-center font-heading text-2xl font-bold sm:text-3xl">{t.s10.title}</h2>
-        <div className="mx-auto mt-8 max-w-3xl space-y-3">
+        <h2 className={H2}>{t.s10.title}</h2>
+        <div className="mx-auto mt-10 max-w-4xl space-y-3">
           {t.s10.faqs.map((f, i) => (
             <details
               key={i}
-              className="group rounded-lg border border-border bg-card p-4"
+              className="group rounded-lg border border-border bg-card p-5"
               onToggle={(e) => { if ((e.currentTarget as HTMLDetailsElement).open) track("faq_expand", { question: f.q }); }}
             >
-              <summary className="cursor-pointer list-none font-heading text-[15px] font-semibold text-card-foreground marker:content-none">
+              <summary className="cursor-pointer list-none font-heading text-base font-semibold text-card-foreground marker:content-none">
                 <span className="select-none text-brand-primary group-open:hidden">+ </span>
                 <span className="hidden select-none text-brand-primary group-open:inline">− </span>
                 {f.q}
               </summary>
-              <p className="mt-3 text-sm leading-relaxed text-card-foreground/90">{f.a}</p>
+              <p className="mt-3 text-[15px] leading-relaxed text-card-foreground/90">{f.a}</p>
             </details>
           ))}
         </div>
       </Section>
 
       {/* S11 — final CTA */}
-      <Section className="text-center">
-        <h2 className="mx-auto max-w-2xl font-heading text-3xl font-extrabold sm:text-4xl">{t.s11.h2}</h2>
-        <p className="mt-3 text-lg text-foreground/90">{t.s11.sub}</p>
-        <div className="mx-auto mt-8 max-w-2xl"><Terminal cmd={MARKETPLACE_ADD} label={t.s11.copy} copied={t.s2.copied} /></div>
-        <p className="mt-5 text-sm text-muted-foreground">{t.s11.guarantee}</p>
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <span className="text-sm text-muted-foreground">{t.s11.studioPrompt}</span>
-          <CtaLink href={LINKS.whatsapp} event="cta_whatsapp">{t.s11.whatsapp}</CtaLink>
-          <CtaLink href={LINKS.calendar} event="cta_calendar" variant="outline">{t.s11.calendar}</CtaLink>
+      <Section className="relative overflow-hidden text-center">
+        <div aria-hidden className="pointer-events-none absolute inset-0">
+          <div className="absolute left-1/2 top-1/2 h-[60vh] w-[70vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(124,92,255,0.18),transparent_62%)] blur-2xl" />
+        </div>
+        <div className="relative">
+          <h2 className="mx-auto max-w-[26ch] font-heading font-extrabold leading-tight text-[clamp(2rem,1.2rem+2.4vw,4rem)]">{t.s11.h2}</h2>
+          <p className="mt-4 text-[clamp(1.05rem,0.95rem+0.4vw,1.35rem)] text-foreground/90">{t.s11.sub}</p>
+          <div className="mx-auto mt-9 max-w-[min(48rem,92vw)]"><Terminal cmd={MARKETPLACE_ADD} label={t.s11.copy} copied={t.s2.copied} /></div>
+          <p className="mt-5 text-sm text-muted-foreground">{t.s11.guarantee}</p>
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+            <span className="text-sm text-muted-foreground">{t.s11.studioPrompt}</span>
+            <CtaLink href={LINKS.whatsapp} event="cta_whatsapp">{t.s11.whatsapp}</CtaLink>
+            <CtaLink href={LINKS.calendar} event="cta_calendar" variant="outline">{t.s11.calendar}</CtaLink>
+          </div>
         </div>
       </Section>
 
       {/* S12 — footer */}
-      <footer className="border-t border-border bg-background px-5 py-10">
-        <div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-4 text-center text-sm text-muted-foreground sm:flex-row sm:justify-between sm:text-left">
+      <footer className="border-t border-border bg-background px-[clamp(1.25rem,4vw,4rem)] py-10">
+        <div className={cn(CONTAINER, "flex flex-col items-center gap-4 text-center text-sm text-muted-foreground sm:flex-row sm:justify-between sm:text-left")}>
           <div className="font-heading font-extrabold text-foreground">better<span className="text-brand-primary">-</span>toolkits</div>
           <nav className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
             <a href={LINKS.github} target="_blank" rel="noreferrer" className="hover:text-foreground">GitHub</a>
@@ -383,7 +436,7 @@ export default function Page() {
             <a href={LINKS.whatsapp} target="_blank" rel="noreferrer" onClick={() => track("cta_whatsapp")} className="hover:text-foreground">WhatsApp</a>
           </nav>
         </div>
-        <div className="mx-auto mt-6 w-full max-w-5xl text-center text-xs text-muted-foreground sm:text-left">
+        <div className={cn(CONTAINER, "mt-6 text-center text-xs text-muted-foreground sm:text-left")}>
           {t.s12.license} · {t.s12.rights}
         </div>
       </footer>
