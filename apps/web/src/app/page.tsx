@@ -434,7 +434,6 @@ export default function Page() {
             <h3 className="font-heading text-xl font-bold">{t.s8.col1.name}</h3>
             <p className="mt-3 font-heading font-extrabold text-brand-primary text-[clamp(3rem,2rem+2vw,4.5rem)]">{t.s8.col1.price}</p>
             <p className="mt-4 text-[15px] leading-relaxed text-card-foreground/90">{t.s8.col1.body}</p>
-            <div className="mt-6"><Terminal cmd={MARKETPLACE_ADD} label={t.s2.copy} copied={t.s2.copied} /></div>
           </div>
           <div className="rounded-xl border border-primary/40 bg-gradient-to-b from-primary/10 to-transparent p-8">
             <h3 className="font-heading text-xl font-bold">{t.s8.col2.name}</h3>
@@ -461,24 +460,12 @@ export default function Page() {
           ))}
         </div>
 
-        {/* dogfooding: the claim rendered as the artifact itself — a terminal */}
-        <div className="terminal-dark mx-auto mt-10 max-w-[52rem] overflow-hidden rounded-xl border border-primary/25 text-left shadow-[0_18px_50px_-18px_rgba(124,92,255,0.35)]">
-          <div className="flex items-center gap-1.5 border-b border-white/10 px-4 py-2.5">
-            <span className="h-3 w-3 rounded-full bg-destructive/80" />
-            <span className="h-3 w-3 rounded-full bg-warning/80" />
-            <span className="h-3 w-3 rounded-full bg-success/80" />
-            <span className="ml-3 font-mono text-xs text-[#837C99]">aaarrr-flywheel — /landing-page</span>
-            <span className="ml-auto rounded-full bg-success/15 px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wide text-success">live</span>
-          </div>
-          <div className="p-4 font-mono text-[13px] leading-relaxed sm:text-sm">
-            <div><span className="select-none text-brand-tertiary">$ </span>/landing-page --b2b better-toolkits</div>
-            <div className="mt-1 text-[#837C99]">
-              <span className="select-none text-success">✓ </span>{t.s9.dogfooding}{" "}
-              <a href={LINKS.betterMicroservices} target="_blank" rel="noreferrer" onClick={() => track("cta_github")}
-                 className="font-medium text-brand-primary hover:underline">{t.s9.sibling}</a>
-            </div>
-          </div>
-        </div>
+        {/* dogfooding: quiet one-liner — the claim doesn't need fake window chrome */}
+        <p className="mx-auto mt-8 max-w-[70ch] text-center text-[15px] italic text-muted-foreground">
+          {t.s9.dogfooding}{" "}
+          <a href={LINKS.betterMicroservices} target="_blank" rel="noreferrer" onClick={() => track("cta_github")}
+             className="font-medium not-italic text-primary hover:underline">{t.s9.sibling}</a>
+        </p>
 
         {/* ventures: window-chrome chips with LIVE badge */}
         <div className="mt-12 text-center">
