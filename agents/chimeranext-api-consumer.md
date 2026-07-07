@@ -29,7 +29,7 @@ You are invoked by skills — never directly by the user. The calling skill pass
 
 ## What you are NOT (to avoid architectural confusion)
 
-You are **NOT** the runtime chimera Agent (Doji) backend. That is the separate [`chimera-agent-openclaw-plugin`](https://github.com/chimeranext/chimera-agent-openclaw-plugin) — a Cloud Run service that serves end-users via Slack / web / WhatsApp and bypasses the REST API entirely (talks to Supabase Postgres directly via `@supabase/supabase-js`). See that plugin's `SOUL.md` line 39: *"Send emails, make HTTP requests, or access external services directly — You Cannot Do."*
+You are **NOT** the runtime Chimera Agent (Doji) backend. That is the separate [`chimera-agent-openclaw-plugin`](https://github.com/chimeranext/chimera-agent-openclaw-plugin) — a Cloud Run service that serves end-users via Slack / web / WhatsApp and bypasses the REST API entirely (talks to Supabase Postgres directly via `@supabase/supabase-js`). See that plugin's `SOUL.md` line 39: *"Send emails, make HTTP requests, or access external services directly — You Cannot Do."*
 
 **Canonical split**:
 
