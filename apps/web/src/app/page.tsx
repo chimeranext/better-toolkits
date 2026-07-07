@@ -197,7 +197,8 @@ export default function Page() {
           <div className="absolute bottom-[-18%] left-[-12%] h-[45vh] w-[45vw] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(236,72,153,0.14),transparent_60%)] blur-3xl" />
         </div>
 
-        <div className="relative">
+        {/* Hero fills the viewport (minus sticky bar + header) so the next section never peeks in half-cut. */}
+        <div className="relative flex min-h-[calc(100svh-8.5rem)] flex-col justify-center">
           {/* Full-bleed: the display headline escapes the content container so each sentence fits one line at display size. */}
           <h1 className="relative left-1/2 w-[94vw] -translate-x-1/2 font-heading font-extrabold leading-[1.08] tracking-tight text-[clamp(2.1rem,0.8rem+3.1vw,4.5rem)]">
             <span className="block text-foreground/85">{t.s2.h1a}</span>
@@ -205,14 +206,29 @@ export default function Page() {
           </h1>
           <p className="mt-3 text-xs uppercase tracking-[0.2em] text-muted-foreground sm:text-sm">{t.s2.source}</p>
           <p className="mx-auto mt-5 max-w-[58ch] text-[clamp(1rem,0.92rem+0.4vw,1.3rem)] leading-relaxed text-foreground/90">{t.s2.sub}</p>
-          <div className="mx-auto mt-7 max-w-[min(56rem,94vw)]">
+          <div className="mx-auto mt-7 w-full max-w-[min(56rem,94vw)]">
             <HeroTerminal label={t.s2.copy} copied={t.s2.copied} readyLine={readyLine} />
           </div>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm">
-            <CtaLink href={LINKS.github} event="cta_github" variant="ghost">{t.s2.github}</CtaLink>
-            <span className="text-muted-foreground">· {t.s2.audit}</span>
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
+            <a
+              href="#stack"
+              data-event="cta_learn_more"
+              onClick={() => track("cta_learn_more")}
+              className="inline-flex items-center justify-center rounded-lg bg-primary px-9 py-4 text-base font-bold text-primary-foreground shadow-[0_10px_40px_-8px_rgba(124,92,255,0.65)] transition-transform hover:-translate-y-0.5 hover:bg-primary/90 sm:text-lg"
+            >
+              {t.s2.learnMore}
+            </a>
+            <CtaLink
+              href={LINKS.github}
+              event="cta_github"
+              variant="outline"
+              className="rounded-lg px-9 py-4 text-base font-bold sm:text-lg"
+            >
+              {t.s2.github}
+            </CtaLink>
           </div>
-          <p className="mt-9 font-mono text-xs text-muted-foreground sm:text-sm">{t.s2.trust}</p>
+          <p className="mt-3 text-sm text-muted-foreground">{t.s2.audit}</p>
+          <p className="mt-8 font-mono text-xs text-muted-foreground sm:text-sm">{t.s2.trust}</p>
         </div>
       </Section>
 

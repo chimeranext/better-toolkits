@@ -77,7 +77,7 @@ export const METHOD_GROUPS: { label: { en: string; es: string }; items: string[]
 type Content = {
   nav: { install: string; langOther: string };
   s1: string;
-  s2: { h1a: string; h1b: string; source: string; sub: string; copy: string; copied: string; github: string; audit: string; trust: string };
+  s2: { h1a: string; h1b: string; source: string; sub: string; copy: string; copied: string; github: string; audit: string; trust: string; learnMore: string };
   s3: { a: string; b: string };
   s4: { title: string; pairs: { problem: string; solution: string; toolkit: string }[] };
   s5: { title: string; jumpProcess: string; jumpPricing: string; cols: { n: string; toolkit: string; what: string; license: string; status: string } };
@@ -100,7 +100,7 @@ export const COPY: Record<Lang, Content> = {
       source: "Supabase Startups Survey 2026 — 2,000+ founders",
       sub: "Every week without an operating system is runway spent reinventing one. Install yours in 60 seconds ↓",
       copy: "Copy", copied: "Copied ✓",
-      github: "View on GitHub →", audit: "Audit before you install",
+      github: "View on GitHub →", audit: "Audit before you install", learnMore: "Learn more ↓",
       trust: "Source-available · BSL-1.1 · 75 commands · 96 skills · 22 agents · 0 lock-in",
     },
     s3: { a: "You wouldn't build your product without a framework.", b: "Why build your company without one?" },
@@ -170,7 +170,7 @@ export const COPY: Record<Lang, Content> = {
       source: "Supabase Startups Survey 2026 — más de 2,000 founders",
       sub: "Cada semana sin un sistema operativo de empresa es runway quemado reinventando uno. Instala el tuyo en 60 segundos ↓",
       copy: "Copiar", copied: "Copiado ✓",
-      github: "Ver en GitHub →", audit: "Audita antes de instalar",
+      github: "Ver en GitHub →", audit: "Audita antes de instalar", learnMore: "Conoce más ↓",
       trust: "Source-available · BSL-1.1 · 75 comandos · 96 skills · 22 agentes · 0 lock-in",
     },
     s3: { a: "No construirías tu producto sin un framework.", b: "¿Por qué construyes tu empresa sin uno?" },
