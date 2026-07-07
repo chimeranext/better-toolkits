@@ -1,7 +1,7 @@
 {
   "name": "fractional-cto-toolkit",
-  "version": "1.0.0",
-  "description": "Operational toolkit for freelance and fractional CTOs — SOPs, checklists, and guided workflows for project takeovers, technical audits, client onboarding, and vendor evaluation.",
+  "version": "1.1.0",
+  "description": "Operational toolkit for freelance and fractional CTOs — contracts, project-takeover SOPs, and a process-engineering pipeline (standardize → automation-triage → SOP authoring with executable output) for client onboarding, technical audits, and vendor evaluation.",
   "author": {
     "name": "Luis Andres Pena Castillo",
     "url": "https://github.com/lapc506"
@@ -19,6 +19,10 @@
     "technical-audit",
     "due-diligence",
     "sop",
+    "sop-authoring",
+    "process-standardization",
+    "automation-triage",
+    "rpa",
     "checklist",
     "client-onboarding"
   ]

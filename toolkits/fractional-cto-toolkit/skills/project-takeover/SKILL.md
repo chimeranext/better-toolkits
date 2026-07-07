@@ -10,6 +10,7 @@ description: >
   documentos operativos para ejecutar la transferencia.
   NO usar para evaluacion de riesgo (eso es /takeover-assessment)
   ni para contratos (eso es /contract-psa o /contract-retainer).
+  Para SOPs operativos generales (no de takeover), usar /sop-authoring.
 ---
 
 # Project Takeover SOP Generator
@@ -17,6 +18,12 @@ description: >
 Genera los 4 documentos SOP operativos para ejecutar la transferencia de un proyecto
 de software existente. Cubre: SOP tecnico, guia ejecutiva, solicitud formal de entrega,
 y template de ultimatum — calibrados al nivel de riesgo del caso.
+
+> Este skill es un productor de SOPs **especializado** (transferencias de proyecto). Es un caso
+> particular del pipeline de process-engineering: para estandarizar y documentar cualquier otro
+> proceso operativo del cliente, usar `/process-standardization` → `/automation-triage` →
+> `/sop-authoring`. Los 4 documentos que genera aqui comparten el vocabulario de callouts
+> (`DECISION POINT`, `SCALE NOTE`, `LESSON LEARNED`) y el "bus test" de `/sop-authoring`.
 
 ## Regla de idioma
 
@@ -99,6 +106,9 @@ Comunicar el nivel de riesgo al usuario con una explicacion breve.
    - Ajustar la secuencia de ejecucion segun el nivel de riesgo
    - Eliminar secciones que no aplican (ej. si no hay mobile, eliminar Apple Developer / Google Play)
    - Reemplazar marcadores genericos con el nombre del proyecto y contexto especifico
+   - Usar los callouts estandar para lo que el CTO no puede pasar por alto:
+     `> DECISION POINT:` (una decision requerida, quien la toma), `> SCALE NOTE:` (como cambia por
+     tamaño/riesgo del proyecto), `> LESSON LEARNED:` (consejo de ejecuciones previas)
 3. Escribir en `./fractional-cto/takeover/{slug}-takeover-sop.md`
 
 ### Paso 3 — Generar guia ejecutiva (para el lead/cliente)
@@ -186,3 +196,6 @@ Presentar al usuario los 4 documentos con su audiencia y momento de uso:
 - Si el usuario ya menciono detalles especificos (ej. "el repo esta en GitHub bajo la cuenta
   del dev anterior"), usarlos directamente sin volver a preguntar.
 - El tono del SOP es profesional pero directo — es un documento operativo, no academico.
+- Aplicar el "bus test" antes de entregar el SOP tecnico: si el CTO se cayera de la escena mañana,
+  ¿podria un colega leer el SOP y ejecutar el takeover? Si no, agregar detalle (pasos vagos, owners
+  sin nombrar por rol, umbrales faltantes son las brechas tipicas).
