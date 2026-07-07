@@ -14,7 +14,7 @@
 # The hook surfaces the risk; the human decides.
 #
 # Motivating incident: 2026-05-20 — legacy-ticket atomic migration moved
-# src/components/agent/ChatWidget.tsx. PRs #2105, #2107, #1713 in chimera-os
+# src/components/agent/ChatWidget.tsx. PRs #2105, #2107, #1713 in example-platform
 # each spent ~10 min diagnosing the same ENOENT failure that a 30-second
 # rebase resolved.
 # =============================================================================
