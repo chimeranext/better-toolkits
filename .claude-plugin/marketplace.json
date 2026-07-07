@@ -8,10 +8,102 @@
   },
   "plugins": [
     {
-      "name": "aaarrr-flywheel-toolkit",
-      "description": "AAARRR Acquisition funnel + Retention/Referral flywheel sobre Meta Marketing API. Awareness/Acquisition/Activation/Revenue se ejecutan como funnel lineal; Retention/Referral cierran el loop como flywheel que retroalimenta Acquisition. Mantra: fail fast, fail often, fail cheap, fail forward.",
-      "version": "0.1.0",
-      "source": "./toolkits/aaarrr-flywheel-toolkit"
+      "name": "make-no-mistakes",
+      "description": "The disciplined dev lifecycle — implement issues, review PRs, sync releases, test E2E, manage sessions, stash secrets, and enforce manifest-driven tool-call hooks. One plugin to make no mistakes.",
+      "version": "1.33.0",
+      "source": "./toolkits/make-no-mistakes-toolkit",
+      "category": "workflow",
+      "keywords": [
+        "claude-code",
+        "claude-code-plugin",
+        "workflow",
+        "linear",
+        "github",
+        "greptile",
+        "testing",
+        "e2e",
+        "security",
+        "pentest",
+        "developer-workflow",
+        "session-management",
+        "secret-management"
+      ]
+    },
+    {
+      "name": "atomic-design-toolkit",
+      "description": "Atomic Design toolkit for Flutter and Vite — decompose features into atoms, molecules, organisms, templates, and pages. Audit mode scans components, Vite bundle health (10 signals: duplicates, hashless assets, mixed majors, dual lockfiles, and more), and atomic-design enforcement hooks (V7: 7 cure-presence checks for future-drift exposure) across 18+ design system lenses. Migrate mode consumes audit reports to drive phased remediation.",
+      "version": "1.2.0",
+      "source": "./toolkits/atomic-design-toolkit",
+      "category": "frontend",
+      "keywords": [
+        "claude-code",
+        "claude-code-plugin",
+        "flutter",
+        "vite",
+        "react",
+        "vue",
+        "svelte",
+        "atomic-design",
+        "widget",
+        "component",
+        "design-system",
+        "material3",
+        "cupertino",
+        "bootstrap5",
+        "tailwind",
+        "shadcn",
+        "widgetbook",
+        "storybook",
+        "ui-components",
+        "bundle-health",
+        "migration",
+        "enforcement-hooks",
+        "atomic-design-rules"
+      ]
+    },
+    {
+      "name": "ux-research-toolkit",
+      "description": "Guided UX research map creation — experience maps, customer journey maps, service blueprints, storyboards, and user story maps. Helps non-experts create professional UX artifacts through dialogue, JSON data, and interactive HTML visualization.",
+      "version": "2.1.0",
+      "source": "./toolkits/ux-research-toolkit",
+      "category": "productivity",
+      "keywords": [
+        "claude-code",
+        "claude-code-plugin",
+        "ux-research",
+        "experience-map",
+        "journey-map",
+        "customer-journey",
+        "service-blueprint",
+        "storyboard",
+        "user-story-map",
+        "user-experience",
+        "design-thinking",
+        "service-design",
+        "user-persona",
+        "agile-planning",
+        "nielsen-norman"
+      ]
+    },
+    {
+      "name": "business-model-toolkit",
+      "description": "Interactive business model brainstorming — guided dialogue covering the full startup lifecycle from problem validation through execution and investor pitch.",
+      "version": "2.0.0",
+      "source": "./toolkits/business-model-toolkit",
+      "category": "productivity",
+      "keywords": [
+        "claude-code",
+        "claude-code-plugin",
+        "business-model",
+        "lean-canvas",
+        "startup",
+        "brainstorming",
+        "running-lean",
+        "founder-institute",
+        "pitch-deck",
+        "mvp",
+        "unit-economics"
+      ]
     },
     {
       "name": "app-gtm-release",
@@ -50,24 +142,10 @@
       ]
     },
     {
-      "name": "business-model-toolkit",
-      "description": "Interactive business model brainstorming — guided dialogue covering the full startup lifecycle from problem validation through execution and investor pitch.",
-      "version": "2.0.0",
-      "source": "./toolkits/business-model-toolkit",
-      "category": "productivity",
-      "keywords": [
-        "claude-code",
-        "claude-code-plugin",
-        "business-model",
-        "lean-canvas",
-        "startup",
-        "brainstorming",
-        "running-lean",
-        "founder-institute",
-        "pitch-deck",
-        "mvp",
-        "unit-economics"
-      ]
+      "name": "aaarrr-flywheel-toolkit",
+      "description": "AAARRR Acquisition funnel + Retention/Referral flywheel sobre Meta Marketing API. Awareness/Acquisition/Activation/Revenue se ejecutan como funnel lineal; Retention/Referral cierran el loop como flywheel que retroalimenta Acquisition. Mantra: fail fast, fail often, fail cheap, fail forward.",
+      "version": "0.1.0",
+      "source": "./toolkits/aaarrr-flywheel-toolkit"
     },
     {
       "name": "fractional-cto-toolkit",
@@ -109,88 +187,10 @@
       "source": "./toolkits/launchpad-toolkit"
     },
     {
-      "name": "ux-research-toolkit",
-      "description": "Guided UX research map creation — experience maps, customer journey maps, service blueprints, storyboards, and user story maps. Helps non-experts create professional UX artifacts through dialogue, JSON data, and interactive HTML visualization.",
-      "version": "2.1.0",
-      "source": "./toolkits/ux-research-toolkit",
-      "category": "productivity",
-      "keywords": [
-        "claude-code",
-        "claude-code-plugin",
-        "ux-research",
-        "experience-map",
-        "journey-map",
-        "customer-journey",
-        "service-blueprint",
-        "storyboard",
-        "user-story-map",
-        "user-experience",
-        "design-thinking",
-        "service-design",
-        "user-persona",
-        "agile-planning",
-        "nielsen-norman"
-      ]
-    },
-    {
       "name": "venture-studio-toolkit",
       "description": "Macro portfolio management for venture studios and serial founders — LATAM corporate structures (Cayman Sandwich, Delaware Tostada, Skip-CR), Services Hub pattern with MSA templates, accelerator matching, govclab frameworks (studio thesis, focus, secret sauce), and Three Horizons portfolio allocation. Spanish-first; bilingual output framework documented for v1.3+.",
       "version": "1.2.0",
       "source": "./toolkits/venture-studio-toolkit"
-    },
-    {
-      "name": "atomic-design-toolkit",
-      "description": "Atomic Design toolkit for Flutter and Vite — decompose features into atoms, molecules, organisms, templates, and pages. Audit mode scans components, Vite bundle health (10 signals: duplicates, hashless assets, mixed majors, dual lockfiles, and more), and atomic-design enforcement hooks (V7: 7 cure-presence checks for future-drift exposure) across 18+ design system lenses. Migrate mode consumes audit reports to drive phased remediation.",
-      "version": "1.2.0",
-      "source": "./toolkits/atomic-design-toolkit",
-      "category": "frontend",
-      "keywords": [
-        "claude-code",
-        "claude-code-plugin",
-        "flutter",
-        "vite",
-        "react",
-        "vue",
-        "svelte",
-        "atomic-design",
-        "widget",
-        "component",
-        "design-system",
-        "material3",
-        "cupertino",
-        "bootstrap5",
-        "tailwind",
-        "shadcn",
-        "widgetbook",
-        "storybook",
-        "ui-components",
-        "bundle-health",
-        "migration",
-        "enforcement-hooks",
-        "atomic-design-rules"
-      ]
-    },
-    {
-      "name": "make-no-mistakes",
-      "description": "The disciplined dev lifecycle — implement issues, review PRs, sync releases, test E2E, manage sessions, stash secrets, and enforce manifest-driven tool-call hooks. One plugin to make no mistakes.",
-      "version": "1.33.0",
-      "source": "./toolkits/make-no-mistakes-toolkit",
-      "category": "workflow",
-      "keywords": [
-        "claude-code",
-        "claude-code-plugin",
-        "workflow",
-        "linear",
-        "github",
-        "greptile",
-        "testing",
-        "e2e",
-        "security",
-        "pentest",
-        "developer-workflow",
-        "session-management",
-        "secret-management"
-      ]
     }
   ]
 }
