@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Tokens inherited from better-microservices/apps/web (Chimera brand). */
+@layer base {
+  :root {
+    --background: 257 38% 5%;        /* #08060F */
+    --foreground: 260 30% 92%;       /* #ECE8F2 */
+    --card: 252 30% 14%;             /* #1C1830 */
+    --card-foreground: 260 30% 92%;
+    --muted: 250 24% 12%;
+    --muted-foreground: 252 11% 55%; /* #837C99 */
+    --border: 252 26% 20%;           /* #2A2640 */
+    --input: 252 26% 20%;
+    --primary: 252 100% 68%;         /* #7C5CFF violet */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 217 91% 60%;        /* #3B82F6 blue */
+    --secondary-foreground: 0 0% 100%;
+    --accent: 330 81% 60%;           /* #EC4899 magenta */
+    --accent-foreground: 0 0% 100%;
+    --destructive: 351 95% 71%;      /* #FB7185 */
+    --destructive-foreground: 0 0% 100%;
+    --success: 160 84% 52%;          /* #34D399 */
+    --warning: 43 96% 56%;           /* #FBBF24 */
+    --ring: 252 100% 68%;
+  }
+  * { @apply border-border; }
+  body { @apply bg-background text-foreground font-body antialiased; }
+  h1, h2, h3 { @apply font-heading; }
+}
+
+/* Light-surface sections (S4 problems, S7 process, S10 FAQ per design §7). */
+.surface-light {
+  --background: 0 0% 100%;
+  --foreground: 257 30% 10%;
+  --card: 250 40% 98%;
+  --card-foreground: 257 30% 10%;
+  --muted: 250 30% 96%;
+  --muted-foreground: 252 12% 40%;
+  --border: 252 20% 88%;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
