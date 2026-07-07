@@ -1,0 +1,267 @@
+<!-- story-cards.html — User Story Map story cards (one card column per phase) -->
+<!--
+  Renderer replaces per phase:
+    __PHASE_ID__            → phase.id
+    __PHASE_LABEL__         → phase.label
+    __USER_STORY__          → phase.user_story
+    __ACCEPTANCE_CRITERIA__ → phase.acceptance_criteria (array → joined as checkable list)
+    __PRIORITY__            → phase.priority  (must-have | should-have | could-have | wont-have)
+    __RELEASE__             → phase.release   (optional)
+    __EFFORT_ESTIMATE__     → phase.effort_estimate  (XS | S | M | L | XL, optional)
+
+  The renderer wraps all story card columns in .uxrt-story-grid and emits one
+  .uxrt-story-column per phase. This file is the per-column/per-card template.
+  Multiple stories per phase are handled by repeating .uxrt-story-card within the column.
+-->
+
+<style>
+  /* ── Story grid: one column per phase, matching phase-table alignment ── */
+  .uxrt-story-grid {
+    display: grid;
+    /* Column count matches phase count — renderer sets --phase-count via inline style */
+    grid-template-columns: repeat(var(--uxrt-phase-count, 6), 1fr);
+    gap: 16px;
+    padding: 16px 0;
+  }
+
+  /* ── Phase column ── */
+  .uxrt-story-column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* ── Individual story card ── */
+  .uxrt-story-card {
+    background: #222244;
+    border: 1.5px solid #333366;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .uxrt-story-card:focus-within {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.18);
+  }
+
+  /* ── Card header: priority badge + effort badge ── */
+  .uxrt-story-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: #2a2a50;
+    border-bottom: 1px solid #333366;
+    gap: 8px;
+  }
+
+  /* ── Priority badge ── */
+  .uxrt-priority-badge {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 10px;
+    border: 1px solid currentColor;
+    white-space: nowrap;
+  }
+
+  .uxrt-priority-badge[data-priority="must-have"] {
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.12);
+  }
+
+  .uxrt-priority-badge[data-priority="should-have"] {
+    color: #ffa07a;
+    background: rgba(255, 160, 122, 0.12);
+  }
+
+  .uxrt-priority-badge[data-priority="could-have"] {
+    color: #6bcb77;
+    background: rgba(107, 203, 119, 0.12);
+  }
+
+  .uxrt-priority-badge[data-priority="wont-have"] {
+    color: #888;
+    background: rgba(136, 136, 136, 0.10);
+  }
+
+  /* ── Effort badge ── */
+  .uxrt-effort-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 8px;
+    background: #1a1a3a;
+    border: 1px solid #444466;
+    color: #9090cc;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    white-space: nowrap;
+  }
+
+  .uxrt-effort-badge[data-effort="XS"] { font-size: 9px;  color: #8888aa; }
+  .uxrt-effort-badge[data-effort="S"]  { font-size: 10px; color: #9999bb; }
+  .uxrt-effort-badge[data-effort="M"]  { font-size: 11px; color: #aaaacc; }
+  .uxrt-effort-badge[data-effort="L"]  { font-size: 12px; color: #bbbbdd; }
+  .uxrt-effort-badge[data-effort="XL"] { font-size: 13px; color: #ccccee; font-weight: 800; }
+
+  .uxrt-effort-badge:hover {
+    border-color: #667eea;
+  }
+
+  /* ── User story text ── */
+  .uxrt-story-card__story {
+    padding: 12px;
+    font-size: 13px;
+    line-height: 1.55;
+    color: #c8c8e8;
+    border-bottom: 1px solid #2d2d55;
+    min-height: 60px;
+  }
+
+  .uxrt-story-card__story[contenteditable]:empty::before {
+    content: attr(data-placeholder);
+    color: #444466;
+    pointer-events: none;
+  }
+
+  /* ── Acceptance criteria section ── */
+  .uxrt-story-card__criteria-header {
+    padding: 6px 12px 2px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #555580;
+    background: #1e1e3e;
+    border-bottom: 1px solid #2a2a4a;
+  }
+
+  .uxrt-story-card__criteria {
+    padding: 8px 12px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #9090c0;
+    background: #1e1e3e;
+    min-height: 40px;
+    white-space: pre-wrap;
+  }
+
+  .uxrt-story-card__criteria[contenteditable]:empty::before {
+    content: attr(data-placeholder);
+    color: #3a3a5a;
+    pointer-events: none;
+  }
+
+  /* ── Footer: release tag ── */
+  .uxrt-story-card__footer {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: #1c1c38;
+    border-top: 1px solid #2a2a4a;
+  }
+
+  .uxrt-story-card__release-icon {
+    font-size: 11px;
+    color: #667eea;
+    flex-shrink: 0;
+  }
+
+  .uxrt-story-card__release {
+    font-size: 11px;
+    color: #7070a0;
+    flex: 1;
+  }
+
+  .uxrt-story-card__release[contenteditable]:empty::before {
+    content: attr(data-placeholder);
+    color: #333355;
+    pointer-events: none;
+  }
+</style>
+
+
+<!-- ═══ STORY COLUMN (repeat per phase — renderer wraps in .uxrt-story-grid) ═══ -->
+<div class="uxrt-story-column" data-phase="__PHASE_ID__">
+
+  <!-- ═══ STORY CARD (repeat per story within phase) ═══ -->
+  <div class="uxrt-story-card" data-phase="__PHASE_ID__">
+
+    <!-- Header: priority + effort -->
+    <div class="uxrt-story-card__header">
+      <span class="uxrt-priority-badge"
+            data-field="priority"
+            data-phase="__PHASE_ID__"
+            data-priority="__PRIORITY__"
+            title="Click to cycle priority"
+            onclick="uxrtCyclePriority(this)">__PRIORITY__</span>
+      <span class="uxrt-effort-badge"
+            data-field="effort_estimate"
+            data-phase="__PHASE_ID__"
+            data-effort="__EFFORT_ESTIMATE__"
+            title="Click to cycle effort estimate"
+            onclick="uxrtCycleEffort(this)">__EFFORT_ESTIMATE__</span>
+    </div>
+
+    <!-- User story text -->
+    <div class="uxrt-story-card__story"
+         contenteditable="true"
+         data-field="user_story"
+         data-phase="__PHASE_ID__"
+         data-placeholder="As a [usuario], I want [objetivo], so that [beneficio]...">__USER_STORY__</div>
+
+    <!-- Acceptance criteria -->
+    <div class="uxrt-story-card__criteria-header">Criterios de aceptación</div>
+    <div class="uxrt-story-card__criteria"
+         contenteditable="true"
+         data-field="acceptance_criteria"
+         data-phase="__PHASE_ID__"
+         data-placeholder="Un criterio por línea...">__ACCEPTANCE_CRITERIA__</div>
+
+    <!-- Footer: release tag -->
+    <div class="uxrt-story-card__footer">
+      <span class="uxrt-story-card__release-icon">🏷️</span>
+      <div class="uxrt-story-card__release"
+           contenteditable="true"
+           data-field="release"
+           data-phase="__PHASE_ID__"
+           data-placeholder="Sprint / Release...">__RELEASE__</div>
+    </div>
+
+  </div>
+  <!-- /uxrt-story-card -->
+
+</div>
+<!-- /uxrt-story-column -->
+
+
+<script>
+/**
+ * Cycle the priority badge through MoSCoW values.
+ */
+function uxrtCyclePriority(el) {
+  const cycle = ['must-have', 'should-have', 'could-have', 'wont-have'];
+  const current = el.dataset.priority || 'must-have';
+  const next = cycle[(cycle.indexOf(current) + 1) % cycle.length];
+  el.dataset.priority = next;
+  el.textContent = next;
+}
+
+/**
+ * Cycle the effort badge through T-shirt sizes.
+ */
+function uxrtCycleEffort(el) {
+  const cycle = ['XS', 'S', 'M', 'L', 'XL'];
+  const current = el.dataset.effort || 'M';
+  const next = cycle[(cycle.indexOf(current) + 1) % cycle.length];
+  el.dataset.effort = next;
+  el.textContent = next;
+}
+</script>

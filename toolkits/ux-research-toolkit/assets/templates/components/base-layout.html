@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>__MAP_TITLE__</title>
+  <style>
+    /* ── Reset & Base ──────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #1a1a2e;
+      color: #e0e0e0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
+      padding: 32px 24px 120px;
+    }
+
+    /* ── Wrapper ───────────────────────────────────────────────── */
+    .uxrt-map {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* ── Header ────────────────────────────────────────────────── */
+    .uxrt-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .uxrt-header__eyebrow {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: #888;
+      margin-bottom: 8px;
+    }
+    .uxrt-header__title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .uxrt-header__subtitle {
+      color: #999;
+      font-size: 14px;
+    }
+
+    /* ── Persona Card ──────────────────────────────────────────── */
+    .uxrt-persona-card {
+      background: #222244;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 28px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .uxrt-persona-card__avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+    .uxrt-persona-card__body { flex: 1; }
+    .uxrt-persona-card__name {
+      font-weight: 700;
+      font-size: 16px;
+      color: #fff;
+    }
+    .uxrt-persona-card__meta {
+      font-size: 13px;
+      color: #aaa;
+      margin-top: 4px;
+    }
+    .uxrt-persona-card__pain {
+      font-size: 13px;
+      color: #ccc;
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+    .uxrt-persona-card__pain strong {
+      color: #667eea;
+    }
+
+    /* ── Grid ──────────────────────────────────────────────────── */
+    .uxrt-grid {
+      display: grid;
+      grid-template-columns: 140px repeat(var(--phase-count, 5), 1fr);
+      gap: 0;
+      margin-bottom: 0;
+    }
+
+    /* Responsive: horizontal scroll on narrow viewports */
+    @media (max-width: 768px) {
+      .uxrt-grid {
+        overflow-x: auto;
+        display: block;
+        white-space: nowrap;
+      }
+      .uxrt-grid > * {
+        display: inline-block;
+        vertical-align: top;
+      }
+    }
+
+    /* ── Grid — Row Label (first column) ───────────────────────── */
+    .uxrt-row-label {
+      padding: 16px 12px;
+      font-size: 12px;
+      color: #aaa;
+      display: flex;
+      align-items: center;
+      line-height: 1.4;
+    }
+    .uxrt-row-label--header {
+      background: #333355;
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-radius: 8px 0 0 0;
+    }
+    .uxrt-row-label--emotion  { background: #2a2a4a; }
+    .uxrt-row-label--actions  { background: #252545; }
+    .uxrt-row-label--thoughts { background: #2a2a4a; }
+    .uxrt-row-label--frustrations { background: #252545; }
+    .uxrt-row-label--touchpoints  { background: #2a2a4a; }
+    .uxrt-row-label--opportunities {
+      background: #1a3a2a;
+      color: #6bcb77;
+      border-radius: 0 0 0 8px;
+    }
+
+    /* ── Grid — Phase Header Cells ─────────────────────────────── */
+    .uxrt-phase-header {
+      padding: 12px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 12px;
+    }
+    .uxrt-phase-header--color-0 { background: #4a3f6b; color: #e8d5ff; }
+    .uxrt-phase-header--color-1 { background: #3f5a6b; color: #d5f0ff; }
+    .uxrt-phase-header--color-2 { background: #3f6b5a; color: #d5ffe8; }
+    .uxrt-phase-header--color-3 { background: #6b5a3f; color: #ffe8d5; }
+    .uxrt-phase-header--color-4 { background: #5a3f6b; color: #e8d5ff; }
+    /* Last phase header gets a rounded top-right corner */
+    .uxrt-phase-header--last { border-radius: 0 8px 0 0; }
+
+    /* ── Grid — Emotion Cells ──────────────────────────────────── */
+    .uxrt-emotion-cell {
+      background: #2a2a4a;
+      padding: 12px;
+      text-align: center;
+    }
+    .uxrt-emotion-cell__emoji { font-size: 32px; }
+    .uxrt-emotion-cell__label {
+      font-size: 11px;
+      margin-top: 4px;
+      display: block;
+    }
+    .uxrt-emotion-cell__bar-track {
+      background: #333;
+      border-radius: 4px;
+      height: 6px;
+      margin-top: 6px;
+    }
+    .uxrt-emotion-cell__bar-fill {
+      height: 6px;
+      border-radius: 4px;
+    }
+
+    /* ── Grid — Action / Text Cells ────────────────────────────── */
+    .uxrt-cell {
+      padding: 12px;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .uxrt-cell--actions      { background: #252545; color: #ddd; }
+    .uxrt-cell--thoughts     { background: #2a2a4a; color: #ddd; font-style: italic; }
+    .uxrt-cell--frustrations { background: #252545; color: #ff8a8a; }
+    .uxrt-cell--touchpoints  { background: #2a2a4a; color: #88aaff; }
+    .uxrt-cell--opportunities {
+      background: #1a3a2a;
+      color: #a8e6a1;
+    }
+    /* Last column bottom-right corner rounding */
+    .uxrt-cell--last-col-opportunities { border-radius: 0 0 8px 0; }
+
+    /* ── Analysis Panels ───────────────────────────────────────── */
+    .uxrt-pain-points {
+      margin-top: 28px;
+      background: #3a1a1a;
+      border-radius: 12px;
+      padding: 20px;
+      border-left: 4px solid #ff6b6b;
+    }
+    .uxrt-pain-points__header {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #ff6b6b;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+    .uxrt-pain-points__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 600px) {
+      .uxrt-pain-points__grid { grid-template-columns: 1fr; }
+    }
+    .uxrt-pain-points__item {
+      font-size: 13px;
+      color: #ddd;
+      line-height: 1.5;
+    }
+
+    .uxrt-moments {
+      margin-top: 16px;
+      background: #1a2a3a;
+      border-radius: 12px;
+      padding: 20px;
+      border-left: 4px solid #667eea;
+    }
+    .uxrt-moments__header {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #667eea;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+    .uxrt-moments__item {
+      font-size: 13px;
+      color: #ddd;
+      line-height: 1.8;
+      margin-bottom: 8px;
+    }
+    .uxrt-moments__item:last-child { margin-bottom: 0; }
+    .uxrt-moments__phase-ref {
+      color: #88aaff;
+      font-weight: 700;
+    }
+
+    /* ── Footer ────────────────────────────────────────────────── */
+    .uxrt-footer {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 11px;
+      color: #666;
+      border-top: 1px solid #333;
+      padding-top: 16px;
+    }
+
+    /* ── Editor Controls (sticky bar) ──────────────────────────── */
+    .uxrt-editor-controls {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #111128;
+      border-top: 1px solid #333355;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 1000;
+    }
+    .uxrt-editor-controls__btn {
+      padding: 8px 18px;
+      border-radius: 6px;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .uxrt-editor-controls__btn:hover { opacity: 0.85; }
+    .uxrt-editor-controls__btn--save {
+      background: #667eea;
+      color: #fff;
+    }
+    .uxrt-editor-controls__btn--refresh {
+      background: #2a2a4a;
+      color: #aac4ff;
+      border: 1px solid #445;
+    }
+    .uxrt-editor-controls__status {
+      font-size: 12px;
+      color: #6bcb77;
+      margin-left: 8px;
+      min-width: 180px;
+    }
+
+    /* ── Contenteditable Styling ────────────────────────────────── */
+    [contenteditable="true"] {
+      outline: none;
+      cursor: text;
+      border-radius: 3px;
+      transition: background 0.15s, box-shadow 0.15s;
+    }
+    [contenteditable="true"]:hover {
+      background: rgba(255,255,255,0.04);
+    }
+    [contenteditable="true"]:focus {
+      background: rgba(102, 126, 234, 0.12);
+      box-shadow: inset 0 0 0 1px rgba(102, 126, 234, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="uxrt-map">
+
+    <!-- Header -->
+    <div class="uxrt-header">
+      <div class="uxrt-header__eyebrow">Experience Map · __PROFILE_TYPE__</div>
+      <h1 class="uxrt-header__title" contenteditable="true" data-field="meta.title">__MAP_TITLE__</h1>
+    </div>
+
+    <!-- Components injected by renderer -->
+    __COMPONENTS__
+
+    <!-- Footer -->
+    <div class="uxrt-footer">
+      Generado por <strong>ux-research-toolkit</strong> · Experience Map (__PROFILE_TYPE__) · Basado en metodología NN/g · <span contenteditable="true" data-field="meta.created">__CREATED_DATE__</span>
+    </div>
+
+  </div>
+
+  <!-- Editor Controls injected by renderer -->
+  __EDITOR_CONTROLS__
+</body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "name": "ux-research-toolkit",
+  "version": "2.1.0",
+  "description": "Guided UX research map creation — experience maps, customer journey maps, service blueprints, storyboards, and user story maps. Helps non-experts create professional UX artifacts through dialogue, JSON data, and interactive HTML visualization.",
+  "author": {
+    "name": "Luis Andres Pena Castillo",
+    "url": "https://github.com/chimeranext"
+  },
+  "homepage": "https://github.com/chimeranext/ux-research-toolkit",
+  "repository": "https://github.com/chimeranext/ux-research-toolkit",
+  "license": "BSL-1.1",
+  "keywords": [
+    "claude-code",
+    "claude-code-plugin",
+    "ux-research",
+    "experience-map",
+    "journey-map",
+    "customer-journey",
+    "user-experience",
+    "design-thinking",
+    "service-design",
+    "service-blueprint",
+    "storyboard",
+    "user-story-map",
+    "user-persona",
+    "agile-planning"
+  ]
+}

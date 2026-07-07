@@ -1,0 +1,29 @@
+<!-- touchpoint-map.html — Touchpoints + Channels row fragment (one cell per phase) -->
+<!--
+  Renderer replaces per phase:
+    __PHASE_ID__    → phase.id
+    __TOUCHPOINTS__ → phase.touchpoints joined as comma-separated text
+    __CHANNELS__    → phase.channels joined as comma-separated text (optional display)
+
+  The row-label cell is emitted ONCE before the phase loop.
+  Touchpoints and channels are displayed as comma-separated inline text.
+-->
+
+<!-- ═══ ROW LABEL (emit once) ═══ -->
+<div class="uxrt-row-label uxrt-row-label--touchpoints">📱 Touchpoints</div>
+
+<!-- ═══ TOUCHPOINTS CELL (repeat per phase) ═══ -->
+<div class="uxrt-cell uxrt-cell--touchpoints" data-phase="__PHASE_ID__">
+  <span contenteditable="true"
+        data-field="touchpoints"
+        data-phase="__PHASE_ID__"
+        title="Touchpoints (comma-separated)">__TOUCHPOINTS__</span>
+  <span class="uxrt-touchpoints__channels-sep"
+        style="display:block;margin-top:4px;font-size:11px;color:#6680bb;"
+        data-phase="__PHASE_ID__">
+    <span contenteditable="true"
+          data-field="channels"
+          data-phase="__PHASE_ID__"
+          title="Channels (comma-separated)">__CHANNELS__</span>
+  </span>
+</div>

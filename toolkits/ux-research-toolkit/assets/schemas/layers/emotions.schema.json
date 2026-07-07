@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ux-research-toolkit/schemas/layers/emotions.schema.json",
+  "title": "UX Research Toolkit — Emotions Layer",
+  "description": "Layer schema extending each phase with an emotional state. Merge into each phase object alongside the core phase definition. Patch applied to each phase object to add emotional data.",
+  "type": "object",
+  "properties": {
+    "emotion": {
+      "type": "object",
+      "description": "The dominant emotional state the persona experiences during this phase",
+      "required": ["emoji", "label", "level"],
+      "properties": {
+        "emoji": {
+          "type": "string",
+          "description": "Single emoji representing the emotion visually",
+          "examples": ["😟", "😊", "😤", "😌", "😰"]
+        },
+        "label": {
+          "type": "string",
+          "description": "Short emotion name in the language of the document",
+          "examples": ["Preocupada", "Aliviada", "Frustrada", "Contenta"]
+        },
+        "level": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "Emotional valence on a 1-5 scale. 1 = very negative/distressed, 3 = neutral, 5 = very positive/delighted. Used to plot the emotion curve."
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": ["emotion"]
+}

@@ -1,0 +1,205 @@
+<!-- swimlanes.html — Service Blueprint swimlane rows (Physical Evidence, Frontstage, Line of Visibility, Backstage, Support Processes) -->
+<!--
+  Renderer replaces per phase:
+    __PHASE_ID__            → phase.id
+    __PHYSICAL_EVIDENCE__   → phase.physical_evidence
+    __FRONTSTAGE_ACTIONS__  → phase.frontstage_actions
+    __BACKSTAGE_ACTIONS__   → phase.backstage_actions
+    __SUPPORT_PROCESSES__   → phase.support_processes
+    __LINE_OF_VISIBILITY__  → phase.line_of_visibility  (enum: visible | partially-visible | hidden)
+
+  Row labels are emitted ONCE; data cells are repeated per phase.
+  The renderer emits the five row groups sequentially.
+-->
+
+<style>
+  .uxrt-swimlane-section {
+    display: contents;
+  }
+
+  .uxrt-row-label--physical-evidence {
+    background: #1e1e38;
+    border-left: 4px solid #a78bfa;
+  }
+
+  .uxrt-cell--physical-evidence {
+    background: #1e1e38;
+    border-top: 2px solid #a78bfa;
+  }
+
+  .uxrt-row-label--frontstage {
+    background: #252545;
+    border-left: 4px solid #667eea;
+  }
+
+  .uxrt-cell--frontstage {
+    background: #252545;
+  }
+
+  .uxrt-swimlane-visibility-row {
+    display: contents;
+  }
+
+  .uxrt-row-label--line-of-visibility {
+    background: #1e1e3a;
+    border-left: 4px solid #667eea;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #667eea;
+  }
+
+  .uxrt-cell--line-of-visibility {
+    background: #1e1e3a;
+    border-top: 2px dashed #667eea;
+    border-bottom: 2px dashed #667eea;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+  }
+
+  .uxrt-visibility-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    border: 1px solid currentColor;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .uxrt-visibility-badge[data-value="visible"] {
+    color: #6bcb77;
+    background: rgba(107, 203, 119, 0.12);
+  }
+
+  .uxrt-visibility-badge[data-value="partially-visible"] {
+    color: #ffd93d;
+    background: rgba(255, 217, 61, 0.12);
+  }
+
+  .uxrt-visibility-badge[data-value="hidden"] {
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.12);
+  }
+
+  .uxrt-row-label--backstage {
+    background: #2a2a3a;
+    border-left: 4px solid #f093fb;
+  }
+
+  .uxrt-cell--backstage {
+    background: #2a2a3a;
+  }
+
+  .uxrt-row-label--support-processes {
+    background: #1a1a2a;
+    border-left: 4px solid #4facfe;
+  }
+
+  .uxrt-cell--support-processes {
+    background: #1a1a2a;
+    border-bottom: 2px solid #4facfe;
+  }
+</style>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     ROW 1 — EVIDENCIA FÍSICA (Physical Evidence)
+     ════════════════════════════════════════════════════════════ -->
+
+<!-- ═══ ROW LABEL (emit once) ═══ -->
+<div class="uxrt-row-label uxrt-row-label--physical-evidence">🧾 Evidencia física</div>
+
+<!-- ═══ PHYSICAL EVIDENCE CELL (repeat per phase) ═══ -->
+<div class="uxrt-cell uxrt-cell--physical-evidence"
+     data-phase="__PHASE_ID__"
+     contenteditable="true"
+     data-field="physical_evidence">__PHYSICAL_EVIDENCE__</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     ROW 2 — ACCIONES EN ESCENA (Frontstage Actions)
+     ════════════════════════════════════════════════════════════ -->
+
+<!-- ═══ ROW LABEL (emit once) ═══ -->
+<div class="uxrt-row-label uxrt-row-label--frontstage">👁️ Acciones en escena</div>
+
+<!-- ═══ FRONTSTAGE CELL (repeat per phase) ═══ -->
+<div class="uxrt-cell uxrt-cell--frontstage"
+     data-phase="__PHASE_ID__"
+     contenteditable="true"
+     data-field="frontstage_actions">__FRONTSTAGE_ACTIONS__</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     ROW 3 — LÍNEA DE VISIBILIDAD (Line of Visibility)
+     Dashed separator + visibility badge per phase
+     ════════════════════════════════════════════════════════════ -->
+
+<!-- ═══ ROW LABEL (emit once) ═══ -->
+<div class="uxrt-row-label uxrt-row-label--line-of-visibility">
+  <span>— — —</span>
+  <span>Línea de visibilidad</span>
+</div>
+
+<!-- ═══ LINE OF VISIBILITY CELL (repeat per phase) ═══ -->
+<div class="uxrt-cell uxrt-cell--line-of-visibility"
+     data-phase="__PHASE_ID__">
+  <span class="uxrt-visibility-badge"
+        data-field="line_of_visibility"
+        data-phase="__PHASE_ID__"
+        data-value="__LINE_OF_VISIBILITY__"
+        title="Click to cycle: visible → partially-visible → hidden"
+        onclick="uxrtCycleVisibility(this)">__LINE_OF_VISIBILITY__</span>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     ROW 4 — ACCIONES TRAS BASTIDORES (Backstage Actions)
+     ════════════════════════════════════════════════════════════ -->
+
+<!-- ═══ ROW LABEL (emit once) ═══ -->
+<div class="uxrt-row-label uxrt-row-label--backstage">🎭 Tras bastidores</div>
+
+<!-- ═══ BACKSTAGE CELL (repeat per phase) ═══ -->
+<div class="uxrt-cell uxrt-cell--backstage"
+     data-phase="__PHASE_ID__"
+     contenteditable="true"
+     data-field="backstage_actions">__BACKSTAGE_ACTIONS__</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     ROW 5 — PROCESOS DE SOPORTE (Support Processes)
+     ════════════════════════════════════════════════════════════ -->
+
+<!-- ═══ ROW LABEL (emit once) ═══ -->
+<div class="uxrt-row-label uxrt-row-label--support-processes">⚙️ Procesos de soporte</div>
+
+<!-- ═══ SUPPORT PROCESSES CELL (repeat per phase) ═══ -->
+<div class="uxrt-cell uxrt-cell--support-processes"
+     data-phase="__PHASE_ID__"
+     contenteditable="true"
+     data-field="support_processes">__SUPPORT_PROCESSES__</div>
+
+
+<script>
+/**
+ * Cycle the line_of_visibility badge through its three valid states.
+ * Called onclick on each badge element.
+ */
+function uxrtCycleVisibility(el) {
+  const cycle = ['visible', 'partially-visible', 'hidden'];
+  const current = el.dataset.value || 'visible';
+  const nextIdx = (cycle.indexOf(current) + 1) % cycle.length;
+  const next = cycle[nextIdx];
+  el.dataset.value = next;
+  el.textContent = next;
+}
+</script>

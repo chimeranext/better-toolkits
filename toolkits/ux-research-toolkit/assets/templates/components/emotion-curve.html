@@ -1,0 +1,37 @@
+<!-- emotion-curve.html — Emotion row fragment (one cell per phase, renderer repeats) -->
+<!--
+  Renderer replaces per phase:
+    __PHASE_ID__         → phase.id
+    __EMOTION_EMOJI__    → phase.emotion.emoji
+    __EMOTION_LABEL__    → phase.emotion.label
+    __EMOTION_LEVEL__    → phase.emotion.level  (integer 1–5)
+    __EMOTION_COLOR__    → color hex based on level:
+                           1 → #ff6b6b  2 → #ffa07a  3 → #ffd93d
+                           4 → #90ee90  5 → #6bcb77
+    __EMOTION_BAR_WIDTH__ → (level/5)*100  e.g. "60%"
+
+  The row-label cell is emitted ONCE before the phase loop.
+-->
+
+<!-- ═══ ROW LABEL (emit once) ═══ -->
+<div class="uxrt-row-label uxrt-row-label--emotion">😊 Emociones</div>
+
+<!-- ═══ EMOTION CELL (repeat per phase) ═══ -->
+<div class="uxrt-emotion-cell" data-phase="__PHASE_ID__">
+  <div class="uxrt-emotion-cell__emoji"
+       contenteditable="true"
+       data-field="emotion.emoji"
+       data-phase="__PHASE_ID__">__EMOTION_EMOJI__</div>
+  <span class="uxrt-emotion-cell__label"
+        style="color: __EMOTION_COLOR__;"
+        contenteditable="true"
+        data-field="emotion.label"
+        data-phase="__PHASE_ID__">__EMOTION_LABEL__</span>
+  <div class="uxrt-emotion-cell__bar-track">
+    <div class="uxrt-emotion-cell__bar-fill"
+         style="background: __EMOTION_COLOR__; width: __EMOTION_BAR_WIDTH__;"
+         data-field="emotion.level"
+         data-phase="__PHASE_ID__"
+         data-level="__EMOTION_LEVEL__"></div>
+  </div>
+</div>

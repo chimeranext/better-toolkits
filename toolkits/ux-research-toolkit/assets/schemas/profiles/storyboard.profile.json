@@ -1,0 +1,15 @@
+{
+  "name": "storyboard",
+  "display_name": "Storyboard (Guión Visual)",
+  "layers": ["core", "emotions", "scenes"],
+  "components": ["base-layout", "persona-card", "comic-frames", "emotion-curve", "editor-controls"],
+  "default_phases": [
+    {"id": "scene-1", "label": "Escena 1: Contexto", "icon": "🎬"},
+    {"id": "scene-2", "label": "Escena 2: Problema", "icon": "😰"},
+    {"id": "scene-3", "label": "Escena 3: Búsqueda", "icon": "🔎"},
+    {"id": "scene-4", "label": "Escena 4: Descubrimiento", "icon": "💡"},
+    {"id": "scene-5", "label": "Escena 5: Solución", "icon": "✨"},
+    {"id": "scene-6", "label": "Escena 6: Resultado", "icon": "🎉"}
+  ],
+  "variant": "narrative"
+}

@@ -1,0 +1,463 @@
+<!-- editor-controls.html — Sticky footer with Save/Refresh buttons and JavaScript -->
+<div class="uxrt-editor-controls" id="uxrt-editor-controls">
+  <button class="uxrt-editor-controls__btn uxrt-editor-controls__btn--save"
+          onclick="uxrtSaveJson()">💾 Save JSON</button>
+  <button class="uxrt-editor-controls__btn uxrt-editor-controls__btn--refresh"
+          onclick="uxrtRefreshJson()">🔄 Refresh from JSON</button>
+  <span class="uxrt-editor-controls__status" id="uxrt-status" aria-live="polite"></span>
+  <!-- Hidden file input for fallback load -->
+  <input type="file" id="uxrt-file-input" accept=".json,application/json"
+         style="display:none;" onchange="uxrtHandleFileInput(this)">
+</div>
+
+<script>
+/* ──────────────────────────────────────────────────────────────────
+   UX Research Toolkit — Editor Controls
+   Implements bidirectional sync between contenteditable DOM and JSON.
+
+   JSON structure mirrors core.schema.json:
+   {
+     meta:    { type, profile, title, created, updated, version },
+     persona: { name, age, role, location, avatar_emoji, primary_pain, context },
+     phases:  [{ id, label, icon, emotion, actions, thoughts, frustrations,
+                 opportunities, touchpoints, channels,
+                 // v2 — backstage layer (service-blueprint)
+                 frontstage_actions, backstage_actions, support_processes,
+                 physical_evidence, line_of_visibility,
+                 // v2 — scenes layer (storyboard)
+                 scene_description, scene_setting, scene_dialogue, scene_mood,
+                 // v2 — stories layer (user-story-map)
+                 user_story, acceptance_criteria, priority, release, effort_estimate }],
+     analysis:{ pain_points: [], moments_of_truth: [] }
+   }
+────────────────────────────────────────────────────────────────── */
+
+// ── Helpers ──────────────────────────────────────────────────────
+
+/** Set a deeply-nested value using dot-notation path, including array indices.
+ *  e.g. setDeep(obj, "analysis.pain_points[2]", "text")
+ */
+function uxrtSetDeep(obj, path, value) {
+  // Normalise bracket notation: a[0].b → a.0.b
+  const parts = path.replace(/\[(\d+)\]/g, '.$1').split('.');
+  let cur = obj;
+  for (let i = 0; i < parts.length - 1; i++) {
+    const part = parts[i];
+    const nextIsIndex = /^\d+$/.test(parts[i + 1]);
+    if (cur[part] === undefined || cur[part] === null) {
+      cur[part] = nextIsIndex ? [] : {};
+    }
+    cur = cur[part];
+  }
+  const last = parts[parts.length - 1];
+  cur[last] = value;
+}
+
+/** Get a deeply-nested value using dot-notation path. */
+function uxrtGetDeep(obj, path) {
+  const parts = path.replace(/\[(\d+)\]/g, '.$1').split('.');
+  let cur = obj;
+  for (const part of parts) {
+    if (cur === undefined || cur === null) return undefined;
+    cur = cur[part];
+  }
+  return cur;
+}
+
+/** Display a status message that auto-clears after 3 s. */
+function uxrtStatus(msg, isError) {
+  const el = document.getElementById('uxrt-status');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.color = isError ? '#ff8a8a' : '#6bcb77';
+  clearTimeout(uxrtStatus._timer);
+  uxrtStatus._timer = setTimeout(() => { el.textContent = ''; }, 3000);
+}
+
+// ── Build JSON from DOM ──────────────────────────────────────────
+
+function uxrtBuildJson() {
+  // Seed from any existing window.__UXRT_META__ injected by renderer
+  const meta = Object.assign(
+    { type: '', profile: '', title: '', created: '', updated: '', version: 1 },
+    window.__UXRT_META__ || {}
+  );
+
+  // Update meta.updated to today
+  meta.updated = new Date().toISOString().split('T')[0];
+
+  const persona = {};
+  const phasesMap = {}; // phase_id → phase object
+  const analysis = { pain_points: [], moments_of_truth: [] };
+
+  document.querySelectorAll('[contenteditable]').forEach(el => {
+    const field = el.dataset.field;
+    const phase = el.dataset.phase;
+    if (!field) return;
+
+    const text = el.innerText.trim();
+
+    if (phase) {
+      // Phase-scoped field
+      if (!phasesMap[phase]) phasesMap[phase] = { id: phase };
+      const p = phasesMap[phase];
+
+      if (field === 'label') {
+        p.label = text;
+      } else if (field === 'emotion.emoji') {
+        if (!p.emotion) p.emotion = {};
+        p.emotion.emoji = text;
+      } else if (field === 'emotion.label') {
+        if (!p.emotion) p.emotion = {};
+        p.emotion.label = text;
+      } else if (field === 'emotion.level') {
+        // level is stored in data-level, not innerText
+        if (!p.emotion) p.emotion = {};
+        p.emotion.level = parseInt(el.dataset.level, 10) || 3;
+      } else if (field === 'actions') {
+        p.actions = text;
+      } else if (field === 'thoughts') {
+        p.thoughts = text;
+      } else if (field === 'frustrations') {
+        p.frustrations = text;
+      } else if (field === 'opportunities') {
+        p.opportunities = text;
+      } else if (field === 'touchpoints') {
+        p.touchpoints = text.split(',').map(s => s.trim()).filter(Boolean);
+      } else if (field === 'channels') {
+        p.channels = text.split(',').map(s => s.trim()).filter(Boolean);
+
+      // ── v2: backstage layer (service-blueprint) ──────────────
+      } else if (field === 'frontstage_actions') {
+        p.frontstage_actions = text;
+      } else if (field === 'backstage_actions') {
+        p.backstage_actions = text;
+      } else if (field === 'support_processes') {
+        p.support_processes = text;
+      } else if (field === 'physical_evidence') {
+        p.physical_evidence = text;
+      } else if (field === 'line_of_visibility') {
+        // line_of_visibility is stored in data-value on the badge, not innerText
+        // (handled separately below via querySelectorAll on the badge element)
+
+      // ── v2: scenes layer (storyboard) ────────────────────────
+      } else if (field === 'scene_description') {
+        p.scene_description = text;
+      } else if (field === 'scene_setting') {
+        p.scene_setting = text;
+      } else if (field === 'scene_dialogue') {
+        p.scene_dialogue = text;
+      } else if (field === 'scene_mood') {
+        p.scene_mood = text;
+
+      // ── v2: stories layer (user-story-map) ───────────────────
+      } else if (field === 'user_story') {
+        p.user_story = text;
+      } else if (field === 'acceptance_criteria') {
+        // Split multi-line textarea into array; filter blank lines
+        p.acceptance_criteria = text.split('\n').map(s => s.trim()).filter(Boolean);
+      } else if (field === 'release') {
+        p.release = text;
+      } else if (field === 'priority') {
+        // priority is stored in data-priority on the badge, not innerText
+        // (handled separately below via querySelectorAll on the badge element)
+      } else if (field === 'effort_estimate') {
+        // effort_estimate is stored in data-effort on the badge, not innerText
+        // (handled separately below via querySelectorAll on the badge element)
+      }
+    } else if (field.startsWith('persona.')) {
+      const key = field.slice('persona.'.length);
+      if (key === 'age') {
+        persona[key] = parseInt(text, 10) || 0;
+      } else {
+        persona[key] = text;
+      }
+    } else if (field === 'meta.title') {
+      meta.title = text;
+    } else if (field === 'meta.created') {
+      meta.created = text;
+    } else if (field.startsWith('analysis.pain_points[')) {
+      const idx = parseInt(field.match(/\[(\d+)\]/)[1], 10);
+      analysis.pain_points[idx] = text;
+    } else if (field.startsWith('analysis.moments_of_truth[')) {
+      const match = field.match(/\[(\d+)\]\.(\w+)/);
+      if (match) {
+        const idx = parseInt(match[1], 10);
+        const key = match[2];
+        if (!analysis.moments_of_truth[idx]) analysis.moments_of_truth[idx] = {};
+        analysis.moments_of_truth[idx][key] = text;
+      }
+    }
+  });
+
+  // Also collect emotion.level from bar-fill elements (not contenteditable)
+  document.querySelectorAll('[data-field="emotion.level"]').forEach(el => {
+    const phase = el.dataset.phase;
+    if (phase && phasesMap[phase]) {
+      if (!phasesMap[phase].emotion) phasesMap[phase].emotion = {};
+      phasesMap[phase].emotion.level = parseInt(el.dataset.level, 10) || 3;
+    }
+  });
+
+  // ── v2: collect badge data-attributes (not innerText) ─────────
+
+  // line_of_visibility from swimlanes badge
+  document.querySelectorAll('[data-field="line_of_visibility"]').forEach(el => {
+    const phase = el.dataset.phase;
+    if (phase) {
+      if (!phasesMap[phase]) phasesMap[phase] = { id: phase };
+      phasesMap[phase].line_of_visibility = el.dataset.value || 'visible';
+    }
+  });
+
+  // priority from story-cards badge
+  document.querySelectorAll('[data-field="priority"]').forEach(el => {
+    const phase = el.dataset.phase;
+    if (phase) {
+      if (!phasesMap[phase]) phasesMap[phase] = { id: phase };
+      phasesMap[phase].priority = el.dataset.priority || 'must-have';
+    }
+  });
+
+  // effort_estimate from story-cards badge
+  document.querySelectorAll('[data-field="effort_estimate"]').forEach(el => {
+    const phase = el.dataset.phase;
+    if (phase) {
+      if (!phasesMap[phase]) phasesMap[phase] = { id: phase };
+      const effort = el.dataset.effort;
+      if (effort) phasesMap[phase].effort_estimate = effort;
+    }
+  });
+
+  // Preserve phase order using DOM order of phase header cells
+  const phaseOrder = [];
+  document.querySelectorAll('[data-phase]').forEach(el => {
+    const pid = el.dataset.phase;
+    if (pid && !phaseOrder.includes(pid)) phaseOrder.push(pid);
+  });
+
+  // Merge with any phase icon data stored in window.__UXRT_PHASES__
+  const phaseIconMap = window.__UXRT_PHASES__ || {};
+  const phases = phaseOrder.map(pid => {
+    const p = phasesMap[pid] || { id: pid };
+    if (!p.icon && phaseIconMap[pid]) p.icon = phaseIconMap[pid];
+    return p;
+  });
+
+  // Clean sparse arrays
+  analysis.pain_points = analysis.pain_points.filter(Boolean);
+  analysis.moments_of_truth = analysis.moments_of_truth.filter(Boolean);
+
+  return { meta, persona, phases, analysis };
+}
+
+// ── Save to JSON ─────────────────────────────────────────────────
+
+async function uxrtSaveJson() {
+  const json = uxrtBuildJson();
+  const blob = new Blob([JSON.stringify(json, null, 2)], { type: 'application/json' });
+  const suggestedName = (json.meta.title || 'map').replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-').toLowerCase() + '.json';
+
+  if (window.showSaveFilePicker) {
+    // File System Access API (Chrome 86+, Edge 86+)
+    try {
+      const handle = await window.showSaveFilePicker({
+        suggestedName,
+        types: [{ description: 'JSON file', accept: { 'application/json': ['.json'] } }]
+      });
+      const writable = await handle.createWritable();
+      await writable.write(blob);
+      await writable.close();
+      uxrtStatus('Saved successfully ✓');
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        uxrtStatus('Save failed: ' + err.message, true);
+      }
+    }
+  } else {
+    // Fallback: trigger a download link
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = suggestedName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
+    uxrtStatus('Downloaded as ' + suggestedName + ' ✓');
+  }
+}
+
+// ── Refresh from JSON ────────────────────────────────────────────
+
+async function uxrtRefreshJson() {
+  if (window.showOpenFilePicker) {
+    // File System Access API
+    try {
+      const [handle] = await window.showOpenFilePicker({
+        types: [{ description: 'JSON file', accept: { 'application/json': ['.json'] } }],
+        multiple: false
+      });
+      const file = await handle.getFile();
+      const text = await file.text();
+      uxrtApplyJson(JSON.parse(text));
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        uxrtStatus('Load failed: ' + err.message, true);
+      }
+    }
+  } else {
+    // Fallback: hidden file input
+    document.getElementById('uxrt-file-input').click();
+  }
+}
+
+function uxrtHandleFileInput(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      uxrtApplyJson(JSON.parse(e.target.result));
+    } catch (err) {
+      uxrtStatus('Invalid JSON: ' + err.message, true);
+    }
+  };
+  reader.readAsText(file);
+  input.value = ''; // reset so the same file can be loaded again
+}
+
+// ── Apply JSON to DOM ────────────────────────────────────────────
+
+function uxrtApplyJson(data) {
+  if (!data || typeof data !== 'object') {
+    uxrtStatus('Invalid data structure', true);
+    return;
+  }
+
+  // Helper: set innerText of all matching elements
+  function set(field, phase, value) {
+    if (value === undefined || value === null) return;
+    const selector = phase
+      ? `[contenteditable][data-field="${CSS.escape(field)}"][data-phase="${CSS.escape(phase)}"]`
+      : `[contenteditable][data-field="${CSS.escape(field)}"]`;
+    document.querySelectorAll(selector).forEach(el => {
+      el.innerText = String(value);
+    });
+  }
+
+  // meta
+  if (data.meta) {
+    set('meta.title', null, data.meta.title);
+    set('meta.created', null, data.meta.created);
+    // Update window.__UXRT_META__
+    window.__UXRT_META__ = Object.assign(window.__UXRT_META__ || {}, data.meta);
+  }
+
+  // persona
+  if (data.persona) {
+    ['name', 'age', 'role', 'location', 'avatar_emoji', 'primary_pain', 'context'].forEach(key => {
+      set('persona.' + key, null, data.persona[key]);
+    });
+  }
+
+  // phases
+  if (Array.isArray(data.phases)) {
+    data.phases.forEach(phase => {
+      const pid = phase.id;
+      if (!pid) return;
+
+      set('label', pid, phase.label);
+
+      if (phase.emotion) {
+        set('emotion.emoji', pid, phase.emotion.emoji);
+        set('emotion.label', pid, phase.emotion.label);
+
+        // Update bar fill width + color for emotion level
+        if (phase.emotion.level) {
+          const lvl = phase.emotion.level;
+          const colors = { 1: '#ff6b6b', 2: '#ffa07a', 3: '#ffd93d', 4: '#90ee90', 5: '#6bcb77' };
+          const color = colors[lvl] || '#ffd93d';
+          const width = (lvl / 5 * 100) + '%';
+          document.querySelectorAll(`[data-field="emotion.level"][data-phase="${CSS.escape(pid)}"]`).forEach(el => {
+            el.dataset.level = lvl;
+            el.style.width = width;
+            el.style.background = color;
+            // Also update sibling label color
+            const labelEl = el.closest('.uxrt-emotion-cell')?.querySelector('[data-field="emotion.label"]');
+            if (labelEl) labelEl.style.color = color;
+          });
+        }
+      }
+
+      set('actions', pid, phase.actions);
+      set('thoughts', pid, phase.thoughts);
+      set('frustrations', pid, phase.frustrations);
+      set('opportunities', pid, phase.opportunities);
+
+      if (Array.isArray(phase.touchpoints)) {
+        set('touchpoints', pid, phase.touchpoints.join(', '));
+      }
+      if (Array.isArray(phase.channels)) {
+        set('channels', pid, phase.channels.join(', '));
+      }
+
+      // ── v2: backstage layer (service-blueprint) ──────────────
+      set('frontstage_actions', pid, phase.frontstage_actions);
+      set('backstage_actions', pid, phase.backstage_actions);
+      set('support_processes', pid, phase.support_processes);
+      set('physical_evidence', pid, phase.physical_evidence);
+      if (phase.line_of_visibility) {
+        document.querySelectorAll(`[data-field="line_of_visibility"][data-phase="${CSS.escape(pid)}"]`).forEach(el => {
+          el.dataset.value = phase.line_of_visibility;
+          el.textContent = phase.line_of_visibility;
+        });
+      }
+
+      // ── v2: scenes layer (storyboard) ────────────────────────
+      set('scene_description', pid, phase.scene_description);
+      set('scene_setting', pid, phase.scene_setting);
+      set('scene_dialogue', pid, phase.scene_dialogue);
+      set('scene_mood', pid, phase.scene_mood);
+
+      // ── v2: stories layer (user-story-map) ───────────────────
+      set('user_story', pid, phase.user_story);
+      if (Array.isArray(phase.acceptance_criteria)) {
+        set('acceptance_criteria', pid, phase.acceptance_criteria.join('\n'));
+      }
+      set('release', pid, phase.release);
+      if (phase.priority) {
+        document.querySelectorAll(`[data-field="priority"][data-phase="${CSS.escape(pid)}"]`).forEach(el => {
+          el.dataset.priority = phase.priority;
+          el.textContent = phase.priority;
+        });
+      }
+      if (phase.effort_estimate) {
+        document.querySelectorAll(`[data-field="effort_estimate"][data-phase="${CSS.escape(pid)}"]`).forEach(el => {
+          el.dataset.effort = phase.effort_estimate;
+          el.textContent = phase.effort_estimate;
+        });
+      }
+    });
+  }
+
+  // analysis — pain_points
+  if (data.analysis) {
+    if (Array.isArray(data.analysis.pain_points)) {
+      data.analysis.pain_points.forEach((pp, i) => {
+        set('analysis.pain_points[' + i + ']', null, pp);
+      });
+    }
+
+    // analysis — moments_of_truth
+    if (Array.isArray(data.analysis.moments_of_truth)) {
+      data.analysis.moments_of_truth.forEach((mot, i) => {
+        set('analysis.moments_of_truth[' + i + '].phase', null, mot.phase);
+        set('analysis.moments_of_truth[' + i + '].description', null, mot.description);
+      });
+    }
+  }
+
+  uxrtStatus('Loaded from file ✓');
+}
+</script>

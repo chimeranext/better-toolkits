@@ -1,0 +1,15 @@
+{
+  "name": "service-blueprint",
+  "display_name": "Service Blueprint (Plano de Servicio)",
+  "layers": ["core", "emotions", "actions", "touchpoints", "backstage"],
+  "components": ["base-layout", "persona-card", "phase-table", "emotion-curve", "action-rows", "touchpoint-map", "swimlanes", "pain-points-summary", "moments-of-truth", "editor-controls"],
+  "default_phases": [
+    {"id": "awareness", "label": "Descubrimiento", "icon": "🔍"},
+    {"id": "consideration", "label": "Consideración", "icon": "🤔"},
+    {"id": "acquisition", "label": "Adquisición", "icon": "🛒"},
+    {"id": "service-delivery", "label": "Entrega del servicio", "icon": "📦"},
+    {"id": "post-service", "label": "Post-servicio", "icon": "📞"},
+    {"id": "retention", "label": "Retención", "icon": "🔄"}
+  ],
+  "requires_product_context": true
+}

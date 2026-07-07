@@ -1,0 +1,23 @@
+{
+  "name": "experience-map",
+  "display_name": "Experience Map (Day in the Life)",
+  "layers": ["core", "emotions", "actions", "touchpoints"],
+  "components": [
+    "base-layout",
+    "persona-card",
+    "phase-table",
+    "emotion-curve",
+    "action-rows",
+    "pain-points-summary",
+    "moments-of-truth",
+    "editor-controls"
+  ],
+  "default_phases": [
+    {"id": "early-morning", "label": "Mañana temprana", "icon": "🌅"},
+    {"id": "late-morning", "label": "Media mañana", "icon": "☀️"},
+    {"id": "afternoon", "label": "Tarde", "icon": "🌤️"},
+    {"id": "evening", "label": "Atardecer", "icon": "🌆"},
+    {"id": "night", "label": "Noche", "icon": "🌙"}
+  ],
+  "variant": "day-in-the-life"
+}

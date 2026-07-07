@@ -1,0 +1,19 @@
+<!-- pain-points-summary.html — Aggregated pain points panel (below the grid) -->
+<!--
+  Renderer replaces:
+    __PAIN_POINTS_ITEMS__ → rendered <div> items for each pain point in analysis.pain_points
+                            Each item uses __PAIN_POINT_N__ (N = 0-based index) placeholder.
+
+  The renderer iterates analysis.pain_points and emits one .uxrt-pain-points__item per entry,
+  injecting index N and the item text. Example emitted item:
+
+    <div class="uxrt-pain-points__item"
+         contenteditable="true"
+         data-field="analysis.pain_points[0]">Incapacidad de medir dolor...</div>
+-->
+<div class="uxrt-pain-points">
+  <div class="uxrt-pain-points__header">🔥 Pain Points Principales</div>
+  <div class="uxrt-pain-points__grid">
+    __PAIN_POINTS_ITEMS__
+  </div>
+</div>

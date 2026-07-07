@@ -1,0 +1,15 @@
+{
+  "name": "user-story-map",
+  "display_name": "User Story Map (Mapa de Historias de Usuario)",
+  "layers": ["core", "actions", "stories"],
+  "components": ["base-layout", "persona-card", "phase-table", "action-rows", "story-cards", "editor-controls"],
+  "default_phases": [
+    {"id": "discover", "label": "Descubrir", "icon": "🔍"},
+    {"id": "evaluate", "label": "Evaluar", "icon": "⚖️"},
+    {"id": "acquire", "label": "Adquirir", "icon": "🛒"},
+    {"id": "setup", "label": "Configurar", "icon": "⚙️"},
+    {"id": "use-core", "label": "Uso principal", "icon": "⚡"},
+    {"id": "extend", "label": "Extender", "icon": "🔧"}
+  ],
+  "requires_product_context": true
+}

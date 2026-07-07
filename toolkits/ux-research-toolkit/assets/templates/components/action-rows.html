@@ -1,0 +1,71 @@
+<!-- action-rows.html — Actions, Thoughts, Frustrations, Opportunities rows (4 sub-templates) -->
+<!--
+  Renderer replaces per phase:
+    __PHASE_ID__       → phase.id
+    __ACTIONS__        → phase.actions
+    __THOUGHTS__       → phase.thoughts
+    __FRUSTRATIONS__   → phase.frustrations
+    __OPPORTUNITIES__  → phase.opportunities
+
+  Each row label is emitted ONCE; each data cell is repeated per phase.
+  The renderer emits the four row groups sequentially.
+-->
+
+<!-- ════════════════════════════════════════════════════════════
+     ROW 1 — ACCIONES (Actions)
+     ════════════════════════════════════════════════════════════ -->
+
+<!-- ═══ ROW LABEL (emit once) ═══ -->
+<div class="uxrt-row-label uxrt-row-label--actions">🎯 Acciones</div>
+
+<!-- ═══ ACTIONS CELL (repeat per phase) ═══ -->
+<div class="uxrt-cell uxrt-cell--actions"
+     data-phase="__PHASE_ID__"
+     contenteditable="true"
+     data-field="actions"
+     data-phase="__PHASE_ID__">__ACTIONS__</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     ROW 2 — PENSAMIENTOS (Thoughts)
+     ════════════════════════════════════════════════════════════ -->
+
+<!-- ═══ ROW LABEL (emit once) ═══ -->
+<div class="uxrt-row-label uxrt-row-label--thoughts">💭 Pensamientos</div>
+
+<!-- ═══ THOUGHTS CELL (repeat per phase) ═══ -->
+<div class="uxrt-cell uxrt-cell--thoughts"
+     data-phase="__PHASE_ID__"
+     contenteditable="true"
+     data-field="thoughts"
+     data-phase="__PHASE_ID__">__THOUGHTS__</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     ROW 3 — FRUSTRACIONES (Frustrations)
+     ════════════════════════════════════════════════════════════ -->
+
+<!-- ═══ ROW LABEL (emit once) ═══ -->
+<div class="uxrt-row-label uxrt-row-label--frustrations">😤 Frustraciones</div>
+
+<!-- ═══ FRUSTRATIONS CELL (repeat per phase) ═══ -->
+<div class="uxrt-cell uxrt-cell--frustrations"
+     data-phase="__PHASE_ID__"
+     contenteditable="true"
+     data-field="frustrations"
+     data-phase="__PHASE_ID__">__FRUSTRATIONS__</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     ROW 4 — OPORTUNIDADES (Opportunities)
+     ════════════════════════════════════════════════════════════ -->
+
+<!-- ═══ ROW LABEL (emit once) ═══ -->
+<div class="uxrt-row-label uxrt-row-label--opportunities">💡 Oportunidades</div>
+
+<!-- ═══ OPPORTUNITIES CELL (repeat per phase) ═══ -->
+<div class="uxrt-cell uxrt-cell--opportunities __LAST_CELL_CLASS__"
+     data-phase="__PHASE_ID__"
+     contenteditable="true"
+     data-field="opportunities"
+     data-phase="__PHASE_ID__">__OPPORTUNITIES__</div>

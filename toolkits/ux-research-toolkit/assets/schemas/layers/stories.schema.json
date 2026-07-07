@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ux-research-toolkit/schemas/layers/stories.schema.json",
+  "title": "UX Research Toolkit — Stories Layer",
+  "description": "Layer schema extending each phase with agile user story data. Captures user stories in standard format, acceptance criteria, MoSCoW priority, release assignment, and effort estimates for product backlog mapping.",
+  "type": "object",
+  "properties": {
+    "user_story": {
+      "type": "string",
+      "description": "The user story in standard format: 'As a [user], I want [goal], so that [benefit]'.",
+      "examples": ["As a pet owner, I want to log Rocky's daily symptoms, so that I can share accurate health data with my vet"]
+    },
+    "acceptance_criteria": {
+      "type": "array",
+      "description": "List of conditions that must be true for this user story to be considered done. Each item is a testable, verifiable statement.",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 0,
+      "examples": [
+        ["El usuario puede registrar al menos 3 síntomas por día", "El historial muestra los últimos 30 días", "La app envía recordatorio diario a la hora configurada"]
+      ]
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["must-have", "should-have", "could-have", "wont-have"],
+      "description": "MoSCoW priority classification. 'must-have' = critical for launch; 'should-have' = important but not critical; 'could-have' = nice to have; 'wont-have' = explicitly out of scope for this release."
+    },
+    "release": {
+      "type": "string",
+      "description": "Which release, sprint, or iteration this user story belongs to.",
+      "examples": ["MVP", "Sprint 3", "v1.2", "Q3 Release"]
+    },
+    "effort_estimate": {
+      "type": "string",
+      "enum": ["XS", "S", "M", "L", "XL"],
+      "description": "T-shirt size effort estimate for this user story. XS = trivial (<1 day); S = small (1-2 days); M = medium (3-5 days); L = large (1-2 weeks); XL = extra large (>2 weeks)."
+    }
+  },
+  "required": ["user_story", "acceptance_criteria", "priority"]
+}

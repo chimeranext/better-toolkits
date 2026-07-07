@@ -1,0 +1,24 @@
+<!-- phase-table.html — Grid header row fragment (one instance per phase, renderer repeats) -->
+<!--
+  Renderer replaces:
+    __PHASE_ID__       → phase.id
+    __PHASE_LABEL__    → phase.label
+    __PHASE_ICON__     → phase.icon
+    __PHASE_COLOR_N__  → color index class suffix (0–4, cycling)
+    --phase-count CSS variable is set on .uxrt-grid by the renderer
+-->
+
+<!-- Grid header: "Dimensión" label cell (rendered ONCE before the loop) -->
+<!-- NOTE: The renderer emits this block first, then repeats the phase cell for each phase -->
+
+<!-- ═══ DIMENSION LABEL (emit once, before phase loop) ═══ -->
+<div class="uxrt-row-label uxrt-row-label--header">Dimensión</div>
+
+<!-- ═══ PHASE HEADER CELL (repeat per phase) ═══ -->
+<div class="uxrt-phase-header uxrt-phase-header--color-__PHASE_COLOR_N__ __PHASE_LAST_CLASS__"
+     data-phase="__PHASE_ID__">
+  <span class="uxrt-phase-header__icon">__PHASE_ICON__</span>
+  <span contenteditable="true"
+        data-field="label"
+        data-phase="__PHASE_ID__">__PHASE_LABEL__</span>
+</div>
