@@ -27,7 +27,7 @@ Any region may be empty but must be present (empty sections render as "(none)").
 ---
 generated: 2026-04-18T15:30:00-06:00        # ISO-8601 with timezone — report timestamp
 toolkit-version: 1.1.0                       # value from atomic-design-toolkit plugin.json
-project-name: chimera-os                        # from package.json "name" or pubspec.yaml "name"
+project-name: example-platform                        # from package.json "name" or pubspec.yaml "name"
 project-version: 1.4.5                       # from package.json "version" or pubspec.yaml "version"
 
 stack: vite                                  # "flutter" | "vite"
@@ -227,7 +227,7 @@ Each appendix is optional but, if present, must use a fixed heading so the migra
 ---
 generated: 2026-04-18T15:30:00-06:00
 toolkit-version: 1.1.0
-project-name: chimera-os
+project-name: example-platform
 project-version: 1.4.5
 stack: vite
 framework: react
@@ -254,7 +254,7 @@ components:
   unclassified: 71
 ---
 
-# Audit Report — chimera-os
+# Audit Report — example-platform
 
 ## TL;DR
 

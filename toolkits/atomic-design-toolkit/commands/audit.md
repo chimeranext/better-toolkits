@@ -246,7 +246,7 @@ Cross-reference with component.gallery (https://component.gallery/components/) a
 
 ### Step V7: Atomic-Design Enforcement Audit (Hook Presence)
 
-Bundle-health and component-inventory checks (V1-V5) tell you *what is broken today*. They do not tell you whether the project will **drift again tomorrow**. V7 measures the four-cure defense-in-depth pattern (premortem reference: legacy-ticket component-layer Conway's Law, chimera-os 2026-05-14, $394K already spent + $324K forward extrapolation if unaddressed). Read the full setup walkthrough at `${CLAUDE_PLUGIN_ROOT}/references/atomic-design-hooks-setup.md`.
+Bundle-health and component-inventory checks (V1-V5) tell you *what is broken today*. They do not tell you whether the project will **drift again tomorrow**. V7 measures the four-cure defense-in-depth pattern (premortem reference: legacy-ticket component-layer Conway's Law, example-platform 2026-05-14, $394K already spent + $324K forward extrapolation if unaddressed). Read the full setup walkthrough at `${CLAUDE_PLUGIN_ROOT}/references/atomic-design-hooks-setup.md`.
 
 The four cures are:
 
@@ -459,7 +459,7 @@ When `:report` is present in the argument list, after running the selected audit
 
 ### Example Invocation
 
-For the **chimera-os** audit that produced 0 blockers, 2 warnings, and 1 new finding:
+For the **example-platform** audit that produced 0 blockers, 2 warnings, and 1 new finding:
 
 ```bash
 /atomic-design-toolkit:audit :vite :report
