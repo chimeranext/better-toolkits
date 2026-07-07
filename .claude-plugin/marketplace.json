@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "app-gtm-release-toolkit",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Multi-platform app go-to-market toolkit — ship Flutter, KMP, .NET MAUI, Swift, and PWAs to Google Play, App Store, Microsoft Store, Snap Store, Flathub, and alternative channels. Three-tier architecture: strategic advisor + per-framework ship commands + mass publish. Phase 2 production-ready: /ship-flutter, /ship-pwa, /ship-msstore, /ship-snap, /ship-kmp, /ship-maui, /ship-everywhere.",
   "owner": {
     "name": "Luis Andres Pena Castillo",
@@ -10,14 +10,14 @@
   "plugins": [
     {
       "name": "app-gtm-release",
-      "description": "Guided multi-platform app release lifecycle. Three-tier command architecture: /ship-advisor (strategic router), per-framework execution (/ship-flutter, /ship-pwa, /ship-snap, /ship-msstore, /ship-kmp, /ship-maui production-ready; /ship-swift roadmap stub), and /ship-everywhere (mass-publish orchestrator). 10 commands, 15 skills (6 framework-agnostic, 4 Flutter-coupled with TODO markers, 5 framework-specific: pwa-quality, msstore-submission, snap-build, kmp-build, maui-publishing; alt-distribution extended with Flathub coverage), 2 agents. Covers Codemagic/GitHub Actions CI/CD, Google Play + App Store + Microsoft Store + Snap Store + Flathub + alternative distribution, RevenueCat monetization, Shorebird code push (Flutter), Workbox/Lighthouse PWA quality, MSIX packaging via PWA Builder or native, snapcraft authoring, KMP iOS framework integration, MAUI multi-target builds, and pre-launch checklist based on Andrea Bizzotto's methodology.",
-      "version": "2.2.0",
+      "description": "Guided multi-platform app release lifecycle. Three-tier command architecture: /ship-advisor (strategic router), per-framework execution (/ship-flutter, /ship-pwa, /ship-snap, /ship-msstore, /ship-kmp, /ship-maui production-ready; /ship-swift roadmap stub), and /ship-everywhere (mass-publish orchestrator). 10 commands, 16 skills (7 framework-agnostic incl. gtm-fit GTM strategy, 4 Flutter-coupled with TODO markers, 5 framework-specific: pwa-quality, msstore-submission, snap-build, kmp-build, maui-publishing; alt-distribution extended with Flathub coverage), 2 agents. Covers Codemagic/GitHub Actions CI/CD, Google Play + App Store + Microsoft Store + Snap Store + Flathub + alternative distribution, RevenueCat monetization, Shorebird code push (Flutter), Workbox/Lighthouse PWA quality, MSIX packaging via PWA Builder or native, snapcraft authoring, KMP iOS framework integration, MAUI multi-target builds, and pre-launch checklist based on Andrea Bizzotto's methodology.",
+      "version": "2.3.0",
       "author": {
         "name": "Luis Andres Pena Castillo",
         "email": "lapc506@users.noreply.github.com"
       },
       "source": "./",
-      "homepage": "https://github.com/lapc506/app-gtm-release-toolkit",
+      "homepage": "https://github.com/chimeranext/app-gtm-release-toolkit",
       "category": "productivity",
       "keywords": [
         "claude-code",

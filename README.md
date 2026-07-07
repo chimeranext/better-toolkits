@@ -7,7 +7,7 @@ A Claude Code plugin by [Luis Andres Pena Castillo](https://github.com/lapc506).
 ## Install (Claude Code)
 
 ```bash
-claude plugin add lapc506/app-gtm-release-toolkit
+claude plugin add chimeranext/app-gtm-release-toolkit
 ```
 
 ## Install (OpenCode)
@@ -175,10 +175,10 @@ This is **v2.0.0** — a breaking rename. The plugin namespace changed:
 
 Steps to migrate:
 1. Uninstall the old plugin: `claude plugin remove lapc506/flutter-go-to-market-toolkit`
-2. Install the renamed plugin: `claude plugin add lapc506/app-gtm-release-toolkit`
+2. Install the renamed plugin: `claude plugin add chimeranext/app-gtm-release-toolkit`
 3. Update any saved aliases or shortcuts referencing the old namespace.
 
-The legacy GitHub URL (`/lapc506/flutter-go-to-market-toolkit`) HTTPS-redirects to the new repo for now, but configure your remotes to the new URL explicitly.
+The repo now lives under the ChimeraNext org (`github.com/chimeranext/app-gtm-release-toolkit`) — configure your remotes to the new URL explicitly.
 
 ## Methodology
 

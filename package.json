@@ -40,7 +40,7 @@
     "app-store",
     "cicd"
   ],
-  "repository": { "type": "git", "url": "git+https://github.com/lapc506/app-gtm-release-toolkit.git" },
+  "repository": { "type": "git", "url": "git+https://github.com/chimeranext/app-gtm-release-toolkit.git" },
   "author": "Luis Andres Pena Castillo",
   "license": "BSL-1.1",
   "dependencies": {
