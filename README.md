@@ -13,16 +13,16 @@ and a sibling to [better-microservices](https://github.com/chimeranext/better-mi
 
 | Toolkit | What it does | Version | Status |
 |---|---|---|---|
-| [`aaarrr-flywheel-toolkit`](toolkits/aaarrr-flywheel-toolkit) | Growth-engineering funnel + flywheel: pricing strategy → landing-page design → instrumentation (Meta Pixel · GA4 · PostHog · UTM) → AAARRR execution on the Meta Marketing API. | 0.2.0 | Available |
+| [`aaarrr-flywheel-toolkit`](toolkits/aaarrr-flywheel-toolkit) | AAARRR acquisition funnel + Retention/Referral flywheel over the Meta Marketing API — Awareness/Acquisition/Activation/Revenue run as a linear funnel; Retention/Referral close the loop. | 0.1.0 | Available |
 | [`app-gtm-release-toolkit`](toolkits/app-gtm-release-toolkit) | Multi-platform app go-to-market and release — ship Flutter, KMP, .NET MAUI, Swift, and PWAs to Google Play, App Store, Microsoft Store, Snap Store, Flathub, and alternative channels. | 2.3.0 | Available |
-| [`business-model-toolkit`](toolkits/business-model-toolkit) | Interactive business-model brainstorming — guided dialogue across the full startup lifecycle from problem validation through execution and investor pitch. | 2.1.0 | Available |
+| [`business-model-toolkit`](toolkits/business-model-toolkit) | Interactive business-model brainstorming — guided dialogue across the full startup lifecycle from problem validation through execution and investor pitch. | 2.0.0 | Available |
 | [`fractional-cto-toolkit`](toolkits/fractional-cto-toolkit) | Operational toolkit for freelance and fractional CTOs — SOPs, checklists, and guided workflows for project takeovers, technical audits, client onboarding, and vendor evaluation. | 1.0.0 | Available |
 | [`instructional-design-toolkit`](toolkits/instructional-design-toolkit) | Design cmi5-compliant courses and 1-on-1 session plans with the CONTEXT→CONCEPT→BUILD→SHIP→REFLECT formula, Bloom's progression, and Kirkpatrick L1-L4 evaluation. | 1.0.0 | Available |
 | [`launchpad-toolkit`](toolkits/launchpad-toolkit) | Founder operations lab — AI intake, cap table, co-founder and investor matching, demo-day prep, and stage tracking, with graceful degradation when live data is unavailable. | 0.5.0 | Available |
 | [`ux-research-toolkit`](toolkits/ux-research-toolkit) | Guided UX-research map creation — experience maps, customer journey maps, service blueprints, storyboards, and user story maps, with interactive HTML visualization. | 2.1.0 | Available |
 | [`venture-studio-toolkit`](toolkits/venture-studio-toolkit) | Macro portfolio management for venture studios — LATAM corporate structures, Services Hub / MSA templates, accelerator matching, and Three Horizons allocation. | 1.2.0 | Available |
-| [`atomic-design-toolkit`](toolkits/atomic-design-toolkit) | Atomic Design for Flutter and Vite — decompose features into atoms, molecules, organisms, templates, and pages; audit component and bundle health; drive phased migration. | 1.2.0 | Incoming — history reconciliation in progress |
-| [`make-no-mistakes-toolkit`](toolkits/make-no-mistakes-toolkit) | The disciplined dev lifecycle — implement issues, review PRs, sync releases, test E2E, manage sessions, stash secrets, and enforce manifest-driven tool-call hooks. | 1.33.0 | Incoming — history reconciliation in progress |
+| [`atomic-design-toolkit`](toolkits/atomic-design-toolkit) | Atomic Design for Flutter and Vite — decompose features into atoms, molecules, organisms, templates, and pages; audit component and bundle health; drive phased migration. | 1.2.0 | Available |
+| [`make-no-mistakes-toolkit`](toolkits/make-no-mistakes-toolkit) | The disciplined dev lifecycle — implement issues, review PRs, sync releases, test E2E, manage sessions, stash secrets, and enforce manifest-driven tool-call hooks. | 1.33.0 | Available |
 
 Each toolkit keeps its **own license** — see the `LICENSE` file inside each
 `toolkits/<name>/`.
@@ -77,7 +77,7 @@ single marketplace means:
 ## History
 
 This monorepo consolidates ten previously-separate repositories with their **full git
-history preserved** via `git subtree add`. Eight toolkits are live today; two
-(`atomic-design-toolkit` and `make-no-mistakes-toolkit`) are marked *incoming* while
-their histories are being reconciled, and will be added to
-[`marketplace.json`](.claude-plugin/marketplace.json) once complete.
+history preserved** via `git subtree add`. All ten toolkits are live in
+[`marketplace.json`](.claude-plugin/marketplace.json); `atomic-design-toolkit` and
+`make-no-mistakes-toolkit` were the last two imported, after their histories were
+reconciled.
