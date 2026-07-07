@@ -241,7 +241,7 @@ Users add your repo URL in their F-Droid client to access apps.
 
 Some communities — accelerators, incubators, dev collectives — run their own curated app repositories: maintainer-approved storefronts that users browse through third-party Android store clients such as Droid-ify or Neo Store. If a community you belong to runs one, it is usually the cheapest distribution channel available to you.
 
-<!-- TODO: ChimeraNext marketplace — link the concrete submission flow here once the repo exists -->
+The canonical example is the [ChimeraNext Marketplace](https://github.com/chimeranext/startups-android-appstore) — a curated free-as-in-freedom Android app marketplace. Its issue-template submission flow is the reference implementation of the process below.
 
 ### Why Use One
 
