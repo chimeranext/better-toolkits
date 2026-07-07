@@ -25,9 +25,29 @@
     --warning: 43 96% 56%;           /* #FBBF24 */
     --ring: 252 100% 68%;
   }
+  /* Buttons need a slightly darker violet than the dark-mode primary to hit
+     WCAG AA with white text (4.34:1 → 5.5:1). Same hue, both themes. */
+  :root { --primary-strong: 252 90% 60%; }
+
   * { @apply border-border; }
   body { @apply bg-background text-foreground font-body antialiased; }
   h1, h2, h3 { @apply font-heading; }
+
+  /* WCAG 2.4.7: explicit visible focus everywhere, not browser default. */
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* WCAG 2.3.3: hover lifts and micro-transitions collapse under reduced motion. */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
 }
 
 /* Terminal surfaces stay dark and legible regardless of the section surface
@@ -75,8 +95,10 @@
   --secondary-foreground: 0 0% 100%;
   --accent: 330 75% 52%;
   --accent-foreground: 0 0% 100%;
-  --success: 160 70% 38%;
-  --warning: 38 92% 46%;
+  --destructive: 347 77% 41%;     /* rose-700 — 5.9:1 on white (dark token was 2.72:1) */
+  --destructive-foreground: 0 0% 100%;
+  --success: 160 90% 27%;         /* darkened: ≥4.5:1 even over the success/15 tint */
+  --warning: 38 92% 40%;
   --ring: 252 90% 60%;
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
