@@ -98,7 +98,7 @@ claude plugin install ux-research-toolkit@better-toolkits
 
 BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
-### [business-model-toolkit](toolkits/business-model-toolkit/) `v2.1.0`
+### [business-model-toolkit](toolkits/business-model-toolkit/) `v2.2.0`
 
 Interactive business-model brainstorming — guided dialogue covering the full startup lifecycle from problem validation through execution and investor pitch.
 
@@ -106,9 +106,10 @@ Interactive business-model brainstorming — guided dialogue covering the full s
 
 - **21 phases across 3 spaces** — Problem-Hypothesis, Solution-Validation, Execution-Acceleration.
 - **Methodology** — combines Running Lean, Lean Canvas, and Founder Institute practice.
+- **v2.2 additions** — a `brand-identity` skill (Brand Steering Wheel + Limbic Map emotional positioning + tone of voice + minimal guidelines) that deepens the branding phase and hands off to the landing page and pitch deck; plus an OKR + KPI-reporting operational layer in `execution-plan` (objectives + measurable key results with optional weighting, quarterly cadence, North Star + KPIs by stage).
 - **v2.1 additions** — a customer-interview system, a product-vision audit (PIBER + IDCF gap analysis of a module against its strategic spike), and a pitch-script skill, plus a `linear-projects-setup` command.
 - **Background research** — a market-research agent runs while you answer complementary questions.
-- 8 auto-activating skills across the lifecycle, guided commands, and 1 background market-research agent.
+- 9 auto-activating skills across the lifecycle, guided commands, and 1 background market-research agent.
 
 #### Install
 
