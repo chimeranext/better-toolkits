@@ -144,7 +144,7 @@ claude plugin install app-gtm-release@better-toolkits
 
 BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
-### [aaarrr-flywheel-toolkit](toolkits/aaarrr-flywheel-toolkit/) `v0.2.1`
+### [aaarrr-flywheel-toolkit](toolkits/aaarrr-flywheel-toolkit/) `v0.3.0`
 
 Growth-engineering toolkit — a complete funnel + flywheel from pricing to compounding growth.
 
@@ -152,6 +152,7 @@ Growth-engineering toolkit — a complete funnel + flywheel from pricing to comp
 
 - **Full growth pipeline** — pricing strategy → landing-page design → instrumentation (Meta Pixel + GA4 + PostHog + UTM) → AAARRR execution over the Meta Marketing API.
 - **Funnel + flywheel** — Awareness / Acquisition / Activation / Revenue run as a linear funnel; Retention / Referral close the loop as a flywheel that feeds Acquisition back with lookalike audiences and real K-factor.
+- **Unit economics + NPS** (v0.3) — a canonical unit-economics reference (CAC blended vs paid, gross-margin-based LTV, payback in months, healthy benchmarks by business model) wired into `/revenue --unit-economics`, and an NPS + feedback-loop reference (promoters/passives/detractors, capture→triage→close) wired into `/retain --nps` as the leading indicator of churn.
 - **Landing layer** — `/landing-page` (design) and `/landing-instrument` (wire Pixel/GA4/PostHog/UTM/Conversions API), with a landing-page-design skill, a landing-instrumentation skill, CRO methodology, and B2B/B2C/B2B2C references.
 - **Stage commands** — `/acquire`, `/activate`, `/revenue`, `/retain`, `/refer`, plus `/aaarrr-launch`, `/aaarrr-analyze`, and `/kill-funnel`; Meta Graph API skill for execution.
 - Mantra: *fail fast, fail often, fail cheap, fail forward.*
