@@ -1,0 +1,35 @@
+{
+  "name": "@lapc506/business-model-toolkit",
+  "version": "2.1.0",
+  "description": "Interactive business model brainstorming — guided dialogue covering the full startup lifecycle. OpenCode + Claude Code plugin.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": { "business-model-toolkit": "dist/cli.js" },
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
+    "./cli": { "import": "./dist/cli.js" }
+  },
+  "files": ["dist/", "commands/", "agents/", "skills/", "references/", "assets/", "README.md", "LICENSE"],
+  "engines": { "node": ">=20.11.0" },
+  "publishConfig": { "access": "public" },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean && tsup src/cli.ts --format esm --clean false",
+    "test": "echo 'no tests yet' && exit 0",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": ["opencode", "plugin", "business-model", "startup", "lean-canvas"],
+  "repository": { "type": "git", "url": "git+https://github.com/lapc506/business-model-toolkit.git" },
+  "author": "Luis Andres Pena Castillo",
+  "license": "BSL-1.1",
+  "dependencies": {
+    "@opencode-ai/plugin": "^0.7.0",
+    "jsonc-parser": "^3.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  }
+}
