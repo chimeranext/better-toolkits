@@ -1,6 +1,6 @@
 {
   "name": "launchpad-toolkit",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Methodology prototype laboratory for chimeranext Launchpad pillar — AI intake, cap table, co-founder matching, investor matching, demo day prep, stage tracker, plus a chimeranext-api-consumer agent that enriches skills with live chimeranext API data when endpoints are available and degrades gracefully when they are not. Dual-purpose: external CLI for founders without chimeranext + internal validation lab for productizing patterns into the chimeranext Launchpad product.",
   "author": {
     "name": "Luis Andres Pena Castillo",
