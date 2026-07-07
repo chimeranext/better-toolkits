@@ -8,7 +8,7 @@
   {
     "plugin": "atomic-design-toolkit",
     "dir": "atomic-design-toolkit",
-    "version": "1.2.0",
+    "version": "1.3.0",
     "category": "frontend"
   },
   {
@@ -20,7 +20,7 @@
   {
     "plugin": "business-model-toolkit",
     "dir": "business-model-toolkit",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "category": "productivity"
   },
   {
@@ -32,7 +32,7 @@
   {
     "plugin": "aaarrr-flywheel-toolkit",
     "dir": "aaarrr-flywheel-toolkit",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "category": null
   },
   {
@@ -50,7 +50,7 @@
   {
     "plugin": "launchpad-toolkit",
     "dir": "launchpad-toolkit",
-    "version": "0.5.0",
+    "version": "0.6.0",
     "category": null
   },
   {
