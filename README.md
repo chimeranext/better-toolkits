@@ -84,12 +84,13 @@ app-gtm-release-toolkit install --force    # Overwrite unmanaged conflicts
 | **2.5** | Swift native iOS | — | `/ship-swift` |
 | **3** | Tauri, Electron, Capacitor | Mac App Store | `/ship-webview-native` (possible merge) |
 
-## Skills (15)
+## Skills (16)
 
-Auto-activate by context — you can also invoke them directly. Seven are framework-agnostic; three are Flutter-coupled (marked with `<!-- TODO: framework-agnostic split -->` for refactor in Phase 3+); five are framework-specific (Phase 1+2).
+Auto-activate by context — you can also invoke them directly. Eight are framework-agnostic; three are Flutter-coupled (marked with `<!-- TODO: framework-agnostic split -->` for refactor in Phase 3+); five are framework-specific (Phase 1+2).
 
 | Skill | Status | Triggers when you... |
 |-------|--------|---------------------|
+| `gtm-fit` | Agnostic | Say "how do I get users", "make my app sell", "GTM strategy", "minimum viable segment", "cómo vendo mi app" |
 | `pre-launch-checklist` | Flutter-coupled | Say "am I ready to launch", "production checklist", "release preparation" |
 | `app-security` | Agnostic | Say "App Check setup", "protect my API", "secure Firebase" |
 | `monetization` | Agnostic | Say "add subscriptions", "RevenueCat", "paywall", "in-app purchases" |
@@ -190,6 +191,8 @@ Based on:
 - **PWA Builder (Microsoft)** — PWA → multi-store packaging (Phase 1)
 - **Snapcraft (Canonical)** — Linux desktop distribution (Phase 1)
 - **WidgetTricks** — [Startup shipping patterns](https://widgettricks.substack.com/p/startup-guide-ship-fast)
+- **Chris Gardner (Underscore VC)** — [How to Build a Product that Scales into a Company](https://www.youtube.com/watch?v=r-98YRAF1dY) (Harvard Innovation Labs): product-company gap, SLIP framework, minimum viable segment, pricing ladders
+- **Héctor de León (hdeleon.net)** — [Cómo hacer que tu software se venda solo](https://www.youtube.com/watch?v=caxtR9e76EM): organic presence system (website + payment methods, video-first distribution, dedicated WhatsApp channel, open-core funnel)
 
 ## Sources
 
@@ -224,7 +227,8 @@ app-gtm-release-toolkit/
 ├── agents/                   # 2 autonomous agents
 │   ├── pipeline-builder.md
 │   └── checklist-auditor.md
-├── skills/                   # 15 auto-activating skills
+├── skills/                   # 16 auto-activating skills
+│   ├── gtm-fit/                 # agnostic — GTM strategy (SLIP, MVS, organic presence)
 │   ├── pre-launch-checklist/    # Flutter-coupled
 │   ├── app-security/            # agnostic
 │   ├── monetization/            # agnostic

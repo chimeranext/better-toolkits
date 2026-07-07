@@ -169,14 +169,18 @@ Future<void> openCheckout(String productId) async {
 | One-time purchase | Unlock all features | Spiky, no recurring |
 | Consumable | Credits, tokens | Variable, engagement-dependent |
 | Tiered | Basic / Pro / Enterprise | Segmented by usage |
+| Open-core | Free open-source edition + paid full product | Free edition works as top-of-funnel; third parties distributing it feed the paid product |
 
 ### Pricing Best Practices for Stores
 
 - **Offer annual plans** — higher LTV, lower churn. Typical discount: 15-30% vs monthly
-- **Free trial > freemium** for subscription apps (Apple and Google both support trial periods natively)
+- **Free trial > freemium** for subscription apps (Apple and Google both support trial periods natively). People anchor a product's value to what it costs — free-forever risks "value-less" perception, so prefer a trial that converts over permanent free
+- **Design a pricing ladder** — a cheap or free way in, then a paved walk up the value chain (the HubSpot/Slack tier pattern). Product-led growth: get the product in hands ASAP, convert on seats/features as usage grows. If freemium, keep upselling paths always visible (the LinkedIn pattern: free network effects, premium piled on top)
 - **Price anchoring** — show annual price first, monthly price looks expensive by comparison
 - **Localized pricing** — adjust prices by market purchasing power
 - **Introductory offers** — Apple and Google support discounted first periods
+
+Pricing is a day-one architecture decision, not a post-launch patch. For the strategy layer (SLIP framework, gain-pain ratio, minimum viable segment) see `app-gtm-release:gtm-fit`.
 
 ### Store Commission
 

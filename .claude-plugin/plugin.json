@@ -1,7 +1,7 @@
 {
   "name": "app-gtm-release",
-  "version": "2.2.0",
-  "description": "Multi-platform app go-to-market and release toolkit — ship Flutter, Kotlin Multiplatform, .NET MAUI, Swift, and PWAs to Google Play, App Store, Microsoft Store, Snap Store, Flathub, and alternative channels. Three-tier command architecture: ship-advisor (strategy), per-framework ship-X commands (execution), ship-everywhere (mass publish). Phase 2 adds /ship-kmp, /ship-maui as production-ready commands; alt-distribution skill extended with Flathub coverage.",
+  "version": "2.3.0",
+  "description": "Multi-platform app go-to-market and release toolkit — ship Flutter, Kotlin Multiplatform, .NET MAUI, Swift, and PWAs to Google Play, App Store, Microsoft Store, Snap Store, Flathub, and alternative channels. Three-tier command architecture: ship-advisor (strategy), per-framework ship-X commands (execution), ship-everywhere (mass publish). v2.3 adds the gtm-fit skill — GTM strategy layer (SLIP framework, minimum viable segment, organic presence system) so shipped apps also sell.",
   "author": {
     "name": "Luis Andres Pena Castillo",
     "url": "https://github.com/lapc506"

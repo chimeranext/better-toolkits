@@ -110,6 +110,7 @@ Read `references/timeline-24h.md` for detailed time breakdowns per step.
    - Google Play pre-launch report + Android vitals
    - App Store Connect crash reports
    - Review store ratings/feedback within first 24h
+5. **Demand generation (starts now, not "later"):** the stores are discovery, not a demand engine — kick off the organic presence system (website with payment methods, video-first distribution, instant contact channel) from `app-gtm-release:gtm-fit`
 
 ## CI/CD Platform Decision Tree
 
@@ -167,6 +168,7 @@ These reliability practices are woven into the pipeline, not bolted on after:
 
 When orchestrating a full launch, invoke skills in this order:
 
+0. `app-gtm-release:gtm-fit` — strategy check before the clock starts: minimum viable segment defined, SLIP score has no zeros, organic presence (website / videos / contact channel) planned for post-launch
 1. `app-gtm-release:pre-launch-checklist` — verify readiness (flavors, error monitoring, force update, security)
 2. `app-gtm-release:cicd-setup` — pipeline and signing
 3. `app-gtm-release:app-security` — Firebase App Check + hardening
