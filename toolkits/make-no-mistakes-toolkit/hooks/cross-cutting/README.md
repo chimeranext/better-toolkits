@@ -6,7 +6,7 @@ single config file at the consumer-repo root.
 
 | File | Purpose | Surface | Source |
 |------|---------|---------|--------|
-| `pre-write-no-cleartext-secret-in-config.sh` | Block `${...KEY/SECRET/TOKEN/PASSWORD/...}` placeholders in any JSON/YAML/TOML/env config file that the runtime would substitute to disk in cleartext. | `cleartext_secrets` | Generalized from legacy-ticket hook of the same family in `chimera-agent-openclaw-plugin`. |
+| `pre-write-no-cleartext-secret-in-config.sh` | Block `${...KEY/SECRET/TOKEN/PASSWORD/...}` placeholders in any JSON/YAML/TOML/env config file that the runtime would substitute to disk in cleartext. | `cleartext_secrets` | Generalized from legacy-ticket hook of the same family in `example-plugin`. |
 | `pre-write-cross-repo-schema-ownership.sh` | Block new SQL migrations for tables this repo does not own. | `schema_ownership` | Generalized from legacy-ticket `pre-write-plugin-side-migration.sh`. |
 | `pre-write-version-bump-discipline.sh` | Block multi-step version bumps in pinned dependencies by delegating to a per-repo validator script. | `version_bumps` | Generalized from legacy-ticket `pre-write-openclaw-version-bump-discipline.sh`. |
 
@@ -143,7 +143,7 @@ the target file uses:
 
 If your repo already has a tighter `.claude/hooks/`-level 4a hook for
 one of these surfaces (the canonical case is
-`chimera-agent-openclaw-plugin`), set `defer_to_local_hook: true` on the
+`example-plugin`), set `defer_to_local_hook: true` on the
 matching config block. The 4b hook logs an info-stderr and fail-opens;
 the 4a hook owns enforcement. This lets the config block stay live
 (visible, documented, ready for the day 4a is retired) without firing
@@ -193,7 +193,7 @@ no-op when disabled, no-op when config missing, bypass marker honored).
 ## Reference
 
 - legacy-ticket — this work (Cure 4b)
-- legacy-ticket — Cure 4a foundation in `chimera-agent-openclaw-plugin`
+- legacy-ticket — Cure 4a foundation in `example-plugin`
 - legacy-ticket — 15-day persistence-freeze incident that motivated the
   schema-ownership hook
 - legacy-ticket — service-role key cleartext-leak incident that motivated

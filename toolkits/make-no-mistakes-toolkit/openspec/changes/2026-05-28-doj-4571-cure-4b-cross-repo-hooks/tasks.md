@@ -36,7 +36,7 @@
 These are tracked under legacy-ticket acceptance ("At least 2 repos consuming
 the toolkit hooks") but live in their own PRs in their own repos.
 
-### `chimera-os` PR
+### `example-platform` PR
 
 - [ ] Add `.claude/config/cross-cutting-hooks.json` with:
   - `cleartext_secrets.enabled: true` (built-in defaults sufficient)
@@ -48,7 +48,7 @@ the toolkit hooks") but live in their own PRs in their own repos.
 - [ ] Verify by attempting a write of a migration touching an unowned
       table (synthetic test) — hook must block
 
-### `chimera-agent-openclaw-plugin` PR
+### `example-plugin` PR
 
 - [ ] Add `.claude/config/cross-cutting-hooks.json` with:
   - `cleartext_secrets.enabled: true`
@@ -77,5 +77,5 @@ coordination strategy (one combined effort vs. staggered, who reviews).
 | Design proposal in `openspec/changes/` | this directory |
 | 3 generic hooks generalized + tested against ≥2 repo fixtures | `hooks/cross-cutting/*.sh` + tests |
 | Per-repo config schema documented | `schemas/cross-cutting-hooks.schema.json` + `hooks/cross-cutting/README.md` |
-| ≥2 repos consuming toolkit hooks | chimera-os PR + chimera-agent-openclaw-plugin PR |
+| ≥2 repos consuming toolkit hooks | example-platform PR + example-plugin PR |
 | Versioning + rollback documented | design.md "Versioning and rollback" + README |

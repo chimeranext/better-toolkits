@@ -415,7 +415,7 @@
 # Design System rules (legacy-ticket)
 #
 # These four rules implement AI-write-time enforcement for the Chimera Design
-# System. They are the 4th enforcement layer, complementing the chimera-os
+# System. They are the 4th enforcement layer, complementing the example-platform
 # repo's existing layers:
 #   1. useDsRules React hook (passive, runtime-only)
 #   2. ds-lint pre-commit hook (post-author, post-write)
@@ -2085,7 +2085,7 @@
       expected_exit: 0
 
 - id: warn-version-readme-changelog-sync
-  description: Warn when a version manifest (package.json, plugin.json, marketplace.json) is being bumped without a parallel update to README.md + CHANGELOG.md — the visible-version surface drifts silently otherwise (legacy-ticket defense-in-depth, sister rule to chimera-os repo-local post-write-version-readme-sync.sh)
+  description: Warn when a version manifest (package.json, plugin.json, marketplace.json) is being bumped without a parallel update to README.md + CHANGELOG.md — the visible-version surface drifts silently otherwise (legacy-ticket defense-in-depth, sister rule to example-platform repo-local post-write-version-readme-sync.sh)
   applies_to: [Edit, Write, MultiEdit]
   match:
     # Anchor on start-of-string OR a leading "/" so the rule fires for both
@@ -2111,7 +2111,7 @@
   memory_ref: feedback_version_readme_changelog_sync.md
   references:
     - "legacy-ticket — three-layer drift thesis (Cure 4: PreToolUse/PostToolUse hooks)"
-    - "Sister hook in chimera-os: .claude/hooks/post-write-version-readme-sync.sh"
+    - "Sister hook in example-platform: .claude/hooks/post-write-version-readme-sync.sh"
     - "make-no-mistakes-toolkit PR #21 — visible README version + reconstructed CHANGELOG"
   message: |
     WARN: a version manifest (package.json / plugin.json / marketplace.json)
@@ -2127,7 +2127,7 @@
       human would look (README, CHANGELOG, or git tags). PR #21 closed that
       gap by reconstructing the CHANGELOG and adding a header version line.
     - Without this rule, the same drift will reappear on the next bump.
-    - Defense-in-depth: the chimera-os repo has a sister PostToolUse hook
+    - Defense-in-depth: the example-platform repo has a sister PostToolUse hook
       (.claude/hooks/post-write-version-readme-sync.sh) that catches the
       same drift locally even if this toolkit isn't installed.
 

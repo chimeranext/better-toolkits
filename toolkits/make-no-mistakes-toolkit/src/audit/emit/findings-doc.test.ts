@@ -3,7 +3,7 @@ import { renderFindingsDoc } from "./findings-doc";
 import type { AuditReport } from "../types";
 
 const report: AuditReport = {
-  family: "SCH", repo: "chimera-os", stack: "supabase", date: "2026-06-02", engine_version: "1.0.0",
+  family: "SCH", repo: "example-platform", stack: "supabase", date: "2026-06-02", engine_version: "1.0.0",
   findings: [{
     id: "SCH-001", title: "`bio` duplicated across 3 tables", severity: "high",
     anti_pattern: "1NF + DRY", evidence: [{ file: "supabase/migrations/x.sql", line: 2 }],
@@ -16,7 +16,7 @@ describe("renderFindingsDoc", () => {
     const md = renderFindingsDoc(report);
     expect(md).toMatch(/^---\n/);
     expect(md).toContain("family: SCH");
-    expect(md).toContain("repo: chimera-os");
+    expect(md).toContain("repo: example-platform");
   });
   it("renders one table row per finding with its id and severity", () => {
     const md = renderFindingsDoc(report);

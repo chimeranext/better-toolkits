@@ -7,7 +7,7 @@ const validate = new Ajv().compile(schema);
 
 const sample: AuditReport = {
   family: "SCH",
-  repo: "chimera-os",
+  repo: "example-platform",
   stack: "supabase",
   date: "2026-06-02",
   engine_version: "1.0.0",
