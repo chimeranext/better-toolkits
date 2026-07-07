@@ -79,7 +79,7 @@ type Content = {
   s1: string;
   s2: { h1a: string; h1b: string; source: string; sub: string; copy: string; copied: string; github: string; audit: string; trust: string; learnMore: string };
   s3: { a: string; b: string };
-  s4: { title: string; pairs: { problem: string; solution: string; toolkit: string }[] };
+  s4: { title: string; fixLead: string; pairs: { problem: string; solution: string; toolkit: string }[] };
   s5: { title: string; jumpProcess: string; jumpPricing: string; cols: { n: string; toolkit: string; what: string; license: string; status: string } };
   s6: { a: string; b: string };
   s7: { title: string; steps: { title: string; cmd: string; note?: string }[]; demo: string };
@@ -106,6 +106,7 @@ export const COPY: Record<Lang, Content> = {
     s3: { a: "You wouldn't build your product without a framework.", b: "Why build your company without one?" },
     s4: {
       title: "The chaos you're normalizing",
+      fixLead: "How do you fix it? With",
       pairs: [
         { problem: "Release night is a ritual sacrifice — every deploy hand-rolled, different, and past midnight", solution: "one guided lifecycle with hard gates to Play, App Store, Microsoft Store and Snap. Boring on purpose.", toolkit: "app-gtm-release" },
         { problem: "You're betting the roadmap on vibes — zero research, zero framework, pure adrenaline", solution: "journey maps, canvases and problem validation before a single sprint gets burned", toolkit: "ux-research + business-model" },
@@ -176,6 +177,7 @@ export const COPY: Record<Lang, Content> = {
     s3: { a: "No construirías tu producto sin un framework.", b: "¿Por qué construyes tu empresa sin uno?" },
     s4: {
       title: "El caos que estás normalizando",
+      fixLead: "¿Cómo lo arreglas? Con",
       pairs: [
         { problem: "La noche de release es un ritual de sacrificio — cada deploy artesanal, distinto y de madrugada", solution: "un ciclo guiado con gates duros a Play, App Store, Microsoft Store y Snap. Aburrido a propósito.", toolkit: "app-gtm-release" },
         { problem: "Estás apostando el roadmap a puro feeling — cero research, cero framework, pura adrenalina", solution: "journey maps, canvas y validación del problema antes de quemar un solo sprint", toolkit: "ux-research + business-model" },
