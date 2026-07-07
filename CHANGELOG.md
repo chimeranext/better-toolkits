@@ -6,7 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
-_No unreleased changes. v0.5 shipped the final v0.x scope item (`chimeranext-api-consumer` agent). Next milestone is v1.0 stability pass._
+_No unreleased changes._
+
+## [0.6.0] — 2026-07-07
+
+### Added
+
+- Skill `financial-model` — 5-year financial projection model generator for a single venture. Flow: **Setup** (currency, fiscal year, business-model preset) → **Assumptions** (revenue drivers per stream, fixed/variable costs, hiring plan, growth/churn) → **Calculations** (monthly P&L for years 1-2, annual for years 3-5, cash flow, runway) → **Financial Statements** (P&L, cash flow, simplified balance) → **Executive Summary** with chart specs. Business-model presets (SaaS / DTC / Marketplace / Services / Fintech) drive revenue structure and sanity-check benchmarks (gross margin per model, burn multiple, Rule of 40, Magic Number, CAC payback, runway post-raise). Outputs monthly/annual/cash-flow tables as CSV-ready markdown with documented per-cell formulas. Wires into `cap-table-builder` (runway → raise ask → dilution), `investor-matching`, `demo-day-prep`, `stage-tracker`, and cross-references `business-model-toolkit:execution-plan` (Beyond Budgeting Forecast) and `aaarrr-flywheel-toolkit` unit-economics for consistency.
 
 ## [0.5.0] — 2026-04-15
 
