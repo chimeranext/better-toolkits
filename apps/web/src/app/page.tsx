@@ -126,6 +126,95 @@ function Section({ id, tone = "dark", className, children }: { id?: string; tone
   );
 }
 
+/** S4 artifact illustrations — no external images, everything speaks the product's language. */
+function S4Visual({ index }: { index: number }) {
+  if (index === 0) {
+    // Release gates terminal
+    return (
+      <div className="terminal-dark overflow-hidden rounded-xl border border-primary/25 shadow-lg">
+        <div className="flex items-center gap-1.5 border-b border-white/10 px-4 py-2.5">
+          <span className="h-3 w-3 rounded-full bg-destructive/80" /><span className="h-3 w-3 rounded-full bg-warning/80" /><span className="h-3 w-3 rounded-full bg-success/80" />
+          <span className="ml-3 font-mono text-xs text-[#837C99]">app-gtm-release</span>
+        </div>
+        <div className="p-4 font-mono text-[13px] leading-relaxed sm:text-sm">
+          <div><span className="text-brand-tertiary">$ </span>/app-gtm-release:ship-everywhere</div>
+          <div><span className="text-success">✓ </span>Gate 1 · code readiness</div>
+          <div><span className="text-success">✓ </span>Gate 2 · signed artifacts</div>
+          <div><span className="text-success">✓ </span>Gate 3 · store validation</div>
+          <div><span className="text-brand-accent">➜ </span>Published: Play · App Store · MS Store · Snap</div>
+        </div>
+      </div>
+    );
+  }
+  if (index === 1) {
+    // Journey map sketch
+    const stages = ["Discover", "Consider", "Decide", "Onboard", "Retain"];
+    const bars = [[3, 2, 1], [2, 3, 2], [1, 2, 3], [2, 3, 2], [3, 3, 3]];
+    return (
+      <div className="overflow-hidden rounded-xl border border-border bg-card shadow-lg">
+        <div className="flex items-center gap-1.5 border-b border-border/60 bg-muted/40 px-4 py-2.5">
+          <span className="h-3 w-3 rounded-full bg-destructive/70" /><span className="h-3 w-3 rounded-full bg-warning/70" /><span className="h-3 w-3 rounded-full bg-success/70" />
+          <span className="ml-3 font-mono text-xs text-muted-foreground">journey-map.html</span>
+        </div>
+        <div className="grid grid-cols-5 gap-3 p-5">
+          {stages.map((s, si) => (
+            <div key={s} className="text-center">
+              <div className="font-mono text-[10px] uppercase tracking-wide text-muted-foreground">{s}</div>
+              <div className="mt-2 space-y-1.5">
+                {bars[si].map((b, bi) => (
+                  <div key={bi} className="h-2 rounded-full bg-primary" style={{ opacity: 0.25 + b * 0.25, width: `${b * 33}%`, marginInline: "auto" }} />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+  if (index === 2) {
+    // Audit findings terminal
+    return (
+      <div className="terminal-dark overflow-hidden rounded-xl border border-primary/25 shadow-lg">
+        <div className="flex items-center gap-1.5 border-b border-white/10 px-4 py-2.5">
+          <span className="h-3 w-3 rounded-full bg-destructive/80" /><span className="h-3 w-3 rounded-full bg-warning/80" /><span className="h-3 w-3 rounded-full bg-success/80" />
+          <span className="ml-3 font-mono text-xs text-[#837C99]">make-no-mistakes</span>
+        </div>
+        <div className="p-4 font-mono text-[13px] leading-relaxed sm:text-sm">
+          <div><span className="text-brand-tertiary">$ </span>/make-no-mistakes:audit</div>
+          <div className="text-[#837C99]">▶ 6 detector families · 163 files scanned</div>
+          <div><span className="text-destructive">✗ </span>schema-drift: 2 CONFIRMED</div>
+          <div><span className="text-destructive">✗ </span>ddd-boundaries: 1 CONFIRMED</div>
+          <div><span className="text-brand-accent">➜ </span>repo-health 72/100 — 3 cures proposed</div>
+        </div>
+      </div>
+    );
+  }
+  // AAARRR funnel bars
+  const funnel: Array<[string, number, string]> = [
+    ["Awareness", 100, "#7C5CFF"], ["Acquisition", 64, "#3B82F6"], ["Activation", 41, "#22D3EE"],
+    ["Revenue", 18, "#EC4899"], ["Retention", 27, "#34D399"], ["Referral", 9, "#FBBF24"],
+  ];
+  return (
+    <div className="overflow-hidden rounded-xl border border-border bg-card shadow-lg">
+      <div className="flex items-center gap-1.5 border-b border-border/60 bg-muted/40 px-4 py-2.5">
+        <span className="h-3 w-3 rounded-full bg-destructive/70" /><span className="h-3 w-3 rounded-full bg-warning/70" /><span className="h-3 w-3 rounded-full bg-success/70" />
+        <span className="ml-3 font-mono text-xs text-muted-foreground">aaarrr-funnel</span>
+      </div>
+      <div className="space-y-2.5 p-5">
+        {funnel.map(([label, pct, color]) => (
+          <div key={label} className="flex items-center gap-3">
+            <span className="w-24 shrink-0 font-mono text-[11px] uppercase tracking-wide text-muted-foreground">{label}</span>
+            <div className="h-3 flex-1 overflow-hidden rounded-full bg-muted">
+              <div className="h-full rounded-full" style={{ width: `${pct}%`, backgroundColor: color }} />
+            </div>
+            <span className="w-10 shrink-0 text-right font-mono text-[11px] text-muted-foreground">{pct}%</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // --- page -------------------------------------------------------------------
 
 export default function Page() {
@@ -239,17 +328,22 @@ export default function Page() {
         </p>
       </div>
 
-      {/* S4 — problems / solutions */}
+      {/* S4 — problems / solutions: zigzag CARD // VISUAL rows with artifact illustrations */}
       <Section tone="light">
         <h2 className={H2}>{t.s4.title}</h2>
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 2xl:grid-cols-4">
+        <div className="mt-14 space-y-12 lg:space-y-16">
           {t.s4.pairs.map((p, i) => (
-            <div key={i} className="flex flex-col rounded-xl border border-border bg-card p-6 transition-transform hover:-translate-y-0.5">
-              <p className="text-base font-semibold leading-snug text-destructive">{p.problem}</p>
-              <p className="mt-4 text-[15px] leading-relaxed text-card-foreground">
-                <span className="select-none text-primary">→ </span>
-                <code className="font-mono text-sm font-semibold text-primary">{p.toolkit}</code>: {p.solution}
-              </p>
+            <div key={i} className="grid items-center gap-8 lg:grid-cols-2 lg:gap-14">
+              <div className={cn(i % 2 === 1 && "lg:order-2")}>
+                <p className="font-heading font-semibold leading-snug text-destructive text-[clamp(1.25rem,1rem+0.9vw,1.9rem)]">{p.problem}</p>
+                <p className="mt-5 text-[clamp(1rem,0.95rem+0.3vw,1.2rem)] leading-relaxed text-card-foreground">
+                  <span className="select-none text-primary">→ </span>
+                  <code className="font-mono font-semibold text-primary">{p.toolkit}</code>: {p.solution}
+                </p>
+              </div>
+              <div className={cn(i % 2 === 1 && "lg:order-1")}>
+                <S4Visual index={i} />
+              </div>
             </div>
           ))}
         </div>
@@ -314,24 +408,23 @@ export default function Page() {
       {/* S7 — process */}
       <Section id="process" tone="light">
         <h2 className={H2}>{t.s7.title}</h2>
-        <ol className="mx-auto mt-12 grid max-w-[80rem] gap-5 lg:grid-cols-3">
+        {/* One full-width row per step, stacked — the hero terminal already is the live demo. */}
+        <ol className="mx-auto mt-12 max-w-[80rem] space-y-5">
           {t.s7.steps.map((s, i) => (
-            <li key={i} className="flex flex-col rounded-xl border border-border bg-card p-6">
-              <div className="flex items-center gap-3">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">{i + 1}</span>
-                <span className="font-heading text-lg font-semibold text-card-foreground">{s.title}</span>
+            <li key={i} className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6 lg:flex-row lg:items-center">
+              <div className="flex shrink-0 items-center gap-3 lg:w-[24rem]">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-base font-bold text-primary-foreground">{i + 1}</span>
+                <div>
+                  <span className="font-heading text-lg font-semibold text-card-foreground">{s.title}</span>
+                  {s.note && <p className="text-sm text-muted-foreground">{s.note}</p>}
+                </div>
               </div>
-              {s.note && <p className="mt-2 text-sm text-muted-foreground">{s.note}</p>}
-              <div className="terminal-dark mt-4 rounded-md p-3.5">
+              <div className="terminal-dark min-w-0 flex-1 rounded-md p-3.5">
                 <code className="block whitespace-pre-wrap font-mono text-sm leading-relaxed [overflow-wrap:anywhere]"><span className="select-none text-brand-tertiary">$ </span>{s.cmd}</code>
               </div>
             </li>
           ))}
         </ol>
-        <div className="terminal-dark mx-auto mt-10 flex h-44 max-w-[80rem] items-center justify-center rounded-xl border border-dashed border-border text-sm text-[#837C99]">
-          {/* TODO: replace with real asciinema/GIF terminal demo */}
-          ▶ {t.s7.demo}
-        </div>
       </Section>
 
       {/* S8 — pricing */}
@@ -408,16 +501,18 @@ export default function Page() {
         {/* methodology bento: one accent per discipline */}
         <div className="mt-14">
           <p className="mx-auto max-w-[70ch] text-center text-[clamp(1rem,0.9rem+0.4vw,1.25rem)] font-medium text-card-foreground">{t.s9.methodTagline}</p>
-          <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6">
+          {/* Bento: spans tile the 6-col grid exactly — the 10-framework card anchors 2 rows. */}
+          <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-6">
             {METHOD_GROUPS.map((g, gi) => {
               // Brand accents re-tuned for contrast on the light surface (same
               // treatment as the canonical light theme: darker, same hues).
               const accents = ["#6D4AF5", "#2563EB", "#0E93B5", "#DB2777", "#0F9D6B", "#D97706"];
+              const spans = ["lg:col-span-3 lg:row-span-2", "lg:col-span-3", "lg:col-span-3", "lg:col-span-2", "lg:col-span-2", "lg:col-span-2"];
               const accent = accents[gi % accents.length];
               return (
                 <div
                   key={g.label.en}
-                  className="rounded-xl border bg-card p-6 transition-transform hover:-translate-y-1"
+                  className={cn("rounded-xl border bg-card p-6 transition-transform hover:-translate-y-1", spans[gi % spans.length])}
                   style={{ borderColor: `${accent}55`, boxShadow: `inset 0 3px 0 0 ${accent}` }}
                 >
                   <div className="flex items-baseline justify-between gap-2">
@@ -443,20 +538,13 @@ export default function Page() {
       {/* S10 — FAQ */}
       <Section tone="light">
         <h2 className={H2}>{t.s10.title}</h2>
-        <div className="mx-auto mt-10 max-w-4xl space-y-3">
+        {/* Masonry, answers always visible — reading a FAQ must not cost a click. */}
+        <div className="mt-10 columns-1 gap-5 md:columns-2 xl:columns-3">
           {t.s10.faqs.map((f, i) => (
-            <details
-              key={i}
-              className="group rounded-lg border border-border bg-card p-5"
-              onToggle={(e) => { if ((e.currentTarget as HTMLDetailsElement).open) track("faq_expand", { question: f.q }); }}
-            >
-              <summary className="cursor-pointer list-none font-heading text-base font-semibold text-card-foreground marker:content-none">
-                <span className="select-none text-primary group-open:hidden">+ </span>
-                <span className="hidden select-none text-primary group-open:inline">− </span>
-                {f.q}
-              </summary>
+            <div key={i} className="mb-5 break-inside-avoid rounded-xl border border-border bg-card p-6">
+              <h3 className="font-heading text-base font-semibold text-primary">{f.q}</h3>
               <p className="mt-3 text-[15px] leading-relaxed text-card-foreground/90">{f.a}</p>
-            </details>
+            </div>
           ))}
         </div>
       </Section>
