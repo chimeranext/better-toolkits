@@ -15,7 +15,7 @@ All notable changes to `venture-studio-toolkit` documented in this file. Format 
 - **Mermaid diagrams** — reemplaza ASCII art por diagramas Mermaid `flowchart TD` en:
   - README Tostada + Sandwich structures
   - `attached-fund-structure` govclab architecture (Management Co → GP → Fund → Portfolio)
-  - `references/lapc506-services-hub-canonical.md` caso @lapc506 architecture
+  - the Services Hub canonical reference (serial-entrepreneur architecture)
 - **MCP integrations section** en README — pointer a `mcp-integrations-guide.md`
 
 **New reference documents**:
@@ -39,7 +39,7 @@ demand. Documentation-first approach para design validation antes de touching 22
 ### Added — Services Hub pattern (middle-ground entre serial entrepreneur y formal studio)
 
 **Driven by dog-food of v1.0** ([legacy-ticket](https://linear.app/chimera-coding/issue/legacy-ticket))
-against @lapc506 4-venture portfolio. Reveló gap: users con 3-5 ventures wanting shared
+against a serial-founder 4-venture portfolio. Reveló gap: users con 3-5 ventures wanting shared
 services + independent VC raises per venture no tenían pattern — skill saltaba de Multi-LLC
 (pattern #2/#3) a Multi-LLC+Holding (pattern #7) sin middle ground. Services Hub llena el gap.
 
@@ -55,9 +55,9 @@ Parent Epic: [legacy-ticket](https://linear.app/chimera-coding/issue/legacy-tick
 
 **New reference document**:
 
-- `references/lapc506-services-hub-canonical.md` ([legacy-ticket](https://linear.app/chimera-coding/issue/legacy-ticket)) —
-  canonical example aplicando Services Hub Model a @lapc506 4-venture scenario (Altrupets,
-  Vertivolatam, Habitanexus, Aduanext). Concrete numbers: $6k setup, $4.4k annual.
+- Services Hub canonical example —
+  applying the Services Hub Model to a serial-entrepreneur 4-venture scenario.
+  Concrete numbers: $6k setup, $4.4k annual.
   Referenced por `services-hub-setup`, `structure-decision`, `when-to-become-studio`.
 
 **Updated skills**:
@@ -66,7 +66,7 @@ Parent Epic: [legacy-ticket](https://linear.app/chimera-coding/issue/legacy-tick
   added **pattern #6: Services Hub + Independent Ventures**. Shifted previous #6
   (Multi-LLC + Holding) to #7. Updated decision tree Regla 2 to route 3+ ventures con
   shared services + independent VC raises + no-fund a Services Hub. Added canonical
-  case 4 (@lapc506 Services Hub).
+  case 4 (serial-founder Services Hub).
 
 - `when-to-become-studio` v1.1.0 ([legacy-ticket](https://linear.app/chimera-coding/issue/legacy-ticket)) —
   refactored from binary (ready/not ready) a **3 operating modes**:
@@ -88,7 +88,7 @@ Parent Epic: [legacy-ticket](https://linear.app/chimera-coding/issue/legacy-tick
 
 - Naming consistency: patterns #1-#7 explicitly numbered across all skills
 - Cross-references updated: all skill integrations sections reflect new pattern #6
-- Case study `chimeranext-labs-canonical-thesis.md` references unchanged (chimeranext Labs
+- Studio-thesis canonical case study references unchanged (Acme Studio
   es Skip-CR pattern #1, no Services Hub)
 
 ### Pending for v1.2
@@ -96,7 +96,7 @@ Parent Epic: [legacy-ticket](https://linear.app/chimera-coding/issue/legacy-tick
 - Cross-plugin: update `business-model-toolkit` Fase 13 con Services Hub reference
   ([legacy-ticket](https://linear.app/chimera-coding/issue/legacy-ticket)) — requiere separate PR en
   `business-model-toolkit` repo
-- Dog-food the new Services Hub pattern con real-world user outside @lapc506 case
+- Dog-food the new Services Hub pattern con real-world user outside the serial-founder case
 - Implement bilingual output (es/en) per YAML config (deferred from v1.0)
 - Add MCP integration for Linear / Carta / Mercury (deferred from v1.0)
 
@@ -139,7 +139,7 @@ Parent Epic: [legacy-ticket](https://linear.app/chimera-coding/issue/legacy-tick
 - `when-to-become-studio` — 9-signal readiness assessment + transition roadmap
 
 **Reference documents**:
-- `chimeranext-labs-canonical-thesis.md` — canonical test case with 3 iterations
+- Studio-thesis canonical case study — canonical test case with 3 iterations
 
 ### Legal disclaimers
 

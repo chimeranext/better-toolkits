@@ -148,7 +148,7 @@
 - **Regulatory**: Texas Secretary of State
 - **Banking**: Mercury, Brex + large national banks con presencia fuerte
 - **VC friendliness**: 🟡 Media — similar a Wyoming, VCs familiarity is lower
-- **Fit**: **caso chimeranext** — Texas LLC con freelancers LATAM. Atractivo por no state tax + friendly business climate + Austin tech hub. Common para startups que NO planean captar priced round VC en corto plazo.
+- **Fit**: **caso Acme Studio** — Texas LLC con freelancers LATAM. Atractivo por no state tax + friendly business climate + Austin tech hub. Common para startups que NO planean captar priced round VC en corto plazo.
 
 ---
 

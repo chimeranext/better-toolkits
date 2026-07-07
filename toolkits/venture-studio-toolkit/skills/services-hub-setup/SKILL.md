@@ -356,8 +356,9 @@ MSAs pasan a intercompany agreements centralized via Holding.
 - **Harvest / Toggl** — time tracking per venture para cost allocation
 - **Carta** — cap table management (separate per venture)
 
-## Case study: @lapc506 (reference)
+## Case study: serial entrepreneur (reference)
 
-Ver `references/lapc506-services-hub-canonical.md` para ejemplo completo del pattern
-aplicado al serial entrepreneur con 4 ventures personales (Altrupets, Vertivolatam,
-Habitanexus, Aduanext) operando desde Costa Rica.
+Un caso canónico del pattern es un serial entrepreneur con ~4 ventures personales
+operando desde una sola jurisdicción (ej. Costa Rica): el Services Hub centraliza
+legal, contabilidad y tooling compartido, con MSAs por venture. Números concretos
+de ejemplo: ~$6k setup, ~$4.4k anual.
