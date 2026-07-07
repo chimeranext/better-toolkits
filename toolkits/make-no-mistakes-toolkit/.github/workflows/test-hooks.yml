@@ -1,0 +1,45 @@
+name: Test hooks
+
+on:
+  pull_request:
+    paths:
+      - 'hooks/**'
+      - 'scripts/build-rules.mjs'
+      - '.github/workflows/test-hooks.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'hooks/**'
+      - 'scripts/build-rules.mjs'
+
+jobs:
+  test:
+    # Use Blacksmith managed runners (same pattern as chimera-os) to avoid the
+    # GitHub-hosted billing block. Drop-in replacement for ubuntu-latest.
+    runs-on: blacksmith-2vcpu-ubuntu-2204
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify rules.json is in sync with rules.yaml
+        run: |
+          npm run build-rules
+          if ! git diff --exit-code hooks/rules/rules.json; then
+            echo "::error::hooks/rules/rules.json is stale. Run 'npm run build-rules' and commit the result."
+            exit 1
+          fi
+
+      - name: Run hook smoke tests
+        run: bash hooks/test-hooks.sh
+
+      - name: Run sentinel walk-up tests
+        # Exercises the `disable_if_repo_file` lookup from subdirectories
+        # (Greptile #25 P1 regression — sentinel at repo root must be honored
+        # even when the hook fires from any nested cwd within the repo).
+        run: bash hooks/test-sentinel-walkup.sh

@@ -1,0 +1,20 @@
+node_modules/
+dist/
+*.log
+.env
+.env.*
+.DS_Store
+
+# Per-project config (not committed — each dev sets their own)
+slack-config.json
+
+# Local-only design history and IP-leak guard inputs.
+# Each contributor / fork keeps their own copy here. See README.md and
+# hooks/rules/README.md (the latter documents the IP-leak guard format —
+# opt-in list of client/org names that must never appear in rules.yaml).
+.private/
+
+# Agent / git worktrees (transient, never committed)
+.claude/worktrees/
+.worktrees/
+.wt-*/

@@ -1,0 +1,3045 @@
+# =============================================================================
+# make-no-mistakes — Rules manifest (SSoT)
+#
+# This file is the single source of truth for all enforcement rules.
+# Memories (~/.claude/.../memory/feedback_*.md) and per-repo CLAUDE.md
+# citations should reference rule ids defined here, not paraphrase the rules.
+#
+# Schema (per row):
+#   id: kebab-case unique identifier
+#   description: one-line summary (shown in stderr on match)
+#   applies_to: [Bash | Edit | Write | MultiEdit | Slack]
+#       Determines which dispatcher (pre-bash.sh, pre-edit.sh, post-slack.sh)
+#       picks up the rule.
+#   match: array of conditions, ALL must hold (AND-chain)
+#     - field: command | file_path | content | text | old_string
+#       pattern: ERE regex; if present, field must match
+#       not_pattern: ERE regex; if present, field must NOT match
+#       flags: i (case-insensitive) | (omitted, case-sensitive)
+#   action: block | warn
+#   bypass_marker: kebab-case id used in "// hook-bypass: <marker>" comments;
+#       null if no bypass is offered. Bypass tokens are searched in any
+#       string field of tool_input.
+#   memory_ref: filename of the corresponding feedback memory
+#   references: array of external doc references (free text)
+#   message: multi-line stderr output shown on match
+#   tests: array of unit tests
+#     - name: kebab-case test id
+#       input: { tool_input: { ... } }   # JSON passed to the hook on stdin
+#       expected_exit: 0 | 2
+#
+# How to add a new rule: see hooks/rules/README.md
+# =============================================================================
+
+- id: ssh-db-mutation
+  description: Block gcloud compute ssh with inline DB or Moodle config commands
+  applies_to: [Bash]
+  match:
+    - field: command
+      pattern: 'gcloud[[:space:]]+compute[[:space:]]+ssh.*--command.*(php[[:space:]]+-r|set_config|mdl_|scorm_|mysql[[:space:]]+-|mysqldump|\$DB->)'
+  action: block
+  bypass_marker: ssh-db-rule
+  memory_ref: feedback_scripts_not_db.md
+  message: |
+    BLOCKED: gcloud compute ssh + inline DB/Moodle command detected.
+
+    Use a versioned script in scripts/ instead. If none fits, write+commit
+    one first. Bypass: add "// hook-bypass: ssh-db-rule" to the command.
+  tests:
+    - name: blocks-ssh-php-r
+      input:
+        tool_input:
+          command: 'gcloud compute ssh acme-vm --command="docker exec moodle php -r ''var_dump(1);''"'
+      expected_exit: 2
+    - name: blocks-ssh-set-config
+      input:
+        tool_input:
+          command: 'gcloud compute ssh acme-vm --command="set_config(''foo'', ''bar'', ''moodlecourse'')"'
+      expected_exit: 2
+    - name: blocks-ssh-mysql-shell
+      input:
+        tool_input:
+          command: 'gcloud compute ssh acme-vm --command="mysql -u root -e ''SELECT 1''"'
+      expected_exit: 2
+    - name: allows-regular-ssh
+      input:
+        tool_input:
+          command: 'gcloud compute ssh acme-vm --command="ls /var/log"'
+      expected_exit: 0
+    - name: allows-bypass-marker
+      input:
+        tool_input:
+          command: 'gcloud compute ssh acme-vm --command="php -r ''echo 1;''" # hook-bypass: ssh-db-rule'
+      expected_exit: 0
+
+- id: gcloud-missing-project
+  description: Warn when gcloud command is missing --project= flag
+  applies_to: [Bash]
+  match:
+    # Allow zero or more global flags (--verbosity=debug, --quiet, etc.)
+    # between `gcloud` and the subcommand. Without this allowance, a
+    # command like `gcloud --verbosity=debug compute instances list`
+    # would slip past the warning even though it lacks --project=.
+    - field: command
+      pattern: '^[[:space:]]*gcloud([[:space:]]+--[a-zA-Z0-9_-]+(=[^[:space:]]+)?)*[[:space:]]+(compute|sql|run|iam|secrets|projects|storage|functions|builds|artifacts|container|auth)[[:space:]]'
+      not_pattern: '--project[= ]|gcloud([[:space:]]+--[a-zA-Z0-9_-]+(=[^[:space:]]+)?)*[[:space:]]+(version|help|info|config)[[:space:]]'
+  action: warn
+  bypass_marker: null
+  memory_ref: feedback_gcloud_explicit_flags.md
+  references: []
+  message: |
+    WARNING: gcloud command without explicit --project= flag.
+
+    Active config drift can cause cross-project mistakes. Pass --project=<id>
+    on every gcloud command (and --account= for multi-account setups).
+  tests:
+    - name: warns-on-compute-without-project
+      input:
+        tool_input:
+          command: 'gcloud compute instances list'
+      expected_exit: 0
+      expected_stderr_contains: 'gcloud-missing-project'
+    - name: allows-with-project
+      input:
+        tool_input:
+          command: 'gcloud compute instances list --project=acme-dev'
+      expected_exit: 0
+    - name: allows-version-subcommand
+      input:
+        tool_input:
+          command: 'gcloud version'
+      expected_exit: 0
+    - name: warns-with-global-flags-before-subcommand
+      input:
+        tool_input:
+          command: 'gcloud --verbosity=debug compute instances list'
+      expected_exit: 0
+      expected_stderr_contains: 'gcloud-missing-project'
+
+- id: prod-ops-no-approval
+  description: Block production operations without explicit user acknowledgement
+  applies_to: [Bash]
+  match:
+    - field: command
+      pattern: '--project=([a-z0-9-]+-prod\b|production\b)|--env=prod\b|\bENV=prod\b|--target=prod\b'
+  action: block
+  bypass_marker: prod-ops
+  memory_ref: feedback_never_touch_prod_without_approval.md
+  references: []
+  message: |
+    BLOCKED: production operation detected.
+
+    Production changes require explicit user approval. Once confirmed, add
+    "// hook-bypass: prod-ops" to the command to acknowledge.
+  tests:
+    - name: blocks-prod-project-flag
+      input:
+        tool_input:
+          command: 'gcloud --project=acme-prod compute instances list'
+      expected_exit: 2
+    - name: blocks-env-prod
+      input:
+        tool_input:
+          command: 'ENV=prod npm run deploy'
+      expected_exit: 2
+    - name: allows-staging
+      input:
+        tool_input:
+          command: 'gcloud --project=acme-dev compute instances list'
+      expected_exit: 0
+    - name: allows-bypass
+      input:
+        tool_input:
+          command: 'gcloud --project=acme-prod compute instances list # hook-bypass: prod-ops'
+      expected_exit: 0
+
+- id: destructive-db-ops
+  description: Block destructive DB operations even with --local
+  applies_to: [Bash]
+  match:
+    - field: command
+      pattern: 'supabase[[:space:]]+db[[:space:]]+(reset|push|repair)\b|psql[^|]*\b(DROP[[:space:]]+(TABLE|DATABASE|SCHEMA)|TRUNCATE|DELETE[[:space:]]+FROM)\b'
+  action: block
+  bypass_marker: db-destructive
+  memory_ref: feedback_db_ops_explicit_permission.md
+  references: []
+  message: |
+    BLOCKED: destructive DB operation.
+
+    Even with --local, ask explicit user permission first. Once confirmed,
+    add "// hook-bypass: db-destructive" to the command.
+  tests:
+    - name: blocks-supabase-reset
+      input:
+        tool_input:
+          command: 'supabase db reset --local'
+      expected_exit: 2
+    - name: blocks-psql-drop-table
+      input:
+        tool_input:
+          command: 'psql -c "DROP TABLE users"'
+      expected_exit: 2
+    - name: blocks-psql-truncate
+      input:
+        tool_input:
+          command: 'psql -c "TRUNCATE users"'
+      expected_exit: 2
+    - name: allows-supabase-status
+      input:
+        tool_input:
+          command: 'supabase status'
+      expected_exit: 0
+    - name: allows-bypass
+      input:
+        tool_input:
+          command: 'supabase db reset --local # hook-bypass: db-destructive'
+      expected_exit: 0
+
+- id: manual-edge-fn-deploy
+  description: Block manual Edge Function deploy (CI-only)
+  applies_to: [Bash]
+  match:
+    - field: command
+      pattern: 'supabase[[:space:]]+functions[[:space:]]+deploy\b'
+  action: block
+  bypass_marker: edge-fn-manual
+  memory_ref: feedback_edge_functions_via_ci.md
+  references: []
+  message: |
+    BLOCKED: manual Edge Function deploy.
+
+    Deploy via CI workflow (push to develop for staging, main for prod).
+    Bypass: add "// hook-bypass: edge-fn-manual" if a hotfix justifies it.
+  tests:
+    - name: blocks-functions-deploy
+      input:
+        tool_input:
+          command: 'supabase functions deploy my-function'
+      expected_exit: 2
+    - name: allows-functions-list
+      input:
+        tool_input:
+          command: 'supabase functions list'
+      expected_exit: 0
+    - name: allows-bypass
+      input:
+        tool_input:
+          command: 'supabase functions deploy my-function # hook-bypass: edge-fn-manual'
+      expected_exit: 0
+
+- id: minified-build-output
+  description: Block writing minified content to build/ directories
+  applies_to: [Edit, Write, MultiEdit]
+  match:
+    - field: file_path
+      pattern: 'amd/build/.*\.min\.js$|dist/.*\.min\.(js|css)$'
+    - field: content
+      pattern: '(var [a-z]=function|;function [a-z]\(\)|^[a-zA-Z0-9_$]+=function\([a-zA-Z0-9_$,]*\)\{)'
+  action: block
+  bypass_marker: minified-build
+  memory_ref: feedback_no_minified_build.md
+  references: []
+  message: |
+    BLOCKED: minified content being written to build/.
+
+    Build artifacts must stay human-readable. Replace with a readable copy
+    of src/. Bypass: "// hook-bypass: minified-build" inside the content.
+  tests:
+    - name: blocks-minified-amd-build
+      input:
+        tool_input:
+          file_path: 'plugins/foo/amd/build/main.min.js'
+          content: 'var a=function(b){return b};var c=function(){};'
+      expected_exit: 2
+    - name: allows-readable-amd-build
+      input:
+        tool_input:
+          file_path: 'plugins/foo/amd/build/main.min.js'
+          content: |
+            define(['jquery'], function($) {
+                'use strict';
+                return {
+                    init: function() { console.log('hello'); }
+                };
+            });
+      expected_exit: 0
+    - name: allows-non-build-paths
+      input:
+        tool_input:
+          file_path: 'src/utils/helper.js'
+          content: 'var a=function(b){return b};'
+      expected_exit: 0
+
+- id: secrets-hardcoded
+  description: Block hardcoded credential patterns being written to source files
+  applies_to: [Edit, Write, MultiEdit]
+  match:
+    - field: content
+      pattern: '(password|secret|api_key|apikey|token|access_key|private_key)["\'']?[[:space:]]*[:=][[:space:]]*["\'']?[A-Za-z0-9_!@#$%^&*+/=-]{12,}'
+      flags: i
+    - field: file_path
+      not_pattern: '\.env\.example|\.(test|spec)\.|README|\.md$|fixtures/|mocks?/'
+  action: block
+  bypass_marker: secret-leak
+  memory_ref: feedback_never_leak_secrets.md
+  references: []
+  message: |
+    POTENTIAL SECRET LEAK: hardcoded credential pattern detected.
+
+    Use Secret Manager / .env / local memory for real values. If this is a
+    placeholder or test fixture, prefix with "EXAMPLE_" / "CHANGEME_", move
+    to .env.example, or add "// hook-bypass: secret-leak" near the line.
+  tests:
+    - name: blocks-hardcoded-password-in-src
+      input:
+        tool_input:
+          file_path: 'src/config.ts'
+          content: 'const password = "supersecret123ABC!"'
+      expected_exit: 2
+    - name: blocks-hardcoded-api-key
+      input:
+        tool_input:
+          file_path: 'src/lib/api.ts'
+          content: 'const api_key: "sk_live_abc123def456ghi789"'
+      expected_exit: 2
+    - name: allows-env-example
+      input:
+        tool_input:
+          file_path: '.env.example'
+          content: 'PASSWORD=changeme_supersecret_placeholder'
+      expected_exit: 0
+    - name: allows-bypass
+      input:
+        tool_input:
+          file_path: 'src/config.ts'
+          content: 'const password = "supersecret123ABC!" // hook-bypass: secret-leak'
+      expected_exit: 0
+    - name: allows-test-file
+      input:
+        tool_input:
+          file_path: 'src/auth.test.ts'
+          content: 'const password = "supersecret123ABC!"'
+      expected_exit: 0
+
+- id: slack-unicode-bullets
+  description: Warn on Unicode bullets in Slack messages (use - instead)
+  applies_to: [Slack]
+  match:
+    - field: text
+      pattern: '[•◦▪▫]'
+  action: warn
+  bypass_marker: null
+  memory_ref: feedback_slack_no_unicode_bullets.md
+  references: []
+  message: |
+    Slack style: Unicode bullets (•◦▪▫) detected. Use "-" instead.
+  tests:
+    - name: warns-on-bullet
+      input:
+        tool_input:
+          text: 'Hola • mundo'
+      expected_exit: 0
+      expected_stderr_contains: slack-unicode-bullets
+    - name: allows-dash-bullet
+      input:
+        tool_input:
+          text: 'Hola - mundo'
+      expected_exit: 0
+
+- id: slack-tables-no-codeblock
+  description: Warn when a markdown table separator row appears in Slack text
+  applies_to: [Slack]
+  match:
+    # Match the distinctive markdown-table separator row (|---|---|).
+    # Plain pipe-prose without a separator is too noisy; the separator
+    # almost exclusively appears inside actual tables. False-positive: a
+    # table legitimately wrapped in a fenced code block still triggers the
+    # warning, but warn-only is tolerable. Detecting "inside a code block"
+    # reliably from a single regex is not feasible in bash; line-by-line
+    # parsing would be needed to do it perfectly.
+    - field: text
+      pattern: '^\|[-:|[:space:]]+\|[[:space:]]*$'
+  action: warn
+  bypass_marker: null
+  memory_ref: feedback_slack_tables.md
+  message: |
+    Slack style: markdown table syntax detected.
+    Slack mrkdwn does not render bare pipe-tables — wrap the table in
+    triple-backtick fences for it to display correctly.
+  tests:
+    - name: warns-on-bare-table
+      input:
+        tool_input:
+          text: |
+            Resultados:
+            | col1 | col2 | col3 |
+            | ---- | ---- | ---- |
+            | a    | b    | c    |
+      expected_exit: 0
+      expected_stderr_contains: slack-tables-no-codeblock
+    - name: allows-message-with-stray-pipes
+      input:
+        tool_input:
+          text: |
+            Just a paragraph with | a stray pipe | character — no table here.
+      expected_exit: 0
+
+- id: slack-spanish-tildes
+  description: Warn when common Spanish words appear without tildes
+  applies_to: [Slack]
+  match:
+    - field: text
+      pattern: '\b(migracion|verificacion|analisis|patron|tambien|configuracion|implementacion|version|integracion|notificacion|aplicacion|comunicacion)\b'
+      flags: i
+  action: warn
+  bypass_marker: null
+  memory_ref: feedback_spanish_accents.md
+  references: []
+  message: |
+    Slack style: Spanish word without tilde detected. Always write with accents
+    (migración, verificación, análisis, patrón, también, configuración, ...).
+  tests:
+    - name: warns-on-tildeless-migracion
+      input:
+        tool_input:
+          text: 'La migracion fue exitosa'
+      expected_exit: 0
+      expected_stderr_contains: slack-spanish-tildes
+    - name: allows-with-tilde
+      input:
+        tool_input:
+          text: 'La migración fue exitosa'
+      expected_exit: 0
+
+# -----------------------------------------------------------------------------
+# Design System rules (legacy-ticket)
+#
+# These four rules implement AI-write-time enforcement for the Chimera Design
+# System. They are the 4th enforcement layer, complementing the chimera-os
+# repo's existing layers:
+#   1. useDsRules React hook (passive, runtime-only)
+#   2. ds-lint pre-commit hook (post-author, post-write)
+#   3. validate-storage-upload Edge Function (Storage bucket uploads)
+#   4. THIS layer — PreToolUse on Edit/Write/MultiEdit (write-time, blocks
+#      the violation BEFORE the file is touched, tightest feedback loop)
+#
+# Linear: legacy-ticket (Phase G of legacy-ticket design-system-linter).
+# -----------------------------------------------------------------------------
+
+- id: ds-arbitrary-breakpoint
+  description: 'Block arbitrary Tailwind breakpoints (min-[Xpx]) in TSX/JSX/TS source — use sm:/md:/lg:/xl:/2xl: preset breakpoints'
+  applies_to: [Edit, Write, MultiEdit]
+  match:
+    - field: file_path
+      pattern: '\.(tsx|jsx|ts|js)$'
+    - field: content
+      pattern: 'min-\[[0-9]+px\]'
+  action: block
+  bypass_marker: ds-arbitrary-breakpoint
+  memory_ref: feedback_design_system_no_arbitrary_breakpoints.md
+  message: |
+    BLOCKED: arbitrary Tailwind breakpoint detected (min-[Xpx]).
+
+    Use Tailwind's preset breakpoints instead: sm: (640px), md: (768px),
+    lg: (1024px), xl: (1280px), 2xl: (1536px). Arbitrary values fragment
+    the responsive design language and break consistency across the app.
+
+    If a non-preset breakpoint is genuinely required, add
+    "// hook-bypass: ds-arbitrary-breakpoint" to the line and justify
+    in the PR description.
+  tests:
+    - name: blocks-min-1200px-in-tsx
+      input:
+        tool_input:
+          file_path: 'src/components/foo.tsx'
+          content: '<div className="min-[1200px]:flex">x</div>'
+      expected_exit: 2
+    - name: blocks-min-768-arbitrary
+      input:
+        tool_input:
+          file_path: 'src/pages/Bar.tsx'
+          content: '<div className="min-[768px]:block">y</div>'
+      expected_exit: 2
+    - name: allows-preset-md
+      input:
+        tool_input:
+          file_path: 'src/components/foo.tsx'
+          content: '<div className="md:flex">x</div>'
+      expected_exit: 0
+    - name: allows-non-tsx-files
+      input:
+        tool_input:
+          file_path: 'docs/example.md'
+          content: 'Use min-[1200px] for ...'
+      expected_exit: 0
+    - name: allows-bypass-marker
+      input:
+        tool_input:
+          file_path: 'src/components/foo.tsx'
+          content: '<div className="min-[1380px]:hidden">x</div> // hook-bypass: ds-arbitrary-breakpoint'
+      expected_exit: 0
+
+- id: ds-deep-ui-import
+  description: Block deep imports from @/components/ui/<file> — always import from the barrel @/components/ui
+  applies_to: [Edit, Write, MultiEdit]
+  match:
+    - field: file_path
+      pattern: '\.(tsx|jsx|ts)$'
+    - field: content
+      pattern: 'from[[:space:]]+["'']@/components/ui/[a-zA-Z][a-zA-Z0-9_-]+["'']'
+  action: block
+  bypass_marker: ds-deep-ui-import
+  memory_ref: feedback_design_system_barrel_imports.md
+  message: |
+    BLOCKED: deep import from @/components/ui/<file> detected.
+
+    Always import Design System components from the barrel:
+      import { Button, Card, TextInput } from "@/components/ui"
+
+    Deep imports like @/components/ui/button bypass the barrel-controlled
+    surface and make refactors brittle. The barrel is the public API.
+  tests:
+    - name: blocks-deep-button-import
+      input:
+        tool_input:
+          file_path: 'src/pages/Foo.tsx'
+          content: 'import { Button } from "@/components/ui/button"'
+      expected_exit: 2
+    - name: blocks-deep-textinput-import
+      input:
+        tool_input:
+          file_path: 'src/components/Bar.tsx'
+          content: "import { TextInput } from '@/components/ui/text-input'"
+      expected_exit: 2
+    - name: allows-barrel-import
+      input:
+        tool_input:
+          file_path: 'src/pages/Foo.tsx'
+          content: 'import { Button, Card } from "@/components/ui"'
+      expected_exit: 0
+    - name: allows-non-ds-import
+      input:
+        tool_input:
+          file_path: 'src/pages/Foo.tsx'
+          content: 'import { foo } from "@/lib/utils"'
+      expected_exit: 0
+    - name: allows-bypass-marker
+      input:
+        tool_input:
+          file_path: 'src/pages/Foo.tsx'
+          content: 'import { Button } from "@/components/ui/button" // hook-bypass: ds-deep-ui-import'
+      expected_exit: 0
+
+- id: ds-arbitrary-fixed-width-in-ds-component
+  description: Block arbitrary fixed widths (w-[Xpx]) inside DS components — they must be flexible (w-full + max-w)
+  applies_to: [Edit, Write, MultiEdit]
+  match:
+    # Anchor on start-of-string OR a leading "/" so the rule fires for both
+    # relative paths ("src/components/ui/...") and absolute paths
+    # ("/home/user/repo/src/components/ui/..."). Claude Code's Edit/Write
+    # tools may pass either form at runtime.
+    - field: file_path
+      pattern: '(^|/)src/components/ui/'
+    - field: content
+      # Require the `w` to NOT be preceded by a letter/dash so we don't
+      # mis-flag legitimate composite utilities like max-w-[200px] or
+      # min-w-[120px]. ERE has no lookahead, so we anchor on a leading
+      # boundary of "start-of-line OR non-[a-zA-Z-] character".
+      pattern: '(^|[^a-zA-Z-])w-\[[0-9]+px\]'
+  action: block
+  bypass_marker: ds-arbitrary-fixed-width
+  memory_ref: feedback_design_system_no_fixed_pixel_widths.md
+  message: |
+    BLOCKED: arbitrary fixed pixel width in a DS component.
+
+    DS components live under src/components/ui/ and must be flexible.
+    Use w-full + max-w-[Xpx] instead of w-[Xpx], so the component
+    adapts to its container.
+
+    Application-level usage (outside src/components/ui/) is exempt —
+    this rule only fires when editing the DS components themselves.
+  tests:
+    - name: blocks-w-pixel-in-ui-button
+      input:
+        tool_input:
+          file_path: 'src/components/ui/button.tsx'
+          content: '<button className="w-[120px]">x</button>'
+      expected_exit: 2
+    - name: blocks-w-pixel-in-ui-card
+      input:
+        tool_input:
+          file_path: 'src/components/ui/card.tsx'
+          content: '<div className="w-[300px] p-4">y</div>'
+      expected_exit: 2
+    # Regression: Claude Code passes absolute paths to Edit/Write at runtime.
+    # Without the (^|/) anchor the rule would silently allow these (the bug
+    # Greptile flagged in PR #14).
+    - name: blocks-w-pixel-in-ui-button-absolute-path
+      input:
+        tool_input:
+          file_path: '/home/user/repo/src/components/ui/button.tsx'
+          content: '<button className="w-[120px]">x</button>'
+      expected_exit: 2
+    - name: allows-w-pixel-outside-ds
+      input:
+        tool_input:
+          file_path: 'src/pages/Settings.tsx'
+          content: '<div className="w-[300px]">page-specific</div>'
+      expected_exit: 0
+    - name: allows-w-full-max-w
+      input:
+        tool_input:
+          file_path: 'src/components/ui/button.tsx'
+          content: '<button className="w-full max-w-[200px]">x</button>'
+      expected_exit: 0
+    - name: allows-bypass-marker
+      input:
+        tool_input:
+          file_path: 'src/components/ui/special.tsx'
+          content: '<div className="w-[42px]">px-perfect-icon</div> // hook-bypass: ds-arbitrary-fixed-width'
+      expected_exit: 0
+
+- id: ds-raw-hex-color-in-source
+  description: Warn on raw hex color literals in TSX/TS source — colors must come from Tailwind tokens (chimera-primary-*, etc.)
+  applies_to: [Edit, Write, MultiEdit]
+  match:
+    - field: file_path
+      pattern: '\.(tsx|jsx|ts|js)$'
+      not_pattern: '(tailwind\.config|theme/|design-system/|design-tokens|\.test\.|\.stories\.)'
+    - field: content
+      pattern: '#[0-9a-fA-F]{6}\b'
+  action: warn
+  bypass_marker: ds-raw-hex-color
+  memory_ref: feedback_design_system_token_only_colors.md
+  message: |
+    WARNING: raw hex color literal found in source.
+
+    Use a Tailwind token instead (e.g., bg-chimera-primary-lilac, text-chimera-foreground).
+    The token system is the single source of truth for color and theming.
+
+    Exempt paths (NOT flagged): tailwind.config.*, theme/, design-system/,
+    design-tokens, .test.*, .stories.*. Use the bypass marker if a hex is
+    genuinely required outside those paths (e.g. embedding a brand color
+    in a logo SVG that the design system doesn't yet expose).
+  tests:
+    - name: warns-on-raw-hex-in-tsx
+      input:
+        tool_input:
+          file_path: 'src/components/foo.tsx'
+          content: '<div style={{ color: "#FF7151" }}>x</div>'
+      expected_exit: 0
+      expected_stderr_contains: 'ds-raw-hex-color-in-source'
+    - name: warns-on-raw-hex-in-ts
+      input:
+        tool_input:
+          file_path: 'src/lib/util.ts'
+          content: 'const PRIMARY = "#C980FC"'
+      expected_exit: 0
+      expected_stderr_contains: 'ds-raw-hex-color-in-source'
+    - name: allows-tailwind-config
+      input:
+        tool_input:
+          file_path: 'tailwind.config.ts'
+          content: 'lilac: "#C980FC"'
+      expected_exit: 0
+    - name: allows-theme-file
+      input:
+        tool_input:
+          file_path: 'src/theme/tokens.ts'
+          content: 'export const PRIMARY = "#C980FC"'
+      expected_exit: 0
+    - name: allows-test-file
+      input:
+        tool_input:
+          file_path: 'src/components/foo.test.tsx'
+          content: 'expect(color).toBe("#FF7151")'
+      expected_exit: 0
+    # Lock in the design-system/ exemption so a future regex tweak that
+    # accidentally narrows not_pattern fails this test.
+    - name: allows-design-system-folder
+      input:
+        tool_input:
+          file_path: 'src/design-system/tokens.ts'
+          content: 'export const PRIMARY = "#C980FC"'
+      expected_exit: 0
+    # Lock in the design-tokens exemption (matches both folder and filename).
+    - name: allows-design-tokens-file
+      input:
+        tool_input:
+          file_path: 'src/lib/design-tokens.ts'
+          content: 'export const LILAC = "#C980FC"'
+      expected_exit: 0
+    - name: allows-bypass-marker
+      input:
+        tool_input:
+          file_path: 'src/components/Logo.tsx'
+          content: '<svg fill="#FF7151" /> // hook-bypass: ds-raw-hex-color'
+      expected_exit: 0
+
+# -----------------------------------------------------------------------------
+# Database / migration discipline rules
+#
+# These four rules prevent the class of drift that occurs when migration files
+# fail to auto-run in a downstream environment and the workaround is to apply
+# the SQL manually via psql / the Supabase SQL Editor — leaving the migrations
+# directory and downstream databases silently out of sync.
+#
+# Layered defense:
+#   1. schema-sql-outside-migrations — block ad-hoc DDL in non-migration files
+#   2. warn-psql-against-supabase-remote — nudge away from SQL-Editor-style
+#      direct execution (psql / pg_dump / pg_restore) against any *.supabase.co
+#      host
+#   3. pr-create-with-migrations-needs-deploy-note — remind the author to
+#      describe migration deployment when opening a PR
+#   4. block-supabase-db-push-prod — hard stop on `supabase db push` aimed at
+#      the PRODUCTION project ref OR --linked (which may transparently target
+#      a previously-linked production project); only the create-release SOP
+#      may apply migrations to prod.
+#
+# Rule 4 references project-ref placeholders __PROD_SUPABASE_REF__ and
+# __STAGING_SUPABASE_REF__. The `npm run build-rules` step substitutes these
+# from the per-install gitignored config at .private/substitutions.json
+# (UPPER_SNAKE token map). Without the config the placeholders remain
+# in rules.json — the rule still parses and runs, but it only fires for
+# commands that literally contain the placeholder text (i.e., it is
+# documented inert). See hooks/rules/README.md for the substitution workflow.
+# -----------------------------------------------------------------------------
+
+- id: schema-sql-outside-migrations
+  description: Block schema-changing SQL (ALTER/CREATE/DROP/GRANT/REVOKE/CREATE POLICY) in .sql files outside supabase/migrations/
+  applies_to: [Edit, Write, MultiEdit]
+  match:
+    - field: file_path
+      pattern: '\.sql$'
+      not_pattern: '(supabase/migrations/|supabase/tests/|supabase/seed)'
+    - field: content
+      pattern: '\b(ALTER TABLE|CREATE TABLE|DROP TABLE|CREATE POLICY|DROP POLICY|GRANT |REVOKE |CREATE FUNCTION|DROP FUNCTION|CREATE TYPE|ALTER TYPE)\b'
+      flags: i
+  action: block
+  bypass_marker: schema-sql-outside-migrations
+  memory_ref: feedback_scripts_not_db.md
+  message: |
+    BLOCKED: schema-changing SQL in a file outside supabase/migrations/.
+
+    Every schema mutation (ALTER/CREATE/DROP/GRANT/POLICY) MUST live in a
+    timestamped migration file, never in ad-hoc scripts or runtime queries.
+
+    Create a new file:
+      supabase/migrations/$(date -u +%Y%m%d%H%M%S)_<slug>.sql
+
+    Legitimate exceptions (use the bypass marker):
+    - Schema docs / examples in READMEs — should not be executable SQL
+    - Test fixtures under supabase/tests/ — already exempt via not_pattern
+  tests:
+    - name: blocks-create-table-in-script
+      input:
+        tool_input:
+          file_path: 'scripts/setup.sql'
+          content: 'CREATE TABLE foo (id int primary key);'
+      expected_exit: 2
+    - name: blocks-grant-in-edge-function
+      input:
+        tool_input:
+          file_path: 'supabase/functions/foo/migrate.sql'
+          content: 'GRANT SELECT ON foo TO authenticated;'
+      expected_exit: 2
+    - name: blocks-alter-table-in-readme-example
+      input:
+        tool_input:
+          file_path: 'docs/example.sql'
+          content: 'ALTER TABLE foo ADD COLUMN bar text;'
+      expected_exit: 2
+    - name: allows-schema-in-migrations-folder
+      input:
+        tool_input:
+          file_path: 'supabase/migrations/20260509000000_foo.sql'
+          content: 'CREATE TABLE foo (id int primary key);'
+      expected_exit: 0
+    - name: allows-schema-in-tests-folder
+      input:
+        tool_input:
+          file_path: 'supabase/tests/foo_test.sql'
+          content: 'CREATE TABLE temp_test_t (id int);'
+      expected_exit: 0
+    - name: allows-non-schema-sql-anywhere
+      input:
+        tool_input:
+          file_path: 'scripts/query.sql'
+          content: 'SELECT * FROM foo;'
+      expected_exit: 0
+    - name: allows-bypass-marker
+      input:
+        tool_input:
+          file_path: 'scripts/oneshot.sql'
+          content: |
+            -- # hook-bypass: schema-sql-outside-migrations
+            CREATE TABLE foo (id int primary key);
+      expected_exit: 0
+
+- id: warn-psql-against-supabase-remote
+  description: Warn when psql / pg_dump / pg_restore is executed directly against a *.supabase.co host (drift risk vs versioned migrations)
+  applies_to: [Bash]
+  match:
+    - field: command
+      # Cover the full Postgres CLI surface a developer might reach for —
+      # not just psql. pg_dump / pg_restore / pg_dumpall against the live
+      # Supabase host are equivalent vectors for ad-hoc reads and writes
+      # that bypass the versioned migrations workflow.
+      pattern: '\b(psql|pg_dump|pg_restore|pg_dumpall)\b.*\.supabase\.co'
+      flags: i
+  action: warn
+  bypass_marker: psql-supabase-remote
+  memory_ref: feedback_scripts_not_db.md
+  message: |
+    WARNING: direct psql / pg_dump / pg_restore execution against a Supabase
+    remote host.
+
+    SQL Editor / direct-Postgres-CLI workflows create drift between the
+    versioned migrations directory and other devs' local databases.
+
+    Correct workflow:
+      1. Add a migration in supabase/migrations/<timestamp>_<slug>.sql
+      2. Test locally:  supabase db reset --local
+      3. Push to develop — CI applies the migration to staging automatically
+      4. For production: follow the create-release SOP
+
+    Use the bypass marker only for legitimate hotfixes where the PR cycle
+    is too slow.
+  tests:
+    - name: warns-on-psql-supabase-remote
+      input:
+        tool_input:
+          command: "psql postgresql://user:pass@db.example1.supabase.co:5432/postgres -c 'SELECT 1'"
+      expected_exit: 0
+      expected_stderr_contains: 'warn-psql-against-supabase-remote'
+    - name: warns-on-psql-different-supabase-host
+      input:
+        tool_input:
+          command: "psql -h db.example2.supabase.co -d postgres -c 'CREATE INDEX foo_idx ON foo (id)'"
+      expected_exit: 0
+      expected_stderr_contains: 'warn-psql-against-supabase-remote'
+    - name: warns-on-pg-dump-supabase-remote
+      input:
+        tool_input:
+          command: 'pg_dump -h db.example1.supabase.co -d postgres -t public.foo > foo.sql'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-psql-against-supabase-remote'
+    - name: warns-on-pg-restore-supabase-remote
+      input:
+        tool_input:
+          command: 'pg_restore -h db.example1.supabase.co -d postgres backup.dump'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-psql-against-supabase-remote'
+    - name: allows-psql-localhost
+      input:
+        tool_input:
+          command: "psql -h localhost -p 54322 -d postgres -c 'SELECT 1'"
+      expected_exit: 0
+    - name: allows-non-psql-supabase-references
+      input:
+        tool_input:
+          command: 'curl https://example1.supabase.co/rest/v1/foo'
+      expected_exit: 0
+    - name: allows-bypass-marker
+      input:
+        tool_input:
+          command: "psql -h db.example1.supabase.co -c 'SELECT 1' # hook-bypass: psql-supabase-remote"
+      expected_exit: 0
+
+- id: pr-create-with-migrations-needs-deploy-note
+  description: Warn when gh pr create body (inline --body) does not mention migrations (caller should verify the PR has no migration files)
+  applies_to: [Bash]
+  match:
+    - field: command
+      # Require an inline --body argument and explicitly exclude --body-file
+      # (which sources the body from a separate file the rule cannot read,
+      # so any keyword check would produce a false positive). Matching --body
+      # immediately followed by space, "=" or end-of-string anchors the
+      # positive match away from --body-file's "--body-" substring.
+      pattern: 'gh[[:space:]]+pr[[:space:]]+create.*--body([[:space:]]|=|$)'
+      not_pattern: '--body-file'
+      flags: i
+    - field: command
+      not_pattern: '(migration|db push|supabase db|migration-deployment|requires.*staging|requires.*prod)'
+      flags: i
+  action: warn
+  bypass_marker: pr-create-no-migration-note
+  memory_ref: feedback_scripts_not_db.md
+  message: |
+    WARNING: gh pr create body does not mention migrations.
+
+    If your PR modifies files under supabase/migrations/, the body MUST
+    include a "Migration deployment" section that lists:
+      1. Which envs need supabase db push (staging auto via CI; prod via release)
+      2. Backfill order if the migrations depend on existing data
+      3. Post-merge verification steps
+
+    This rule does NOT inspect the diff — it only reads the command, and it
+    intentionally skips --body-file invocations because it cannot read the
+    referenced file. Use the bypass marker if your PR has no migrations.
+  tests:
+    - name: warns-on-pr-create-body-without-migration-mention
+      input:
+        tool_input:
+          command: 'gh pr create --base develop --title "feat: foo" --body "Adds feature X"'
+      expected_exit: 0
+      expected_stderr_contains: 'pr-create-with-migrations-needs-deploy-note'
+    - name: allows-pr-create-body-mentioning-migration
+      input:
+        tool_input:
+          command: 'gh pr create --base develop --title "feat: foo" --body "Adds X. Migration deployment: requires supabase db push on staging"'
+      expected_exit: 0
+    - name: allows-pr-create-body-mentioning-db-push
+      input:
+        tool_input:
+          command: 'gh pr create --body "Use db push to apply"'
+      expected_exit: 0
+    - name: allows-pr-create-with-body-file
+      input:
+        tool_input:
+          command: 'gh pr create --base develop --title "feat: foo" --body-file ./pr-body.md'
+      expected_exit: 0
+    - name: allows-bypass-marker
+      input:
+        tool_input:
+          command: 'gh pr create --body "release notes only # hook-bypass: pr-create-no-migration-note"'
+      expected_exit: 0
+
+- id: block-supabase-db-push-prod
+  description: Block supabase db push that targets the PRODUCTION project ref or uses --linked (the linked project may transparently be production)
+  applies_to: [Bash]
+  match:
+    - field: command
+      # Two paths into the production database, both blocked:
+      #   1. An explicit --project-ref / --db-url containing __PROD_SUPABASE_REF__
+      #      (substituted at build time from .private/substitutions.json; see
+      #      hooks/rules/README.md). Without the substitution, the literal
+      #      placeholder string remains and the rule is documented inert.
+      #   2. `supabase db push --linked`, which resolves to whichever project
+      #      the developer most recently ran `supabase link --project-ref ...`
+      #      against. The CLI gives no static way to know whether that link
+      #      points at staging or prod, so we conservatively block it and
+      #      require the bypass marker as the author's explicit ack that they
+      #      verified the linked project is intentional.
+      pattern: 'supabase[[:space:]]+db[[:space:]]+push.*(__PROD_SUPABASE_REF__|--linked\b)'
+  action: block
+  bypass_marker: prod-db-push-approved
+  memory_ref: feedback_never_touch_prod_without_approval.md
+  message: |
+    BLOCKED: supabase db push targeting either the PRODUCTION project ref
+    or the currently-linked project (which may be production).
+
+    NEVER run against production without explicit user approval — see
+    feedback_never_touch_prod_without_approval.md.
+
+    Correct workflow:
+      1. Merge to main
+      2. The release owner runs the create-release SOP that ships
+         migrations to production through CI, not from a developer machine.
+
+    Use the bypass marker ONLY when the user has verbally approved the
+    operation. For --linked, double-check the active link first:
+      supabase status --output json | jq -r '.project_ref'
+
+    Marketplace consumers: the production project ref is configured per
+    install via .private/substitutions.json (PROD_SUPABASE_REF token). See
+    hooks/rules/README.md for the substitution workflow.
+  tests:
+    - name: blocks-supabase-db-push-prod
+      input:
+        tool_input:
+          command: 'supabase db push --db-url postgresql://postgres:pwd@db.__PROD_SUPABASE_REF__.supabase.co:5432/postgres'
+      expected_exit: 2
+    - name: blocks-supabase-db-push-prod-with-project-ref-flag
+      input:
+        tool_input:
+          command: 'supabase db push --project-ref __PROD_SUPABASE_REF__'
+      expected_exit: 2
+    - name: blocks-supabase-db-push-linked
+      input:
+        tool_input:
+          command: 'supabase db push --linked'
+      expected_exit: 2
+    - name: blocks-supabase-db-push-linked-with-extra-flags
+      input:
+        tool_input:
+          command: 'supabase db push --linked --include-all'
+      expected_exit: 2
+    - name: allows-supabase-db-push-staging
+      input:
+        tool_input:
+          command: 'supabase db push --project-ref __STAGING_SUPABASE_REF__'
+      expected_exit: 0
+    - name: allows-supabase-db-push-local
+      input:
+        tool_input:
+          command: 'supabase db push'
+      expected_exit: 0
+    - name: allows-bypass-marker-prod-ref
+      input:
+        tool_input:
+          command: 'supabase db push --project-ref __PROD_SUPABASE_REF__ # hook-bypass: prod-db-push-approved'
+      expected_exit: 0
+    - name: allows-bypass-marker-linked
+      input:
+        tool_input:
+          command: 'supabase db push --linked # hook-bypass: prod-db-push-approved'
+      expected_exit: 0
+
+
+- id: warn-curl-mutating-supabase-rest
+  description: Warn when curl issues a mutating HTTP method (POST/PATCH/PUT/DELETE) against the Supabase PostgREST endpoint (drift risk vs versioned migrations + RLS bypass)
+  applies_to: [Bash]
+  match:
+    # The pattern catches three mutation vectors against Supabase PostgREST:
+    #   1. Explicit `-X METHOD` (with or without space; `-X POST` and the
+    #      no-space `-XPOST` shorthand both fire).
+    #   2. URL-before-flag ordering (`curl <url> -X POST ...`), which is
+    #      common in shell scripts that build the URL into a variable.
+    #   3. Implicit POST via `-d` / `--data` / `--data-raw` / `--data-binary`.
+    #      Curl auto-promotes to POST when these flags are present even
+    #      without `-X`, so a one-liner like `curl -d '...' <url>` is a
+    #      live mutation that would otherwise pass silently.
+    # The match is narrowed to `.supabase.co/rest/v1/` (PostgREST) so this
+    # rule does NOT fire for Supabase Auth / Storage / Edge Function
+    # endpoints — those have separate guidance and Edge Functions are the
+    # intended outlet.
+    - field: command
+      pattern: 'curl.*((-X[[:space:]]*(POST|PATCH|PUT|DELETE).*\.supabase\.co/rest/v1/)|(\.supabase\.co/rest/v1/.*-X[[:space:]]*(POST|PATCH|PUT|DELETE))|((-d[[:space:]]|--data([[:space:]]|=|-raw[[:space:]]|-raw=|-binary[[:space:]]|-binary=|-urlencode[[:space:]]|-urlencode=)).*\.supabase\.co/rest/v1/)|(\.supabase\.co/rest/v1/.*(-d[[:space:]]|--data([[:space:]]|=|-raw[[:space:]]|-raw=|-binary[[:space:]]|-binary=|-urlencode[[:space:]]|-urlencode=))))'
+      flags: i
+  action: warn
+  bypass_marker: curl-supabase-rest-mutation
+  memory_ref: feedback_scripts_not_db.md
+  message: |
+    WARNING: mutating curl against the Supabase PostgREST endpoint.
+
+    Direct REST mutations bypass:
+      - the versioned migrations workflow (drift across local DBs / envs),
+      - the RLS + admin-role checks the Supabase clients enforce, and
+      - the access pattern already encapsulated in src/services/api/.
+
+    Correct outlets:
+      - Schema changes      -> supabase/migrations/<timestamp>_<slug>.sql
+      - Data mutations      -> an Edge Function or a committed script
+      - One-shot fixes      -> use the API client from a versioned script
+
+    Use the bypass marker (curl-supabase-rest-mutation) only for documented
+    hotfixes that the team has explicitly approved.
+  tests:
+    - name: warns-curl-post-supabase-rest
+      input:
+        tool_input:
+          command: "curl -X POST https://example.supabase.co/rest/v1/profiles -H 'apikey: x' -d '{\"id\":1}'"
+      expected_exit: 0
+      expected_stderr_contains: 'warn-curl-mutating-supabase-rest'
+    - name: warns-curl-patch
+      input:
+        tool_input:
+          command: "curl -X PATCH https://example.supabase.co/rest/v1/profiles?id=eq.1 -d '{\"name\":\"a\"}'"
+      expected_exit: 0
+      expected_stderr_contains: 'warn-curl-mutating-supabase-rest'
+    - name: warns-curl-put
+      input:
+        tool_input:
+          command: "curl -X PUT https://example.supabase.co/rest/v1/profiles?id=eq.1 -d '{\"name\":\"b\"}'"
+      expected_exit: 0
+      expected_stderr_contains: 'warn-curl-mutating-supabase-rest'
+    - name: warns-curl-delete
+      input:
+        tool_input:
+          command: 'curl -X DELETE https://example.supabase.co/rest/v1/profiles?id=eq.1'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-curl-mutating-supabase-rest'
+    - name: warns-curl-xpost-no-space
+      input:
+        tool_input:
+          command: "curl -XPOST https://example.supabase.co/rest/v1/profiles -d '{\"id\":1}'"
+      expected_exit: 0
+      expected_stderr_contains: 'warn-curl-mutating-supabase-rest'
+    - name: warns-curl-url-before-flag
+      input:
+        tool_input:
+          command: "curl https://example.supabase.co/rest/v1/profiles -X POST -d '{\"id\":1}'"
+      expected_exit: 0
+      expected_stderr_contains: 'warn-curl-mutating-supabase-rest'
+    - name: allows-curl-get-supabase-rest
+      input:
+        tool_input:
+          command: 'curl https://example.supabase.co/rest/v1/profiles?select=id,name'
+      expected_exit: 0
+    - name: allows-curl-non-supabase
+      input:
+        tool_input:
+          command: "curl -X POST https://example.com/api/v1/users -d '{\"id\":1}'"
+      expected_exit: 0
+    - name: warns-curl-implicit-post-via-d
+      input:
+        tool_input:
+          command: "curl -d '{\"id\":1}' https://example.supabase.co/rest/v1/profiles"
+      expected_exit: 0
+      expected_stderr_contains: 'warn-curl-mutating-supabase-rest'
+    - name: warns-curl-implicit-post-via-data-raw
+      input:
+        tool_input:
+          command: "curl --data-raw '{\"id\":1}' https://example.supabase.co/rest/v1/profiles"
+      expected_exit: 0
+      expected_stderr_contains: 'warn-curl-mutating-supabase-rest'
+    - name: warns-curl-supabase-then-d
+      input:
+        tool_input:
+          command: "curl https://example.supabase.co/rest/v1/profiles -d '{\"id\":1}'"
+      expected_exit: 0
+      expected_stderr_contains: 'warn-curl-mutating-supabase-rest'
+    - name: warns-curl-implicit-post-via-data-urlencode
+      input:
+        tool_input:
+          command: "curl --data-urlencode 'name=Alice' https://example.supabase.co/rest/v1/profiles"
+      expected_exit: 0
+      expected_stderr_contains: 'warn-curl-mutating-supabase-rest'
+    - name: allows-bypass-marker
+      input:
+        tool_input:
+          command: "curl -X POST https://example.supabase.co/rest/v1/profiles -d '{\"id\":1}' # hook-bypass: curl-supabase-rest-mutation"
+      expected_exit: 0
+
+# -----------------------------------------------------------------------------
+# Anti foot-shoot (Tier 1) — block rules for the high-cost mistakes that
+# already burned the team. Each rule maps 1:1 to a feedback memory whose
+# intent is "never do this", not "be careful":
+#   - feedback_no_headless.md            -> block-playwright-headless
+#   - feedback_resolve_merge_conflicts.md -> block-git-force-push-no-lease,
+#                                            block-git-rebase-skip
+#   - feedback_standup_desktop.md        -> block-standup-not-in-escritorio
+#   - feedback_goodnight_desktop.md      -> block-goodnight-not-in-escritorio
+#
+# All five are `block` (not `warn`). Each ships a kebab-case bypass_marker
+# for the rare cases where the action is intentional (and ideally
+# documented in a commit message or PR body).
+# -----------------------------------------------------------------------------
+
+- id: block-playwright-headless
+  description: Block `playwright test` invocations that omit --headed / --ui / --debug (memory feedback_no_headless.md — browser must be visible during E2E)
+  applies_to: [Bash]
+  match:
+    # Two AND-chained conditions on `command`. The first asserts the
+    # invocation is a playwright test run; the second asserts none of the
+    # opt-in visible-runner flags are present. `\b` boundaries on
+    # `playwright` exclude unrelated tools like playwright-extra-cli.
+    - field: command
+      pattern: '\bplaywright[[:space:]]+test\b'
+    - field: command
+      not_pattern: '(--headed|--ui|--debug)'
+  action: block
+  bypass_marker: playwright-headless-allowed
+  memory_ref: feedback_no_headless.md
+  message: |
+    BLOCKED: `playwright test` without --headed / --ui / --debug.
+
+    Per feedback_no_headless.md the browser must be visible during E2E:
+    headless runs hide visual regressions and UI race conditions, and
+    the in-focus requirement only holds when a window is up.
+
+    Use one of:
+      - --headed   browser visible
+      - --ui       Playwright UI mode (interactive)
+      - --debug    step-through debugger
+
+    Bypass marker (playwright-headless-allowed) is reserved for
+    explicitly-documented CI runs (e.g. a Vercel preview workflow).
+  tests:
+    - name: blocks-playwright-test-bare
+      input:
+        tool_input:
+          command: 'npx playwright test'
+      expected_exit: 2
+    - name: blocks-playwright-test-config
+      input:
+        tool_input:
+          command: 'npx playwright test --config=playwright.config.ts'
+      expected_exit: 2
+    - name: allows-playwright-headed
+      input:
+        tool_input:
+          command: 'npx playwright test --headed'
+      expected_exit: 0
+    - name: allows-playwright-ui
+      input:
+        tool_input:
+          command: 'npx playwright test --ui'
+      expected_exit: 0
+    - name: allows-playwright-debug
+      input:
+        tool_input:
+          command: 'npx playwright test --debug'
+      expected_exit: 0
+    - name: allows-non-playwright-test
+      input:
+        tool_input:
+          command: 'npm test'
+      expected_exit: 0
+    - name: blocks-pnpm-dlx-playwright-headless
+      input:
+        tool_input:
+          command: 'pnpm dlx playwright test'
+      expected_exit: 2
+    - name: blocks-yarn-dlx-playwright-headless
+      input:
+        tool_input:
+          command: 'yarn dlx playwright test'
+      expected_exit: 2
+    - name: allows-pnpm-dlx-playwright-headed
+      input:
+        tool_input:
+          command: 'pnpm dlx playwright test --headed'
+      expected_exit: 0
+    - name: allows-bypass-marker
+      input:
+        tool_input:
+          command: 'npx playwright test # hook-bypass: playwright-headless-allowed'
+      expected_exit: 0
+
+- id: block-git-force-push-no-lease
+  description: Block `git push --force` / `-f` without `--force-with-lease` (overwrites collaborator pushes silently)
+  applies_to: [Bash]
+  match:
+    # Positive: a push command using -f or --force (the latter must be
+    # followed by whitespace or end-of-string so we don't accidentally
+    # match --force-with-lease, which has a `-` after `--force`).
+    - field: command
+      pattern: 'git[[:space:]]+push.*(-f\b|--force([[:space:]]|$))'
+    # Negative: defense-in-depth — even if the author squeezed both flags
+    # onto the line (`git push -f origin main --force-with-lease`),
+    # presence of --force-with-lease aborts the fire.
+    - field: command
+      not_pattern: '--force-with-lease'
+  action: block
+  bypass_marker: git-force-push-bare-allowed
+  memory_ref: feedback_resolve_merge_conflicts.md
+  message: |
+    BLOCKED: `git push --force` without --force-with-lease.
+
+    Bare --force overwrites the remote without verifying that what is
+    there is what you last fetched — it silently destroys collaborator
+    pushes. --force-with-lease aborts when the remote has advanced since
+    your last fetch, which is the safety net you want.
+
+    Use:
+      git push --force-with-lease origin <branch>
+
+    Bypass marker (git-force-push-bare-allowed) ONLY when you have
+    verified that no other contributor has pushed to the branch.
+  tests:
+    - name: blocks-force-short-flag
+      input:
+        tool_input:
+          command: 'git push -f origin feature-x'
+      expected_exit: 2
+    - name: blocks-force-long-flag
+      input:
+        tool_input:
+          command: 'git push --force origin feature-x'
+      expected_exit: 2
+    - name: allows-force-with-lease
+      input:
+        tool_input:
+          command: 'git push --force-with-lease origin feature-x'
+      expected_exit: 0
+    - name: allows-no-force-push
+      input:
+        tool_input:
+          command: 'git push origin feature-x'
+      expected_exit: 0
+    - name: allows-force-with-lease-and-force-combined
+      input:
+        tool_input:
+          command: 'git push -f origin main --force-with-lease'
+      expected_exit: 0
+    - name: allows-bypass-marker
+      input:
+        tool_input:
+          command: 'git push --force origin feature-x # hook-bypass: git-force-push-bare-allowed'
+      expected_exit: 0
+
+- id: block-git-rebase-skip
+  description: Block `git rebase --skip` (drops the conflicting commit silently)
+  applies_to: [Bash]
+  match:
+    - field: command
+      pattern: 'git[[:space:]]+rebase[[:space:]]+--skip\b'
+  action: block
+  bypass_marker: git-rebase-skip-acknowledged
+  memory_ref: feedback_resolve_merge_conflicts.md
+  message: |
+    BLOCKED: `git rebase --skip` drops the conflicting commit silently.
+
+    Per feedback_resolve_merge_conflicts.md: never skip; resolve each
+    conflict one by one, verify the result, and `git rebase --continue`.
+
+    Correct moves:
+      - Resolve manually, `git add`, `git rebase --continue`
+      - If the commit is genuinely obsolete, `git rebase --abort` and
+        cherry-pick the commits you want
+      - Bypass marker (git-rebase-skip-acknowledged) ONLY with explicit
+        acknowledgement of the data loss
+  tests:
+    - name: blocks-rebase-skip
+      input:
+        tool_input:
+          command: 'git rebase --skip'
+      expected_exit: 2
+    - name: allows-rebase-continue
+      input:
+        tool_input:
+          command: 'git rebase --continue'
+      expected_exit: 0
+    - name: allows-rebase-abort
+      input:
+        tool_input:
+          command: 'git rebase --abort'
+      expected_exit: 0
+    - name: allows-non-rebase-command
+      input:
+        tool_input:
+          command: 'git status'
+      expected_exit: 0
+    - name: allows-bypass-marker
+      input:
+        tool_input:
+          command: 'git rebase --skip # hook-bypass: git-rebase-skip-acknowledged'
+      expected_exit: 0
+
+- id: block-standup-not-in-escritorio
+  description: Block `daily-standup*.md` writes anywhere outside ~/Escritorio (memory feedback_standup_desktop.md)
+  applies_to: [Edit, Write, MultiEdit]
+  match:
+    # Single condition with both pattern (must match standup filename) and
+    # not_pattern (must NOT live under /Escritorio/ or /Desktop/). The
+    # localized "Escritorio" handles the user's Spanish-locale desktop;
+    # "Desktop" handles English-locale or aliasing setups.
+    - field: file_path
+      pattern: 'daily-standup.*\.md$'
+      not_pattern: '(/Escritorio/|/Desktop/)'
+  action: block
+  bypass_marker: standup-non-desktop-acknowledged
+  memory_ref: feedback_standup_desktop.md
+  message: |
+    BLOCKED: daily-standup file being written outside ~/Escritorio.
+
+    Per feedback_standup_desktop.md the standup lives in ~/Escritorio,
+    NEVER inside a repo (commit-by-accident risk + cross-repo
+    fragmentation). The standup-post-slack skill always resolves the
+    path from ~/Escritorio.
+
+    Use the absolute path:
+      ~/Escritorio/daily-standup.md
+    (or ~/Desktop/daily-standup.md on English-locale machines).
+
+    Bypass marker is intentionally NOT recommended — there is no
+    legitimate path outside the desktop.
+  tests:
+    - name: blocks-standup-in-repo
+      input:
+        tool_input:
+          file_path: '/home/user/repo/docs/daily-standup.md'
+          content: '# Standup 2026-05-09'
+      expected_exit: 2
+    - name: blocks-standup-in-tmp
+      input:
+        tool_input:
+          file_path: '/tmp/daily-standup.md'
+          content: '# Standup'
+      expected_exit: 2
+    - name: allows-standup-in-escritorio
+      input:
+        tool_input:
+          file_path: '/home/user/Escritorio/daily-standup.md'
+          content: '# Standup'
+      expected_exit: 0
+    - name: allows-standup-in-desktop-english
+      input:
+        tool_input:
+          file_path: '/home/user/Desktop/daily-standup.md'
+          content: '# Standup'
+      expected_exit: 0
+    - name: allows-non-standup-file
+      input:
+        tool_input:
+          file_path: '/home/user/repo/docs/notes.md'
+          content: '# Notes'
+      expected_exit: 0
+    - name: allows-bypass-marker-write-tool
+      input:
+        tool_input:
+          file_path: '/tmp/daily-standup.md'
+          content: '# Standup // hook-bypass: standup-non-desktop-acknowledged'
+      expected_exit: 0
+    # Edit and MultiEdit expose `new_string` / `old_string` / `edits[]` instead
+    # of `content`, so we lock in that the bypass marker placed in any of those
+    # fields still short-circuits the rule. The dispatcher scans the entire raw
+    # tool_input JSON for the marker, so any string-valued field is reachable.
+    - name: allows-bypass-marker-edit-tool
+      input:
+        tool_input:
+          file_path: '/tmp/daily-standup.md'
+          old_string: '# Old'
+          new_string: '# Standup // hook-bypass: standup-non-desktop-acknowledged'
+      expected_exit: 0
+    - name: allows-bypass-marker-multiedit-tool
+      input:
+        tool_input:
+          file_path: '/tmp/daily-standup.md'
+          edits:
+            - old_string: '# A'
+              new_string: '# B // hook-bypass: standup-non-desktop-acknowledged'
+      expected_exit: 0
+
+- id: block-goodnight-not-in-escritorio
+  description: Block /goodnight handoff files (`next-day-*.md` / `goodnight-*.md`) anywhere outside ~/Escritorio (memory feedback_goodnight_desktop.md)
+  applies_to: [Edit, Write, MultiEdit]
+  match:
+    - field: file_path
+      pattern: '(next-day-|goodnight-).*\.md$'
+      not_pattern: '(/Escritorio/|/Desktop/)'
+  action: block
+  bypass_marker: goodnight-non-desktop-acknowledged
+  memory_ref: feedback_goodnight_desktop.md
+  message: |
+    BLOCKED: /goodnight handoff file being written outside ~/Escritorio.
+
+    Per feedback_goodnight_desktop.md the /goodnight skill must save
+    next-day handoff files to ~/Escritorio, NOT inside .claude/next-day/
+    or any repo path.
+
+    Use the absolute path:
+      ~/Escritorio/<filename>.md
+    (or ~/Desktop/<filename>.md on English-locale machines).
+
+    Bypass marker is intentionally NOT recommended.
+  tests:
+    - name: blocks-next-day-in-claude-dir
+      input:
+        tool_input:
+          file_path: '/home/user/.claude/next-day/next-day-2026-05-09.md'
+          content: '# Handoff'
+      expected_exit: 2
+    - name: blocks-goodnight-in-tmp
+      input:
+        tool_input:
+          file_path: '/tmp/goodnight-context.md'
+          content: '# Goodnight'
+      expected_exit: 2
+    - name: allows-next-day-in-escritorio
+      input:
+        tool_input:
+          file_path: '/home/user/Escritorio/next-day-2026-05-09.md'
+          content: '# Handoff'
+      expected_exit: 0
+    - name: allows-goodnight-in-desktop
+      input:
+        tool_input:
+          file_path: '/home/user/Desktop/goodnight-2026-05-09.md'
+          content: '# Handoff'
+      expected_exit: 0
+    - name: allows-non-handoff-file
+      input:
+        tool_input:
+          file_path: '/home/user/repo/docs/notes.md'
+          content: '# Notes'
+      expected_exit: 0
+    - name: allows-bypass-marker-write-tool
+      input:
+        tool_input:
+          file_path: '/tmp/next-day-2026-05-09.md'
+          content: '# Handoff // hook-bypass: goodnight-non-desktop-acknowledged'
+      expected_exit: 0
+    - name: allows-bypass-marker-edit-tool
+      input:
+        tool_input:
+          file_path: '/tmp/next-day-2026-05-09.md'
+          old_string: '# Old'
+          new_string: '# Handoff // hook-bypass: goodnight-non-desktop-acknowledged'
+      expected_exit: 0
+    - name: allows-bypass-marker-multiedit-tool
+      input:
+        tool_input:
+          file_path: '/tmp/next-day-2026-05-09.md'
+          edits:
+            - old_string: '# A'
+              new_string: '# B // hook-bypass: goodnight-non-desktop-acknowledged'
+      expected_exit: 0
+
+# -----------------------------------------------------------------------------
+# Tier 2 — discipline (warn) rules. Soft guidelines from feedback memories
+# that aren't outright errors but degrade quality if accumulated. Each rule
+# nudges the author toward the documented pattern without blocking the
+# operation. One exception: block-sibling-suffix-storage uses `block` because
+# the storage-layout error is hard to undo once committed.
+#
+# Memory map:
+#   - feedback_never_delete_debug_logs.md   -> warn-deletes-console-log
+#   - feedback_no_time_estimates.md         -> warn-time-estimates-in-plans
+#   - feedback_split_large_prs.md           -> warn-pr-create-many-files
+#   - feedback_no_posthog_nag.md            -> warn-posthog-in-alerts
+#   - feedback_explicit_storage_prefixes.md -> block-sibling-suffix-storage
+#   - feedback_test_on_staging.md           -> warn-localhost-in-pr-body
+#
+# warn-deletes-console-log requires the new `old_string` field exposed by
+# parse-input.sh in this PR — see hooks/lib/parse-input.sh and the README.
+# -----------------------------------------------------------------------------
+
+- id: warn-deletes-console-log
+  description: Warn when an Edit operation removes a line containing a debug-logging call (memory feedback_never_delete_debug_logs.md — gate via env var, never delete)
+  applies_to: [Edit, MultiEdit]
+  match:
+    # `old_string` is the field exposed by parse-input.sh (PR-C). For Edit
+    # it maps to tool_input.old_string; for MultiEdit it is the join of
+    # every edits[].old_string so a single pattern check covers both
+    # tool surfaces.
+    - field: old_string
+      pattern: '(console\.log\(|console\.debug\(|console\.error\(|\bdebug\(|logger\.(debug|info|trace)\()'
+      flags: i
+  action: warn
+  bypass_marker: console-log-deletion-verified
+  memory_ref: feedback_never_delete_debug_logs.md
+  message: |
+    WARNING: Edit removes a line containing a debug-log call.
+
+    Per feedback_never_delete_debug_logs.md NEVER delete debug logs;
+    gate them with an env var (e.g. DEBUG_TOOLS), disable for prod,
+    re-enable when needed.
+
+    Per feedback_never_remove_debug_logs_early.md even when converting
+    to env-gating, NEVER delete before verifying the fix in prod.
+
+    Use the bypass marker (console-log-deletion-verified) ONLY when:
+      - Converting to env-gating (the new gate replaces the log)
+      - The fix has been verified in prod for >24h
+      - The log was a documented debug-temp called out in the original
+        commit message
+  tests:
+    - name: warns-on-edit-deleting-console-log
+      input:
+        tool_input:
+          old_string: "console.log('debug:', x)"
+          new_string: ''
+      expected_exit: 0
+      expected_stderr_contains: 'warn-deletes-console-log'
+    - name: warns-on-edit-deleting-logger-debug
+      input:
+        tool_input:
+          old_string: 'logger.debug("trace", { id })'
+          new_string: ''
+      expected_exit: 0
+      expected_stderr_contains: 'warn-deletes-console-log'
+    - name: warns-on-edit-deleting-console-error
+      input:
+        tool_input:
+          old_string: "if (err) console.error(err)"
+          new_string: 'if (err) reportToSentry(err)'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-deletes-console-log'
+    - name: allows-edit-not-touching-logs
+      input:
+        tool_input:
+          old_string: 'const x = 1'
+          new_string: 'const x = 2'
+      expected_exit: 0
+    # MultiEdit shape: parse-input.sh flattens every edits[].old_string into a
+    # single newline-joined value via jq. These two tests lock in that the
+    # MultiEdit code path fires correctly, and that null old_string entries
+    # (filtered by `| strings` in the jq expression) do not blow up the rule.
+    - name: warns-on-multiedit-deleting-console-log
+      input:
+        tool_input:
+          edits:
+            - old_string: "console.log('debug:', x)"
+              new_string: ''
+      expected_exit: 0
+      expected_stderr_contains: 'warn-deletes-console-log'
+    - name: warns-on-multiedit-second-edit-deletes-logger
+      input:
+        tool_input:
+          edits:
+            - old_string: 'const x = 1'
+              new_string: 'const x = 2'
+            - old_string: 'logger.debug("trace", { id })'
+              new_string: ''
+      expected_exit: 0
+      expected_stderr_contains: 'warn-deletes-console-log'
+    # Lock in the `| strings` null-guard added to parse-input.sh: the first
+    # edit has no old_string key at all, but the rule must still fire on the
+    # second edit's deletion. Without `| strings`, jq would throw on the
+    # null and the rule would silently miss.
+    - name: warns-on-multiedit-with-null-old-string
+      input:
+        tool_input:
+          edits:
+            - new_string: 'inserted line'
+            - old_string: "console.log('debug:', y)"
+              new_string: ''
+      expected_exit: 0
+      expected_stderr_contains: 'warn-deletes-console-log'
+    - name: allows-multiedit-not-touching-logs
+      input:
+        tool_input:
+          edits:
+            - old_string: 'const x = 1'
+              new_string: 'const x = 2'
+      expected_exit: 0
+    - name: allows-bypass-marker
+      input:
+        tool_input:
+          old_string: "console.log('debug:', x) // hook-bypass: console-log-deletion-verified"
+          new_string: ''
+      expected_exit: 0
+
+- id: warn-time-estimates-in-plans
+  description: Warn when plan/spec/design files contain time-based estimates (memory feedback_no_time_estimates.md — use sequential ordering, not days/sprints/cycles)
+  applies_to: [Edit, Write, MultiEdit]
+  match:
+    - field: file_path
+      pattern: '(plans?/|specs?/|design/|openspec/|docs/superpowers/).*\.md$'
+    - field: content
+      # Bilingual: English (days/sprints/weeks/cycles) + Spanish
+      # (días/semanas/ciclos). The optional accent on `ía` covers tildeless
+      # writing too.
+      pattern: '\b[0-9]+[[:space:]]*(days?|sprints?|weeks?|d[ií]as?|semanas?|cycles?|ciclos?)\b'
+      flags: i
+  action: warn
+  bypass_marker: time-estimates-allowed
+  memory_ref: feedback_no_time_estimates.md
+  message: |
+    WARNING: time-based estimate (X days/weeks/sprints) in plan/spec.
+
+    Per feedback_no_time_estimates.md never use days/sprints/cycles;
+    use sequential ordering with conceptual milestones.
+
+    Replace with:
+      - "Phase 1, Phase 2, Phase 3"
+      - "After X ships -> Y starts"
+      - "Once Greptile 5/5 + CI green -> merge"
+
+    Bypass marker (time-estimates-allowed) ONLY when the doc is
+    marketing / external-facing (where calendar dates are expected).
+  tests:
+    - name: warns-on-3-days-in-plan
+      input:
+        tool_input:
+          file_path: 'plans/2026-05-feature.md'
+          content: 'Estimate: 3 days for the implementation phase.'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-time-estimates-in-plans'
+    - name: warns-on-2-sprints-in-spec
+      input:
+        tool_input:
+          file_path: 'specs/2026-05-pricing.md'
+          content: 'Will land in 2 sprints.'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-time-estimates-in-plans'
+    - name: warns-on-spanish-dias
+      input:
+        tool_input:
+          file_path: 'openspec/changes/2026-05-foo/design.md'
+          content: 'Listo en 5 dias.'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-time-estimates-in-plans'
+    - name: warns-on-spanish-semanas-with-tilde
+      input:
+        tool_input:
+          file_path: 'docs/superpowers/plans/foo.md'
+          content: 'Tomara 4 semanas mas o menos.'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-time-estimates-in-plans'
+    - name: allows-non-time-content
+      input:
+        tool_input:
+          file_path: 'plans/2026-05-feature.md'
+          content: '## Plan\n\nPhase 1: spike. Phase 2: implement.'
+      expected_exit: 0
+    # Bare ordinal numbers without a time-unit word must not trigger the rule.
+    # The `[[:space:]]*(days?|sprints?|...)` clause only matches when an actual
+    # unit word follows the digits.
+    - name: allows-numbers-without-time-units
+      input:
+        tool_input:
+          file_path: 'plans/2026-05-feature.md'
+          content: 'Phase 1 and Phase 2 cover the implementation; depends on issue 42 closing first.'
+      expected_exit: 0
+    - name: allows-non-plan-files
+      input:
+        tool_input:
+          file_path: 'README.md'
+          content: 'Will land in 2 sprints'
+      expected_exit: 0
+    - name: allows-bypass-marker
+      input:
+        tool_input:
+          file_path: 'plans/marketing-launch.md'
+          content: '3 weeks to launch # hook-bypass: time-estimates-allowed'
+      expected_exit: 0
+
+- id: warn-pr-create-many-files
+  description: Warn on `gh pr create` — caller must verify the PR has <=15 files (memory feedback_split_large_prs.md / 15-file rule)
+  applies_to: [Bash]
+  match:
+    - field: command
+      pattern: 'gh[[:space:]]+pr[[:space:]]+create\b'
+  action: warn
+  bypass_marker: pr-file-count-verified
+  memory_ref: feedback_split_large_prs.md
+  message: |
+    WARNING: `gh pr create`.
+
+    Per feedback_split_large_prs.md / the 15-file rule (legacy-ticket):
+    PRs with >15 files get abandoned more easily — split by domain
+    before opening.
+
+    Verify with:
+      git diff --stat <base>..HEAD | tail -1
+
+    If the diff touches <=15 files, use bypass marker
+    `pr-file-count-verified`. If it touches >15 files, abort and split.
+  tests:
+    - name: warns-on-pr-create-bare
+      input:
+        tool_input:
+          command: 'gh pr create --title "feat: foo" --base main'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-pr-create-many-files'
+    - name: warns-on-pr-create-with-body
+      input:
+        tool_input:
+          command: 'gh pr create --base develop --title "feat: foo" --body "Adds X"'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-pr-create-many-files'
+    - name: warns-on-pr-create-with-base
+      input:
+        tool_input:
+          command: 'gh pr create --base develop --head feature-x'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-pr-create-many-files'
+    - name: allows-bypass-marker
+      input:
+        tool_input:
+          command: 'gh pr create --title "feat: foo" --base main # hook-bypass: pr-file-count-verified'
+      expected_exit: 0
+    - name: allows-non-pr-create-gh-commands
+      input:
+        tool_input:
+          command: 'gh pr list'
+      expected_exit: 0
+    - name: allows-gh-pr-edit
+      input:
+        tool_input:
+          command: 'gh pr edit 16 --add-label foo'
+      expected_exit: 0
+
+- id: warn-posthog-in-alerts
+  description: Warn when Slack messages mention PostHog / dashboard / instrumentation (memory feedback_no_posthog_nag.md — Juan owns; out of scope for other POs)
+  applies_to: [Slack]
+  match:
+    - field: text
+      pattern: '\b(posthog|dashboard|instrumentation)\b'
+      flags: i
+  action: warn
+  bypass_marker: posthog-mention-approved
+  memory_ref: feedback_no_posthog_nag.md
+  message: |
+    WARNING: PostHog / dashboard / instrumentation mention in Slack.
+
+    Per feedback_no_posthog_nag.md the agent / automation must EXCLUDE
+    PostHog / dashboards / instrumentation from alerts; Juan owns that
+    surface, other POs explicitly told it is out of scope.
+
+    Use the bypass marker (posthog-mention-approved) ONLY when:
+      - The alert is addressed to Juan directly (his Slack user-id)
+      - You confirmed with Juan that the alert is welcome
+  tests:
+    - name: warns-posthog-in-slack
+      input:
+        tool_input:
+          text: 'Vi una metrica rara en PostHog ayer, podemos revisar?'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-posthog-in-alerts'
+    - name: warns-dashboard-in-slack
+      input:
+        tool_input:
+          text: 'El dashboard de Sentry esta en rojo'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-posthog-in-alerts'
+    - name: warns-instrumentation-in-slack
+      input:
+        tool_input:
+          text: 'Falta instrumentation en el endpoint /foo'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-posthog-in-alerts'
+    - name: allows-non-posthog-text
+      input:
+        tool_input:
+          text: 'PR #16 listo para review'
+      expected_exit: 0
+    - name: allows-bypass-marker
+      input:
+        tool_input:
+          text: 'Subi un evento nuevo a PostHog # hook-bypass: posthog-mention-approved'
+      expected_exit: 0
+
+- id: block-sibling-suffix-storage
+  description: Block storage uploads that use a sibling-suffix layout (memory feedback_explicit_storage_prefixes.md — use originals/ + processed/ subdirs instead)
+  applies_to: [Bash]
+  match:
+    # CLI surface only — `supabase storage upload`, `gcloud storage cp`,
+    # `gsutil cp`. The application-layer storage-uploader code paths are
+    # covered by review; this rule is a defense-in-depth guard against
+    # ad-hoc CLI uploads with the discouraged layout. Match common
+    # transformation suffixes (`processed`, `original`, `raw`, `optimized`)
+    # paired with common artefact extensions.
+    - field: command
+      pattern: '(supabase[[:space:]]+storage[[:space:]]+upload|gcloud[[:space:]]+storage[[:space:]]+cp|gsutil[[:space:]]+cp).*\.(processed|original|raw|optimized)\.(zip|tar|gz|bin|jpg|jpeg|png|pdf|mp4)\b'
+      flags: i
+  action: block
+  bypass_marker: sibling-suffix-storage-allowed
+  memory_ref: feedback_explicit_storage_prefixes.md
+  message: |
+    BLOCKED: storage upload with a sibling-suffix layout.
+
+    Per feedback_explicit_storage_prefixes.md pipelines that transform
+    artefacts must use <bucket>/originals/ + <bucket>/processed/
+    (or stage-specific names), never siblings like foo.zip +
+    foo.processed.zip in the same folder.
+
+    Use:
+      <bucket>/originals/foo.zip
+      <bucket>/processed/foo.zip
+
+    Bypass marker (sibling-suffix-storage-allowed) ONLY for legacy
+    buckets in active migration.
+  tests:
+    - name: blocks-supabase-storage-processed-suffix
+      input:
+        tool_input:
+          command: 'supabase storage upload my-bucket/foo.processed.zip ./foo.processed.zip'
+      expected_exit: 2
+    - name: blocks-gcloud-storage-cp
+      input:
+        tool_input:
+          command: 'gcloud storage cp ./foo.processed.zip gs://my-bucket/foo.processed.zip'
+      expected_exit: 2
+    - name: blocks-gsutil-original-suffix
+      input:
+        tool_input:
+          command: 'gsutil cp ./foo.original.mp4 gs://my-bucket/foo.original.mp4'
+      expected_exit: 2
+    - name: allows-clean-paths
+      input:
+        tool_input:
+          command: 'supabase storage upload my-bucket/originals/foo.zip ./foo.zip'
+      expected_exit: 0
+    # Both source and destination are clean (no suffix anywhere) — must allow.
+    # This locks in the negative path while the positive
+    # `blocks-gcloud-storage-cp` test confirms the rule fires when a sibling-
+    # suffix appears anywhere in the command.
+    - name: allows-clean-source-and-clean-destination-bucket-prefix
+      input:
+        tool_input:
+          command: 'gcloud storage cp ./foo.zip gs://my-bucket/processed/foo.zip'
+      expected_exit: 0
+    - name: allows-non-storage-cp
+      input:
+        tool_input:
+          command: 'cp ./foo.processed.zip /tmp/foo.processed.zip'
+      expected_exit: 0
+    - name: allows-bypass-marker
+      input:
+        tool_input:
+          command: 'gcloud storage cp ./foo.processed.zip gs://my-bucket/foo.processed.zip # hook-bypass: sibling-suffix-storage-allowed'
+      expected_exit: 0
+
+- id: warn-localhost-in-pr-body
+  description: Warn when `gh pr create` / `gh pr edit` body contains a localhost reference (memory feedback_test_on_staging.md — QA target is dev.chimeranext.io, not localhost)
+  applies_to: [Bash]
+  match:
+    # Two AND-chained conditions on `command`: the gh subcommand uses
+    # --body inline AND the same command line contains localhost or
+    # 127.0.0.1. The --body-file form is naturally excluded — the rule
+    # cannot read the body file content, and --body-file does not contain
+    # the literal "localhost" itself.
+    - field: command
+      pattern: 'gh[[:space:]]+pr[[:space:]]+(create|edit).*--body([[:space:]]|=|$)'
+    - field: command
+      pattern: '(localhost|127\.0\.0\.1)'
+  action: warn
+  bypass_marker: localhost-in-pr-body-allowed
+  memory_ref: feedback_test_on_staging.md
+  message: |
+    WARNING: localhost reference in PR body.
+
+    Per feedback_test_on_staging.md the QA testing target is
+    dev.chimeranext.io (staging), not localhost. Any reviewer who tries
+    to verify against localhost will hit env mismatches:
+      - Local DB differs from staging
+      - Edge Functions missing local secrets
+      - Different feature flags
+
+    Replace localhost links with dev.chimeranext.io equivalents.
+
+    Bypass marker (localhost-in-pr-body-allowed) ONLY for steps that
+    legitimately require an explicit local build (e.g. asking the
+    reviewer to run `bun run dev` before pushing).
+  tests:
+    - name: warns-pr-create-with-localhost
+      input:
+        tool_input:
+          command: 'gh pr create --base develop --title "feat: foo" --body "Test on http://localhost:5173/foo"'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-localhost-in-pr-body'
+    - name: warns-pr-edit-with-127
+      input:
+        tool_input:
+          command: 'gh pr edit 16 --body "Hit http://127.0.0.1:54321/health"'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-localhost-in-pr-body'
+    - name: allows-pr-create-with-staging-url
+      input:
+        tool_input:
+          command: 'gh pr create --base develop --title "feat: foo" --body "Test on https://dev.chimeranext.io/foo"'
+      expected_exit: 0
+    - name: allows-non-pr-localhost
+      input:
+        tool_input:
+          command: 'curl http://localhost:5173/foo'
+      expected_exit: 0
+    - name: allows-pr-create-no-body
+      input:
+        tool_input:
+          command: 'gh pr create --base develop --title "feat: foo"'
+      expected_exit: 0
+    - name: allows-bypass-marker
+      input:
+        tool_input:
+          command: 'gh pr create --body "Run bun run dev on localhost:5173 # hook-bypass: localhost-in-pr-body-allowed"'
+      expected_exit: 0
+
+- id: warn-bash-mutation-without-leading-cd
+  description: Warn when bash mutation commands (git commit/push/mv/rm/reset/merge/revert, sed -i / sed --in-place, gh pr create/merge/edit) don't start with an absolute-path `cd /<...>` (or `pushd /<...>`, `cd ~/<...>`, `cd $VAR/<...>`) — prevents commits landing on the wrong branch when working across multiple parallel worktrees
+  applies_to: [Bash]
+  match:
+    # Positive: command contains a state-mutating op.
+    # sed pattern covers: `sed -i `, `sed -i.bak`, `sed -ibackup`, and long form `sed --in-place`.
+    - field: command
+      pattern: 'git[[:space:]]+(commit|push|mv|rm[[:space:]]|reset|revert|merge)|sed[[:space:]]+-i([[:space:]]|[^[:space:]-])|sed[[:space:]]+--in-place[[:space:]]|gh[[:space:]]+pr[[:space:]]+(create|merge|edit)'
+    # Negative: command must START with `cd <absolute-path>` or `pushd <absolute-path>`.
+    # Accepts: cd /full/path, pushd /full/path, cd ~/path, cd $VAR/path (env vars assumed absolute).
+    # Rejects: cd worktree-dir (relative path — DOESN'T fix the cwd-confusion bug because if
+    # cwd is already in the wrong worktree, `cd relative-dir` resolves to the wrong place).
+    - field: command
+      not_pattern: '^[[:space:]]*(cd|pushd)[[:space:]]+(/|~|\$)'
+  action: warn
+  bypass_marker: cd-worktree-rule
+  memory_ref: feedback_cd_between_worktrees.md
+  references:
+    - "legacy-ticket PR-2/PR-3 cross-ref fixup (2026-05-10) — bug that motivated this rule"
+  message: |
+    WARN: bash mutation command (git commit/push/mv/rm/reset/merge/revert,
+    sed -i, or gh pr create/merge/edit) detected without a leading
+    `cd /<path>` prefix.
+
+    Per feedback_cd_between_worktrees.md: when working across multiple
+    parallel git worktrees in the same session, EVERY bash invocation that
+    touches a specific worktree MUST start with explicit
+    `cd /full/path/to/worktree && ...`.
+
+    Bug pattern this prevents (real, 2026-05-10):
+    - Two parallel worktrees for two PRs (PR-2 + PR-3 of same repo).
+    - First worktree's sed + commit + push: correct (cwd was PR-2).
+    - Second worktree's sed + commit + push: missing cd → still in PR-2 cwd
+      → commit landed on PR-2 branch instead of PR-3 branch.
+    - Required revert on PR-2 + correct re-apply on PR-3. Confused commit
+      history visible to reviewers.
+
+    If the command operates on absolute paths or doesn't need cwd context,
+    or you've intentionally verified cwd via `pwd` immediately before,
+    add "# hook-bypass: cd-worktree-rule" to acknowledge.
+  tests:
+    - name: warns-on-git-commit-no-cd
+      input:
+        tool_input:
+          command: 'git add foo.md && git commit -m "fix"'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-bash-mutation-without-leading-cd'
+    - name: warns-on-git-push-no-cd
+      input:
+        tool_input:
+          command: 'git push origin main'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-bash-mutation-without-leading-cd'
+    - name: warns-on-git-mv-no-cd
+      input:
+        tool_input:
+          command: 'git mv content/old content/new'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-bash-mutation-without-leading-cd'
+    - name: warns-on-git-rm-no-cd
+      input:
+        tool_input:
+          command: 'git rm path/to/file.md'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-bash-mutation-without-leading-cd'
+    - name: warns-on-sed-i-no-cd
+      input:
+        tool_input:
+          command: 'sed -i s/foo/bar/g content/file.md'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-bash-mutation-without-leading-cd'
+    - name: warns-on-sed-i-bak-no-cd
+      input:
+        tool_input:
+          command: 'sed -i.bak s/foo/bar/g content/file.md'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-bash-mutation-without-leading-cd'
+    - name: warns-on-sed-in-place-long-form-no-cd
+      input:
+        tool_input:
+          command: 'sed --in-place s/foo/bar/g content/file.md'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-bash-mutation-without-leading-cd'
+    - name: warns-on-git-commit-with-relative-cd
+      input:
+        tool_input:
+          command: 'cd worktree-dir && git commit -m "fix"'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-bash-mutation-without-leading-cd'
+    - name: warns-on-git-push-with-dotdot-cd
+      input:
+        tool_input:
+          command: 'cd ../sibling-dir && git push'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-bash-mutation-without-leading-cd'
+    - name: warns-on-gh-pr-create-no-cd
+      input:
+        tool_input:
+          command: 'gh pr create --base main --title foo'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-bash-mutation-without-leading-cd'
+    - name: warns-on-gh-pr-merge-no-cd
+      input:
+        tool_input:
+          command: 'gh pr merge 27 --squash --delete-branch'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-bash-mutation-without-leading-cd'
+    - name: warns-on-git-reset-hard-no-cd
+      input:
+        tool_input:
+          command: 'git reset --hard origin/main'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-bash-mutation-without-leading-cd'
+    - name: passes-with-cd-prefix
+      input:
+        tool_input:
+          command: 'cd /home/user/repo && git commit -m fix && git push'
+      expected_exit: 0
+    - name: passes-with-pushd-prefix
+      input:
+        tool_input:
+          command: 'pushd /home/user/repo && git commit -m fix'
+      expected_exit: 0
+    - name: passes-with-tilde-cd-prefix
+      input:
+        tool_input:
+          command: 'cd ~/repo && git commit -m fix'
+      expected_exit: 0
+    - name: passes-with-env-var-cd-prefix
+      input:
+        tool_input:
+          command: 'cd $WORKTREE && git push'
+      expected_exit: 0
+    - name: passes-on-git-status
+      input:
+        tool_input:
+          command: 'git status'
+      expected_exit: 0
+    - name: passes-on-git-log
+      input:
+        tool_input:
+          command: 'git log --oneline -3'
+      expected_exit: 0
+    - name: passes-on-git-diff
+      input:
+        tool_input:
+          command: 'git diff --stat'
+      expected_exit: 0
+    - name: passes-on-gh-pr-list
+      input:
+        tool_input:
+          command: 'gh pr list --author=@me'
+      expected_exit: 0
+    - name: passes-on-gh-pr-view
+      input:
+        tool_input:
+          command: 'gh pr view 27 --json mergeable'
+      expected_exit: 0
+    - name: passes-with-bypass-marker
+      input:
+        tool_input:
+          command: 'git push origin main # hook-bypass: cd-worktree-rule'
+      expected_exit: 0
+
+- id: warn-version-readme-changelog-sync
+  description: Warn when a version manifest (package.json, plugin.json, marketplace.json) is being bumped without a parallel update to README.md + CHANGELOG.md — the visible-version surface drifts silently otherwise (legacy-ticket defense-in-depth, sister rule to chimera-os repo-local post-write-version-readme-sync.sh)
+  applies_to: [Edit, Write, MultiEdit]
+  match:
+    # Anchor on start-of-string OR a leading "/" so the rule fires for both
+    # relative and absolute file paths. Covers the four manifest surfaces
+    # that ship a "version" field in this repo and most plugin repos:
+    #   - package.json                       (npm manifest)
+    #   - plugin.json                        (Claude Code plugin manifest at repo root)
+    #   - marketplace.json                   (marketplace manifest at repo root)
+    #   - .claude-plugin/plugin.json         (Claude Code plugin manifest, namespaced)
+    #   - .claude-plugin/marketplace.json    (marketplace manifest, namespaced)
+    - field: file_path
+      pattern: '(^|/)(package\.json|plugin\.json|marketplace\.json|\.claude-plugin/plugin\.json|\.claude-plugin/marketplace\.json)$'
+    # Positive: the new content / new_string includes a "version": "X.Y.Z" line.
+    # Quote handling: JSON manifest files always use double quotes, so the
+    # pattern only needs to match the canonical `"version": "<digit>...` form.
+    # `[0-9]` as the first version character is intentional — we only warn on
+    # real semver-shaped bumps, not on edits that happen to remove the version
+    # field or add unrelated keys.
+    - field: content
+      pattern: '"version"[[:space:]]*:[[:space:]]*"[0-9]'
+  action: warn
+  bypass_marker: version-readme-changelog-sync
+  memory_ref: feedback_version_readme_changelog_sync.md
+  references:
+    - "legacy-ticket — three-layer drift thesis (Cure 4: PreToolUse/PostToolUse hooks)"
+    - "Sister hook in chimera-os: .claude/hooks/post-write-version-readme-sync.sh"
+    - "make-no-mistakes-toolkit PR #21 — visible README version + reconstructed CHANGELOG"
+  message: |
+    WARN: a version manifest (package.json / plugin.json / marketplace.json)
+    is being written with a "version": "X.Y.Z" field, but this hook cannot
+    see whether README.md and CHANGELOG.md were updated in the same change.
+
+    When you bump the version in any manifest, also update in the same PR:
+      1. README.md — the "Version: X.Y.Z" line at the top
+      2. CHANGELOG.md — add a new entry under ## [X.Y.Z] - YYYY-MM-DD
+
+    Why this rule exists (legacy-ticket three-layer drift thesis):
+    - The repo shipped 1.1.0 → 1.14.0 with NO visible version anywhere a
+      human would look (README, CHANGELOG, or git tags). PR #21 closed that
+      gap by reconstructing the CHANGELOG and adding a header version line.
+    - Without this rule, the same drift will reappear on the next bump.
+    - Defense-in-depth: the chimera-os repo has a sister PostToolUse hook
+      (.claude/hooks/post-write-version-readme-sync.sh) that catches the
+      same drift locally even if this toolkit isn't installed.
+
+    Suggested workflow:
+      bump version in manifest(s) → update README.md "Version: ..." line →
+      append CHANGELOG.md entry → commit all four files together.
+
+    If you're intentionally splitting the bump from the README/CHANGELOG
+    update (e.g., bumping a vendored sub-manifest's version that isn't user-
+    visible), add "# hook-bypass: version-readme-changelog-sync" inline in
+    a comment near the version field or pass it on the Write call.
+  tests:
+    - name: warns-on-package-json-version-bump
+      input:
+        tool_input:
+          file_path: 'package.json'
+          content: |
+            {
+              "name": "@example/pkg",
+              "version": "1.15.0"
+            }
+      expected_exit: 0
+      expected_stderr_contains: 'warn-version-readme-changelog-sync'
+    - name: warns-on-plugin-json-version-bump
+      input:
+        tool_input:
+          file_path: '.claude-plugin/plugin.json'
+          content: |
+            {
+              "name": "make-no-mistakes",
+              "version": "1.15.0"
+            }
+      expected_exit: 0
+      expected_stderr_contains: 'warn-version-readme-changelog-sync'
+    - name: warns-on-marketplace-json-version-bump
+      input:
+        tool_input:
+          file_path: '.claude-plugin/marketplace.json'
+          content: |
+            {
+              "name": "marketplace",
+              "version": "1.15.0",
+              "plugins": [{"version": "1.15.0"}]
+            }
+      expected_exit: 0
+      expected_stderr_contains: 'warn-version-readme-changelog-sync'
+    - name: warns-on-absolute-path-package-json
+      input:
+        tool_input:
+          file_path: '/home/user/repo/package.json'
+          content: '{"version": "2.0.0"}'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-version-readme-changelog-sync'
+    - name: warns-on-root-plugin-json
+      input:
+        tool_input:
+          file_path: 'plugin.json'
+          content: '{"version": "1.0.1"}'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-version-readme-changelog-sync'
+    - name: warns-on-edit-of-package-json
+      input:
+        tool_input:
+          file_path: 'package.json'
+          old_string: '"version": "1.14.0"'
+          new_string: '"version": "1.15.0"'
+      expected_exit: 0
+      expected_stderr_contains: 'warn-version-readme-changelog-sync'
+    - name: allows-package-json-write-without-version-field
+      input:
+        tool_input:
+          file_path: 'package.json'
+          content: |
+            {
+              "name": "@example/pkg",
+              "description": "no version field touched"
+            }
+      expected_exit: 0
+    - name: allows-unrelated-json-file
+      input:
+        tool_input:
+          file_path: 'tsconfig.json'
+          content: '{"version": "1.0.0"}'
+      expected_exit: 0
+    - name: allows-readme-write
+      input:
+        tool_input:
+          file_path: 'README.md'
+          content: '**Version: 1.15.0**'
+      expected_exit: 0
+    - name: allows-changelog-write
+      input:
+        tool_input:
+          file_path: 'CHANGELOG.md'
+          content: '## [1.15.0] - 2026-05-14'
+      expected_exit: 0
+    - name: allows-bypass-marker
+      input:
+        tool_input:
+          file_path: 'package.json'
+          content: |
+            {
+              "version": "1.15.0"
+              // hook-bypass: version-readme-changelog-sync
+            }
+      expected_exit: 0
+
+# -----------------------------------------------------------------------------
+# Greptile review extraction discipline
+#
+# Greptile App on GitHub EDITS the same review comment in-place on each
+# re-review, instead of posting a fresh comment per analysis pass. So:
+#   - comment.created_at stays fixed at original creation (DOES NOT change on
+#     re-review).
+#   - comment.updated_at is what changes when Greptile re-analyzes.
+#   - The HTML <sub>Last reviewed commit: [...](https://.../commit/HASH)</sub>
+#     footer is the authoritative source for "which commit this review covers".
+#
+# Recurring buggy patterns Claude writes (seen in CIV-728 PR #114 forensic
+# 2026-05-25 and earlier sessions — see memory feedback_greptile_match_head_
+# not_chronology.md):
+#   1. `gh api .../comments --jq '... | sort_by(.created_at) ...'` — uses
+#      creation order, returns stale state on re-reviews.
+#   2. `gh api .../comments | grep "Confidence Score" | head -1` — grabs
+#      first-by-creation, not latest-by-update.
+#   3. `(.body | capture("/commit/(?<sha>[0-9a-f]+)"))` — captures the FIRST
+#      commit URL anywhere in the body (often a code-permalink quoted in a
+#      finding, NOT the "Last reviewed commit" footer hash).
+#
+# The corrective pattern uses updated_at AND extracts the commit hash from
+# the "Last reviewed commit:" prefix specifically:
+#   gh api "repos/<o>/<r>/issues/<N>/comments" --jq '
+#     [.[] | select(.user.login | test("greptile";"i")) | {
+#       updated: .updated_at,
+#       commit: ((.body | split("Last reviewed commit:")[1] // "" |
+#                 split("commit/")[1] // "" | split(")")[0])[0:10]),
+#       score: ((.body | capture("<h3>Confidence Score: (?<s>[0-9]/5)</h3>").s) // "?")
+#     }] | map(select(.commit == env.SHORT)) | sort_by(.updated) | last'
+#
+# Memory: feedback_greptile_match_head_not_chronology.md +
+#         feedback_tail_with_desc_ordering.md
+# -----------------------------------------------------------------------------
+
+- id: warn-greptile-review-extraction-by-created-at
+  description: 'Warn when a Bash command extracts Greptile review state but uses created_at / chronology / first-commit-URL capture — Greptile edits the same comment in-place, so updated_at + the "Last reviewed commit:" footer hash are the authoritative signals (memory feedback_greptile_match_head_not_chronology.md)'
+  applies_to: [Bash]
+  match:
+    # Condition A: a comments API call AND a "greptile" reference must both
+    # be present in the same command line. Reading anything else from gh api
+    # comments is fine; warning fires only when the consumer is looking for
+    # Greptile state. The user.login filter usually appears as
+    # `select(.user.login | test("greptile";"i"))` or `grep -i greptile`.
+    - field: command
+      pattern: 'gh[[:space:]]+api\b.*\bcomments\b'
+    - field: command
+      pattern: 'greptile'
+      flags: i
+    # Condition B: at least one of three buggy patterns is present.
+    #   B1. `created_at` referenced inside jq (sort_by, select, the projection
+    #       itself). On re-review Greptile leaves created_at untouched, so any
+    #       use of it to find "the latest review" returns a stale snapshot.
+    #   B2. A `head -N` / `tail -N` after greptile match — implicit chronology
+    #       assumption ("first match is the right one") that the in-place edit
+    #       behavior silently breaks.
+    #   B3. A jq `capture("/commit/...sha...")` near greptile — grabs the
+    #       first commit hash anywhere in the body (often a permalink quoted
+    #       inside a finding), not the authoritative "Last reviewed commit:"
+    #       footer hash.
+    - field: command
+      pattern: '(\bcreated_at\b|\b(head|tail)[[:space:]]+-n?[[:space:]]*[0-9]+|capture\([^)]*/commit/)'
+    # Negative: if the command ALREADY uses updated_at or extracts via "Last
+    # reviewed commit:", it is on the correct path and the warning would be
+    # pure noise. Allow it through.
+    - field: command
+      not_pattern: '(Last reviewed commit|\bupdated_at\b)'
+  action: warn
+  bypass_marker: greptile-extraction-acknowledged
+  memory_ref: feedback_greptile_match_head_not_chronology.md
+  references:
+    - 'feedback_tail_with_desc_ordering.md — sister rule on DESC|tail bug'
+    - 'CIV-728 PR #114 forensic 2026-05-25 — stale 3/5 review picked over 5/5 HEAD review'
+  message: |
+    WARN: Bash command extracts Greptile review state with a chronology-based
+    pattern (created_at / head -N / tail -N / capture(.../commit/...)).
+
+    Greptile App on GitHub EDITS the same review comment in-place on each
+    re-review. As a result:
+      - comment.created_at is FROZEN at original posting; it DOES NOT
+        change when Greptile re-analyzes a new commit.
+      - comment.updated_at IS what moves with each re-review.
+      - The "<sub>Last reviewed commit: ...(commit/HASH)</sub>" footer in
+        the body is the authoritative source for "which commit this review
+        is about" — NOT the first /commit/ URL captured anywhere in the
+        body (which is often a permalink quoted inside a finding).
+
+    Use this pattern instead (copy-paste-able):
+
+      HEAD=$(gh pr view <N> --json headRefOid --jq '.headRefOid')
+      export SHORT=${HEAD:0:10}
+      gh api "repos/<owner>/<repo>/issues/<N>/comments" --jq '
+        [.[] | select(.user.login | test("greptile";"i")) | {
+          updated: .updated_at,
+          commit: ((.body | split("Last reviewed commit:")[1] // "" |
+                    split("commit/")[1] // "" | split(")")[0])[0:10]),
+          score: ((.body | capture("<h3>Confidence Score: (?<s>[0-9]/5)</h3>").s) // "?")
+        }] | map(select(.commit == env.SHORT)) | sort_by(.updated) | last'
+
+    This:
+      1. Pulls the PR's actual HEAD SHA up front.
+      2. Filters Greptile comments to ONLY those whose "Last reviewed
+         commit:" footer matches HEAD (so a stale older review can't win).
+      3. Among the matching reviews, picks the latest by updated_at.
+
+    Per feedback_greptile_match_head_not_chronology.md: out-of-order parallel
+    re-runs make creation order misleading. Per feedback_tail_with_desc_
+    ordering.md: same failure mode (trust an implicit order without
+    validating it).
+
+    Bypass marker (greptile-extraction-acknowledged) ONLY for legitimate
+    cases (e.g., you explicitly WANT the creation order to audit posting
+    cadence, not the latest state).
+  tests:
+    # B1: sort_by(.created_at) is the canonical buggy form.
+    - name: warns-on-sort-by-created-at-greptile-comments
+      input:
+        tool_input:
+          command: "gh api repos/o/r/issues/1/comments --jq '[.[] | select(.user.login | test(\"greptile\";\"i\"))] | sort_by(.created_at) | last'"
+      expected_exit: 0
+      expected_stderr_contains: 'warn-greptile-review-extraction-by-created-at'
+    # B2a: greptile + tail -N — implicit "tail of chronological listing".
+    - name: warns-on-greptile-grep-then-tail
+      input:
+        tool_input:
+          command: "gh api repos/o/r/issues/1/comments --jq '.[].body' | grep -i greptile | tail -1"
+      expected_exit: 0
+      expected_stderr_contains: 'warn-greptile-review-extraction-by-created-at'
+    # B2b: greptile + head -N — implicit "first match wins".
+    - name: warns-on-greptile-grep-then-head
+      input:
+        tool_input:
+          command: "gh api repos/o/r/issues/1/comments --jq '.[] | select(.body | test(\"greptile\";\"i\"))' | grep 'Confidence Score' | head -1"
+      expected_exit: 0
+      expected_stderr_contains: 'warn-greptile-review-extraction-by-created-at'
+    # B3: capture on /commit/<sha> grabs the first /commit/ URL in the body,
+    # not the Last reviewed commit footer. Common buggy form.
+    - name: warns-on-capture-commit-sha-from-greptile-body
+      input:
+        tool_input:
+          command: 'gh api repos/o/r/issues/1/comments --jq ''[.[] | select(.user.login | test("greptile";"i")) | {commit: (.body | capture("/commit/(?<sha>[0-9a-f]+)").sha)}]'''
+      expected_exit: 0
+      expected_stderr_contains: 'warn-greptile-review-extraction-by-created-at'
+    # Correct pattern — uses updated_at + "Last reviewed commit:" — MUST PASS.
+    - name: allows-correct-pattern-updated-at-and-last-reviewed-commit
+      input:
+        tool_input:
+          command: |
+            gh api "repos/o/r/issues/1/comments" --jq '
+              [.[] | select(.user.login | test("greptile";"i")) | {
+                updated: .updated_at,
+                commit: ((.body | split("Last reviewed commit:")[1] // "" | split("commit/")[1] // "" | split(")")[0])[0:10]),
+                score: ((.body | capture("<h3>Confidence Score: (?<s>[0-9]/5)</h3>").s) // "?")
+              }] | sort_by(.updated) | last'
+      expected_exit: 0
+    # Generic gh api comments call WITHOUT greptile — out of scope.
+    - name: allows-non-greptile-comments-call
+      input:
+        tool_input:
+          command: "gh api repos/o/r/issues/1/comments --jq '[.[] | .body] | sort_by(.created_at)'"
+      expected_exit: 0
+    # Greptile-aware call that uses updated_at — correct, no buggy pattern.
+    - name: allows-greptile-with-updated-at-and-sort
+      input:
+        tool_input:
+          command: "gh api repos/o/r/issues/1/comments --jq '[.[] | select(.user.login | test(\"greptile\";\"i\"))] | sort_by(.updated_at) | last'"
+      expected_exit: 0
+    # Non-gh-api commands that mention greptile — out of scope (e.g. listing
+    # PR labels containing the word, gh search code, etc.).
+    - name: allows-gh-search-greptile-not-api-comments
+      input:
+        tool_input:
+          command: 'gh search prs --label greptile-approved'
+      expected_exit: 0
+    - name: allows-bypass-marker
+      input:
+        tool_input:
+          command: "gh api repos/o/r/issues/1/comments --jq '[.[] | select(.user.login | test(\"greptile\";\"i\"))] | sort_by(.created_at) | last' # hook-bypass: greptile-extraction-acknowledged"
+      expected_exit: 0
+- id: inline-db-mutation-mysql
+  description: Block inline mysql / mysqldump mutations (use a versioned script in scripts/ or bin/ instead)
+  applies_to: [Bash]
+  match:
+    # Positive: three mutation vectors via the mysql CLI:
+    #   1. `mysql ... -e "<SQL with mutation keyword>"` — the canonical
+    #      one-liner. `-e`/`--execute` may be followed by space or `=`.
+    #   2. `mysql ... < file.sql` — feeding a SQL file via stdin. We cannot
+    #      read the file contents, but the discipline is the same: the
+    #      one-shot redirect bypasses the versioned-scripts workflow.
+    #   3. `mysqldump ... | mysql ...` — restore one-liner that overwrites
+    #      target data wholesale.
+    # NOTE: the spacing between `-e`/`--execute` and the SQL keyword is
+    # `[[:space:]]*` (zero-or-more), NOT `[[:space:]]+` — mysql accepts the
+    # short form `-e"DROP TABLE foo"` with no separator. Same logic for the
+    # long form: `--execute="..."` is the documented = shape, and
+    # `--execute "..."` is the documented space shape. Both must match.
+    # Greptile #25 P1: original regex required `[[:space:]]+|=` and missed
+    # `mysql -e"..."` and `mysql --execute="..."` shapes.
+    - field: command
+      pattern: '(\bmysql[[:space:]][^|<]*(-e|--execute)([[:space:]]*|=)[''"]?[[:space:]]*(UPDATE|DELETE|INSERT|REPLACE|CREATE|ALTER|DROP|GRANT|REVOKE|TRUNCATE|RENAME)\b)|(\bmysql[[:space:]][^|]*<[[:space:]]*[^[:space:]]+\.sql\b)|(\bmysqldump\b[^|]*\|[[:space:]]*mysql\b)'
+      flags: i
+    # Negative: do not fire when the command is itself a versioned-script
+    # invocation (the script lives in git, so the discipline is satisfied).
+    - field: command
+      not_pattern: '^[[:space:]]*(\./scripts/|bash[[:space:]]+scripts/|\./bin/|bash[[:space:]]+bin/|sh[[:space:]]+scripts/|sh[[:space:]]+bin/)'
+  action: block
+  bypass_marker: db-mutation-rule
+  disable_if_repo_file: .no-make-no-mistakes-db-mutation
+  memory_ref: feedback_scripts_not_db.md
+  message: |
+    BLOCKED: inline mysql / mysqldump DB mutation detected.
+
+    Per feedback_scripts_not_db.md: scripts-in-the-repo, not inline.
+    Move the SQL into a versioned file under scripts/ or bin/ and invoke
+    that script. The script wrapper makes the change reviewable in git,
+    re-runnable across environments, and auditable after the fact.
+
+    Allowed patterns:
+      - SELECT / SHOW / DESCRIBE / EXPLAIN — read-only is fine inline
+      - `./scripts/<name>.sh` / `bash scripts/<name>.sh` — versioned wrapper
+      - `# hook-bypass: db-mutation-rule` appended to the command for an
+        explicitly-acknowledged one-shot
+
+    Per-repo escape hatch: `touch .no-make-no-mistakes-db-mutation` at the
+    repo root if the entire repo's job is inline DB work.
+  tests:
+    - name: blocks-mysql-e-update
+      input:
+        tool_input:
+          command: "mysql -u root -e \"UPDATE users SET active=1 WHERE id=42\""
+      expected_exit: 2
+    - name: blocks-mysql-e-delete
+      input:
+        tool_input:
+          command: "mysql -u root mydb -e 'DELETE FROM sessions WHERE expired_at < NOW()'"
+      expected_exit: 2
+    - name: blocks-mysql-e-drop-table
+      input:
+        tool_input:
+          command: "mysql -h db.example.com -u admin -e \"DROP TABLE legacy_table\""
+      expected_exit: 2
+    # Greptile finding (P1, PR #25): the `-e` alternative is a prefix of
+    # `--execute`. Earlier patterns that anchored `(-e|--execute)` without
+    # boundary handling, or that required whitespace BEFORE `=`, missed the
+    # long-option form and the `--execute="..."` shape entirely. These cases
+    # exercise both bypasses.
+    - name: blocks-mysql-long-execute-space
+      input:
+        tool_input:
+          command: 'mysql --execute "UPDATE users SET active=1"'
+      expected_exit: 2
+    - name: blocks-mysql-long-execute-equals
+      input:
+        tool_input:
+          command: 'mysql --execute="DROP TABLE legacy"'
+      expected_exit: 2
+    - name: blocks-mysql-short-e-no-space-quoted
+      input:
+        tool_input:
+          command: 'mysql -uroot -e"DROP TABLE legacy"'
+      expected_exit: 2
+    - name: blocks-mysql-stdin-redirect
+      input:
+        tool_input:
+          command: 'mysql -u root mydb < migrations/oneshot.sql'
+      expected_exit: 2
+    - name: blocks-mysqldump-pipe-mysql
+      input:
+        tool_input:
+          command: 'mysqldump -u root prod_db | mysql -u root staging_db'
+      expected_exit: 2
+    - name: allows-mysql-e-select
+      input:
+        tool_input:
+          command: "mysql -u root -e 'SELECT COUNT(*) FROM users'"
+      expected_exit: 0
+    - name: allows-mysql-e-show
+      input:
+        tool_input:
+          command: "mysql -u root -e 'SHOW TABLES'"
+      expected_exit: 0
+    - name: allows-mysql-via-versioned-script
+      input:
+        tool_input:
+          command: "./scripts/seed-users.sh"
+      expected_exit: 0
+    - name: allows-mysql-via-bash-scripts-prefix
+      input:
+        tool_input:
+          command: "bash scripts/migrate-prod.sh --confirm"
+      expected_exit: 0
+    - name: allows-bypass-marker
+      input:
+        tool_input:
+          command: "mysql -u root -e 'DROP TABLE foo' # hook-bypass: db-mutation-rule"
+      expected_exit: 0
+
+- id: inline-db-mutation-psql
+  description: Block inline psql / pg_restore mutations beyond the destructive ops already caught by destructive-db-ops (use a versioned migration or script instead)
+  applies_to: [Bash]
+  match:
+    # Positive: psql -c "<mutation>" with the broader keyword set, plus
+    # pg_restore against any non-localhost host. The `destructive-db-ops`
+    # rule above already blocks DROP TABLE/DATABASE/SCHEMA / TRUNCATE /
+    # DELETE FROM via psql -c; here we extend coverage to UPDATE / INSERT
+    # / REPLACE / CREATE / ALTER / GRANT / REVOKE / RENAME so the full
+    # mutation set is consistently denied at the CLI.
+    # NOTE: spacing between `-c`/`--command` and the SQL keyword is
+    # `[[:space:]]*` (zero-or-more), NOT `[[:space:]]+` — psql accepts the
+    # short form `psql -d mydb -c"UPDATE ..."` with no separator (Greptile
+    # #25 P1).
+    - field: command
+      pattern: '(\bpsql\b[^|]*(-c|--command)([[:space:]]*|=)[''"]?[[:space:]]*(UPDATE|INSERT|REPLACE|CREATE|ALTER|GRANT|REVOKE|RENAME)\b)|(\bpg_restore\b)'
+      flags: i
+    - field: command
+      not_pattern: '^[[:space:]]*(\./scripts/|bash[[:space:]]+scripts/|\./bin/|bash[[:space:]]+bin/|sh[[:space:]]+scripts/|sh[[:space:]]+bin/)'
+  action: block
+  bypass_marker: db-mutation-rule
+  disable_if_repo_file: .no-make-no-mistakes-db-mutation
+  memory_ref: feedback_scripts_not_db.md
+  message: |
+    BLOCKED: inline psql mutation or pg_restore detected.
+
+    Per feedback_scripts_not_db.md: schema and data changes belong in a
+    versioned migration (supabase/migrations/<ts>_<slug>.sql or your
+    project's equivalent), not in an ad-hoc `psql -c` one-liner.
+
+    For pg_restore: load the dump from a committed script that documents
+    target DB, dump version, and the rollback plan — never from a raw
+    shell invocation that exists only in the agent's transient history.
+
+    SELECT / SHOW / EXPLAIN / DESCRIBE are still allowed inline.
+
+    Bypass with `# hook-bypass: db-mutation-rule` after explicit team
+    approval, or drop `.no-make-no-mistakes-db-mutation` at the repo root.
+  tests:
+    - name: blocks-psql-c-update
+      input:
+        tool_input:
+          command: 'psql -h db.example.com -d mydb -c "UPDATE users SET active=true"'
+      expected_exit: 2
+    - name: blocks-psql-c-insert
+      input:
+        tool_input:
+          command: "psql -d mydb -c 'INSERT INTO audit (action) VALUES (''oneshot'')'"
+      expected_exit: 2
+    - name: blocks-psql-c-alter-table
+      input:
+        tool_input:
+          command: 'psql -d mydb -c "ALTER TABLE users ADD COLUMN nickname text"'
+      expected_exit: 2
+    - name: blocks-psql-c-grant
+      input:
+        tool_input:
+          command: 'psql -d mydb -c "GRANT SELECT ON users TO readonly_role"'
+      expected_exit: 2
+    # Greptile finding (P1, PR #25): psql accepts the short-option form where
+    # the SQL follows `-c` immediately, without whitespace or `=`. Original
+    # pattern required `[[:space:]]+|=` after `-c`, missing `-c"..."`.
+    - name: blocks-psql-c-no-space-quoted
+      input:
+        tool_input:
+          command: 'psql -d mydb -c"UPDATE users SET active=true"'
+      expected_exit: 2
+    - name: blocks-psql-long-command-equals
+      input:
+        tool_input:
+          command: 'psql -d mydb --command="UPDATE sessions SET expired=true"'
+      expected_exit: 2
+    - name: blocks-pg-restore
+      input:
+        tool_input:
+          command: 'pg_restore -h db.example.com -d mydb backup.dump'
+      expected_exit: 2
+    - name: allows-psql-c-select
+      input:
+        tool_input:
+          command: "psql -d mydb -c 'SELECT count(*) FROM users'"
+      expected_exit: 0
+    - name: allows-psql-c-explain
+      input:
+        tool_input:
+          command: "psql -d mydb -c 'EXPLAIN ANALYZE SELECT * FROM users'"
+      expected_exit: 0
+    - name: allows-psql-via-versioned-script
+      input:
+        tool_input:
+          command: "./scripts/db-migrate.sh"
+      expected_exit: 0
+    - name: allows-bypass-marker
+      input:
+        tool_input:
+          command: 'psql -d mydb -c "UPDATE users SET active=true" # hook-bypass: db-mutation-rule'
+      expected_exit: 0
+
+- id: inline-db-mutation-sqlite
+  description: Block inline sqlite3 mutations (use a versioned script in scripts/ or bin/ instead)
+  applies_to: [Bash]
+  match:
+    # Positive: `sqlite3 <path-to.db> "<SQL>"` is the canonical shape;
+    # the SQL argument is the positional after the database path. Match
+    # invocations where any mutation keyword appears anywhere on the
+    # command line after `sqlite3 ` (cheaper than parsing positional args
+    # and still effective because the keyword set is unique enough to
+    # mutations).
+    - field: command
+      pattern: '\bsqlite3\b[^|]*\b(UPDATE|DELETE|INSERT|REPLACE|CREATE|ALTER|DROP|GRANT|REVOKE|TRUNCATE|RENAME)\b'
+      flags: i
+    - field: command
+      not_pattern: '^[[:space:]]*(\./scripts/|bash[[:space:]]+scripts/|\./bin/|bash[[:space:]]+bin/|sh[[:space:]]+scripts/|sh[[:space:]]+bin/)'
+  action: block
+  bypass_marker: db-mutation-rule
+  disable_if_repo_file: .no-make-no-mistakes-db-mutation
+  memory_ref: feedback_scripts_not_db.md
+  message: |
+    BLOCKED: inline sqlite3 DB mutation detected.
+
+    Even for local SQLite databases, drift between dev machines is a
+    real cost — when one teammate's local DB has the manual change and
+    others' don't, debugging session reproduction degrades silently.
+    Move the SQL into scripts/ and commit it.
+
+    SELECT / EXPLAIN remain allowed inline. The bypass marker is
+    `db-mutation-rule`. Per-repo opt-out:
+    `touch .no-make-no-mistakes-db-mutation` at the root.
+  tests:
+    - name: blocks-sqlite3-update
+      input:
+        tool_input:
+          command: 'sqlite3 ./data.db "UPDATE users SET active=1"'
+      expected_exit: 2
+    - name: blocks-sqlite3-delete
+      input:
+        tool_input:
+          command: "sqlite3 ./data.db 'DELETE FROM users WHERE id=42'"
+      expected_exit: 2
+    - name: blocks-sqlite3-create-table
+      input:
+        tool_input:
+          command: 'sqlite3 ./data.db "CREATE TABLE foo (id integer primary key)"'
+      expected_exit: 2
+    - name: blocks-sqlite3-alter
+      input:
+        tool_input:
+          command: 'sqlite3 ./data.db "ALTER TABLE users ADD COLUMN x text"'
+      expected_exit: 2
+    - name: allows-sqlite3-select
+      input:
+        tool_input:
+          command: 'sqlite3 ./data.db "SELECT count(*) FROM users"'
+      expected_exit: 0
+    - name: allows-sqlite3-via-versioned-script
+      input:
+        tool_input:
+          command: './scripts/seed-sqlite.sh ./data.db'
+      expected_exit: 0
+    - name: allows-bypass-marker
+      input:
+        tool_input:
+          command: 'sqlite3 ./data.db "UPDATE users SET active=1" # hook-bypass: db-mutation-rule'
+      expected_exit: 0
+
+- id: inline-db-mutation-mongo
+  description: Block inline mongo / mongorestore mutations (use a versioned script in scripts/ or bin/ instead)
+  applies_to: [Bash]
+  match:
+    # Positive vectors:
+    #   1. `mongo --eval "<expr with .update/.insert/.delete/...>"` — the
+    #      legacy shell syntax. Mongosh uses the same flag.
+    #   2. `mongosh --eval` — same surface, newer binary name.
+    #   3. `mongorestore ...` — bulk restore one-liner. Block unconditionally
+    #      since by definition it overwrites collections.
+    # Mutation method set is the canonical write surface (.update, .insert,
+    # .delete, .drop, .createCollection, .dropDatabase, .replaceOne, .save,
+    # .findAndModify, .deleteOne, .deleteMany, .updateOne, .updateMany,
+    # .insertOne, .insertMany).
+    # NOTE: scan for the mutation method anywhere up to a pipe after `--eval`,
+    # using `[[:space:]=]` to accept both the space form (`--eval "..."`) and
+    # the equals form (`--eval="..."`). Greptile #25 P1: the previous shape
+    # `[[:space:]]+[^[:space:]]*\.method` only matched if the mutation method
+    # appeared inside a single non-space token immediately after `--eval`,
+    # which fails the moment a quoted JS expression contains a space anywhere
+    # before the `.method` call.
+    - field: command
+      pattern: '(\b(mongo|mongosh)\b[^|]*--eval[[:space:]=][^|]*\.(update|insert|delete|drop|createCollection|dropDatabase|replaceOne|save|findAndModify|deleteOne|deleteMany|updateOne|updateMany|insertOne|insertMany)\b)|(\bmongorestore\b)'
+    - field: command
+      not_pattern: '^[[:space:]]*(\./scripts/|bash[[:space:]]+scripts/|\./bin/|bash[[:space:]]+bin/|sh[[:space:]]+scripts/|sh[[:space:]]+bin/)'
+  action: block
+  bypass_marker: db-mutation-rule
+  disable_if_repo_file: .no-make-no-mistakes-db-mutation
+  memory_ref: feedback_scripts_not_db.md
+  message: |
+    BLOCKED: inline mongo / mongosh / mongorestore mutation detected.
+
+    Per feedback_scripts_not_db.md, mongo data changes belong in a
+    versioned migration runner script — never in a transient `--eval`
+    one-liner. The bypass marker is `db-mutation-rule`; the per-repo
+    escape hatch is `.no-make-no-mistakes-db-mutation` at the root.
+
+    Read methods (.find, .findOne, .aggregate, .countDocuments, etc.)
+    remain allowed inline.
+  tests:
+    - name: blocks-mongo-eval-update
+      input:
+        tool_input:
+          command: 'mongo --eval "db.users.update({_id:42},{$set:{active:true}})"'
+      expected_exit: 2
+    # Greptile finding (P1, PR #25): `--eval` is almost always followed by a
+    # quoted JavaScript expression that contains whitespace. The original
+    # pattern required the mutation method inside the FIRST non-space token
+    # after `--eval`, which the quote+space layout breaks. These cases
+    # exercise the realistic shapes seen in incident-driven one-liners.
+    - name: blocks-mongo-eval-update-with-spaces-inside-arg
+      input:
+        tool_input:
+          command: 'mongo --eval "db.users.update({_id: 42}, {$set: {active: true}})"'
+      expected_exit: 2
+    - name: blocks-mongosh-eval-insertOne-spaces
+      input:
+        tool_input:
+          command: 'mongosh --eval "db.audit.insertOne({ event: \"oneshot\" })"'
+      expected_exit: 2
+    - name: blocks-mongo-eval-equals
+      input:
+        tool_input:
+          command: 'mongo --eval="db.users.deleteMany({active:false})"'
+      expected_exit: 2
+    - name: blocks-mongo-eval-deleteMany
+      input:
+        tool_input:
+          command: 'mongo --eval "db.sessions.deleteMany({expired:true})"'
+      expected_exit: 2
+    - name: blocks-mongosh-eval-drop
+      input:
+        tool_input:
+          command: 'mongosh --eval "db.legacy_collection.drop()"'
+      expected_exit: 2
+    - name: blocks-mongo-eval-createCollection
+      input:
+        tool_input:
+          command: 'mongo --eval "db.createCollection(''audit'')"'
+      expected_exit: 2
+    - name: blocks-mongorestore
+      input:
+        tool_input:
+          command: 'mongorestore --db prod --drop ./backup'
+      expected_exit: 2
+    - name: allows-mongo-eval-find
+      input:
+        tool_input:
+          command: 'mongo --eval "db.users.find({active:true}).count()"'
+      expected_exit: 0
+    - name: allows-mongo-eval-aggregate
+      input:
+        tool_input:
+          command: 'mongo --eval "db.events.aggregate([{$match:{}}])"'
+      expected_exit: 0
+    - name: allows-mongo-via-versioned-script
+      input:
+        tool_input:
+          command: './scripts/seed-mongo.sh'
+      expected_exit: 0
+    - name: allows-bypass-marker
+      input:
+        tool_input:
+          command: 'mongo --eval "db.users.drop()" # hook-bypass: db-mutation-rule'
+      expected_exit: 0
+
+- id: inline-db-mutation-redis
+  description: Block inline redis-cli mutations (use a versioned script in scripts/ or bin/ instead)
+  applies_to: [Bash]
+  match:
+    # Positive: `redis-cli ... <MUTATING_VERB> ...`. The Redis command
+    # surface is large — match the common write verbs that show up in
+    # incident-driven one-liners: SET, DEL, FLUSHDB, FLUSHALL, HSET,
+    # HDEL, SADD, SREM, LPUSH, RPUSH, ZADD, ZREM, EXPIRE, RENAME, MSET,
+    # SETEX, SETNX, INCR, DECR, COPY, MOVE, UNLINK, RESTORE, EVAL (EVAL
+    # can mutate via Lua even though it can also read).
+    # Verb must be at command-word boundaries to avoid mis-matching
+    # values that happen to contain those substrings.
+    - field: command
+      pattern: '\bredis-cli\b[^|]*[[:space:]]+(SET|DEL|FLUSHDB|FLUSHALL|HSET|HDEL|SADD|SREM|LPUSH|RPUSH|ZADD|ZREM|EXPIRE|RENAME|MSET|SETEX|SETNX|INCR|DECR|COPY|MOVE|UNLINK|RESTORE|EVAL)\b'
+      flags: i
+    - field: command
+      not_pattern: '^[[:space:]]*(\./scripts/|bash[[:space:]]+scripts/|\./bin/|bash[[:space:]]+bin/|sh[[:space:]]+scripts/|sh[[:space:]]+bin/)'
+  action: block
+  bypass_marker: db-mutation-rule
+  disable_if_repo_file: .no-make-no-mistakes-db-mutation
+  memory_ref: feedback_scripts_not_db.md
+  message: |
+    BLOCKED: inline redis-cli mutation detected.
+
+    Even in a cache, manual one-liners create cross-env drift: the value
+    you set is visible to your machine only until eviction, and other
+    engineers cannot reproduce. Use a script under scripts/ or bin/.
+
+    Read verbs (GET, MGET, HGET, KEYS, SCAN, INFO, PING, EXISTS, TYPE,
+    TTL, LLEN, SCARD, ZRANGE, SMEMBERS, ...) remain allowed inline.
+
+    Bypass marker: `db-mutation-rule`. Per-repo opt-out:
+    `touch .no-make-no-mistakes-db-mutation` at the root.
+  tests:
+    - name: blocks-redis-cli-set
+      input:
+        tool_input:
+          command: 'redis-cli SET feature:enabled 1'
+      expected_exit: 2
+    - name: blocks-redis-cli-del
+      input:
+        tool_input:
+          command: 'redis-cli DEL session:42'
+      expected_exit: 2
+    - name: blocks-redis-cli-flushall
+      input:
+        tool_input:
+          command: 'redis-cli -h cache.example.com FLUSHALL'
+      expected_exit: 2
+    - name: blocks-redis-cli-flushdb
+      input:
+        tool_input:
+          command: 'redis-cli -n 3 FLUSHDB'
+      expected_exit: 2
+    - name: blocks-redis-cli-hset
+      input:
+        tool_input:
+          command: 'redis-cli HSET user:1 name alice'
+      expected_exit: 2
+    - name: allows-redis-cli-get
+      input:
+        tool_input:
+          command: 'redis-cli GET feature:enabled'
+      expected_exit: 0
+    - name: allows-redis-cli-keys
+      input:
+        tool_input:
+          command: 'redis-cli KEYS "session:*"'
+      expected_exit: 0
+    - name: allows-redis-cli-info
+      input:
+        tool_input:
+          command: 'redis-cli INFO memory'
+      expected_exit: 0
+    - name: allows-redis-via-versioned-script
+      input:
+        tool_input:
+          command: './scripts/flush-cache.sh'
+      expected_exit: 0
+    - name: allows-bypass-marker
+      input:
+        tool_input:
+          command: 'redis-cli FLUSHALL # hook-bypass: db-mutation-rule'
+      expected_exit: 0
+
+- id: inline-db-mutation-gcloud-sql
+  description: Block inline `gcloud sql import` / `gcloud sql export` (use a versioned script in scripts/ or bin/ that documents the source/destination)
+  applies_to: [Bash]
+  match:
+    # Positive: import/export of SQL or CSV dumps via the gcloud SQL CLI.
+    # Both directions are blocked: import is the obvious mutation surface;
+    # export is included because exports against PRODUCTION leak PII and
+    # consume IOPS, so the discipline (versioned script with documented
+    # purpose) applies equally.
+    # NOTE: gcloud accepts global flags BEFORE the command group, so we must
+    # tolerate zero-or-more arbitrary tokens between `gcloud` and `sql`.
+    # The `([^[:space:]]+[[:space:]]+)*` group matches any token-then-space
+    # repetition, which covers BOTH shapes that gcloud accepts for global
+    # flags taking a value:
+    #   --flag=value       (one token)        e.g. `--project=my-prod`
+    #   --flag value       (two tokens)       e.g. `--project my-prod`
+    # ...plus bare bool flags (`--quiet`, `-q`), `--account user@host`,
+    # `--configuration prod`, `--impersonate-service-account svc@example.com`,
+    # `--region us-central1`, `--zone us-central1-a`, etc. Greptile re-review
+    # on PR #25 surfaced that the prior `(--?[a-zA-Z0-9_-]+(=[^[:space:]]*)?[[:space:]]+)*`
+    # shape only matched the `=`-bound form and missed every space-separated
+    # global flag value. The looser tokens-then-space loop closes that gap.
+    # False-positive risk is bounded: the pattern still anchors on the
+    # literal `sql[[:space:]]+(import|export)[[:space:]]+(sql|csv|bak)` tail,
+    # so legitimate read-only verbs (`sql instances list`, `sql databases
+    # describe`, ...) cannot match.
+    - field: command
+      pattern: '\bgcloud[[:space:]]+([^[:space:]]+[[:space:]]+)*sql[[:space:]]+(import|export)[[:space:]]+(sql|csv|bak)\b'
+      flags: i
+    - field: command
+      not_pattern: '^[[:space:]]*(\./scripts/|bash[[:space:]]+scripts/|\./bin/|bash[[:space:]]+bin/|sh[[:space:]]+scripts/|sh[[:space:]]+bin/)'
+  action: block
+  bypass_marker: db-mutation-rule
+  disable_if_repo_file: .no-make-no-mistakes-db-mutation
+  memory_ref: feedback_scripts_not_db.md
+  references:
+    - "feedback_never_touch_prod_without_approval.md (production guardrail)"
+  message: |
+    BLOCKED: inline `gcloud sql import` / `gcloud sql export` detected.
+
+    Imports overwrite target DB state. Exports against production cost
+    IOPS and (when carrying PII) violate the data-handling guidelines.
+    Both belong in a versioned script that documents:
+      - source / destination instance IDs (PROD vs STAGING)
+      - dump version (timestamped GCS URI)
+      - PII-handling approval if any
+      - rollback procedure
+
+    Bypass marker: `db-mutation-rule`. Per-repo opt-out:
+    `touch .no-make-no-mistakes-db-mutation` at the root.
+  tests:
+    - name: blocks-gcloud-sql-import-sql
+      input:
+        tool_input:
+          command: 'gcloud sql import sql my-instance gs://backups/dump.sql --database=mydb'
+      expected_exit: 2
+    - name: blocks-gcloud-sql-export-sql
+      input:
+        tool_input:
+          command: 'gcloud sql export sql my-instance gs://backups/dump.sql --database=mydb'
+      expected_exit: 2
+    - name: blocks-gcloud-sql-import-csv
+      input:
+        tool_input:
+          command: 'gcloud sql import csv my-instance gs://backups/users.csv --database=mydb --table=users'
+      expected_exit: 2
+    - name: blocks-gcloud-sql-export-bak
+      input:
+        tool_input:
+          command: 'gcloud sql export bak my-instance gs://backups/dump.bak --database=mydb'
+      expected_exit: 2
+    # Greptile finding (P1+Security, PR #25): `gcloud` accepts global flags
+    # BEFORE the command group. The previous pattern required `gcloud sql`
+    # contiguously, missing `gcloud --project=my-prod sql ...` — exactly the
+    # shape used when targeting a specific project (i.e., production).
+    - name: blocks-gcloud-global-project-sql-export
+      input:
+        tool_input:
+          command: 'gcloud --project=my-prod sql export sql my-instance gs://backups/dump.sql --database=mydb'
+      expected_exit: 2
+    - name: blocks-gcloud-global-quiet-sql-import
+      input:
+        tool_input:
+          command: 'gcloud --quiet sql import sql my-instance gs://backups/dump.sql --database=mydb'
+      expected_exit: 2
+    - name: blocks-gcloud-global-account-sql-export-csv
+      input:
+        tool_input:
+          command: 'gcloud --account=svc@example.iam.gserviceaccount.com sql export csv my-instance gs://backups/users.csv --database=mydb --query="SELECT * FROM users"'
+      expected_exit: 2
+    - name: blocks-gcloud-multiple-global-flags-sql-export
+      input:
+        tool_input:
+          command: 'gcloud --project=my-prod --quiet sql export sql my-instance gs://backups/dump.sql --database=mydb'
+      expected_exit: 2
+    # Greptile re-review on PR #25: the `=`-bound match wasn't enough.
+    # gcloud also accepts global flags as TWO space-separated tokens
+    # (`--project my-prod`, `--configuration prod`, etc.). Each of the
+    # five cases below would have bypassed the old regex.
+    - name: blocks-gcloud-global-project-space-sql-export
+      input:
+        tool_input:
+          command: 'gcloud --project my-prod sql export sql my-instance gs://backups/dump.sql --database=mydb'
+      expected_exit: 2
+    - name: blocks-gcloud-global-configuration-space-sql-import
+      input:
+        tool_input:
+          command: 'gcloud --configuration prod sql import sql my-instance gs://backups/dump.sql --database=mydb'
+      expected_exit: 2
+    - name: blocks-gcloud-global-impersonate-space-sql-export
+      input:
+        tool_input:
+          command: 'gcloud --impersonate-service-account svc@example.iam.gserviceaccount.com sql export sql my-instance gs://backups/dump.sql --database=mydb'
+      expected_exit: 2
+    - name: blocks-gcloud-global-account-space-sql-export-csv
+      input:
+        tool_input:
+          command: 'gcloud --account user@example.com sql export csv my-instance gs://backups/users.csv --database=mydb --query="SELECT * FROM users"'
+      expected_exit: 2
+    - name: blocks-gcloud-global-region-space-sql-import
+      input:
+        tool_input:
+          command: 'gcloud --region us-central1 sql import sql my-instance gs://backups/dump.sql --database=mydb'
+      expected_exit: 2
+    - name: blocks-gcloud-mixed-space-and-equals-flags-sql-export
+      input:
+        tool_input:
+          command: 'gcloud --project my-prod --configuration=prod --quiet sql export bak my-instance gs://backups/dump.bak --database=mydb'
+      expected_exit: 2
+    - name: allows-gcloud-sql-instances-list
+      input:
+        tool_input:
+          command: 'gcloud sql instances list --project=myproject'
+      expected_exit: 0
+    - name: allows-gcloud-global-flag-space-sql-databases-describe
+      input:
+        tool_input:
+          command: 'gcloud --project my-prod sql databases describe mydb --instance=my-instance'
+      expected_exit: 0
+    - name: allows-gcloud-global-flag-space-sql-instances-list
+      input:
+        tool_input:
+          command: 'gcloud --configuration prod sql instances list'
+      expected_exit: 0
+    - name: allows-gcloud-sql-via-versioned-script
+      input:
+        tool_input:
+          command: './scripts/sql-import.sh my-instance gs://backups/dump.sql'
+      expected_exit: 0
+    - name: allows-bypass-marker
+      input:
+        tool_input:
+          command: 'gcloud sql import sql my-instance gs://backups/dump.sql --database=mydb # hook-bypass: db-mutation-rule'
+      expected_exit: 0
