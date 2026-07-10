@@ -114,6 +114,32 @@ weekly batch — never "everything at once". The setup creates a feeding SOP in
 `_procedimientos/` (weekly ingestion + `log.md` review) so this cadence is itself a
 versioned procedure.
 
+## Obsidian setup (optional, curated)
+
+Obsidian is customizable like a terminal or VS Code — themes and community plugins — but
+the brain must stay useful with zero plugins (plain Markdown first). Offer this curated
+set during setup and add nothing else by default (start-from-zero discipline):
+
+- **Theme (pick one):** `wasp` (dark/light, amber accents, MIT, battle-tested) or
+  `Listive` (dark/light, fine-grained control via Style Settings).
+- **Plugins:**
+  - `Style Settings` — only if the user picks Listive.
+  - `Obsidian Web Clipper` (browser extension) — captures web articles straight into
+    `_sources/` with frontmatter; feeds the ingestion cycle.
+  - `Vault as MCP` (by ebullient) — runs an MCP server inside the vault so external
+    agents (Claude Desktop/Code, etc.) read, search, and edit notes over local HTTP
+    instead of raw filesystem access. Enable Bearer-token auth; desktop only. This is
+    the natural transport for the agent-first layer when the agent runs outside the
+    repo checkout.
+
+Version `.obsidian/` selectively in git: commit `app.json`, `appearance.json`,
+`community-plugins.json`, and `themes/`; ignore `workspace*` (device-local state) — the
+`.gitignore` from Step 5 already handles this. That way every clone of the brain opens
+with the same look and the same plugin set.
+
+Reference for inspiration (not bundled): METAKAIHOS, a commercial "Obsidian Vault for
+AI-Augmented Thinking".
+
 ## Flujo del skill
 
 ### Step 1 — Detect mode
