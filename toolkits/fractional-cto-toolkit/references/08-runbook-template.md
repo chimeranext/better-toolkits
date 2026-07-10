@@ -30,10 +30,10 @@ Two runbook shapes below; delete the one you are not using.
 
 ## Read this first — the mental model
 
-<!-- The foundational thing the reader must internalize before any step. In dojocoding's
-release runbook this is the branch model; in the devsecops runbook it is "rule zero:
-merging is not deploying". State the one invariant that, if misunderstood, causes the
-incident this runbook exists to prevent. -->
+<!-- The foundational thing the reader must internalize before any step. Common examples:
+the branch model for a release runbook, or a "rule zero: merging is not deploying" for a
+deploy runbook. State the one invariant that, if misunderstood, causes the incident this
+runbook exists to prevent. -->
 
 > **{{RULE_ZERO}}** — the single most-misunderstood invariant of this system, stated up
 > front (e.g. "merging is not deploying: prod only changes on a manual dispatch from main").
