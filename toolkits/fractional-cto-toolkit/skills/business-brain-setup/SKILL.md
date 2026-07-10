@@ -132,15 +132,73 @@ Create every folder from the canonical table, each with a `_MOC.md` (type: `moc`
 will serve as its hub: a short purpose line plus empty sections for the notes that will
 link into it. Then the agent-first skeleton:
 
-- Root `CLAUDE.md` (brain layer 1): venture philosophy, analysis style, ingestion +
-  citation rules, working language. Ask the user 3-4 configuration questions before
-  writing it (language, optimization axes — principles/checklists/frameworks/cases —,
-  source rigor: internal-only vs. allow-external-flagged).
+- Root `CLAUDE.md` (brain layer 1): the agent's full **operating manual**, written from
+  the template in the next section, customized with the user's answers to 3-4
+  configuration questions (language, optimization axes — principles/checklists/
+  frameworks/cases —, source rigor: internal-only vs. allow-external-flagged). Also
+  create `AGENTS.md` as a symlink to it (copy on Windows) so non-Claude agents find the
+  same manual.
 - Root `index.md` (agent-first entry: every page + one-line summary) and `log.md`
   (chronological change/decision record). One `index.md` + `log.md` per unit folder too.
 - Root `README.md` explaining the methodology in one screen (CODE flow, atomicity rule,
   human-agent cycle, weekly inbox sweep + ingestion cadence).
 - The feeding SOP in `_procedimientos/` (weekly `_sources/` ingestion + `log.md` review).
+
+### The brain's `CLAUDE.md` — operating manual template
+
+Write this at the vault root, replacing `{placeholders}` with the user's configuration
+answers. This file is what makes the vault an LLM wiki instead of a folder of notes: any
+agent session opened inside the vault reads it and knows how to operate the brain.
+
+```markdown
+# {Venture} Business Brain — Manual de operación
+
+Eres el operador de este business brain. Este vault es la fuente de verdad del negocio:
+lo construyes y mantienes TÚ (el agente); los humanos capturan, curan y dan feedback.
+
+## Idioma y estilo
+- Contenido del vault en {working language}. Claves de frontmatter en inglés.
+- Optimiza para: {optimization axes, e.g. principios accionables + checklists}.
+
+## Capas
+- `_sources/` — fuentes brutas e INMUTABLES (PDFs, transcripts, contratos, clips web).
+  Nunca las edites ni las borres. Son depósito humano.
+- Carpetas de unidad (`0-gerencia/` … `4-finanzas/`, `modelo-negocio/`,
+  `identidad-marca/`) — notas atómicas destiladas. Este es TU territorio.
+- `index.md` + `log.md` (raíz y por unidad) — índice y bitácora. Mantenerlos al día es
+  parte de CADA operación; nunca los dejes desactualizados.
+
+## Cómo ingerir (cuando te pidan "procesa lo nuevo en _sources/")
+1. Lee `index.md` raíz PRIMERO. Nunca escanees todos los archivos: navega por índices.
+2. Por cada fuente nueva: destila notas atómicas (UNA idea de negocio por nota) con el
+   frontmatter completo del template `_templates/nota-atomica.md`.
+3. Cita la fuente en `sources:` (documento + fecha + tema). Regla de rigor:
+   {source rigor: "solo fuentes internas" | "externo permitido, marcado como tal"}.
+   Una afirmación sin fuente en `_sources/` se marca `type: supuesto` — jamás como hecho.
+4. Enlaza cada nota a su `_MOC.md` de unidad y a toda nota relacionada de otras unidades
+   (`[[wikilinks]]`). El valor del brain está en el grafo, no en el árbol.
+5. Actualiza `index.md` y `log.md` de la unidad Y de la raíz (qué entró, qué se creó,
+   qué se enlazó, fecha).
+
+## Cómo responder preguntas de negocio
+- Entra por `index.md` raíz → salta solo a las páginas relevantes.
+- Responde citando las fuentes (`_sources/...`) de cada afirmación.
+- Si la respuesta requiere algo que el brain no tiene, dilo explícitamente y propón
+  qué fuente habría que ingerir — no rellenes con tu conocimiento de entrenamiento.
+
+## Barrido semanal (cuando te pidan "haz el barrido")
+1. Vacía `00-inbox/`: cada nota suelta se clasifica, gana frontmatter y se enlaza.
+2. Procesa `_sources/` pendientes (ingesta de arriba).
+3. Revisa `log.md`: resume la semana en una entrada.
+4. Commit con mensaje descriptivo — el historial git es la memoria auditable.
+
+## Qué NUNCA hacer
+- Editar o borrar nada en `_sources/`.
+- Presentar como hecho algo sin fuente (va como `supuesto`).
+- Guardar work items, spikes o backlog aquí — eso vive en Linear
+  (/make-no-mistakes:linear-projects-setup). Aquí solo el conocimiento destilado.
+- Mezclar este brain con el de otro venture: un vault = un negocio.
+```
 
 ### Step 3 — Templates
 
@@ -180,7 +238,7 @@ versioned. The commit history is the venture's auditable decision memory.
 Checklist to print at the end:
 
 - [ ] All canonical folders exist, each with its `_MOC.md`
-- [ ] Root `CLAUDE.md` written from the user's configuration answers
+- [ ] Root `CLAUDE.md` written from the operating-manual template + `AGENTS.md` symlink
 - [ ] `index.md` + `log.md` at root and per unit
 - [ ] Feeding SOP present in `_procedimientos/`
 - [ ] Templates present and frontmatter-complete
