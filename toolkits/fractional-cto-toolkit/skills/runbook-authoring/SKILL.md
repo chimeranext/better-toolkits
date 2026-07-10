@@ -26,8 +26,8 @@ Runbook  = a TECHNICAL/engineering-ops procedure — release, deploy,     (this 
 ```
 
 The dividing line is **domain and context**, not merely "process vs event". An SOP
-("how Ops launches a hackathon") needs no engineering context — its owner is operations.
-A runbook ("cutting a production release", "responding to a prod chain-of-thought leak")
+("how Ops launches an event") needs no engineering context — its owner is operations.
+A runbook ("cutting a production release", "responding to a prod data leak in an incident")
 requires repo/infra knowledge and is written **bus-factor-1**: assume the reader operates
 the system alone with zero tribal context. Both can be repeatable and both can be
 triggered; the runbook is the one a software engineer must understand to execute.
@@ -101,8 +101,7 @@ delete the other.
      highest-value content; they encode a failure the reader would otherwise repeat.
    - **Honest confidence levels** in root cause; say which popular advice is wrong.
    - **A rollback always exists** — if there's a point-of-no-return, name it explicitly.
-   - **Bilingual** (EN + ES) when the operating team is bilingual, like dojocoding's
-     devsecops runbook.
+   - **Bilingual** (EN + ES) when the operating team is bilingual.
 3. Write to `{runbooks-dir}/{slug}/{slug}-runbook.md`.
 
 ### Paso 4 — Paired scripts (incident/recovery shape)
