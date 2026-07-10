@@ -43,7 +43,8 @@ root itself when the user says the whole repo IS the brain — e.g. a repo renam
 
 | Folder | Domain | PARA bias |
 |---|---|---|
-| `00-inbox/` | Capture zone ("Limbo") — everything enters here unclassified | capture |
+| `00-inbox/` | Capture zone ("Limbo") — quick human notes enter here unclassified | capture |
+| `_sources/` | Raw immutable sources (PDFs, transcripts, contracts, raw minutes, web clips). Humans deposit; nobody edits. The agent distills FROM here INTO the unit folders | capture |
 | `0-gerencia/` | Management: strategy, OKRs, board, legal compliance, alliances | areas + projects |
 | `1-operaciones/` | Operations: procedures in motion, logistics, HR/talent | areas |
 | `2-ingenieria-producto/` | Product engineering **knowledge**: architecture decisions, learnings, internal tooling docs. Work items and spikes do NOT live here — they belong in Linear (see `/make-no-mistakes:linear-projects-setup`) | areas |
@@ -74,6 +75,7 @@ para: project | area | resource | archive
 status: activo | validado | descartado | archivado
 date: 2026-07-10
 tags: [hipotesis, cliente]
+sources: ["[[_sources/entrevista-cliente-2026-07-01]]"]   # empty ONLY if type: supuesto
 ---
 ```
 
@@ -81,6 +83,36 @@ Cross-cutting tags: `#riesgo`, `#decision`, `#okr`, `#cliente`, `#hipotesis`. Th
 frontmatter is mandatory from day 1: it is what lets Obsidian Bases (or any tool, or an
 agent) generate the decision log, the risk register, and the hypothesis backlog as
 filtered views without rework.
+
+**Source traceability is mandatory.** Every distilled claim cites its source in
+`_sources/` (document + date + topic), via a `sources:` frontmatter list or an inline
+reference. Default mode is *internal sources only*: when the brain is used for business
+decisions, the agent must not fill gaps from its training data — if a claim has no source
+in `_sources/`, it is flagged as an assumption (`type: supuesto`), never presented as fact.
+
+## Agent-first layer (LLM-wiki pattern)
+
+The brain is designed to be operated BY an AI agent, not merely read by one. Three
+components make that work (Karpathy's LLM-wiki pattern):
+
+1. **`CLAUDE.md` at the vault root** — layer 1 of the brain: the venture's philosophy,
+   how to analyze, ingestion and citation rules, working language. It instructs any agent
+   session opened inside the vault.
+2. **`index.md` + `log.md` at the root and per unit** — the index is what an agent reads
+   FIRST (every page with link + one-line summary; ~70x cheaper than re-scanning files
+   RAG-style); the log is the chronological record of every change and decision, auditable
+   without reading git history. Per-unit copies let an agent operate with scoped context
+   (one unit) without losing the cross-unit graph — one vault per venture, never one per
+   topic.
+3. **Human-agent cycle** — the human captures to `_sources/` (or `00-inbox/`, or via
+   Obsidian Web Clipper); the agent ingests, distills into atomic notes, links them to
+   MOCs, and records the change in `log.md`; the human reviews and gives feedback; the
+   agent corrects. Distillation and linking are delegated to the agent; the human curates.
+
+Progressive ingestion is the operating discipline: pilot with 2-3 sources, then a steady
+weekly batch — never "everything at once". The setup creates a feeding SOP in
+`_procedimientos/` (weekly ingestion + `log.md` review) so this cadence is itself a
+versioned procedure.
 
 ## Flujo del skill
 
@@ -98,9 +130,17 @@ Confirm the detected mode and the output location with the user before writing a
 
 Create every folder from the canonical table, each with a `_MOC.md` (type: `moc`) that
 will serve as its hub: a short purpose line plus empty sections for the notes that will
-link into it. Create the root `README.md` explaining the methodology in one screen
-(CODE flow, atomicity rule, weekly inbox sweep) and the root `_MOC.md` linking the
-per-unit MOCs — the entry point for humans and agents alike.
+link into it. Then the agent-first skeleton:
+
+- Root `CLAUDE.md` (brain layer 1): venture philosophy, analysis style, ingestion +
+  citation rules, working language. Ask the user 3-4 configuration questions before
+  writing it (language, optimization axes — principles/checklists/frameworks/cases —,
+  source rigor: internal-only vs. allow-external-flagged).
+- Root `index.md` (agent-first entry: every page + one-line summary) and `log.md`
+  (chronological change/decision record). One `index.md` + `log.md` per unit folder too.
+- Root `README.md` explaining the methodology in one screen (CODE flow, atomicity rule,
+  human-agent cycle, weekly inbox sweep + ingestion cadence).
+- The feeding SOP in `_procedimientos/` (weekly `_sources/` ingestion + `log.md` review).
 
 ### Step 3 — Templates
 
@@ -140,6 +180,9 @@ versioned. The commit history is the venture's auditable decision memory.
 Checklist to print at the end:
 
 - [ ] All canonical folders exist, each with its `_MOC.md`
+- [ ] Root `CLAUDE.md` written from the user's configuration answers
+- [ ] `index.md` + `log.md` at root and per unit
+- [ ] Feeding SOP present in `_procedimientos/`
 - [ ] Templates present and frontmatter-complete
 - [ ] (migrate) Every source file mapped, linked, and backed up
 - [ ] Root README + root MOC explain the system in one screen
