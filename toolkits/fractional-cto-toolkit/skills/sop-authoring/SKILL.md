@@ -42,18 +42,22 @@ Resolve the pipeline directory `{sops-dir}` first, in this order:
 
 ### Paso 1 — Routing test
 
-Before writing, confirm the thing is actually an Operational SOP. An SOP documents *how a team
-operates a repeatable process*, no code required to understand it. Route away anything that is not:
+Before writing, confirm the thing is actually an Operational SOP. An SOP documents *how the
+**company** operates a repeatable process*, no code required to understand it. Use the canonical
+4-way documentation taxonomy (SOP / PDR / ADR / Product Documentation), plus the runbook case:
 
 | If the draft is really about… | It is a… | Route it to… |
 |---|---|---|
-| The steps an operator follows to run a process | **Operational SOP** | continue here |
-| *What* to build, for whom, and why | Build Decision | product decision record |
-| *How* it is built technically (stack, schema, infra, APIs) | Tech Decision | architecture decision record |
-| How an end user *uses* the finished product | User Guide | product documentation |
+| The steps an operator follows to run a business process (no code) | **SOP** | continue here |
+| *What* to build, for whom, and why | **PDR** (Product Decision Record) | `openspec/changes/{date-slug}/proposal.md` |
+| *How* it is built technically (stack, schema, infra, APIs) | **ADR** (Architecture Decision Record) | `openspec/changes/{date-slug}/design.md` |
+| How an end user *uses* the finished product | **Product Documentation** | product docs |
+| A technical/engineering-ops procedure (release, deploy, incident) needing repo/infra context | **Runbook** | `/runbook-authoring` |
 
-If it fails the routing test, tell the user which type it actually is and stop — do not force a
-non-process into the SOP template.
+Rule of thumb: if a **software engineer must understand it to execute it**, it is not an SOP — it
+is a runbook (or an ADR). A one-off playbook that will not repeat is a runbook or post-mortem, not
+an SOP; promote it to an SOP only once it becomes a recurring pattern. If it fails the routing test,
+tell the user which type it actually is and stop — do not force a non-process into the SOP template.
 
 ### Paso 2 — Depth by maturity
 
