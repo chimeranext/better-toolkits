@@ -46,7 +46,7 @@ root itself when the user says the whole repo IS the brain — e.g. a repo renam
 | `00-inbox/` | Capture zone ("Limbo") — everything enters here unclassified | capture |
 | `0-gerencia/` | Management: strategy, OKRs, board, legal compliance, alliances | areas + projects |
 | `1-operaciones/` | Operations: procedures in motion, logistics, HR/talent | areas |
-| `2-ingenieria-producto/` | Product engineering: features, spikes, internal tooling | projects |
+| `2-ingenieria-producto/` | Product engineering **knowledge**: architecture decisions, learnings, internal tooling docs. Work items and spikes do NOT live here — they belong in Linear (see `/make-no-mistakes:linear-projects-setup`) | areas |
 | `3-experiencia-cliente/` | Customer experience: marketing, journeys, research, satisfaction | areas + resources |
 | `4-finanzas/` | Finance: metrics, financial model, tax management | areas |
 | `modelo-negocio/` | Business Model Canvas modules + corporate purpose | resources → projects |
@@ -151,7 +151,13 @@ linking it to the MOC.**
 
 ## Relationship to other skills
 
-- `/process-standardization` and `/sop-authoring` write their outputs into
-  `_procedimientos/` when a business brain exists — same pipeline, shared home.
+- **`_procedimientos/` is the canonical home of the business's SOPs.** The whole
+  process-engineering pipeline (`/process-standardization` → `/automation-triage` →
+  `/sop-authoring`) resolves its `{sops-dir}` to `<brain-root>/_procedimientos/` whenever a
+  business brain exists; `./fractional-cto/sops/` is only the fallback for engagements
+  without one. The reason the brain exists is that each business's own SOPs live in it.
+- **Spikes and work items live in Linear, not in the brain.** Use
+  `/make-no-mistakes:linear-projects-setup` for backlog/spike infrastructure; the brain
+  only keeps the distilled knowledge that outlives the ticket (the decision, the learning).
 - The business-model-toolkit produces the `./business/` folder this skill migrates;
   run it first for a venture that has no business model yet.

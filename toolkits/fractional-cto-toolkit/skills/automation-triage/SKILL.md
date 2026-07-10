@@ -32,7 +32,14 @@ maintenance — not RPA jargon.
 
 ## Output directory
 
-All files go in `./fractional-cto/sops/{slug}/` — the shared pipeline directory.
+Resolve the pipeline directory `{sops-dir}` first, in this order:
+
+1. If a business brain exists in the working directory (a `business-brain/` folder, or a vault
+   root with `_procedimientos/` — see `/business-brain-setup`), then
+   `{sops-dir}` = `<brain-root>/_procedimientos/`. SOPs that belong to a business LIVE in its
+   business brain; that folder is their canonical home.
+2. Otherwise (no brain yet, e.g. a client engagement without one),
+   `{sops-dir}` = `./fractional-cto/sops/`.
 
 ## Flujo del skill
 
@@ -41,7 +48,7 @@ All files go in `./fractional-cto/sops/{slug}/` — the shared pipeline director
 Two paths, mirroring `/project-takeover`:
 
 **Path A (preferred): capture available.**
-Check for `./fractional-cto/sops/{slug}/{slug}-capture.md` from `/process-standardization`. If it
+Check for `{sops-dir}/{slug}/{slug}-capture.md` from `/process-standardization`. If it
 exists, load the ordered step list and confirm with the user:
 > "I found your captured process for **{slug}** — {N} steps. Triaging each one. Correct?"
 
@@ -106,7 +113,7 @@ stay `Human + AI` even if technically automatable.
 
 ### Paso 5 — Handoff
 
-Write the verdict to `./fractional-cto/sops/{slug}/{slug}-triage.md`: the per-step verdict table, the
+Write the verdict to `{sops-dir}/{slug}/{slug}-triage.md`: the per-step verdict table, the
 executive rationale, the risk callouts, and a recommended automation sequence (what to do first).
 
 **Suggested next step:**

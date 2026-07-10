@@ -29,7 +29,14 @@ skills). Confirm if unclear.
 
 ## Output directory
 
-All files go in `./fractional-cto/sops/{slug}/` — the shared pipeline directory.
+Resolve the pipeline directory `{sops-dir}` first, in this order:
+
+1. If a business brain exists in the working directory (a `business-brain/` folder, or a vault
+   root with `_procedimientos/` — see `/business-brain-setup`), then
+   `{sops-dir}` = `<brain-root>/_procedimientos/`. SOPs that belong to a business LIVE in its
+   business brain; that folder is their canonical home.
+2. Otherwise (no brain yet, e.g. a client engagement without one),
+   `{sops-dir}` = `./fractional-cto/sops/`.
 
 ## Flujo del skill
 
@@ -73,7 +80,7 @@ scales to process maturity.
    - **Callouts** for what the reader must not miss: `> DECISION POINT`, `> SCALE NOTE`,
      `> LESSON LEARNED`.
    - In **Section 6**, structure phases with **Owner / Duration / Gate to next phase**.
-4. Write to `./fractional-cto/sops/{slug}/{slug}-sop.md`.
+4. Write to `{sops-dir}/{slug}/{slug}-sop.md`.
 
 ### Paso 4 — Executable mode (when automatable)
 
@@ -90,7 +97,7 @@ executable SOP:
    - Conditional steps → `[OPTIONAL]`.
 4. State in the doc that the markdown is authoritative (edit steps = change behavior) and that human
    gates are structural. Reference the JSONL run log.
-5. Write to `./fractional-cto/sops/{slug}/{slug}-sop.skill.md`.
+5. Write to `{sops-dir}/{slug}/{slug}-sop.skill.md`.
 
 If every verdict is `Human`, skip this step — a purely human process needs no executable form. Say so.
 
