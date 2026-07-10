@@ -31,7 +31,14 @@ the contract skills). Confirm with the user if unclear.
 
 ## Output directory
 
-All files go in `./fractional-cto/sops/{slug}/` within the current working directory, where `{slug}`
+Resolve the pipeline directory `{sops-dir}` first, in this order:
+
+1. If a business brain exists in the working directory (a `business-brain/` folder, or a vault
+   root with `_procedimientos/` — see `/business-brain-setup`), then
+   `{sops-dir}` = `<brain-root>/_procedimientos/`. SOPs that belong to a business LIVE in its
+   business brain; that folder is their canonical home.
+2. Otherwise (no brain yet, e.g. a client engagement without one),
+   `{sops-dir}` = `./fractional-cto/sops/`.
 is the process name in kebab-case. This directory is the shared data flow for the whole pipeline —
 `/automation-triage` and `/sop-authoring` read from and write to the same place.
 
@@ -61,7 +68,7 @@ first — do not try to boil the ocean.
 > **DECISION POINT:** confirm with the user which process(es) to standardize now. Everything below
 > runs per selected process.
 
-Write the ranked inventory to `./fractional-cto/sops/{slug}/{slug}-inventory.md` (or a shared
+Write the ranked inventory to `{sops-dir}/{slug}/{slug}-inventory.md` (or a shared
 `_inventory.md` when covering several processes at once).
 
 ### Paso 2 — Capture the current state
@@ -85,7 +92,7 @@ useless; "email the vendor 14 days out with headcount" is a step).
 > **LESSON LEARNED:** the best-performer's process is rarely the documented one. Capture what they
 > *actually* do, including the workarounds — that is the real standard.
 
-Write the raw ordered capture to `./fractional-cto/sops/{slug}/{slug}-capture.md`:
+Write the raw ordered capture to `{sops-dir}/{slug}/{slug}-capture.md`:
 a numbered step list, each step tagged with its tool and success criterion, plus a short list of
 open questions / gaps discovered during capture.
 
