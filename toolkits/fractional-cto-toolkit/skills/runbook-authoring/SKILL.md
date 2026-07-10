@@ -16,12 +16,21 @@ description: >
 
 Turns a triggering event — an incident, an alert, a release, a scheduled ops task — into a
 rigorous runbook someone (or an agent) can execute under pressure. Sibling of
-`/sop-authoring`: same executable discipline, different shape.
+`/sop-authoring`: same executable discipline, different domain.
 
 ```
-SOP      = how a team operates a STEADY-STATE repeatable process   (/sop-authoring)
-Runbook  = the procedure to respond to a TRIGGERING EVENT/task      (this skill)
+SOP      = a BUSINESS process anyone non-technical can run; no code    (/sop-authoring)
+Runbook  = a TECHNICAL/engineering-ops procedure — release, deploy,     (this skill)
+           incident response — needing repo/infra context, written
+           bus-factor-1
 ```
+
+The dividing line is **domain and context**, not merely "process vs event". An SOP
+("how Ops launches a hackathon") needs no engineering context — its owner is operations.
+A runbook ("cutting a production release", "responding to a prod chain-of-thought leak")
+requires repo/infra knowledge and is written **bus-factor-1**: assume the reader operates
+the system alone with zero tribal context. Both can be repeatable and both can be
+triggered; the runbook is the one a software engineer must understand to execute.
 
 ## Language rule
 
@@ -41,18 +50,23 @@ Resolve `{runbooks-dir}` first, in this order:
 
 ## Flujo del skill
 
-### Paso 1 — Routing test (SOP vs runbook)
+### Paso 1 — Routing test (the canonical 4-way + runbook)
 
-Confirm the thing is actually a runbook. A runbook has a **trigger**; an SOP does not.
+Confirm the thing is actually a runbook. Use the canonical documentation taxonomy (SOP /
+PDR / ADR / Product Documentation), extended with the runbook case:
 
 | If the draft answers… | It is a… | Route it to… |
 |---|---|---|
-| "when EVENT X fires, do these steps" (incident, alert, release, cron) | **Runbook** | continue here |
-| "how we operate process X in steady state" | **Operational SOP** | `/sop-authoring` |
-| "how to test the security of a system" | **Security playbook** | `/pentest-playbook-setup` |
-| *What* to build / *how* it's built technically | Decision record | ADR / product doc |
+| A technical/engineering-ops procedure needing repo/infra context (release, deploy, incident) | **Runbook** | continue here |
+| How the **company** operates a business process; no code required to understand | **SOP** | `/sop-authoring` |
+| *What* to build, for whom, and why | **PDR** (Product Decision Record) | `openspec/changes/{date-slug}/proposal.md` |
+| *How* it's built technically (stack, schema, infra, APIs) | **ADR** (Architecture Decision Record) | `openspec/changes/{date-slug}/design.md` |
+| How an end user *uses* the finished product | **Product Documentation** | product docs |
+| How to security-test a system | **Security playbook** | `/pentest-playbook-setup` |
 
-If it has no trigger, it is probably an SOP — say so and route to `/sop-authoring`.
+Rule of thumb: if a **software engineer must understand it to execute it**, it is a
+runbook, not an SOP. A one-off playbook that will not repeat is a runbook or a
+post-mortem — never an SOP (promote it to an SOP only once it becomes a pattern).
 
 ### Paso 2 — Pick the runbook shape
 
@@ -67,16 +81,28 @@ delete the other.
 ### Paso 3 — Author the runbook
 
 1. Read the template: `${CLAUDE_PLUGIN_ROOT}/references/08-runbook-template.md`.
-2. Fill the chosen shape. Writing discipline:
-   - **Lead with the reader's summary** (the `⚠` blockquote) — the whole runbook in one
-     breath, actionable by someone on-call who reads nothing else.
-   - **Name owners by role, not person**, so the runbook survives turnover.
+2. Fill the chosen shape. Writing discipline (the DNA of a real runbook):
+   - **Header table + reader's summary** — the whole runbook actionable in one breath by
+     someone on-call who reads nothing else.
+   - **Bus-factor-1 framing, stated explicitly**, plus the maxim *"if a step disagrees
+     with reality, reality wins — fix the page."* A runbook is a living document.
+   - **A "read this first" mental-model section** — the one invariant that, if
+     misunderstood, causes the incident this runbook exists to prevent (the "rule zero":
+     e.g. "merging is not deploying"). Put it before any step.
+   - **Name owners by role, not person**; the goal is to make the procedure a *team*
+     capability, not tribal knowledge in one head.
    - **Verbatim commands with expected output as comments** — never paraphrase a command.
    - **Diagnosis is read-only**; the fix/procedure is where state changes.
    - **Every irreversible or outward-facing step carries a gate** (`[APPROVAL REQUIRED]`
      for deploy-to-prod, publish, delete).
+   - **Verification proves it took effect** — verify the live revision/version in the
+     target environment, not that a command exited 0. "Fixed on staging" ≠ "live in prod".
+   - **Dated real-incident callouts** (`> Real incident (YYYY-MM-DD, vX.Y.Z): …`) — the
+     highest-value content; they encode a failure the reader would otherwise repeat.
    - **Honest confidence levels** in root cause; say which popular advice is wrong.
    - **A rollback always exists** — if there's a point-of-no-return, name it explicitly.
+   - **Bilingual** (EN + ES) when the operating team is bilingual, like dojocoding's
+     devsecops runbook.
 3. Write to `{runbooks-dir}/{slug}/{slug}-runbook.md`.
 
 ### Paso 4 — Paired scripts (incident/recovery shape)

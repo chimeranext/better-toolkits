@@ -1,18 +1,42 @@
 # Runbook — {{TITLE}}
 
-> **Trigger:** {{WHAT_FIRES_THIS}} · **Tier:** {{incident | operational}} · **Owner role:** {{ROLE}}
-> **Applies to:** {{STACK / ENV SCOPE}}
+| Field | Value |
+|---|---|
+| **Process** | {{WHAT_THIS_DOES}} |
+| **Trigger** | {{WHAT_FIRES_THIS}} — an incident, an alert, a release, a scheduled task |
+| **Who can run it** | {{ROLE}} — a *role*, not a person; the point is to make this a team capability |
+| **Stewards** | {{OWNING_ROLES}} |
+| **Command / entrypoint** | {{SLASH_COMMAND_OR_SCRIPT}} (if any) |
+| **Channels** | announce: {{CHANNEL}} · incidents: {{CHANNEL}} |
+| **Applies to** | {{STACK / ENV SCOPE}} |
 
-> ⚠ **Reader's summary** — the whole runbook in one breath: what event fires it, what
-> the procedure does, the one thing that most often goes wrong, and how you know it
-> worked. A reader on-call at 3 AM should be able to act from this paragraph alone.
+> ⚠ **Reader's summary** — the whole runbook in one breath: what fires it, what the
+> procedure does, the one thing that most often goes wrong, and how you know it worked.
+> A reader on-call at 3 AM with none of the tribal context should be able to act from
+> this paragraph alone.
+
+> **Bus-factor-1.** Written assuming the reader operates this alone, with zero tribal
+> context. **If a step here disagrees with lived reality, reality wins — fix the page.**
 
 <!--
-A runbook answers an EVENT ("the release is ready", "oomd is killing apps", "the nightly
-scan failed"). An SOP answers a steady-state PROCESS ("how we onboard a client"). If this
-has no trigger, it is probably an SOP → use /sop-authoring. Two runbook shapes below;
-delete the one you are not using.
+A runbook is the TECHNICAL/engineering-operations counterpart of an SOP: a procedure for
+release / deploy / incident response that needs repo/infra context to execute. An SOP is a
+BUSINESS process anyone non-technical can run ("how we onboard a client") — no code. If the
+draft needs no engineering context and is a steady-state business process → /sop-authoring.
+Two runbook shapes below; delete the one you are not using.
 -->
+
+---
+
+## Read this first — the mental model
+
+<!-- The foundational thing the reader must internalize before any step. In dojocoding's
+release runbook this is the branch model; in the devsecops runbook it is "rule zero:
+merging is not deploying". State the one invariant that, if misunderstood, causes the
+incident this runbook exists to prevent. -->
+
+> **{{RULE_ZERO}}** — the single most-misunderstood invariant of this system, stated up
+> front (e.g. "merging is not deploying: prod only changes on a manual dispatch from main").
 
 ---
 
@@ -73,8 +97,15 @@ Sequential steps; step N executable only after N-1. Each risky/outward step carr
 > Mark automatable steps for the executable form. Human-approval gates are structural —
 > an agent runtime pauses at them.
 
-### Verification & health checks
-How you confirm the run succeeded (smoke checks, dashboards, expected metrics).
+### Verification & health checks — prove it took effect
+How you confirm the run *actually took effect in the target environment*, not just that
+the command exited 0. "Merged" / "fixed on staging" is not "live in prod" — verify the
+live revision/version, not the intent. Smoke checks, dashboards, the exact query that
+proves the new state.
+
+> **Real incident ({{DATE}}, {{VERSION}}).** {{What went wrong, why, and the one-line
+> lesson}}. Real-incident callouts dated with a version are the most valuable part of a
+> runbook — they encode a failure the reader would otherwise repeat.
 
 ### Rollback / abort
 The exact steps to revert this run safely, and the point-of-no-return if any.
