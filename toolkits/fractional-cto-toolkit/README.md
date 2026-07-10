@@ -44,6 +44,12 @@ optionally-executable SOP. One pipeline over one shared artifact (`./fractional-
 | 8 | `sop-authoring` | "write an SOP", "operational procedure", "make this SOP executable" | Structured SOP + executable SOP when automatable |
 | 9 | `business-brain-setup` | "business brain", "cerebro de negocio", "convert our business model folder" | Git/Obsidian knowledge vault (scaffold or BMC migration) |
 
+## Commands
+
+| Command | Purpose | Output |
+|---------|---------|--------|
+| `/pentest-playbook-setup` | Author a stack-tailored security playbook for an authorized engagement (Cyber Kill Chain + OWASP). Gated on written authorization + scope | `PENTEST-PLAYBOOK.md` (+ optional DevSecOps `security-scan.yml`); executed afterwards by `/make-no-mistakes:pentest-runner` |
+
 ## Contract Templates
 
 All contracts include a **Section 0: Shared Risk Model** with compensation variants:
