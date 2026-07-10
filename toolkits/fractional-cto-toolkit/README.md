@@ -29,6 +29,9 @@ optionally-executable SOP. One pipeline over one shared artifact (`./fractional-
   with an executive-legible rationale.
 - **sop-authoring** — write the structured Operational SOP from a template; when a step is
   automatable, also emit a runnable executable SOP (proceda-style) with human-approval gates.
+- **runbook-authoring** — sibling of sop-authoring for the *event-driven* case: an incident/
+  recovery runbook (with paired diagnose/repair scripts) or an operational/release runbook,
+  plus an executable form. An SOP documents a steady-state process; a runbook answers a trigger.
 
 ## Skills
 
@@ -43,6 +46,7 @@ optionally-executable SOP. One pipeline over one shared artifact (`./fractional-
 | 7 | `automation-triage` | "should we automate this", "RPA vs AI", "attended vs unattended" | Per-step verdict (human/RPA/AI/hybrid) + rationale |
 | 8 | `sop-authoring` | "write an SOP", "operational procedure", "make this SOP executable" | Structured SOP + executable SOP when automatable |
 | 9 | `business-brain-setup` | "business brain", "cerebro de negocio", "convert our business model folder" | Git/Obsidian knowledge vault (scaffold or BMC migration) |
+| 10 | `runbook-authoring` | "write a runbook", "incident runbook", "release runbook", "on-call procedure", "runbook de release" | Trigger-driven runbook (incident or operational) + paired diagnose/repair scripts + executable form |
 
 ## Commands
 
