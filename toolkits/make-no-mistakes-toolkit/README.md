@@ -95,6 +95,8 @@ Deliberate actions you invoke explicitly.
 | [`/make-no-mistakes:handover <@person> [#channel] [draft]`](commands/handover.md) | Hand a body of work (PRs, issues, an incident + root cause, a Draft someone must finish) to a specific teammate for review/decision — house Slack style, verify-don't-remember |
 | [`/make-no-mistakes:remind <topic>`](commands/remind.md) | Recall past decisions, instructions, or feedback from memory and project context |
 | [`/make-no-mistakes:takeover-pr <repo> [pr#]`](commands/takeover-pr.md) | Pick a random open PR from a teammate, check it out, review it, and take over the work |
+| [`/make-no-mistakes:ready-to-review-mergeable <ISSUE-123 ...> [--confidence 4.0]`](commands/ready-to-review-mergeable.md) | Drive tracker issues to **bot-approved, mergeable** PRs via `/implement` + a confidence-gated reviewer loop (Stop-hook enforced), or with no issue IDs leave the current branch PR-ready — Diátaxis `status: review`, fix CI, push; **never merge** |
+| [`/make-no-mistakes:hygiene-hooks-setup [audit|install|verify]`](commands/hygiene-hooks-setup.md) | Audit, install, and verify tracker/PR hygiene hooks — detects orphaned hook configs (scripts on disk, empty `hooks` field), enables the opt-in Linear create-hygiene gate (full triage or exit 2), and proves each hook with a synthetic-payload suite |
 | [`/make-no-mistakes:secret-input`](commands/secret-input.md) | Stage a secret/password via OS-native GUI dialog (Linux zenity/kdialog/pinentry, macOS osascript, Windows Get-Credential). The value never appears in the conversation log or terminal history. Cross-platform via `.sh` (Linux/macOS/WSL/Git Bash) + `.ps1` (native Windows) |
 | [`/make-no-mistakes:secret-use ENVVAR -- <cmd>`](commands/secret-use.md) | Run one command with the staged secret loaded as an environment variable. Env var lives only inside the consuming process and is unset on completion |
 | [`/make-no-mistakes:secret-clear`](commands/secret-clear.md) | Wipe the staged secret (shred/rm-P/random-overwrite per OS). Idempotent — safe to call when no secret is staged. Always run when done with credentials |
@@ -337,7 +339,7 @@ make-no-mistakes-toolkit/
 │   ├── cli.ts
 │   ├── index.ts
 │   └── lib/
-├── commands/           # 30 explicit commands
+├── commands/           # 34 explicit commands
 ├── agents/             # 2 specialized subagents
 ├── skills/             # 10 auto-activating skills
 │   └── */SKILL.md
