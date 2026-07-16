@@ -20,6 +20,25 @@ On macOS/Windows the secret persists on disk between staging and `/secret-clear`
 
 ---
 
+## Step 0: Announce Before Prompting — NEVER Fire the Dialog Cold
+
+A GUI dialog appearing with no context is disorienting: the user may not have the
+secret at hand, may not know WHICH secret is being requested, and may need to open
+a separate browser session/console to obtain it first.
+
+**If the agent initiated this skill proactively** (the user did not type
+`/secret-input` themselves this turn), you MUST, before running any script:
+
+1. Announce in Spanish: **which** secret/token you are about to request, **why**
+   it is needed, and — if known from context — **where to obtain it** (exact URL,
+   console path, and which browser profile/session if that matters).
+2. Wait for the user to confirm they have the value copied and are ready.
+3. Only then proceed to Step 1.
+
+**If the user invoked `/secret-input` directly**, they opted in — proceed to
+Step 1 immediately, but still state in one line which secret you expect them to
+paste if the surrounding conversation makes it obvious.
+
 ## Step 1: Detect OS and Run the Right Script
 
 If `bash` is available (Linux, macOS, WSL, Git Bash, MSYS2), use the `.sh`:
