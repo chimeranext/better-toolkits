@@ -33,9 +33,12 @@ command -v jq >/dev/null 2>&1 || exit 0  # fail-open: never block on missing inf
 # --- Per-repo opt-in gate (no-op if the consumer repo has not enabled it) ---
 REPO_ROOT="${CLAUDE_PROJECT_DIR:-$(pwd)}"
 CFG="$REPO_ROOT/.claude/config/hygiene-hooks.json"
-[ -f "$CFG" ] || exit 0
+# Three explicit fail-open steps: (a) config is readable, (b) config is valid
+# JSON, (c) the opt-in flag is set. Any failure no-ops rather than blocking.
+[ -r "$CFG" ] || exit 0                        # (a) readable (also covers absent)
+jq -e . "$CFG" >/dev/null 2>&1 || exit 0       # (b) valid JSON
 ENABLED="$(jq -r '.linear_create_hygiene // false' "$CFG" 2>/dev/null)" || exit 0
-[ "$ENABLED" = "true" ] || exit 0
+[ "$ENABLED" = "true" ] || exit 0              # (c) opt-in flag
 
 TOOL_INPUT="$(printf '%s' "$INPUT" | jq -r '.tool_input // empty' 2>/dev/null)" || exit 0
 [ -n "$TOOL_INPUT" ] || exit 0
