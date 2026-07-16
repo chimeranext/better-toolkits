@@ -18,6 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `/ready-to-review-mergeable` command — leave the current branch PR-ready and mergeable for human review: default Diátaxis front-matter `status: review` when the repo enforces that schema, run CI-equivalent validators, commit autofixes, push, open/update a non-draft PR with optional `Depends on:` chain links. **Never merges.** Complements `/implement` (execution) and `/takeover-pr` (pick up someone else's PR).
+
 ## [1.33.0] - 2026-06-08
 
 ### Added
