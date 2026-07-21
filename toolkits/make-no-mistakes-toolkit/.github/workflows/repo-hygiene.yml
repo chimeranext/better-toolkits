@@ -1,0 +1,66 @@
+name: Repo hygiene (central audit)
+
+on:
+  schedule:
+    # Mondays 15:00 UTC — dry-run audit for Seacrets platform repos
+    - cron: '0 15 * * 1'
+  workflow_dispatch:
+    inputs:
+      subcommand:
+        description: Subcommand to run
+        type: choice
+        options:
+          - audit
+          - policy
+          - prune-remote
+          - all
+        default: audit
+      apply:
+        description: Apply mutations (default dry-run)
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  hygiene:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout toolkit
+        uses: actions/checkout@v4
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Run repo hygiene
+        env:
+          GH_TOKEN: ${{ secrets.REPO_HYGIENE_GH_TOKEN || github.token }}
+          GITHUB_STEP_SUMMARY: ${{ github.workspace }}/repo-hygiene-report.md
+        run: |
+          chmod +x scripts/repo-hygiene.sh
+          SUB="${{ github.event.inputs.subcommand || 'audit' }}"
+          APPLY="${{ github.event.inputs.apply }}"
+          ARGS=(scripts/repo-hygiene.sh "$SUB")
+          if [[ "$APPLY" == "true" ]]; then
+            ARGS+=(--apply)
+          fi
+          echo "Running: ${ARGS[*]}"
+          "${ARGS[@]}"
+
+      - name: Append run metadata
+        if: always()
+        run: |
+          {
+            echo ""
+            echo "---"
+            echo "_Workflow run: [\`${{ github.run_id }}\`](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) · actor \`${{ github.actor }}\` · apply=${{ github.event.inputs.apply || 'false' }}_"
+          } >> repo-hygiene-report.md
+
+      - name: Upload audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: repo-hygiene-${{ github.run_id }}
+          path: repo-hygiene-report.md
+          if-no-files-found: warn

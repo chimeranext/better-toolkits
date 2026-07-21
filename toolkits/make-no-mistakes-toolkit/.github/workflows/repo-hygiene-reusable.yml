@@ -1,0 +1,72 @@
+name: Repo hygiene (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      subcommand:
+        description: audit | policy | prune-remote | prune-local | all
+        type: string
+        default: audit
+      apply:
+        description: Apply mutations (default dry-run)
+        type: boolean
+        default: false
+      local_path:
+        description: Optional path for prune-local (usually empty in Actions)
+        type: string
+        default: ''
+    secrets:
+      gh_token:
+        description: GitHub token with repo contents + delete_ref on this repo
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  hygiene:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout caller repo
+        uses: actions/checkout@v4
+
+      - name: Checkout make-no-mistakes-toolkit scripts
+        uses: actions/checkout@v4
+        with:
+          repository: chimeranext/make-no-mistakes-toolkit
+          path: make-no-mistakes-toolkit
+          sparse-checkout: |
+            scripts/repo-hygiene.sh
+          sparse-checkout-cone-mode: false
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Run repo hygiene (single repo)
+        env:
+          GH_TOKEN: ${{ secrets.gh_token || github.token }}
+          GITHUB_STEP_SUMMARY: ${{ github.workspace }}/repo-hygiene-report.md
+        run: |
+          chmod +x make-no-mistakes-toolkit/scripts/repo-hygiene.sh
+          REPO="${{ github.repository }}"
+          ARGS=(
+            make-no-mistakes-toolkit/scripts/repo-hygiene.sh
+            "${{ inputs.subcommand }}"
+            --repo "$REPO"
+          )
+          if [[ "${{ inputs.apply }}" == "true" ]]; then
+            ARGS+=(--apply)
+          fi
+          if [[ -n "${{ inputs.local_path }}" ]]; then
+            ARGS+=(--local-path "${{ inputs.local_path }}")
+          fi
+          echo "Running: ${ARGS[*]}"
+          "${ARGS[@]}"
+
+      - name: Upload audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: repo-hygiene-${{ github.run_id }}
+          path: repo-hygiene-report.md
+          if-no-files-found: warn

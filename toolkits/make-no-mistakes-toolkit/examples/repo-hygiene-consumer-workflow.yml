@@ -1,0 +1,28 @@
+# Copy to .github/workflows/repo-hygiene.yml in a Seacrets consumer repo.
+# Weekly dry-run audit + manual apply via workflow_dispatch.
+
+name: Repo hygiene
+
+on:
+  schedule:
+    - cron: '0 16 * * 1'  # Mondays 16:00 UTC
+  workflow_dispatch:
+    inputs:
+      subcommand:
+        description: Subcommand
+        type: choice
+        options: [audit, policy, prune-remote, all]
+        default: audit
+      apply:
+        description: Apply mutations
+        type: boolean
+        default: false
+
+jobs:
+  hygiene:
+    uses: chimeranext/make-no-mistakes-toolkit/.github/workflows/repo-hygiene-reusable.yml@main
+    with:
+      subcommand: ${{ inputs.subcommand || 'audit' }}
+      apply: ${{ inputs.apply || false }}
+    secrets:
+      gh_token: ${{ secrets.GITHUB_TOKEN }}

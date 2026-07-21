@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-import { basename } from "node:path";
+import { execFileSync } from "node:child_process";
+import { basename, join } from "node:path";
 import process from "node:process";
 import { doctorPlugin } from "./lib/doctor.js";
 import { installPlugin, InstallConflictError } from "./lib/install.js";
@@ -26,7 +27,9 @@ function formatList(items: string[]): string[] {
 
 function usage(binaryName: string): string {
   return [
-    `${binaryName} <install|update|uninstall|doctor> [options]`,
+    `${binaryName} <install|update|uninstall|doctor|repo-hygiene> [options]`,
+    "",
+    "  repo-hygiene     Pass-through to scripts/repo-hygiene.sh (see --help there)",
     "",
     "Options:",
     "  --config-dir <path>  Override the OpenCode config directory",
@@ -134,6 +137,13 @@ async function main(): Promise<void> {
 
   if (args.version) {
     process.stdout.write(`${metadata.version}\n`);
+    return;
+  }
+
+  const rawArgv = process.argv.slice(2);
+  if (rawArgv[0] === "repo-hygiene") {
+    const scriptPath = join(packageRoot, "scripts/repo-hygiene.sh");
+    execFileSync("bash", [scriptPath, ...rawArgv.slice(1)], { stdio: "inherit" });
     return;
   }
 
