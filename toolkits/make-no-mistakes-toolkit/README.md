@@ -38,6 +38,7 @@ npx @lapc506/make-no-mistakes install
 | `make-no-mistakes update` | Refresh managed assets |
 | `make-no-mistakes uninstall` | Remove managed files only |
 | `make-no-mistakes doctor` | Health check |
+| `make-no-mistakes repo-hygiene audit` | Audit merged-PR branch clutter + `delete_branch_on_merge` (dry-run) |
 | `make-no-mistakes install --dry-run` | Preview changes |
 | `make-no-mistakes install --force` | Overwrite unmanaged conflicts |
 
@@ -73,7 +74,7 @@ After the audit(s), it runs a **premortem** on the aggregated remediation plan, 
 
 ## What's Inside
 
-### Commands (30)
+### Commands (33)
 
 Deliberate actions you invoke explicitly.
 
@@ -86,6 +87,8 @@ Deliberate actions you invoke explicitly.
 | [`/make-no-mistakes:e2e-test-builder <source>`](commands/e2e-test-builder.md) | Generate a TestSprite-compatible `test-suite.json` from docs or PRDs |
 | [`/make-no-mistakes:e2e-test-runner [filter]`](commands/e2e-test-runner.md) | Execute E2E tests from `test-suite.json` with runner selection and reporting |
 | [`/make-no-mistakes:pentest-runner <phase>`](commands/pentest-runner.md) | Automated pentesting following Cyber Kill Chain + OWASP methodology |
+| [`/make-no-mistakes:pentest-playbook-setup [audit\|sync\|workflows\|gaps]`](commands/pentest-playbook-setup.md) | Audit/sync pentest playbook ↔ CI ↔ tenant triage config (setup step; pairs with pentest-runner + triage-security-findings) |
+| [`/make-no-mistakes:triage-security-findings <scanner\|phase2\|pentest-report>`](commands/triage-security-findings.md) | Triage CI + pentest findings into owned backlog issues (tenant config e.g. `linear-setup.json` → `securityFindingTriage`) |
 | [`/make-no-mistakes:goodmorning`](commands/goodmorning.md) | Bootstrap your session from previous day's handoff files |
 | [`/make-no-mistakes:goodnight [label]`](commands/goodnight.md) | Save full session context as a handoff file for tomorrow |
 | [`/make-no-mistakes:pending-left`](commands/pending-left.md) | Track what's left unfinished across git, Linear, and session context |
@@ -97,6 +100,7 @@ Deliberate actions you invoke explicitly.
 | [`/make-no-mistakes:takeover-pr <repo> [pr#]`](commands/takeover-pr.md) | Pick a random open PR from a teammate, check it out, review it, and take over the work |
 | [`/make-no-mistakes:ready-to-review-mergeable <ISSUE-123 ...> [--confidence 4.0]`](commands/ready-to-review-mergeable.md) | Drive tracker issues to **bot-approved, mergeable** PRs via `/implement` + a confidence-gated reviewer loop (Stop-hook enforced), or with no issue IDs leave the current branch PR-ready — Diátaxis `status: review`, fix CI, push; **never merge** |
 | [`/make-no-mistakes:hygiene-hooks-setup [audit|install|verify]`](commands/hygiene-hooks-setup.md) | Audit, install, and verify tracker/PR hygiene hooks — detects orphaned hook configs (scripts on disk, empty `hooks` field), enables the opt-in Linear create-hygiene gate (full triage or exit 2), and proves each hook with a synthetic-payload suite |
+| [`/make-no-mistakes:repo-hygiene [audit|policy|prune-remote|all]`](commands/repo-hygiene.md) | Audit/prune merged-PR branches, enable `delete_branch_on_merge`, optional local prune — CLI + scheduled GitHub Action with auditable logs |
 | [`/make-no-mistakes:secret-input`](commands/secret-input.md) | Stage a secret/password via OS-native GUI dialog (Linux zenity/kdialog/pinentry, macOS osascript, Windows Get-Credential). The value never appears in the conversation log or terminal history. Cross-platform via `.sh` (Linux/macOS/WSL/Git Bash) + `.ps1` (native Windows) |
 | [`/make-no-mistakes:secret-use ENVVAR -- <cmd>`](commands/secret-use.md) | Run one command with the staged secret loaded as an environment variable. Env var lives only inside the consuming process and is unset on completion |
 | [`/make-no-mistakes:secret-clear`](commands/secret-clear.md) | Wipe the staged secret (shred/rm-P/random-overwrite per OS). Idempotent — safe to call when no secret is staged. Always run when done with credentials |
@@ -113,7 +117,7 @@ Deliberate actions you invoke explicitly.
 | [`/make-no-mistakes:e2e-test-preview [path]`](commands/e2e-test-preview.md) | Launch a Qt-based visual previewer for `test-suite.json` — interactive table with filtering, detail pane, and CSV export (auto-installs PySide6) |
 | [`/make-no-mistakes:gemini-code-review [target]`](commands/gemini-code-review.md) | Cheap first-pass code review (one-shot via liteLLM) on a parametrizable model — Gemini 3.5 Flash by default; supports `--model` and `--adversarial`, curated against the repo's CLAUDE.md |
 
-### Skills (10)
+### Skills (11)
 
 Auto-activate by context — you don't need to remember the command name.
 
@@ -125,6 +129,7 @@ Auto-activate by context — you don't need to remember the command name.
 | [`review-open-prs`](skills/review-open-prs/SKILL.md) | Ask about open PRs, merge readiness, or Greptile scores |
 | [`review-active-issues`](skills/review-active-issues/SKILL.md) | Ask about your Linear issues, backlog, or issue status |
 | [`rebase-advisor`](skills/rebase-advisor/SKILL.md) | Mention needing to sync branches after a release (suggests `/make-no-mistakes:rebase`) |
+| [`repo-hygiene-advisor`](skills/repo-hygiene-advisor/SKILL.md) | Ask to clean merged branches, branch clutter, or `delete_branch_on_merge` (suggests `/make-no-mistakes:repo-hygiene`) |
 | [`audit-engine`](skills/audit-engine/SKILL.md) | Run any of the six repo-health audits (schema-drift, contract-drift, ddd, explicit-architecture, strangler, enforcement-hooks). Hybrid LLM-first detection + deterministic verification + cure-mapping |
 | [`domain-driven-advisor`](skills/domain-driven-advisor/SKILL.md) | Ask "which audit do I need?" / "where do I start with repo health?" — routes you to the right audit(s) and runs a premortem |
 | [`premortem`](skills/premortem/SKILL.md) | Say "premortem this", "what could kill this", "stress test this plan", "what am I missing", or "find the blind spots" on a plan/launch/decision |
