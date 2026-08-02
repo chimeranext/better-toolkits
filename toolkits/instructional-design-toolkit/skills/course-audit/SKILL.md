@@ -116,6 +116,53 @@ Si existe `tag-taxonomy.md` en el repo (proyecto del usuario, no del plugin):
 
 Si no existe tag-taxonomy.md: skip este check (PASS).
 
+### Paso 2.5 — Aplicar overlays al audit (Base + Overlay protocol)
+
+Antes de componer el report, leer
+`${CLAUDE_PLUGIN_ROOT}/assets/runtime/overlay-protocol.md` y ejecutar el
+procedimiento (Discovery §2 + Invocation §3 + Layer 1 validator §5,
+**específicamente §5.4** porque el `baseDraft` es findings-shaped, NO el
+`course.json`) sobre el conjunto de findings producido en el Paso 2:
+
+- `command` = `"course-audit"`
+- `cwd` = directorio de trabajo desde donde se invocó `/idt:course-audit`
+- `baseDraft` = objeto con forma `{ findings: [...], summary: {...} }` que
+  resume los 8 checks de framework. Cada `finding` tiene al menos los campos
+  `check`, `severity` (`pass`/`warn`/`fail`), `description`, y opcionalmente
+  `recommended_change` (texto libre o JSON Pointer-shaped) que el overlay
+  puede usar para proponer fixes. Un overlay puede AGREGAR findings — p.ej.
+  un overlay `content-standards` desde `chimera-academy` puede inyectar findings
+  Chimera-específicos como "Módulo 2 carece de text-classes load-bearing,
+  contradice la regla 'text classes carry the course'".
+- `context.cwd` y `context.repo` per la convención general.
+- `context.locale` derivado de `course.meta.language` cuando esté presente.
+- `context._sourceArtifact` = el `course.json` cargado en el Paso 1
+  (side-channel del runtime, no parte del contrato público de
+  `OverlayInput.context` — ver overlay-protocol.md §5.4).
+
+Reglas (§5.4):
+
+- El validator Layer 1 toma el snapshot contra `context._sourceArtifact`
+  (el `course.json`), NO contra `baseDraft`. El snapshot queda fijo durante
+  todo el run — los overlays agregan findings, no tocan el source.
+- Después de cada overlay, además del snapshot-compare estándar, el runtime
+  escanea cada `finding` nuevo y mira sus campos `recommended_change` /
+  `proposed_diff` / equivalentes. Si el texto del finding referencia
+  cualquier path Layer 1 de §4 con intención de mutar (p.ej.
+  `set meta.id = ...`, `replace modules[0].au_id`, `delete capstone.id`):
+  ABORT con error apuntando al `SKILL.md` del overlay AND al índice del
+  finding ofensor en el array `findings[]`.
+- Findings que proponen cambios sobre campos mutables (titles, slugs,
+  description text, `analysis.identified_risks`, copy de lessons): OK — solo
+  los path L1 disparan el abort.
+- Los findings de overlays se mezclan con los findings base en el report
+  (Paso 3) bajo una sub-sección "Overlay findings" por overlay aplicado, con
+  el `SKILL.md` path del overlay como header.
+- Si discovery devuelve cero overlays: el report contiene solo los 8 checks
+  base (auditoría voice-neutral cmi5/xAPI). Ningún warning.
+- Warnings de overlays se acumulan y se incluyen en la presentación final
+  (Paso 4) junto al "N fixes prioritarios identificados".
+
 ### Paso 3 — Compose audit report
 
 Generar `docs/instructional-design/courses/{slug}/audits/audit-{YYYY-MM-DD}.md` con
@@ -167,3 +214,5 @@ confirmación explícita por fix. NO bulk-apply.
 - `${CLAUDE_PLUGIN_ROOT}/assets/skill-references/ship-first-design.md`
 - `${CLAUDE_PLUGIN_ROOT}/agents/cmi5-metadata-writer.md`
 - `${CLAUDE_PLUGIN_ROOT}/assets/schemas/course.schema.json`
+- `${CLAUDE_PLUGIN_ROOT}/assets/schemas/overlay-protocol.schema.json` — contrato `OverlayInput`/`OverlayOutput` para el Paso 2.5
+- `${CLAUDE_PLUGIN_ROOT}/assets/runtime/overlay-protocol.md` — discovery + invocation + Layer 1 invariant validator

@@ -326,15 +326,48 @@ posponer si aplica).
 2. Despachar `cmi5-metadata-writer` agent para validar IDs + completar defaults.
    Si aborta: revisar el error, corregir, re-correr. NO escribir hasta que pase.
 
-3. Crear directorio `docs/instructional-design/courses/{slug}/`.
+   El objeto resultante de este paso es el **base draft (Layer 1 + Layer 2)**
+   — cmi5/xAPI-compliant, voice-neutral. Antes de escribirlo, pasar por el
+   paso 3 (overlays) para que un consumer plugin como `chimera-academy` pueda
+   layerar voz / fórmula / rubric editorial.
 
-4. Escribir `course.json`.
+3. **Aplicar overlays (Base + Overlay protocol).** Antes de tocar disco, leer
+   `${CLAUDE_PLUGIN_ROOT}/assets/runtime/overlay-protocol.md` y ejecutar el
+   procedimiento completo (Discovery §2 + Invocation §3 + Layer 1 validator
+   §5) sobre el base draft producido en el paso 2:
 
-5. Generar `course.md` aplicando el template
+   - `command` = `"new-course"`
+   - `cwd` = directorio de trabajo donde se invocó `/idt:new-course`
+   - `baseDraft` = objeto `course.json` post-`cmi5-metadata-writer`
+   - `context.locale` = `course.meta.language` (`es` | `en`)
+
+   Comportamiento esperado:
+
+   - Si no hay `<cwd>/.claude-plugin/plugin.json`: discovery devuelve cero
+     overlays, se escribe el base draft directamente (cmi5-compliant,
+     voice-neutral). Ningún warning.
+   - Si hay overlays: se aplican en orden por `overlay_priority` ascendente
+     (estructural=50 → genérico=75 → voz=100), tie-break alfabético por path
+     (case-insensitive, forward-slash-normalized).
+   - Layer 1 invariants (`au_id`, `meta.id`, IDs estables, semver, Open
+     Badges) se revalidan después de cada overlay contra el schema
+     `${CLAUDE_PLUGIN_ROOT}/assets/schemas/overlay-protocol.schema.json`. Si
+     un overlay los muta: ABORT con error que apunta al `SKILL.md` ofensor.
+     NO se escribe nada en disco.
+   - Warnings de overlays se acumulan y se presentan al usuario en el resumen
+     final (paso 8).
+
+   El draft que sale de este paso es el draft final que se valida y escribe.
+
+4. Crear directorio `docs/instructional-design/courses/{slug}/`.
+
+5. Escribir `course.json` (el draft final post-overlays).
+
+6. Generar `course.md` aplicando el template
    `${CLAUDE_PLUGIN_ROOT}/assets/templates/course-overview.md.tmpl`. Sustituir todos
    los markers `{{course.field.path}}` con los valores reales.
 
-6. Validar `course.json` con `ajv` si está disponible:
+7. Validar `course.json` con `ajv` si está disponible:
 
    ```bash
    ajv validate -s ${CLAUDE_PLUGIN_ROOT}/assets/schemas/course.schema.json -d docs/instructional-design/courses/{slug}/course.json --spec=draft2020 -c ajv-formats
@@ -342,7 +375,8 @@ posponer si aplica).
 
    Si falla: report al usuario, NO marcar como done.
 
-7. Presentar resumen:
+8. Presentar resumen (incluyendo cualquier warning surgido de overlays en el
+   paso 3):
 
    > "Curso generado en `docs/instructional-design/courses/{slug}/`:
    >
@@ -354,6 +388,7 @@ posponer si aplica).
    > ✅ JSON válido contra schema cmi5
    > ✅ IDs estables asignados
    > ✅ Defaults cmi5 aplicados (masteryScore, moveOn, launchMethod)
+   > {Si overlays aplicados: bullet list de los SKILL.md path que corrieron + sus warnings}
    >
    > Próximos pasos sugeridos:
    > - `/course-audit {slug}` — validar contra framework completo
@@ -383,6 +418,10 @@ posponer si aplica).
 ### Esquemas
 - `${CLAUDE_PLUGIN_ROOT}/assets/schemas/course.schema.json`
 - `${CLAUDE_PLUGIN_ROOT}/assets/schemas/profiles/course.profile.json`
+- `${CLAUDE_PLUGIN_ROOT}/assets/schemas/overlay-protocol.schema.json` — contrato `OverlayInput`/`OverlayOutput` para el Paso 3 (Base + Overlay)
+
+### Runtime
+- `${CLAUDE_PLUGIN_ROOT}/assets/runtime/overlay-protocol.md` — discovery + invocation + Layer 1 invariant validator
 
 ### Templates
 - `${CLAUDE_PLUGIN_ROOT}/assets/templates/course-overview.md.tmpl`

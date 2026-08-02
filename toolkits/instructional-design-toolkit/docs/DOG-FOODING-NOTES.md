@@ -7,17 +7,17 @@
 
 | Task | Linear | Status | Files | PR |
 |---|---|---|---|---|
-| T01 — Plugin skeleton + manifests | legacy-ticket | ✅ Done | 6 | merged inline (no PR) |
-| T02 — JSON schemas + examples | legacy-ticket | ✅ Done | 10 | #1 |
-| T03 — Reference docs + skill-references | legacy-ticket | ✅ Done | 10 | #2 |
-| T04 — Adapter interfaces + CSV + v2 stubs | legacy-ticket | ✅ Done | 11 | #3 |
-| T05 — 7 specialized agents | legacy-ticket | ✅ Done | 7 | #4 |
-| T06 — /new-course + skill + template | legacy-ticket | ✅ Done | 3 | #5 |
-| T07 — 1-on-1 session plans (4 cmds + 4 skills + 3 templates) | legacy-ticket | ✅ Done | 11 | #6 |
-| T08 — Audit commands + skills | legacy-ticket | ✅ Done | 4 | #7 |
-| T09 — Visualize + slides + 6 templates | legacy-ticket | ✅ Done | 10 | #8 |
-| T10 — Iteration commands (revise + retro + diff) | legacy-ticket | ✅ Done | 6 | #9 |
-| T11 — README final + dog-fooding notes | legacy-ticket | ✅ Done | 2 | #10 |
+| T01 — Plugin skeleton + manifests | DOJ-3271 | ✅ Done | 6 | merged inline (no PR) |
+| T02 — JSON schemas + examples | DOJ-3272 | ✅ Done | 10 | #1 |
+| T03 — Reference docs + skill-references | DOJ-3273 | ✅ Done | 10 | #2 |
+| T04 — Adapter interfaces + CSV + v2 stubs | DOJ-3274 | ✅ Done | 11 | #3 |
+| T05 — 7 specialized agents | DOJ-3275 | ✅ Done | 7 | #4 |
+| T06 — /new-course + skill + template | DOJ-3276 | ✅ Done | 3 | #5 |
+| T07 — 1-on-1 session plans (4 cmds + 4 skills + 3 templates) | DOJ-3277 | ✅ Done | 11 | #6 |
+| T08 — Audit commands + skills | DOJ-3278 | ✅ Done | 4 | #7 |
+| T09 — Visualize + slides + 6 templates | DOJ-3279 | ✅ Done | 10 | #8 |
+| T10 — Iteration commands (revise + retro + diff) | DOJ-3280 | ✅ Done | 6 | #9 |
+| T11 — README final + dog-fooding notes | DOJ-3281 | ✅ Done | 2 | #10 |
 
 **Total**: 80 archivos creados, ~5800 líneas de código/docs across 10 PRs.
 
@@ -125,6 +125,6 @@ con el toolkit. Documentar resultados en una sección extendida acá.
 
 - **Daniel Bejarano** — repo health setup (Greptile config pending).
 - **Equipo Chimera Pathways** — context y direction sobre LRS target (Ralph
-  self-hosted vía spike legacy-ticket).
+  self-hosted vía spike DOJ-2573).
 - **Equipo Freedom Academy / DemoLab** — caso de referencia para SCORM 2004 →
   cmi5 migration path.

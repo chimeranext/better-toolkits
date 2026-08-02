@@ -1,0 +1,62 @@
+# Vendored-toolkit invariants.
+#
+# `toolkits/instructional-design-toolkit/` is vendored from its canonical
+# upstream, which names its own organisation and its example consumer plugin
+# throughout its documentation. This repo must not carry those names.
+#
+# The check is the SAME program that applies the rebrand
+# (`scripts/vendor-sync/idt-debrand.py`), run with `--check`. That is the point:
+# a separate checker would be a second implementation of the mapping, and two
+# implementations of one mapping drift. A file the transform would still
+# rewrite is exactly a file that still carries the upstream brand.
+#
+# Fails the PR rather than warning, because the failure mode it guards is a
+# silent one -- an upstream sync that lands unrebranded reviews clean, since
+# the diff looks like the upstream content it is supposed to be.
+
+name: vendor invariants
+
+on:
+  pull_request:
+    paths:
+      - "toolkits/instructional-design-toolkit/**"
+      - "scripts/vendor-sync/**"
+      - ".github/workflows/vendor-invariants.yml"
+  push:
+    branches: [main]
+    paths:
+      - "toolkits/instructional-design-toolkit/**"
+      - "scripts/vendor-sync/**"
+
+permissions:
+  contents: read
+
+jobs:
+  debrand:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Vendored IDT carries no upstream brand
+        run: python3 scripts/vendor-sync/idt-debrand.py --check
+
+  toolkit-lint:
+    # The upstream ships its own three checks. Running them here catches a sync
+    # that copied a broken tree, and catches a rebrand that broke YAML
+    # frontmatter or JSON syntax on its way through.
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: toolkits/instructional-design-toolkit
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --quiet pyyaml==6.0.2
+      - run: python3 scripts/ci/check_json_schemas.py
+      - run: python3 scripts/ci/check_frontmatter.py
+      - run: python3 scripts/ci/check_agent_references.py
