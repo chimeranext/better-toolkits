@@ -1,7 +1,7 @@
 # Ralph LRS Adapter (v2 stub)
 
 > **STATUS: NOT IMPLEMENTED IN V1.** Documentado para forward compatibility.
-> Implementación cuando se complete el spike [legacy-ticket](https://linear.app/chimera-coding/issue/legacy-ticket).
+> Implementación cuando se complete el spike [DOJ-2573](https://linear.app/chimera-coding/issue/DOJ-2573).
 
 ## Source
 
@@ -90,4 +90,4 @@ Credentials van en env vars o secrets, NUNCA hard-coded.
 
 - Ralph LRS: <https://ralph.io>
 - xAPI spec: <https://github.com/adlnet/xAPI-Spec>
-- Spike interno: [legacy-ticket](https://linear.app/chimera-coding/issue/legacy-ticket) — Custom LRS xAPI nativo en Supabase + Importador SCORM
+- Spike interno: [DOJ-2573](https://linear.app/chimera-coding/issue/DOJ-2573) — Custom LRS xAPI nativo en Supabase + Importador SCORM
