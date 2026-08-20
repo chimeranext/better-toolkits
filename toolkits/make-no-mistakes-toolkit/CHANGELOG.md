@@ -18,6 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Port from upstream make-no-mistakes **PR #52** (SSOT-aware): ENF efficacy verifier `findHookEfficacyGaps` (`src/audit/verifiers/enforcement-hooks-efficacy.ts`) + tests; detector + thin `/audit-enforcement-hooks` document coverage vs bind.
+
+### Fixed
+- Port from upstream make-no-mistakes **PR #66**: `block-git-force-push-no-lease` anchors `-f` as a standalone argument (leading whitespace) so hex-class greps after a plain `git push` are not false positives.
+
 ### Skipped
 - Upstream DojoCodingLabs/make-no-mistakes-toolkit **PR #58** (teaching-surface discard-stderr sweep + `check-discard-stderr.mjs`): **not ported**. Better-toolkits already ships the multi-harness runtime SSOT in `shared/hooks/stderr/` (Lote 1). PR #58 targets the same defect class at doc-lint time and is tightly coupled to Dojo's `rules.yaml`→`rules.json`/`prepublishOnly` gate; a straight port would duplicate the runtime baseline without matching our SSOT layout. Remaining silenced-stderr examples in `references/` are deferred to a separate SSOT-aware sweep.
 
