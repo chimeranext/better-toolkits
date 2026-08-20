@@ -156,7 +156,7 @@
     {
       "name": "instructional-design-toolkit",
       "description": "Guided instructional design toolkit — design cmi5-compliant courses and 1-on-1 session plans using CONTEXT→CONCEPT→BUILD→SHIP→REFLECT formula, Builder's Bloom's progression, Ship-First Design, and Kirkpatrick L1-L4 evaluation. Produces JSON + Markdown + HTML visualization + Marp slide decks.",
-      "version": "1.0.0",
+      "version": "1.2.0",
       "source": "./toolkits/instructional-design-toolkit",
       "category": "productivity",
       "keywords": [

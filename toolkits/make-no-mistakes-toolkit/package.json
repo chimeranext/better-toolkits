@@ -26,6 +26,8 @@
     "hooks/",
     "schemas/",
     "references/",
+    "templates/",
+    "docs/",
     "slack-config.example.json",
     "README.md",
     "LICENSE"

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { track } from "@/lib/track";
@@ -264,6 +265,12 @@ export default function Page() {
           better<span className="text-brand-primary">-</span>toolkits
         </a>
         <nav className="flex items-center gap-2 sm:gap-3">
+          <Link
+            href="/doctrine/"
+            className="hidden rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground sm:inline"
+          >
+            {t.nav.doctrine}
+          </Link>
           <button
             type="button"
             onClick={toggleLang}
@@ -493,6 +500,11 @@ export default function Page() {
         <div className="mt-14">
           <h3 className="text-center font-heading font-bold text-[clamp(1.4rem,1rem+1.2vw,2.25rem)]">{t.s9.methodTitle}</h3>
           <p className="mx-auto mt-4 max-w-[70ch] text-center text-[clamp(1rem,0.9rem+0.4vw,1.25rem)] font-medium text-card-foreground">{t.s9.methodTagline}</p>
+          <p className="mt-4 text-center">
+            <Link href="/doctrine/" className="text-sm font-semibold text-primary hover:underline">
+              {t.nav.doctrine} →
+            </Link>
+          </p>
           {/* Bento: spans tile the 6-col grid exactly — the 10-framework card anchors 2 rows. */}
           <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-6">
             {METHOD_GROUPS.map((g, gi) => {
@@ -564,6 +576,7 @@ export default function Page() {
         <div className={cn(CONTAINER, "flex flex-col items-center gap-4 text-center text-sm text-muted-foreground sm:flex-row sm:justify-between sm:text-left")}>
           <div className="font-heading font-extrabold text-foreground">better<span className="text-brand-primary">-</span>toolkits</div>
           <nav className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+            <Link href="/doctrine/" className="hover:text-foreground">{t.nav.doctrine}</Link>
             <a href={LINKS.github} target="_blank" rel="noreferrer" className="hover:text-foreground">GitHub</a>
             <a href={LINKS.betterMicroservices} target="_blank" rel="noreferrer" className="hover:text-foreground">better-microservices</a>
             <a href={LINKS.support} className="hover:text-foreground">support@chimeranext.dev</a>

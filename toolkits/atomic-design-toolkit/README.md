@@ -26,6 +26,8 @@ npx @lapc506/atomic-design-toolkit doctor       # Health check
 npx @lapc506/atomic-design-toolkit uninstall    # Remove all managed files
 ```
 
+Also register the local stderr adapter so shell redirects are blocked even when this package is the only toolkit installed: `hooks/stderr/adapters/opencode-plugin.ts` — see [`docs/opencode-stderr.md`](../../docs/opencode-stderr.md).
+
 ## Quickstart
 
 The toolkit auto-detects your stack (Flutter vs Vite) and picks framework-appropriate conventions. Pick the guide that matches your project.

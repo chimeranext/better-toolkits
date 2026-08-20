@@ -16,7 +16,7 @@ con un modelo más flexible basado en xAPI statements.
 - Portable entre LMSs.
 - Tracking rico de interactions custom.
 
-**Target LRSs de este toolkit**: Ralph (self-hosted, target principal para chimera
+**Target LRSs de este toolkit**: Ralph (self-hosted, target principal para Chimera
 Pathways), SCORM Cloud (SaaS sandbox para testing), Learning Locker (UK, self-hosted).
 
 ---

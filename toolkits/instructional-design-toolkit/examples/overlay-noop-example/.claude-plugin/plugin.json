@@ -1,0 +1,17 @@
+{
+  "name": "overlay-noop-example",
+  "version": "1.0.0",
+  "description": "Self-contained no-op overlay fixture for the IDT Base + Overlay protocol (DOJ-3707). Demonstrates the discovery contract: a plugin.json declared at <cwd>/.claude-plugin/plugin.json plus a skills/<name>/SKILL.md whose frontmatter declares overlay_target. Used as the external-consumer fixture in Phase 4 validation tests. Does NOT mutate the base draft — returns it unchanged with a single demonstration warning.",
+  "author": {
+    "name": "instructional-design-toolkit",
+    "url": "https://github.com/chimeranext/instructional-design-toolkit"
+  },
+  "license": "BSL-1.1",
+  "keywords": [
+    "instructional-design-toolkit",
+    "overlay",
+    "fixture",
+    "noop",
+    "test"
+  ]
+}

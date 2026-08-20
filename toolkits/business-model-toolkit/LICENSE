@@ -17,27 +17,51 @@ Parameters
 ## Licensor
 
 Luis Andres Pena Castillo
-(hereinafter, "Andres Pena")
+(hereinafter, "Andres Pena"), including affiliated entities doing business as ChimeraNext.
 
 ## Licensed Work
 
-"business-model-toolkit" Version 2.0.0 or later.
-The Licensed Work is (c) 2026 Andres Pena
+"business-model-toolkit" Version 1.0.0 or later.
+The Licensed Work is (c) 2026 Luis Andres Pena Castillo / ChimeraNext
 
 ### Additional Use Grant
 
-You may make production use of the Licensed Work, provided Your use does not include offering the Licensed Work to third parties on a hosted or embedded basis in order to compete with Andres Pena's paid version(s) of the Licensed Work. For purposes of this license:
+You may make production use of the Licensed Work **within your own organization** for
+internal development, architectural auditing, testing optimization, and startup
+validation, provided Your use does **not** include offering the Licensed Work (or a
+substantially similar derivative) to third parties as a competing product — including
+on a hosted or embedded basis, as a marketplace of agent/plugin toolkits, as a paid
+support arrangement that redistributes the Licensed Work, or by rebranding/repackaging
+the Licensed Work as Your own commercial offering.
 
--- A "competitive offering" is a Product that is offered to third parties on a paid basis, including through paid support arrangements, that significantly overlaps with the capabilities of Andres Pena's paid version(s) of the Licensed Work. If Your Product is not a competitive offering when You first make it generally available, it will not become a competitive offering later due to Andres Pena releasing a new version of the Licensed Work with additional capabilities. In addition, Products that are not provided on a paid basis are not competitive.
+For purposes of this license:
 
--- "Product" means software that is offered to end users to manage in their own environments or offered as a service on a hosted basis.
+-- A "competitive offering" is a Product that is offered to third parties on a paid
+basis, including through paid support arrangements, that significantly overlaps with
+the capabilities of Andres Pena's / ChimeraNext's paid version(s) of the Licensed Work
+or of the better-toolkits ecosystem. If Your Product is not a competitive offering when
+You first make it generally available, it will not become a competitive offering later
+due to Andres Pena releasing a new version of the Licensed Work with additional
+capabilities. In addition, Products that are not provided on a paid basis are not
+competitive solely by virtue of being free.
 
--- "Embedded" means including the source code or executable code from the Licensed Work in a competitive offering. "Embedded" also means packaging the competitive offering in such a way that the Licensed Work must be accessed or downloaded for the competitive offering to operate.
+-- "Product" means software that is offered to end users to manage in their own
+environments or offered as a service on a hosted basis.
 
-Hosting or using the Licensed Work(s) for internal purposes within an organization is not considered a competitive offering.
-Andres Pena considers your organization to include all of your affiliates under common control.
+-- "Embedded" means including the source code or executable code from the Licensed
+Work in a competitive offering. "Embedded" also means packaging the competitive
+offering in such a way that the Licensed Work must be accessed or downloaded for the
+competitive offering to operate.
 
-For binding interpretive guidance on using Andres Pena products under the Business Source License, please refer to the official documentation or contact us directly.
+Hosting or using the Licensed Work(s) for internal purposes within an organization
+(including freelancers using the Licensed Work while delivering client work product
+that remains the client's) is not considered a competitive offering.
+Andres Pena considers your organization to include all of your affiliates under
+common control.
+
+For binding interpretive guidance on using Andres Pena / ChimeraNext products under
+the Business Source License, open an issue on
+https://github.com/chimeranext/better-toolkits or contact us directly.
 
 ## Change Date
 
@@ -48,7 +72,7 @@ FIVE years from the date the Licensed Work is published.
 [Non-Profit Open Software License ("Non-Profit OSL") 3.0](https://trustee.ietf.org/assets/licenses/non-profit-osl-3/)
 
 For information about alternative licensing arrangements for the Licensed Work,
-please create an issue on this same repository.
+please create an issue on https://github.com/chimeranext/better-toolkits.
 
 ## Notice
 

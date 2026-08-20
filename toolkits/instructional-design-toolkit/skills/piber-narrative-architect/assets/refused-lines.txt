@@ -1,0 +1,98 @@
+# Refused lines and lexicon for the PIBER gate.
+# One entry per line. Lines starting with # are comments.
+# Entries are matched case-insensitively as substrings, on text with
+# quoted spans and inline code masked out, so a document may still
+# discuss these constructions when it quotes them.
+#
+# Sections: [insight-openers], [cliche-en], [cliche-es], [vanity], [hedge]
+
+[insight-openers]
+in today's fast-paced
+in today's world
+in a world where
+in an increasingly
+consumers are increasingly
+customers are increasingly
+people are increasingly
+at the end of the day
+everyone knows that
+now more than ever
+it's not just about
+more than ever before
+en el mundo actual
+en un mundo donde
+en la era de
+cada vez mas los consumidores
+cada vez mas las personas
+hoy en dia mas que nunca
+al final del dia
+todos sabemos que
+ahora mas que nunca
+
+[cliche-en]
+game changer
+game-changing
+paradigm shift
+disrupt the industry
+revolutionize the way
+seamless experience
+cutting edge
+best in class
+next generation
+unlock the power
+harness the power
+take it to the next level
+move the needle
+low hanging fruit
+think outside the box
+at the intersection of
+the future of work
+digital transformation journey
+one stop shop
+world class solution
+uber of
+airbnb of
+netflix of
+
+[cliche-es]
+cambio de paradigma
+revolucionar la forma
+experiencia unica e inigualable
+solucion integral
+de vanguardia
+lider en el mercado
+llevar al siguiente nivel
+sinergia
+valor agregado
+piensa fuera de la caja
+en la interseccion de
+transformacion digital integral
+la mejor solucion del mercado
+el uber de
+el airbnb de
+somos apasionados por
+
+[vanity]
+impressions
+followers
+likes
+page views
+reach
+mentions
+sessions
+impresiones
+seguidores
+alcance
+visitas
+
+[hedge]
+arguably
+somewhat
+fairly unique
+quite possibly
+it could be argued
+in some sense
+relatively speaking
+de alguna manera
+en cierto sentido
+podria argumentarse

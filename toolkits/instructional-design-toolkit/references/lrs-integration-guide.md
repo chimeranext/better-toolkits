@@ -31,7 +31,7 @@ ese caso alcanza con `/course-visualize` + dogfooding manual.
 - Self-hosted, stack Python/Django + Postgres.
 - Open source (MIT), desarrollado por France Université Numérique.
 - URL: <https://ralph.io>.
-- Referencia interna: [legacy-ticket](https://linear.app/chimera-coding/issue/legacy-ticket) — spike
+- Referencia interna: [DOJ-2573](https://linear.app/chimera-coding/issue/DOJ-2573) — spike
   Custom LRS xAPI en Supabase evaluando Ralph como base.
 - **Ventaja**: ownership completo de los datos, no vendor lock-in.
 - **Costo**: infra + mantenimiento (Supabase free tier puede servir para dev;
