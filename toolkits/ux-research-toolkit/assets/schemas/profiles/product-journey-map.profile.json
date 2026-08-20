@@ -43,7 +43,7 @@
   "requires_product_context": true,
   "capture": {
     "$comment": "Read by the capturing pipeline that lives in the consuming repo, NOT by this toolkit. The toolkit declares the contract; whoever owns the product owns the browser, the sessions and the schedule. Putting the capturer here would make this toolkit depend on Playwright and on one product's auth, and it is meant to be usable by more than one.",
-    "output_dir": "dojo-journey-map-screens",
+    "output_dir": "journey-map-screens",
     "filename": "{code}.jpg",
     "format": "jpeg",
     "quality": 72,
