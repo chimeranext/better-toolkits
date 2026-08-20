@@ -5,7 +5,6 @@ description: >
   business model brainstorming. Investigates the market, competitors, failed
   startups, and market sizing (TAM/SAM/SOM) while the user answers complementary
   questions in the main conversation.
-model: sonnet
 tools:
   - WebSearch
   - WebFetch

@@ -176,3 +176,9 @@ business-model-toolkit/
 ## License
 
 [Business Source License 1.1](./LICENSE) — you may use, modify, and redistribute for non-competitive purposes. Converts to Non-Profit OSL 3.0 after 5 years.
+
+### Landing page (ported)
+
+- Command: [`commands/landing-page.md`](commands/landing-page.md) → [`references/landing-page/protocol.md`](references/landing-page/protocol.md)
+- Skill: [`skills/landing-page-design/SKILL.md`](skills/landing-page-design/SKILL.md)
+- Agent: `agents/landing-page-researcher.md` (no hardcoded `model:`)
