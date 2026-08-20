@@ -95,7 +95,7 @@
           "type": "string",
           "description": "Path or data URI of the captured image. OPTIONAL on purpose: a map with no captures is a valid map that renders as wireframes, and a pipeline that has not run yet must not invalidate the document it is supposed to enrich.",
           "examples": [
-            "dojo-journey-map-screens/AUTH-01.jpg",
+            "journey-map-screens/AUTH-01.jpg",
             "data:image/jpeg;base64,…"
           ]
         },
