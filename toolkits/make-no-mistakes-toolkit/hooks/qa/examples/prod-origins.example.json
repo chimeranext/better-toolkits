@@ -1,0 +1,25 @@
+{
+  "$comment": [
+    "Example contract for hooks/qa/pre-tool-prod-write-guard.sh.",
+    "Copy to .claude/qa/prod-origins.json in the consumer repo.",
+    "Without this file the hook fails open (no-op)."
+  ],
+  "prodOrigins": [
+    "app.example.com",
+    "www.example.com"
+  ],
+  "currentOriginFile": ".claude/qa/.current-origin",
+  "mutatingToolPatterns": [
+    "browser_click$",
+    "browser_type$",
+    "browser_fill_form$",
+    "browser_press_key$",
+    "browser_select_option$",
+    "browser_file_upload$",
+    "browser_handle_dialog$",
+    "browser_evaluate$",
+    "browser_run_code_unsafe$"
+  ],
+  "armedTokenSearchRoot": "docs/qa/rounds",
+  "armedTokenFilename": ".write-armed"
+}

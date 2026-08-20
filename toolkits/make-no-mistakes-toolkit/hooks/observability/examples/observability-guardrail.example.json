@@ -1,0 +1,25 @@
+{
+  "$comment": [
+    "Example contract for hooks/observability/pre-write-observability-guard.sh.",
+    "Copy to observability-guardrail.json (or set OBSERVABILITY_GUARDRAIL_JSON).",
+    "Without this file the hook fails open (no-op)."
+  ],
+  "posthogImportAllowlist": [
+    "src/lib/analytics/usePostHog.ts"
+  ],
+  "metaPixelAllowlist": [
+    "src/lib/analytics/useMetaPixel.ts"
+  ],
+  "sentryInitAllowlist": [
+    "src/lib/sentry.ts"
+  ],
+  "webVitalsImportAllowlist": [
+    "src/lib/analytics/useWebVitals.ts"
+  ],
+  "allowlist": [
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.stories.tsx",
+    "**/setupTests.ts"
+  ]
+}

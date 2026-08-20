@@ -3,14 +3,14 @@
 License text copyright (c) 2023 MariaDB plc, All Rights Reserved.
 "Business Source License" is a trademark of MariaDB plc.
 
-"launchpad-toolkit" is licensed under the Business Source License agreement below.
+"{{LICENSED_WORK}}" is licensed under the Business Source License agreement below.
 
-"launchpad-toolkit" occasionally includes source code that is derived from third-party code.
+"{{LICENSED_WORK}}" occasionally includes source code that is derived from third-party code.
 This situation is noted in the license header at the top of the affected files.
 Full authorship information can be derived from the version control history.
 ---
 
-"launchpad-toolkit" BUSINESS SOURCE LICENSE AGREEMENT
+"{{LICENSED_WORK}}" BUSINESS SOURCE LICENSE AGREEMENT
 
 Parameters
 
@@ -21,7 +21,7 @@ Luis Andres Pena Castillo
 
 ## Licensed Work
 
-"launchpad-toolkit" Version 1.0.0 or later.
+"{{LICENSED_WORK}}" Version 1.0.0 or later.
 The Licensed Work is (c) 2026 Luis Andres Pena Castillo / ChimeraNext
 
 ### Additional Use Grant

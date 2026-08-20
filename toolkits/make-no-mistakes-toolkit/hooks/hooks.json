@@ -1,5 +1,5 @@
 {
-  "description": "make-no-mistakes — manifest-driven PreToolUse + PostToolUse hooks. Generic regex rules live in hooks/rules/rules.yaml (compiled to rules.json). Per-repo atomic-design enforcement lives in hooks/atomic/ and reads .atomic-design-rules.json at the consumer repo root (no-op if absent). Cross-cutting Cure 4b hooks (legacy-ticket) live in hooks/cross-cutting/ and read per-repo config from .claude/config/cross-cutting-hooks.json at the consumer-repo root (no-op if absent). See hooks/rules/README.md, hooks/atomic/README.md, and hooks/cross-cutting/README.md. Opt-in Linear create-hygiene lives in hooks/hygiene/ and reads .claude/config/hygiene-hooks.json at the consumer repo root (no-op if absent) — see /hygiene-hooks-setup.",
+  "description": "make-no-mistakes — manifest-driven PreToolUse + PostToolUse + Stop hooks. Generic regex rules live in hooks/rules/rules.yaml (compiled to rules.json). Per-repo atomic-design enforcement lives in hooks/atomic/ and reads .atomic-design-rules.json at the consumer repo root (no-op if absent). Cross-cutting Cure 4b hooks live in hooks/cross-cutting/ and read .claude/config/cross-cutting-hooks.json (no-op if absent). Opt-in Linear create-hygiene lives in hooks/hygiene/ via .claude/config/hygiene-hooks.json — see /hygiene-hooks-setup. Stderr preserve is ON by default (opt-out via .claude/config/stderr-hooks.json or MNM_DISABLE_STDERR_HOOK=1) — see hooks/stderr/README.md. Prod-write (hooks/qa/) and observability (hooks/observability/) no-op until their contract JSON exists in the consumer repo. stop-prs-green no-ops unless .claude/.implement-prs exists.",
   "hooks": {
     "PreToolUse": [
       {
@@ -8,6 +8,11 @@
           {
             "type": "command",
             "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/pre-bash.sh",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/stderr/adapters/claude-pre-bash.sh",
             "timeout": 5
           }
         ]
@@ -39,6 +44,11 @@
             "type": "command",
             "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/cross-cutting/pre-write-version-bump-discipline.sh",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/observability/pre-write-observability-guard.sh",
+            "timeout": 5
           }
         ]
       },
@@ -48,6 +58,16 @@
           {
             "type": "command",
             "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/hygiene/pre-linear-save-issue-hygiene.sh",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__.*(click|fill|form_input|type_text|browser_type|press_key|select_option|drag|drop|upload|file_upload|handle_dialog|evaluate|javascript_tool|shortcuts_execute|computer|run_code)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/qa/pre-tool-prod-write-guard.sh",
             "timeout": 5
           }
         ]
@@ -71,6 +91,27 @@
             "type": "command",
             "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/atomic/post-atomic-drift.sh",
             "timeout": 3
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__.*linear.*__save_issue",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/hygiene/post-linear-save-issue-state-landed.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/hygiene/stop-prs-green.sh",
+            "timeout": 60
           }
         ]
       }

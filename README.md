@@ -280,4 +280,15 @@ This monorepo consolidates ten previously-separate repositories with their **ful
 history preserved** via `git subtree add`. All ten toolkits are live in
 [`marketplace.json`](.claude-plugin/marketplace.json); `atomic-design-toolkit` and
 `make-no-mistakes-toolkit` were the last two imported, after their histories were
-reconciled.
+reconciled. The curation is maintained by ChimeraNext under copyright of
+Luis Andres Pena Castillo — see [NOTICE](NOTICE) and [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Legal Disclaimer & Terms of Use
+
+This monorepo and the curated toolkits contained herein are distributed strictly as **source-available software** for developer lifecycle optimization, architectural auditing, and startup validation purposes under the Business Source License 1.1 (BSL-1.1).
+
+* **No Commercial Warranty:** The software is provided on an "AS IS" basis, without warranty of any kind, express or implied. The author and contributors express no warranties regarding the software's fitness for production deployment or its financial/operational outcomes.
+* **Limitation of Liability:** In no event shall the author (Luis Andres Pena Castillo), ChimeraNext, or any associated entity be liable for any direct, indirect, incidental, special, exemplary, or consequential damages (including, but not limited to, procurement of substitute goods or services; loss of use, data, or profits; or business interruption) however caused and on any theory of liability, whether in contract, strict liability, or tort arising in any way out of the use of this software.
+* **Production Restriction:** Startups and independent developers are solely responsible for ensuring their use of these toolkits complies with the non-production limitations enforced by the BSL-1.1 license until the respective Change Date of each package converts the work into open-source.
+
+Binding license text: root [LICENSE](LICENSE), per-toolkit `toolkits/*/LICENSE`, and [NOTICE](NOTICE). Contribution and consulting norms: [CONTRIBUTING.md](CONTRIBUTING.md). Contract template for Pre-existing IP: [docs/legal/pre-existing-ip-clause.md](docs/legal/pre-existing-ip-clause.md).
