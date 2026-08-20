@@ -1,15 +1,15 @@
 {
   "team": {
     "key": "DOJ",
-    "name": "chimeranext"
+    "name": "ChimeraOS"
   },
   "git": {
     "baseBranch": "main",
     "branchPattern": "andres/{issue-id-lowercase}-{short-description}"
   },
   "defaults": {
-    "greptileReview": true,
-    "greptileMinConfidence": 3,
+    "chimeraCodeReviewer": true,
+    "chimeraCodeReviewerMinConfidence": 3,
     "squashMerge": true,
     "slackNotify": true
   },

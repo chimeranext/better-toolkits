@@ -8,6 +8,11 @@
             "type": "command",
             "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/spend-safety.sh \"$TOOL_INPUT\"",
             "timeout": 3000
+          },
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/stderr/adapters/claude-pre-bash.sh",
+            "timeout": 5
           }
         ]
       }
@@ -23,5 +28,6 @@
         ]
       }
     ]
-  }
+  },
+  "description": "aaarrr-flywheel-toolkit hooks (stderr baseline on by default)."
 }

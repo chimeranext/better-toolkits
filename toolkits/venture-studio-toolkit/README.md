@@ -220,3 +220,20 @@ claude plugin add chimeranext/venture-studio-toolkit
 ## Licencia
 
 Business Source License 1.1 (BSL-1.1). Ver [LICENSE](./LICENSE) para detalles.
+
+
+## Install (OpenCode) — stderr baseline
+
+This toolkit vendors `hooks/stderr/` (same detector as the rest of better-toolkits).
+
+Register the OpenCode file plugin (required for stderr on OpenCode2):
+
+```jsonc
+{
+  "plugin": [
+    "/absolute/path/to/this-toolkit/hooks/stderr/adapters/opencode-plugin.ts"
+  ]
+}
+```
+
+See monorepo [`docs/opencode-stderr.md`](../../docs/opencode-stderr.md) and [`docs/multi-harness-ssot.md`](../../docs/multi-harness-ssot.md).

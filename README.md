@@ -9,6 +9,89 @@ your startup needs, from problem validation through go-to-market. Inspired by th
 "pick-your-stack" experience of [create-better-t-stack](https://www.better-t-stack.dev/)
 and a sibling to [better-microservices](https://github.com/chimeranext/better-microservices).
 
+## Multi-harness SSOT
+
+One protocol markdown contract (`references/` + thin entries). One stderr detector. N harness wire-ups — Claude Code, Cursor, OpenCode2, Antigravity, and friends. Not a Cursor-vs-Claude dichotomy.
+
+- Contract: [`docs/multi-harness-ssot.md`](docs/multi-harness-ssot.md)
+- OpenSpec: [`openspec/changes/2026-08-20-multi-harness-ssot/`](openspec/changes/2026-08-20-multi-harness-ssot/)
+- Public doctrine: [toolkits.chimeranext.dev/doctrine](https://toolkits.chimeranext.dev/doctrine/)
+
+### Main selling point — stderr baseline
+
+Agents that discard stderr (`2>/dev/null`, bare `2>&1` without a log sink) hide failures. Every toolkit in this monorepo vendors [`shared/hooks/stderr/`](shared/hooks/stderr/) and registers it on install. **On by default; opt-out** via `MNM_DISABLE_STDERR_HOOK=1`, `.claude/config/stderr-hooks.json` → `{"preserve_stderr": false}`, or OpenCode `"plugin": ["-local.mnm-no-stderr-redirect"]`.
+
+#### Claude Code (plugin hooks)
+
+Install any marketplace toolkit — its `hooks/hooks.json` already wires PreToolUse `Bash` → the stderr adapter:
+
+```bash
+claude plugin marketplace add chimeranext/better-toolkits
+claude plugin install make-no-mistakes@better-toolkits
+# or instructional-design-toolkit, aaarrr-flywheel-toolkit, …
+```
+
+Verify the plugin root contains `hooks/stderr/adapters/claude-pre-bash.sh`. No extra step when using the published plugins.
+
+From a local clone (dev):
+
+```bash
+# Plugin path example — point Claude at the toolkit directory that includes hooks/
+# The shipped hooks.json entry is:
+#   bash ${CLAUDE_PLUGIN_ROOT}/hooks/stderr/adapters/claude-pre-bash.sh
+```
+
+#### Cursor (`beforeShellExecution`)
+
+1. Clone this repo (or copy `shared/hooks/stderr` / any toolkit’s `hooks/stderr`).
+2. Register a user or project hook:
+
+```json
+{
+  "version": 1,
+  "hooks": {
+    "beforeShellExecution": [
+      {
+        "command": "bash ${workspaceFolder}/shared/hooks/stderr/adapters/cursor-before-shell.sh"
+      }
+    ]
+  }
+}
+```
+
+Put that in `.cursor/hooks.json` (project) or your user hooks config. Adjust the path if you only vendored a single toolkit (`toolkits/<name>/hooks/stderr/adapters/cursor-before-shell.sh`).
+
+#### OpenCode2 (file plugin)
+
+Add the absolute path to the TypeScript adapter in `~/.config/opencode/opencode.jsonc` (or project config):
+
+```jsonc
+{
+  "plugin": [
+    "/absolute/path/to/better-toolkits/shared/hooks/stderr/adapters/opencode-plugin.ts"
+  ]
+}
+```
+
+Or the copy inside an installed toolkit:
+
+```jsonc
+{
+  "plugin": [
+    "/absolute/path/to/make-no-mistakes-toolkit/hooks/stderr/adapters/opencode-plugin.ts"
+  ]
+}
+```
+
+Toolkits that ship an npm CLI (`make-no-mistakes`, `atomic-design`, `business-model`, `app-gtm-release`) still need this file-plugin line for stderr — their `npx … install` registers the package plugin; stderr is the local adapter above. See [`docs/opencode-stderr.md`](docs/opencode-stderr.md).
+
+#### Sanity check
+
+```bash
+python3 shared/hooks/stderr/detect.py --command 'gh api … 2>/dev/null'   # exit 2 = blocked
+python3 shared/hooks/stderr/detect.py --command 'cmd 2>&1 | tee run.log' # exit 0 = allowed
+```
+
 ## Install
 
 Add the marketplace once, then install any toolkit by its **plugin name**:
@@ -21,8 +104,8 @@ claude plugin install <plugin-name>@better-toolkits
 The plugin name usually matches the directory, but not always — `app-gtm-release-toolkit`
 installs as `app-gtm-release`, and `make-no-mistakes-toolkit` installs as `make-no-mistakes`.
 The authoritative list of installable names lives in
-[`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json). A future documentation
-and configurator site is planned at **toolkits.chimeranext.dev**.
+[`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json). Landing + doctrine:
+**https://toolkits.chimeranext.dev** (GitHub Pages + custom domain; see [`apps/web/README.md`](apps/web/README.md)).
 
 ## Toolkits
 
@@ -258,8 +341,8 @@ BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENS
 .claude-plugin/
   marketplace.json    # the marketplace manifest Claude Code reads (one entry per toolkit)
 toolkits/             # the toolkits — one git history per toolkit, preserved via git subtree
-apps/web/             # (Phase 2) landing-page selector / configurator
-docs/site/            # (Phase 2) documentation site → toolkits.chimeranext.dev
+apps/web/             # Landing + /doctrine (toolkits.chimeranext.dev via GitHub Pages)
+docs/                 # Monorepo contracts (multi-harness-ssot.md, …)
 ```
 
 ## Why one monorepo?
@@ -280,4 +363,15 @@ This monorepo consolidates ten previously-separate repositories with their **ful
 history preserved** via `git subtree add`. All ten toolkits are live in
 [`marketplace.json`](.claude-plugin/marketplace.json); `atomic-design-toolkit` and
 `make-no-mistakes-toolkit` were the last two imported, after their histories were
-reconciled.
+reconciled. The curation is maintained by ChimeraNext under copyright of
+Luis Andres Pena Castillo — see [NOTICE](NOTICE) and [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Legal Disclaimer & Terms of Use
+
+This monorepo and the curated toolkits contained herein are distributed strictly as **source-available software** for developer lifecycle optimization, architectural auditing, and startup validation purposes under the Business Source License 1.1 (BSL-1.1).
+
+* **No Commercial Warranty:** The software is provided on an "AS IS" basis, without warranty of any kind, express or implied. The author and contributors express no warranties regarding the software's fitness for production deployment or its financial/operational outcomes.
+* **Limitation of Liability:** In no event shall the author (Luis Andres Pena Castillo), ChimeraNext, or any associated entity be liable for any direct, indirect, incidental, special, exemplary, or consequential damages (including, but not limited to, procurement of substitute goods or services; loss of use, data, or profits; or business interruption) however caused and on any theory of liability, whether in contract, strict liability, or tort arising in any way out of the use of this software.
+* **Production Restriction:** Startups and independent developers are solely responsible for ensuring their use of these toolkits complies with the non-production limitations enforced by the BSL-1.1 license until the respective Change Date of each package converts the work into open-source.
+
+Binding license text: root [LICENSE](LICENSE), per-toolkit `toolkits/*/LICENSE`, and [NOTICE](NOTICE). Contribution and consulting norms: [CONTRIBUTING.md](CONTRIBUTING.md). Contract template for Pre-existing IP: [docs/legal/pre-existing-ip-clause.md](docs/legal/pre-existing-ip-clause.md).

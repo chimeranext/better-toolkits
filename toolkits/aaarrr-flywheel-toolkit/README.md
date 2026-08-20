@@ -262,3 +262,20 @@ Docs en español. Código en inglés. Los archivos en `agents/`, `commands/` y `
 ## Licencia
 
 MIT.
+
+
+## Install (OpenCode) — stderr baseline
+
+This toolkit vendors `hooks/stderr/` (same detector as the rest of better-toolkits).
+
+Register the OpenCode file plugin (required for stderr on OpenCode2):
+
+```jsonc
+{
+  "plugin": [
+    "/absolute/path/to/this-toolkit/hooks/stderr/adapters/opencode-plugin.ts"
+  ]
+}
+```
+
+See monorepo [`docs/opencode-stderr.md`](../../docs/opencode-stderr.md) and [`docs/multi-harness-ssot.md`](../../docs/multi-harness-ssot.md).

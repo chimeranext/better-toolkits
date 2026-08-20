@@ -57,7 +57,7 @@ This skill activates when the user describes a situation involving:
 
    **If the issue IS redacted (Bilingual Format present and substantive):**
 
-   > This is an implementation task. Use:
+   > This is an implementation task. Prefer `/implement` (skill) or `/make-no-mistakes:implement` (Claude command) — both load `references/implement/*`. Use:
    >
    > `/make-no-mistakes:implement {ISSUE-ID}`
    >

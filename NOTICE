@@ -1,0 +1,50 @@
+# NOTICE
+
+Copyright © 2026 Luis Andres Pena Castillo / ChimeraNext.
+All rights reserved, except as granted under the Business Source License 1.1.
+
+## What this monorepo is
+
+`better-toolkits` is a curated marketplace of source-available Claude Code (and
+related agent-harness) toolkits for **developer lifecycle optimization,
+architectural auditing, and startup validation**.
+
+Each toolkit under `toolkits/<name>/` is separately licensed under BSL-1.1 —
+see that toolkit's `LICENSE`. This repository's root `LICENSE` covers the
+monorepo curation, marketplace manifest, shared docs, and any material that
+does not carry its own LICENSE.
+
+## Intended use
+
+Allowed under the Additional Use Grant: internal development, auditing, testing
+optimization, and using the toolkits while delivering client work product that
+belongs to the client.
+
+Not allowed: converting this ecosystem into a competing product — including a
+rival marketplace, a SaaS that redistributes these plugins, or rebranding /
+repackaging the Licensed Work as your own commercial offering.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) § Acceptable use and
+[docs/legal/pre-existing-ip-clause.md](docs/legal/pre-existing-ip-clause.md) for
+consulting / client-work language.
+
+## Curated toolkits
+
+| Toolkit | License |
+|---------|---------|
+| [aaarrr-flywheel-toolkit](toolkits/aaarrr-flywheel-toolkit/) | [LICENSE](toolkits/aaarrr-flywheel-toolkit/LICENSE) |
+| [app-gtm-release-toolkit](toolkits/app-gtm-release-toolkit/) | [LICENSE](toolkits/app-gtm-release-toolkit/LICENSE) |
+| [atomic-design-toolkit](toolkits/atomic-design-toolkit/) | [LICENSE](toolkits/atomic-design-toolkit/LICENSE) |
+| [business-model-toolkit](toolkits/business-model-toolkit/) | [LICENSE](toolkits/business-model-toolkit/LICENSE) |
+| [fractional-cto-toolkit](toolkits/fractional-cto-toolkit/) | [LICENSE](toolkits/fractional-cto-toolkit/LICENSE) |
+| [instructional-design-toolkit](toolkits/instructional-design-toolkit/) | [LICENSE](toolkits/instructional-design-toolkit/LICENSE) |
+| [launchpad-toolkit](toolkits/launchpad-toolkit/) | [LICENSE](toolkits/launchpad-toolkit/LICENSE) |
+| [make-no-mistakes-toolkit](toolkits/make-no-mistakes-toolkit/) | [LICENSE](toolkits/make-no-mistakes-toolkit/LICENSE) |
+| [ux-research-toolkit](toolkits/ux-research-toolkit/) | [LICENSE](toolkits/ux-research-toolkit/LICENSE) |
+| [venture-studio-toolkit](toolkits/venture-studio-toolkit/) | [LICENSE](toolkits/venture-studio-toolkit/LICENSE) |
+
+## Disclaimer
+
+THE SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTY OF ANY KIND.
+See the root [LICENSE](LICENSE) and the Legal Disclaimer section in
+[README.md](README.md).

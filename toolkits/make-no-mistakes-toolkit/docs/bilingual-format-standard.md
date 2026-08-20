@@ -64,11 +64,11 @@ If any of these dominate the brief, treat the issue as **not redacted** and reco
 
 ## Where the full template lives
 
-The complete output template — every section header, every field, the analysis frameworks (5 Whys / MECE / Minto Pyramid / Pareto / Second-Order Thinking), the label taxonomy, and the verification commands — lives in:
+The complete fill-in template lives in:
 
-[`skills/spike-recommend/SKILL.md`](../skills/spike-recommend/SKILL.md) → **"Output Format"** section.
+[`templates/bilingual-issue-brief.md`](../templates/bilingual-issue-brief.md)
 
-Do not duplicate the template into other skill files. Instead, point at `spike-recommend/SKILL.md` for the canonical version and use this file (`docs/bilingual-format-standard.md`) for the marker / stub definitions.
+Producers (`spike-recommend`, `spec-recommend`) emit using that file. This doc (`docs/bilingual-format-standard.md`) remains the SSOT for markers, stubs, and consumer behavior only.
 
 ---
 

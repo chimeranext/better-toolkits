@@ -40,13 +40,30 @@ ABORT con ese mensaje si falta.
 - `course_json_path` (required)
 - `module_order` (optional, integer): filtrar a un módulo específico
 - `lesson_order` (optional, integer): dentro del módulo, una lesson específica
+- `overlaid_lessons` (optional, array): lessons post-overlay producidas por el
+  Base + Overlay protocol (ver `${CLAUDE_PLUGIN_ROOT}/assets/runtime/overlay-protocol.md`).
+  Cuando viene presente, el agent renderiza desde este array en vez del
+  `course.json`. Cada elemento del array tiene la misma forma que un
+  `lesson` del schema, posiblemente con texto modificado por overlays
+  (CONTEXT/CONCEPT/BUILD/SHIP/REFLECT). Layer 1 invariants (`id`, `au_id`,
+  `module.au_id`, `course.meta.id`) se respetan — los IDs vienen idénticos al
+  `course.json`. Si el array está vacío o ausente, el agent usa el flujo
+  estándar desde `course.json`.
 
 ## Process
 
 1. Verificar marp-cli (abort si falta).
 2. Leer `course.json` y validar.
 3. Leer template `${CLAUDE_PLUGIN_ROOT}/assets/templates/marp-lesson.md.tmpl`.
-4. Determinar lessons a procesar (filtros opcionales).
+4. Determinar lessons a procesar:
+   - Si `overlaid_lessons` está presente y no vacío: usar ese array como
+     fuente de las lessons. Aplicar `module_order` / `lesson_order` como
+     filtros sobre este array (no sobre el `course.json`). Los IDs y la
+     estructura de módulos se cruzan contra `course.json` para resolver
+     `course.meta.title`, `module.title`, `module.order`, etc. — overlays NO
+     mutan estos campos.
+   - Si `overlaid_lessons` no viene: usar el `course.json` directamente con
+     los filtros opcionales `module_order` / `lesson_order`.
 5. Para cada lesson:
    - Sustituir variables del template:
      - `{{title}}` → `lesson.title`

@@ -28,6 +28,13 @@ app-gtm-release-toolkit install --dry-run  # Preview changes
 app-gtm-release-toolkit install --force    # Overwrite unmanaged conflicts
 ```
 
+
+### Stderr baseline (OpenCode)
+
+Also register the local stderr adapter so shell redirects are blocked even when this package is the only toolkit installed:
+
+`hooks/stderr/adapters/opencode-plugin.ts` — see [`docs/opencode-stderr.md`](../../docs/opencode-stderr.md).
+
 ## Three-Tier Command Architecture
 
 ```

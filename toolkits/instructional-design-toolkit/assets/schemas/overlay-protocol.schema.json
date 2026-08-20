@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chimeranext.github.io/instructional-design-toolkit/overlay-protocol.schema.json",
+  "title": "OverlayProtocol",
+  "description": "Contract for the Base + Overlay pattern accepted in DOJ-3706. IDT commands that produce content (new-course, course-audit, slides-preview, and future authoring commands) emit a Layer 1 (cmi5/xAPI invariants) + Layer 2 (pedagogy generic) base draft, then invoke discovered overlay skills sequentially. Each overlay receives an OverlayInput and returns an OverlayOutput. Layer 1 invariants are enforced both BEFORE the first overlay runs and AFTER each overlay returns. Overlays run in ascending overlay_priority order; ties are broken alphabetically by SKILL.md path (case-insensitive, forward-slash-normalized). This schema is a definitions-only document — consumers validate concrete payloads against $defs/OverlayInput, $defs/OverlayOutput, or $defs/OverlaySkillFrontmatter as appropriate; there is no single top-level shape because the protocol is composed of multiple distinct payloads.",
+  "$defs": {
+    "OverlayInput": {
+      "type": "object",
+      "description": "Payload handed to an overlay skill when it is invoked.",
+      "required": ["command", "baseDraft", "context"],
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The IDT command currently running (without the /idt: prefix). Examples: 'new-course', 'course-audit', 'slides-preview'. Overlays whose 'overlay_target' frontmatter array does not include this value MUST NOT be invoked."
+        },
+        "baseDraft": {
+          "type": "object",
+          "description": "The output of the prior step. On the first overlay, this is the Layer 1 + Layer 2 base draft produced by the IDT command (cmi5/xAPI-shaped — see course.schema.json for new-course/course-audit; arbitrary command-shaped objects for other commands). On subsequent overlays, this is the previous overlay's 'draft' return value. Overlays MUST treat this value as deeply read-only at the input boundary (return a new object rather than mutating in place)."
+        },
+        "context": {
+          "type": "object",
+          "description": "Discovery and execution context computed by the IDT runtime.",
+          "required": ["cwd", "repo"],
+          "additionalProperties": false,
+          "properties": {
+            "cwd": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Absolute working directory where the IDT command was invoked. The runtime walks this path looking for .claude-plugin/plugin.json files."
+            },
+            "repo": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Conventional name or path of the consumer repository (e.g. 'chimera-academy'). Used in warnings and audit reports for human readability — not for discovery."
+            },
+            "locale": {
+              "type": "string",
+              "enum": ["en", "es"],
+              "description": "Optional ISO 639-1 code. Overlays may use this to localize their transforms; otherwise overlays SHOULD respect the language already present in baseDraft."
+            }
+          }
+        }
+      }
+    },
+    "OverlayOutput": {
+      "type": "object",
+      "description": "Return value of a single overlay invocation.",
+      "required": ["draft"],
+      "additionalProperties": false,
+      "properties": {
+        "draft": {
+          "type": "object",
+          "description": "The transformed draft. The runtime feeds this value into the next overlay's 'baseDraft', or — if this is the last overlay — validates it once more against Layer 1 invariants and writes it. Overlays MUST NOT mutate Layer 1 immutable fields (au_id, modules[].classes_cmi5.activityType, all stable IDs, semver classification fields, Open Badges 3.0 / W3C VC stable fields — see assets/runtime/overlay-protocol.md §4 for the full canonical list). Layer 1 violations abort the run with an error pointing at the offending overlay's SKILL.md path."
+        },
+        "warnings": {
+          "type": "array",
+          "description": "Non-fatal notes surfaced in the user-facing Claude response. Use this for situations where the overlay produced a partial transform (e.g. 'Could not locate hero image — skipped that section'). The runtime concatenates warnings from all overlays and shows them after the final write.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "OverlaySkillFrontmatter": {
+      "type": "object",
+      "description": "Shape of the YAML frontmatter that an overlay skill's SKILL.md MUST declare. The IDT discovery procedure scans plugin.json-declared plugins, parses each skills/*/SKILL.md frontmatter, and treats any skill that declares a non-empty 'overlay_target' array as a candidate overlay.",
+      "required": ["name", "overlay_target"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Skill name (matches the directory name)."
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Semver. Recommended."
+        },
+        "description": {
+          "type": "string",
+          "description": "Free-form description (used by Claude to decide skill activation outside overlay invocation)."
+        },
+        "overlay_target": {
+          "type": "array",
+          "description": "Array of IDT command names this overlay applies to (without the /idt: prefix). Overlays whose array does not include the running command are skipped. An overlay listing a command IDT does not implement is silently ignored (forward-compat for newer plugin versions).",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "overlay_priority": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000,
+          "description": "Ordering hint. Lower numbers run first. Default tiers (use unless you have a documented reason): structural=50 (reshapes scaffold early), generic=75 (annotations/locale enrichment), voice=100 (editorial transforms run last). Ties are broken alphabetically by SKILL.md path (case-insensitive, forward-slash-normalized) to keep ordering deterministic across operating systems."
+        }
+      }
+    },
+    "Layer1Invariants": {
+      "type": "object",
+      "description": "The set of fields the IDT runtime treats as IMMUTABLE across overlay invocations. If any of these change between the input baseDraft and the output draft, the run is aborted with an error naming the offending overlay's SKILL.md path. This list is the authoritative reference for the validator described in assets/runtime/overlay-protocol.md.",
+      "properties": {
+        "stable_id_fields": {
+          "type": "array",
+          "description": "Identifier fields that anchor xAPI history. Renaming any of these breaks every learner's prior progress data.",
+          "items": { "type": "string" },
+          "examples": [
+            ["meta.id", "modules[].id", "modules[].au_id", "modules[].lessons[].id", "capstone.id", "capstone.assessment_criteria[].id", "modules[].classes[].id"]
+          ]
+        },
+        "cmi5_xapi_fields": {
+          "type": "array",
+          "description": "cmi5/xAPI structural fields whose values must remain consistent with the spec.",
+          "items": { "type": "string" },
+          "examples": [
+            ["modules[].au_id", "modules[].classes_cmi5.activityType"]
+          ]
+        },
+        "credential_fields": {
+          "type": "array",
+          "description": "Open Badges 3.0 / W3C Verifiable Credentials stable fields. Out of scope for the v1.0 schema (course.schema.json) but reserved here for the Layer 1 contract — credentials emitted in future versions inherit the same immutability.",
+          "items": { "type": "string" }
+        },
+        "semver_classification_fields": {
+          "type": "array",
+          "description": "Fields that drive the MAJOR/MINOR/PATCH classification used by /course-revise. Mutating these changes how a release is categorized and is therefore reserved to the base layer, not overlays.",
+          "items": { "type": "string" },
+          "examples": [
+            ["meta.version", "meta.version_timeline[].type"]
+          ]
+        }
+      }
+    }
+  },
+  "type": "object",
+  "additionalProperties": true
+}

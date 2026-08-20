@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chimeranext.github.io/instructional-design-toolkit/path.schema.json",
+  "title": "Path",
+  "description": "A Chimera Path authoring contract produced by instructional-design-toolkit. A PATH is a SUPER-STRUCTURE *above* the cmi5-course layer (course.schema.json): it references existing courses by id or slug, groups them into ordered MILESTONES, and wraps them in a credential. The per-course cmi5/xAPI contract is UNTOUCHED — a path adds NO AU and NO block; it is purely additive. xAPI identity (additive, no collision with course IRIs): the path activity IRI is `path:<slug>`, each milestone activity IRI is `path:<slug>/milestone:<ordinal>`. The credential is an OpenBadge 3.0 achievement (credential.cert_name / skills_demonstrated / earning_criteria seed the OpenBadge template — NOT a new cmi5 AU). IDs (meta.id, milestones[].id) are IMMUTABLE once created — changing them breaks xAPI history and OpenBadge issuance for learners. Slugs and titles are mutable. Field names align with the chimera-academy content source-of-truth at schemas/path.schema.yml (content/paths/<slug>/path-overview.md frontmatter); this JSON schema is the toolkit authoring contract and additionally carries the meta.id / version cmi5-identity fields the YAML omits.",
+  "type": "object",
+  "required": ["meta", "milestones"],
+  "additionalProperties": false,
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["id", "version", "slug", "title", "language", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^path:[a-z0-9-]+$",
+          "description": "IMMUTABLE path identifier. Doubles as the path-level xAPI activity IRI (path:<slug>). Changing it breaks xAPI history and OpenBadge issuance."
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Semantic version. MAJOR=breaking (milestone removed/reordered, course removed from a milestone, credential criteria hardened), MINOR=additive (course or milestone added), PATCH=cosmetic (title/description/presentation tweaks)."
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$",
+          "description": "URL + xAPI IRI key. Must be stable once published. Mirrors chimera-academy path.slug."
+        },
+        "title": {
+          "type": "string",
+          "minLength": 5,
+          "description": "Mutable display title."
+        },
+        "language": {
+          "type": "string",
+          "enum": ["es", "en"]
+        },
+        "description": {
+          "type": "string",
+          "description": "Mutable path summary."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["draft", "published", "archived"],
+          "description": "Lifecycle status. Mirrors chimera-academy path.status (default draft)."
+        },
+        "level": {
+          "type": "string",
+          "enum": ["beginner", "intermediate", "advanced"],
+          "description": "Aggregate difficulty of the path (independent of Chimera Score rank)."
+        },
+        "emblem": {
+          "type": "string",
+          "description": "Emoji/glyph for the credential badge when no image URL is set."
+        },
+        "faculty": {
+          "type": "string",
+          "description": "Owning faculty (e.g. 'Chimera Academy')."
+        },
+        "created": { "type": "string", "format": "date" },
+        "updated": { "type": "string", "format": "date" },
+        "version_timeline": {
+          "type": "array",
+          "description": "Append-only log of versions.",
+          "items": {
+            "type": "object",
+            "required": ["version", "date", "type", "summary"],
+            "additionalProperties": false,
+            "properties": {
+              "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+              "date": { "type": "string", "format": "date" },
+              "type": { "type": "string", "enum": ["major", "minor", "patch"] },
+              "summary": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "credential": {
+      "type": "object",
+      "description": "OpenBadge 3.0 achievement metadata. This is NOT a new cmi5 AU — it is the path-level credential definition that seeds the OpenBadge template (and chimera-academy paths.{cert_name,skills_demonstrated,earning_criteria} columns).",
+      "additionalProperties": false,
+      "properties": {
+        "cert_name": {
+          "type": "string",
+          "description": "Path certificate / credential name (e.g. 'Agentic AI Engineer')."
+        },
+        "skills_demonstrated": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Curated path-level skills (distinct from per-course tags). Maps to OpenBadge 3.0 achievement skills."
+        },
+        "earning_criteria": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "How a learner earns the credential (bullet list). Maps to OpenBadge 3.0 achievement criteria."
+        }
+      }
+    },
+    "presentation": {
+      "type": "object",
+      "description": "Path-card and credential presentation metadata (no pedagogical weight).",
+      "additionalProperties": false,
+      "properties": {
+        "tech_pills": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "3-4 most-recognisable technologies the path teaches (path card)."
+        },
+        "reward_points": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Chimera Score reward on completion (reconciled with score-engine)."
+        },
+        "credential_badge_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Optional optimized badge image; overrides emblem when set."
+        },
+        "banner_image_url": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    "milestones": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Ordered named phases. Each groups ordered course references. A milestone adds NO cmi5 AU — its xAPI identity is path:<slug>/milestone:<ordinal>.",
+      "items": { "$ref": "#/$defs/milestone" }
+    }
+  },
+  "$defs": {
+    "milestone": {
+      "type": "object",
+      "required": ["id", "ordinal", "title", "courses"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^(milestone:[a-z0-9-]+|path:[a-z0-9-]+/milestone:\\d+)$",
+          "description": "IMMUTABLE milestone identifier. Either a bare `milestone:<slug>` or the fully-qualified `path:<slug>/milestone:<n>` form (the latter is the xAPI activity IRI). Changing it breaks xAPI history."
+        },
+        "ordinal": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "1-based position of this milestone within the path (teaching order)."
+        },
+        "title": {
+          "type": "string",
+          "description": "Mutable milestone title."
+        },
+        "description": {
+          "type": "string",
+          "description": "Mutable milestone summary."
+        },
+        "courses": {
+          "type": "array",
+          "minItems": 1,
+          "description": "Member courses in teaching order. Each entry is either a cmi5 course id (`course:<slug>`) or a bare course slug. The path REFERENCES these courses — it never modifies their course.json.",
+          "items": {
+            "type": "string",
+            "pattern": "^(course:[a-z0-9-]+|[a-z0-9-]+)$"
+          }
+        }
+      }
+    }
+  }
+}

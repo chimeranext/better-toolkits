@@ -188,7 +188,12 @@
     },
     "lesson": {
       "type": "object",
-      "required": ["id", "order", "slug", "title", "context", "concept", "build", "ship", "reflect"],
+      "description": "A lesson supports TWO authoring shapes (relaxed under DOJ-4007 to unblock retrofit of legacy free-form content for staging seed):\n\n  1. **IDT 5-bucket (recommended)** — `context` + `concept` + `build` + `ship` + `reflect`. Enforces Builder's Bloom pedagogy + Ship-First Design. Use for new lessons authored via the instructional-design-toolkit.\n  2. **Free-form `body`** — single markdown string. Use for legacy / open-ended content that doesn't fit the 5-bucket frame, or for lessons that ship before IDT-style structuring (DemoLab/Articulate Rise parity).\n\n  `anyOf` requires AT LEAST one of the two shapes (cannot ship an empty lesson). A lesson MAY provide both: the IDT tooling will prefer the structured fields and treat `body` as supplemental commentary. Course validators downstream (chimera-os ingestion) MUST accept both shapes without branching on which one is present — render the structured fields when available, fall back to `body` otherwise.",
+      "required": ["id", "order", "slug", "title"],
+      "anyOf": [
+        { "required": ["body"] },
+        { "required": ["context", "concept", "build", "ship"] }
+      ],
       "additionalProperties": false,
       "properties": {
         "id": { "type": "string", "pattern": "^lesson:[a-z0-9-]+$", "description": "IMMUTABLE" },
@@ -197,31 +202,36 @@
         "slug": { "type": "string" },
         "title": { "type": "string" },
         "estimated_minutes": { "type": "integer", "minimum": 5 },
+        "body": {
+          "type": "string",
+          "minLength": 50,
+          "description": "Free-form markdown body — alternative to the 5-bucket structured fields. Use for legacy / open-ended content or content imported from external authoring tools (Articulate Rise, Notion exports, etc.). IDT tooling emits a WARNING (not an error) when a lesson uses `body` instead of the structured fields, recommending migration to the 5-bucket frame when the content allows."
+        },
         "context": {
           "type": "string",
           "minLength": 100,
-          "description": "100-200 word hook that makes the student FEEL the urgency"
+          "description": "(Recommended) 100-200 word hook that makes the student FEEL the urgency. Required when not using the free-form `body` field."
         },
         "concept": {
           "type": "string",
           "minLength": 200,
-          "description": "300-500 word mental model. Use \\n---\\n to split across Marp slides."
+          "description": "(Recommended) 300-500 word mental model. Use \\n---\\n to split across Marp slides. Required when not using the free-form `body` field."
         },
         "build": {
           "type": "string",
           "minLength": 200,
-          "description": "50-60% of lesson content. Apply the concept with Claude as partner (NOT teacher)."
+          "description": "(Recommended) 50-60% of lesson content. Apply the concept with Claude as partner (NOT teacher). Required when not using the free-form `body` field."
         },
         "ship": {
           "type": "string",
           "minLength": 30,
-          "description": "50-100 word deliverable — what the student saves/creates/deploys"
+          "description": "(Recommended) 50-100 word deliverable — what the student saves/creates/deploys. Required when not using the free-form `body` field."
         },
         "reflect": {
           "type": "array",
           "items": { "type": "string" },
           "minItems": 1,
-          "description": "1-2 provocative questions specific to THIS lesson"
+          "description": "(Recommended) 1-2 provocative questions specific to THIS lesson. Optional but encouraged for both authoring shapes."
         },
         "marp_slide_count": { "type": "integer", "minimum": 3 }
       }

@@ -25,7 +25,11 @@ three in order.
 | Hook | Event / matcher | What it gates | Distribution |
 |---|---|---|---|
 | `pre-linear-save-issue-hygiene.sh` | `PreToolUse` on `mcp__.*linear.*__save_issue` | CREATE without full triage (project, assignee, priority≠0, ≥1 label, milestone, explicit non-Backlog state) → **exit 2** with the missing-field list. Updates (`id` present) pass. Fail-open without `jq`. | Plugin-level (`hooks/hygiene/`, **opt-in per repo** via config) or repo-level copy |
-| `stop-prs-green.sh` | `Stop` | Blocks session end while `.claude/.implement-prs` lists any PR that is draft / unreviewed / not APPROVED / below the confidence threshold (the `/ready-to-review-mergeable` exit condition) | Repo-level (companion of `/implement`) |
+| `post-linear-save-issue-state-landed.sh` | `PostToolUse` on `mcp__.*linear.*__save_issue` | **Warn** when requested `state` / triage fields did not land (MCP silent no-op). Never blocks. | Plugin-level (always registered; cheap when response is clean) |
+| `stop-prs-green.sh` | `Stop` | Blocks session end while `.claude/.implement-prs` lists any PR that is draft / unreviewed / not APPROVED / has blocker|P1|P2 findings (the `/ready-to-review-mergeable` exit condition). No-op if the file is absent. | Plugin-level |
+| `stderr/adapters/claude-pre-bash.sh` | `PreToolUse` Bash | Blocks stderr→`/dev/null` and bare `2>&1` without a log sink. **On by default; opt-out** via `.claude/config/stderr-hooks.json` or `MNM_DISABLE_STDERR_HOOK=1`. | Plugin-level — see `hooks/stderr/README.md` |
+| `qa/pre-tool-prod-write-guard.sh` | browser-mutating MCP tools | Blocks PROD-origin mutations unless a human armed a single-use token. **No-op** without `.claude/qa/prod-origins.json`. | Plugin-level + example contract in `hooks/qa/examples/` |
+| `observability/pre-write-observability-guard.sh` | `Write`/`Edit`/`MultiEdit` | Warn/block direct posthog / fbq / Sentry.init / web-vitals outside allowlisted chokepoints. **No-op** without `observability-guardrail.json`. | Plugin-level + example in `hooks/observability/examples/` |
 
 Related but procedural (agent contract, NOT executable hooks — documented in
 `/ready-to-review-mergeable`): backfill project/assignee/priority on start,
