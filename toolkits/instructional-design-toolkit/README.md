@@ -392,3 +392,20 @@ PASS/FAIL, complementa `/course-audit`).
 ## License
 
 [BSL-1.1](./LICENSE) — Business Source License 1.1.
+
+
+## Install (OpenCode) — stderr baseline
+
+This toolkit vendors `hooks/stderr/` (same detector as the rest of better-toolkits).
+
+Register the OpenCode file plugin (required for stderr on OpenCode2):
+
+```jsonc
+{
+  "plugin": [
+    "/absolute/path/to/this-toolkit/hooks/stderr/adapters/opencode-plugin.ts"
+  ]
+}
+```
+
+See monorepo [`docs/opencode-stderr.md`](../../docs/opencode-stderr.md) and [`docs/multi-harness-ssot.md`](../../docs/multi-harness-ssot.md).

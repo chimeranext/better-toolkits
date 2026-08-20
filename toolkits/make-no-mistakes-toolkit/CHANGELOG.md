@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Port from DojoCodingLabs/make-no-mistakes-toolkit (merged upstream, multi-harness SSOT-thinned):
+  - `parallelize` Cursor skill (multi-harness thin entry → `references/parallelize/protocol.md`)
+  - `/merge-advisor` + skill — merge ORDER for a set of open PRs (upstream PR #57 / v1.39.0)
+  - `sync-advisor` skill — measure checkout drift before naming the fix (upstream PR #56 / v1.38.0); `rebase-advisor` kept as deprecated alias
+  - `/parallelize`, `/explain`, `/handover-pr`, `/observability-audit`, `/secret-generate` (+ `scripts/secret-generate.sh`)
+  - Protocol bodies under `references/<name>/protocol.md`; commands/skills are thin entries
 - `/pentest-playbook-setup` command — audit/sync pentest playbook wiring (playbook ↔ CI workflows ↔ tenant `securityFindingTriage` config). Modes: `audit`, `sync`, `workflows`, `gaps`. Step 1 of pentest trilogy with `/pentest-runner` and `/triage-security-findings`.
 - `/triage-security-findings` command — triage pentest-playbook + CI scanner output into owned tracker issues; pairs with `/pentest-runner`. Tenant scanner catalog in `linear-setup.json` → `securityFindingTriage` (ACME first consumer). No duplicate `implementation-briefs/` files.
 - `/repo-hygiene` command + `scripts/repo-hygiene.sh` + `repo-hygiene-advisor` skill — audit/prune merged-PR head branches and enforce `delete_branch_on_merge`. Subcommands: `audit`, `policy`, `prune-remote`, `prune-local`, `all`. Default dry-run; `--apply` to mutate. CLI entry: `make-no-mistakes repo-hygiene …`. GitHub Actions: central scheduled workflow (`.github/workflows/repo-hygiene.yml`, org secret `REPO_HYGIENE_GH_TOKEN`) + reusable per-repo workflow (`repo-hygiene-reusable.yml`) with consumer snippet in `examples/repo-hygiene-consumer-workflow.yml`. Reports append to `$GITHUB_STEP_SUMMARY` and upload as artifact.

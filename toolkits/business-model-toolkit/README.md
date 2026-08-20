@@ -28,6 +28,13 @@ business-model-toolkit install --dry-run  # Preview changes
 business-model-toolkit install --force    # Overwrite unmanaged conflicts
 ```
 
+
+### Stderr baseline (OpenCode)
+
+Also register the local stderr adapter so shell redirects are blocked even when this package is the only toolkit installed:
+
+`hooks/stderr/adapters/opencode-plugin.ts` — see [`docs/opencode-stderr.md`](../../docs/opencode-stderr.md).
+
 ## What's Inside
 
 ### Commands (4)

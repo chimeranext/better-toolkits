@@ -5,8 +5,9 @@ on:
     branches: [main]
     paths:
       - "apps/web/**"
-      - ".claude-plugin/marketplace.json" # S5 table data source
+      - ".claude-plugin/marketplace.json"
       - ".github/workflows/deploy-pages.yml"
+      - "docs/multi-harness-ssot.md"
   workflow_dispatch:
 
 permissions:
@@ -32,10 +33,17 @@ jobs:
           cache: npm
           cache-dependency-path: apps/web/package-lock.json
       - run: npm ci
+      # Root deploy for custom domain toolkits.chimeranext.dev (CNAME in public/).
+      # Leave repository variable PAGES_BASE_PATH unset (or empty). Set it to
+      # /better-toolkits only for a temporary project-URL deploy without DNS.
       - run: npm run build
         env:
-          PAGES_BASE_PATH: /better-toolkits
-      - run: touch out/.nojekyll
+          PAGES_BASE_PATH: ${{ vars.PAGES_BASE_PATH }}
+      - run: |
+          touch out/.nojekyll
+          # Ensure CNAME lands in the Pages artifact (Next copies public/ → out/)
+          test -f out/CNAME || cp public/CNAME out/CNAME
+          cat out/CNAME
       - uses: actions/upload-pages-artifact@v3
         with:
           path: apps/web/out

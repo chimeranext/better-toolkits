@@ -42,6 +42,13 @@ npx @lapc506/make-no-mistakes install
 | `make-no-mistakes install --dry-run` | Preview changes |
 | `make-no-mistakes install --force` | Overwrite unmanaged conflicts |
 
+
+### Stderr baseline (OpenCode)
+
+Also register the local stderr adapter so shell redirects are blocked even when this package is the only toolkit installed:
+
+`hooks/stderr/adapters/opencode-plugin.ts` — see [`docs/opencode-stderr.md`](../../docs/opencode-stderr.md).
+
 ## Start here: `/make-no-mistakes:domain-driven-advisor`
 
 **If you only run one command from this plugin, run this one.**
@@ -74,13 +81,19 @@ After the audit(s), it runs a **premortem** on the aggregated remediation plan, 
 
 ## What's Inside
 
-### Commands (33)
+### Commands (39)
 
 Deliberate actions you invoke explicitly.
 
 | Command | Description |
 |---------|-------------|
 | [`/make-no-mistakes:implement <ISSUE-ID>`](commands/implement.md) | Disciplined execution of Linear issues — worktree isolation, all-reviewer loops, CI verification, clean merges |
+| [`/make-no-mistakes:merge-advisor [<base>]`](commands/merge-advisor.md) | Read-only merge **ORDER** for a set of open PRs (pairwise collisions + latent conflicts after earlier lands). Never merges |
+| [`/make-no-mistakes:parallelize <brief>`](commands/parallelize.md) | Plan how to split work across subagents / worktrees / agent teams before implementing |
+| [`/make-no-mistakes:explain <topic>`](commands/explain.md) | Explain a decision, command, or failure mode from project + toolkit context |
+| [`/make-no-mistakes:handover-pr <pr>`](commands/handover-pr.md) | Hand a specific PR to a teammate with verify-don't-remember context |
+| [`/make-no-mistakes:observability-audit`](commands/observability-audit.md) | Audit observability coverage against the consumer contract JSON |
+| [`/make-no-mistakes:secret-generate`](commands/secret-generate.md) | Generate and stage secrets via the secret-store helpers (pairs with secret-input/use/clear) |
 | [`/make-no-mistakes:prioritize <pillar-slug>`](commands/prioritize.md) | MoSCoW + RICE-adapted applied to a pillar's Linear issues, traceable to its PIBER+IDCF sub-spike and the latest vision audit. Outputs priority report + description-footer per issue + snapshot comment on the sub-spike. Chain: `product-vision-audit → prioritize → spike-recommend → implement` |
 | [`/make-no-mistakes:rebase <repo>`](commands/rebase.md) | Team release sync — rebase all branches, auto-merge ready PRs, health report |
 | [`/make-no-mistakes:linear-projects-setup`](commands/linear-projects-setup.md) | Bootstrap Linear workspace with full label taxonomy, projects, and integrations |
@@ -117,18 +130,22 @@ Deliberate actions you invoke explicitly.
 | [`/make-no-mistakes:e2e-test-preview [path]`](commands/e2e-test-preview.md) | Launch a Qt-based visual previewer for `test-suite.json` — interactive table with filtering, detail pane, and CSV export (auto-installs PySide6) |
 | [`/make-no-mistakes:gemini-code-review [target]`](commands/gemini-code-review.md) | Cheap first-pass code review (one-shot via liteLLM) on a parametrizable model — Gemini 3.5 Flash by default; supports `--model` and `--adversarial`, curated against the repo's CLAUDE.md |
 
-### Skills (11)
+### Skills (15)
 
 Auto-activate by context — you don't need to remember the command name.
 
 | Skill | Triggers when you... |
 |-------|---------------------|
 | [`implement-advisor`](skills/implement-advisor/SKILL.md) | Want to work on a Linear issue, implement a feature, or fix a bug (suggests `/make-no-mistakes:implement`) |
+| [`implement`](skills/implement/SKILL.md) | Invoke the full `/implement` protocol (multi-harness entry → `references/implement/*`) |
+| [`parallelize`](skills/parallelize/SKILL.md) | Fan-out work across isolated agents (`/parallelize` → `references/parallelize/protocol.md`) |
+| [`sync-advisor`](skills/sync-advisor/SKILL.md) | Ask "am I up to date", "is my checkout stale", or sync-after-release — measures drift, routes to `git pull` / single rebase / `/rebase`. Never syncs itself |
+| [`merge-advisor`](skills/merge-advisor/SKILL.md) | Ask "in what order do I merge these" — computes merge ORDER for a set of PRs. Never merges |
+| [`rebase-advisor`](skills/rebase-advisor/SKILL.md) | **Deprecated alias** of `sync-advisor` (kept for muscle memory) |
 | [`spec-recommend`](skills/spec-recommend/SKILL.md) | Discuss specs, SRDs, implementation briefs, or say "what should I build" |
 | [`spike-recommend`](skills/spike-recommend/SKILL.md) | Paste a Linear issue URL or ask to analyze an issue |
 | [`review-open-prs`](skills/review-open-prs/SKILL.md) | Ask about open PRs, merge readiness, or Greptile scores |
 | [`review-active-issues`](skills/review-active-issues/SKILL.md) | Ask about your Linear issues, backlog, or issue status |
-| [`rebase-advisor`](skills/rebase-advisor/SKILL.md) | Mention needing to sync branches after a release (suggests `/make-no-mistakes:rebase`) |
 | [`repo-hygiene-advisor`](skills/repo-hygiene-advisor/SKILL.md) | Ask to clean merged branches, branch clutter, or `delete_branch_on_merge` (suggests `/make-no-mistakes:repo-hygiene`) |
 | [`audit-engine`](skills/audit-engine/SKILL.md) | Run any of the six repo-health audits (schema-drift, contract-drift, ddd, explicit-architecture, strangler, enforcement-hooks). Hybrid LLM-first detection + deterministic verification + cure-mapping |
 | [`domain-driven-advisor`](skills/domain-driven-advisor/SKILL.md) | Ask "which audit do I need?" / "where do I start with repo health?" — routes you to the right audit(s) and runs a premortem |
@@ -437,7 +454,7 @@ Implementation briefs produced by `spec-recommend` and `spike-recommend` follow 
 - **Human Layer** — User story, background, analogy, pitfalls (readable by non-engineers)
 - **Agent Layer** — Objective, context files, acceptance criteria, verification commands (executable by AI)
 
-See `skills/spec-recommend/references/bilingual-format.md` for the full template.
+Fill-in SSOT: [`templates/bilingual-issue-brief.md`](templates/bilingual-issue-brief.md). Markers/stubs: [`docs/bilingual-format-standard.md`](docs/bilingual-format-standard.md). Multi-harness contract: [`docs/multi-harness-ssot.md`](../../docs/multi-harness-ssot.md).
 
 ## License
 

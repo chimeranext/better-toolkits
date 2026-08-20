@@ -1,0 +1,17 @@
+{
+  "description": "business-model-toolkit \u2014 includes stderr preserve baseline (see hooks/stderr/README.md).",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/stderr/adapters/claude-pre-bash.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

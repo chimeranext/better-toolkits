@@ -82,7 +82,7 @@ export const METHOD_GROUPS: { label: { en: string; es: string }; items: string[]
 
 // --- Per-language section copy ----------------------------------------------
 type Content = {
-  nav: { install: string; langOther: string };
+  nav: { install: string; langOther: string; doctrine: string };
   s1: string;
   s2: { h1a: string; h1b: string; source: string; sub: string; copy: string; copied: string; github: string; audit: string; trust: string; learnMore: string };
   s3: { a: string; b: string };
@@ -99,7 +99,7 @@ type Content = {
 
 export const COPY: Record<Lang, Content> = {
   en: {
-    nav: { install: "GitHub", langOther: "ES" },
+    nav: { install: "GitHub", langOther: "ES", doctrine: "Multi-harness SSOT" },
     s1: "10 battle-tested toolkits · One command · Source-available",
     s2: {
       h1a: "62% of startups now ship AI-written code.",
@@ -157,7 +157,8 @@ export const COPY: Record<Lang, Content> = {
         { q: "Is this like what HashiCorp did?", a: "No. better-toolkits was born BSL on day one — there's no license rug-pull, and the terms can only relax over time (a fixed date in the legal text)." },
         { q: "Do I need all 10 toolkits?", a: "No. Each is an independent plugin in the same marketplace. Install one, install all — your call." },
         { q: "How is this different from awesome-lists and plugin collections?", a: "Those are fragments. This is an integrated system: the toolkits share conventions and hand work to each other — audit → implement → release → grow." },
-        { q: "Does it work with my stack?", a: "Releases cover Flutter, KMP, .NET MAUI, Swift and PWA. Strategy and process toolkits are framework-agnostic. Built for Claude Code first — and four of the ten (make-no-mistakes, atomic-design, business-model, app-gtm-release) also install into OpenCode via their npm CLIs." },
+        { q: "What is Multi-harness SSOT?", a: "One protocol contract in markdown (references/ + thin entries) and one stderr baseline across Claude Code, Cursor, OpenCode2, and Antigravity — not a Cursor-vs-Claude split. See /doctrine or docs/multi-harness-ssot.md." },
+        { q: "Does it work with my stack?", a: "Releases cover Flutter, KMP, .NET MAUI, Swift and PWA. Strategy and process toolkits are framework-agnostic. Built for Claude Code first — and four of the ten (make-no-mistakes, atomic-design, business-model, app-gtm-release) also install into OpenCode via their npm CLIs. Stderr baseline wires into Claude, Cursor, and OpenCode2." },
         { q: "Can the studio work hands-on with us?", a: "That's exactly what the WhatsApp button is for." },
       ],
     },
@@ -172,7 +173,7 @@ export const COPY: Record<Lang, Content> = {
     s12: { license: "License BSL-1.1 → Non-Profit OSL 3.0", rights: "© 2026 Luis Andres Pena Castillo" },
   },
   es: {
-    nav: { install: "GitHub", langOther: "EN" },
+    nav: { install: "GitHub", langOther: "EN", doctrine: "Multi-harness SSOT" },
     s1: "10 toolkits probados en batalla · Un comando · Source-available",
     s2: {
       h1a: "El 62% de las startups ya shippea código escrito por IA.",
@@ -230,7 +231,8 @@ export const COPY: Record<Lang, Content> = {
         { q: "¿Es como lo que hizo HashiCorp?", a: "No. better-toolkits nació BSL desde el día uno — no hay rug-pull de licencia, y los términos solo pueden relajarse con el tiempo (fecha fija en el texto legal)." },
         { q: "¿Necesito los 10 toolkits?", a: "No. Cada uno es un plugin independiente del mismo marketplace. Instala uno o instala todos." },
         { q: "¿En qué se diferencia de las awesome-lists?", a: "Esas son fragmentos. Esto es un sistema integrado: los toolkits comparten convenciones y se pasan el trabajo — audita → implementa → lanza → crece." },
-        { q: "¿Funciona con mi stack?", a: "Releases: Flutter, KMP, .NET MAUI, Swift y PWA. Estrategia y proceso: agnósticos. Construido primero para Claude Code — y cuatro de los diez (make-no-mistakes, atomic-design, business-model, app-gtm-release) también se instalan en OpenCode vía sus CLIs de npm." },
+        { q: "¿Qué es Multi-harness SSOT?", a: "Un contrato de protocolo en markdown (references/ + entries finos) y un stderr baseline en Claude Code, Cursor, OpenCode2 y Antigravity — no una dicotomía Cursor vs Claude. Ver /doctrine o docs/multi-harness-ssot.md." },
+        { q: "¿Funciona con mi stack?", a: "Releases: Flutter, KMP, .NET MAUI, Swift y PWA. Estrategia y proceso: agnósticos. Construido primero para Claude Code — y cuatro de los diez (make-no-mistakes, atomic-design, business-model, app-gtm-release) también se instalan en OpenCode vía sus CLIs de npm. El stderr baseline se cablea en Claude, Cursor y OpenCode2." },
         { q: "¿El estudio puede trabajar mano a mano con nosotros?", a: "Para eso exactamente está el botón de WhatsApp." },
       ],
     },
