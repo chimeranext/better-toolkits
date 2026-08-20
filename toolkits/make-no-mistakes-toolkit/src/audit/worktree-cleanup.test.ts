@@ -502,9 +502,9 @@ describe('integration — against real git repositories', () => {
 
   it('resolves NO base rather than guessing one, when the repo has none of the conventional names', () => {
     // Not hypothetical. Measured 2026-08-06 across the 23 git checkouts under
-    // ~/Documentos/GitHub/dojocoding: `openclaw` carries 3155 remote-tracking
+    // a multi-repo working root: one checkout carries 3155 remote-tracking
     // refs and not one of origin/{HEAD,main,develop,master,trunk} — every
-    // branch is `origin/dojo/v<date>-fixes`.
+    // branch is `origin/release/v<date>-fixes`.
     //
     // An empty base set is the input that must NOT become "nothing to compare
     // against, so nothing is unmerged". `main()` exits 2 on it; this asserts
@@ -512,13 +512,13 @@ describe('integration — against real git repositories', () => {
     // plausible name.
     const remote = path.join(root, 'remote.git');
     const repo = path.join(root, 'repo');
-    g(['init', '--bare', '-b', 'dojo/v2026.5.22-fixes', remote], root);
-    g(['init', '-b', 'dojo/v2026.5.22-fixes', repo], root);
+    g(['init', '--bare', '-b', 'release/v2026.5.22-fixes', remote], root);
+    g(['init', '-b', 'release/v2026.5.22-fixes', repo], root);
     g(['config', 'user.email', 't@example.com'], repo);
     g(['config', 'user.name', 'T'], repo);
     commit(repo, 'README.md');
     g(['remote', 'add', 'origin', remote], repo);
-    g(['push', '-u', 'origin', 'dojo/v2026.5.22-fixes'], repo);
+    g(['push', '-u', 'origin', 'release/v2026.5.22-fixes'], repo);
     g(['fetch', 'origin', '--prune'], repo);
 
     const { bases, how } = resolveBases(repo, null);
@@ -526,7 +526,7 @@ describe('integration — against real git repositories', () => {
     expect(how).toMatch(/no remote base branch found/);
 
     // ...and naming one explicitly still works, which is the documented way out.
-    expect(resolveBases(repo, 'dojo/v2026.5.22-fixes').bases).toEqual(['dojo/v2026.5.22-fixes']);
+    expect(resolveBases(repo, 'release/v2026.5.22-fixes').bases).toEqual(['release/v2026.5.22-fixes']);
   });
 
   it('CONTROL — the same branch measured against a base it never reached is refused', () => {

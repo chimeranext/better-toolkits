@@ -128,7 +128,7 @@ checkouts under one working root: **21 resolve `main` first, 1 resolves
 `develop` first, 7 resolve a two-element set, and 1 resolves NONE.** That last
 one carries 3155 remote-tracking refs and not one of
 `origin/{HEAD,main,develop,master,trunk}` — every branch is
-`origin/dojo/v<date>-fixes`. The tool exits 2 there asking for `--base`, rather
+`origin/release/v<date>-fixes`. The tool exits 2 there asking for `--base`, rather
 than reading an empty base set as "nothing is unmerged".
 
 The two-element case is the one the set exists for: a repo whose `origin/HEAD`
