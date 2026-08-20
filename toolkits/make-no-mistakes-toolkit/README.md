@@ -89,6 +89,7 @@ Deliberate actions you invoke explicitly.
 |---------|-------------|
 | [`/make-no-mistakes:implement <ISSUE-ID>`](commands/implement.md) | Disciplined execution of Linear issues — worktree isolation, all-reviewer loops, CI verification, clean merges |
 | [`/make-no-mistakes:merge-advisor [<base>]`](commands/merge-advisor.md) | Read-only merge **ORDER** for a set of open PRs (pairwise collisions + latent conflicts after earlier lands). Never merges |
+| [`/make-no-mistakes:disk-cleanup [target-GB]`](commands/disk-cleanup.md) | Reclaim disk in ascending risk (docker images → worktree node_modules → worktrees; volumes listed only). Measured free-space deltas, never predictions |
 | [`/make-no-mistakes:parallelize <brief>`](commands/parallelize.md) | Plan how to split work across subagents / worktrees / agent teams before implementing |
 | [`/make-no-mistakes:explain <topic>`](commands/explain.md) | Explain a decision, command, or failure mode from project + toolkit context |
 | [`/make-no-mistakes:handover-pr <pr>`](commands/handover-pr.md) | Hand a specific PR to a teammate with verify-don't-remember context |
@@ -141,6 +142,7 @@ Auto-activate by context — you don't need to remember the command name.
 | [`parallelize`](skills/parallelize/SKILL.md) | Fan-out work across isolated agents (`/parallelize` → `references/parallelize/protocol.md`) |
 | [`sync-advisor`](skills/sync-advisor/SKILL.md) | Ask "am I up to date", "is my checkout stale", or sync-after-release — measures drift, routes to `git pull` / single rebase / `/rebase`. Never syncs itself |
 | [`merge-advisor`](skills/merge-advisor/SKILL.md) | Ask "in what order do I merge these" — computes merge ORDER for a set of PRs. Never merges |
+| [`worktree-cleanup`](skills/worktree-cleanup/SKILL.md) | Classify/reclaim worktree disk without destroying work; stages 2–3 of `/disk-cleanup` |
 | [`rebase-advisor`](skills/rebase-advisor/SKILL.md) | **Deprecated alias** of `sync-advisor` (kept for muscle memory) |
 | [`spec-recommend`](skills/spec-recommend/SKILL.md) | Discuss specs, SRDs, implementation briefs, or say "what should I build" |
 | [`spike-recommend`](skills/spike-recommend/SKILL.md) | Paste a Linear issue URL or ask to analyze an issue |

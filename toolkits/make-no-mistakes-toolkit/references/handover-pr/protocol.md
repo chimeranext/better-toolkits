@@ -122,7 +122,7 @@ Extract a Linear issue ID from the branch name or PR title (`PREFIX-123-slug`, `
 gh pr view NUMBER --repo "$ORG/$REPO" --json reviews \
   --jq '.reviews[] | {author: .author.login, state: .state}'
 ```
-The verdict of an automated reviewer (e.g., `dojo-code-reviewer`) lands in `.reviews[*]`, NOT `.comments[*]` — read the right field. Capture the score / APPROVED state and any blocking findings.
+The verdict of an automated reviewer (e.g., `example-code-reviewer`) lands in `.reviews[*]`, NOT `.comments[*]` — read the right field. Capture the score / APPROVED state and any blocking findings.
 
 ### 3f. Mergeability
 From 3a, record `mergeable` + `mergeStateStatus`. If `UNSTABLE`/`DIRTY`/conflicts, flag it prominently — the receiver needs to know whether they can merge or must rebase/fix first.
