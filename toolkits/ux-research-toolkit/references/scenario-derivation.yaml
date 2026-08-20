@@ -1,0 +1,195 @@
+# Scenario derivation — how a journey step becomes an ordered set of test cases.
+#
+# ## What this file is, and what it is NOT
+#
+# It is a PORTABLE REFERENCE COPY, for a product that does not yet have its own.
+# Copy it into the consuming repository, adapt the vocabulary to that product's
+# access tiers, and from then on THAT copy is authoritative for that product.
+#
+# It is NOT a runtime dependency, and no command should resolve a rule by
+# reaching into this toolkit at execution time. The reason is not aesthetic:
+# making a product depend on a general-purpose kit means every engineer who
+# wants to add a scenario first has to work out WHICH toolkit command owns the
+# rule, and that lookup is exactly the friction that stops people adding
+# scenarios at all. A rule nobody can apply without a scavenger hunt is a rule
+# that does not get applied.
+#
+# So the consuming product declares the CONTRACT and its INSTANCE together, in
+# one file it owns. When that copy and this one differ, the product's copy wins
+# for the product. Nothing reconciles them automatically — that is a deliberate
+# accepted cost, stated here rather than discovered later.
+#
+# ## Why this is data and not prose
+#
+# "Failure modes first, happy path last" starts life in a README, which is the
+# right home for a convention a PERSON follows and the wrong one for a rule a
+# COMMAND applies. A command that enumerates a pillar's cases cannot parse an
+# argument out of English. This file is the machine half; a README should point
+# here rather than restating it, because two copies of a rule is one copy that
+# drifts.
+#
+# ## What it consumes
+#
+# A journey map whose steps carry `code`, `path`, `access` and (ideally)
+# `pillar` — the fields declared by `assets/schemas/layers/screens.schema.json`.
+# That file says which steps EXIST; this one says what to do with each `access`.
+
+version: 1
+
+# ORDER IS THE POINT, and it is why `order` is an explicit integer rather than
+# document position.
+#
+# Everyone writes the happy path first, because it is what the feature is FOR —
+# and once it is green the feature LOOKS covered, so the failure modes become a
+# backlog item and stay one. Writing them first inverts that: by the time the
+# happy path is reached, everything it needs already exists and it takes ten
+# minutes.
+#
+# Lower `order` is written first. The happy path is deliberately last and
+# deliberately the highest number, so adding a new failure class later does not
+# require renumbering it.
+ordering:
+  authorization: 10
+  input: 20
+  state: 30
+  happy_path: 90
+
+# One row per `access` level, and this is where the free work happens: the map
+# already knows each step's precondition, so the authorization failure mode is a
+# LOOKUP rather than a judgement call.
+#
+# ADAPT THIS SECTION. The levels below are a common starting set, not a
+# standard. A product with entitlements, verification tiers or scoped staff
+# permissions adds rows; a product with only public and private pages deletes
+# most of them. What must not change is the shape: every level either declares
+# what it generates, or declares `generates: null` WITH a reason.
+#
+# `null` is a real answer and not a gap. A screen anyone can reach has nothing
+# to deny, and inventing a scenario for it produces a test asserting the absence
+# of a rule that does not exist.
+access_scenarios:
+  pub:
+    generates: null
+    why: reachable by anyone, so there is nothing to deny
+
+  aware:
+    generates: null
+    why: reachable anonymously; signing in personalises it but does not gate it
+
+  auth:
+    class: authorization
+    title: an anonymous visitor does not reach {label}
+    given: the visitor has no session
+    then_predicate: assertRedirectedToSignIn
+
+  ent:
+    class: authorization
+    title: an account without the entitlement does not reach {label}
+    given: the visitor is signed in with no active entitlement
+    then_predicate: assertEntitlementRequired
+
+  ver:
+    class: authorization
+    title: an unverified account does not reach {label}
+    given: the visitor is signed in but not verified for this resource
+    then_predicate: assertVerificationRequired
+
+  scoped:
+    class: authorization
+    # The row that is easy to collapse into `admin` and expensive to. When a
+    # surface is gated behind a SCOPED permission rather than staff status, the
+    # interesting denial is a staff account that LACKS that permission — not an
+    # anonymous visitor, who is already denied at the staff boundary. Collapsing
+    # the two tests the boundary twice and the actual rule zero times.
+    title: a staff account without the scoped permission does not reach {label}
+    given: the visitor is staff but lacks the permission this surface requires
+    then_predicate: assertPermissionRequired
+
+  admin:
+    class: authorization
+    title: a non-staff account does not reach {label}
+    given: the visitor is signed in and is not staff
+    then_predicate: assertAdminRequired
+
+# Emitted LAST for every step regardless of access level. Short by construction:
+# everything it needs was set up by the failure modes written above it.
+happy_path:
+  class: happy_path
+  title: "{label} renders for a permitted visitor"
+  # Supplied per case. A derivation rule cannot decide what "correct" means for
+  # a given screen; a human reviewing the round decides that.
+  then_predicate: null
+
+# EVERY GENERATED SCENARIO CARRIES THESE, and the reason is the promotion gate.
+#
+# A tag that maps to the runner's "parse but never execute" mode means a
+# generated scenario is syntax-checked on every build and NEVER run. It comes
+# off only when BOTH hold: a human has used the case and said what it means, and
+# the predicate its `Then` names actually exists.
+#
+# That is deliberate and not an obstacle. A generator that emitted green
+# scenarios would manufacture exactly the false confidence this whole approach
+# exists to remove — a suite that passes while asserting nothing is worse than
+# no suite, because it is counted.
+generated_tags:
+  - "@fixme"
+  - "@n1"
+
+# REPORTING VOCABULARY — how a derived scenario reaches a test-management tool.
+#
+# Both major targets key off labels the test declares, and if those labels are
+# invented per-suite the report groups by nothing useful: a flat list of cases
+# with no way to ask "how is this area doing". So the grouping is derived from
+# fields the map already carries, and declared HERE rather than in each
+# consumer, because two consumers deriving it independently is two derivations
+# that drift.
+reporting:
+  # Three-level grouping, so a report reads top-down by area without anyone
+  # configuring a view.
+  allure:
+    epic: "{pillar}"
+    feature: "{surface}"
+    story: "{code}"
+    tags: ["access:{access}", "{class}"]
+    # A LINK, not a label: the code joins back to the map and to the weekly
+    # capture, so a reader looking at a failure can see the screen itself.
+    link:
+      name: "journey map: {code}"
+      url: "{map_url}#{code}"
+
+  # Suite-and-fields, for tools that allocate their own numeric IDs. `{code}`
+  # cannot BE that ID, so it travels as a field instead. Dropping it would leave
+  # a case unable to name which screen it covers, which is the whole point of
+  # deriving from a map.
+  qase:
+    suite: "{pillar}/{surface}"
+    title: "{title}"
+    fields:
+      screen_code: "{code}"
+      route: "{route}"
+      access: "{access}"
+
+  # Severity is derived from the scenario CLASS, never guessed per case.
+  #
+  # An authorization scenario failing means a screen is reachable by someone who
+  # should not reach it. That is a different order of problem from a happy path
+  # rendering wrong, and a report that ranks them the same makes the triage
+  # order somebody's mood.
+  severity:
+    authorization: critical
+    input: normal
+    state: normal
+    happy_path: normal
+
+# What this file does NOT decide, so that each absence is a decision rather than
+# an oversight:
+#
+#   - WHICH steps become end-to-end tests at all. That is a moment-of-truth
+#     filter, and it is a VOLUME question rather than an ordering one. Deriving
+#     a scenario for every step and running all of them inverts the test
+#     pyramid, which is a well-documented anti-pattern.
+#   - What "correct" means for a happy path. A human reviewing the round
+#     adjudicates that; a derivation rule cannot.
+#   - Whether the predicates named above exist. They are the INTENDED contract.
+#     A `Then` naming a predicate that does not exist must fail the promotion
+#     gate — that is the gate working, not a defect in this file.
