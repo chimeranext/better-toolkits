@@ -1,0 +1,66 @@
+{
+  "name": "product-journey-map",
+  "display_name": "Product Journey Map",
+  "$comment": "A journey map whose steps are real product screens. It is a SEPARATE profile rather than a flag on `journey-map` because the `screens` layer is required once present, and adding it there would invalidate every existing journey map at once. Additive, and it names the thing: this is the profile whose output is meant to be consumed by machines as well as read by people.\n\nWHAT MAKES IT DIFFERENT, and it is one property: every step carries a navigable `path` and an `access` precondition. That is what lets a capturer visit the screen and a test suite derive its failure modes, without anyone re-typing the journey into a second artefact that then drifts.\n\nTHE RENDERER CONTRACT, restated here because a profile is where a renderer looks: the procedural wireframe is drawn UNDERNEATH the screenshot, always. A missing capture degrades to a diagram, never to a broken image, and stays visibly missing rather than silently indistinguishable from a captured one.",
+  "layers": [
+    "core",
+    "screens",
+    "actions",
+    "touchpoints"
+  ],
+  "components": [
+    "base-layout",
+    "persona-card",
+    "phase-table",
+    "screen-grid",
+    "action-rows",
+    "touchpoint-map",
+    "moments-of-truth",
+    "editor-controls"
+  ],
+  "default_phases": [
+    {
+      "id": "public",
+      "label": "Público",
+      "icon": "🌐"
+    },
+    {
+      "id": "signup",
+      "label": "Registro & onboarding",
+      "icon": "🔑"
+    },
+    {
+      "id": "core-use",
+      "label": "Uso principal",
+      "icon": "⚡"
+    },
+    {
+      "id": "staff",
+      "label": "Operación interna",
+      "icon": "🛠️"
+    }
+  ],
+  "requires_product_context": true,
+  "capture": {
+    "$comment": "Read by the capturing pipeline that lives in the consuming repo, NOT by this toolkit. The toolkit declares the contract; whoever owns the product owns the browser, the sessions and the schedule. Putting the capturer here would make this toolkit depend on Playwright and on one product's auth, and it is meant to be usable by more than one.",
+    "output_dir": "dojo-journey-map-screens",
+    "filename": "{code}.jpg",
+    "format": "jpeg",
+    "quality": 72,
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "access_sessions": {
+      "pub": null,
+      "aware": null,
+      "auth": "JOURNEY_CAPTURE_SESSION_AUTH",
+      "ent": "JOURNEY_CAPTURE_SESSION_ENT",
+      "ver": "JOURNEY_CAPTURE_SESSION_VER",
+      "scoped": "JOURNEY_CAPTURE_SESSION_SCOPED",
+      "admin": "JOURNEY_CAPTURE_SESSION_ADMIN"
+    },
+    "on_missing_session": "skip",
+    "$comment_on_missing": "`skip`, never `fail`. A screen whose session is unavailable renders as its wireframe, which is the same degradation the renderer already guarantees. Failing the whole run because one session expired would make the pipeline all-or-nothing, and an all-or-nothing weekly job is one that ends up disabled."
+  }
+}

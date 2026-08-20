@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ux-research-toolkit/schemas/layers/screens.schema.json",
+  "title": "UX Research Toolkit — Screens Layer",
+  "description": "Layer schema extending each phase with the concrete product screens a persona passes through. This is the layer that turns a map from a research artefact into a reusable input: a screen carries a navigable route and an auth precondition, so an automated capturer can visit it and a test suite can derive scenarios from it without anyone re-typing the journey.",
+  "$comment": "WHY THIS LAYER EXISTS AND WHY IT IS NOT `touchpoints`.\n\n`touchpoints` answers 'what does the persona interact with' in prose:\n'App móvil', 'Correo de confirmación'. That is the right resolution for\nresearch and the wrong one for automation, because prose does not resolve\nto anything a machine can visit or assert against.\n\nA screen is the same moment expressed so that BOTH readers work: a human\nsees the step, and a capturer sees a route plus the auth state needed to\nreach it. Nothing in this layer replaces `touchpoints`; a phase can carry\nboth, and a research-only map simply omits this one.\n\nTHE CONTRACT THE RENDERER MUST HOLD, stated here because it is the\nproperty that makes a weekly pipeline survivable:\n\n  A procedural wireframe renders UNDERNEATH the screenshot, always.\n\nThe screenshot is layered on top. When a capture is missing, stale or\nfailed, the wireframe stays visible and the map degrades to a diagram.\nIt never degrades to a broken image, and — more importantly — a missing\ncapture is VISIBLE as a wireframe rather than silently indistinguishable\nfrom a captured one.\n\n`code` is the join key and is never renumbered. The capturer writes\n`<code>.jpg`, downstream suites key scenarios off the same string, and a\nrenumber would break both silently.",
+  "type": "object",
+  "properties": {
+    "screens": {
+      "type": "array",
+      "description": "Ordered product screens this phase passes through.",
+      "minItems": 0,
+      "items": {
+        "$ref": "#/$defs/screen"
+      }
+    }
+  },
+  "required": [
+    "screens"
+  ],
+  "$defs": {
+    "screen": {
+      "type": "object",
+      "description": "One product screen: what it is called, where it lives, and what a visitor must already be to reach it.",
+      "required": [
+        "code",
+        "label",
+        "path",
+        "access"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "Stable join key, unique across the whole map. Written by the capturer as `<code>.jpg` and consumed by downstream test suites. NEVER renumber it: a renumber orphans every capture and every derived scenario at once, and both fail silently.",
+          "pattern": "^[A-Z][A-Z0-9]{1,10}-[0-9]{2}$",
+          "examples": [
+            "AUTH-01",
+            "PATH-07",
+            "HACK-12"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "description": "Human-readable name for the screen, as it appears on the map.",
+          "examples": [
+            "Verificar email",
+            "Elegir plan",
+            "Directorio de inversionistas"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "description": "Route relative to the product origin, with parameters in `:param` form. Must be navigable: this is what the capturer visits and what a `When` step would drive to. A path nobody can reach is a screen nobody can capture.",
+          "pattern": "^/",
+          "examples": [
+            "/auth/verify-email",
+            "/offers/:slug",
+            "/launchpad/investors/:slug"
+          ]
+        },
+        "access": {
+          "type": "string",
+          "description": "The precondition a visitor must already satisfy to reach this screen. The capturer uses it to pick a session, and a derived test uses it to generate the authorization failure mode: for anything above `pub`, the first scenario is that a visitor WITHOUT it does not get there.\n\nOrdered from least to most restrictive. The four in the middle are not decoration: collapsing them into `auth`/`admin` makes the capturer bring the wrong session, get a 403, and record a reachable screen as unreachable.\n\n  pub    no session\n  aware  reachable anonymously, personalised when signed in\n  auth   any signed-in account\n  ent    a purchased entitlement (an organization plan, a tier)\n  ver    a verified or eligible state (accepted terms, joined the event)\n  scoped a specific permission beyond plain admin\n  admin  staff\n\nMEASURED, not designed: this vocabulary was extracted from a real 195-screen map. The first draft of this schema had only four values, built from a sample of one lane, and the validator rejected 13 screens on the full map. That rejection is why the list is seven.",
+          "enum": [
+            "pub",
+            "aware",
+            "auth",
+            "ent",
+            "ver",
+            "scoped",
+            "admin"
+          ],
+          "examples": [
+            "pub",
+            "auth"
+          ]
+        },
+        "archetype": {
+          "type": "string",
+          "description": "Layout family, used by the renderer to draw the procedural wireframe that sits underneath the screenshot. This is what makes a missing capture degrade to a diagram rather than to a broken image.",
+          "examples": [
+            "landing",
+            "form",
+            "list",
+            "table",
+            "profile",
+            "doc",
+            "pricing",
+            "success",
+            "loading",
+            "cert"
+          ]
+        },
+        "screenshot": {
+          "type": "string",
+          "description": "Path or data URI of the captured image. OPTIONAL on purpose: a map with no captures is a valid map that renders as wireframes, and a pipeline that has not run yet must not invalidate the document it is supposed to enrich.",
+          "examples": [
+            "dojo-journey-map-screens/AUTH-01.jpg",
+            "data:image/jpeg;base64,…"
+          ]
+        },
+        "captured": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the screenshot was taken. Absence means never captured; a stale date means the capture is older than the screen. Both are legible states, and neither is the same as 'captured and fine' — which is the distinction a bare image silently loses."
+        },
+        "pillar": {
+          "type": "string",
+          "description": "Owning pillar, for routing findings to whoever can fix them. Left free-form here because the owning system is the consuming repo's, not this toolkit's: hard-coding one product's pillar list would make this schema wrong everywhere else.",
+          "examples": [
+            "pathways",
+            "hackathons",
+            "launchpad",
+            "platform"
+          ]
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}
