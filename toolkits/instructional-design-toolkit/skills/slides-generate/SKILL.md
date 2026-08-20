@@ -35,7 +35,9 @@ Three principles: extreme clarity, zero decoration, surgical use of color. Every
 - Use: opening slide of every deck
 
 ### 2. Statement Slide
-- One sentence broken across 1-2 lines
+- One sentence broken across 1-2 lines with a **semantic `<br>`** at the main
+  clause boundary — never let the browser choose the wrap (see "Semantic Line
+  Breaks" below)
 - The 1-2 most important words get `<strong>` (renders in the consumer's primary accent)
 - Action phrases get `<u>` (underline in accent color)
 - No bullets, no lists — just the statement
@@ -92,6 +94,35 @@ Three principles: extreme clarity, zero decoration, surgical use of color. Every
 | Transition h1 | 400 | 2.8em | Text color |
 | Logo | 800 | 52px height | 55% opacity |
 
+
+## Semantic Line Breaks
+
+On `statement`, `title`, and `transition` slides, **you** control where each line
+breaks — never the browser. A browser wrap keys off the slide width, so it will
+strand a single trailing word ("minutos." on its own line) and the rhythm of the
+line collapses. Insert a `<br>` at the main clause boundary instead.
+
+- Keep it to at most 2 lines, roughly 8-10 words per line.
+- Break where the sentence naturally pauses (after the leading clause, before the
+  verb phrase).
+
+| Don't (browser-wrapped) | Do (semantic `<br>`) |
+|-------------------------|----------------------|
+| `Al final de esta sesión vas a poder salir al aire en minutos.` — the browser leaves "minutos." alone on line 2 | `Al final de esta sesión,<br>vas a poder salir al aire en minutos.` |
+
+## Anti-Widow Typography
+
+Consumer deck templates must guard against widows and orphans in CSS so no line
+is left with a single dangling word:
+
+- `text-wrap: balance` on headings (`h1`, `.big-idea`) — evens out multi-line
+  headings.
+- `text-wrap: pretty` on prose and bullets (`p`, `li`) — prevents single-word
+  last lines.
+
+If a consumer template does not already ship these declarations, the generator
+adds them to the `<style>` block of the deck it emits.
+
 ## Content Extraction Rules
 
 When converting a video script to slides:
@@ -123,6 +154,8 @@ When converting a video script to slides:
 | Slide with no accent word | Every slide should have at least one `<strong>` |
 | Using accent on unimportant words | Accent = the word the audience must remember |
 | Paragraphs of text | If it's more than 2 lines, break it into bullets or multiple slides |
+| Browser-wrapped statements stranding one word on a line | Insert a semantic `<br>` at the clause boundary (see Semantic Line Breaks) |
+| Templates with no widow guard | `text-wrap: balance` on headings, `text-wrap: pretty` on prose/bullets |
 
 ## Image Generation
 
