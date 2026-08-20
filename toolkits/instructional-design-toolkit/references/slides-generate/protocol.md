@@ -149,6 +149,21 @@ Parse the video brief's script sections. For each section:
 - **Alternate content and statement slides** — never two content slides back-to-back
 - **Target 1 slide per 30-60 seconds** of estimated speaking time
 
+- **Semantic line breaks in statements** — for `statement`, `title`, and
+  `transition` slides, YOU must insert `<br>` at the main clause boundary.
+  Never delegate line-wrapping to the browser (it breaks on width, stranding a
+  single word — e.g. "minutos." — on its own line). Keep it to at most 2 lines,
+  ~8-10 words per line, and break where the sentence naturally pauses.
+  - Bad (browser-wrapped): "Al final de esta sesión vas a poder salir al aire en
+    minutos." — the browser leaves "minutos." alone on line 2.
+  - Good (semantic `<br>`): "Al final de esta sesión,<br>vas a poder salir al aire
+    en minutos."
+- **Anti-widow typography** — the consumer's deck templates must set
+  `text-wrap: balance` on headings (`h1`, `.big-idea`) and `text-wrap: pretty`
+  on prose and bullets (`p`, `li`) so no line is left with a single dangling
+  word. If the consumer template does not already include these declarations, add
+  them to the `<style>` block of the deck you emit.
+
 ## Phase 3 — Generate HTML
 
 Create a self-contained `.html` file by:

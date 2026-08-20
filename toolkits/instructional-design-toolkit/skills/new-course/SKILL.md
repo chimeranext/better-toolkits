@@ -159,8 +159,9 @@ Leer `${CLAUDE_PLUGIN_ROOT}/assets/skill-references/blooms-taxonomy.md`.
 
 Preguntar:
 
-1. "¿Cuántos módulos planeás? (típico 8-12 para cursos de 30-50h, 4-6 para cursos
-   cortos de 10-15h)"
+1. "¿Cuántos módulos planeás? Los módulos NO tienen número obligatorio — se
+   agrupan sólo cuando hay suficientes lecciones que van juntas. Menos de 8
+   lecciones normalmente no necesita módulos."
 
 2. "¿Tenés fuentes de inspiración? (otros cursos, libros, repos open source, papers).
    Si sí, mencionalos para basar la ramp en evidencia."
@@ -184,7 +185,7 @@ Para cada módulo, preguntar (uno a la vez):
 a. "Título del módulo:"
 b. "Philosophy quote — 1 frase ethos del módulo (ej. 'Un buen test es la primera línea de docs'):"
 c. "Bloom level (Recognize / Explain / Build / Debug / Decide / Ship):"
-d. "Estimated hours (2-5 típico):"
+d. "Estimated hours (deriva de las lecciones: 3-20 min cada una):"
 e. "Ship milestone — qué shippea el alumno al terminar este módulo (concreto):"
 
 Asignar `id` estable (`module:slug`) y `au_id` (`au:slug-001`) — el agent
@@ -208,7 +209,8 @@ CONTEXT→CONCEPT→BUILD→SHIP→REFLECT).
 
 Para cada módulo (uno a la vez), preguntar:
 
-> "Vamos al Módulo {N}: {title}. ¿Cuántas lecciones tiene? (4-7 típico, máximo 9)"
+> "Vamos al Módulo {N}: {title}. ¿Cuántas lecciones tiene? (4-7 típico, máximo 9.
+>  El curso completo necesita MÍNIMO 5 lecciones, aunque sean cortas.)"
 
 Para cada lección dentro del módulo (una a la vez), preguntar las 5 secciones de
 la fórmula. **Crítico**: respetar la regla Load-Bearing (la lección enseña el
@@ -239,7 +241,7 @@ f. "**REFLECT** — 1-2 preguntas provocativas específicas a ESTA lección. NUN
    '¿Cuál de las warnings de flutter doctor te tentó posponer que después te daría
    problema en producción?'"
 
-g. "**Estimated minutes** (15-60 típico):"
+g. "**Estimated minutes** (3-20; apuntá a 5-10. MÁXIMO 20 — microlearning):"
 
 Asignar `id` estable (`lesson:slug`).
 
