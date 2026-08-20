@@ -432,20 +432,20 @@
     "match": [
       {
         "field": "text",
-        "pattern": "[•◦▪▫]"
+        "pattern": "[\u2022\u25e6\u25aa\u25ab]"
       }
     ],
     "action": "warn",
     "bypass_marker": null,
     "memory_ref": "feedback_slack_no_unicode_bullets.md",
     "references": [],
-    "message": "Slack style: Unicode bullets (•◦▪▫) detected. Use \"-\" instead.\n",
+    "message": "Slack style: Unicode bullets (\u2022\u25e6\u25aa\u25ab) detected. Use \"-\" instead.\n",
     "tests": [
       {
         "name": "warns-on-bullet",
         "input": {
           "tool_input": {
-            "text": "Hola • mundo"
+            "text": "Hola \u2022 mundo"
           }
         },
         "expected_exit": 0,
@@ -477,7 +477,7 @@
     "action": "warn",
     "bypass_marker": null,
     "memory_ref": "feedback_slack_tables.md",
-    "message": "Slack style: markdown table syntax detected.\nSlack mrkdwn does not render bare pipe-tables — wrap the table in\ntriple-backtick fences for it to display correctly.\n",
+    "message": "Slack style: markdown table syntax detected.\nSlack mrkdwn does not render bare pipe-tables \u2014 wrap the table in\ntriple-backtick fences for it to display correctly.\n",
     "tests": [
       {
         "name": "warns-on-bare-table",
@@ -493,7 +493,7 @@
         "name": "allows-message-with-stray-pipes",
         "input": {
           "tool_input": {
-            "text": "Just a paragraph with | a stray pipe | character — no table here.\n"
+            "text": "Just a paragraph with | a stray pipe | character \u2014 no table here.\n"
           }
         },
         "expected_exit": 0
@@ -517,7 +517,7 @@
     "bypass_marker": null,
     "memory_ref": "feedback_spanish_accents.md",
     "references": [],
-    "message": "Slack style: Spanish word without tilde detected. Always write with accents\n(migración, verificación, análisis, patrón, también, configuración, ...).\n",
+    "message": "Slack style: Spanish word without tilde detected. Always write with accents\n(migraci\u00f3n, verificaci\u00f3n, an\u00e1lisis, patr\u00f3n, tambi\u00e9n, configuraci\u00f3n, ...).\n",
     "tests": [
       {
         "name": "warns-on-tildeless-migracion",
@@ -533,7 +533,7 @@
         "name": "allows-with-tilde",
         "input": {
           "tool_input": {
-            "text": "La migración fue exitosa"
+            "text": "La migraci\u00f3n fue exitosa"
           }
         },
         "expected_exit": 0
@@ -542,7 +542,7 @@
   },
   {
     "id": "ds-arbitrary-breakpoint",
-    "description": "Block arbitrary Tailwind breakpoints (min-[Xpx]) in TSX/JSX/TS source — use sm:/md:/lg:/xl:/2xl: preset breakpoints",
+    "description": "Block arbitrary Tailwind breakpoints (min-[Xpx]) in TSX/JSX/TS source \u2014 use sm:/md:/lg:/xl:/2xl: preset breakpoints",
     "applies_to": [
       "Edit",
       "Write",
@@ -617,7 +617,7 @@
   },
   {
     "id": "ds-deep-ui-import",
-    "description": "Block deep imports from @/components/ui/<file> — always import from the barrel @/components/ui",
+    "description": "Block deep imports from @/components/ui/<file> \u2014 always import from the barrel @/components/ui",
     "applies_to": [
       "Edit",
       "Write",
@@ -692,7 +692,7 @@
   },
   {
     "id": "ds-arbitrary-fixed-width-in-ds-component",
-    "description": "Block arbitrary fixed widths (w-[Xpx]) inside DS components — they must be flexible (w-full + max-w)",
+    "description": "Block arbitrary fixed widths (w-[Xpx]) inside DS components \u2014 they must be flexible (w-full + max-w)",
     "applies_to": [
       "Edit",
       "Write",
@@ -711,7 +711,7 @@
     "action": "block",
     "bypass_marker": "ds-arbitrary-fixed-width",
     "memory_ref": "feedback_design_system_no_fixed_pixel_widths.md",
-    "message": "BLOCKED: arbitrary fixed pixel width in a DS component.\n\nDS components live under src/components/ui/ and must be flexible.\nUse w-full + max-w-[Xpx] instead of w-[Xpx], so the component\nadapts to its container.\n\nApplication-level usage (outside src/components/ui/) is exempt —\nthis rule only fires when editing the DS components themselves.\n",
+    "message": "BLOCKED: arbitrary fixed pixel width in a DS component.\n\nDS components live under src/components/ui/ and must be flexible.\nUse w-full + max-w-[Xpx] instead of w-[Xpx], so the component\nadapts to its container.\n\nApplication-level usage (outside src/components/ui/) is exempt \u2014\nthis rule only fires when editing the DS components themselves.\n",
     "tests": [
       {
         "name": "blocks-w-pixel-in-ui-button",
@@ -777,7 +777,7 @@
   },
   {
     "id": "ds-raw-hex-color-in-source",
-    "description": "Warn on raw hex color literals in TSX/TS source — colors must come from Tailwind tokens (chimera-primary-*, etc.)",
+    "description": "Warn on raw hex color literals in TSX/TS source \u2014 colors must come from Tailwind tokens (chimera-primary-*, etc.)",
     "applies_to": [
       "Edit",
       "Write",
@@ -906,7 +906,7 @@
     "action": "block",
     "bypass_marker": "schema-sql-outside-migrations",
     "memory_ref": "feedback_scripts_not_db.md",
-    "message": "BLOCKED: schema-changing SQL in a file outside supabase/migrations/.\n\nEvery schema mutation (ALTER/CREATE/DROP/GRANT/POLICY) MUST live in a\ntimestamped migration file, never in ad-hoc scripts or runtime queries.\n\nCreate a new file:\n  supabase/migrations/$(date -u +%Y%m%d%H%M%S)_<slug>.sql\n\nLegitimate exceptions (use the bypass marker):\n- Schema docs / examples in READMEs — should not be executable SQL\n- Test fixtures under supabase/tests/ — already exempt via not_pattern\n",
+    "message": "BLOCKED: schema-changing SQL in a file outside supabase/migrations/.\n\nEvery schema mutation (ALTER/CREATE/DROP/GRANT/POLICY) MUST live in a\ntimestamped migration file, never in ad-hoc scripts or runtime queries.\n\nCreate a new file:\n  supabase/migrations/$(date -u +%Y%m%d%H%M%S)_<slug>.sql\n\nLegitimate exceptions (use the bypass marker):\n- Schema docs / examples in READMEs \u2014 should not be executable SQL\n- Test fixtures under supabase/tests/ \u2014 already exempt via not_pattern\n",
     "tests": [
       {
         "name": "blocks-create-table-in-script",
@@ -996,7 +996,7 @@
     "action": "warn",
     "bypass_marker": "psql-supabase-remote",
     "memory_ref": "feedback_scripts_not_db.md",
-    "message": "WARNING: direct psql / pg_dump / pg_restore execution against a Supabase\nremote host.\n\nSQL Editor / direct-Postgres-CLI workflows create drift between the\nversioned migrations directory and other devs' local databases.\n\nCorrect workflow:\n  1. Add a migration in supabase/migrations/<timestamp>_<slug>.sql\n  2. Test locally:  supabase db reset --local\n  3. Push to develop — CI applies the migration to staging automatically\n  4. For production: follow the create-release SOP\n\nUse the bypass marker only for legitimate hotfixes where the PR cycle\nis too slow.\n",
+    "message": "WARNING: direct psql / pg_dump / pg_restore execution against a Supabase\nremote host.\n\nSQL Editor / direct-Postgres-CLI workflows create drift between the\nversioned migrations directory and other devs' local databases.\n\nCorrect workflow:\n  1. Add a migration in supabase/migrations/<timestamp>_<slug>.sql\n  2. Test locally:  supabase db reset --local\n  3. Push to develop \u2014 CI applies the migration to staging automatically\n  4. For production: follow the create-release SOP\n\nUse the bypass marker only for legitimate hotfixes where the PR cycle\nis too slow.\n",
     "tests": [
       {
         "name": "warns-on-psql-supabase-remote",
@@ -1089,7 +1089,7 @@
     "action": "warn",
     "bypass_marker": "pr-create-no-migration-note",
     "memory_ref": "feedback_scripts_not_db.md",
-    "message": "WARNING: gh pr create body does not mention migrations.\n\nIf your PR modifies files under supabase/migrations/, the body MUST\ninclude a \"Migration deployment\" section that lists:\n  1. Which envs need supabase db push (staging auto via CI; prod via release)\n  2. Backfill order if the migrations depend on existing data\n  3. Post-merge verification steps\n\nThis rule does NOT inspect the diff — it only reads the command, and it\nintentionally skips --body-file invocations because it cannot read the\nreferenced file. Use the bypass marker if your PR has no migrations.\n",
+    "message": "WARNING: gh pr create body does not mention migrations.\n\nIf your PR modifies files under supabase/migrations/, the body MUST\ninclude a \"Migration deployment\" section that lists:\n  1. Which envs need supabase db push (staging auto via CI; prod via release)\n  2. Backfill order if the migrations depend on existing data\n  3. Post-merge verification steps\n\nThis rule does NOT inspect the diff \u2014 it only reads the command, and it\nintentionally skips --body-file invocations because it cannot read the\nreferenced file. Use the bypass marker if your PR has no migrations.\n",
     "tests": [
       {
         "name": "warns-on-pr-create-body-without-migration-mention",
@@ -1154,7 +1154,7 @@
     "action": "block",
     "bypass_marker": "prod-db-push-approved",
     "memory_ref": "feedback_never_touch_prod_without_approval.md",
-    "message": "BLOCKED: supabase db push targeting either the PRODUCTION project ref\nor the currently-linked project (which may be production).\n\nNEVER run against production without explicit user approval — see\nfeedback_never_touch_prod_without_approval.md.\n\nCorrect workflow:\n  1. Merge to main\n  2. The release owner runs the create-release SOP that ships\n     migrations to production through CI, not from a developer machine.\n\nUse the bypass marker ONLY when the user has verbally approved the\noperation. For --linked, double-check the active link first:\n  supabase status --output json | jq -r '.project_ref'\n\nMarketplace consumers: the production project ref is configured per\ninstall via .private/substitutions.json (PROD_SUPABASE_REF token). See\nhooks/rules/README.md for the substitution workflow.\n",
+    "message": "BLOCKED: supabase db push targeting either the PRODUCTION project ref\nor the currently-linked project (which may be production).\n\nNEVER run against production without explicit user approval \u2014 see\nfeedback_never_touch_prod_without_approval.md.\n\nCorrect workflow:\n  1. Merge to main\n  2. The release owner runs the create-release SOP that ships\n     migrations to production through CI, not from a developer machine.\n\nUse the bypass marker ONLY when the user has verbally approved the\noperation. For --linked, double-check the active link first:\n  supabase status --output json | jq -r '.project_ref'\n\nMarketplace consumers: the production project ref is configured per\ninstall via .private/substitutions.json (PROD_SUPABASE_REF token). See\nhooks/rules/README.md for the substitution workflow.\n",
     "tests": [
       {
         "name": "blocks-supabase-db-push-prod",
@@ -1379,7 +1379,7 @@
   },
   {
     "id": "block-playwright-headless",
-    "description": "Block `playwright test` invocations that omit --headed / --ui / --debug (memory feedback_no_headless.md — browser must be visible during E2E)",
+    "description": "Block `playwright test` invocations that omit --headed / --ui / --debug (memory feedback_no_headless.md \u2014 browser must be visible during E2E)",
     "applies_to": [
       "Bash"
     ],
@@ -1499,7 +1499,7 @@
     "match": [
       {
         "field": "command",
-        "pattern": "git[[:space:]]+push.*(-f\\b|--force([[:space:]]|$))"
+        "pattern": "git[[:space:]]+push.*([[:space:]]-f\\b|--force([[:space:]]|$))"
       },
       {
         "field": "command",
@@ -1509,7 +1509,7 @@
     "action": "block",
     "bypass_marker": "git-force-push-bare-allowed",
     "memory_ref": "feedback_resolve_merge_conflicts.md",
-    "message": "BLOCKED: `git push --force` without --force-with-lease.\n\nBare --force overwrites the remote without verifying that what is\nthere is what you last fetched — it silently destroys collaborator\npushes. --force-with-lease aborts when the remote has advanced since\nyour last fetch, which is the safety net you want.\n\nUse:\n  git push --force-with-lease origin <branch>\n\nBypass marker (git-force-push-bare-allowed) ONLY when you have\nverified that no other contributor has pushed to the branch.\n",
+    "message": "BLOCKED: `git push --force` without --force-with-lease.\n\nBare --force overwrites the remote without verifying that what is\nthere is what you last fetched \u2014 it silently destroys collaborator\npushes. --force-with-lease aborts when the remote has advanced since\nyour last fetch, which is the safety net you want.\n\nUse:\n  git push --force-with-lease origin <branch>\n\nIf --force-with-lease is itself refusing, the remote HAS advanced \u2014\nthat is the collaborator push you were about to destroy, and it is\ninformation, not an obstacle.\n\nA block is a finding. Report it upward rather than routing around it.\n",
     "tests": [
       {
         "name": "blocks-force-short-flag",
@@ -1564,6 +1564,69 @@
           }
         },
         "expected_exit": 0
+      },
+      {
+        "name": "allows-plain-push-then-hex-range-grep",
+        "input": {
+          "tool_input": {
+            "command": "git push > \"$log\" 2>&1; grep -aoE '[0-9a-f]{10}\\.\\.[0-9a-f]{10}' \"$log\""
+          }
+        },
+        "expected_exit": 0
+      },
+      {
+        "name": "allows-plain-push-then-a-f-range-grep",
+        "input": {
+          "tool_input": {
+            "command": "git push origin main && grep -E '[a-f]+' out.txt"
+          }
+        },
+        "expected_exit": 0
+      },
+      {
+        "name": "blocks-force-short-flag-at-end-of-command",
+        "input": {
+          "tool_input": {
+            "command": "git push -f"
+          }
+        },
+        "expected_exit": 2
+      },
+      {
+        "name": "allows-other-command-f-flag-before-the-push",
+        "input": {
+          "tool_input": {
+            "command": "rm -f stale.lock && git push origin main"
+          }
+        },
+        "expected_exit": 0
+      },
+      {
+        "name": "known-limitation-fires-on-grep-f-in-same-command",
+        "input": {
+          "tool_input": {
+            "command": "git push origin main && grep -f patterns.txt build.log"
+          }
+        },
+        "expected_exit": 2
+      },
+      {
+        "name": "known-limitation-fires-on-tar-f-in-same-command",
+        "input": {
+          "tool_input": {
+            "command": "git push origin main; tar -xz -f a.tgz"
+          }
+        },
+        "expected_exit": 2
+      },
+      {
+        "name": "known-limitation-fires-on-rm-f-in-same-command",
+        "input": {
+          "tool_input": {
+            "command": "git push origin main && rm -f stale.lock"
+          }
+        },
+        "expected_exit": 2
       }
     ]
   },
@@ -1649,7 +1712,7 @@
     "action": "block",
     "bypass_marker": "standup-non-desktop-acknowledged",
     "memory_ref": "feedback_standup_desktop.md",
-    "message": "BLOCKED: daily-standup file being written outside ~/Escritorio.\n\nPer feedback_standup_desktop.md the standup lives in ~/Escritorio,\nNEVER inside a repo (commit-by-accident risk + cross-repo\nfragmentation). The standup-post-slack skill always resolves the\npath from ~/Escritorio.\n\nUse the absolute path:\n  ~/Escritorio/daily-standup.md\n(or ~/Desktop/daily-standup.md on English-locale machines).\n\nBypass marker is intentionally NOT recommended — there is no\nlegitimate path outside the desktop.\n",
+    "message": "BLOCKED: daily-standup file being written outside ~/Escritorio.\n\nPer feedback_standup_desktop.md the standup lives in ~/Escritorio,\nNEVER inside a repo (commit-by-accident risk + cross-repo\nfragmentation). The standup-post-slack skill always resolves the\npath from ~/Escritorio.\n\nUse the absolute path:\n  ~/Escritorio/daily-standup.md\n(or ~/Desktop/daily-standup.md on English-locale machines).\n\nBypass marker is intentionally NOT recommended \u2014 there is no\nlegitimate path outside the desktop.\n",
     "tests": [
       {
         "name": "blocks-standup-in-repo",
@@ -1849,7 +1912,7 @@
   },
   {
     "id": "warn-deletes-console-log",
-    "description": "Warn when an Edit operation removes a line containing a debug-logging call (memory feedback_never_delete_debug_logs.md — gate via env var, never delete)",
+    "description": "Warn when an Edit operation removes a line containing a debug-logging call (memory feedback_never_delete_debug_logs.md \u2014 gate via env var, never delete)",
     "applies_to": [
       "Edit",
       "MultiEdit"
@@ -1989,7 +2052,7 @@
   },
   {
     "id": "warn-time-estimates-in-plans",
-    "description": "Warn when plan/spec/design files contain time-based estimates (memory feedback_no_time_estimates.md — use sequential ordering, not days/sprints/cycles)",
+    "description": "Warn when plan/spec/design files contain time-based estimates (memory feedback_no_time_estimates.md \u2014 use sequential ordering, not days/sprints/cycles)",
     "applies_to": [
       "Edit",
       "Write",
@@ -2002,7 +2065,7 @@
       },
       {
         "field": "content",
-        "pattern": "\\b[0-9]+[[:space:]]*(days?|sprints?|weeks?|d[ií]as?|semanas?|cycles?|ciclos?)\\b",
+        "pattern": "\\b[0-9]+[[:space:]]*(days?|sprints?|weeks?|d[i\u00ed]as?|semanas?|cycles?|ciclos?)\\b",
         "flags": "i"
       }
     ],
@@ -2099,7 +2162,7 @@
   },
   {
     "id": "warn-pr-create-many-files",
-    "description": "Warn on `gh pr create` — caller must verify the PR has <=15 files (memory feedback_split_large_prs.md / 15-file rule)",
+    "description": "Warn on `gh pr create` \u2014 caller must verify the PR has <=15 files (memory feedback_split_large_prs.md / 15-file rule)",
     "applies_to": [
       "Bash"
     ],
@@ -2112,7 +2175,7 @@
     "action": "warn",
     "bypass_marker": "pr-file-count-verified",
     "memory_ref": "feedback_split_large_prs.md",
-    "message": "WARNING: `gh pr create`.\n\nPer feedback_split_large_prs.md / the 15-file rule (legacy-ticket):\nPRs with >15 files get abandoned more easily — split by domain\nbefore opening.\n\nVerify with:\n  git diff --stat <base>..HEAD | tail -1\n\nIf the diff touches <=15 files, use bypass marker\n`pr-file-count-verified`. If it touches >15 files, abort and split.\n",
+    "message": "WARNING: `gh pr create`.\n\nPer feedback_split_large_prs.md / the 15-file rule (legacy-ticket):\nPRs with >15 files get abandoned more easily \u2014 split by domain\nbefore opening.\n\nVerify with:\n  git diff --stat <base>..HEAD | tail -1\n\nIf the diff touches <=15 files, use bypass marker\n`pr-file-count-verified`. If it touches >15 files, abort and split.\n",
     "tests": [
       {
         "name": "warns-on-pr-create-bare",
@@ -2175,7 +2238,7 @@
   },
   {
     "id": "warn-posthog-in-alerts",
-    "description": "Warn when Slack messages mention PostHog / dashboard / instrumentation (memory feedback_no_posthog_nag.md — Juan owns; out of scope for other POs)",
+    "description": "Warn when Slack messages mention PostHog / dashboard / instrumentation (memory feedback_no_posthog_nag.md \u2014 Juan owns; out of scope for other POs)",
     "applies_to": [
       "Slack"
     ],
@@ -2243,7 +2306,7 @@
   },
   {
     "id": "block-sibling-suffix-storage",
-    "description": "Block storage uploads that use a sibling-suffix layout (memory feedback_explicit_storage_prefixes.md — use originals/ + processed/ subdirs instead)",
+    "description": "Block storage uploads that use a sibling-suffix layout (memory feedback_explicit_storage_prefixes.md \u2014 use originals/ + processed/ subdirs instead)",
     "applies_to": [
       "Bash"
     ],
@@ -2326,7 +2389,7 @@
   },
   {
     "id": "warn-localhost-in-pr-body",
-    "description": "Warn when `gh pr create` / `gh pr edit` body contains a localhost reference (memory feedback_test_on_staging.md — QA target is dev.chimeranext.io, not localhost)",
+    "description": "Warn when `gh pr create` / `gh pr edit` body contains a localhost reference (memory feedback_test_on_staging.md \u2014 QA target is dev.chimeranext.io, not localhost)",
     "applies_to": [
       "Bash"
     ],
@@ -2405,7 +2468,7 @@
   },
   {
     "id": "warn-bash-mutation-without-leading-cd",
-    "description": "Warn when bash mutation commands (git commit/push/mv/rm/reset/merge/revert, sed -i / sed --in-place, gh pr create/merge/edit) don't start with an absolute-path `cd /<...>` (or `pushd /<...>`, `cd ~/<...>`, `cd $VAR/<...>`) — prevents commits landing on the wrong branch when working across multiple parallel worktrees",
+    "description": "Warn when bash mutation commands (git commit/push/mv/rm/reset/merge/revert, sed -i / sed --in-place, gh pr create/merge/edit) don't start with an absolute-path `cd /<...>` (or `pushd /<...>`, `cd ~/<...>`, `cd $VAR/<...>`) \u2014 prevents commits landing on the wrong branch when working across multiple parallel worktrees",
     "applies_to": [
       "Bash"
     ],
@@ -2423,9 +2486,9 @@
     "bypass_marker": "cd-worktree-rule",
     "memory_ref": "feedback_cd_between_worktrees.md",
     "references": [
-      "legacy-ticket PR-2/PR-3 cross-ref fixup (2026-05-10) — bug that motivated this rule"
+      "legacy-ticket PR-2/PR-3 cross-ref fixup (2026-05-10) \u2014 bug that motivated this rule"
     ],
-    "message": "WARN: bash mutation command (git commit/push/mv/rm/reset/merge/revert,\nsed -i, or gh pr create/merge/edit) detected without a leading\n`cd /<path>` prefix.\n\nPer feedback_cd_between_worktrees.md: when working across multiple\nparallel git worktrees in the same session, EVERY bash invocation that\ntouches a specific worktree MUST start with explicit\n`cd /full/path/to/worktree && ...`.\n\nBug pattern this prevents (real, 2026-05-10):\n- Two parallel worktrees for two PRs (PR-2 + PR-3 of same repo).\n- First worktree's sed + commit + push: correct (cwd was PR-2).\n- Second worktree's sed + commit + push: missing cd → still in PR-2 cwd\n  → commit landed on PR-2 branch instead of PR-3 branch.\n- Required revert on PR-2 + correct re-apply on PR-3. Confused commit\n  history visible to reviewers.\n\nIf the command operates on absolute paths or doesn't need cwd context,\nor you've intentionally verified cwd via `pwd` immediately before,\nadd \"# hook-bypass: cd-worktree-rule\" to acknowledge.\n",
+    "message": "WARN: bash mutation command (git commit/push/mv/rm/reset/merge/revert,\nsed -i, or gh pr create/merge/edit) detected without a leading\n`cd /<path>` prefix.\n\nPer feedback_cd_between_worktrees.md: when working across multiple\nparallel git worktrees in the same session, EVERY bash invocation that\ntouches a specific worktree MUST start with explicit\n`cd /full/path/to/worktree && ...`.\n\nBug pattern this prevents (real, 2026-05-10):\n- Two parallel worktrees for two PRs (PR-2 + PR-3 of same repo).\n- First worktree's sed + commit + push: correct (cwd was PR-2).\n- Second worktree's sed + commit + push: missing cd \u2192 still in PR-2 cwd\n  \u2192 commit landed on PR-2 branch instead of PR-3 branch.\n- Required revert on PR-2 + correct re-apply on PR-3. Confused commit\n  history visible to reviewers.\n\nIf the command operates on absolute paths or doesn't need cwd context,\nor you've intentionally verified cwd via `pwd` immediately before,\nadd \"# hook-bypass: cd-worktree-rule\" to acknowledge.\n",
     "tests": [
       {
         "name": "warns-on-git-commit-no-cd",
@@ -2641,7 +2704,7 @@
   },
   {
     "id": "warn-version-readme-changelog-sync",
-    "description": "Warn when a version manifest (package.json, plugin.json, marketplace.json) is being bumped without a parallel update to README.md + CHANGELOG.md — the visible-version surface drifts silently otherwise (legacy-ticket defense-in-depth, sister rule to example-platform repo-local post-write-version-readme-sync.sh)",
+    "description": "Warn when a version manifest (package.json, plugin.json, marketplace.json) is being bumped without a parallel update to README.md + CHANGELOG.md \u2014 the visible-version surface drifts silently otherwise (legacy-ticket defense-in-depth, sister rule to example-platform repo-local post-write-version-readme-sync.sh)",
     "applies_to": [
       "Edit",
       "Write",
@@ -2661,11 +2724,11 @@
     "bypass_marker": "version-readme-changelog-sync",
     "memory_ref": "feedback_version_readme_changelog_sync.md",
     "references": [
-      "legacy-ticket — three-layer drift thesis (Cure 4: PreToolUse/PostToolUse hooks)",
+      "legacy-ticket \u2014 three-layer drift thesis (Cure 4: PreToolUse/PostToolUse hooks)",
       "Sister hook in example-platform: .claude/hooks/post-write-version-readme-sync.sh",
-      "make-no-mistakes-toolkit PR #21 — visible README version + reconstructed CHANGELOG"
+      "make-no-mistakes-toolkit PR #21 \u2014 visible README version + reconstructed CHANGELOG"
     ],
-    "message": "WARN: a version manifest (package.json / plugin.json / marketplace.json)\nis being written with a \"version\": \"X.Y.Z\" field, but this hook cannot\nsee whether README.md and CHANGELOG.md were updated in the same change.\n\nWhen you bump the version in any manifest, also update in the same PR:\n  1. README.md — the \"Version: X.Y.Z\" line at the top\n  2. CHANGELOG.md — add a new entry under ## [X.Y.Z] - YYYY-MM-DD\n\nWhy this rule exists (legacy-ticket three-layer drift thesis):\n- The repo shipped 1.1.0 → 1.14.0 with NO visible version anywhere a\n  human would look (README, CHANGELOG, or git tags). PR #21 closed that\n  gap by reconstructing the CHANGELOG and adding a header version line.\n- Without this rule, the same drift will reappear on the next bump.\n- Defense-in-depth: the example-platform repo has a sister PostToolUse hook\n  (.claude/hooks/post-write-version-readme-sync.sh) that catches the\n  same drift locally even if this toolkit isn't installed.\n\nSuggested workflow:\n  bump version in manifest(s) → update README.md \"Version: ...\" line →\n  append CHANGELOG.md entry → commit all four files together.\n\nIf you're intentionally splitting the bump from the README/CHANGELOG\nupdate (e.g., bumping a vendored sub-manifest's version that isn't user-\nvisible), add \"# hook-bypass: version-readme-changelog-sync\" inline in\na comment near the version field or pass it on the Write call.\n",
+    "message": "WARN: a version manifest (package.json / plugin.json / marketplace.json)\nis being written with a \"version\": \"X.Y.Z\" field, but this hook cannot\nsee whether README.md and CHANGELOG.md were updated in the same change.\n\nWhen you bump the version in any manifest, also update in the same PR:\n  1. README.md \u2014 the \"Version: X.Y.Z\" line at the top\n  2. CHANGELOG.md \u2014 add a new entry under ## [X.Y.Z] - YYYY-MM-DD\n\nWhy this rule exists (legacy-ticket three-layer drift thesis):\n- The repo shipped 1.1.0 \u2192 1.14.0 with NO visible version anywhere a\n  human would look (README, CHANGELOG, or git tags). PR #21 closed that\n  gap by reconstructing the CHANGELOG and adding a header version line.\n- Without this rule, the same drift will reappear on the next bump.\n- Defense-in-depth: the example-platform repo has a sister PostToolUse hook\n  (.claude/hooks/post-write-version-readme-sync.sh) that catches the\n  same drift locally even if this toolkit isn't installed.\n\nSuggested workflow:\n  bump version in manifest(s) \u2192 update README.md \"Version: ...\" line \u2192\n  append CHANGELOG.md entry \u2192 commit all four files together.\n\nIf you're intentionally splitting the bump from the README/CHANGELOG\nupdate (e.g., bumping a vendored sub-manifest's version that isn't user-\nvisible), add \"# hook-bypass: version-readme-changelog-sync\" inline in\na comment near the version field or pass it on the Write call.\n",
     "tests": [
       {
         "name": "warns-on-package-json-version-bump",
@@ -2788,7 +2851,7 @@
   },
   {
     "id": "warn-greptile-review-extraction-by-created-at",
-    "description": "Warn when a Bash command extracts Greptile review state but uses created_at / chronology / first-commit-URL capture — Greptile edits the same comment in-place, so updated_at + the \"Last reviewed commit:\" footer hash are the authoritative signals (memory feedback_greptile_match_head_not_chronology.md)",
+    "description": "Warn when a Bash command extracts Greptile review state but uses created_at / chronology / first-commit-URL capture \u2014 Greptile edits the same comment in-place, so updated_at + the \"Last reviewed commit:\" footer hash are the authoritative signals (memory feedback_greptile_match_head_not_chronology.md)",
     "applies_to": [
       "Bash"
     ],
@@ -2815,10 +2878,10 @@
     "bypass_marker": "greptile-extraction-acknowledged",
     "memory_ref": "feedback_greptile_match_head_not_chronology.md",
     "references": [
-      "feedback_tail_with_desc_ordering.md — sister rule on DESC|tail bug",
-      "CIV-728 PR #114 forensic 2026-05-25 — stale 3/5 review picked over 5/5 HEAD review"
+      "feedback_tail_with_desc_ordering.md \u2014 sister rule on DESC|tail bug",
+      "CIV-728 PR #114 forensic 2026-05-25 \u2014 stale 3/5 review picked over 5/5 HEAD review"
     ],
-    "message": "WARN: Bash command extracts Greptile review state with a chronology-based\npattern (created_at / head -N / tail -N / capture(.../commit/...)).\n\nGreptile App on GitHub EDITS the same review comment in-place on each\nre-review. As a result:\n  - comment.created_at is FROZEN at original posting; it DOES NOT\n    change when Greptile re-analyzes a new commit.\n  - comment.updated_at IS what moves with each re-review.\n  - The \"<sub>Last reviewed commit: ...(commit/HASH)</sub>\" footer in\n    the body is the authoritative source for \"which commit this review\n    is about\" — NOT the first /commit/ URL captured anywhere in the\n    body (which is often a permalink quoted inside a finding).\n\nUse this pattern instead (copy-paste-able):\n\n  HEAD=$(gh pr view <N> --json headRefOid --jq '.headRefOid')\n  export SHORT=${HEAD:0:10}\n  gh api \"repos/<owner>/<repo>/issues/<N>/comments\" --jq '\n    [.[] | select(.user.login | test(\"greptile\";\"i\")) | {\n      updated: .updated_at,\n      commit: ((.body | split(\"Last reviewed commit:\")[1] // \"\" |\n                split(\"commit/\")[1] // \"\" | split(\")\")[0])[0:10]),\n      score: ((.body | capture(\"<h3>Confidence Score: (?<s>[0-9]/5)</h3>\").s) // \"?\")\n    }] | map(select(.commit == env.SHORT)) | sort_by(.updated) | last'\n\nThis:\n  1. Pulls the PR's actual HEAD SHA up front.\n  2. Filters Greptile comments to ONLY those whose \"Last reviewed\n     commit:\" footer matches HEAD (so a stale older review can't win).\n  3. Among the matching reviews, picks the latest by updated_at.\n\nPer feedback_greptile_match_head_not_chronology.md: out-of-order parallel\nre-runs make creation order misleading. Per feedback_tail_with_desc_\nordering.md: same failure mode (trust an implicit order without\nvalidating it).\n\nBypass marker (greptile-extraction-acknowledged) ONLY for legitimate\ncases (e.g., you explicitly WANT the creation order to audit posting\ncadence, not the latest state).\n",
+    "message": "WARN: Bash command extracts Greptile review state with a chronology-based\npattern (created_at / head -N / tail -N / capture(.../commit/...)).\n\nGreptile App on GitHub EDITS the same review comment in-place on each\nre-review. As a result:\n  - comment.created_at is FROZEN at original posting; it DOES NOT\n    change when Greptile re-analyzes a new commit.\n  - comment.updated_at IS what moves with each re-review.\n  - The \"<sub>Last reviewed commit: ...(commit/HASH)</sub>\" footer in\n    the body is the authoritative source for \"which commit this review\n    is about\" \u2014 NOT the first /commit/ URL captured anywhere in the\n    body (which is often a permalink quoted inside a finding).\n\nUse this pattern instead (copy-paste-able):\n\n  HEAD=$(gh pr view <N> --json headRefOid --jq '.headRefOid')\n  export SHORT=${HEAD:0:10}\n  gh api \"repos/<owner>/<repo>/issues/<N>/comments\" --jq '\n    [.[] | select(.user.login | test(\"greptile\";\"i\")) | {\n      updated: .updated_at,\n      commit: ((.body | split(\"Last reviewed commit:\")[1] // \"\" |\n                split(\"commit/\")[1] // \"\" | split(\")\")[0])[0:10]),\n      score: ((.body | capture(\"<h3>Confidence Score: (?<s>[0-9]/5)</h3>\").s) // \"?\")\n    }] | map(select(.commit == env.SHORT)) | sort_by(.updated) | last'\n\nThis:\n  1. Pulls the PR's actual HEAD SHA up front.\n  2. Filters Greptile comments to ONLY those whose \"Last reviewed\n     commit:\" footer matches HEAD (so a stale older review can't win).\n  3. Among the matching reviews, picks the latest by updated_at.\n\nPer feedback_greptile_match_head_not_chronology.md: out-of-order parallel\nre-runs make creation order misleading. Per feedback_tail_with_desc_\nordering.md: same failure mode (trust an implicit order without\nvalidating it).\n\nBypass marker (greptile-extraction-acknowledged) ONLY for legitimate\ncases (e.g., you explicitly WANT the creation order to audit posting\ncadence, not the latest state).\n",
     "tests": [
       {
         "name": "warns-on-sort-by-created-at-greptile-comments",
@@ -2928,7 +2991,7 @@
     "bypass_marker": "db-mutation-rule",
     "disable_if_repo_file": ".no-make-no-mistakes-db-mutation",
     "memory_ref": "feedback_scripts_not_db.md",
-    "message": "BLOCKED: inline mysql / mysqldump DB mutation detected.\n\nPer feedback_scripts_not_db.md: scripts-in-the-repo, not inline.\nMove the SQL into a versioned file under scripts/ or bin/ and invoke\nthat script. The script wrapper makes the change reviewable in git,\nre-runnable across environments, and auditable after the fact.\n\nAllowed patterns:\n  - SELECT / SHOW / DESCRIBE / EXPLAIN — read-only is fine inline\n  - `./scripts/<name>.sh` / `bash scripts/<name>.sh` — versioned wrapper\n  - `# hook-bypass: db-mutation-rule` appended to the command for an\n    explicitly-acknowledged one-shot\n\nPer-repo escape hatch: `touch .no-make-no-mistakes-db-mutation` at the\nrepo root if the entire repo's job is inline DB work.\n",
+    "message": "BLOCKED: inline mysql / mysqldump DB mutation detected.\n\nPer feedback_scripts_not_db.md: scripts-in-the-repo, not inline.\nMove the SQL into a versioned file under scripts/ or bin/ and invoke\nthat script. The script wrapper makes the change reviewable in git,\nre-runnable across environments, and auditable after the fact.\n\nAllowed patterns:\n  - SELECT / SHOW / DESCRIBE / EXPLAIN \u2014 read-only is fine inline\n  - `./scripts/<name>.sh` / `bash scripts/<name>.sh` \u2014 versioned wrapper\n  - `# hook-bypass: db-mutation-rule` appended to the command for an\n    explicitly-acknowledged one-shot\n\nPer-repo escape hatch: `touch .no-make-no-mistakes-db-mutation` at the\nrepo root if the entire repo's job is inline DB work.\n",
     "tests": [
       {
         "name": "blocks-mysql-e-update",
@@ -3070,7 +3133,7 @@
     "bypass_marker": "db-mutation-rule",
     "disable_if_repo_file": ".no-make-no-mistakes-db-mutation",
     "memory_ref": "feedback_scripts_not_db.md",
-    "message": "BLOCKED: inline psql mutation or pg_restore detected.\n\nPer feedback_scripts_not_db.md: schema and data changes belong in a\nversioned migration (supabase/migrations/<ts>_<slug>.sql or your\nproject's equivalent), not in an ad-hoc `psql -c` one-liner.\n\nFor pg_restore: load the dump from a committed script that documents\ntarget DB, dump version, and the rollback plan — never from a raw\nshell invocation that exists only in the agent's transient history.\n\nSELECT / SHOW / EXPLAIN / DESCRIBE are still allowed inline.\n\nBypass with `# hook-bypass: db-mutation-rule` after explicit team\napproval, or drop `.no-make-no-mistakes-db-mutation` at the repo root.\n",
+    "message": "BLOCKED: inline psql mutation or pg_restore detected.\n\nPer feedback_scripts_not_db.md: schema and data changes belong in a\nversioned migration (supabase/migrations/<ts>_<slug>.sql or your\nproject's equivalent), not in an ad-hoc `psql -c` one-liner.\n\nFor pg_restore: load the dump from a committed script that documents\ntarget DB, dump version, and the rollback plan \u2014 never from a raw\nshell invocation that exists only in the agent's transient history.\n\nSELECT / SHOW / EXPLAIN / DESCRIBE are still allowed inline.\n\nBypass with `# hook-bypass: db-mutation-rule` after explicit team\napproval, or drop `.no-make-no-mistakes-db-mutation` at the repo root.\n",
     "tests": [
       {
         "name": "blocks-psql-c-update",
@@ -3194,7 +3257,7 @@
     "bypass_marker": "db-mutation-rule",
     "disable_if_repo_file": ".no-make-no-mistakes-db-mutation",
     "memory_ref": "feedback_scripts_not_db.md",
-    "message": "BLOCKED: inline sqlite3 DB mutation detected.\n\nEven for local SQLite databases, drift between dev machines is a\nreal cost — when one teammate's local DB has the manual change and\nothers' don't, debugging session reproduction degrades silently.\nMove the SQL into scripts/ and commit it.\n\nSELECT / EXPLAIN remain allowed inline. The bypass marker is\n`db-mutation-rule`. Per-repo opt-out:\n`touch .no-make-no-mistakes-db-mutation` at the root.\n",
+    "message": "BLOCKED: inline sqlite3 DB mutation detected.\n\nEven for local SQLite databases, drift between dev machines is a\nreal cost \u2014 when one teammate's local DB has the manual change and\nothers' don't, debugging session reproduction degrades silently.\nMove the SQL into scripts/ and commit it.\n\nSELECT / EXPLAIN remain allowed inline. The bypass marker is\n`db-mutation-rule`. Per-repo opt-out:\n`touch .no-make-no-mistakes-db-mutation` at the root.\n",
     "tests": [
       {
         "name": "blocks-sqlite3-update",
@@ -3281,7 +3344,7 @@
     "bypass_marker": "db-mutation-rule",
     "disable_if_repo_file": ".no-make-no-mistakes-db-mutation",
     "memory_ref": "feedback_scripts_not_db.md",
-    "message": "BLOCKED: inline mongo / mongosh / mongorestore mutation detected.\n\nPer feedback_scripts_not_db.md, mongo data changes belong in a\nversioned migration runner script — never in a transient `--eval`\none-liner. The bypass marker is `db-mutation-rule`; the per-repo\nescape hatch is `.no-make-no-mistakes-db-mutation` at the root.\n\nRead methods (.find, .findOne, .aggregate, .countDocuments, etc.)\nremain allowed inline.\n",
+    "message": "BLOCKED: inline mongo / mongosh / mongorestore mutation detected.\n\nPer feedback_scripts_not_db.md, mongo data changes belong in a\nversioned migration runner script \u2014 never in a transient `--eval`\none-liner. The bypass marker is `db-mutation-rule`; the per-repo\nescape hatch is `.no-make-no-mistakes-db-mutation` at the root.\n\nRead methods (.find, .findOne, .aggregate, .countDocuments, etc.)\nremain allowed inline.\n",
     "tests": [
       {
         "name": "blocks-mongo-eval-update",
