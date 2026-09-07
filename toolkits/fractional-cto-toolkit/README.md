@@ -33,6 +33,25 @@ optionally-executable SOP. One pipeline over one shared artifact (`./fractional-
   recovery runbook (with paired diagnose/repair scripts) or an operational/release runbook,
   plus an executable form. An SOP documents a steady-state process; a runbook answers a trigger.
 
+## Requirements-First Pipeline
+
+Beyond operational processes, the toolkit formalizes a client's **product requirements
+before any code is written** — the PRD is the source of truth, everything else derives.
+
+```
+PRD / SRS (Product Owner, ISO/IEEE 830 + ISO/IEC/IEEE 29148:2018, bare template)
+   │  derive (NOT the reverse)
+   ▼
+OpenSpec specs/changes  →  Linear issue (Bilingual Layer)  →  /opsx-* flow
+   /opsx-explore → /opsx-propose → human review → /opsx-apply → PR → /opsx-sync → /opsx-archive
+```
+
+- **requirements-authoring** — write a versioned PRD/SRS per the standards (vendored bare
+  template from `jam01/SRS-Template`, CC0) with 29148 quality checklists and a
+  verification traceability table.
+- Any client adopting this can also bootstrap the **4 engineering best practices**
+  (DSMS, IFS, CPS, PRDS) from day one — see `references/engineering-standards/`.
+
 ## Skills
 
 | # | Skill | Triggers | Output |
@@ -47,6 +66,7 @@ optionally-executable SOP. One pipeline over one shared artifact (`./fractional-
 | 8 | `sop-authoring` | "write an SOP", "operational procedure", "make this SOP executable" | Structured SOP + executable SOP when automatable |
 | 9 | `business-brain-setup` | "business brain", "cerebro de negocio", "convert our business model folder" | Git/Obsidian knowledge vault (scaffold or BMC migration) |
 | 10 | `runbook-authoring` | "write a runbook", "incident runbook", "release runbook", "on-call procedure", "runbook de release" | Trigger-driven runbook (incident or operational) + paired diagnose/repair scripts + executable form |
+| 11 | `requirements-authoring` | "PRD", "SRS", "requisitos", "29148", "IEEE 830", "spec for this feature" | Versioned PRD/SRS per ISO/IEEE 830 + ISO/IEC/IEEE 29148:2018 + OpenSpec derived + Linear Bilingual brief |
 
 ## Commands
 
@@ -68,6 +88,8 @@ All contracts include a **Section 0: Shared Risk Model** with compensation varia
 
 ## Features
 
+- Requirements-first pipeline: PRD/SRS per ISO/IEEE 830 + ISO/IEC/IEEE 29148:2018 (bare template vendored from jam01/SRS-Template, CC0), OpenSpec derived from the PRD, Linear Bilingual-brief issues, and the full `/opsx-*` workflow
+- 4 engineering best practices bootstrap for any client (DSMS, IFS, CPS, PRDS)
 - Bilingual templates (Spanish primary, English key terms)
 - Costa Rica legal framework (Ley 8968, Codigo Penal, Camara de Comercio arbitration)
 - 7-threat risk matrix (destruction, retention, exfiltration, sabotage, data theft, disruption, extortion)

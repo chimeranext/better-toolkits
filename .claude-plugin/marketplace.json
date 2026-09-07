@@ -149,8 +149,8 @@
     },
     {
       "name": "fractional-cto-toolkit",
-      "description": "Operational toolkit for freelance and fractional CTOs — contracts, project-takeover SOPs, and a process-engineering pipeline (standardize → automation-triage → SOP authoring with executable output) for client onboarding, technical audits, and vendor evaluation.",
-      "version": "1.1.0",
+      "description": "Operational toolkit for freelance and fractional CTOs — contracts, project-takeover SOPs, a process-engineering pipeline (standardize → automation-triage → SOP authoring with executable output), and a requirements-first pipeline (PRD/SRS per ISO/IEEE 830 + ISO/IEC/IEEE 29148:2018 → OpenSpec derived → Linear Bilingual issues → /opsx-* workflow) for client onboarding, technical audits, and vendor evaluation.",
+      "version": "1.2.0",
       "source": "./toolkits/fractional-cto-toolkit"
     },
     {
