@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- **`/resolve-open-questions`:** Cursor harness uses **`AskQuestion`** (Claude keeps `AskUserQuestion`); fallback to numbered chat options only if the tool is unavailable. HITL doctrine (`docs/hitl.md`, `.cursor/rules/hitl-doctrine.mdc`) aligned.
 - **Repo doctrine:** HITL is a monorepo pillar (`docs/hitl.md`, `/doctrine`, `.cursor/rules/hitl-doctrine.mdc`, CONTRIBUTING + root README) — not toolkit-only. `/merge-advisor` + skill always HITL-ask after the ORDER (no `--execute`); re-measure between merges.
 
 ### Added
