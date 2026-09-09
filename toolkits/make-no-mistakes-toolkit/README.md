@@ -1,6 +1,6 @@
 # make-no-mistakes
 
-**Version: 1.33.0** · [CHANGELOG](./CHANGELOG.md) · [Marketplace](https://github.com/chimeranext/make-no-mistakes-toolkit)
+**Version: 1.35.0** · [CHANGELOG](./CHANGELOG.md) · [Marketplace](https://github.com/chimeranext/make-no-mistakes-toolkit)
 
 The disciplined dev lifecycle — implement issues, review PRs, sync releases, test E2E, and manage sessions. One plugin to make no mistakes.
 
@@ -114,6 +114,7 @@ Deliberate actions you invoke explicitly.
 | [`/make-no-mistakes:takeover-pr <repo> [pr#]`](commands/takeover-pr.md) | Pick a random open PR from a teammate, check it out, review it, and take over the work |
 | [`/make-no-mistakes:ready-to-review-mergeable <ISSUE-123 ...> [--confidence 4.0]`](commands/ready-to-review-mergeable.md) | Drive tracker issues to **bot-approved, mergeable** PRs via `/implement` + a confidence-gated reviewer loop (Stop-hook enforced), or with no issue IDs leave the current branch PR-ready — Diátaxis `status: review`, fix CI, push; **never merge** |
 | [`/make-no-mistakes:hygiene-hooks-setup [audit|install|verify]`](commands/hygiene-hooks-setup.md) | Audit, install, and verify tracker/PR hygiene hooks — detects orphaned hook configs (scripts on disk, empty `hooks` field), enables the opt-in Linear create-hygiene gate (full triage or exit 2), and proves each hook with a synthetic-payload suite |
+| [`/make-no-mistakes:opencode-setup [audit|install|verify]`](commands/opencode-setup.md) | Register better-toolkits OpenCode plugins — **one** stderr baseline adapter in `"plugin"` (+ optional `--also-npm`). Does **not** port Claude `hooks.json` |
 | [`/make-no-mistakes:repo-hygiene [audit|policy|prune-remote|all]`](commands/repo-hygiene.md) | Audit/prune merged-PR branches, enable `delete_branch_on_merge`, optional local prune — CLI + scheduled GitHub Action with auditable logs |
 | [`/make-no-mistakes:secret-input`](commands/secret-input.md) | Stage a secret/password via OS-native GUI dialog (Linux zenity/kdialog/pinentry, macOS osascript, Windows Get-Credential). The value never appears in the conversation log or terminal history. Cross-platform via `.sh` (Linux/macOS/WSL/Git Bash) + `.ps1` (native Windows) |
 | [`/make-no-mistakes:secret-use ENVVAR -- <cmd>`](commands/secret-use.md) | Run one command with the staged secret loaded as an environment variable. Env var lives only inside the consuming process and is unset on completion |
