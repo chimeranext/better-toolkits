@@ -33,6 +33,26 @@ optionally-executable SOP. One pipeline over one shared artifact (`./fractional-
   recovery runbook (with paired diagnose/repair scripts) or an operational/release runbook,
   plus an executable form. An SOP documents a steady-state process; a runbook answers a trigger.
 
+## Requirements-First Pipeline
+
+Beyond operational processes, the toolkit formalizes a client's **product requirements
+before any code is written** — the PRD is the source of truth, everything else derives.
+
+```
+PRD / SRS (Product Owner, ISO/IEEE 830 + ISO/IEC/IEEE 29148:2018, bare template)
+   │  derive (NOT the reverse)
+   ▼
+OpenSpec specs/changes  →  Linear issue (Bilingual Layer)  →  /opsx-* flow
+   /opsx-explore → /opsx-propose → human review → /opsx-apply → PR → /opsx-sync → /opsx-archive
+```
+
+- **requirements-authoring** — write a versioned PRD/SRS per the standards (vendored bare
+  template from `jam01/SRS-Template`, CC0) with 29148 quality checklists and a
+  verification traceability table.
+- Any client adopting this can bootstrap the **6 engineering standards**
+  (DSMS, IFS, CPS, PRDS, BrS, QT4L) from day one — see `references/engineering-standards/`.
+  The **clean code quartet** is DSMS + IFS + CPS + PRDS; BrS and QT4L complete branching and QA traceability.
+
 ## Skills
 
 | # | Skill | Triggers | Output |
@@ -47,11 +67,14 @@ optionally-executable SOP. One pipeline over one shared artifact (`./fractional-
 | 8 | `sop-authoring` | "write an SOP", "operational procedure", "make this SOP executable" | Structured SOP + executable SOP when automatable |
 | 9 | `business-brain-setup` | "business brain", "cerebro de negocio", "convert our business model folder" | Git/Obsidian knowledge vault (scaffold or BMC migration) |
 | 10 | `runbook-authoring` | "write a runbook", "incident runbook", "release runbook", "on-call procedure", "runbook de release" | Trigger-driven runbook (incident or operational) + paired diagnose/repair scripts + executable form |
+| 11 | `requirements-authoring` | "PRD", "SRS", "requisitos", "29148", "IEEE 830", "spec for this feature" | Versioned PRD/SRS per ISO/IEEE 830 + ISO/IEC/IEEE 29148:2018 + OpenSpec derived + Linear Bilingual brief |
 
 ## Commands
 
 | Command | Purpose | Output |
 |---------|---------|--------|
+| `/clean-code-standards-setup` | Adopt the 6 engineering standards in a client repo (incremental scaffold) | `AGENTS.md` pointers, `docs/process/engineering-standards.md`, PR template (PRDS), QT4L stub |
+| `/clean-code-standards-audit` | Measure adoption of DSMS, IFS, CPS, PRDS, BrS, QT4L; optional open-PR review | Findings report; optional `docs/process/clean-code-standards-audit-<date>.md` |
 | `/pentest-playbook-setup` | Author a stack-tailored security playbook for an authorized engagement (Cyber Kill Chain + OWASP). Gated on written authorization + scope | `PENTEST-PLAYBOOK.md` (+ optional DevSecOps `security-scan.yml`); executed afterwards by `/make-no-mistakes:pentest-runner` |
 
 ## Contract Templates
@@ -68,6 +91,8 @@ All contracts include a **Section 0: Shared Risk Model** with compensation varia
 
 ## Features
 
+- Requirements-first pipeline: PRD/SRS per ISO/IEEE 830 + ISO/IEC/IEEE 29148:2018 (bare template vendored from jam01/SRS-Template, CC0), OpenSpec derived from the PRD, Linear Bilingual-brief issues, and the full `/opsx-*` workflow
+- 6 engineering standards bootstrap for any client (DSMS, IFS, CPS, PRDS, BrS, QT4L)
 - Bilingual templates (Spanish primary, English key terms)
 - Costa Rica legal framework (Ley 8968, Codigo Penal, Camara de Comercio arbitration)
 - 7-threat risk matrix (destruction, retention, exfiltration, sabotage, data theft, disruption, extortion)
