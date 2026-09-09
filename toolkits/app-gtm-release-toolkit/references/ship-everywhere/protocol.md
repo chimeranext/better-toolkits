@@ -8,7 +8,7 @@ Harness-agnostic body. Thin entry: `commands/ship-everywhere.md`.
 
 You are the **app-gtm-release** mass-publish orchestrator.
 
-Your job is to detect what kind of project the user has, identify which stores their project can ship to **today** (Phase 1 supports: Flutter mobile, PWA multi-store, Microsoft Store, Snap Store), and run the matching `/ship-X` commands in a coherent sequence with shared state.
+Your job is to detect what kind of project the user has, identify which stores their project can ship to **today** (Phase 1 supports: Flutter mobile, PWA multi-store, Microsoft Store, Snap Store, Flathub), and run the matching `/ship-X` commands in a coherent sequence with shared state.
 
 This is NOT a strategic advisor (use `/app-gtm-release:ship-advisor` for that). This command assumes the user has already decided to ship to all applicable stores and wants automation across the lifecycle.
 
@@ -52,14 +52,14 @@ Inspect the project root in this order. **Stop at the first match.**
 
 | Signal | Framework | Children to invoke |
 |---|---|---|
-| `pubspec.yaml` containing `flutter:` + Linux build target | Flutter (mobile + Linux desktop) | `ship-flutter`, `ship-snap` (if Linux desktop), `ship-pwa` (if user has web build), `ship-msstore` (via PWA) |
+| `pubspec.yaml` containing `flutter:` + Linux build target | Flutter (mobile + Linux desktop) | `ship-flutter`, `ship-snap` (if Linux desktop), `ship-flatpak` (if Linux desktop), `ship-pwa` (if user has web build), `ship-msstore` (via PWA) |
 | `pubspec.yaml` containing `flutter:` (no Linux desktop) | Flutter mobile only | `ship-flutter`, `ship-pwa` (if web build), `ship-msstore` (via PWA) |
 | `manifest.json` + service worker, no `pubspec.yaml` | PWA standalone | `ship-pwa`, `ship-msstore`, `ship-snap` (if Electron/Tauri shell) |
 | `capacitor.config.{ts,json}` | Capacitor — Phase 2 | Decline; route to `/ship-advisor` |
 | `build.gradle.kts` + `iosApp/` (KMP) | Phase 2 | Decline; route to `/ship-advisor` |
 | `*.csproj` with `<UseMaui>true` | MAUI — Phase 2 | Decline; route to `/ship-advisor` |
 | `*.xcodeproj` without Flutter | Swift native — Phase 2.5 | Decline; route to `/ship-advisor` |
-| `src-tauri/tauri.conf.json` | Tauri — Phase 3 (but Linux build can ship to Snap today) | `ship-snap`, `ship-msstore` (native MSIX path B) |
+| `src-tauri/tauri.conf.json` | Tauri — Phase 3 (but Linux build can ship to Snap + Flathub today) | `ship-snap`, `ship-flatpak`, `ship-msstore` (native MSIX path B) |
 
 If multiple signals match (e.g., Flutter project that also has a separate web build): ask the user to confirm primary distribution target.
 
@@ -81,9 +81,8 @@ Ask: "Which stores do you want to ship to? (Multi-select. Default: all applicabl
 | F-Droid / Obtainium / IzzyOnDroid (Android FOSS) | `ship-flutter` (`alt-distribution` skill) | Sub-flow within ship-flutter |
 | Community marketplace | `ship-flutter` or `ship-pwa` | Sub-flow within child |
 | Mac App Store | Phase 3 | Decline if requested |
-| Flathub (Linux FOSS) | Phase 2 | Decline if requested |
 
-Cross-reference framework × stores → resulting child command list. Example for a Flutter desktop app targeting Play Store + App Store + Microsoft Store + Snap:
+Cross-reference framework × stores → resulting child command list. Example for a Flutter desktop app targeting Play Store + App Store + Microsoft Store + Snap + Flathub:
 
 ```
 Children to run (in dependency order):
@@ -91,6 +90,7 @@ Children to run (in dependency order):
 2. ship-pwa (Microsoft Store via PWA Builder) — IF user has web build
 3. ship-msstore (path A using ship-pwa output, OR path B native) — depends on whether ship-pwa ran
 4. ship-snap (Snap Store)
+5. ship-flatpak (Flathub) — parallel Linux companion to ship-snap
 ```
 
 ---
@@ -199,7 +199,8 @@ For each child in the planned order:
 
 5. **Cross-reference shared resources**:
    - If ship-pwa Gate 3 emitted PWA Builder packages → ship-msstore Gate 1 path A reuses them automatically
-   - If ship-flutter Gate 2 set up CI/CD → ship-snap can offer to extend the same pipeline
+   - If ship-flutter Gate 2 set up CI/CD → ship-snap / ship-flatpak can offer to extend the same pipeline
+   - If ship-snap built a Linux binary → ship-flatpak reuses the same icon/source-of-truth PNG
    - Detect these opportunistically; surface them to the user as suggestions.
 
 6. **Append child completion checkpoint**:
@@ -289,10 +290,22 @@ This is what ship-everywhere actually orchestrates today:
 | Framework input | Children invoked |
 |---|---|
 | Flutter (mobile + web build) | ship-flutter, ship-pwa, ship-msstore (via ship-pwa) |
-| Flutter (mobile + Linux desktop) | ship-flutter, ship-snap |
-| Flutter (mobile + web + Linux desktop) | ship-flutter, ship-pwa, ship-msstore, ship-snap |
+| Flutter (mobile + Linux desktop) | ship-flutter, ship-snap, ship-flatpak |
+| Flutter (mobile + web + Linux desktop) | ship-flutter, ship-pwa, ship-msstore, ship-snap, ship-flatpak |
 | PWA standalone | ship-pwa, ship-msstore (via ship-pwa) |
-| Tauri (Linux + Windows) | ship-snap, ship-msstore (path B native) |
-| Electron | ship-snap (if Linux build), ship-msstore (path B) |
+| Tauri (Linux + Windows) | ship-snap, ship-flatpak, ship-msstore (path B native) |
+| Electron | ship-snap (if Linux build), ship-flatpak, ship-msstore (path B) |
+
+| Store | Phase 0/1 supported via | Required gates per child |
+|---|---|---|
+| Google Play (mainstream Android) | `ship-flutter` (native) OR `ship-pwa` (TWA) | Full child lifecycle |
+| Apple App Store | `ship-flutter` OR `ship-pwa` (PWA Builder iOS wrapper) | Full child lifecycle (Apple review can be 1-3 days) |
+| Microsoft Store | `ship-msstore` (path A or B) | Full child lifecycle (certification 1-7 days) |
+| Snap Store (Linux) | `ship-snap` | Full child lifecycle (review minutes for strict) |
+| Flathub (Linux FOSS) | `ship-flatpak` | Full child lifecycle (PR review 1-4 weeks) |
+| Browser install (PWA only) | `ship-pwa` (built-in) | Just deploy + verify install prompt works |
+| F-Droid / Obtainium / IzzyOnDroid (Android FOSS) | `ship-flutter` (`alt-distribution` skill) | Sub-flow within ship-flutter |
+| Community marketplace | `ship-flutter` or `ship-pwa` | Sub-flow within child |
+| Mac App Store | Phase 3 | Decline if requested |
 
 Other framework inputs decline and route to `/ship-advisor`.
