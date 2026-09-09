@@ -67,7 +67,12 @@ Put that in `.cursor/hooks.json` (project) or your user hooks config. Adjust the
 
 #### OpenCode2 (file plugin)
 
-Add the absolute path to the TypeScript adapter in `~/.config/opencode/opencode.jsonc` (or project config):
+Prefer **`/make-no-mistakes:opencode-setup`** — audits and merges **one** stderr
+adapter into OpenCode’s `"plugin"` array (optional `--also-npm` for the four CLI
+packages). Protocol:
+[`toolkits/make-no-mistakes-toolkit/references/opencode-setup/protocol.md`](toolkits/make-no-mistakes-toolkit/references/opencode-setup/protocol.md).
+
+Manual equivalent — absolute path in `~/.config/opencode/opencode.jsonc` (or project):
 
 ```jsonc
 {
@@ -77,17 +82,7 @@ Add the absolute path to the TypeScript adapter in `~/.config/opencode/opencode.
 }
 ```
 
-Or the copy inside an installed toolkit:
-
-```jsonc
-{
-  "plugin": [
-    "/absolute/path/to/make-no-mistakes-toolkit/hooks/stderr/adapters/opencode-plugin.ts"
-  ]
-}
-```
-
-Toolkits that ship an npm CLI (`make-no-mistakes`, `atomic-design`, `business-model`, `app-gtm-release`) still need this file-plugin line for stderr — their `npx … install` registers the package plugin; stderr is the local adapter above. See [`docs/opencode-stderr.md`](docs/opencode-stderr.md).
+Toolkits that ship an npm CLI (`make-no-mistakes`, `atomic-design`, `business-model`, `app-gtm-release`) still need this file-plugin line for stderr — their `npx … install` registers the package plugin; stderr is the local adapter above. Claude `hooks.json` is **not** loaded by OpenCode. See [`docs/opencode-stderr.md`](docs/opencode-stderr.md).
 
 #### Sanity check
 
