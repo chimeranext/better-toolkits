@@ -9,6 +9,7 @@ for tk in "$ROOT"/toolkits/*/; do
   rm -rf "$dest"
   mkdir -p "$tk/hooks"
   cp -a "$SRC" "$dest"
+  find "$dest" -type d -name '__pycache__' -exec rm -rf {} + || true
   chmod +x "$dest/detect.py" \
     "$dest/adapters/claude-pre-bash.sh" \
     "$dest/adapters/cursor-before-shell.sh" \
