@@ -30,3 +30,7 @@ Thumbs.db
 .agents/
 .claude/worktrees/
 .worktrees/
+
+# Python
+__pycache__/
+*.py[cod]
