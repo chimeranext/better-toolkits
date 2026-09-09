@@ -21,6 +21,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - **Repo doctrine:** HITL is a monorepo pillar (`docs/hitl.md`, `/doctrine`, `.cursor/rules/hitl-doctrine.mdc`, CONTRIBUTING + root README) — not toolkit-only. `/merge-advisor` + skill always HITL-ask after the ORDER (no `--execute`); re-measure between merges.
 
+## [1.36.1] - 2026-09-09
+
+### Changed
+- **`/evaluate-agent-skills`**: worker auto-installs SkillSpector / SkillEvaluator via `uv tool install` when missing (requires `uv`). Opt out with `--no-install`. Tier 3 live eval remains opt-in + HITL. Docs: protocol + `docs/evaluate-agent-skills.md`.
+
 ## [1.36.0] - 2026-09-09
 
 ### Added
