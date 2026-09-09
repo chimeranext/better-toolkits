@@ -4,13 +4,14 @@
   "description": "Source-available Claude Code toolkits monorepo — pick the toolkits your startup needs. One marketplace, ten toolkits.",
   "owner": {
     "name": "Luis Andres Pena Castillo",
-    "email": "lapc506@users.noreply.github.com"
+    "email": "lapc506@users.noreply.github.com",
+    "url": "https://github.com/chimeranext"
   },
   "plugins": [
     {
       "name": "make-no-mistakes",
-      "description": "The disciplined dev lifecycle — implement issues, review PRs, sync releases, test E2E, manage sessions, stash secrets, and enforce manifest-driven tool-call hooks. One plugin to make no mistakes.",
-      "version": "1.34.0",
+      "description": "The disciplined dev lifecycle — implement issues, review PRs, sync releases, test E2E, manage sessions, stash secrets, and enforce manifest-driven tool-call hooks. Includes /evaluate-agent-skills (NVIDIA SkillSpector/SkillEvaluator wrappers).",
+      "version": "1.36.1",
       "source": "./toolkits/make-no-mistakes-toolkit",
       "category": "workflow",
       "keywords": [
@@ -26,8 +27,19 @@
         "pentest",
         "developer-workflow",
         "session-management",
-        "secret-management"
-      ]
+        "secret-management",
+        "skillspector",
+        "skillevaluator",
+        "agent-skills",
+        "evaluate-agent-skills"
+      ],
+      "author": {
+        "name": "Luis Andres Pena Castillo",
+        "url": "https://github.com/lapc506"
+      },
+      "homepage": "https://toolkits.chimeranext.dev",
+      "repository": "https://github.com/chimeranext/better-toolkits",
+      "license": "BSL-1.1"
     },
     {
       "name": "atomic-design-toolkit",
@@ -59,7 +71,14 @@
         "migration",
         "enforcement-hooks",
         "atomic-design-rules"
-      ]
+      ],
+      "author": {
+        "name": "Luis Andres Pena Castillo",
+        "url": "https://github.com/lapc506"
+      },
+      "homepage": "https://toolkits.chimeranext.dev",
+      "repository": "https://github.com/chimeranext/better-toolkits",
+      "license": "BSL-1.1"
     },
     {
       "name": "ux-research-toolkit",
@@ -83,7 +102,14 @@
         "user-persona",
         "agile-planning",
         "nielsen-norman"
-      ]
+      ],
+      "author": {
+        "name": "Luis Andres Pena Castillo",
+        "url": "https://github.com/lapc506"
+      },
+      "homepage": "https://toolkits.chimeranext.dev",
+      "repository": "https://github.com/chimeranext/better-toolkits",
+      "license": "BSL-1.1"
     },
     {
       "name": "business-model-toolkit",
@@ -103,7 +129,14 @@
         "pitch-deck",
         "mvp",
         "unit-economics"
-      ]
+      ],
+      "author": {
+        "name": "Luis Andres Pena Castillo",
+        "url": "https://github.com/lapc506"
+      },
+      "homepage": "https://toolkits.chimeranext.dev",
+      "repository": "https://github.com/chimeranext/better-toolkits",
+      "license": "BSL-1.1"
     },
     {
       "name": "app-gtm-release",
@@ -139,19 +172,66 @@
         "mobile",
         "desktop",
         "web"
-      ]
+      ],
+      "author": {
+        "name": "Luis Andres Pena Castillo",
+        "url": "https://github.com/lapc506"
+      },
+      "homepage": "https://toolkits.chimeranext.dev",
+      "repository": "https://github.com/chimeranext/better-toolkits",
+      "license": "BSL-1.1"
     },
     {
       "name": "aaarrr-flywheel-toolkit",
       "description": "Growth-engineering toolkit. Funnel + flywheel completo: pricing strategy → landing-page design → instrumentation (Pixel + GA4 + PostHog + UTM) → AAARRR ejecución sobre Meta Marketing API. Awareness/Acquisition/Activation/Revenue como funnel lineal; Retention/Referral cierran el loop como flywheel que retroalimenta Acquisition con LAL audiences y K-factor real. Unit-economics doctrine (CAC blended vs paid, gross-margin LTV, payback en meses, benchmarks por modelo) y NPS + feedback loop (promoters/passives/detractors) integrados en revenue y retain. Mantra: fail fast, fail often, fail cheap, fail forward.",
       "version": "0.3.0",
-      "source": "./toolkits/aaarrr-flywheel-toolkit"
+      "source": "./toolkits/aaarrr-flywheel-toolkit",
+      "author": {
+        "name": "Luis Andres Pena Castillo",
+        "url": "https://github.com/lapc506"
+      },
+      "homepage": "https://toolkits.chimeranext.dev",
+      "repository": "https://github.com/chimeranext/better-toolkits",
+      "license": "BSL-1.1",
+      "category": "productivity",
+      "keywords": [
+        "claude-code",
+        "claude-code-plugin",
+        "growth",
+        "aaarrr",
+        "pirate-metrics",
+        "meta-ads",
+        "ga4",
+        "posthog",
+        "landing-page",
+        "unit-economics",
+        "nps"
+      ]
     },
     {
       "name": "fractional-cto-toolkit",
       "description": "Operational toolkit for freelance and fractional CTOs — contracts, project-takeover SOPs, a process-engineering pipeline (standardize → automation-triage → SOP authoring with executable output), and a requirements-first pipeline (PRD/SRS per ISO/IEEE 830 + ISO/IEC/IEEE 29148:2018 → OpenSpec derived → Linear Bilingual issues → /opsx-* workflow) for client onboarding, technical audits, and vendor evaluation.",
       "version": "1.2.0",
-      "source": "./toolkits/fractional-cto-toolkit"
+      "source": "./toolkits/fractional-cto-toolkit",
+      "author": {
+        "name": "Luis Andres Pena Castillo",
+        "url": "https://github.com/lapc506"
+      },
+      "homepage": "https://toolkits.chimeranext.dev",
+      "repository": "https://github.com/chimeranext/better-toolkits",
+      "license": "BSL-1.1",
+      "category": "productivity",
+      "keywords": [
+        "claude-code",
+        "claude-code-plugin",
+        "fractional-cto",
+        "prd",
+        "srs",
+        "openspec",
+        "linear",
+        "process-engineering",
+        "vendor-evaluation"
+      ]
     },
     {
       "name": "instructional-design-toolkit",
@@ -178,19 +258,62 @@
         "atomic-habits",
         "learning-record-store",
         "ralph-lrs"
-      ]
+      ],
+      "author": {
+        "name": "Luis Andres Pena Castillo",
+        "url": "https://github.com/lapc506"
+      },
+      "homepage": "https://toolkits.chimeranext.dev",
+      "repository": "https://github.com/chimeranext/better-toolkits",
+      "license": "BSL-1.1"
     },
     {
       "name": "launchpad-toolkit",
       "description": "Methodology prototype laboratory for chimeranext Launchpad pillar — AI intake, cap table, co-founder matching, investor matching, demo day prep, stage tracker, a 5-year financial-model generator (Setup → Assumptions → Calculations → Statements → charts, with per-business-model sanity checks), plus a chimeranext-api-consumer agent that enriches skills with live chimeranext API data when endpoints are available and degrades gracefully when they are not. Dual-purpose: external CLI for founders without chimeranext + internal validation lab for productizing patterns into the chimeranext Launchpad product.",
       "version": "0.6.0",
-      "source": "./toolkits/launchpad-toolkit"
+      "source": "./toolkits/launchpad-toolkit",
+      "author": {
+        "name": "Luis Andres Pena Castillo",
+        "url": "https://github.com/lapc506"
+      },
+      "homepage": "https://toolkits.chimeranext.dev",
+      "repository": "https://github.com/chimeranext/better-toolkits",
+      "license": "BSL-1.1",
+      "category": "productivity",
+      "keywords": [
+        "claude-code",
+        "claude-code-plugin",
+        "launchpad",
+        "cap-table",
+        "fundraising",
+        "financial-model",
+        "demo-day",
+        "startup"
+      ]
     },
     {
       "name": "venture-studio-toolkit",
       "description": "Macro portfolio management for venture studios and serial founders — LATAM corporate structures (Cayman Sandwich, Delaware Tostada, Skip-CR), Services Hub pattern with MSA templates, accelerator matching, govclab frameworks (studio thesis, focus, secret sauce), and Three Horizons portfolio allocation. Spanish-first; bilingual output framework documented for v1.3+.",
       "version": "1.2.0",
-      "source": "./toolkits/venture-studio-toolkit"
+      "source": "./toolkits/venture-studio-toolkit",
+      "author": {
+        "name": "Luis Andres Pena Castillo",
+        "url": "https://github.com/lapc506"
+      },
+      "homepage": "https://toolkits.chimeranext.dev",
+      "repository": "https://github.com/chimeranext/better-toolkits",
+      "license": "BSL-1.1",
+      "category": "productivity",
+      "keywords": [
+        "claude-code",
+        "claude-code-plugin",
+        "venture-studio",
+        "portfolio",
+        "latam",
+        "accelerator",
+        "three-horizons",
+        "govclab"
+      ]
     }
   ]
 }
