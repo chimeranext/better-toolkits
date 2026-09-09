@@ -111,6 +111,9 @@ The authoritative list of installable names lives in
 [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json). Landing + doctrine:
 **https://toolkits.chimeranext.dev** (GitHub Pages + custom domain; see [`apps/web/README.md`](apps/web/README.md)).
 
+Discovery / Build with Claude listing prep (external marketplace — not vendoring into
+their `plugins/` tree): [`docs/buildwithclaude-marketplace.md`](docs/buildwithclaude-marketplace.md).
+
 ## Toolkits
 
 Listed in priority order. Each toolkit keeps its **own license** — see the `LICENSE` file
@@ -347,7 +350,7 @@ BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENS
 toolkits/<name>/
   .claude-plugin/plugin.json   # per-toolkit plugin identity + version
 apps/web/             # Landing + /doctrine (toolkits.chimeranext.dev via GitHub Pages)
-docs/                 # Monorepo contracts (multi-harness-ssot.md, …)
+docs/                 # Monorepo contracts (multi-harness-ssot.md, buildwithclaude-marketplace.md, …)
 ```
 
 ## Why one monorepo?
