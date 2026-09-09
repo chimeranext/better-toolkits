@@ -20,7 +20,7 @@ it help?” via with/without-skill measurement ([NVIDIA docs](https://docs.nvidi
 ## Arguments
 
 ```
-[scan | quality | validate | full] <path-or-url> [--llm] [--format json|markdown|sarif] [--output <file>]
+[scan | quality | validate | full] <path-or-url> [--llm] [--format json|markdown|sarif] [--output <file>] [--no-install]
 ```
 
 | Mode | Default CLI | Needs |
@@ -33,24 +33,34 @@ it help?” via with/without-skill measurement ([NVIDIA docs](https://docs.nvidi
 `<path-or-url>` — skill directory (`SKILL.md` inside), zip, git URL, or a toolkit
 skills tree (e.g. `toolkits/make-no-mistakes-toolkit/skills/merge-advisor`).
 
+`--no-install` — skip auto-install of missing peer CLIs (fail with install hints).
+
 ---
 
-## Install upstream (peer deps — document, don’t vendor)
+## Peer CLIs (auto-install by default)
+
+The worker installs missing peers via **`uv tool install`** when the user invoked
+`/evaluate-agent-skills` (or the script) — that is the intentional happy path.
+Pass `--no-install` to skip and only check PATH.
 
 ```bash
-# SkillSpector (security)
+# What the worker runs when skillspector / skillevaluator is missing:
 uv tool install git+https://github.com/NVIDIA/SkillSpector.git
-
-# SkillEvaluator (quality + Tier 1 validate)
 uv tool install --python 3.13 "skillevaluator[all] @ git+https://github.com/NVIDIA/SkillEvaluator.git"
+```
 
-# Full validate evidence (recommended)
+Requires **`uv`** on PATH when install is needed; otherwise exit 127 with a clear
+error (link: https://docs.astral.sh/uv/getting-started/installation/). Install logs
+go under `reports/evaluate-agent-skills/uv-tool-install-*.log` (tee).
+
+Recommended extras for full validate evidence (not auto-installed):
+
+```bash
 # macOS: brew install semgrep gitleaks
 # or:    uv tool install semgrep
 ```
 
-Worker script (optional, same checks):  
-`${CLAUDE_PLUGIN_ROOT}/scripts/evaluate-agent-skills.sh`
+Worker: `${CLAUDE_PLUGIN_ROOT}/scripts/evaluate-agent-skills.sh`
 
 ---
 
@@ -64,26 +74,25 @@ Worker script (optional, same checks):
 2. Verify target exists (or is a URL/zip Spector accepts).
 3. Prefer a directory that contains `SKILL.md`.
 
-### Step 2 — Preflight
+### Step 2 — Preflight / install
 
-```bash
-command -v skillspector   # required for scan / full / validate security evidence
-command -v skillevaluator # required for quality / validate / full
-```
-
-If missing: print install commands above and **STOP** — do not fabricate findings.
-
-### Step 3 — Run
-
-Prefer the worker:
+Prefer the worker — it auto-installs peers unless `--no-install`:
 
 ```bash
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/evaluate-agent-skills.sh" $ARGUMENTS
 ```
 
-Or invoke CLIs directly per mode. Default Spector: `--no-llm` (deterministic,
-no provider key). Pass `--llm` only when the user opts in and a provider key is
-staged via `/secret-use` (never echo keys).
+If invoking CLIs directly: ensure `skillspector` / `skillevaluator` on PATH (or
+run the `uv tool install` lines above). If still missing after install attempt:
+print hints and **STOP** — do not fabricate findings. Do **not** end with “install
+yourself” as the product when the user asked to evaluate — run the worker so it
+installs (unless they passed `--no-install`).
+
+### Step 3 — Run
+
+Default Spector: `--no-llm` (deterministic, no provider key). Pass `--llm` only
+when the user opts in and a provider key is staged via `/secret-use` (never echo
+keys).
 
 Write reports under `reports/evaluate-agent-skills/` when `--output` omitted
 (create dir). Prefer `--format markdown` for human curation + `json` for CI.
@@ -99,6 +108,7 @@ Do **not** dump raw SARIF/JSON only:
 5. For Evaluator live Tier 3: require `evals/evals.json` (or accepted paths from
    NVIDIA docs). Without it, report Tier 3 skipped — same as missing BENCHMARK
    during review. **HITL** before spending sandbox/provider budget on Tier 3.
+   Tier 3 is **opt-in**, never the default for `full`.
 
 ### Step 5 — Optional CI pointer
 
@@ -111,7 +121,7 @@ Suggest a workflow only when the user asks; do not invent monorepo CI without HI
 
 - Vendoring SkillSpector / SkillEvaluator source into better-toolkits.
 - Merging this into `/audit` / audit-engine families (orthogonal domain).
-- Auto Tier 3 on every skill in the monorepo (costly; opt-in).
+- Auto Tier 3 on every skill in the monorepo (costly; opt-in + HITL).
 - Replacing Greptile / gemini-code-review for **code** PRs — this is for **skills**.
 
 ## Related
