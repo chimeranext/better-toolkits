@@ -21,6 +21,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - **Repo doctrine:** HITL is a monorepo pillar (`docs/hitl.md`, `/doctrine`, `.cursor/rules/hitl-doctrine.mdc`, CONTRIBUTING + root README) — not toolkit-only. `/merge-advisor` + skill always HITL-ask after the ORDER (no `--execute`); re-measure between merges.
 
+## [1.35.0] - 2026-09-09
+
+### Added
+- **`/opencode-setup`** (+ Cursor skill): audit / install / verify OpenCode `"plugin"` registration for the monorepo stderr baseline (`opencode-plugin.ts`). Optional `--also-npm`. Protocol SSOT: `references/opencode-setup/protocol.md`. Explicit non-goal: Claude `hooks.json` is not loaded by OpenCode.
+
 ### Added
 - Port from upstream make-no-mistakes **PR #52** (SSOT-aware): ENF efficacy verifier `findHookEfficacyGaps` (`src/audit/verifiers/enforcement-hooks-efficacy.ts`) + tests; detector + thin `/audit-enforcement-hooks` document coverage vs bind.
 
