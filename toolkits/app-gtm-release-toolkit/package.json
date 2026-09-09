@@ -1,7 +1,7 @@
 {
   "name": "@lapc506/app-gtm-release-toolkit",
-  "version": "2.2.0",
-  "description": "Multi-platform app go-to-market and release toolkit — ship Flutter, KMP, Swift, .NET MAUI, and PWAs to Google Play, App Store, Microsoft Store, Snap Store, and alternative channels. OpenCode + Claude Code plugin.",
+  "version": "2.4.0",
+  "description": "Multi-platform app go-to-market and release toolkit — ship Flutter, KMP, Swift, .NET MAUI, and PWAs to Google Play, App Store, Microsoft Store, Snap Store, Flathub, Zapstore, and alternative channels. OpenCode + Claude Code plugin.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -38,6 +38,9 @@
     "microsoft-store",
     "google-play",
     "app-store",
+    "flatpak",
+    "flathub",
+    "zapstore",
     "cicd"
   ],
   "repository": { "type": "git", "url": "git+https://github.com/chimeranext/app-gtm-release-toolkit.git" },
