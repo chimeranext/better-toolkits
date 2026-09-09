@@ -25,3 +25,8 @@ Thumbs.db
 *.swp
 .idea/
 .vscode/
+
+# Agent / git worktrees (transient, never committed)
+.agents/
+.claude/worktrees/
+.worktrees/
