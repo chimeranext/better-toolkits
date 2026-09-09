@@ -1,6 +1,6 @@
 # Multi-harness SSOT
 
-Durable contract for this monorepo. Public doctrine: [toolkits.chimeranext.dev/doctrine](https://toolkits.chimeranext.dev/doctrine/). Decision record: [`openspec/changes/2026-08-20-multi-harness-ssot/`](../openspec/changes/2026-08-20-multi-harness-ssot/).
+Durable contract for this monorepo (one of two doctrine pillars — the other is [HITL](hitl.md)). Public doctrine: [toolkits.chimeranext.dev/doctrine](https://toolkits.chimeranext.dev/doctrine/). Decision record: [`openspec/changes/2026-08-20-multi-harness-ssot/`](../openspec/changes/2026-08-20-multi-harness-ssot/).
 
 Install stderr on Claude Code / Cursor / OpenCode2: see the **Multi-harness SSOT** section in the [root README](../README.md).
 

@@ -2,6 +2,9 @@ Autonomous local work vs hard STOP gates for shared-state mutations.
 
 ## Authorization & Human-in-the-Loop Boundaries
 
+Repo-wide parent doctrine: [`docs/hitl.md`](../../../../docs/hitl.md). This file is
+the `/implement` application of that doctrine — not HITL’s only home.
+
 `/implement` is authorized to drive local work end-to-end **without per-action approval**, but every shared-state mutation that materially affects others (a PR's review surface, a merge to `{baseBranch}`, an issue-tracker status flip, a local workspace deletion) requires an **explicit user OK at that exact step**. The protocol below treats these as hard STOP gates: surface the action, ask, wait for an explicit answer, then proceed.
 
 ### Autonomous (no per-action approval needed)
@@ -52,3 +55,10 @@ Autonomous local work vs hard STOP gates for shared-state mutations.
   The orchestrator then calls `AskUserQuestion` on the sub-agent's behalf, captures the user's choice, and relays it back via `SendMessage`. The sub-agent resumes from where it halted. Attempting `AskUserQuestion` from a sub-agent results in a silent hang or runtime error — never do it.
 
 Default posture: when uncertain whether an action is local or shared-state, treat it as shared-state and ask.
+
+### Sibling: `/merge-advisor`
+
+Same doctrine applies to the multi-PR merge queue: measure autonomously, then
+**always** HITL before any `gh pr merge` (gate name for sub-agents:
+`"merge-advisor-queue"`). See `references/merge-advisor/protocol.md`. There is
+no opt-in `--execute` — the approval question is mandatory after the plan.
