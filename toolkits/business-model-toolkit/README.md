@@ -152,8 +152,7 @@ All content is generated in **Spanish**. Business terms appear as "Spanish (Engl
 ```
 business-model-toolkit/
 ├── .claude-plugin/
-│   ├── plugin.json
-│   └── marketplace.json
+│   └── plugin.json
 ├── commands/           # 2 entry points
 │   ├── brainstorm.md
 │   └── simulate.md
