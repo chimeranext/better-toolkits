@@ -1,0 +1,51 @@
+schema: spec-driven
+
+context: |
+  better-toolkits is a monorepo of source-available Claude/Cursor toolkits
+  (make-no-mistakes, instructional-design, fractional-cto, venture-studio, …)
+  plus shared hooks and the toolkits.chimeranext.dev landing app.
+
+  Governance: GitHub Issues on this repo (`toolkit:*`, `area:*` labels). One
+  OpenSpec store at repo root — do NOT create `openspec/changes/` inside individual
+  toolkits; satellite consumer repos (e.g. Seacrets app) use overlays only.
+
+  Multi-harness SSOT: protocol markdown under `toolkits/<name>/references/`,
+  thin entries in `commands/` + Cursor skills. Shared stderr guard:
+  `shared/hooks/stderr/`.
+
+  HITL doctrine: after a plan whose next step mutates shared state, agents ask
+  and wait. See `docs/hitl.md` and `.cursor/rules/hitl-doctrine.mdc`.
+
+  Change folders: `openspec/changes/YYYY-MM-DD-<slug>/` with `.openspec.yaml`,
+  `proposal.md`, `design.md`, `tasks.md`, and delta `specs/<capability>/spec.md`
+  unless `skip_specs: true`.
+
+  Workflow (OPSX): `/opsx-propose` → human review → `/opsx-apply` → PR →
+  `/opsx-sync` (optional) → `/opsx-archive` (human OK only). CLI ≥ 1.10.
+
+rules:
+  proposal:
+    - Include Change ID matching the folder name
+    - Map to one spec domain (`toolkit:<name>` or `area:web|docs|meta`)
+    - Always include Non-goals and verifiable success criteria
+  specs:
+    - Use #### Scenario: with WHEN/THEN bullets
+    - Delta sections: ## ADDED Requirements, ## MODIFIED Requirements, or ## REMOVED Requirements
+    - Requirement statements MUST include SHALL or SHALL NOT
+  design:
+    - Record which toolkit paths and shared hooks are touched
+    - Call out multi-harness adapter impacts (Cursor, Claude, OpenCode)
+  tasks:
+    - Checkbox tasks with change slug in commit messages
+    - Link GitHub issue when one exists
+
+operations:
+  apply:
+    guidance:
+      - Implement in the owning toolkit path under `toolkits/<name>/`
+      - Keep tasks.md checkboxes in sync on the monorepo change branch
+      - Do not duplicate OpenSpec changes in consumer repos (overlays only)
+  archive:
+    guidance:
+      - Do not mass-archive without explicit human OK
+      - Merge delta specs into `openspec/specs/` unless skip_specs
