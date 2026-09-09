@@ -6,7 +6,8 @@
 
 A pile of PRs is open against one base. Each was measured green **against a base
 that no longer exists by the time its turn comes**. This skill computes the
-order that keeps them green, and it never merges anything.
+order that keeps them green, then **always** offers to execute that order under
+HITL. There is no `--execute` flag — the approval question *is* the product.
 
 ## The question nobody else answers
 
@@ -23,20 +24,56 @@ is a property of the pair (PR, base-it-will-land-on).** A per-PR report reads
 every row against *today's* base, and the moment the first merge lands, every
 other row is describing a base that is gone. Ten green PRs is not ten merges.
 
-## This skill never acts
+## HITL doctrine (mandatory — not opt-in)
 
-Everything below reads. The fixes are **printed for the user to run**:
+Repo-wide parent: [`docs/hitl.md`](../../../../docs/hitl.md). This section is the
+`/merge-advisor` application of that doctrine.
 
-- `gh pr merge`, `git merge`, `git rebase`, `git push` — recommended, never run.
-- Regeneration commands — printed with their exact invocation, never executed.
+Two halves, in this order. Neither is optional.
 
-One exception, named out loud when used: `git fetch origin --quiet` runs first.
-It writes remote-tracking refs and nothing else. Without it every measurement is
-taken against a stale base and produces an order that was correct yesterday.
+### Half A — measure (autonomous)
+
+The seven predicates run without asking. One mutation is allowed without HITL:
+`git fetch origin --quiet` (remote-tracking refs only). Without it every
+measurement is against a stale base.
+
+Print the full plan (tiers, full PR URLs, not-in-order, capacity). The plan
+alone is not the end of the skill.
+
+### Half B — execute under HITL (always)
+
+Immediately after the plan, the orchestrator **must** ask for an explicit OK.
+Do not end with “run these `gh pr merge` yourself.” Do not invent `--execute`.
+
+**Harness surface (same doctrine as `/implement`):**
+
+| Harness | How to ask |
+|---------|------------|
+| Claude Code | `AskUserQuestion` |
+| Cursor | equivalent in the main conversation: numbered options + wait for an explicit reply (never treat silence as yes) |
+| Background sub-agent | do **not** ask; emit `pause` JSON with `gate: "merge-advisor-queue"` and halt — orchestrator asks and relays |
+
+Minimum question after the plan:
+
+> **Execute this merge plan?**
+>
+> 1. **Yes — tier by tier** (recommended): merge the next tier, re-measure, ask again.
+> 2. **Yes — one PR** (name which from Tier 1).
+> 3. **Plan only** — do not merge this session.
+> 4. **Stop** — do not merge.
+
+For choices 1–2, **another hard STOP before each `gh pr merge`**: PR URL, merge
+method, freshly read `mergeable` / checks. After each successful merge: re-run
+`force_mergeable` on the remainder, re-derive tiers if the shape changed, ask
+HITL again. A plan printed once and followed for an hour is a plan whose later
+tiers measured the wrong base.
 
 **Never offer a bypass as an option.** `--admin`, `--force`, merging past a red
 or unanswered check, disabling a required check to unblock a queue — none of
 these is a row in a menu. If the ordering is blocked, the block is the finding.
+
+Regeneration commands and any `git rebase` / `git push --force-with-lease`
+needed to unblock a PR also require HITL.
 
 ## Step 0 — Resolve the base and the PR set
 

@@ -17,6 +17,10 @@ One protocol markdown contract (`references/` + thin entries). One stderr detect
 - OpenSpec: [`openspec/changes/2026-08-20-multi-harness-ssot/`](openspec/changes/2026-08-20-multi-harness-ssot/)
 - Public doctrine: [toolkits.chimeranext.dev/doctrine](https://toolkits.chimeranext.dev/doctrine/)
 
+## HITL (repo doctrine)
+
+**Human-in-the-loop is the other pillar** of this monorepo — orthogonal to multi-harness SSOT. After a plan whose natural next step mutates shared state, agents **ask and wait**. No buried `--execute`. Canonical: [`docs/hitl.md`](docs/hitl.md). Cursor agents: [`.cursor/rules/hitl-doctrine.mdc`](.cursor/rules/hitl-doctrine.mdc).
+
 ### Main selling point — stderr baseline
 
 Agents that discard stderr (`2>/dev/null`, bare `2>&1` without a log sink) hide failures. Every toolkit in this monorepo vendors [`shared/hooks/stderr/`](shared/hooks/stderr/) and registers it on install. **On by default; opt-out** via `MNM_DISABLE_STDERR_HOOK=1`, `.claude/config/stderr-hooks.json` → `{"preserve_stderr": false}`, or OpenCode `"plugin": ["-local.mnm-no-stderr-redirect"]`.
