@@ -8,6 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- **Runtime PRDS hooks:** [`shared/hooks/prds/`](shared/hooks/prds/) — multi-harness
+  PreToolUse / beforeShellExecution / OpenCode plugin gating `gh pr create|edit`
+  and `git push` (when a PR exists) to PRDS body sections. Fractional-cto **1.3.0**.
+
 ### Changed
 
 - **Marketplace SSOT:** only [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json)
