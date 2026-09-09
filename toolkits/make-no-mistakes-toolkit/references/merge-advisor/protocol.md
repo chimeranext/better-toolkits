@@ -4,11 +4,12 @@ Harness-agnostic body. Thin entry: `commands/merge-advisor.md`.
 
 ---
 
-# /merge-advisor — el orden, no el estado
+# /merge-advisor — el orden, luego HITL
 
 Hay una pila de PRs abiertos contra una misma base. Cada uno se midió verde
 **contra una base que ya no existe para cuando le llega el turno**. Este comando
-calcula el orden que los mantiene verdes, y no mergea nada.
+calcula el orden que los mantiene verdes y **siempre** ofrece ejecutarlo con
+aprobación humana — no existe un flag `--execute` que nadie va a descubrir.
 
 ## La pregunta que ningún otro comando contesta
 
@@ -49,20 +50,61 @@ verdes no son diez merges.
 | `--only <numbers>` | todos | Subconjunto separado por comas. El resto queda fuera del plan y se nombra como excluido, nunca se omite en silencio. |
 | `--out <path>` | stdout | Escribe el plan a un archivo además de imprimirlo. |
 
-## Este comando nunca actúa
+## Doctrina HITL (obligatoria — no es opt-in)
 
-Todo lo de abajo lee. Las acciones se **imprimen para que las corras vos**:
-`gh pr merge`, `git merge`, `git rebase`, `git push`, y cualquier comando de
-regeneración.
+Repo-wide parent: [`docs/hitl.md`](../../../../docs/hitl.md). This section is the
+`/merge-advisor` application of that doctrine.
 
-Una sola excepción, y se dice en voz alta cuando se usa: `git fetch origin`
-corre primero. Escribe refs de seguimiento remoto y nada más. Sin eso, cada
-medición sale contra una base vieja y produce un orden que era correcto ayer.
+Dos mitades, en este orden. Ninguna se salta.
+
+### Mitad A — medir (autónoma)
+
+Los siete predicados corren solos. `git fetch origin` es la única mutación
+permitida sin preguntar: escribe refs de seguimiento remoto y nada más. Sin eso,
+cada medición sale contra una base vieja y produce un orden que era correcto ayer.
+
+Al terminar, **imprimí el plan completo** (tiers, URLs, no-en-el-orden,
+capacidad). El plan solo no es el final del comando.
+
+### Mitad B — ejecutar con HITL (siempre)
+
+Inmediatamente después del plan, el orquestador **debe** pedir aprobación
+explícita. No imprimir «corrés vos `gh pr merge`» y terminar. No inventar
+`--execute`. La pregunta es el producto.
+
+**Superficie por harness (misma doctrina que `/implement`):**
+
+| Harness | Cómo pedir |
+|---------|------------|
+| Claude Code | `AskUserQuestion` |
+| Cursor | equivalente en la conversación principal: opciones numeradas + esperar respuesta explícita (no asumir «sí» por silencio) |
+| Sub-agente en background | **no** preguntar; emitir `pause` JSON (`gate: "merge-advisor-queue"`) y halt — el orquestador pregunta y retransmite |
+
+Pregunta mínima tras el plan (español; opciones fijas):
+
+> **¿Ejecutamos el plan de merge?**
+>
+> 1. **Sí — tier por tier** (recomendado): mergear el siguiente tier, re-medir, y volver a preguntar.
+> 2. **Sí — un PR** (nombrar cuál del Tier 1).
+> 3. **Solo el plan** — no mergear en esta sesión.
+> 4. **Parar** — no mergear.
+
+Si eligen 1 o 2, **antes de cada `gh pr merge`** hay otro hard STOP con la URL
+del PR, el método (`--merge` / `--squash` / `--rebase` según default del repo o
+pregunta si no hay default), y el estado `mergeable` / checks **recién leídos**.
+Tras cada merge exitoso: `force_mergeable` otra vez sobre el resto, re-derivar
+tiers si cambió la forma, y volver a la pregunta HITL. Un plan impreso una vez
+y seguido una hora es un plan cuyas capas posteriores midieron la base equivocada.
 
 **Nunca ofrece el bypass como opción.** `--admin`, `--force`, mergear pasando
 por encima de un check en rojo o que todavía no contestó, apagar un check
 requerido para destrabar la cola: nada de eso es una fila de un menú. Si el orden
-está bloqueado, el bloqueo es el hallazgo.
+está bloqueado, el bloqueo es el hallazgo — y la pregunta HITL refleja el
+bloqueo, no lo rodea.
+
+Regeneración de artefactos anclados: se **imprime** el comando exacto; ejecutarlo
+también requiere HITL (misma superficie). `git rebase` / `git push --force-with-lease`
+para desbloquear un PR fuera del orden: HITL, siempre.
 
 ## Los siete predicados
 
@@ -157,20 +199,21 @@ salidas de git quedan en original.
 ## Posición en la cadena
 
 ```
-review-open-prs  ->  merge-advisor  ->  sync-advisor   ->  implement
- (qué necesita     (en qué orden)     (mi checkout       (ejecutar el
-  atención)                            derivó)            siguiente issue)
+review-open-prs  ->  merge-advisor (+ HITL merge)  ->  sync-advisor  ->  implement
+ (qué necesita      (orden + merge con OK humano)    (checkout        (siguiente
+  atención)                                           derivó)          issue)
 ```
 
 Un uso típico: `review-open-prs` dice que hay once abiertos y cuatro en rojo;
-`merge-advisor` dice que dos de los verdes chocan entre sí y que el squash del
-primero desancla el baseline de los otros nueve; y recién ahí el merge se hace a
-mano, en el orden impreso.
+`merge-advisor` imprime que dos de los verdes chocan entre sí, pregunta HITL, y
+mergea el tier que el humano autorizó — re-midiendo entre merges.
 
 ## Requisitos
 
-- `gh` autenticado con lectura sobre el repo objetivo. Sin eso corre en modo
-  degradado y lo declara.
+- `gh` autenticado con lectura **y**, si el humano autoriza merge, escritura /
+  permiso de merge sobre el repo objetivo. Sin auth de lectura corre en modo
+  degradado y lo declara; sin permiso de merge la mitad B se detiene en HITL
+  con el error, no inventa bypass.
 - `git` con acceso al remoto: los heads de los PRs se traen como refs locales,
   porque los predicados 4 y 5 necesitan los commits, no los SHAs.
 - Nada más. No requiere `linear-setup.json` ni ninguna config del toolkit.

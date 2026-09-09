@@ -88,7 +88,7 @@ Deliberate actions you invoke explicitly.
 | Command | Description |
 |---------|-------------|
 | [`/make-no-mistakes:implement <ISSUE-ID>`](commands/implement.md) | Disciplined execution of Linear issues — worktree isolation, all-reviewer loops, CI verification, clean merges |
-| [`/make-no-mistakes:merge-advisor [<base>]`](commands/merge-advisor.md) | Read-only merge **ORDER** for a set of open PRs (pairwise collisions + latent conflicts after earlier lands). Never merges |
+| [`/make-no-mistakes:merge-advisor [<base>]`](commands/merge-advisor.md) | Merge **ORDER** for a set of open PRs (pairwise collisions + latent conflicts), then **HITL** to execute the plan (AskUserQuestion / Cursor equivalent — no `--execute` flag) |
 | [`/make-no-mistakes:disk-cleanup [target-GB]`](commands/disk-cleanup.md) | Reclaim disk in ascending risk (docker images → worktree node_modules → worktrees; volumes listed only). Measured free-space deltas, never predictions |
 | [`/make-no-mistakes:parallelize <brief>`](commands/parallelize.md) | Plan how to split work across subagents / worktrees / agent teams before implementing |
 | [`/make-no-mistakes:explain <topic>`](commands/explain.md) | Explain a decision, command, or failure mode from project + toolkit context |
@@ -141,7 +141,7 @@ Auto-activate by context — you don't need to remember the command name.
 | [`implement`](skills/implement/SKILL.md) | Invoke the full `/implement` protocol (multi-harness entry → `references/implement/*`) |
 | [`parallelize`](skills/parallelize/SKILL.md) | Fan-out work across isolated agents (`/parallelize` → `references/parallelize/protocol.md`) |
 | [`sync-advisor`](skills/sync-advisor/SKILL.md) | Ask "am I up to date", "is my checkout stale", or sync-after-release — measures drift, routes to `git pull` / single rebase / `/rebase`. Never syncs itself |
-| [`merge-advisor`](skills/merge-advisor/SKILL.md) | Ask "in what order do I merge these" — computes merge ORDER for a set of PRs. Never merges |
+| [`merge-advisor`](skills/merge-advisor/SKILL.md) | Ask "in what order do I merge these" — computes ORDER, then HITL-asks to merge (re-measure between merges) |
 | [`worktree-cleanup`](skills/worktree-cleanup/SKILL.md) | Classify/reclaim worktree disk without destroying work; stages 2–3 of `/disk-cleanup` |
 | [`rebase-advisor`](skills/rebase-advisor/SKILL.md) | **Deprecated alias** of `sync-advisor` (kept for muscle memory) |
 | [`spec-recommend`](skills/spec-recommend/SKILL.md) | Discuss specs, SRDs, implementation briefs, or say "what should I build" |
@@ -384,7 +384,7 @@ make-no-mistakes-toolkit/
 └── README.md
 ```
 
-**Design principle:** Commands for destructive/token-intensive actions (you decide when). Skills for read-only analysis (context-aware, auto-activate). Agents for heavy orchestration (own context window). Hooks for deterministic guardrails on every tool call (no human in the loop).
+**Design principle:** Commands for destructive/token-intensive actions (you decide when). Skills for analysis that may *propose* shared-state mutations — **HITL is doctrine**: after the plan, always `AskUserQuestion` (Claude) or the Cursor equivalent; never bury execution behind a flag nobody will discover. Agents for heavy orchestration (own context window). Hooks for deterministic guardrails on every tool call (no human in the loop).
 
 ## Hooks (v1.5.0+)
 
