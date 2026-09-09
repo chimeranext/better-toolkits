@@ -8,6 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- **`/make-no-mistakes:evaluate-agent-skills`:** wrap NVIDIA SkillSpector / SkillEvaluator
+  (peer CLIs; see [`docs/evaluate-agent-skills.md`](docs/evaluate-agent-skills.md)).
+
 ### Changed
 
 - **Marketplace SSOT:** only [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json)
@@ -17,3 +22,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **app-gtm-release** entry in the root marketplace bumped **2.3.0 → 2.4.0** to match
   the toolkit `plugin.json` / `package.json` (fixes install-surface drift after
   `/ship-flatpak`).
+- **make-no-mistakes** marketplace entry bumped toward **1.36.0** (`/evaluate-agent-skills`).
