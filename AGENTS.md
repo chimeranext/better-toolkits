@@ -7,6 +7,19 @@ repository. Prefer this file over inventing workspace layouts under the parent
 Related: [`docs/hitl.md`](docs/hitl.md) (ask-and-wait before shared-state
 mutations), [`docs/multi-harness-ssot.md`](docs/multi-harness-ssot.md).
 
+## Marketplace SSOT (mandatory)
+
+**One** Claude Code marketplace manifest exists for this monorepo:
+
+[`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json)
+
+- Install surface: `claude plugin marketplace add chimeranext/better-toolkits`
+- Each toolkit keeps only `.claude-plugin/plugin.json` (plugin identity + version).
+- **Forbidden:** `toolkits/*/.claude-plugin/marketplace.json` — those were standalone-repo
+  leftovers and cause version drift. Do not recreate them.
+- When bumping a toolkit version, update **root** `marketplace.json` + that toolkit's
+  `plugin.json` (and `package.json` / CHANGELOG / README when they exist) in the same PR.
+
 ## Git worktrees (mandatory when parallel)
 
 When more than one branch/PR is active, or the primary checkout is dirty, use an

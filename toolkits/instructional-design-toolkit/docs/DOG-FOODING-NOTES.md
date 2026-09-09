@@ -33,7 +33,7 @@ markdown declarativos (commands, skills, agents, templates, references) — las
 - ✅ JSON Schema validation: los 4 examples (course-example.json + 3 session-plan
   examples) pasan `ajv validate` contra sus schemas correspondientes (ver T02 PR #1).
 - ✅ JSON syntax: todos los archivos JSON pasan `python3 -m json.tool`.
-- ✅ Plugin manifest: `plugin.json` y `marketplace.json` válidos.
+- ✅ Plugin manifest: `plugin.json` válido.
 
 ### Validaciones que requieren ejecución real (post-install)
 

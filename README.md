@@ -208,16 +208,16 @@ claude plugin install business-model-toolkit@better-toolkits
 
 BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
-### [app-gtm-release-toolkit](toolkits/app-gtm-release-toolkit/) `v2.3.0`
+### [app-gtm-release-toolkit](toolkits/app-gtm-release-toolkit/) `v2.4.0`
 
 Multi-platform app go-to-market and release — ship Flutter, Kotlin Multiplatform, .NET MAUI, Swift, and PWAs to Google Play, App Store, Microsoft Store, Snap Store, Flathub, and alternative channels.
 
 #### What you get
 
-- **Three-tier command architecture** — `/ship-advisor` (strategy) → per-framework `/ship-flutter`, `/ship-pwa`, `/ship-msstore`, `/ship-snap`, `/ship-kmp`, `/ship-maui` (execution) → `/ship-everywhere` (mass publish).
+- **Three-tier command architecture** — `/ship-advisor` (strategy) → per-framework `/ship-flutter`, `/ship-pwa`, `/ship-msstore`, `/ship-snap`, `/ship-flatpak`, `/ship-kmp`, `/ship-maui` (execution) → `/ship-everywhere` (mass publish).
 - **CI/CD & distribution** — Codemagic and GitHub Actions, RevenueCat monetization, Shorebird code push, plus desktop code signing + notarization for Windows/macOS.
 - **GTM layer** — the `gtm-fit` skill (SLIP framework, minimum viable segment, organic-presence system) so shipped apps also sell.
-- 10 commands, 17 skills, 2 agents; pre-launch checklist based on Andrea Bizzotto's methodology.
+- 11 commands, 18 skills, 2 agents; pre-launch checklist based on Andrea Bizzotto's methodology.
 
 #### Install
 
@@ -343,8 +343,9 @@ BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENS
 
 ```
 .claude-plugin/
-  marketplace.json    # the marketplace manifest Claude Code reads (one entry per toolkit)
-toolkits/             # the toolkits — one git history per toolkit, preserved via git subtree
+  marketplace.json    # sole Claude Code marketplace (one entry per toolkit)
+toolkits/<name>/
+  .claude-plugin/plugin.json   # per-toolkit plugin identity + version
 apps/web/             # Landing + /doctrine (toolkits.chimeranext.dev via GitHub Pages)
 docs/                 # Monorepo contracts (multi-harness-ssot.md, …)
 ```
@@ -359,7 +360,10 @@ single marketplace means:
 - **Preserved history.** Each toolkit is imported with `git subtree`, so its full
   commit history survives (`git log toolkits/<name>/`).
 - **Independent licensing and versioning.** Every toolkit keeps its own `LICENSE`
-  and its own version; the monorepo just curates them.
+  and its own version in `plugin.json`; the root
+  [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json) lists those
+  versions for install. Agent rules for keeping them in sync: [`AGENTS.md`](AGENTS.md).
+- **Change log for monorepo-level work:** [`CHANGELOG.md`](CHANGELOG.md).
 
 ## History
 

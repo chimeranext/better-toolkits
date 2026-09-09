@@ -222,8 +222,7 @@ CI/CD pipelines adapted from:
 ```
 app-gtm-release-toolkit/
 ├── .claude-plugin/
-│   ├── plugin.json
-│   └── marketplace.json
+│   └── plugin.json
 ├── commands/                 # 11 commands (10 real, 1 stub)
 │   ├── audit.md              # framework detection + Flutter audit (real)
 │   ├── ship-advisor.md       # strategic router (real)
