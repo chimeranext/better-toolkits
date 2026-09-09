@@ -9,7 +9,7 @@ Canonical: [`docs/hitl.md`](../../docs/hitl.md). Public: `/doctrine`.
 
 After a plan whose natural next step mutates **shared state** (`gh pr merge` / create mode, force-with-lease on published history, tracker → Done, worktree delete, prod ops, regenerating base-anchored artifacts for the open PR set): **ask and wait**. The question is the product.
 
-- Claude: `AskUserQuestion`. Cursor: numbered options in the main chat + explicit reply (silence ≠ yes). Sub-agents: `pause` JSON; orchestrator asks.
+- Claude: `AskUserQuestion`. Cursor: **`AskQuestion`** (fixed-choice); if unavailable, numbered options in the main chat + explicit reply (silence ≠ yes). Sub-agents: `pause` JSON; orchestrator asks.
 - Do **not** end with “run these commands yourself” when the user clearly wants the outcome, and do **not** invent `--execute` / hide the happy path behind a flag.
 - Never offer `--admin` / `--force` / merge-past-red as menu options.
 - Local measure / edit / test work may proceed without per-action approval until that boundary.
