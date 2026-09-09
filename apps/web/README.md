@@ -23,6 +23,13 @@ Workflow: [`.github/workflows/deploy-pages.yml`](../../.github/workflows/deploy-
 
 Temporary project URL without DNS: set repository variable `PAGES_BASE_PATH=/better-toolkits` and remove/ignore CNAME.
 
+## Open Graph
+
+`public/og.png` (1200×630) is referenced from `src/app/layout.tsx` as `og:image` /
+`twitter:image`. After deploy, re-scrape with the
+[Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/) if WhatsApp
+still shows a stale preview.
+
 ## Doctrine
 
 [`/doctrine`](https://toolkits.chimeranext.dev/doctrine/) surfaces **Multi-harness SSOT** (see [`docs/multi-harness-ssot.md`](../../docs/multi-harness-ssot.md)).

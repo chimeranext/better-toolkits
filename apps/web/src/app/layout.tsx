@@ -10,6 +10,13 @@ const title = "better-toolkits — pick the toolkits your startup needs";
 const description =
   "10 battle-tested Claude Code toolkits. One marketplace, one command, source-available (BSL-1.1). Operate like a venture studio from day one.";
 
+const ogImage = {
+  url: "/og.png",
+  width: 1200,
+  height: 630,
+  alt: "better-toolkits — pick the toolkits your startup needs",
+} as const;
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://toolkits.chimeranext.dev"),
   title,
@@ -23,8 +30,14 @@ export const metadata: Metadata = {
     url: "https://toolkits.chimeranext.dev",
     siteName: "better-toolkits",
     type: "website",
+    images: [ogImage],
   },
-  twitter: { card: "summary_large_image", title, description },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+    images: [ogImage.url],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

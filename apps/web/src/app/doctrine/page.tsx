@@ -10,6 +10,18 @@ export const metadata: Metadata = {
     description:
       "One protocol contract, one stderr detector, N harness entries. Not a Cursor-vs-Claude dichotomy.",
     url: "https://toolkits.chimeranext.dev/doctrine",
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: "better-toolkits — pick the toolkits your startup needs",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og.png"],
   },
 };
 
