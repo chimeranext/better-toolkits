@@ -152,8 +152,7 @@ All content is generated in **Spanish**. Business terms appear as "Spanish (Engl
 ```
 business-model-toolkit/
 ├── .claude-plugin/
-│   ├── plugin.json
-│   └── marketplace.json
+│   └── plugin.json           # version; monorepo marketplace SSOT is root .claude-plugin/marketplace.json
 ├── commands/           # 2 entry points
 │   ├── brainstorm.md
 │   └── simulate.md

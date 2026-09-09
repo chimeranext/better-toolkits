@@ -343,8 +343,9 @@ BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENS
 
 ```
 .claude-plugin/
-  marketplace.json    # the marketplace manifest Claude Code reads (one entry per toolkit)
-toolkits/             # the toolkits — one git history per toolkit, preserved via git subtree
+  marketplace.json    # SSOT — the only marketplace Claude Code reads (one entry per toolkit)
+toolkits/<name>/
+  .claude-plugin/plugin.json   # per-toolkit plugin identity + version (no per-toolkit marketplace.json)
 apps/web/             # Landing + /doctrine (toolkits.chimeranext.dev via GitHub Pages)
 docs/                 # Monorepo contracts (multi-harness-ssot.md, …)
 ```
@@ -355,11 +356,13 @@ These toolkits started life as ten separate repositories. Consolidating them int
 single marketplace means:
 
 - **One install surface.** `claude plugin marketplace add chimeranext/better-toolkits`
-  is the single door — no hunting for ten repo URLs.
+  is the single door — no hunting for ten repo URLs. Per-toolkit
+  `marketplace.json` files were deleted; do not recreate them.
 - **Preserved history.** Each toolkit is imported with `git subtree`, so its full
   commit history survives (`git log toolkits/<name>/`).
 - **Independent licensing and versioning.** Every toolkit keeps its own `LICENSE`
-  and its own version; the monorepo just curates them.
+  and its own version in `plugin.json`; the monorepo root `marketplace.json`
+  must stay in sync with those versions.
 
 ## History
 

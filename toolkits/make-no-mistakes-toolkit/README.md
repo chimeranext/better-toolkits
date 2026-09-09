@@ -356,9 +356,8 @@ The plugin consumes these SOPs to give context-aware recommendations. Each Produ
 
 ```
 make-no-mistakes-toolkit/
-├── .claude-plugin/     # Claude Code plugin metadata
-│   ├── plugin.json
-│   └── marketplace.json
+├── .claude-plugin/     # Claude Code plugin metadata (plugin.json only; marketplace SSOT is monorepo root)
+│   └── plugin.json
 ├── src/                # OpenCode npm distribution (TypeScript CLI)
 │   ├── cli.ts
 │   ├── index.ts
