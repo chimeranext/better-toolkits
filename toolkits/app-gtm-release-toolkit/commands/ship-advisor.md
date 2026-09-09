@@ -37,7 +37,7 @@ Ask: "Which stores do you want to publish to? Pick all that apply:"
 - F-Droid (Android FOSS)
 - GitHub Releases / Obtainium (direct APK distribution)
 - IzzyOnDroid (lighter FOSS-friendly)
-- Flathub (Linux desktop FOSS) — *Phase 2*
+- Flathub (Linux desktop FOSS) — *Phase 1*
 - Mac App Store (macOS) — *Phase 3*
 - PWA browser-install only (no app store)
 - Curated community marketplace (accelerator / dev-collective repo)
@@ -64,8 +64,9 @@ Match the framework × store combination against this table and produce the reco
 | KMP | none yet | `/ship-kmp` (Phase 2) |
 | Swift native | none yet | `/ship-swift` (Phase 2.5) |
 | .NET MAUI | none yet | `/ship-maui` (Phase 2) |
-| Tauri | none yet | `/ship-msstore`, Mac App Store via Phase 3 |
+| Tauri | none yet | `/ship-msstore`, `/ship-snap`, `/ship-flatpak`, Mac App Store via Phase 3 |
 | Snap target | none yet | `/ship-snap` (Phase 1) |
+| Flatpak target | none yet | `/ship-flatpak` (Phase 1) |
 
 | Store | Framework paths supported (Phase 0) | Phase 1+ |
 |---|---|---|
@@ -73,8 +74,8 @@ Match the framework × store combination against this table and produce the reco
 | App Store | Flutter (now) | KMP/Swift/MAUI iOS (Phase 2/2.5) |
 | Microsoft Store | none yet | PWA Builder + MSIX (Phase 1) |
 | Snap Store | none yet | Snapcraft (Phase 1) |
+| Flathub | none yet | `/ship-flatpak` (Phase 1) |
 | F-Droid / Obtainium / IzzyOnDroid | Flutter Android (now) | Any Android target (Phase 2) |
-| Flathub | none yet | Phase 2 |
 | Mac App Store | none yet | Phase 3 |
 
 ### Step 5 — Write the recommendation

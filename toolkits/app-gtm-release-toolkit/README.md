@@ -47,6 +47,7 @@ Also register the local stderr adapter so shell redirects are blocked even when 
 ║  /app-gtm-release:ship-flutter   ← Phase 0 ✅ ║
 ║  /app-gtm-release:ship-pwa       ← Phase 1 ✅ ║
 ║  /app-gtm-release:ship-snap      ← Phase 1 ✅ ║
+║  /app-gtm-release:ship-flatpak   ← Phase 1 ✅ ║
 ║  /app-gtm-release:ship-msstore   ← Phase 1 ✅ ║
 ║  /app-gtm-release:ship-kmp       ← Phase 2 ✅ ║
 ║  /app-gtm-release:ship-maui      ← Phase 2 ✅ ║
@@ -57,7 +58,7 @@ Also register the local stderr adapter so shell redirects are blocked even when 
 ╚════════════════════════════════════════════╝
 ```
 
-### Commands Today (10)
+### Commands Today (11)
 
 | Command | Status | Description |
 |---------|--------|-------------|
@@ -67,6 +68,7 @@ Also register the local stderr adapter so shell redirects are blocked even when 
 | `/app-gtm-release:ship-pwa` | ✅ Phase 1 | PWA → Microsoft Store + Google Play (TWA) + App Store via PWA Builder (5 gates) |
 | `/app-gtm-release:ship-msstore` | ✅ Phase 1 | App → Microsoft Store (path A PWA Builder MSIX or path B native MSIX, 5 gates) |
 | `/app-gtm-release:ship-snap` | ✅ Phase 1 | Linux desktop → Snap Store with channels strategy (5 gates) |
+| `/app-gtm-release:ship-flatpak` | ✅ Phase 1 | Linux desktop → Flathub via Flatpak manifest + offline Node/Rust sources + PR (5 gates) |
 | `/app-gtm-release:ship-everywhere` | ✅ Phase 1 | Mass-publish orchestrator — runs all applicable ship-X children in sequence |
 | `/app-gtm-release:ship-kmp` | ✅ Phase 2 | Kotlin Multiplatform → Play + App Store with iOS framework integration (5 gates) |
 | `/app-gtm-release:ship-maui` | ✅ Phase 2 | .NET MAUI multi-target → Play + App Store + Microsoft Store + macOS Catalyst (5 gates) |
@@ -86,14 +88,14 @@ Also register the local stderr adapter so shell redirects are blocked even when 
 | Phase | Frameworks added | Stores added | Headline commands |
 |---|---|---|---|
 | **0** | Flutter | Google Play, App Store, F-Droid, GitHub Releases, IzzyOnDroid | `/audit`, `/ship-advisor`, `/ship-flutter` |
-| **1** | PWA standalone | Microsoft Store, Snap Store | `/ship-pwa`, `/ship-msstore`, `/ship-snap`, `/ship-everywhere` |
-| **2 (now)** | KMP, .NET MAUI | Flathub (in alt-distribution) | `/ship-kmp`, `/ship-maui` |
+| **1** | PWA standalone | Microsoft Store, Snap Store, Flathub | `/ship-pwa`, `/ship-msstore`, `/ship-snap`, `/ship-flatpak`, `/ship-everywhere` |
+| **2 (now)** | KMP, .NET MAUI | (all Phase 1 stores apply) | `/ship-kmp`, `/ship-maui` |
 | **2.5** | Swift native iOS | — | `/ship-swift` |
 | **3** | Tauri, Electron, Capacitor | Mac App Store | `/ship-webview-native` (possible merge) |
 
-## Skills (17)
+## Skills (18)
 
-Auto-activate by context — you can also invoke them directly. Nine are framework-agnostic; three are Flutter-coupled (marked with `<!-- TODO: framework-agnostic split -->` for refactor in Phase 3+); five are framework-specific (Phase 1+2).
+Auto-activate by context — you can also invoke them directly. Nine are framework-agnostic; three are Flutter-coupled (marked with `<!-- TODO: framework-agnostic split -->` for refactor in Phase 3+); six are framework-specific (Phase 1+2).
 
 | Skill | Status | Triggers when you... |
 |-------|--------|---------------------|
@@ -112,6 +114,7 @@ Auto-activate by context — you can also invoke them directly. Nine are framewo
 | `pwa-quality` | PWA-specific (Phase 1) | Say "validate manifest", "Lighthouse PWA", "Workbox setup", "PWA readiness" |
 | `msstore-submission` | Microsoft Store-specific (Phase 1) | Say "Microsoft Store", "Partner Center", "MSIX", "MS Store certification" |
 | `snap-build` | Snap-specific (Phase 1) | Say "snapcraft", "Snap Store", "Ubuntu Store", "Linux desktop distribution" |
+| `flatpak-build` | Flatpak-specific (Phase 1) | Say "Flathub", "Flatpak", "flatpak-builder manifest", "AppStream", "Linux desktop distribution" |
 | `kmp-build` | KMP-specific (Phase 2) | Say "Kotlin Multiplatform", "KMM", "iOS framework integration", "Compose Multiplatform" |
 | `maui-publishing` | MAUI-specific (Phase 2) | Say ".NET MAUI", "MAUI publishing", "dotnet workload maui", "Xamarin migration" |
 
@@ -221,12 +224,13 @@ app-gtm-release-toolkit/
 ├── .claude-plugin/
 │   ├── plugin.json
 │   └── marketplace.json
-├── commands/                 # 10 commands (9 real, 1 stub)
+├── commands/                 # 11 commands (10 real, 1 stub)
 │   ├── audit.md              # framework detection + Flutter audit (real)
 │   ├── ship-advisor.md       # strategic router (real)
 │   ├── ship-flutter.md       # full Flutter lifecycle, 4 spaces (real)
 │   ├── ship-pwa.md           # PWA → MS Store + Play TWA + App Store, 5 gates (real — Phase 1)
 │   ├── ship-snap.md          # Linux desktop → Snap Store, 5 gates (real — Phase 1)
+│   ├── ship-flatpak.md       # Linux desktop → Flathub, 5 gates (real — Phase 1)
 │   ├── ship-msstore.md       # MSIX → Microsoft Store, 5 gates (real — Phase 1)
 │   ├── ship-everywhere.md    # mass-publish orchestrator (real — Phase 1)
 │   ├── ship-kmp.md           # KMP → Play + App Store, 5 gates (real — Phase 2)
@@ -235,7 +239,7 @@ app-gtm-release-toolkit/
 ├── agents/                   # 2 autonomous agents
 │   ├── pipeline-builder.md
 │   └── checklist-auditor.md
-├── skills/                   # 17 auto-activating skills
+├── skills/                   # 18 auto-activating skills
 │   ├── gtm-fit/                 # agnostic — GTM strategy (SLIP, MVS, organic presence)
 │   ├── pre-launch-checklist/    # Flutter-coupled
 │   ├── app-security/            # agnostic
@@ -250,6 +254,7 @@ app-gtm-release-toolkit/
 │   ├── pwa-quality/             # PWA-specific (Phase 1)
 │   ├── msstore-submission/      # Microsoft Store-specific (Phase 1)
 │   ├── snap-build/              # Snap-specific (Phase 1)
+│   ├── flatpak-build/           # Flatpak/Flathub-specific (Phase 1)
 │   ├── kmp-build/               # KMP-specific (Phase 2)
 │   └── maui-publishing/         # MAUI-specific (Phase 2)
 ├── src/                      # OpenCode CLI installer (TypeScript, builds to dist/)
