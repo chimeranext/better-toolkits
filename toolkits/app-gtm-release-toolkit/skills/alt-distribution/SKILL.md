@@ -1,9 +1,9 @@
 ---
 name: alt-distribution
-description: "Distribute apps through alternative channels beyond mainstream stores. Android: F-Droid, GitHub Releases (Obtainium-compatible), IzzyOnDroid, direct APK. Linux desktop: Flathub (Phase 2). Covers reproducible builds, fdroiddata metadata, AppStream metadata for Flathub, flatpak-builder manifests, and PR workflow to flathub/flathub. Use this skill when the user asks about F-Droid publishing, open source app distribution, APK distribution outside Play Store, Obtainium, reproducible builds, FOSS app stores, fdroiddata, IzzyOnDroid, self-hosted repos, sideloading, distributing without Google Play, Flathub, flatpak, flatpak-builder, AppStream, 'publish to Flathub', or 'Linux desktop FOSS distribution'."
+description: "Distribute apps through alternative channels beyond mainstream stores. Android: F-Droid, GitHub Releases (Obtainium-compatible), IzzyOnDroid, direct APK, Zapstore. Linux desktop: Flathub (Phase 1). Covers reproducible builds, fdroiddata metadata, AppStream metadata for Flathub, flatpak-builder manifests, PR workflow to flathub/flathub, and Nostr-based stores. Use this skill when the user asks about F-Droid publishing, open source app distribution, APK distribution outside Play Store, Obtainium, reproducible builds, FOSS app stores, fdroiddata, IzzyOnDroid, Zapstore, self-hosted repos, sideloading, distributing without Google Play, Flathub, flatpak, flatpak-builder, AppStream, 'publish to Flathub', or 'Linux desktop FOSS distribution'."
 ---
 
-<!-- TODO: framework-agnostic split for Android-focused sections (F-Droid, Obtainium, IzzyOnDroid) — Phase 3+ when MAUI/KMP need Android alt-distribution. The Flathub section (Phase 2) is already framework-agnostic since Flatpak builds anything that compiles on Linux. -->
+<!-- TODO: framework-agnostic split for Android-focused sections (F-Droid, Obtainium, IzzyOnDroid) — Phase 3+ when MAUI/KMP need Android alt-distribution. The Flathub section (Phase 1) is already framework-agnostic since Flatpak builds anything that compiles on Linux. Hands-on packaging moved to the dedicated `flatpak-build` skill. -->
 
 # Alternative Distribution: Beyond Google Play, Beyond Snap
 
@@ -11,7 +11,7 @@ Not every app belongs on the mainstream stores. FOSS projects, privacy-focused a
 
 This skill covers three domains:
 1. **Android alternatives** (F-Droid, Obtainium, IzzyOnDroid, direct APK) — Phase 0+
-2. **Linux desktop alternatives** (Flathub, AppImage) — Phase 2 addition
+2. **Linux desktop alternatives** (Flathub, AppImage) — Phase 1 addition
 3. **Windows & Apple restricted/offline distribution** (WinGet, MSIX sideloading, Store private audience, Apple Unlisted) — non-public channels that still go through (or around) the mainstream stores
 
 ## Distribution Channel Decision
@@ -25,6 +25,7 @@ Is your app fully open source (FOSS)?
 └── No (or mixed)
     ├── Want direct-to-user distribution? → GitHub Releases + Obtainium
     ├── Want a store without Google account? → Uptodown, Aurora Store (read-only)
+    ├── Active on Nostr / want a sign-in-free decentralized store? → Zapstore (zsp CLI)
     └── Want full control? → Self-hosted F-Droid repo
 ```
 
@@ -35,6 +36,7 @@ Is your app fully open source (FOSS)?
 | F-Droid (official) | Yes (build verification) | Free | FOSS license, reproducible builds, no proprietary deps | FOSS/privacy community |
 | IzzyOnDroid | Lighter review | Free | Open source, can have some non-free deps | Broader FOSS community |
 | GitHub Releases | None | Free | GitHub repo, APK artifact | Developers, Obtainium users |
+| Zapstore | Identity-based (Nostr npub + NIP-C1 cert link) | Free (relay) | `zsp` CLI, signing key, Nostr pubkey | Nostr users, alt-store adopters |
 | Uptodown | Editorial review | Free | APK upload | Global, no geo-restrictions |
 | Self-hosted repo | None | Hosting cost | F-Droid server setup | Your users only |
 
@@ -274,9 +276,90 @@ Starting September 2026, Google's Android Developer Verification Program may res
 
 ---
 
+## Zapstore (Nostr-based alternative Android store)
+
+[Zapstore](https://zapstore.dev) is a Nostr-native Android app store. Apps are published as Nostr events (NIP-51/related NIPs) carrying an APK URL; a relay verifies publisher identity and indexes the app. No Play Store account, no Google review — it's the "decentralized community store" of the Android alt-distribution world, complementary to F-Droid and curated marketplaces.
+
+### How it differs from F-Droid / marketplaces
+
+| Capability | Zapstore | F-Droid (official) | Curated marketplace |
+|---|---|---|---|
+| Publication | `zsp` CLI → Nostr event | source build via fdroiddata PR | maintainer index PR |
+| Publisher identity | Nostr npub (whitelisted via `zapstore.yaml` in repo) | app source repo | maintainer review |
+| Signing trust | NIP-C1 cert linking (APK keystore ↔ npub) | reproducible build | maintainer trust |
+| Review | auto-whitelist + reputation | build verification | human |
+
+### Install `zsp`
+
+```bash
+go install github.com/zapstore/zsp@latest
+# or grab a binary from the zsp releases page
+```
+
+### Fastest path: interactive wizard
+
+```bash
+zsp publish --wizard
+```
+Guides you through source selection, metadata enrichment, signing, and relay publish. Writes a `zapstore.yaml` to your repo root — **commit it**.
+
+### Non-wizard quick path
+
+```bash
+zsp publish -r github.com/your-org/your-app
+```
+`zsp` auto-detects the APK source from the URL (GitHub/GitLab/Codeberg/Forgejo release assets, F-Droid, a local APK path, or a direct URL).
+
+### `zapstore.yaml` (committed to repo root — enables auto-whitelisting)
+
+```yaml
+repository: https://github.com/your-org/your-app
+pubkey: npub1your...
+release_source: https://github.com/your-org/your-app/releases/latest
+```
+
+On first publish, the relay fetches `zapstore.yaml` from your repo, verifies the pubkey matches, and whitelists you. Future publishes pass immediately. (If your Nostr identity already has social reputation, you may be whitelisted via the Vertex reputation system without repo verification.)
+
+### Metadata enrichment
+
+`zsp` pulls metadata automatically from GitHub/GitLab/F-Droid/Play Store; fields in `zapstore.yaml` always take priority:
+```yaml
+metadata_sources:
+  - playstore
+  - github
+```
+Use `--skip-metadata` to disable.
+
+### Certificate linking (first publish, one-time)
+
+During your first publish `zsp` asks you to link your APK signing certificate to your Nostr identity — a NIP-C1 proof connecting your APK signing key to your npub. Have your signing keystore (`.jks`, `.p12`, or `.pem`) ready.
+
+### Signing methods (`SIGN_WITH`)
+
+| Method | Value |
+|---|---|
+| Nostr key | `SIGN_WITH=nsec1...` |
+| Hex key | `SIGN_WITH=0123456789abcdef...` |
+| NIP-46 bunker | `SIGN_WITH=bunker://pubkey?relay=...&secret=...` |
+| Browser (NIP-07) | `SIGN_WITH=browser` |
+
+For CI/CD, prefer a **bunker URL stored as a secret** — avoid putting `nsec` in env vars on shared systems (`/proc/*/environ` / shell history exposure).
+
+### CI/CD for Zapstore
+
+Because signing is via `SIGN_WITH`, wire a NIP-46 bunker URL into your release workflow as a secret and run `zsp publish -r github.com/your-org/your-app` on tag pushes.
+
+### When to use Zapstore
+
+Use it in the Android alt-distribution matrix as a **parallel channel** alongside F-Droid / GitHub Releases: any audience on Nostr or wanting a sign-in-free store, plus a way to reach users who disabled Play. It does **not** replace F-Droid for the FOSS/reproducible-build crowd, and is stricter about identity than a self-hosted repo.
+
+---
+
 ## Flathub (Linux Desktop)
 
 Flathub is the de facto Linux desktop app store. Unlike Snap (centralized, Canonical-controlled, requires `snapd`), Flatpak (the underlying tech) is decentralized and bundle-portable. Most major Linux distros ship with Flathub support out of the box (Fedora, Ubuntu via PPA, Linux Mint, Pop!_OS, Endless OS, elementary OS).
+
+> **Hands-on packaging** (manifest authoring, verified offline source generation for Node/Rust, toolchain install, local build, PR submission): see the dedicated skill `app-gtm-release:flatpak-build` and run `/app-gtm-release:ship-flatpak` for the full lifecycle.
 
 ### When Flathub vs Snap?
 
