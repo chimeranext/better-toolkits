@@ -65,7 +65,7 @@ export default function DoctrineClient() {
       </header>
 
       <article className={cn(CONTAINER, "px-[clamp(1.25rem,4vw,4rem)] pb-20 pt-8")}>
-        <p className="text-xs uppercase tracking-[0.18em] text-brand-primary">Multi-harness SSOT</p>
+        <p className="text-xs uppercase tracking-[0.18em] text-brand-primary">{t.pageEyebrow}</p>
         <h1 className="mt-3 font-heading text-[clamp(2rem,1.2rem+2.5vw,3.25rem)] font-extrabold leading-tight tracking-tight">
           {t.title}
         </h1>
@@ -75,10 +75,55 @@ export default function DoctrineClient() {
             {lang === "es" ? "Main selling point — stderr baseline. " : "Main selling point — stderr baseline. "}
           </span>
           {lang === "es"
-            ? "On by default en cada toolkit. Instalación Claude / Cursor / OpenCode2 en el README del monorepo."
-            : "On by default in every toolkit. Claude / Cursor / OpenCode2 install steps live in the monorepo README."}
+            ? "On by default en cada toolkit. Instalación Claude / Cursor / OpenCode2 en el README del monorepo. HITL es el otro pilar (docs/hitl.md)."
+            : "On by default in every toolkit. Claude / Cursor / OpenCode2 install steps live in the monorepo README. HITL is the other pillar (docs/hitl.md)."}
         </p>
         <p className="mt-3 font-mono text-xs text-muted-foreground">{t.sourceNote}</p>
+
+        <section className="mt-12">
+          <h2 className="font-heading text-2xl font-bold">{t.pillarsTitle}</h2>
+          <div className="mt-5 overflow-x-auto rounded-xl border border-border">
+            <table className="w-full min-w-[36rem] text-left text-sm">
+              <thead className="bg-card text-muted-foreground">
+                <tr>
+                  <th className="px-4 py-3 font-medium">{lang === "es" ? "Pilar" : "Pillar"}</th>
+                  <th className="px-4 py-3 font-medium">Doc</th>
+                  <th className="px-4 py-3 font-medium">{lang === "es" ? "Propósito" : "Purpose"}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {t.pillars.map((row) => (
+                  <tr key={row.name} className="border-t border-border">
+                    <td className="px-4 py-3 font-semibold text-primary">{row.name}</td>
+                    <td className="px-4 py-3 font-mono text-xs leading-relaxed">{row.doc}</td>
+                    <td className="px-4 py-3 text-foreground/90">{row.purpose}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section className="mt-12">
+          <h2 className="font-heading text-2xl font-bold">{t.hitlTitle}</h2>
+          <ol className="mt-4 list-decimal space-y-3 pl-5 text-[15px] leading-relaxed text-foreground/90">
+            {t.hitlRules.map((rule) => (
+              <li key={rule}>{rule}</li>
+            ))}
+          </ol>
+        </section>
+
+        <section className="mt-12">
+          <h2 className="font-heading text-2xl font-bold">{t.hitlSurfacesTitle}</h2>
+          <ul className="mt-4 space-y-3">
+            {t.hitlSurfaces.map((row) => (
+              <li key={row.harness} className="rounded-xl border border-border bg-card px-4 py-3">
+                <div className="font-semibold text-primary">{row.harness}</div>
+                <div className="mt-1 font-mono text-xs leading-relaxed text-foreground/85">{row.wire}</div>
+              </li>
+            ))}
+          </ul>
+        </section>
 
         <section className="mt-12">
           <h2 className="font-heading text-2xl font-bold">{t.ssotTitle}</h2>
