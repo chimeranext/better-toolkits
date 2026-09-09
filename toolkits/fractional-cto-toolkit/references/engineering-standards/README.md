@@ -1,20 +1,24 @@
-# Engineering Standards for any startup — the 4 best practices
+# Engineering Standards for any startup — the 6 best practices
 
 > Adaptable desde el día uno. Estos estándares nacen de la práctica adoptada en
 > HabitaNexus (`docs/process/code-organization-standards.md` y
-> `docs/process/pull-request-description-and-scope.md`) y se ofrecen aquí como baseline
-> que cualquier startup puede adoptar desde el inicio. **No son un framework greenfield**:
-> nombran y hacen exigibles convenciones que ya son buen estándar de industria.
+> `docs/process/pull-request-description-and-scope.md`) y del estándar Seacrets.Online
+> (`branching-strategy.md`, `qa-traceability-four-layers.md`). Se ofrecen aquí como
+> baseline que cualquier startup puede adoptar desde el inicio. **No son un framework
+> greenfield**: nombran y hacen exigibles convenciones que ya son buen estándar de industria.
 
-| Sigla | Nombre | Alcance |
-| --- | --- | --- |
-| **DSMS** | Domain-Sliced Module Structure | Dónde viven los archivos (carpetas/módulos) |
-| **IFS** | Intra-File Structure | Cómo se lee un archivo de arriba a abajo |
-| **CPS** | Categorized Public Surface | Cómo exportan barrels/entrypoints públicos |
-| **PRDS** | Pull Request Description Standards | Qué va en la descripción de un PR y qué tan grande es un PR revisable |
+| Sigla | Nombre | Alcance | Fuente |
+| --- | --- | --- | --- |
+| **DSMS** | Domain-Sliced Module Structure | Dónde viven los archivos (carpetas/módulos) | `code-organization-standards.md` |
+| **IFS** | Intra-File Structure | Cómo se lee un archivo de arriba a abajo | `code-organization-standards.md` |
+| **CPS** | Categorized Public Surface | Cómo exportan barrels/entrypoints públicos | `code-organization-standards.md` |
+| **PRDS** | Pull Request Description Standards | Qué va en la descripción de un PR y qué tan grande es un PR revisable | `pull-request-description-and-scope.md` |
+| **BrS** | Branching Strategy | Ramas, nombres y protección por tipo de repo | [branching-strategy.md](branching-strategy.md) |
+| **QT4L** | QA Traceability (four layers) | Cómo un cambio mapea requisitos → tests automatizados → QA manual → ronda HITL | [qa-traceability-four-layers.md](qa-traceability-four-layers.md) |
 
-**Orden de adopción:** documentar y revisar DSMS → IFS → CPS → PRDS. **Prioridad del día
-a día:** IFS y PRDS (ritmo de lectura y ritmo de revisión).
+**Orden de adopción:** documentar y revisar DSMS → IFS → CPS → PRDS → BrS → QT4L.
+**Prioridad del día a día:** IFS, PRDS y QT4L (ritmo de lectura, ritmo de revisión y
+trazabilidad requisito→test en cada cambio).
 
 ## Política de adopción
 
@@ -146,12 +150,16 @@ revisable, commits desde el worktree, assignee correcto, DSMS/IFS/CPS satisfecho
 | ¿Banner `// ---`? | IFS (archivo) / CPS (barrel) |
 | ¿Sale en el barrel del paquete? | CPS |
 | ¿Cómo escribo la descripción del PR? | PRDS |
+| ¿De dónde sale cada rama y qué protejo? | BrS (`branching-strategy.md`) |
+| ¿Cómo trazo requisito → test → QA → HITL? | QT4L (`qa-traceability-four-layers.md`) |
 
 ## Fuente y acreditación
 
-Adaptado de los estándares de HabitaNexus monorepo:
+Adaptado de los estándares de HabitaNexus monorepo y Seacrets.Online:
 
 - `docs/process/code-organization-standards.md` — DSMS / IFS / CPS
 - `docs/process/pull-request-description-and-scope.md` — PRDS
+- `reference/process/branching-strategy.md` — BrS
+- `reference/process/qa-traceability-four-layers.md` — QT4L
 - `.github/PULL_REQUEST_TEMPLATE.md` — template de PR
 - `AGENTS.md` — punteros obligatorios antes de abrir PR
