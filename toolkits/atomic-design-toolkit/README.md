@@ -266,7 +266,7 @@ Auto-detects the stack (Flutter vs Vite) and runs the appropriate checks. Both p
 ```
 atomic-design-toolkit/
 ├── .claude-plugin/
-│   └── plugin.json           # version; monorepo marketplace SSOT is root .claude-plugin/marketplace.json
+│   └── plugin.json
 ├── commands/
 │   ├── generate.md          # Feature component generation (Flutter + Vite)
 │   ├── audit.md             # Codebase audit + bundle health + design system gaps + report emission
