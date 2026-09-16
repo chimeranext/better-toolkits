@@ -1,5 +1,10 @@
 # Engineering standards — index (6 practices)
 
+> SSOT a nivel monorepo: `shared/references/engineering-standards/`
+> (dedup desde `fractional-cto-toolkit/references/engineering-standards/`).
+> **No duplicar estos archivos en los toolkits** — referenciarlos con path
+> monorepo-relativo `shared/references/engineering-standards/<archivo>.
+
 Portable baseline for any client startup. **Not a greenfield framework** — names and
 enforces conventions already in industry use.
 
