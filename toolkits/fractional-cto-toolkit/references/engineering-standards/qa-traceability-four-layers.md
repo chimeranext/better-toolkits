@@ -88,6 +88,12 @@ Al abrir una ronda para el dominio `<Domain>`:
 5. Mapear bullets del SOP §7 a verificación manual en stage (capa 2); no
    duplicar como Gherkin.
 
+**Localizadores UI (capas 3–4):** Storybook CI usa Testing Library
+(`getByRole`, `getByText`); rondas HITL usan Chrome DevTools MCP headed +
+`snapshot`/`uid` con la misma semántica (rol + nombre + copy). SSOT:
+[`make-no-mistakes-toolkit/references/bug-squash/semantic-ui-locator-policy.md`](../../../make-no-mistakes-toolkit/references/bug-squash/semantic-ui-locator-policy.md).
+Anti-patrón: [`disconnected-pattern-library-anti-pattern.md`](../../../make-no-mistakes-toolkit/references/bug-squash/disconnected-pattern-library-anti-pattern.md).
+
 ## Checklist del agente (propose + apply)
 
 - [ ] Cambio de comportamiento tiene delta `specs/` con bloques `#### Scenario:`
