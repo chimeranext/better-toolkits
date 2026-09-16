@@ -62,10 +62,10 @@ Si no hay contexto, preguntar:
 > - **E) Otro** — Describime el perfil"
 
 Una vez seleccionada la audiencia, leer la guia especifica:
-- B2G: `${CLAUDE_PLUGIN_ROOT}/references/cro-methodology.md` (seccion B2G)
-- B2B: `${CLAUDE_PLUGIN_ROOT}/references/landing-b2b.md`
-- B2B2C: `${CLAUDE_PLUGIN_ROOT}/references/landing-b2b2c.md`
-- B2C: `${CLAUDE_PLUGIN_ROOT}/references/landing-b2c.md`
+- B2G: `../../../shared/references/landing/cro-methodology.md` (seccion B2G)
+- B2B: `../../../shared/references/landing/landing-b2b.md`
+- B2B2C: `../../../shared/references/landing/landing-b2b2c.md`
+- B2C: `../../../shared/references/landing/landing-b2c.md`
 
 ### Pregunta 1.2
 
@@ -204,7 +204,7 @@ Con todas las respuestas anteriores, generar el copy seccion por seccion siguien
 **Objetivo:** Documentar todo como spec + ADR.
 
 ### Spec
-Generar el documento completo usando el template `${CLAUDE_PLUGIN_ROOT}/assets/templates/landing-page-spec.md`. Guardar en `./business/04-landing-pages/[audiencia]-landing-spec.md`.
+Generar el documento completo usando el template `../../../shared/references/landing/landing-page-spec.md`. Guardar en `./business/04-landing-pages/[audiencia]-landing-spec.md`.
 
 ### ADR
 Generar un ADR con todas las decisiones tomadas (audiencia, CTA, secuencia emocional, pricing, stack, urgencia) y las alternativas descartadas. Guardar en `./business/04-landing-pages/[audiencia]-landing-adr.md`.
@@ -237,9 +237,9 @@ Antes de cerrar, verificar:
 
 ## Recursos
 
-- Metodologia CRO: `${CLAUDE_PLUGIN_ROOT}/references/cro-methodology.md`
-- Guia B2B: `${CLAUDE_PLUGIN_ROOT}/references/landing-b2b.md`
-- Guia B2B2C: `${CLAUDE_PLUGIN_ROOT}/references/landing-b2b2c.md`
-- Guia B2C: `${CLAUDE_PLUGIN_ROOT}/references/landing-b2c.md`
-- Template de spec: `${CLAUDE_PLUGIN_ROOT}/assets/templates/landing-page-spec.md`
-- Estructura de output: `${CLAUDE_PLUGIN_ROOT}/references/output-structure.md`
+- Metodologia CRO: `../../../shared/references/landing/cro-methodology.md`
+- Guia B2B: `../../../shared/references/landing/landing-b2b.md`
+- Guia B2B2C: `../../../shared/references/landing/landing-b2b2c.md`
+- Guia B2C: `../../../shared/references/landing/landing-b2c.md`
+- Template de spec: `../../../shared/references/landing/landing-page-spec.md`
+- Estructura de output: `../../../shared/references/landing/output-structure.md`

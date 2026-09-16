@@ -366,7 +366,7 @@ Esta skill puede invocarse **standalone** o desde otras fases del business-model
 - **`${CLAUDE_PLUGIN_ROOT}/references/customer-interview-methodology.md`** — Técnicas detalladas
   (60s silencio, magic wand, other people, 5 Whys adaptado, foot-in-the-door)
 - **`${CLAUDE_PLUGIN_ROOT}/references/methodology.md`** — Principios generales del plugin
-- **`${CLAUDE_PLUGIN_ROOT}/references/output-structure.md`** — Estructura de directorios
+- **`shared/references/landing/output-structure.md`** — Estructura de directorios
 
 ### Archivos de plantilla (leer antes de generar)
 - **`${CLAUDE_PLUGIN_ROOT}/assets/templates/outreach-templates.md`** — 5 templates de outreach

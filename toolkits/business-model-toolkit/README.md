@@ -164,10 +164,10 @@ business-model-toolkit/
 │   ├── execution-plan/
 │   ├── growth-acceleration/
 │   └── pitch-deck/
-├── references/         # Shared methodology
+├── references/         # Shared methodology (landing CRO lives in shared SSOT)
 │   ├── methodology.md
-│   ├── output-structure.md
-│   └── readme-guide.md
+│   ├── readme-guide.md
+│   └── landing-page/       # protocol.md (CRO guides: shared/references/landing/)
 ├── assets/templates/   # 7 deliverable templates
 └── README.md
 ```
