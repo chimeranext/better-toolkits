@@ -67,7 +67,7 @@ Soft warns (stderr only): PR title shape, diff ≳ 400 lines.
 
 Or copy the adapter into `.opencode/plugins/`. Prefer **one** absolute path; restart OpenCode after changes.
 
-`/make-no-mistakes:opencode-setup` (when available) can be extended to register this
+`/toolkits-initial-setup` (OpenCode adapter `setup-opencode.md`) or `npx @chimeranext/better-toolkits setup` can register this
 plugin alongside stderr — until then, add the path manually.
 
 ## Vendor sync
