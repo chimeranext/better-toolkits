@@ -25,6 +25,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   `/make-no-mistakes:opencode-setup`. See [`docs/opencode-stderr.md`](docs/opencode-stderr.md).
 - **better-toolkits-bootstrap** marketplace entry **0.1.0 → 0.1.1** (full OpenCode adapter protocol).
 - **make-no-mistakes** marketplace entry **1.37.0 → 1.38.0** (drops `/opencode-setup`).
+- **Product toolkits** (PRDS README OpenCode pointer only): patch bumps —
+  **aaarrr-flywheel** 0.3.0→0.3.1, **app-gtm-release** 2.4.0→2.4.1,
+  **atomic-design** 1.3.0→1.3.1, **business-model** 2.2.0→2.2.1,
+  **fractional-cto** 1.3.0→1.3.1, **instructional-design** 1.2.0→1.2.1,
+  **launchpad** 0.6.0→0.6.1, **ux-research** 2.1.0→2.1.1, **venture-studio** 1.2.0→1.2.1.
 - **HITL / Cursor:** `AskQuestion` is the Cursor equivalent of Claude `AskUserQuestion`
   (`/resolve-open-questions`, `docs/hitl.md`, `/doctrine`, merge-advisor).
 - **Marketplace SSOT:** only [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json)
