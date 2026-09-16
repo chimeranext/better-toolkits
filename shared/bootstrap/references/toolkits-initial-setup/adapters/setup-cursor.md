@@ -1,4 +1,4 @@
-# Cursor adapter — /toolkits-initial-setup
+# setup-cursor — Cursor adapter for /toolkits-initial-setup
 
 ## Marketplace
 
