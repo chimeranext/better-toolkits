@@ -82,7 +82,7 @@ list_pages → navigate_page (round Base URL) → take_snapshot
 | 3 HTTP / browser automation | Prefer API contracts; browser only when UI cannot be asserted otherwise — still no kit-internal attributes |
 | 4 Bug-squash round | MCP a11y snapshot + `uid`; evidence under consumer `roundDir` (default `docs/qa/rounds/`) |
 
-See [QA traceability — four layers](../../../fractional-cto-toolkit/references/engineering-standards/qa-traceability-four-layers.md) (fractional-cto-toolkit) or your consumer repo’s copy.
+See [QA traceability — four layers](../../../../shared/references/engineering-standards/qa-traceability-four-layers.md) (fractional-cto-toolkit) or your consumer repo’s copy.
 
 ## Agent checklist
 

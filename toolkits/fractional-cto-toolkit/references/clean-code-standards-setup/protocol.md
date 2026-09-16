@@ -12,17 +12,17 @@ references — never duplicating full protocol text in the client repo.
 
 | Practice | SSOT |
 | --- | --- |
-| Index | [engineering-standards/README.md](../engineering-standards/README.md) |
-| DSMS / IFS / CPS | [engineering-standards/dsms-ifs-cps.md](../engineering-standards/dsms-ifs-cps.md) |
-| PRDS | [engineering-standards/prds.md](../engineering-standards/prds.md) |
-| BrS | [engineering-standards/branching-strategy.md](../engineering-standards/branching-strategy.md) |
-| QT4L | [engineering-standards/qa-traceability-four-layers.md](../engineering-standards/qa-traceability-four-layers.md) |
+| Index | [engineering-standards/README.md](../../../../shared/references/engineering-standards/README.md) |
+| DSMS / IFS / CPS | [engineering-standards/dsms-ifs-cps.md](../../../../shared/references/engineering-standards/dsms-ifs-cps.md) |
+| PRDS | [engineering-standards/prds.md](../../../../shared/references/engineering-standards/prds.md) |
+| BrS | [engineering-standards/branching-strategy.md](../../../../shared/references/engineering-standards/branching-strategy.md) |
+| QT4L | [engineering-standards/qa-traceability-four-layers.md](../../../../shared/references/engineering-standards/qa-traceability-four-layers.md) |
 
 ## Default outputs (in target `<repo>/`)
 
 - `AGENTS.md` — pointer block: all six standards + PR template + QA traceability; rule “read before opening a PR”.
 - `docs/process/engineering-standards.md` — local index (table of 6 practices + adoption order) linking to toolkit SSOT paths or vendored copies.
-- `.github/PULL_REQUEST_TEMPLATE.md` — PRDS template ([prds.md](../engineering-standards/prds.md)).
+- `.github/PULL_REQUEST_TEMPLATE.md` — PRDS template ([prds.md](../../../../shared/references/engineering-standards/prds.md)).
 - `docs/process/qa-traceability.md` — QT4L mini-guide: when the `tasks.md` section is mandatory + scenario → verification table stub.
 
 Optional with `--branching`: `docs/process/branching.md` from BrS.

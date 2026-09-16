@@ -2,7 +2,7 @@
 """Shared detector: enforce PRDS (Pull Request Description Standards) on push / PR writes.
 
 Protocol SSOT:
-  toolkits/fractional-cto-toolkit/references/engineering-standards/prds.md
+  shared/references/engineering-standards/prds.md
 
 Used by Claude / Cursor / OpenCode adapters under shared/hooks/prds/.
 
@@ -165,7 +165,7 @@ def deny_message(missing: list[str], context: str) -> str:
         f"PRDS: {context} — missing or empty required sections: {secs}. "
         "Fill ## Summary, ## Tracker (or ## Linear), ## Test plan, "
         "## Scope boundaries (out of scope). See fractional-cto "
-        "references/engineering-standards/prds.md. "
+        "shared/references/engineering-standards/prds.md. "
         "Bypass once with `# hook-bypass: prds-body-deferred` "
         "or disable via FCTO_DISABLE_PRDS_HOOK=1."
     )
@@ -184,7 +184,7 @@ def evaluate(command: str, cwd: str | None = None) -> str | None:
             return (
                 "PRDS: `gh pr create|edit` without --body / --body-file. "
                 "Pass a PRDS-complete body (Summary, Tracker, Test plan, "
-                "Scope boundaries). See references/engineering-standards/prds.md."
+                "Scope boundaries). See shared/references/engineering-standards/prds.md."
             )
         if body.startswith("__READ_ERROR__:"):
             return f"PRDS: cannot read --body-file ({body})."
