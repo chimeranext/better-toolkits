@@ -62,10 +62,10 @@ Si no hay contexto, preguntar:
 > - **E) Otro** — Describime el perfil"
 
 Una vez seleccionada la audiencia, leer la guia especifica:
-- B2G: `../cro-methodology.md` (seccion B2G)
-- B2B: `../landing-b2b.md`
-- B2B2C: `../landing-b2b2c.md`
-- B2C: `../landing-b2c.md`
+- B2G: `../../../shared/references/landing/cro-methodology.md` (seccion B2G)
+- B2B: `../../../shared/references/landing/landing-b2b.md`
+- B2B2C: `../../../shared/references/landing/landing-b2b2c.md`
+- B2C: `../../../shared/references/landing/landing-b2c.md`
 
 ### Pregunta 1.2
 
@@ -237,9 +237,9 @@ Antes de cerrar, verificar:
 
 ## Recursos
 
-- Metodologia CRO: `../cro-methodology.md`
-- Guia B2B: `../landing-b2b.md`
-- Guia B2B2C: `../landing-b2b2c.md`
-- Guia B2C: `../landing-b2c.md`
+- Metodologia CRO: `../../../shared/references/landing/cro-methodology.md`
+- Guia B2B: `../../../shared/references/landing/landing-b2b.md`
+- Guia B2B2C: `../../../shared/references/landing/landing-b2b2c.md`
+- Guia B2C: `../../../shared/references/landing/landing-b2c.md`
 - Template de spec: `../../assets/templates/landing-page-spec.md`
-- Estructura de output: `./output-structure.md`
+- Estructura de output: `../../../shared/references/landing/output-structure.md`
