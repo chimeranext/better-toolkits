@@ -8,8 +8,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- **Runtime PRDS hooks:** [`shared/hooks/prds/`](shared/hooks/prds/) — multi-harness
+  PreToolUse / beforeShellExecution / OpenCode plugin gating `gh pr create|edit`
+  and `git push` (when a PR exists) to PRDS body sections. Fractional-cto **1.3.0**.
+
 ### Changed
 
+- **HITL / Cursor:** `AskQuestion` is the Cursor equivalent of Claude `AskUserQuestion`
+  (`/resolve-open-questions`, `docs/hitl.md`, `/doctrine`, merge-advisor).
 - **Marketplace SSOT:** only [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json)
   is the Claude Code marketplace for this repo. Removed leftover
   `toolkits/*/.claude-plugin/marketplace.json` files (standalone-repo import residue).

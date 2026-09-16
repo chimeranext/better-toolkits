@@ -110,6 +110,7 @@ Deliberate actions you invoke explicitly.
 | [`/make-no-mistakes:linear-projects-setup`](commands/linear-projects-setup.md) | Bootstrap Linear workspace with full label taxonomy, projects, and integrations |
 | [`/make-no-mistakes:e2e-test-builder <source>`](commands/e2e-test-builder.md) | Generate a TestSprite-compatible `test-suite.json` from docs or PRDs |
 | [`/make-no-mistakes:e2e-test-runner [filter]`](commands/e2e-test-runner.md) | Execute E2E tests from `test-suite.json` with runner selection and reporting |
+| [`/make-no-mistakes:bug-squash-locally [domain]`](commands/bug-squash-locally.md) | HITL QA on **localhost only** — headed Chrome DevTools MCP + [semantic UI locators](references/bug-squash/semantic-ui-locator-policy.md); full multi-env `/bug-squash` ships with OpenSpec `2026-09-09-generalize-bug-squash` |
 | [`/make-no-mistakes:pentest-runner <phase>`](commands/pentest-runner.md) | Automated pentesting following Cyber Kill Chain + OWASP methodology |
 | [`/make-no-mistakes:pentest-playbook-setup [audit\|sync\|workflows\|gaps]`](commands/pentest-playbook-setup.md) | Audit/sync pentest playbook ↔ CI ↔ tenant triage config (setup step; pairs with pentest-runner + triage-security-findings) |
 | [`/make-no-mistakes:triage-security-findings <scanner\|phase2\|pentest-report>`](commands/triage-security-findings.md) | Triage CI + pentest findings into owned backlog issues (tenant config e.g. `linear-setup.json` → `securityFindingTriage`) |

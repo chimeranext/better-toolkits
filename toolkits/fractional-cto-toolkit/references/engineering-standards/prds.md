@@ -132,6 +132,24 @@ Reviewable work lands in the **owning repo** as a **draft** GitHub PR — not ch
 
 ---
 
+## Runtime enforcement (multi-harness)
+
+Protocol stays here; **runtime** SSOT is [`shared/hooks/prds/`](../../../../shared/hooks/prds/)
+(vendored into toolkit `hooks/prds/`).
+
+| Harness | Wire-up |
+| --- | --- |
+| Claude Code | PreToolUse Bash → `hooks/prds/adapters/claude-pre-bash.sh` (fractional-cto `hooks.json`) |
+| Cursor | `beforeShellExecution` → `cursor-before-shell.sh` |
+| OpenCode | `"plugin"` → `opencode-plugin.ts` ([OpenCode plugins](https://opencode.ai/docs/plugins/)) |
+
+**Blocks** `gh pr create|edit` without the four always-on sections, and `git push` when an
+open PR already exists with a non-PRDS body. Progressive `git push` **before** any PR
+exists remains allowed (this draft workflow). Opt-out: `FCTO_DISABLE_PRDS_HOOK=1` or
+`# hook-bypass: prds-body-deferred`.
+
+---
+
 ## Audit checks (open PRs)
 
 When auditing with `--focus prds` or `--prs`:
