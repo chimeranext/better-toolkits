@@ -8,6 +8,23 @@
   },
   "plugins": [
     {
+      "name": "better-toolkits-bootstrap",
+      "description": "Install first — bootstrap marketplace and harness wiring via /toolkits-initial-setup (HITL). OpenCode: npx @chimeranext/better-toolkits setup.",
+      "version": "0.1.0",
+      "source": "./shared/bootstrap",
+      "category": "workflow",
+      "keywords": [
+        "claude-code",
+        "claude-code-plugin",
+        "cursor",
+        "opencode",
+        "bootstrap",
+        "marketplace",
+        "multi-harness",
+        "stderr"
+      ]
+    },
+    {
       "name": "make-no-mistakes",
       "description": "The disciplined dev lifecycle — implement issues, review PRs, sync releases, test E2E, manage sessions, stash secrets, and enforce manifest-driven tool-call hooks. One plugin to make no mistakes.",
       "version": "1.34.0",
