@@ -67,7 +67,7 @@ Prefer, in order:
 copies already in `"plugins"`, warn; install may leave them (safe) or ask HITL
 before collapsing to the preferred path.
 
-## `opencode.jsonc` merge
+## `opencode.json(c)` merge
 
 Propose append to the **`plugins`** array with the **shared** stderr baseline
 (one path — never one adapter per toolkit, same plugin id), plus one **`skills`**
