@@ -10,7 +10,8 @@ and global plugin installs.
 | In scope | Out of scope |
 |----------|--------------|
 | Marketplace registration, bootstrap plugin, stderr hooks, optional marketplace auto-update (opt-in) | `/make-no-mistakes:*` product commands |
-| Installing N product toolkit plugins / OpenCode merges | Repo-specific `/hygiene-hooks-setup` |
+| Installing N product toolkit plugins / OpenCode merges (`setup-opencode.md`) | Repo-specific `/hygiene-hooks-setup` |
+| OpenCode stderr + optional npm CLIs via `setup-opencode.md` | `/make-no-mistakes:opencode-setup` (removed — use bootstrap) |
 | OpenCode: `npx @chimeranext/better-toolkits setup` | Per-toolkit `npx @lapc506/* install` (deprecated) |
 
 ## Phase 1 — Detect harness
@@ -39,7 +40,7 @@ For each harness, collect **read-only** state:
    - `gitRef` present? Plugin count indexed?
 2. **Bootstrap plugin** — `better-toolkits-bootstrap` installed?
 3. **Product plugins** — which of the 10 toolkits are installed?
-4. **Stderr hooks** — `beforeShellExecution` (Cursor), PreToolUse Bash (Claude), OpenCode `plugin` array.
+4. **Stderr hooks** — `beforeShellExecution` (Cursor), PreToolUse Bash (Claude), OpenCode `plugins` array.
 5. **Marketplace auto-update** (Cursor only) — `workspaceOpen` hook for `update-better-toolkits-marketplace.sh`?
 
 Emit an audit table. Do not fix anything yet.
