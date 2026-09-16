@@ -121,8 +121,21 @@ conectar la app de Slack como cliente de otros MCPs. No es esto.)
 
 ## 7. Auth con secret en RAM (nunca en el chat)
 
+Script (prompt GUI estilo `/secret-input`, persiste con mode 0600):
+
 ```sh
-export SLACK_MCP_CLIENT_SECRET='...'   # Client Secret, NO Signing Secret
+# Per-user (default, sin sudo): ~/.config/opencode/mcp-secrets.env + source en ~/.bashrc
+shared/bootstrap/scripts/setup-opencode-mcp-slack.sh
+
+# System-wide (/etc/profile.d): pide sudo vía GUI (run0 > pkexec > sudo)
+shared/bootstrap/scripts/setup-opencode-mcp-slack.sh --system
+```
+
+Pide el **Client Secret** (NO Signing Secret) con zenity/kdialog (fallback:
+lectura silenciosa en terminal) y lo guarda con `%q`-escaped + `chmod 600`.
+Luego, en terminal nueva (o tras `source`):
+
+```sh
 opencode mcp logout slack              # limpia estado/PKCE viejo
 opencode mcp auth slack                # autorizar en el navegador
 ```
