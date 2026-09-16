@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Repo doctrine:** HITL is a monorepo pillar (`docs/hitl.md`, `/doctrine`, `.cursor/rules/hitl-doctrine.mdc`, CONTRIBUTING + root README) — not toolkit-only. `/merge-advisor` + skill always HITL-ask after the ORDER (no `--execute`); re-measure between merges.
 
 ### Added
+- **`/bug-squash-locally`** — minimal localhost HITL entry; links [semantic UI locator policy](references/bug-squash/semantic-ui-locator-policy.md) and [disconnected pattern library anti-pattern](references/bug-squash/disconnected-pattern-library-anti-pattern.md). Monorepo Cursor thin entry: `.cursor/commands/bug-squash-locally.md`.
 - Port from upstream make-no-mistakes **PR #52** (SSOT-aware): ENF efficacy verifier `findHookEfficacyGaps` (`src/audit/verifiers/enforcement-hooks-efficacy.ts`) + tests; detector + thin `/audit-enforcement-hooks` document coverage vs bind.
 
 ### Fixed

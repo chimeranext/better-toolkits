@@ -1,0 +1,27 @@
+{
+  "roundDir": "docs/qa/rounds",
+  "environments": {
+    "localhost": {
+      "enabled": true,
+      "baseUrl": "http://localhost:8080",
+      "writesAllowed": true
+    },
+    "devel": {
+      "enabled": true,
+      "baseUrl": "https://devel.example.com",
+      "writesAllowed": false
+    },
+    "staging": {
+      "enabled": true,
+      "baseUrl": "https://staging.example.com",
+      "writesAllowed": false
+    },
+    "prod": {
+      "enabled": false,
+      "baseUrl": "https://app.example.com",
+      "writesAllowed": false
+    }
+  },
+  "waiverRegister": "docs/qa/waivers.md",
+  "overlayCommand": null
+}
