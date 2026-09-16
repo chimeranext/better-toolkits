@@ -44,7 +44,7 @@ jobs:
           SKILLSPECTOR_PROVIDER: openai_compatible
           SKILLSPECTOR_COMPAT_BASE_URL: https://openrouter.ai/api/v1
           SKILLSPECTOR_COMPAT_API_KEY: ${{ secrets.SKILLSPECTOR_COMPAT_API_KEY }}
-          SKILLSPECTOR_MODEL: ${{ vars.SKILLSPECTOR_MODEL }}
+          SKILLSPECTOR_MODEL: ${{ vars.SKILLSPECTOR_MODEL || 'google/gemma-4-31b-it:free' }}
         run: |
           ARGS="--no-llm"
           if [ -n "$SKILLSPECTOR_COMPAT_API_KEY" ]; then

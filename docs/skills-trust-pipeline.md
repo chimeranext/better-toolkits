@@ -21,8 +21,11 @@ Basado en [A Trust Pipeline for Agent Skills](https://docs.nvidia.com/skills/age
 - Local con LLM (OpenRouter free): `SKILLSPECTOR_PROVIDER=openai_compatible`,
   `SKILLSPECTOR_COMPAT_BASE_URL=https://openrouter.ai/api/v1`,
   `SKILLSPECTOR_COMPAT_API_KEY` (vía `/secret-input`, jamás en disco),
-  `SKILLSPECTOR_MODEL` (free tier). En CI lo activa el secret
-  `SKILLSPECTOR_COMPAT_API_KEY`; sin secret corre solo estático.
+  `SKILLSPECTOR_MODEL` (default CI: `google/gemma-4-31b-it:free`).
+  Caveats free tier verificados 2026-09-16: modelos chicos fallan el schema
+  estructurado, el pool compartido devuelve 429 bajo carga, y algunos slugs
+  `:free` se dan de baja (verificar en `openrouter.ai/api/v1/models`). Por eso
+  el gate CI es estático (determinista) y el LLM es capa on-demand, no gate.
 
 ## Evaluación (Tier 2+3, a demanda)
 
