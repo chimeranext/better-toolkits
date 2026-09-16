@@ -14,11 +14,23 @@ mutations), [`docs/multi-harness-ssot.md`](docs/multi-harness-ssot.md).
 [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json)
 
 - Install surface: `claude plugin marketplace add chimeranext/better-toolkits`
+- **Bootstrap first:** `claude plugin install better-toolkits-bootstrap@better-toolkits` → `/toolkits-initial-setup` (HITL). OpenCode: `npx @chimeranext/better-toolkits setup`. SSOT: `shared/bootstrap/references/toolkits-initial-setup/protocol.md`.
+- **Deprecated** as monorepo SSOT: `npx @lapc506/make-no-mistakes install` (legacy single-toolkit scope).
 - Each toolkit keeps only `.claude-plugin/plugin.json` (plugin identity + version).
 - **Forbidden:** `toolkits/*/.claude-plugin/marketplace.json` — those were standalone-repo
   leftovers and cause version drift. Do not recreate them.
 - When bumping a toolkit version, update **root** `marketplace.json` + that toolkit's
   `plugin.json` (and `package.json` / CHANGELOG / README when they exist) in the same PR.
+
+## Runtime hooks (stderr + PRDS)
+
+| Runtime | Path | Harnesses |
+| --- | --- | --- |
+| Stderr baseline | [`shared/hooks/stderr/`](shared/hooks/stderr/) | Claude / Cursor / OpenCode |
+| PRDS body gate | [`shared/hooks/prds/`](shared/hooks/prds/) | Claude / Cursor / OpenCode |
+
+Vendor with `scripts/sync-stderr-from-shared.sh` and `scripts/sync-prds-from-shared.sh`.
+See [`docs/multi-harness-ssot.md`](docs/multi-harness-ssot.md).
 
 ## Git worktrees (mandatory when parallel)
 
