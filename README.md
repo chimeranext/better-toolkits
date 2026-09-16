@@ -14,7 +14,8 @@ and a sibling to [better-microservices](https://github.com/chimeranext/better-mi
 One protocol markdown contract (`references/` + thin entries). One stderr detector. N harness wire-ups — Claude Code, Cursor, OpenCode2, Antigravity, and friends. Not a Cursor-vs-Claude dichotomy.
 
 - Contract: [`docs/multi-harness-ssot.md`](docs/multi-harness-ssot.md)
-- OpenSpec: [`openspec/changes/2026-08-20-multi-harness-ssot/`](openspec/changes/2026-08-20-multi-harness-ssot/)
+- OpenSpec / OPSX: [`openspec/`](openspec/) — `/opsx-propose`, `/opsx-apply`, … ([OPSX docs](https://github.com/Fission-AI/OpenSpec/blob/main/docs/opsx.md))
+- Example change: [`openspec/changes/2026-08-20-multi-harness-ssot/`](openspec/changes/2026-08-20-multi-harness-ssot/)
 - Public doctrine: [toolkits.chimeranext.dev/doctrine](https://toolkits.chimeranext.dev/doctrine/)
 
 ## HITL (repo doctrine)

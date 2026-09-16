@@ -77,7 +77,7 @@ explícita. No imprimir «corrés vos `gh pr merge`» y terminar. No inventar
 | Harness | Cómo pedir |
 |---------|------------|
 | Claude Code | `AskUserQuestion` |
-| Cursor | equivalente en la conversación principal: opciones numeradas + esperar respuesta explícita (no asumir «sí» por silencio) |
+| Cursor | **`AskQuestion`** (fixed-choice); si no está disponible: opciones numeradas en la conversación principal + esperar respuesta explícita (no asumir «sí» por silencio) |
 | Sub-agente en background | **no** preguntar; emitir `pause` JSON (`gate: "merge-advisor-queue"`) y halt — el orquestador pregunta y retransmite |
 
 Pregunta mínima tras el plan (español; opciones fijas):

@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- **`/resolve-open-questions`:** Cursor harness uses **`AskQuestion`** (Claude keeps `AskUserQuestion`); fallback to numbered chat options only if the tool is unavailable. HITL doctrine (`docs/hitl.md`, `.cursor/rules/hitl-doctrine.mdc`) aligned.
 - **Repo doctrine:** HITL is a monorepo pillar (`docs/hitl.md`, `/doctrine`, `.cursor/rules/hitl-doctrine.mdc`, CONTRIBUTING + root README) — not toolkit-only. `/merge-advisor` + skill always HITL-ask after the ORDER (no `--execute`); re-measure between merges.
 
 ## [1.36.1] - 2026-09-09
@@ -32,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`/evaluate-agent-skills`** (+ Cursor skill + `scripts/evaluate-agent-skills.sh`): wrap NVIDIA [SkillSpector](https://github.com/NVIDIA/SkillSpector) / SkillEvaluator as peer CLIs (scan / quality / validate). Protocol SSOT under `references/evaluate-agent-skills/`. Does **not** vendor Apache-2.0 upstream into this BSL tree. Docs: monorepo `docs/evaluate-agent-skills.md`.
 
 ### Added
+- **`/bug-squash-locally`** — minimal localhost HITL entry; links [semantic UI locator policy](references/bug-squash/semantic-ui-locator-policy.md) and [disconnected pattern library anti-pattern](references/bug-squash/disconnected-pattern-library-anti-pattern.md). Monorepo Cursor thin entry: `.cursor/commands/bug-squash-locally.md`.
 - Port from upstream make-no-mistakes **PR #52** (SSOT-aware): ENF efficacy verifier `findHookEfficacyGaps` (`src/audit/verifiers/enforcement-hooks-efficacy.ts`) + tests; detector + thin `/audit-enforcement-hooks` document coverage vs bind.
 
 ### Fixed
