@@ -10,9 +10,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- **`/make-no-mistakes:opencode-setup`:** one-shot audit/install/verify for OpenCode
-  `"plugins"` registration of the shared stderr baseline (optional `--also-npm`).
-  See [`docs/opencode-stderr.md`](docs/opencode-stderr.md).
 - **`/make-no-mistakes:evaluate-agent-skills`:** wrap NVIDIA SkillSpector / SkillEvaluator
   (peer CLIs; auto-install via `uv tool install` unless `--no-install` — see
   [`docs/evaluate-agent-skills.md`](docs/evaluate-agent-skills.md)).
@@ -22,6 +19,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- **OpenCode stderr SSOT:** consolidated into
+  [`setup-opencode.md`](shared/bootstrap/references/toolkits-initial-setup/adapters/setup-opencode.md)
+  (`/toolkits-initial-setup` / `npx @chimeranext/better-toolkits setup`). Removed duplicate
+  `/make-no-mistakes:opencode-setup`. See [`docs/opencode-stderr.md`](docs/opencode-stderr.md).
+- **better-toolkits-bootstrap** marketplace entry **0.1.0 → 0.1.1** (full OpenCode adapter protocol).
+- **make-no-mistakes** marketplace entry **1.37.0 → 1.38.0** (drops `/opencode-setup`).
 - **HITL / Cursor:** `AskQuestion` is the Cursor equivalent of Claude `AskUserQuestion`
   (`/resolve-open-questions`, `docs/hitl.md`, `/doctrine`, merge-advisor).
 - **Marketplace SSOT:** only [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json)
@@ -34,5 +37,3 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **app-gtm-release** entry in the root marketplace bumped **2.3.0 → 2.4.0** to match
   the toolkit `plugin.json` / `package.json` (fixes install-surface drift after
   `/ship-flatpak`).
-- **make-no-mistakes** marketplace entry **1.37.0** (`/opencode-setup` on top of
-  `/evaluate-agent-skills` 1.36.1).
