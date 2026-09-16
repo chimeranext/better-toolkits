@@ -4,9 +4,9 @@ Cómo todo cambio **que cambia comportamiento** (delta de spec OpenSpec) mapea
 requisitos normativos a pruebas automatizadas, QA manual de stage y rondas HITL —
 **sin** Gherkin/Behat/cucumber como SSOT de ejecución.
 
-> Adaptado del estándar `qa-traceability-four-layers.md` (Seacrets.Online) y de la
-> doctrina HITL del monorepo HabitaNexus. La receta de ejecución varía por harness;
-> este documento define el **contrato de trazabilidad**, no la herramienta.
+> Adaptado de estándares de ingeniería de plataforma y de la doctrina HITL del
+> monorepo. La receta de ejecución varía por harness; este documento define el
+> **contrato de trazabilidad**, no la herramienta.
 
 ## Cuándo es obligatorio
 

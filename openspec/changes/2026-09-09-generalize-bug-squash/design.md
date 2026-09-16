@@ -68,7 +68,7 @@ Rules:
 - **`prod.enabled` defaults to `false`.** Enabling prod requires explicit config edit + documented waiver/approval policy in overlay.
 - **`enabled: false`** on any environment excludes it from the picker; skipping without running uses **waiver ID** in plan/Linear, not inside `round.md` hop fields.
 - **`baseUrl`** is the sole origin for Chrome MCP navigation for that round.
-- Overlays (Seacrets) add: Slack channel, Linear team, Pest filter prefix, auth hop URLs — not duplicated in base toolkit.
+- **Consumer overlays** add product-specific fields (Slack channel, issue tracker team, test filter prefix, auth URLs) — not duplicated in the base toolkit.
 
 ## Bootstrap flow (first run)
 
@@ -123,13 +123,10 @@ Closing sections unchanged in intent: Traceability, Currency, Gap analysis, Acco
 | --- | --- | --- |
 | Protocol | `make-no-mistakes-toolkit` | `commands/bug-squash.md`, `references/bug-squash/*` |
 | Config | Consumer repo root | `bug-squash.config.json` |
-| Profile | Consumer repo | `.cursor/commands/bug-squash-<startup>.md` (Seacrets: `bug-squash-seacrets.md`) |
-| Runbooks | Consumer docs | localhost boot, auth, domain SOP (Seacrets docs stay in `seacrets.online-docs`) |
+| Profile | Consumer repo | `.cursor/commands/bug-squash-<product>.md` (thin pointer + product URLs) |
+| Runbooks | Consumer docs | localhost boot, auth, domain SOP (consumer docs repo only) |
 
-Seacrets migration:
-
-- Deprecate `bug-squash.md` → 5-line pointer to toolkit + `/bug-squash-seacrets`
-- OpenSpec v1 in `seacrets.online-specs` (SCRT-525) remains historical; link to this change ID for v2
+**Separation of concerns:** better-toolkits owns the generic protocol and example config. Consumer repos own product URLs, overlays, HITL runbooks, and adoption PRs — never the reverse.
 
 ## Hook compatibility
 
@@ -137,6 +134,7 @@ Seacrets migration:
 
 ## Rejected
 
-- Four-hop mandatory chain inside one round (v1 Seacrets mistake for generic toolkit)
+- Four-hop mandatory chain inside one round (legacy monolithic mistake for a generic toolkit)
 - Fail closed on missing config without bootstrap
 - Default `prod.enabled: true`
+- Product-specific migration steps or repo paths in this OpenSpec change

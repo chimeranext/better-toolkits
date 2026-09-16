@@ -7,7 +7,7 @@ context: |
 
   Governance: GitHub Issues on this repo (`toolkit:*`, `area:*` labels). One
   OpenSpec store at repo root — do NOT create `openspec/changes/` inside individual
-  toolkits; satellite consumer repos (e.g. Seacrets app) use overlays only.
+  toolkits; satellite consumer repos use overlays only (no product-specific paths here).
 
   Multi-harness SSOT: protocol markdown under `toolkits/<name>/references/`,
   thin entries in `commands/` + Cursor skills. Shared stderr guard:
