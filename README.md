@@ -42,7 +42,7 @@ One protocol markdown contract (`references/` + thin entries). One stderr detect
 
 ### Main selling point — stderr baseline
 
-Agents that discard stderr (`2>/dev/null`, bare `2>&1` without a log sink) hide failures. Every toolkit in this monorepo vendors [`shared/hooks/stderr/`](shared/hooks/stderr/) and registers it on install. **On by default; opt-out** via `MNM_DISABLE_STDERR_HOOK=1`, `.claude/config/stderr-hooks.json` → `{"preserve_stderr": false}`, or OpenCode `"plugin": ["-local.mnm-no-stderr-redirect"]`.
+Agents that discard stderr (`2>/dev/null`, bare `2>&1` without a log sink) hide failures. Every toolkit in this monorepo vendors [`shared/hooks/stderr/`](shared/hooks/stderr/) and registers it on install. **On by default; opt-out** via `MNM_DISABLE_STDERR_HOOK=1`, `.claude/config/stderr-hooks.json` → `{"preserve_stderr": false}`, or OpenCode `"plugins": ["-local.mnm-no-stderr-redirect"]`.
 
 #### Claude Code (plugin hooks)
 
@@ -86,16 +86,16 @@ Put that in `.cursor/hooks.json` (project) or your user hooks config. Adjust the
 
 #### OpenCode2 (file plugin)
 
-Prefer **`/make-no-mistakes:opencode-setup`** — audits and merges **one** stderr
-adapter into OpenCode’s `"plugin"` array (optional `--also-npm` for the four CLI
-packages). Protocol:
-[`toolkits/make-no-mistakes-toolkit/references/opencode-setup/protocol.md`](toolkits/make-no-mistakes-toolkit/references/opencode-setup/protocol.md).
+Prefer **`/toolkits-initial-setup`** or **`npx @chimeranext/better-toolkits setup`** —
+audits and merges **one** stderr adapter into OpenCode’s `"plugins"` array (optional
+`--also-npm` for the four CLI packages). Protocol:
+[`shared/bootstrap/references/toolkits-initial-setup/adapters/setup-opencode.md`](shared/bootstrap/references/toolkits-initial-setup/adapters/setup-opencode.md).
 
 Manual equivalent — absolute path in `~/.config/opencode/opencode.jsonc` (or project):
 
 ```jsonc
 {
-  "plugin": [
+  "plugins": [
     "/absolute/path/to/better-toolkits/shared/hooks/stderr/adapters/opencode-plugin.ts"
   ]
 }

@@ -50,9 +50,17 @@ entry (replacing `npx @lapc506/make-no-mistakes install`).
 
 `/make-no-mistakes:*` commands SHALL remain product-scoped (implement, bug-squash, repo hygiene).
 `/toolkits-initial-setup` SHALL NOT be defined under `toolkits/make-no-mistakes-toolkit/`.
+OpenCode stderr setup SHALL live only in `shared/bootstrap/.../adapters/setup-opencode.md` —
+not as `/make-no-mistakes:opencode-setup`.
 
 #### Scenario: MNM toolkit not installed
 
 - **WHEN** only `better-toolkits-bootstrap` is installed
 - **THEN** `/make-no-mistakes:implement` is not available
 - **AND** `/toolkits-initial-setup` is available
+
+#### Scenario: OpenCode stderr without MNM
+
+- **WHEN** a developer runs `/toolkits-initial-setup` or `npx @chimeranext/better-toolkits setup`
+- **THEN** the agent follows `setup-opencode.md` for stderr `"plugins"` registration
+- **AND** `/make-no-mistakes:opencode-setup` is not offered as a separate command
