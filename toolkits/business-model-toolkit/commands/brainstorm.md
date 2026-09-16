@@ -91,7 +91,7 @@ Normal mode writes to `./business/` with this structure:
 └── README.md
 ```
 
-Read `${CLAUDE_PLUGIN_ROOT}/references/output-structure.md` for the full directory tree.
+Read `shared/references/landing/output-structure.md` for the full directory tree.
 
 ## Usage
 

@@ -50,7 +50,8 @@ OpenSpec specs/changes  →  Linear issue (Bilingual Layer)  →  /opsx-* flow
   template from `jam01/SRS-Template`, CC0) with 29148 quality checklists and a
   verification traceability table.
 - Any client adopting this can bootstrap the **6 engineering standards**
-  (DSMS, IFS, CPS, PRDS, BrS, QT4L) from day one — see `references/engineering-standards/`.
+  (DSMS, IFS, CPS, PRDS, BrS, QT4L) from day one — see `shared/references/engineering-standards/`
+  (SSOT compartido a nivel monorepo).
   The **clean code quartet** is DSMS + IFS + CPS + PRDS; BrS and QT4L complete branching and QA traceability.
 
 ## Skills

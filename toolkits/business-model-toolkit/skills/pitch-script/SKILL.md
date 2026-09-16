@@ -40,7 +40,7 @@ libros se mantienen en su idioma original.
 ## Directorio de salida
 
 El guion se genera en `./business/03-ejecucion-aceleracion/11-pitch-script.md`.
-Leer `${CLAUDE_PLUGIN_ROOT}/references/output-structure.md` para el arbol completo.
+Leer `shared/references/landing/output-structure.md` para el arbol completo.
 
 ## Regla de personalizacion
 
@@ -178,7 +178,7 @@ Generar `03-ejecucion-aceleracion/11-pitch-script.md`. Presentar. Esperar aproba
 ### Archivos de referencia
 - **`${CLAUDE_PLUGIN_ROOT}/references/pitch-deck-10-commandments.md`** -- Los 10 Mandamientos: estructura narrativa del pitch
 - **`${CLAUDE_PLUGIN_ROOT}/references/methodology.md`** -- Bancos de preguntas, reglas de personalizacion
-- **`${CLAUDE_PLUGIN_ROOT}/references/output-structure.md`** -- Estructura de directorios
+- **`shared/references/landing/output-structure.md`** -- Estructura de directorios
 
 ### Archivos de plantilla (leer antes de generar)
 - **`${CLAUDE_PLUGIN_ROOT}/assets/templates/pitch-script-marp.md`** -- Plantilla teleprompter MARP (7 slides, fondo negro, texto grande)
