@@ -1,4 +1,4 @@
-# Claude Code adapter — /toolkits-initial-setup
+# setup-claude — Claude Code adapter for /toolkits-initial-setup
 
 ## Marketplace + bootstrap
 

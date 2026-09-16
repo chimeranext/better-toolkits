@@ -1,4 +1,4 @@
-# OpenCode adapter — /toolkits-initial-setup
+# setup-opencode — OpenCode adapter for /toolkits-initial-setup
 
 ## CLI entry (no plugin required)
 

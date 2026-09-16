@@ -23,9 +23,12 @@ Infer active harness(es) from context:
 | `CLAUDE_PLUGIN_ROOT`, Claude Code session | **claude** |
 | User invoked CLI or `opencode.jsonc` context | **opencode** |
 
-If `$ARGUMENTS` names a harness, use only that adapter. Otherwise run all detected adapters.
+If `$ARGUMENTS` names a harness (`cursor`, `claude`, `opencode`), use only that adapter.
+Otherwise run all detected adapters.
 
-Load the matching adapter(s) from `adapters/{cursor,claude,opencode}.md`.
+Load the matching adapter(s) from `adapters/setup-{harness}.md` (e.g. `setup-cursor.md`).
+Filename prefix `setup-` avoids collisions with generic harness names when grepping the monorepo
+or adding sibling protocol docs (e.g. `agents.md`).
 
 ## Phase 2 — Audit
 
