@@ -179,11 +179,9 @@ aaarrr-flywheel-toolkit/
 │   └── session-log.sh             # Auto-log de archivos modificados
 │
 ├── references/                   # Libros de definiciones y metodología
-│   ├── cro-methodology.md         # CRO para landing pages
-│   ├── visual-language.md         # Sistema visual (typo/motion/bento)
+│   │                               # (CRO/landing: SSOT en shared/references/landing/)
 │   ├── unit-economics.md          # CAC blended vs paid, LTV gross-margin, payback en meses, benchmarks por modelo
-│   ├── nps-and-feedback-loop.md   # NPS (promoters/passives/detractors) + feedback loop captura→triage→cierre
-│   └── output-structure.md        # Estructura de artefactos generados
+│   └── nps-and-feedback-loop.md   # NPS (promoters/passives/detractors) + feedback loop captura→triage→cierre
 │
 └── skills/
     └── meta-graph-api/            # Documentación exhaustiva de los endpoints usados
