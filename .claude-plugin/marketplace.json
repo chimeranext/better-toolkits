@@ -27,8 +27,8 @@
     },
     {
       "name": "make-no-mistakes",
-      "description": "The disciplined dev lifecycle — implement issues, review PRs, sync releases, test E2E, manage sessions, stash secrets, and enforce manifest-driven tool-call hooks. Includes /evaluate-agent-skills (NVIDIA SkillSpector/SkillEvaluator wrappers).",
-      "version": "1.36.1",
+      "description": "The disciplined dev lifecycle — implement issues, review PRs, sync releases, test E2E, manage sessions, stash secrets, and enforce manifest-driven tool-call hooks. Includes /evaluate-agent-skills (NVIDIA SkillSpector/SkillEvaluator wrappers) and /opencode-setup for OpenCode stderr plugin registration.",
+      "version": "1.37.0",
       "source": "./toolkits/make-no-mistakes-toolkit",
       "category": "workflow",
       "keywords": [

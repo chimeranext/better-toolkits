@@ -22,6 +22,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`/resolve-open-questions`:** Cursor harness uses **`AskQuestion`** (Claude keeps `AskUserQuestion`); fallback to numbered chat options only if the tool is unavailable. HITL doctrine (`docs/hitl.md`, `.cursor/rules/hitl-doctrine.mdc`) aligned.
 - **Repo doctrine:** HITL is a monorepo pillar (`docs/hitl.md`, `/doctrine`, `.cursor/rules/hitl-doctrine.mdc`, CONTRIBUTING + root README) — not toolkit-only. `/merge-advisor` + skill always HITL-ask after the ORDER (no `--execute`); re-measure between merges.
 
+## [1.37.0] - 2026-09-16
+
+### Added
+- **`/opencode-setup`** (+ Cursor skill): audit / install / verify OpenCode `"plugins"` registration for the monorepo stderr baseline (`opencode-plugin.ts`). Optional `--also-npm`. Protocol SSOT: `references/opencode-setup/protocol.md`. Explicit non-goal: Claude `hooks.json` is not loaded by OpenCode.
+
 ## [1.36.1] - 2026-09-09
 
 ### Changed
