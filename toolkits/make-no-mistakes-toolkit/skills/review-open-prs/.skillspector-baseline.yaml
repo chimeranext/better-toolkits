@@ -1,0 +1,26 @@
+# SkillSpector baseline — findings listed here are suppressed on future scans.
+# Edit 'reason' fields and add glob 'rules' as needed. See docs/SUPPRESSION.md.
+version: 2
+scanner_version: 2.11.2
+rules: []
+fingerprints:
+- hash: sha256:f0831e595c595bf182bf40cc87fe8de076d06909c4c404f49079a67ede5fcfe2
+  rule_id: TM1
+  file: SKILL.md
+  reason: 'Reviewed 2026-09-16: static-only FPs (git push --force workflow docs, autonomy
+    phrasing). Pending LLM re-eval.'
+- hash: sha256:301931a92a5b7d6688a86ea71d129f56b3bfcfa6fe99d08fcdce9aedccb82535
+  rule_id: P3
+  file: SKILL.md
+  reason: 'Reviewed 2026-09-16: static-only FPs (git push --force workflow docs, autonomy
+    phrasing). Pending LLM re-eval.'
+- hash: sha256:09623af03afcf48abc4fad6826bb5db403b7278fab19b921e768cf8a64ce04ed
+  rule_id: EA2
+  file: SKILL.md
+  reason: 'Reviewed 2026-09-16: static-only FPs (git push --force workflow docs, autonomy
+    phrasing). Pending LLM re-eval.'
+- hash: sha256:687aec8360161133c6f52b5f8b01e148d9d9ea112206e4bde7dfce5958ab60b3
+  rule_id: EA2
+  file: SKILL.md
+  reason: 'Reviewed 2026-09-16: static-only FPs (git push --force workflow docs, autonomy
+    phrasing). Pending LLM re-eval.'
