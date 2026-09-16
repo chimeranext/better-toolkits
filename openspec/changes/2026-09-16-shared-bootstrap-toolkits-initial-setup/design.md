@@ -38,7 +38,7 @@ shared/bootstrap/
 ├── commands/toolkits-initial-setup.md          # thin
 ├── references/toolkits-initial-setup/
 │   ├── protocol.md                             # SSOT
-│   └── adapters/{cursor,claude,opencode}.md
+│   └── adapters/setup-{cursor,claude,opencode}.md
 ├── hooks/hooks.json                            # stderr → shared/hooks/stderr
 └── cli/                                        # @chimeranext/better-toolkits (stub → full)
 ```

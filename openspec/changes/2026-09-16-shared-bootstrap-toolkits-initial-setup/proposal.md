@@ -13,7 +13,7 @@ install chicken-and-egg problem for the `better-toolkits` marketplace:
 1. **Marketplace plugin** `better-toolkits-bootstrap` (`source: ./shared/bootstrap`) —
    install **first** after `marketplace add`.
 2. **Slash command** `/toolkits-initial-setup` (thin entry → `references/toolkits-initial-setup/protocol.md`).
-3. **Harness adapters** — `adapters/{cursor,claude,opencode}.md` for IDE-specific wiring.
+3. **Harness adapters** — `adapters/setup-{cursor,claude,opencode}.md` for IDE-specific wiring.
 4. **CLI** `@chimeranext/better-toolkits` (`shared/bootstrap/cli/`) — OpenCode / headless
    entry when no plugin is installed yet.
 5. **HITL flow** — detect → audit → propose diffs → explicit human OK → install → verify.
