@@ -1,0 +1,56 @@
+# Heimdall — reusable workflow ($0).
+#
+# Modelo "reviewer en el CI de cada repo": cada uno de los repos chimeranext lo
+# invoca con `uses:` desde su propio workflow `on: pull_request`. Como el job
+# corre DENTRO del repo consumidor, hereda el GITHUB_TOKEN ambiente de Actions;
+# con `pull-requests: write` alcanza para postear el review SIN GitHub App ni
+# private key. El review lo firma `github-actions[bot]` y siempre es un COMMENT
+# (no bloquea ni aprueba merges).
+#
+# Costo $0: runner github-hosted ubuntu + repos públicos (minutos gratis
+# ilimitados). Único secreto real = NVIDIA_API_KEY (lane Kimi-NIM).
+name: heimdall-review
+
+on:
+  workflow_call:
+    inputs:
+      provider:
+        description: "Lane del reviewer (default nim-kimi)."
+        required: false
+        type: string
+        default: "nim-kimi"
+    secrets:
+      NVIDIA_API_KEY:
+        description: "Bearer de NVIDIA NIM (lane Kimi). Requerido."
+        required: true
+
+# El job necesita LEER el código (checkout + diff) y ESCRIBIR el review en el PR.
+# Nada más — mínimo privilegio.
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install deps
+        run: bun install --frozen-lockfile
+
+      - name: Run Heimdall review
+        run: bun run review:ci
+        env:
+          # Token ambiente de Actions — firma como github-actions[bot]. No es un
+          # secreto que el operador deba crear: Actions lo inyecta solo.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Único secreto real del MVP (org-level o pull desde Infisical).
+          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+          REVIEWER_PROVIDER: ${{ inputs.provider }}
