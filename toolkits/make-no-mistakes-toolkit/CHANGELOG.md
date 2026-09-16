@@ -18,6 +18,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **OST (OpenSpec store PR traceability):** shared SSOT
+  `shared/references/engineering-standards/openspec-store-pr-traceability.md` — mandatory
+  1:1 chain `TICKET-N → change folder → one store PR → one merge`; forbidden bundling /
+  close-without-merge. Wired into PRDS, `/implement` phase-0, anti-patterns,
+  `review-open-prs`, and `/clean-code-standards-{setup,audit}`.
+
 ### Changed
 - **`/resolve-open-questions`:** Cursor harness uses **`AskQuestion`** (Claude keeps `AskUserQuestion`); fallback to numbered chat options only if the tool is unavailable. HITL doctrine (`docs/hitl.md`, `.cursor/rules/hitl-doctrine.mdc`) aligned.
 - **Repo doctrine:** HITL is a monorepo pillar (`docs/hitl.md`, `/doctrine`, `.cursor/rules/hitl-doctrine.mdc`, CONTRIBUTING + root README) — not toolkit-only. `/merge-advisor` + skill always HITL-ask after the ORDER (no `--execute`); re-measure between merges.

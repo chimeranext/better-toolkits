@@ -14,6 +14,8 @@ Never-do table, completion checklist, and Slack summary.
 | Skipping rebase between issues | Merge conflicts compound |
 | Running E2E headless | Tests pass locally, fail in real browser — false confidence |
 | Putting all work in one giant PR | Unreviewable. >15 files = split by domain. |
+| Bundling two OpenSpec change folders (different `TICKET-N`) in one store PR | Breaks OST audit trail — one merge commit cannot own two issues ([OST](../../../../shared/references/engineering-standards/openspec-store-pr-traceability.md)) |
+| Closing an OpenSpec store PR without merge while folder is off default branch | Decision record never lands; app code on `devel` is not a substitute |
 | Merging / cleaning up without explicit user OK | Even when CI is green and the PR is approved, shared-state mutations (merge, Linear status, worktree removal) require explicit per-action user approval. The protocol authorizes file edits + commits + push + PR creation — not the destructive end of the lifecycle. |
 
 ## Completion Checklist
