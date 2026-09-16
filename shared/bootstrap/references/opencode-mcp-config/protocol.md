@@ -154,6 +154,10 @@ El `code` del callback es de un solo uso (10 min): si el CLI dice
 | `SSE error: Non-200 status code (400)` con tokens guardados | App no habilitada para MCP | §6, toggle en `app-assistant` |
 | `Missing key mcp.servers.enabled` | Formato V2 en OpenCode v1.15.5 | §1, claves planas |
 | Botón Install no aparece | Sin scopes o workspace/permiso wrong | §4+§5 |
+| `mcp list` dice `connected` pero `mcp debug` da `401 Unauthorized` | Token muerto o `code` de otra app / secret ausente en el canje | §10: verificar que el segmento medio del `code` (`<clientid>.<...>`) coincida con el `clientId` de la config; flujo fresco con secret exportado |
+| Sidebar dice `Needs auth` aunque el CLI dice `connected` | Estado stale de la sesión + refresh sin secret en el proceso servidor | §10: reinicio completo desde terminal con env |
+| `opencode mcp auth slack` colgado por horas (proceso vivo, sin output) | Flujo OAuth a medio canje (secret ausente o callback reusado) | Matar el PID (`ps aux | grep "opencode mcp auth"`), exportar secret, flujo fresco |
+| `logout` deja todo en rojo | El `logout` borra tokens que funcionaban; sin secret a mano no hay re-auth | No hacer `logout` a ciegas: primero `echo ${#SLACK_MCP_CLIENT_SECRET}` (>0), luego `logout + auth` |
 
 ## 9. Verificación
 
@@ -165,7 +169,45 @@ opencode mcp debug slack --print-logs --log-level DEBUG
 `debug` muestra `Auth status: ✓ authenticated` y el error real del handshake
 (Streamable HTTP), no el genérico del `auth`.
 
-## 10. Referencias
+## 10. Reinicio TUI/server: por qué una sesión nueva "pierde" el auth
+
+El `{env:SLACK_MCP_CLIENT_SECRET}` se resuelve en el entorno del **proceso
+servidor**, no por terminal. El env se hereda al nacer el proceso: si el
+servidor/TUI nació sin la var, el access token funciona hasta que expira y
+luego el refresh falla — el estado fluctúa (`connected` → `needs_auth`) y el
+sidebar queda en `Needs auth` aunque el CLI diga `connected` (stale: refleja el
+estado al arrancar la sesión).
+
+Notas de versión: `opencode` (v1.15.5) **no** tiene subcomando `service`; el
+servicio vivo es `opencode2 serve --service`. Se gestiona con `opencode2`:
+
+```sh
+# 1. Matar un auth colgado (si lo hay)
+ps aux | grep "opencode mcp auth" | grep -v grep
+
+# 2. Cerrar el TUI (Ctrl+C o :exit)
+
+# 3. Terminal NUEVA y verificar que trae el secret (bashrc hace auto-source)
+echo ${#SLACK_MCP_CLIENT_SECRET}   # debe imprimir >0, no 0
+
+# 4. Reiniciar el background server desde esa terminal
+opencode2 service restart
+opencode2 service status
+opencode mcp list                  # ✓ slack connected (OAuth)
+
+# 5. Relanzar el TUI desde esa misma terminal para que herede el env
+opencode2
+# o para volver a una sesión: opencode2 -s <session-id>
+```
+
+Reglas:
+
+- Nunca `logout` sin tener el secret a mano (`echo ${#...}` >0 primero).
+- Nunca reusar un `code` de callback: es de un solo uso y va atado a una app
+  (comparar su segmento medio con el `clientId` de la config).
+- Recargar/reabrir la sesión tras el restart: el sidebar no se actualiza solo.
+
+## 11. Referencias
 
 - <https://docs.slack.dev/ai/slack-mcp-server> (overview, scopes por tool)
 - <https://docs.slack.dev/ai/slack-mcp-server/connect-to-harnesses>
