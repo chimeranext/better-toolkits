@@ -42,7 +42,7 @@ One protocol markdown contract (`references/` + thin entries). One stderr detect
 
 ### Main selling point — stderr baseline
 
-Agents that discard stderr (`2>/dev/null`, bare `2>&1` without a log sink) hide failures. Every toolkit in this monorepo vendors [`shared/hooks/stderr/`](shared/hooks/stderr/) and registers it on install. **On by default; opt-out** via `MNM_DISABLE_STDERR_HOOK=1`, `.claude/config/stderr-hooks.json` → `{"preserve_stderr": false}`, or OpenCode `"plugin": ["-local.mnm-no-stderr-redirect"]`.
+Agents that discard stderr (`2>/dev/null`, bare `2>&1` without a log sink) hide failures. Every toolkit in this monorepo vendors [`shared/hooks/stderr/`](shared/hooks/stderr/) and registers it on install. **On by default; opt-out** via `MNM_DISABLE_STDERR_HOOK=1`, `.claude/config/stderr-hooks.json` → `{"preserve_stderr": false}`, or OpenCode `"plugins": ["-local.mnm-no-stderr-redirect"]`.
 
 #### Claude Code (plugin hooks)
 
@@ -86,27 +86,22 @@ Put that in `.cursor/hooks.json` (project) or your user hooks config. Adjust the
 
 #### OpenCode2 (file plugin)
 
-Add the absolute path to the TypeScript adapter in `~/.config/opencode/opencode.jsonc` (or project config):
+Prefer **`/toolkits-initial-setup`** or **`npx @chimeranext/better-toolkits setup`** —
+audits and merges **one** stderr adapter into OpenCode’s `"plugins"` array (optional
+`--also-npm` for the four CLI packages). Protocol:
+[`shared/bootstrap/references/toolkits-initial-setup/adapters/setup-opencode.md`](shared/bootstrap/references/toolkits-initial-setup/adapters/setup-opencode.md).
+
+Manual equivalent — absolute path in `~/.config/opencode/opencode.jsonc` (or project):
 
 ```jsonc
 {
-  "plugin": [
+  "plugins": [
     "/absolute/path/to/better-toolkits/shared/hooks/stderr/adapters/opencode-plugin.ts"
   ]
 }
 ```
 
-Or the copy inside an installed toolkit:
-
-```jsonc
-{
-  "plugin": [
-    "/absolute/path/to/make-no-mistakes-toolkit/hooks/stderr/adapters/opencode-plugin.ts"
-  ]
-}
-```
-
-Toolkits that ship an npm CLI (`make-no-mistakes`, `atomic-design`, `business-model`, `app-gtm-release`) still need this file-plugin line for stderr — their `npx … install` registers the package plugin; stderr is the local adapter above. See [`docs/opencode-stderr.md`](docs/opencode-stderr.md).
+Toolkits that ship an npm CLI (`make-no-mistakes`, `atomic-design`, `business-model`, `app-gtm-release`) still need this file-plugin line for stderr — their `npx … install` registers the package plugin; stderr is the local adapter above. Claude `hooks.json` is **not** loaded by OpenCode. See [`docs/opencode-stderr.md`](docs/opencode-stderr.md).
 
 #### Sanity check
 
@@ -129,6 +124,9 @@ installs as `app-gtm-release`, and `make-no-mistakes-toolkit` installs as `make-
 The authoritative list of installable names lives in
 [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json). Landing + doctrine:
 **https://toolkits.chimeranext.dev** (GitHub Pages + custom domain; see [`apps/web/README.md`](apps/web/README.md)).
+
+Discovery / Build with Claude listing prep (external marketplace — not vendoring into
+their `plugins/` tree): [`docs/buildwithclaude-marketplace.md`](docs/buildwithclaude-marketplace.md).
 
 ## Toolkits
 
@@ -159,7 +157,7 @@ claude plugin install make-no-mistakes@better-toolkits
 
 BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
-### [atomic-design-toolkit](toolkits/atomic-design-toolkit/) `v1.3.0`
+### [atomic-design-toolkit](toolkits/atomic-design-toolkit/) `v1.3.1`
 
 Atomic Design for Flutter and Vite — decompose features into atoms, molecules, organisms, templates, and pages.
 
@@ -183,7 +181,7 @@ claude plugin install atomic-design-toolkit@better-toolkits
 
 BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
-### [ux-research-toolkit](toolkits/ux-research-toolkit/) `v2.1.0`
+### [ux-research-toolkit](toolkits/ux-research-toolkit/) `v2.1.1`
 
 Guided UX-research map creation for non-experts, based on NN/g methodology.
 
@@ -204,7 +202,7 @@ claude plugin install ux-research-toolkit@better-toolkits
 
 BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
-### [business-model-toolkit](toolkits/business-model-toolkit/) `v2.2.0`
+### [business-model-toolkit](toolkits/business-model-toolkit/) `v2.2.1`
 
 Interactive business-model brainstorming — guided dialogue covering the full startup lifecycle from problem validation through execution and investor pitch.
 
@@ -227,7 +225,7 @@ claude plugin install business-model-toolkit@better-toolkits
 
 BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
-### [app-gtm-release-toolkit](toolkits/app-gtm-release-toolkit/) `v2.4.0`
+### [app-gtm-release-toolkit](toolkits/app-gtm-release-toolkit/) `v2.4.1`
 
 Multi-platform app go-to-market and release — ship Flutter, Kotlin Multiplatform, .NET MAUI, Swift, and PWAs to Google Play, App Store, Microsoft Store, Snap Store, Flathub, and alternative channels.
 
@@ -250,7 +248,7 @@ claude plugin install app-gtm-release@better-toolkits
 
 BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
-### [aaarrr-flywheel-toolkit](toolkits/aaarrr-flywheel-toolkit/) `v0.3.0`
+### [aaarrr-flywheel-toolkit](toolkits/aaarrr-flywheel-toolkit/) `v0.3.1`
 
 Growth-engineering toolkit — a complete funnel + flywheel from pricing to compounding growth.
 
@@ -273,7 +271,7 @@ claude plugin install aaarrr-flywheel-toolkit@better-toolkits
 
 BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
-### [fractional-cto-toolkit](toolkits/fractional-cto-toolkit/) `v1.1.0`
+### [fractional-cto-toolkit](toolkits/fractional-cto-toolkit/) `v1.3.1`
 
 Operational toolkit for freelance and fractional CTOs — contracts, project-takeover SOPs, and a process-engineering pipeline for client onboarding, technical audits, and vendor evaluation.
 
@@ -294,7 +292,7 @@ claude plugin install fractional-cto-toolkit@better-toolkits
 
 BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
-### [instructional-design-toolkit](toolkits/instructional-design-toolkit/) `v1.0.0`
+### [instructional-design-toolkit](toolkits/instructional-design-toolkit/) `v1.2.1`
 
 Design cmi5-compliant courses and 1-on-1 session plans.
 
@@ -316,7 +314,7 @@ claude plugin install instructional-design-toolkit@better-toolkits
 
 BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
-### [launchpad-toolkit](toolkits/launchpad-toolkit/) `v0.6.0`
+### [launchpad-toolkit](toolkits/launchpad-toolkit/) `v0.6.1`
 
 Founder-operations lab — a methodology prototype laboratory for the ChimeraNext Launchpad pillar.
 
@@ -337,7 +335,7 @@ claude plugin install launchpad-toolkit@better-toolkits
 
 BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
-### [venture-studio-toolkit](toolkits/venture-studio-toolkit/) `v1.2.0`
+### [venture-studio-toolkit](toolkits/venture-studio-toolkit/) `v1.2.1`
 
 Macro portfolio management for venture studios and serial founders. Spanish-first; bilingual output framework documented for v1.3+.
 
@@ -366,7 +364,7 @@ BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENS
 toolkits/<name>/
   .claude-plugin/plugin.json   # per-toolkit plugin identity + version
 apps/web/             # Landing + /doctrine (toolkits.chimeranext.dev via GitHub Pages)
-docs/                 # Monorepo contracts (multi-harness-ssot.md, …)
+docs/                 # Monorepo contracts (multi-harness-ssot.md, buildwithclaude-marketplace.md, …)
 ```
 
 ## Why one monorepo?
