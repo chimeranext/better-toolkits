@@ -28,7 +28,7 @@ development; do not turn this into a competing product.**
 2. Branch names: `feat/…`, `fix/…`, `docs/…` — no employer-specific ticket prefixes in public branch names.
 3. Keep commits focused. If you touch `hooks/`, add or update the relevant synthetic tests.
 4. Do not commit secrets. Do not silence stderr with `2>/dev/null` in agent harness commands (see make-no-mistakes stderr hooks).
-5. **HITL is repo doctrine** ([`docs/hitl.md`](docs/hitl.md)): after a plan whose natural next step mutates shared state (`gh pr merge`, tracker → Done, force-with-lease on published history, …), ask and wait — Claude `AskUserQuestion` / Cursor equivalent. Do not bury the happy path behind `--execute`.
+5. **HITL is repo doctrine** ([`docs/hitl.md`](docs/hitl.md)): after a plan whose natural next step mutates shared state (`gh pr merge`, tracker → Done, force-with-lease on published history, …), ask and wait — Claude `AskUserQuestion` / Cursor **`AskQuestion`** (fallback: numbered options). Do not bury the happy path behind `--execute`.
 6. Legal/license parameters are generated from `scripts/legal/` — prefer editing the
    template and re-running `python3 scripts/legal/render-bsl.py` over hand-editing
    eleven LICENSE copies.

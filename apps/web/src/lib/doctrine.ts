@@ -63,11 +63,11 @@ export const DOCTRINE: Record<Lang, DoctrineContent> = {
       { harness: "Claude Code", wire: "AskUserQuestion" },
       {
         harness: "Cursor",
-        wire: "Numbered options in the main conversation + wait for an explicit reply (silence ≠ yes)",
+        wire: "AskQuestion (fixed-choice); if unavailable: numbered options in main chat + explicit reply (silence ≠ yes)",
       },
       {
         harness: "Background sub-agent",
-        wire: "Emit pause JSON; orchestrator asks and relays — sub-agent must not ask directly",
+        wire: "Emit pause JSON; orchestrator asks (AskUserQuestion / AskQuestion) and relays — sub-agent must not ask directly",
       },
     ],
     ssotTitle: "Two orthogonal SSOTs",
@@ -146,11 +146,11 @@ export const DOCTRINE: Record<Lang, DoctrineContent> = {
       { harness: "Claude Code", wire: "AskUserQuestion" },
       {
         harness: "Cursor",
-        wire: "Opciones numeradas en la conversación principal + esperar respuesta explícita (silencio ≠ sí)",
+        wire: "AskQuestion (fixed-choice); si no está disponible: opciones numeradas en el chat + respuesta explícita (silencio ≠ sí)",
       },
       {
         harness: "Sub-agente en background",
-        wire: "Emitir pause JSON; el orquestador pregunta y retransmite — el sub-agente no pregunta directo",
+        wire: "Emitir pause JSON; el orquestador pregunta (AskUserQuestion / AskQuestion) y retransmite — el sub-agente no pregunta directo",
       },
     ],
     ssotTitle: "Dos SSOTs ortogonales",
