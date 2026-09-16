@@ -169,3 +169,5 @@ audit if `claude` is also detected.
 - [`docs/opencode-stderr.md`](../../../../docs/opencode-stderr.md) (monorepo)
 - [`shared/hooks/stderr/README.md`](../../../../shared/hooks/stderr/README.md)
 - [`protocol.md`](../protocol.md) — bootstrap orchestration
+- [`../opencode-mcp-config/protocol.md`](../opencode-mcp-config/protocol.md) —
+  remote MCP servers with OAuth on OpenCode (Slack worked example)
