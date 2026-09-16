@@ -1,0 +1,60 @@
+# SkillSpector — security gate for agent skills (blocks HIGH+).
+#
+# Static analysis always runs (deterministic, no secrets). If the repo secret
+# SKILLSPECTOR_COMPAT_API_KEY is present (OpenRouter free tier), the same run
+# adds LLM semantic analysis on top. Exit != 0 blocks the PR when any skill
+# scores > 50 (HIGH/CRITICAL) with findings not covered by that skill's
+# committed `.skillspector-baseline.yaml`.
+
+name: skillspector
+
+on:
+  pull_request:
+    paths:
+      - "toolkits/**/skills/**"
+      - "shared/skills/**"
+      - ".github/workflows/skillspector.yml"
+  push:
+    branches: [main]
+    paths:
+      - "toolkits/**/skills/**"
+      - "shared/skills/**"
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python + uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install SkillSpector
+        run: uv tool install git+https://github.com/NVIDIA/skillspector.git
+
+      - name: Scan all skills (static + optional LLM)
+        env:
+          SKILLSPECTOR_PROVIDER: openai_compatible
+          SKILLSPECTOR_COMPAT_BASE_URL: https://openrouter.ai/api/v1
+          SKILLSPECTOR_COMPAT_API_KEY: ${{ secrets.SKILLSPECTOR_COMPAT_API_KEY }}
+          SKILLSPECTOR_MODEL: ${{ vars.SKILLSPECTOR_MODEL }}
+        run: |
+          ARGS="--no-llm"
+          if [ -n "$SKILLSPECTOR_COMPAT_API_KEY" ]; then
+            ARGS=""
+          fi
+          # shellcheck disable=SC2086
+          python3 scripts/skillspector-gate.py $ARGS
+
+      - name: Upload SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: skillspector-report.sarif
