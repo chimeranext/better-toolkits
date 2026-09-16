@@ -1,50 +1,65 @@
-# better-toolkits — OpenSpec Project Governance
+# better-toolkits — OpenSpec / OPSX
 
-> **Source of truth** for how decisions are recorded, tracked, and shipped in this
-> monorepo. Same convention as `chimeranext/better-microservices`.
+> **Planning SSOT** for this monorepo. Product code lives under `toolkits/`, `apps/`, `shared/`.
 
-## Overview
+## OPSX workflow (Fission-AI OpenSpec)
 
-`better-toolkits` is a monorepo of source-available Claude Code toolkits. Each
-toolkit keeps its own license and lifecycle, but they share one repo, one
-marketplace manifest, one landing page, and **one decision-record convention**
-(this document).
+Configured per [OpenSpec OPSX](https://github.com/Fission-AI/OpenSpec/blob/main/docs/opsx.md):
 
-- **Remote (canonical):** `github.com/chimeranext/better-toolkits`
-- **Tracker:** GitHub Issues on this repo (`toolkit:*` labels)
-- **Install surface:** `.claude-plugin/marketplace.json` (10 plugins) — `claude plugin marketplace add chimeranext/better-toolkits`
+| Step | Cursor | Claude Code |
+| --- | --- | --- |
+| Propose | `/opsx-propose` | `/opsx:propose` |
+| Explore | `/opsx-explore` | `/opsx:explore` |
+| Apply | `/opsx-apply` | `/opsx:apply` |
+| Update artifacts | `/opsx-update` | `/opsx:update` |
+| Sync living specs | `/opsx-sync` | `/opsx:sync` |
+| Archive | `/opsx-archive` | `/opsx:archive` |
 
-## Spec Domains
+**CLI:** `openspec doctor`, `openspec list`, `openspec validate <change>`, `openspec view`
 
-Every change belongs to exactly one **domain**, mapped 1:1 to a `toolkit:*` /
-`area:*` label:
+**Store id:** `better-toolkits` (`.openspec-store/store.yaml`). Register locally:
+
+```bash
+openspec store register --id better-toolkits --yes .
+```
+
+**Planning context for agents:** `openspec/config.yaml` (`context:` + `rules:`). Prefer that over this file for new work.
+
+## Spec domains
+
+Every change belongs to one domain (GitHub label):
 
 | Domain | Label | Scope |
-|---|---|---|
-| One of the 10 toolkits | `toolkit:<name>` | `toolkits/<name>/**` |
-| `web` | `area:web` | `apps/web/**` — landing toolkits.chimeranext.dev |
-| `docs` | `area:docs` | `docs/**`, README |
-| `meta` | `area:meta` | root manifests, marketplace.json, governance, hooks |
+| --- | --- | --- |
+| Toolkit | `toolkit:<name>` | `toolkits/<name>/**` |
+| Web | `area:web` | `apps/web/**` |
+| Docs | `area:docs` | `docs/**`, README |
+| Meta | `area:meta` | marketplace, shared hooks, governance |
 
-## Change lifecycle
+## Change layout
 
-1. **Propose** — create `openspec/changes/<YYYY-MM-DD>-<slug>/` with `proposal.md`
-   (why + decisions), `design.md` (what, in detail), `tasks.md` (how, checklist).
-2. **Implement** — tasks reference the change slug in commit messages.
-3. **Archive** — when shipped, move the change dir to `openspec/changes/archive/`.
-   Planning artifacts for shipped work do NOT live at the top level (lesson from
-   the toolkit consolidation: stale plans/specs for shipped features are debt).
+```text
+openspec/changes/YYYY-MM-DD-<slug>/
+├── .openspec.yaml
+├── proposal.md
+├── design.md
+├── tasks.md
+└── specs/<capability>/spec.md   # unless skip_specs: true
+```
 
-## Enforcement (not just convention)
+Living specs (post-archive): `openspec/specs/<capability>/spec.md`
 
-A `PreToolUse` hook (`.claude/hooks/pre-write-require-openspec.sh`, registered in
-`.claude/settings.json`) enforces two rules for Claude Code sessions in this repo:
+**Do not** create `openspec/changes/` inside individual toolkits — use this monorepo store only.
 
-1. `*-spec.md` / `*-adr.md` / `proposal.md` / `design.md` files may only be
-   created inside `openspec/changes/` — specs don't float around the tree.
-2. Writes under `apps/` require at least one **active** (non-archived) change in
-   `openspec/changes/` — engineering work traces to a recorded decision.
+## Lifecycle
 
-Business artifacts produced by toolkit commands (e.g. `/landing-page` copy decks
-under `business/`) are exempt content outputs; their *decisions* still live in a
-change record.
+1. **Propose** — `/opsx-propose` or `openspec new change <slug>`
+2. **Review** — human HITL on proposal/design/specs/tasks
+3. **Apply** — `/opsx-apply` on a feature branch + draft PR
+4. **Archive** — `/opsx-archive` after ship (human OK only)
+
+Legacy changes predating OPSX (no `.openspec.yaml`) remain under `openspec/changes/` until normalized or archived.
+
+## Enforcement
+
+`.claude/hooks/pre-write-require-openspec.sh` (see root `openspec/project.md` history in git): planning artifacts only under `openspec/changes/`; `apps/` writes require an active change.
