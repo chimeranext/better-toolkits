@@ -1,4 +1,4 @@
-# Engineering standards — index (6 practices)
+# Engineering standards — index (6 practices + OST)
 
 > SSOT a nivel monorepo: `shared/references/engineering-standards/`
 > (dedup desde `fractional-cto-toolkit/references/engineering-standards/`).
@@ -16,11 +16,13 @@ enforces conventions already in industry use.
 | **PRDS** | Pull Request Description Standards | PR body + reviewable size | [prds.md](prds.md) |
 | **BrS** | Branching Strategy | Branches, naming, protection | [branching-strategy.md](branching-strategy.md) |
 | **QT4L** | QA Traceability (four layers) | Req → automated test → manual QA → HITL | [qa-traceability-four-layers.md](qa-traceability-four-layers.md) |
+| **OST** | OpenSpec store PR traceability | Tracker → change folder → one store PR → one merge | [openspec-store-pr-traceability.md](openspec-store-pr-traceability.md) |
 
-The **clean code quartet** is DSMS + IFS + CPS + PRDS. BrS and QT4L complete the
-six-practice family for branching and QA traceability.
+The **clean code quartet** is DSMS + IFS + CPS + PRDS. BrS, QT4L, and **OST**
+(when the client uses an OpenSpec store) complete branching, QA traceability, and
+spec promotion discipline.
 
-**Adoption order:** DSMS → IFS → CPS → PRDS → BrS → QT4L.
+**Adoption order:** DSMS → IFS → CPS → PRDS → BrS → QT4L → **OST** (store repos only).
 
 **Day-to-day priority:** IFS, PRDS, and QT4L (reading rhythm, review rhythm, req→test trace).
 
@@ -50,6 +52,7 @@ Protocol SSOT: `references/clean-code-standards-setup/protocol.md`, `references/
 | PR description and size? | PRDS |
 | Branch naming and protection? | BrS |
 | Scenario → verification in tasks? | QT4L |
+| One OpenSpec folder per store PR? | OST |
 
 ## Provenance
 
