@@ -24,21 +24,24 @@ node shared/bootstrap/cli/bin/better-toolkits.js setup
 
 ## `opencode.jsonc` merge
 
-Propose append to `plugin` array for **each** selected toolkit's OpenCode adapter path(s).
+Propose append to `plugins` array (**plural** — opencode v2 ignores the v1
+singular `plugin` key) for the **shared** stderr baseline adapter, plus one
+`skills` entry per selected toolkit (adapters only register the stderr hook;
+without `skills` entries opencode2 sees zero monorepo commands).
 Use absolute paths. Idempotent: do not duplicate entries.
 
-Stderr (required baseline):
+Stderr (required baseline, shared — same plugin id in every toolkit adapter):
 
 ```jsonc
 {
-  "plugin": [
+  "plugins": [
     "/absolute/path/to/better-toolkits/shared/hooks/stderr/adapters/opencode-plugin.ts"
+  ],
+  "skills": [
+    "/absolute/path/to/better-toolkits/toolkits/<toolkit>/skills"
   ]
 }
 ```
-
-Per-toolkit packages may add their own `plugin` entries — merge all requested toolkits in one
-proposal; user approves the combined diff.
 
 ## Marketplace parity
 
@@ -52,4 +55,6 @@ npx @chimeranext/better-toolkits doctor
 ```
 
 Confirm stderr plugin path exists and OpenCode loads without duplicate `-local.mnm-no-stderr-redirect`
-unless user opted out.
+unless user opted out. Confirm the skills resolve: restart (`opencode2 service restart`) and check
+that a new session advertises toolkit skills (e.g. `implement`); if none appear, the `skills`
+array is missing or points at wrong paths (adapters alone never expose commands).
