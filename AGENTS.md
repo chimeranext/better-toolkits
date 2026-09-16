@@ -14,6 +14,8 @@ mutations), [`docs/multi-harness-ssot.md`](docs/multi-harness-ssot.md).
 [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json)
 
 - Install surface: `claude plugin marketplace add chimeranext/better-toolkits`
+- **Bootstrap first:** `claude plugin install better-toolkits-bootstrap@better-toolkits` → `/toolkits-initial-setup` (HITL). OpenCode: `npx @chimeranext/better-toolkits setup`. SSOT: `shared/bootstrap/references/toolkits-initial-setup/protocol.md`.
+- **Deprecated** as monorepo SSOT: `npx @lapc506/make-no-mistakes install` (legacy single-toolkit scope).
 - Each toolkit keeps only `.claude-plugin/plugin.json` (plugin identity + version).
 - **Forbidden:** `toolkits/*/.claude-plugin/marketplace.json` — those were standalone-repo
   leftovers and cause version drift. Do not recreate them.

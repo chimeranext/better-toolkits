@@ -9,6 +9,23 @@ your startup needs, from problem validation through go-to-market. Inspired by th
 "pick-your-stack" experience of [create-better-t-stack](https://www.better-t-stack.dev/)
 and a sibling to [better-microservices](https://github.com/chimeranext/better-microservices).
 
+## Quick start (install bootstrap first)
+
+```bash
+claude plugin marketplace add chimeranext/better-toolkits
+claude plugin install better-toolkits-bootstrap@better-toolkits
+# Then in Claude Code or Cursor:
+# /toolkits-initial-setup
+```
+
+OpenCode / headless (replaces deprecated `npx @lapc506/make-no-mistakes install`):
+
+```bash
+npx @chimeranext/better-toolkits setup
+```
+
+Protocol SSOT: [`shared/bootstrap/references/toolkits-initial-setup/protocol.md`](shared/bootstrap/references/toolkits-initial-setup/protocol.md) — detect → audit → propose → **HITL ask** → install → verify.
+
 ## Multi-harness SSOT
 
 One protocol markdown contract (`references/` + thin entries). One stderr detector. N harness wire-ups — Claude Code, Cursor, OpenCode2, Antigravity, and friends. Not a Cursor-vs-Claude dichotomy.
@@ -16,6 +33,7 @@ One protocol markdown contract (`references/` + thin entries). One stderr detect
 - Contract: [`docs/multi-harness-ssot.md`](docs/multi-harness-ssot.md)
 - OpenSpec / OPSX: [`openspec/`](openspec/) — `/opsx-propose`, `/opsx-apply`, … ([OPSX docs](https://github.com/Fission-AI/OpenSpec/blob/main/docs/opsx.md))
 - Example change: [`openspec/changes/2026-08-20-multi-harness-ssot/`](openspec/changes/2026-08-20-multi-harness-ssot/)
+- Bootstrap OpenSpec: [`openspec/changes/2026-09-16-shared-bootstrap-toolkits-initial-setup/`](openspec/changes/2026-09-16-shared-bootstrap-toolkits-initial-setup/)
 - Public doctrine: [toolkits.chimeranext.dev/doctrine](https://toolkits.chimeranext.dev/doctrine/)
 
 ## HITL (repo doctrine)
