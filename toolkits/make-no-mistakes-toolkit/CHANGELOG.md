@@ -22,6 +22,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`/resolve-open-questions`:** Cursor harness uses **`AskQuestion`** (Claude keeps `AskUserQuestion`); fallback to numbered chat options only if the tool is unavailable. HITL doctrine (`docs/hitl.md`, `.cursor/rules/hitl-doctrine.mdc`) aligned.
 - **Repo doctrine:** HITL is a monorepo pillar (`docs/hitl.md`, `/doctrine`, `.cursor/rules/hitl-doctrine.mdc`, CONTRIBUTING + root README) — not toolkit-only. `/merge-advisor` + skill always HITL-ask after the ORDER (no `--execute`); re-measure between merges.
 
+## [1.38.0] - 2026-09-16
+
+### Removed
+- **`/opencode-setup`** command + skill — consolidated into bootstrap
+  [`setup-opencode.md`](../../shared/bootstrap/references/toolkits-initial-setup/adapters/setup-opencode.md)
+  (`/toolkits-initial-setup` or `npx @chimeranext/better-toolkits setup`).
+
+## [1.37.0] - 2026-09-16
+
+### Added
+- **`/opencode-setup`** (+ Cursor skill) — **superseded in 1.38.0** by bootstrap `setup-opencode.md`.
+
+## [1.36.1] - 2026-09-09
+
+### Changed
+- **`/evaluate-agent-skills`**: worker auto-installs SkillSpector / SkillEvaluator via `uv tool install` when missing (requires `uv`). Opt out with `--no-install`. Tier 3 live eval remains opt-in + HITL. Docs: protocol + `docs/evaluate-agent-skills.md`.
+
+## [1.36.0] - 2026-09-09
+
+### Added
+- **`/evaluate-agent-skills`** (+ Cursor skill + `scripts/evaluate-agent-skills.sh`): wrap NVIDIA [SkillSpector](https://github.com/NVIDIA/SkillSpector) / SkillEvaluator as peer CLIs (scan / quality / validate). Protocol SSOT under `references/evaluate-agent-skills/`. Does **not** vendor Apache-2.0 upstream into this BSL tree. Docs: monorepo `docs/evaluate-agent-skills.md`.
+
 ### Added
 - **`/bug-squash-locally`** — minimal localhost HITL entry; links [semantic UI locator policy](references/bug-squash/semantic-ui-locator-policy.md) and [disconnected pattern library anti-pattern](references/bug-squash/disconnected-pattern-library-anti-pattern.md). Monorepo Cursor thin entry: `.cursor/commands/bug-squash-locally.md`.
 - Port from upstream make-no-mistakes **PR #52** (SSOT-aware): ENF efficacy verifier `findHookEfficacyGaps` (`src/audit/verifiers/enforcement-hooks-efficacy.ts`) + tests; detector + thin `/audit-enforcement-hooks` document coverage vs bind.
