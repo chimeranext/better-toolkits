@@ -16,11 +16,15 @@ Store: monorepo `openspec/changes/2026-09-09-generalize-bug-squash/` (`openspec 
 ## Phase 1 — Toolkit implementation
 
 - [ ] `commands/bug-squash.md` — harness entry; read references in order
+- [x] `commands/bug-squash-locally.md` — minimal localhost entry + semantic locator pointers
+- [x] `references/bug-squash/semantic-ui-locator-policy.md` — Storybook + MCP locator SSOT
+- [x] `references/bug-squash/disconnected-pattern-library-anti-pattern.md` — host/test anti-pattern
 - [ ] `references/bug-squash/protocol.md` — UDD, N1/N2/N3, Chrome MCP headed-only, close gate
 - [ ] `references/bug-squash/setup-init.md` — bootstrap when config missing
 - [ ] `references/bug-squash/round-schema.md` — v2 header (link from command)
 - [ ] `bug-squash.config.example.json` at toolkit root (copy target for consumer repos)
 - [ ] `commands/bug-squash.config.example.json` or document copy path in README
+- [x] `.cursor/commands/bug-squash-locally.md` — monorepo Cursor thin entry
 - [ ] README section: base command + overlay pattern
 - [ ] Validate hook doc: set `$MNM_QA_ORIGIN` from round `Base URL`
 
