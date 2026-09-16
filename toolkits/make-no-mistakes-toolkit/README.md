@@ -26,6 +26,16 @@ claude plugin install make-no-mistakes
 
 ## Install (OpenCode)
 
+**Deprecated** — use monorepo bootstrap instead:
+
+```bash
+npx @chimeranext/better-toolkits setup
+```
+
+Or install `better-toolkits-bootstrap@better-toolkits` and run `/toolkits-initial-setup`.
+
+Legacy (single-toolkit, personal scope — do not use for new setups):
+
 ```bash
 npx @lapc506/make-no-mistakes install
 ```
