@@ -111,18 +111,26 @@ claude plugin add lapc506/fractional-cto-toolkit
 BSL-1.1
 
 
-## Install (OpenCode) — stderr baseline
+## Install (OpenCode) — stderr + PRDS
 
-This toolkit vendors `hooks/stderr/` (same detector as the rest of better-toolkits).
+This toolkit vendors `hooks/stderr/` and `hooks/prds/` (synced from monorepo
+`shared/hooks/`).
 
-Register the OpenCode file plugin (required for stderr on OpenCode2):
+Register **both** file plugins ([OpenCode plugins](https://opencode.ai/docs/plugins/)):
 
 ```jsonc
 {
   "plugin": [
-    "/absolute/path/to/this-toolkit/hooks/stderr/adapters/opencode-plugin.ts"
+    "/absolute/path/to/this-toolkit/hooks/stderr/adapters/opencode-plugin.ts",
+    "/absolute/path/to/this-toolkit/hooks/prds/adapters/opencode-plugin.ts"
   ]
 }
 ```
 
-See monorepo [`docs/opencode-stderr.md`](../../docs/opencode-stderr.md) and [`docs/multi-harness-ssot.md`](../../docs/multi-harness-ssot.md).
+- **stderr** — block `2>/dev/null` / bare `2>&1` without a log sink  
+- **PRDS** — block `gh pr create|edit` (and `git push` when a PR already exists)
+  without the four always-on PRDS sections
+
+See [`docs/opencode-stderr.md`](../../docs/opencode-stderr.md),
+[`shared/hooks/prds/README.md`](../../shared/hooks/prds/README.md), and
+[`docs/multi-harness-ssot.md`](../../docs/multi-harness-ssot.md).

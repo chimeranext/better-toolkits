@@ -20,6 +20,16 @@ mutations), [`docs/multi-harness-ssot.md`](docs/multi-harness-ssot.md).
 - When bumping a toolkit version, update **root** `marketplace.json` + that toolkit's
   `plugin.json` (and `package.json` / CHANGELOG / README when they exist) in the same PR.
 
+## Runtime hooks (stderr + PRDS)
+
+| Runtime | Path | Harnesses |
+| --- | --- | --- |
+| Stderr baseline | [`shared/hooks/stderr/`](shared/hooks/stderr/) | Claude / Cursor / OpenCode |
+| PRDS body gate | [`shared/hooks/prds/`](shared/hooks/prds/) | Claude / Cursor / OpenCode |
+
+Vendor with `scripts/sync-stderr-from-shared.sh` and `scripts/sync-prds-from-shared.sh`.
+See [`docs/multi-harness-ssot.md`](docs/multi-harness-ssot.md).
+
 ## Git worktrees (mandatory when parallel)
 
 When more than one branch/PR is active, or the primary checkout is dirty, use an
