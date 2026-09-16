@@ -11,7 +11,7 @@ Store: monorepo `openspec/changes/2026-09-09-generalize-bug-squash/` (`openspec 
 - [x] `specs/bug-squash/spec.md` — SHALL requirements + scenarios
 - [x] OPSX wired at repo root (`openspec/config.yaml`, `/opsx-*`, `.openspec-store/store.yaml`)
 - [x] `openspec validate 2026-09-09-generalize-bug-squash` green
-- [ ] Human review (Daniel / Andrés / Isaac for Seacrets overlay alignment)
+- [ ] Human review OpenSpec design + spec scenarios
 
 ## Phase 1 — Toolkit implementation
 
@@ -28,22 +28,13 @@ Store: monorepo `openspec/changes/2026-09-09-generalize-bug-squash/` (`openspec 
 - [ ] README section: base command + overlay pattern
 - [ ] Validate hook doc: set `$MNM_QA_ORIGIN` from round `Base URL`
 
-## Phase 2 — Seacrets overlay (consumer repo)
-
-- [ ] `seacrets.online-app`: add `.cursor/commands/bug-squash-seacrets.md` (profile overlay)
-- [ ] `seacrets.online-app`: root `bug-squash.config.json` (Seacrets URLs; prod `enabled: false`)
-- [ ] Deprecate `bug-squash.md` → 5-line pointer to toolkit + overlay
-- [ ] Draft PR on `*/scrt-525-*` or follow-on issue (assignee `caco26i`)
-
-## Phase 3 — Seacrets docs alignment
-
-- [ ] Update `hitl-bug-squash-standard.md`: multi-env = multiple rounds; link toolkit OpenSpec
-- [ ] Update `qa/rounds.md`: v2 header (`Environment` not hop chain)
-- [ ] Pointer in SCRT-525 OpenSpec: v1 historical; v2 SSOT in MNM toolkit
-
-## Phase 4 — Validation
+## Phase 2 — Validation (toolkit only)
 
 - [ ] Dry-run bootstrap on clean repo (no config)
 - [ ] Open round @ localhost only; confirm command blocks mid-round URL change
 - [ ] Confirm `pre-tool-prod-write-guard.sh` with prod disabled in default config
-- [ ] Seacrets smoke: one staging round artifact with v2 header
+- [ ] Smoke: one staging round artifact with v2 header on a sample consumer config
+
+## Out of scope (consumer repos)
+
+Consumer adoption (product-specific overlays, `bug-squash.config.json` URLs, HITL runbooks, docs alignment) is **not** tracked in this monorepo change. Each product repo owns its overlay PRs and docs — see layering table in `design.md`.
