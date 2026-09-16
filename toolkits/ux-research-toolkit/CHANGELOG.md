@@ -1,3 +1,9 @@
+## [Unreleased]
+
+### Changed
+
+- **hooks/prds/README.md:** OpenCode stderr registration points to `better-toolkits-bootstrap` / `setup-opencode.md` (not `/make-no-mistakes:opencode-setup`).
+
 # Changelog
 
 All notable changes to `ux-research-toolkit` documented in this file. Format follows
