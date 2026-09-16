@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed
+
+- **hooks/prds/README.md:** OpenCode stderr registration points to `better-toolkits-bootstrap` / `setup-opencode.md` (not `/make-no-mistakes:opencode-setup`).
+
 _No unreleased changes._
 
 ## [0.6.0] — 2026-07-07
