@@ -12,8 +12,8 @@ multi-harness reuse. AAARRR funnel context: output dir
 `./business/04-landing-pages/` (spec + ADR + copy).
 
 If business-model-toolkit is not installed (standalone flywheel install),
-fall back to this toolkit's local guides: `references/cro-methodology.md`,
-`references/landing-b2b.md`, `references/landing-b2b2c.md`,
-`references/landing-b2c.md`, `references/visual-language.md`.
+fall back to the shared SSOT directly: `shared/references/landing/`
+(`cro-methodology.md`, `landing-b2b.md`, `landing-b2b2c.md`,
+`landing-b2c.md`, `visual-language.md`).
 
 `$ARGUMENTS` = audience flags (`--b2g` / `--b2b` / `--b2b2c` / `--b2c`) and/or `--what-if` simulation mode.

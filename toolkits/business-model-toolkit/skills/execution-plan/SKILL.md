@@ -38,7 +38,7 @@ el acronimo solo. Nombres propios de frameworks y libros se mantienen en su idio
 
 ## Directorio de salida
 
-Todos los archivos van en `./business/` -- leer `${CLAUDE_PLUGIN_ROOT}/references/output-structure.md`
+Todos los archivos van en `./business/` -- leer `shared/references/landing/output-structure.md`
 para el arbol completo de directorios.
 
 ## Regla de personalizacion
@@ -388,7 +388,7 @@ Aceleracion del Crecimiento (Growth Acceleration) -- Fases 14-17.
 
 ### Archivos de referencia
 - **`${CLAUDE_PLUGIN_ROOT}/references/methodology.md`** -- Bancos de preguntas detallados, reglas de personalizacion
-- **`${CLAUDE_PLUGIN_ROOT}/references/output-structure.md`** -- Estructura de directorios, detalles de archivos, puertas de validacion
+- **`shared/references/landing/output-structure.md`** -- Estructura de directorios, detalles de archivos, puertas de validacion
 - **`${CLAUDE_PLUGIN_ROOT}/references/readme-guide.md`** -- Patrones de generacion de README
 
 ### Archivos de plantilla (leer antes de generar)

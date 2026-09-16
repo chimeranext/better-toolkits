@@ -19,9 +19,8 @@ Read and follow it. Frontmatter triggers unchanged. Output dir
 `./business/04-landing-pages/` (spec + ADR + copy), same as the SSOT.
 
 If business-model-toolkit is not installed (standalone flywheel install),
-fall back to this toolkit's local guides: `references/cro-methodology.md`,
-`references/landing-b2b.md`, `references/landing-b2b2c.md`,
-`references/landing-b2c.md`, `references/visual-language.md`,
-`references/output-structure.md`.
+fall back to the shared SSOT directly: `shared/references/landing/`
+(`cro-methodology.md`, `landing-b2b.md`, `landing-b2b2c.md`,
+`landing-b2c.md`, `visual-language.md`, `output-structure.md`).
 
 Claude Code thin command (same SSOT): `commands/landing-page.md`.
