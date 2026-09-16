@@ -204,7 +204,7 @@ Con todas las respuestas anteriores, generar el copy seccion por seccion siguien
 **Objetivo:** Documentar todo como spec + ADR.
 
 ### Spec
-Generar el documento completo usando el template `../../assets/templates/landing-page-spec.md`. Guardar en `./business/04-landing-pages/[audiencia]-landing-spec.md`.
+Generar el documento completo usando el template `../../../shared/references/landing/landing-page-spec.md`. Guardar en `./business/04-landing-pages/[audiencia]-landing-spec.md`.
 
 ### ADR
 Generar un ADR con todas las decisiones tomadas (audiencia, CTA, secuencia emocional, pricing, stack, urgencia) y las alternativas descartadas. Guardar en `./business/04-landing-pages/[audiencia]-landing-adr.md`.
@@ -241,5 +241,5 @@ Antes de cerrar, verificar:
 - Guia B2B: `../../../shared/references/landing/landing-b2b.md`
 - Guia B2B2C: `../../../shared/references/landing/landing-b2b2c.md`
 - Guia B2C: `../../../shared/references/landing/landing-b2c.md`
-- Template de spec: `../../assets/templates/landing-page-spec.md`
+- Template de spec: `../../../shared/references/landing/landing-page-spec.md`
 - Estructura de output: `../../../shared/references/landing/output-structure.md`
