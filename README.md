@@ -9,12 +9,31 @@ your startup needs, from problem validation through go-to-market. Inspired by th
 "pick-your-stack" experience of [create-better-t-stack](https://www.better-t-stack.dev/)
 and a sibling to [better-microservices](https://github.com/chimeranext/better-microservices).
 
+## Quick start (install bootstrap first)
+
+```bash
+claude plugin marketplace add chimeranext/better-toolkits
+claude plugin install better-toolkits-bootstrap@better-toolkits
+# Then in Claude Code or Cursor:
+# /toolkits-initial-setup
+```
+
+OpenCode / headless (replaces deprecated `npx @lapc506/make-no-mistakes install`):
+
+```bash
+npx @chimeranext/better-toolkits setup
+```
+
+Protocol SSOT: [`shared/bootstrap/references/toolkits-initial-setup/protocol.md`](shared/bootstrap/references/toolkits-initial-setup/protocol.md) — detect → audit → propose → **HITL ask** → install → verify.
+
 ## Multi-harness SSOT
 
 One protocol markdown contract (`references/` + thin entries). One stderr detector. N harness wire-ups — Claude Code, Cursor, OpenCode2, Antigravity, and friends. Not a Cursor-vs-Claude dichotomy.
 
 - Contract: [`docs/multi-harness-ssot.md`](docs/multi-harness-ssot.md)
-- OpenSpec: [`openspec/changes/2026-08-20-multi-harness-ssot/`](openspec/changes/2026-08-20-multi-harness-ssot/)
+- OpenSpec / OPSX: [`openspec/`](openspec/) — `/opsx-propose`, `/opsx-apply`, … ([OPSX docs](https://github.com/Fission-AI/OpenSpec/blob/main/docs/opsx.md))
+- Example change: [`openspec/changes/2026-08-20-multi-harness-ssot/`](openspec/changes/2026-08-20-multi-harness-ssot/)
+- Bootstrap OpenSpec: [`openspec/changes/2026-09-16-shared-bootstrap-toolkits-initial-setup/`](openspec/changes/2026-09-16-shared-bootstrap-toolkits-initial-setup/)
 - Public doctrine: [toolkits.chimeranext.dev/doctrine](https://toolkits.chimeranext.dev/doctrine/)
 
 ## HITL (repo doctrine)
@@ -105,6 +124,9 @@ installs as `app-gtm-release`, and `make-no-mistakes-toolkit` installs as `make-
 The authoritative list of installable names lives in
 [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json). Landing + doctrine:
 **https://toolkits.chimeranext.dev** (GitHub Pages + custom domain; see [`apps/web/README.md`](apps/web/README.md)).
+
+Discovery / Build with Claude listing prep (external marketplace — not vendoring into
+their `plugins/` tree): [`docs/buildwithclaude-marketplace.md`](docs/buildwithclaude-marketplace.md).
 
 ## Toolkits
 
@@ -342,7 +364,7 @@ BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENS
 toolkits/<name>/
   .claude-plugin/plugin.json   # per-toolkit plugin identity + version
 apps/web/             # Landing + /doctrine (toolkits.chimeranext.dev via GitHub Pages)
-docs/                 # Monorepo contracts (multi-harness-ssot.md, …)
+docs/                 # Monorepo contracts (multi-harness-ssot.md, buildwithclaude-marketplace.md, …)
 ```
 
 ## Why one monorepo?
