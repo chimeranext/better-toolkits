@@ -12,11 +12,11 @@ in a client repo. Emit prioritized findings and **incremental** remediation
 
 | Practice | SSOT |
 | --- | --- |
-| DSMS / IFS / CPS | [engineering-standards/dsms-ifs-cps.md](../engineering-standards/dsms-ifs-cps.md) |
-| PRDS | [engineering-standards/prds.md](../engineering-standards/prds.md) |
-| BrS | [engineering-standards/branching-strategy.md](../engineering-standards/branching-strategy.md) |
-| QT4L | [engineering-standards/qa-traceability-four-layers.md](../engineering-standards/qa-traceability-four-layers.md) |
-| Index | [engineering-standards/README.md](../engineering-standards/README.md) |
+| DSMS / IFS / CPS | [engineering-standards/dsms-ifs-cps.md](../../../../shared/references/engineering-standards/dsms-ifs-cps.md) |
+| PRDS | [engineering-standards/prds.md](../../../../shared/references/engineering-standards/prds.md) |
+| BrS | [engineering-standards/branching-strategy.md](../../../../shared/references/engineering-standards/branching-strategy.md) |
+| QT4L | [engineering-standards/qa-traceability-four-layers.md](../../../../shared/references/engineering-standards/qa-traceability-four-layers.md) |
+| Index | [engineering-standards/README.md](../../../../shared/references/engineering-standards/README.md) |
 
 ## Focus areas (`--focus`)
 

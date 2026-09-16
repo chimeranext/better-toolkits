@@ -52,4 +52,4 @@ Workshop **pages** (Storybook-only flows with hardcoded data) validate UX. They 
 ## Related
 
 - [Semantic UI locator policy](./semantic-ui-locator-policy.md)
-- [QA traceability — four layers](../../fractional-cto-toolkit/references/engineering-standards/qa-traceability-four-layers.md)
+- [QA traceability — four layers](../../../../shared/references/engineering-standards/qa-traceability-four-layers.md)

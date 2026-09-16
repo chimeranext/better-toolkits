@@ -1,6 +1,6 @@
 # PRDS runtime hooks (multi-harness)
 
-Enforce [Pull Request Description Standards](../../../toolkits/fractional-cto-toolkit/references/engineering-standards/prds.md)
+Enforce [Pull Request Description Standards](../../../../shared/references/engineering-standards/prds.md)
 on agent shell tools that push or write PR bodies.
 
 | Piece | Role |
