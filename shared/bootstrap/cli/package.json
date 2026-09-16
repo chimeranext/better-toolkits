@@ -1,0 +1,21 @@
+{
+  "name": "@chimeranext/better-toolkits",
+  "version": "0.1.0",
+  "description": "CLI bootstrap for the better-toolkits monorepo — setup, doctor, marketplace wiring for OpenCode and headless flows.",
+  "bin": {
+    "better-toolkits": "bin/better-toolkits.js"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "license": "BSL-1.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chimeranext/better-toolkits.git",
+    "directory": "shared/bootstrap/cli"
+  },
+  "files": [
+    "bin"
+  ]
+}

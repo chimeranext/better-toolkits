@@ -50,7 +50,7 @@ Do not end with “run these `gh pr merge` yourself.” Do not invent `--execute
 | Harness | How to ask |
 |---------|------------|
 | Claude Code | `AskUserQuestion` |
-| Cursor | equivalent in the main conversation: numbered options + wait for an explicit reply (never treat silence as yes) |
+| Cursor | **`AskQuestion`** (fixed-choice); if unavailable: numbered options in the main conversation + wait for an explicit reply (never treat silence as yes) |
 | Background sub-agent | do **not** ask; emit `pause` JSON with `gate: "merge-advisor-queue"` and halt — orchestrator asks and relays |
 
 Minimum question after the plan:

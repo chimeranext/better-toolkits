@@ -1,6 +1,6 @@
 # make-no-mistakes
 
-**Version: 1.35.0** · [CHANGELOG](./CHANGELOG.md) · [Marketplace](https://github.com/chimeranext/make-no-mistakes-toolkit)
+**Version: 1.37.0** · [CHANGELOG](./CHANGELOG.md) · [Marketplace](https://github.com/chimeranext/make-no-mistakes-toolkit)
 
 The disciplined dev lifecycle — implement issues, review PRs, sync releases, test E2E, and manage sessions. One plugin to make no mistakes.
 
@@ -25,6 +25,16 @@ claude plugin install make-no-mistakes
 ```
 
 ## Install (OpenCode)
+
+**Deprecated** — use monorepo bootstrap instead:
+
+```bash
+npx @chimeranext/better-toolkits setup
+```
+
+Or install `better-toolkits-bootstrap@better-toolkits` and run `/toolkits-initial-setup`.
+
+Legacy (single-toolkit, personal scope — do not use for new setups):
 
 ```bash
 npx @lapc506/make-no-mistakes install
@@ -100,6 +110,7 @@ Deliberate actions you invoke explicitly.
 | [`/make-no-mistakes:linear-projects-setup`](commands/linear-projects-setup.md) | Bootstrap Linear workspace with full label taxonomy, projects, and integrations |
 | [`/make-no-mistakes:e2e-test-builder <source>`](commands/e2e-test-builder.md) | Generate a TestSprite-compatible `test-suite.json` from docs or PRDs |
 | [`/make-no-mistakes:e2e-test-runner [filter]`](commands/e2e-test-runner.md) | Execute E2E tests from `test-suite.json` with runner selection and reporting |
+| [`/make-no-mistakes:bug-squash-locally [domain]`](commands/bug-squash-locally.md) | HITL QA on **localhost only** — headed Chrome DevTools MCP + [semantic UI locators](references/bug-squash/semantic-ui-locator-policy.md); full multi-env `/bug-squash` ships with OpenSpec `2026-09-09-generalize-bug-squash` |
 | [`/make-no-mistakes:pentest-runner <phase>`](commands/pentest-runner.md) | Automated pentesting following Cyber Kill Chain + OWASP methodology |
 | [`/make-no-mistakes:pentest-playbook-setup [audit\|sync\|workflows\|gaps]`](commands/pentest-playbook-setup.md) | Audit/sync pentest playbook ↔ CI ↔ tenant triage config (setup step; pairs with pentest-runner + triage-security-findings) |
 | [`/make-no-mistakes:triage-security-findings <scanner\|phase2\|pentest-report>`](commands/triage-security-findings.md) | Triage CI + pentest findings into owned backlog issues (tenant config e.g. `linear-setup.json` → `securityFindingTriage`) |
@@ -114,7 +125,8 @@ Deliberate actions you invoke explicitly.
 | [`/make-no-mistakes:takeover-pr <repo> [pr#]`](commands/takeover-pr.md) | Pick a random open PR from a teammate, check it out, review it, and take over the work |
 | [`/make-no-mistakes:ready-to-review-mergeable <ISSUE-123 ...> [--confidence 4.0]`](commands/ready-to-review-mergeable.md) | Drive tracker issues to **bot-approved, mergeable** PRs via `/implement` + a confidence-gated reviewer loop (Stop-hook enforced), or with no issue IDs leave the current branch PR-ready — Diátaxis `status: review`, fix CI, push; **never merge** |
 | [`/make-no-mistakes:hygiene-hooks-setup [audit|install|verify]`](commands/hygiene-hooks-setup.md) | Audit, install, and verify tracker/PR hygiene hooks — detects orphaned hook configs (scripts on disk, empty `hooks` field), enables the opt-in Linear create-hygiene gate (full triage or exit 2), and proves each hook with a synthetic-payload suite |
-| [`/make-no-mistakes:opencode-setup [audit|install|verify]`](commands/opencode-setup.md) | Register better-toolkits OpenCode plugins — **one** stderr baseline adapter in `"plugin"` (+ optional `--also-npm`). Does **not** port Claude `hooks.json` |
+| [`/make-no-mistakes:opencode-setup [audit|install|verify]`](commands/opencode-setup.md) | Register better-toolkits OpenCode plugins — **one** stderr baseline adapter in `"plugins"` (+ optional `--also-npm`). Does **not** port Claude `hooks.json` |
+| [`/make-no-mistakes:evaluate-agent-skills [scan\|quality\|validate\|full] <path>`](commands/evaluate-agent-skills.md) | NVIDIA SkillSpector + SkillEvaluator — security/quality gate for `SKILL.md` packages before install/publish (peer CLIs; not vendored) |
 | [`/make-no-mistakes:repo-hygiene [audit|policy|prune-remote|all]`](commands/repo-hygiene.md) | Audit/prune merged-PR branches, enable `delete_branch_on_merge`, optional local prune — CLI + scheduled GitHub Action with auditable logs |
 | [`/make-no-mistakes:secret-input`](commands/secret-input.md) | Stage a secret/password via OS-native GUI dialog (Linux zenity/kdialog/pinentry, macOS osascript, Windows Get-Credential). The value never appears in the conversation log or terminal history. Cross-platform via `.sh` (Linux/macOS/WSL/Git Bash) + `.ps1` (native Windows) |
 | [`/make-no-mistakes:secret-use ENVVAR -- <cmd>`](commands/secret-use.md) | Run one command with the staged secret loaded as an environment variable. Env var lives only inside the consuming process and is unset on completion |

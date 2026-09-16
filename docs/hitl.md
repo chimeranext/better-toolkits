@@ -17,8 +17,8 @@ Local autonomous work (edit files, run tests, draft OpenSpec, measure merge orde
 | Harness | Surface |
 |---------|---------|
 | Claude Code | `AskUserQuestion` |
-| Cursor | Equivalent in the **main** conversation: numbered options + wait for an **explicit** reply (never treat silence as yes) |
-| Background sub-agent | Do **not** ask the user. Emit a structured `pause` signal; the orchestrator asks and relays |
+| Cursor | **`AskQuestion`** (structured fixed-choice). If unavailable: numbered options in the **main** conversation + wait for an **explicit** reply (never treat silence as yes) |
+| Background sub-agent | Do **not** ask the user. Emit a structured `pause` signal; the orchestrator asks (`AskUserQuestion` / `AskQuestion`) and relays |
 
 Same pattern as make-no-mistakes [`references/implement/hitl-boundaries.md`](../toolkits/make-no-mistakes-toolkit/references/implement/hitl-boundaries.md) — that file is an implementation of this doctrine for `/implement`, not the doctrine’s only home.
 
