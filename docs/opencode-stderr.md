@@ -30,9 +30,9 @@ That flow merges **one** absolute path to `opencode-plugin.ts` into the OpenCode
 
 ## Manual registration
 
-In `~/.config/opencode/opencode.jsonc` (or project config):
+In `~/.config/opencode/opencode.json` (or project config):
 
-```jsonc
+```json
 {
   "plugins": [
     "/absolute/path/to/better-toolkits/shared/hooks/stderr/adapters/opencode-plugin.ts"
@@ -42,7 +42,43 @@ In `~/.config/opencode/opencode.jsonc` (or project config):
 
 Or any single toolkit copy under `toolkits/<name>/hooks/stderr/adapters/opencode-plugin.ts`.
 
+> v1 key `"plugin"` (singular) is ignored by opencode v2 — entries under it
+> silently do nothing. Verified on opencode v2.0.4.
+
+Or from a clone of this monorepo:
+
+```bash
+# Shared baseline only (same plugin id in every toolkit adapter)
+node -e '
+const path=require("path");
+const plugin=path.resolve("shared/hooks/stderr/adapters/opencode-plugin.ts");
+// Merge manually if the config has comments; otherwise:
+console.log("Add to plugins array:\n  "+JSON.stringify(plugin));
+'
+```
+
 Disable: `"plugins": ["-local.mnm-no-stderr-redirect"]` or `MNM_DISABLE_STDERR_HOOK=1`.
+
+## Register toolkit skills (or commands stay invisible)
+
+The stderr adapters only register the hook — they never expose toolkit
+commands. Opencode v2 discovers skills in `toolkits/*/skills/` via explicit
+`skills` config entries (alternatively: drop/symlink them into an
+auto-discovery dir — `~/.config/opencode/skills`, `~/.claude/skills`,
+`~/.agents/skills`, project `.opencode/skills`). Without either,
+`/toolkits-initial-setup` completes but opencode2 sees zero monorepo
+commands. Add one entry per installed toolkit:
+
+```jsonc
+{
+  "skills": [
+    "/absolute/path/to/better-toolkits/toolkits/make-no-mistakes-toolkit/skills"
+  ]
+}
+```
+
+Verify: restart (`opencode2 service restart`) — new sessions advertise the
+skills (e.g. `implement`, `sync-advisor`).
 
 ## Toolkits with npm OpenCode CLI
 

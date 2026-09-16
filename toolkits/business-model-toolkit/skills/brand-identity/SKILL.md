@@ -50,7 +50,7 @@ y autores (Esch, Haeusel, Limbic) se mantienen en su idioma original.
 
 Este skill produce la **estrategia** de identidad (que siente y como suena la marca), no los
 assets visuales finales. El sistema visual concreto (tipografia, escala, color, motion, bento)
-vive en `aaarrr-flywheel-toolkit/references/visual-language.md`. Este skill define QUE debe
+vive en `shared/references/landing/visual-language.md`. Este skill define QUE debe
 comunicar ese sistema; ese reference define COMO se implementa en codigo.
 
 ## Regla de personalizacion
@@ -255,7 +255,7 @@ Un one-pager accionable, no un brandbook de 80 paginas. Incluye:
 - **Do / Don't de voz** (de TV-2, ampliado a 5-6 pares).
 - **Palabras que usamos / evitamos** (lexico on-brand del mapa limbico).
 - **Direccion visual (mood)** del Cuadrante 4 -- con handoff explicito a
-  `aaarrr-flywheel-toolkit/references/visual-language.md` para la implementacion en codigo
+  `shared/references/landing/visual-language.md` para la implementacion en codigo
   (tipografia, color, motion, bento). Este skill NO define hex codes ni fuentes; los describe
   como intencion y delega la especificacion tecnica.
 

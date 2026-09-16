@@ -58,7 +58,7 @@ Secciones (orden canónico):
 
 Cada archivo generado lleva a continuación el **conjunto mínimo de buenas prácticas de
 ingeniería** del cliente (los 4 best practices; ver
-[`engineering-standards/README.md`](../engineering-standards/README.md)):
+[`engineering-standards/README.md`](../../../../shared/references/engineering-standards/README.md)):
 DSMS, IFS, CPS y PRDS — adoptables desde el inicio, sin refactor legacy.
 
 ## Regla de idioma
@@ -172,6 +172,6 @@ archivos. Siguiente acción (paso 5).
 | --- | --- |
 | [`srs-bare-template.md`](srs-bare-template.md) | Template en blanco (vendido de jam01, CC0) |
 | [`openspec-quick-guide.md`](openspec-quick-guide.md) | Flujo `/opsx-*` + derivación PRD→OpenSpec |
-| [`engineering-standards/README.md`](../engineering-standards/README.md) | Los 4 best practices del cliente (DSMS, IFS, CPS, PRDS) |
+| [`engineering-standards/README.md`](../../../../shared/references/engineering-standards/README.md) | Los 4 best practices del cliente (DSMS, IFS, CPS, PRDS) |
 | `jam01/SRS-Template` | Repo upstream del template (CC0) |
 | `Fission-AI/OpenSpec` | Framework OpenSpec (docs/getting-started.md) |

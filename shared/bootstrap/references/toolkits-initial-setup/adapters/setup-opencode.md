@@ -67,22 +67,28 @@ Prefer, in order:
 copies already in `"plugins"`, warn; install may leave them (safe) or ask HITL
 before collapsing to the preferred path.
 
-## `opencode.jsonc` merge
+## `opencode.json(c)` merge
 
-Propose append to the **`plugins`** array for **each** selected toolkit's OpenCode adapter path(s).
+Propose append to the **`plugins`** array with the **shared** stderr baseline
+(one path — never one adapter per toolkit, same plugin id), plus one **`skills`**
+entry per selected toolkit (adapters only register the stderr hook; without
+`skills` entries opencode2 sees zero monorepo commands).
 Use absolute paths. Idempotent: do not duplicate entries.
 
-Stderr (required baseline):
+Stderr (required baseline) + toolkit skills:
 
 ```jsonc
 {
   "plugins": [
     "/absolute/path/to/better-toolkits/shared/hooks/stderr/adapters/opencode-plugin.ts"
+  ],
+  "skills": [
+    "/absolute/path/to/better-toolkits/toolkits/<toolkit>/skills"
   ]
 }
 ```
 
-Per-toolkit packages may add their own `plugins` entries — merge all requested toolkits in one
+Per-toolkit **npm** packages may add their own `plugins` entries — merge all requested toolkits in one
 proposal; user approves the combined diff.
 
 ### Config file resolution
@@ -118,6 +124,7 @@ Report a table:
 | Stderr adapter present | yes / no (+ path) |
 | Duplicate stderr paths | none / list |
 | Legacy key `"plugin"` (singular) | warn if present — migrate to `"plugins"` |
+| `skills` entries (one per installed toolkit) | list / missing → commands invisible |
 | npm packages registered | which of the four |
 | Claude hooks.json in repo | note: not loaded by OpenCode |
 
@@ -144,7 +151,9 @@ npx @chimeranext/better-toolkits doctor
 ```
 
 Confirm stderr plugin path exists and OpenCode loads without duplicate
-`-local.mnm-no-stderr-redirect` unless user opted out.
+`-local.mnm-no-stderr-redirect` unless user opted out. After `opencode2 service
+restart`, confirm a new session advertises toolkit skills (e.g. `implement`) —
+if none appear, the `skills` array is missing or mispointed.
 
 ## Marketplace parity
 
