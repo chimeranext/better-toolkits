@@ -1,5 +1,5 @@
 {
-  "description": "fractional-cto-toolkit \u2014 includes stderr preserve baseline (see hooks/stderr/README.md).",
+  "description": "fractional-cto-toolkit — stderr preserve + PRDS pre-push / gh pr body gate (see hooks/stderr/README.md, hooks/prds/README.md).",
   "hooks": {
     "PreToolUse": [
       {
@@ -9,6 +9,11 @@
             "type": "command",
             "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/stderr/adapters/claude-pre-bash.sh",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/prds/adapters/claude-pre-bash.sh",
+            "timeout": 10
           }
         ]
       }

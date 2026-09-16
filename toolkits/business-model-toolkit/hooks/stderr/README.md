@@ -22,7 +22,7 @@ Shared detector: [`detect.py`](detect.py).
 |---------|---------|---------|
 | **Claude Code** | `adapters/claude-pre-bash.sh` | Wired in plugin `hooks/hooks.json` when make-no-mistakes is installed |
 | **Cursor** | `adapters/cursor-before-shell.sh` | Copy to `.cursor/hooks/` and register `beforeShellExecution` in `.cursor/hooks.json` (or user hooks) |
-| **OpenCode V2** | `adapters/opencode-plugin.ts` | `"plugins": ["…/hooks/stderr/adapters/opencode-plugin.ts"]` |
+| **OpenCode V2** | `adapters/opencode-plugin.ts` | `"plugins": ["…/hooks/stderr/adapters/opencode-plugin.ts"]` — besides blocking stderr, the plugin registers the hosting toolkit's `skills/` + `references/`, so OpenCode2 sessions get the toolkit's SKILL.md files and local references directly |
 | **Codex / Antigravity / Kiro / Grok CLI** | CLI | `python3 detect.py --command '…'` in your harness pre-exec hook (docs-first v1) |
 
 ### Cursor example `.cursor/hooks.json`
