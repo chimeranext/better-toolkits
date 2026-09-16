@@ -1,0 +1,22 @@
+{
+  "name": "better-toolkits-bootstrap",
+  "version": "0.1.0",
+  "description": "Bootstrap layer for the better-toolkits marketplace — install first, then run /toolkits-initial-setup to wire harnesses and product toolkits with HITL consent.",
+  "author": {
+    "name": "Luis Andres Pena Castillo",
+    "url": "https://github.com/lapc506"
+  },
+  "homepage": "https://github.com/chimeranext/better-toolkits",
+  "repository": "https://github.com/chimeranext/better-toolkits",
+  "license": "BSL-1.1",
+  "keywords": [
+    "claude-code",
+    "claude-code-plugin",
+    "cursor",
+    "opencode",
+    "bootstrap",
+    "marketplace",
+    "multi-harness",
+    "stderr"
+  ]
+}
