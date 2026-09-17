@@ -120,6 +120,10 @@ For each SRD task (or group of related tasks):
    ```bash
    openspec new change "{kebab-case-name}"
    ```
+   Folder name must embed the primary tracker id (`YYYY-MM-DD-{TEAM}-{N}-{slug}` when the
+   client uses that convention). **OST:** one issue → one folder → **one store PR → one
+   merge** on the store default branch — never bundle another issue's folder into a
+   sibling store PR ([openspec-store-pr-traceability.md](../../../../shared/references/engineering-standards/openspec-store-pr-traceability.md)).
 
 2. **Generate proposal.md** with:
    - Human Layer (user story, background, analogy, UX reference, pitfalls)
