@@ -1,19 +1,28 @@
 /**
  * OpenCode plugin — enforce PRDS on `git push` / `gh pr create|edit` shell tools.
  *
- * Registers via opencode.json `"plugin"` array (absolute path) or copy under
- * `.opencode/plugins/`. Spawns shared detect.py (no duplicated section logic).
+ * Install as a directory copy under the global discovery dir:
+ * `<config-dir>/plugins/<id>/` containing `index.ts` (this file, renamed)
+ * plus `detect.py` (copied from `shared/hooks/prds/`). The adapter resolves
+ * `detect.py` next to itself and spawns it (no duplicated section logic).
+ * Do NOT register the file in the `"plugins"` array (rejected with
+ * "configured plugin path must be a directory" on v2.0.5) and do NOT
+ * symlink (the loader follows realpath for resolution).
+ *
+ * Zero-dependency by design: no bare npm imports (the server-side plugin
+ * loader, observed v2.0.5, does not resolve them for local plugins).
+ * `Plugin.define()` from `@opencode-ai/plugin` is an identity function
+ * (verified 1.18.31), so a plain default export is equivalent.
  *
  * Disable: FCTO_DISABLE_PRDS_HOOK=1 or remove/negate this plugin entry.
- * Docs: https://opencode.ai/docs/plugins/
+ * Docs: https://opencode.ai/v2/docs/build/plugins
  */
-import { Plugin } from "@opencode-ai/plugin"
 import { spawnSync } from "node:child_process"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const DETECT = join(__dirname, "..", "detect.py")
+const DETECT = join(__dirname, "detect.py")
 
 function isShellTool(name: string | undefined): boolean {
   if (!name) return false
@@ -33,7 +42,7 @@ function denyReason(command: string, cwd: string): string | null {
   return (proc.stderr || proc.stdout || "PRDS policy blocked this command").trim()
 }
 
-export default Plugin.define({
+export default {
   id: "local.fcto-prds-prepush",
   setup: async (ctx) => {
     await ctx.tool.hook("execute.before", (event) => {
@@ -49,4 +58,4 @@ export default Plugin.define({
       if (msg) throw new Error(msg)
     })
   },
-})
+}
