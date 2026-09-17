@@ -124,7 +124,8 @@ Report a table:
 | Stderr adapter present | yes / no (+ path) |
 | Duplicate stderr paths | none / list |
 | Legacy key `"plugin"` (singular) | warn if present — migrate to `"plugins"` |
-| `skills` entries (one per installed toolkit) | list / missing → commands invisible |
+| `skills` entries (one per installed toolkit) | list / missing → agent cannot auto-invoke toolkit skills (note: skills do NOT appear in `/` autocomplete — see `commands/` row) |
+| `commands/` autocomplete wiring | `~/.config/opencode/commands/<plugin>/<cmd>.md` symlinks present? missing → nothing in `/` suggestions despite skills loading; fix with `shared/bootstrap/scripts/setup-opencode-commands.sh` |
 | npm packages registered | which of the four |
 | Claude hooks.json in repo | note: not loaded by OpenCode |
 
@@ -133,16 +134,31 @@ Report a table:
 1. If `--project`: **HITL** — ask before writing shared `opencode.json(c)`.
 2. Resolve adapter path; fail if missing on disk.
 3. `addPluginToConfig` (or `--dry-run`).
-4. If `--also-npm`: for each package, run `npx --yes <pkg> install` with matching
+4. Wire slash commands for autocomplete (skills alone never surface in `/`
+   suggestions — OpenCode only discovers Markdown under `commands/` dirs):
+
+   ```bash
+   shared/bootstrap/scripts/setup-opencode-commands.sh        # link all
+   shared/bootstrap/scripts/setup-opencode-commands.sh --dry-run  # preview
+   ```
+
+   Idempotent; names follow install names in `.claude-plugin/marketplace.json`
+   (e.g. `/make-no-mistakes/implement`). Skills-only toolkits
+   (e.g. `venture-studio-toolkit`) contribute no commands — expected.
+5. If `--also-npm`: for each package, run `npx --yes <pkg> install` with matching
    `--config-dir` / `--dry-run` / force policy consistent with existing CLIs.
    Do not claim stderr is covered by npm install alone.
 
 ## Phase 3 — Verify
 
 1. Config still parses; stderr path still listed and `test -e` succeeds.
-2. Optional: `python3 <adapter-dir>/../detect.py --command 'echo hi 2>/dev/null'`
+2. `shared/bootstrap/scripts/setup-opencode-commands.sh --check` → `CHECK OK`
+   (exit 0 = every expected symlink resolves; orphans pruned on next run).
+3. Optional: `python3 <adapter-dir>/../detect.py --command 'echo hi 2>/dev/null'`
    → expect exit **2** (blocked). Allowed example: `… 2>&1 | tee /tmp/opencode-setup.log`.
-3. Tell the user to **restart OpenCode** so plugins reload.
+4. Tell the user to **restart OpenCode** so plugins reload. No restart needed
+   for `commands/` — OpenCode reloads command files automatically; type
+   `/<plugin>/` (e.g. `/make-no-mistakes/`) in the TUI to confirm suggestions.
 4. Opt-out reminder: `"plugins": ["-local.mnm-no-stderr-redirect"]` or
    `MNM_DISABLE_STDERR_HOOK=1`.
 
