@@ -42,13 +42,26 @@ jobs:
       - name: Scan all skills (static + optional LLM)
         env:
           SKILLSPECTOR_PROVIDER: openai_compatible
-          SKILLSPECTOR_COMPAT_BASE_URL: https://openrouter.ai/api/v1
-          SKILLSPECTOR_COMPAT_API_KEY: ${{ secrets.SKILLSPECTOR_COMPAT_API_KEY }}
-          SKILLSPECTOR_MODEL: ${{ vars.SKILLSPECTOR_MODEL || 'google/gemma-4-31b-it:free' }}
+          ZEN_KEY: ${{ secrets.SKILLSPECTOR_ZEN_API_KEY }}
+          OR_KEY: ${{ secrets.SKILLSPECTOR_COMPAT_API_KEY }}
+          BASE_URL_VAR: ${{ vars.SKILLSPECTOR_BASE_URL }}
+          MODEL_VAR: ${{ vars.SKILLSPECTOR_MODEL }}
         run: |
-          ARGS="--no-llm"
-          if [ -n "$SKILLSPECTOR_COMPAT_API_KEY" ]; then
+          # Provider priority: Zen (free chat/completions models) > OpenRouter free > static-only.
+          # See scripts/free-models.json (lastFetched) for the model inventory.
+          export SKILLSPECTOR_COMPAT_BASE_URL="$BASE_URL_VAR"
+          if [ -n "$ZEN_KEY" ]; then
+            export SKILLSPECTOR_COMPAT_API_KEY="$ZEN_KEY"
+            [ -z "$SKILLSPECTOR_COMPAT_BASE_URL" ] && export SKILLSPECTOR_COMPAT_BASE_URL="https://opencode.ai/zen/v1"
+            export SKILLSPECTOR_MODEL="${MODEL_VAR:-big-pickle}"
             ARGS=""
+          elif [ -n "$OR_KEY" ]; then
+            export SKILLSPECTOR_COMPAT_API_KEY="$OR_KEY"
+            [ -z "$SKILLSPECTOR_COMPAT_BASE_URL" ] && export SKILLSPECTOR_COMPAT_BASE_URL="https://openrouter.ai/api/v1"
+            export SKILLSPECTOR_MODEL="${MODEL_VAR:-google/gemma-4-31b-it:free}"
+            ARGS=""
+          else
+            ARGS="--no-llm"
           fi
           # shellcheck disable=SC2086
           python3 scripts/skillspector-gate.py $ARGS
