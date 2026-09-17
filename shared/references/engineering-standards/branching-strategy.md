@@ -1,9 +1,9 @@
 # Branching Strategy — por tipo de repo
 
-> Adaptable desde el día uno. Nace de la práctica adoptada en
-> `docs/branching.md` (HabitaNexus) y del estándar `branching-strategy.md`
-> (Seacrets.Online). Define ramas, nombres y protección por **tipo de
-> repositorio**; NO es un framework que exija una sola topología.
+> Adaptable desde el día uno. Field-hardened across multi-repo SaaS deliveries
+> (infra/GitOps trunk-based vs application feature branches). Define ramas,
+> nombres y protección por **tipo de repositorio**; NO es un framework que exija
+> una sola topología.
 
 ## Principios generales
 
