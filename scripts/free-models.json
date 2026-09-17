@@ -1,0 +1,148 @@
+{
+ "lastFetched": "2026-09-16",
+ "providers": [
+  {
+   "id": "openrouter",
+   "baseUrl": "https://openrouter.ai/api/v1",
+   "api": "chat/completions (native)",
+   "auth": "SKILLSPECTOR_COMPAT_API_KEY (free key, $0)",
+   "notes": "Shared free pool 429s under load; :free slugs churn (re-fetch). Small models may fail skillspector structured-output schema.",
+   "models": [
+    {
+     "id": "inclusionai/ling-3.0-flash-vl:free",
+     "context": 262144
+    },
+    {
+     "id": "nex-agi/nex-n2.5-mini:free",
+     "context": 262144
+    },
+    {
+     "id": "nex-agi/nex-n2.5-pro:free",
+     "context": 262144
+    },
+    {
+     "id": "inclusionai/ling-3.0-flash-sante:free",
+     "context": 262144
+    },
+    {
+     "id": "inclusionai/ling-3.0-flash-fin:free",
+     "context": 262144
+    },
+    {
+     "id": "dots-studio/dots-3-note-preview:free",
+     "context": 512000
+    },
+    {
+     "id": "liquid/lfm-2.5-2.6b:free",
+     "context": 65536
+    },
+    {
+     "id": "nvidia/nemotron-3.5-lightning:free",
+     "context": 1000000
+    },
+    {
+     "id": "thinkingmachines/inkling-small:free",
+     "context": 1048576
+    },
+    {
+     "id": "poolside/laguna-s-2.1:free",
+     "context": 262144
+    },
+    {
+     "id": "thinkingmachines/inkling:free",
+     "context": 1048576
+    },
+    {
+     "id": "poolside/laguna-xs-2.1:free",
+     "context": 262144
+    },
+    {
+     "id": "cohere/north-mini-code:free",
+     "context": 256000
+    },
+    {
+     "id": "z-ai/glm-5.2:free",
+     "context": 32768
+    },
+    {
+     "id": "nvidia/nemotron-3.5-content-safety:free",
+     "context": 128000
+    },
+    {
+     "id": "nvidia/nemotron-3-ultra-550b-a55b:free",
+     "context": 1000000
+    },
+    {
+     "id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+     "context": 256000
+    },
+    {
+     "id": "google/gemma-4-26b-a4b-it:free",
+     "context": 262144
+    },
+    {
+     "id": "google/gemma-4-31b-it:free",
+     "context": 262144
+    },
+    {
+     "id": "nvidia/nemotron-3-super-120b-a12b:free",
+     "context": 262144
+    }
+   ]
+  },
+  {
+   "id": "opencode-zen",
+   "baseUrl": "https://opencode.ai/zen/v1",
+   "api": "chat/completions for listed models (muse-spark contributor is responses-only: incompatible)",
+   "auth": "SKILLSPECTOR_ZEN_API_KEY from opencode.ai/auth (billing required even for $0 models). Local auth.json credential returns 403 \u2014 verified 2026-09-16.",
+   "notes": "Free models time-limited; trial/data terms per model (contributor trains on prompts).",
+   "models": [
+    {
+     "id": "big-pickle"
+    },
+    {
+     "id": "mimo-v2.5-free"
+    },
+    {
+     "id": "ling-3.0-flash-fin-free"
+    },
+    {
+     "id": "nemotron-3-ultra-free"
+    },
+    {
+     "id": "nemotron-3.5-lightning-free"
+    }
+   ]
+  },
+  {
+   "id": "ollama",
+   "baseUrl": "http://127.0.0.1:11434/v1",
+   "api": "chat/completions (local, no key, $0)",
+   "auth": "none",
+   "notes": "No models installed locally as of 2026-09-16 (ollama list empty). Pull e.g. llama3.1:8b to enable.",
+   "models": []
+  }
+ ],
+ "verified": [
+  {
+   "model": "qwen/qwen3-235b-a22b:free",
+   "result": "404 retired from free",
+   "date": "2026-09-16"
+  },
+  {
+   "model": "z-ai/glm-5.2:free",
+   "result": "reachable but 32k context < skillspector batch need",
+   "date": "2026-09-16"
+  },
+  {
+   "model": "google/gemma-4-31b-it:free",
+   "result": "works, 429s under shared-pool load",
+   "date": "2026-09-16"
+  },
+  {
+   "model": "cohere/north-mini-code:free",
+   "result": "responds but fails structured-output schema",
+   "date": "2026-09-16"
+  }
+ ]
+}
