@@ -29,4 +29,6 @@ Run this BEFORE Phase 1 (Setup). If `linear-setup.json` has `openspec.changesPat
 
 5. **If `openspec.changesPath` is not configured** in `linear-setup.json`: skip this phase entirely. The project hasn't adopted OpenSpec yet.
 
+6. **Store PR 1:1 (when the change lives in a dedicated OpenSpec store repo):** one primary tracker issue → one change folder → **one store PR → one merge** on the store default branch. Never bundle another issue's folder into a sibling store PR; never close a store PR without merge while the folder is still off default branch. SSOT: [openspec-store-pr-traceability.md](../../../../shared/references/engineering-standards/openspec-store-pr-traceability.md) (**OST**).
+
 **Why mandatory**: per the adoption decision (Slack 2026-03-30, channel C0AE5MKAX7B), OpenSpec is the durable persistence of design decisions. A skill that makes it optional re-introduces the failure mode it was adopted to prevent — implementations diverging from intent because nobody wrote the intent down.

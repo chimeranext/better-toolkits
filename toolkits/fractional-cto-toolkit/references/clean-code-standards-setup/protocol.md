@@ -17,6 +17,7 @@ references — never duplicating full protocol text in the client repo.
 | PRDS | [engineering-standards/prds.md](../../../../shared/references/engineering-standards/prds.md) |
 | BrS | [engineering-standards/branching-strategy.md](../../../../shared/references/engineering-standards/branching-strategy.md) |
 | QT4L | [engineering-standards/qa-traceability-four-layers.md](../../../../shared/references/engineering-standards/qa-traceability-four-layers.md) |
+| OST | [engineering-standards/openspec-store-pr-traceability.md](../../../../shared/references/engineering-standards/openspec-store-pr-traceability.md) |
 
 ## Default outputs (in target `<repo>/`)
 
@@ -24,6 +25,7 @@ references — never duplicating full protocol text in the client repo.
 - `docs/process/engineering-standards.md` — local index (table of 6 practices + adoption order) linking to toolkit SSOT paths or vendored copies.
 - `.github/PULL_REQUEST_TEMPLATE.md` — PRDS template ([prds.md](../../../../shared/references/engineering-standards/prds.md)).
 - `docs/process/qa-traceability.md` — QT4L mini-guide: when the `tasks.md` section is mandatory + scenario → verification table stub.
+- When the client uses an OpenSpec **store** repo: add OST pointer + 1:1 table stub linking `TICKET-N` → change folder → store PR ([openspec-store-pr-traceability.md](../../../../shared/references/engineering-standards/openspec-store-pr-traceability.md)).
 
 Optional with `--branching`: `docs/process/branching.md` from BrS.
 
