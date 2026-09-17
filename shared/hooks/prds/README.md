@@ -55,17 +55,14 @@ Soft warns (stderr only): PR title shape, diff ≳ 400 lines.
 
 ### OpenCode
 
-`opencode.json` / `opencode.jsonc` ([plugins](https://opencode.ai/docs/plugins/)):
-
-```jsonc
-{
-  "plugin": [
-    "/absolute/path/to/better-toolkits/shared/hooks/prds/adapters/opencode-plugin.ts"
-  ]
-}
-```
-
-Or copy the adapter into `.opencode/plugins/`. Prefer **one** absolute path; restart OpenCode after changes.
+Install as a directory copy under the global discovery dir
+(`~/.config/opencode/plugins/<id>/` with `index.ts` plus `detect.py` side by
+side - the adapter resolves `detect.py` next to itself), or under project
+`.opencode/plugins/` ([plugins](https://opencode.ai/v2/docs/plugins)).
+No `"plugins"` array entry for the file itself (rejected on v2.0.5), no
+symlinks, no npm install: the adapter is dependency-free. Verify with
+`opencode plugin list` (id `local.fcto-prds-prepush` must appear) plus a
+command the gate must reject.
 
 `/toolkits-initial-setup` (OpenCode adapter `setup-opencode.md`) or `npx @chimeranext/better-toolkits setup` can register this
 plugin alongside stderr — until then, add the path manually.
