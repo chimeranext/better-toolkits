@@ -4,10 +4,10 @@ Portable rule for clients that use an **OpenSpec store** (canonical repo or path
 with `openspec/changes/`). Complements [PRDS](prds.md) (one PR per tracker issue)
 and [branching-strategy.md](branching-strategy.md) (branch naming).
 
-**Provenance:** Seacrets remediation after specs PR closed without merge while a
-change folder was bundled into a sibling PR (SCRT-803 / SCRT-671, 2026-09-16).
-Client-specific repo names and URLs belong in the client `AGENTS.md` / docs — not
-here.
+**Provenance:** Field-hardened after a store PR was closed without merge while a
+change folder was bundled into a sibling PR (production incident, 2026-09-16).
+Client-specific repo names, tracker keys, and URLs belong in the client
+`AGENTS.md` / docs — not here.
 
 ---
 
@@ -20,7 +20,7 @@ TICKET-N  →  <changesPath>/YYYY-MM-DD-TICKET-N-{slug}/  →  one store PR  →
 | Layer | Rule |
 | --- | --- |
 | **Tracker** | One **primary** issue `TICKET-N` owns the change |
-| **Change folder** | `YYYY-MM-DD-{TEAM}-{N}-{slug}/` — `{N}` must match that issue (team key uppercase in folder, e.g. `SCRT-803`) |
+| **Change folder** | `YYYY-MM-DD-{TEAM}-{N}-{slug}/` — `{N}` must match that issue (team key uppercase in folder, e.g. `ACME-803`) |
 | **Store repo** | **One PR → one merge commit** on the store default branch (often `main`) **per change folder** |
 | **Satellites** | One PR per child issue in app/docs/infra/etc.; link siblings in the description — **never** copy another issue's change folder |
 
@@ -44,7 +44,7 @@ PR body on the store PR must include `Fixes TICKET-N` (or client-equivalent magi
 ## Required
 
 - Open the store PR as soon as a coherent first cut of the change folder exists ([PRDS draft workflow](prds.md#draft-pr-workflow)).
-- Branch on the store repo: `*/{issue-id-lowercase}-*` (e.g. `feat/scrt-803-agency-bounded-context-scaffold`).
+- Branch on the store repo: `*/{issue-id-lowercase}-*` (e.g. `feat/acme-803-feature-slug`).
 - Merge (or explicitly abandon in the tracker) **before** closing the store PR.
 - Satellite implementation PRs may land on integration branches (`devel`, etc.) **after** or in parallel — but **do not** treat merged app code as a substitute for promoting the decision record on the store default branch.
 
