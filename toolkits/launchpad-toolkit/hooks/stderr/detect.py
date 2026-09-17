@@ -20,17 +20,17 @@ import sys
 
 
 SILENCE = [
-    re.compile(r"2\s*>>?\s*/dev/null"),
-    re.compile(r"&>\s*>?\s*/dev/null"),
-    re.compile(r">&\s*/dev/null"),
+    re.compile(r"(^|[^A-Za-z0-9])2\s*>>?\s*/dev/null\b"),
+    re.compile(r"&>\s*>?\s*/dev/null\b"),
+    re.compile(r">&\s*/dev/null\b"),
 ]
 
 # stdout to null then stderr follows it into null
 ORDERED_BOTH_NULL = re.compile(
-    r"(^|[^0-9&>])1?>>?\s*/dev/null\s+2>&1"
+    r"(^|[^0-9&>])1?>>?\s*/dev/null\b\s+2>&1"
 )
 
-BARE_STDOUT_NULL = re.compile(r"(^|[^0-9&>])1?>>?\s*/dev/null")
+BARE_STDOUT_NULL = re.compile(r"(^|[^0-9&>])1?>>?\s*/dev/null\b")
 ALLOWED_REVERSE = re.compile(r"2>&1\s*1?>>?\s*/dev/null")
 
 BARE_FOLD = re.compile(r"2\s*>&\s*1")

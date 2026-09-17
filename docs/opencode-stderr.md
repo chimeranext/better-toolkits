@@ -25,37 +25,36 @@ npx @chimeranext/better-toolkits setup --project
 Protocol SSOT:
 [`shared/bootstrap/references/toolkits-initial-setup/adapters/setup-opencode.md`](../shared/bootstrap/references/toolkits-initial-setup/adapters/setup-opencode.md).
 
-That flow merges **one** absolute path to `opencode-plugin.ts` into the OpenCode
-**`"plugins"`** array. Do not register every toolkit’s vendored copy (same plugin id).
+That flow copies the dependency-free adapter to the global discovery dir
+`~/.config/opencode/plugins/mnm-no-stderr-redirect/index.ts` (no `"plugins"`
+array entry - file entries are rejected on v2.0.5). Do not install every
+toolkit's vendored copy (same plugin id) - one installed copy only.
 
 ## Manual registration
 
-In `~/.config/opencode/opencode.json` (or project config):
-
-```json
-{
-  "plugins": [
-    "/absolute/path/to/better-toolkits/shared/hooks/stderr/adapters/opencode-plugin.ts"
-  ]
-}
-```
-
-Or any single toolkit copy under `toolkits/<name>/hooks/stderr/adapters/opencode-plugin.ts`.
-
-> v1 key `"plugin"` (singular) is ignored by opencode v2 — entries under it
-> silently do nothing. Verified on opencode v2.0.4.
-
-Or from a clone of this monorepo:
+Copy the adapter (never symlink) to the discovery dir:
 
 ```bash
-# Shared baseline only (same plugin id in every toolkit adapter)
-node -e '
-const path=require("path");
-const plugin=path.resolve("shared/hooks/stderr/adapters/opencode-plugin.ts");
-// Merge manually if the config has comments; otherwise:
-console.log("Add to plugins array:\n  "+JSON.stringify(plugin));
-'
+PLUGIN_DIR=~/.config/opencode/plugins/mnm-no-stderr-redirect
+mkdir -p "$PLUGIN_DIR"
+cp shared/hooks/stderr/adapters/opencode-plugin.ts "$PLUGIN_DIR/index.ts"
 ```
+
+From any single toolkit copy, replace the source path with
+`toolkits/<name>/hooks/stderr/adapters/opencode-plugin.ts`.
+
+Verify the plugin id is LOADED (presence is not enough):
+
+```bash
+opencode plugin list  # must show local.mnm-no-stderr-redirect
+```
+
+Then submit any silenced-stderr command and expect the PROHIBIDO rejection;
+a clean command still runs. No restart needed in the common case
+(hot-reload); `opencode service restart` is the fallback.
+
+> v1 key `"plugin"` (singular) is ignored by opencode v2 - entries under it
+> silently do nothing. Verified on opencode v2.0.4.
 
 Disable: `"plugins": ["-local.mnm-no-stderr-redirect"]` or `MNM_DISABLE_STDERR_HOOK=1`.
 

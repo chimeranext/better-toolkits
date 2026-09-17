@@ -6,9 +6,18 @@
  * MNM_DISABLE_STDERR_HOOK=1. Skill/reference registration stays on (it is the
  * toolkit's OpenCode2 entry point); to skip it too, set MNM_DISABLE_HARNESS=1.
  *
- * Detector logic mirrors hooks/stderr/detect.py (keep in sync).
+ * Detector logic mirrors hooks/stderr/detect.py exactly (patterns, quote-stripping, executor handling, sink rules) - keep in sync.
+ *
+ * Zero-dependency by design: no bare npm imports. The OpenCode server-side
+ * plugin loader (observed v2.0.5) does not resolve bare package specifiers
+ * for local plugins, and `Plugin.define()` from `@opencode-ai/plugin` is an
+ * identity function (verified 1.18.31) — so a plain default export is
+ * equivalent and always loadable. Only `node:` builtins are used. Install as
+ * a COPY under the global discovery dir (see the setup-opencode adapter) —
+ * never a symlink (the loader follows realpath for resolution) and never a
+ * file entry in the `"plugins"` array (rejected with
+ * "configured plugin path must be a directory" on v2.0.5).
  */
-import { Plugin } from "@opencode-ai/plugin"
 import { existsSync, readdirSync, readFileSync } from "node:fs"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
@@ -16,30 +25,78 @@ import { fileURLToPath } from "node:url"
 const ADAPTER_DIR = dirname(fileURLToPath(import.meta.url))
 const TOOLKIT_ROOT = join(ADAPTER_DIR, "..", "..", "..")
 
-const SILENCE =
-  /(^|[^A-Za-z0-9])2\s*>>?\s*\/dev\/null\b|&\s*>>?\s*\/dev\/null\b|>&\s*\/dev\/null\b/
-const ORDERED_BOTH =
-  /(^|[^0-9&>])1?>>?\s*\/dev\/null\s+2>&1/
-const BARE_STDOUT = /(^|[^0-9&>])1?>>?\s*\/dev\/null/
-const ALLOWED_REVERSE = /2>&1\s*1?>>?\s*\/dev\/null/g
+const SILENCE = [
+  /(^|[^A-Za-z0-9])2\s*>>?\s*\/dev\/null\b/,
+  /&>\s*>?\s*\/dev\/null\b/,
+  />&\s*\/dev\/null\b/,
+]
+const ORDERED_BOTH_NULL = /(^|[^0-9&>])1?>>?\s*\/dev\/null\b\s+2>&1/
+const BARE_STDOUT_NULL = /(^|[^0-9&>])1?>>?\s*\/dev\/null\b/
+const ALLOWED_REVERSE = /2>&1\s*1?>>?\s*\/dev\/null\b/g
 const BARE_FOLD = /2\s*>&\s*1/
-const HAS_SINK =
-  /(?:^|[\s;|&])(?:>>?|>\|)\s*(?!\/dev\/null)(\.\/|\.\.\/|\/|[A-Za-z0-9_./-])\S*|\|\s*tee(?:\s+-a)?\s+(?!\/dev\/null)/
+const HAS_FILE_SINK =
+  /(?:^|[\s;|&])(?:>>?|>\|)\s*(?!\/dev\/null)(\.\/|\.\.\/|\/|[A-Za-z0-9_./-])\S*/
+const HAS_TEE_FILE =
+  /\|\s*tee(?:\s+-a)?\s+(?!\/dev\/null)(\.\/|\.\.\/|\/|[A-Za-z0-9_./-])\S*/
+const HAS_STDERR_FILE =
+  /2\s*>\s*(?!&|\/dev\/null)(\.\/|\.\.\/|\/|[A-Za-z0-9_./-])\S*/
+const EXECUTOR = /(^|[^A-Za-z0-9_-])(eval|xargs|(ba|z|k)?sh\s+-c|\$\(|`)/
+
+function stripQuotedSpans(s: string): string {
+  let out = ""
+  let q = ""
+  let i = 0
+  const n = s.length
+  while (i < n) {
+    const c = s[i]
+    if (!q) {
+      if (c === "'" || c === '"') {
+        q = c
+      } else if (c === "\\" && i + 1 < n) {
+        out += c + s[i + 1]
+        i += 2
+        continue
+      } else {
+        out += c
+      }
+    } else {
+      if (c === "\\" && q === '"' && i + 1 < n) {
+        i += 1
+      } else if (c === q) {
+        q = ""
+      }
+    }
+    i += 1
+  }
+  return out
+}
+
+function scanText(command: string): string {
+  if (EXECUTOR.test(command)) return command
+  return stripQuotedSpans(command)
+}
 
 function deny(command: string): string | null {
   if (process.env.MNM_DISABLE_STDERR_HOOK === "1") return null
-  if (SILENCE.test(command)) {
-    return "PROHIBIDO: no redirigir stderr a /dev/null. Usá archivos de log o tee."
+  if (!command || !command.trim()) return null
+  const scan = scanText(command)
+  for (const pat of SILENCE) {
+    if (pat.test(scan)) {
+      return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). Ejecuta el comando sin descartar stderr.";
+    }
   }
-  if (ORDERED_BOTH.test(command)) {
-    return "PROHIBIDO: >/dev/null 2>&1 descarta stderr. Usá 2>&1 >/dev/null o logs."
+  if (ORDERED_BOTH_NULL.test(scan)) {
+    return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). Ejecuta el comando sin descartar stderr.";
   }
-  const rem = command.replace(ALLOWED_REVERSE, "")
-  if (BARE_STDOUT.test(rem)) {
-    return "PROHIBIDO: >/dev/null descarta la respuesta. Preferí out=$(cmd) o 2>&1 >/dev/null."
+  const remainder = scan.replace(ALLOWED_REVERSE, "")
+  if (BARE_STDOUT_NULL.test(remainder)) {
+    return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). Ejecuta el comando sin descartar stderr.";
   }
-  if (BARE_FOLD.test(command) && !HAS_SINK.test(command)) {
-    return "PROHIBIDO: 2>&1 sin sink de log. Usá >all.log 2>&1 o 2>&1 | tee run.log."
+  const foldScan = scan.replace(ALLOWED_REVERSE, "")
+  if (BARE_FOLD.test(foldScan)) {
+    if (!(HAS_FILE_SINK.test(foldScan) || HAS_TEE_FILE.test(foldScan) || HAS_STDERR_FILE.test(foldScan))) {
+      return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). Ejecuta el comando sin descartar stderr.";
+    }
   }
   return null
 }
@@ -49,7 +106,7 @@ function firstHeader(markdown: string): string {
   return match ? match[1].trim() : ""
 }
 
-export default Plugin.define({
+export default {
   id: "local.mnm-no-stderr-redirect",
   setup: async (ctx) => {
     if (process.env.MNM_DISABLE_HARNESS !== "1") {
@@ -91,4 +148,4 @@ export default Plugin.define({
       if (msg) throw new Error(msg)
     })
   },
-})
+}
