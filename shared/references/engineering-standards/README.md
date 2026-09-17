@@ -56,4 +56,8 @@ Protocol SSOT: `references/clean-code-standards-setup/protocol.md`, `references/
 
 ## Provenance
 
-Generalized from HabitaNexus / Seacrets.Online process docs (`code-organization-standards`, `pull-request-description-and-scope`, `branching-strategy`, `qa-traceability-four-layers`). Client-specific assignees and tracker IDs belong in the client repo's `AGENTS.md`, not in this SSOT.
+Generalized from production SaaS platform process docs (multi-repo OpenSpec,
+agent handoffs, and store PR traceability): `code-organization-standards`,
+`pull-request-description-and-scope`, `branching-strategy`,
+`qa-traceability-four-layers`. Client-specific assignees, tracker IDs, product
+names, and repo URLs belong in the client repo's `AGENTS.md`, not in this SSOT.
