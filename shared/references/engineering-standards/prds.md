@@ -101,6 +101,22 @@ These limits keep a single human review pass to roughly **15–30 minutes**. If 
 - Mechanical codegen, lockfile-only, or import-path moves **if** the description states that and the test plan is “CI green only”.
 - Follow-up PRs marked **part 1 of N** with the same `TICKET-N` only when acceptance criteria are intentionally phased (note in the tracker).
 
+### Forbidden (OpenSpec store)
+
+When the PR targets the client's **OpenSpec store** repo (or any repo whose sole
+purpose is `<changesPath>/` promotion), **OST** applies — full rules:
+[openspec-store-pr-traceability.md](openspec-store-pr-traceability.md).
+
+| Forbidden | Action |
+| --- | --- |
+| Two+ change folders for different `TICKET-N` in one store PR | Split into one PR per issue |
+| Close store PR without merge while folder is off default branch | Reopen and merge, or abandon issue with human OK |
+| Bundle another issue's change folder “to unblock” a sibling PR | Open a dedicated store PR for that `TICKET-N` |
+| Ship only satellite (app) PRs and skip store promotion | Open/merge the store PR first unless explicitly waived in tracker |
+
+Store PR body must still use the [description template](#description-template);
+**Tracker** must name the single change folder path and `Fixes TICKET-N`.
+
 ---
 
 ## Draft PR workflow

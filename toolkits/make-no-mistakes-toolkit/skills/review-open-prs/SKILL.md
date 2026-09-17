@@ -151,6 +151,27 @@ Classify each PR into one of these categories:
 - **My PR, no Linear issue**: PR authored by me but no matching Linear issue found
 - **Other team PRs**: PRs by other authors (summarize briefly)
 
+## Step 6b: OpenSpec store PR traceability (OST)
+
+When `linear-setup.json` defines `openspec.changesPath` and/or `openspec.storeRepo`,
+audit **open PRs on the store repo** against
+[OST](../../../../shared/references/engineering-standards/openspec-store-pr-traceability.md):
+
+1. List files changed under `<changesPath>/` (default `openspec/changes/`).
+2. Extract distinct `TICKET-N` values from **added** change folder names (`YYYY-MM-DD-{TEAM}-{N}-*`).
+3. Parse PR body for `Fixes TICKET-N` / `Closes TICKET-N`.
+
+Flag in the report:
+
+| Violation | Severity |
+| --- | --- |
+| Two+ change folders with **different** `TICKET-N` in one PR | **BLOCK** — split PRs |
+| Folder `{N}` does not match `Fixes TICKET-N` in body | **BLOCK** |
+| Store PR **closed** without merge while folder absent from default branch | **WARN** |
+| Satellite PR merged but no open/merged store PR for same `TICKET-N` | **WARN** (link OST) |
+
+Include an **OpenSpec store (OST)** section in Step 8 when any store PRs were scanned.
+
 ## Step 7: For Linked PRs, Get Detailed Issue Context
 
 For each PR that matches one of my Linear issues, use `mcp__linear-server__get_issue` to get:
@@ -195,6 +216,18 @@ PRs where mergeable=CONFLICTING:
 ```
 PR #number — Title
   Conflict with: identify likely conflicting PR if possible (e.g., same domain/files)
+  URL
+```
+
+### OpenSpec store PRs — OST violations
+
+When Step 6b ran, list store PRs that bundle folders, mismatch `Fixes TICKET-N`, or
+were closed without merge while the change folder is still off the default branch.
+Link SSOT: `shared/references/engineering-standards/openspec-store-pr-traceability.md`.
+
+```
+PR #number — Title — OST: BLOCK|WARN — reason
+  Fix: split PR / reopen and merge / align Fixes line with folder name
   URL
 ```
 

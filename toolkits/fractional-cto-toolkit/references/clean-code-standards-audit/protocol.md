@@ -16,6 +16,7 @@ in a client repo. Emit prioritized findings and **incremental** remediation
 | PRDS | [engineering-standards/prds.md](../../../../shared/references/engineering-standards/prds.md) |
 | BrS | [engineering-standards/branching-strategy.md](../../../../shared/references/engineering-standards/branching-strategy.md) |
 | QT4L | [engineering-standards/qa-traceability-four-layers.md](../../../../shared/references/engineering-standards/qa-traceability-four-layers.md) |
+| OST | [engineering-standards/openspec-store-pr-traceability.md](../../../../shared/references/engineering-standards/openspec-store-pr-traceability.md) |
 | Index | [engineering-standards/README.md](../../../../shared/references/engineering-standards/README.md) |
 
 ## Focus areas (`--focus`)
@@ -25,7 +26,8 @@ in a client repo. Emit prioritized findings and **incremental** remediation
 | `dsms` | Folder/module tree | Feature-first after `src/`/`app/`/`lib/`; layers under feature; `shared/`/`core/` reserved; no layer-first top-level |
 | `ifs` | Intra-file order | imports → types → constants → main → helpers → exports; `// ---` banners; files >~500 lines without extract |
 | `cps` | Public barrels | Group by domain slice; runtime → type-only → deprecated; banners; no speculative exports |
-| `prds` | Open PRs | Title template; body sections; ~≤400 lines; one intent; draft→undraft after human OK |
+| `prds` | Open PRs | Title template; body sections; ~≤400 lines; one intent; draft→undraft after human OK; store PRs obey **OST** (one change folder per PR) |
+| `ost` | OpenSpec store PRs | One `TICKET-N` per change folder; `Fixes TICKET-N`; no bundled folders; no close-without-merge while off default branch |
 | `brs` | Branches & protection | Branch model by repo type; naming; conventional commits; protected branches |
 | `qt4l` | QA traceability | Behavior changes have QT4L section in `tasks.md` + scenario → verification table |
 
