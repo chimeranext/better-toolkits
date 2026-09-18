@@ -271,7 +271,7 @@ claude plugin install aaarrr-flywheel-toolkit@better-toolkits
 
 BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
-### [fractional-cto-toolkit](toolkits/fractional-cto-toolkit/) `v1.3.1`
+### [fractional-cto-toolkit](toolkits/fractional-cto-toolkit/) `v1.4.0`
 
 Operational toolkit for freelance and fractional CTOs — contracts, project-takeover SOPs, and a process-engineering pipeline for client onboarding, technical audits, and vendor evaluation.
 
@@ -280,7 +280,8 @@ Operational toolkit for freelance and fractional CTOs — contracts, project-tak
 - **Project takeovers** — the `project-takeover` and `takeover-assessment` skills for inheriting a codebase safely.
 - **Contracts** — ready-to-adapt `contract-nda`, `contract-psa`, and `contract-retainer` skills.
 - **Process-engineering pipeline** — `process-standardization` → `automation-triage` → `sop-authoring`: inventory and capture a team's processes, decide step by step what stays human vs. RPA vs. AI agent, and author a structured SOP (with a runnable executable form when steps are automatable).
-- 8 skills covering the fractional-CTO engagement lifecycle and operational process design.
+- **Ops taxonomy** — `playbook-authoring` (when/why/judgment), `runbook-authoring` (execute-under-pressure steps), `sop-authoring` (recurring company process).
+- Skills covering the fractional-CTO engagement lifecycle and operational process design.
 
 #### Install
 
