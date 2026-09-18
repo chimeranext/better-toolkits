@@ -167,6 +167,21 @@ Three layers, least to most invasive:
 A full rollback (delete the config file) is also valid — the hooks
 no-op without their config.
 
+## OpenCode V2 adapter
+
+[`adapters/opencode-cross-cutting.ts`](adapters/opencode-cross-cutting.ts)
+(`local.mnm-cross-cutting`) enforces all three surfaces in
+`execute.before` for `edit` / `write` tools (Write-only for
+`schema_ownership`, like the `.sh`): same config file
+(`.claude/config/cross-cutting-hooks.json`, `version: 1`), same
+`enabled` / `defer_to_local_hook` gates, same `#` / `//` / `--`
+bypass markers, same git-HEAD + validator-script delegation for
+`version_bumps` (validator exit 2 blocks, anything else fails open).
+Opt-out: remove the plugin from `plugins`,
+`MNM_DISABLE_CROSSCUTTING_HOOK=1`, or `CLAUDE_DISABLE_PLUGIN_HOOKS=1`.
+Keep in sync with the three `pre-write-*.sh` scripts and
+`lib/jq-input.sh` / `lib/load-config.sh`.
+
 ## Fail-open invariants
 
 Every hook exits 0 (pass) silently when any of these are true:
