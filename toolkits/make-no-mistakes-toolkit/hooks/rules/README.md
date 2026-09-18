@@ -87,6 +87,26 @@ escape is per-command rather than per-repo.
 3. Run `npm run test-hooks` to verify your `tests` array passes.
 4. Commit both `rules.yaml` AND `rules.json` (CI verifies they're in sync).
 
+## OpenCode V2 adapter
+
+[`adapters/opencode-rules.ts`](adapters/opencode-rules.ts) (`local.mnm-rules`)
+evaluates the same compiled `rules.json` the shell dispatchers read:
+
+- `execute.before` throws on `block` rules for shell (`shell`/`bash`) and
+  edit (`edit`/`write`/`apply_patch`) tools — same verdicts as
+  `pre-bash.sh` / `pre-edit.sh` (bypass markers, `disable_if_repo_file`,
+  AND-chained ERE conditions).
+- `execute.after` appends `warn` verdicts to the result output (never
+  throws) — this covers Slack-style rules (same warn-only contract as
+  `post-slack.sh`) and the `pre-bash-stale-push.sh` force-push heuristic
+  (`MAKE_NO_MISTAKES_STALE_THRESHOLD`, default 5).
+- Opt-out: remove the plugin from `plugins`, `MNM_DISABLE_RULES_HOOK=1`,
+  or `CLAUDE_DISABLE_PLUGIN_HOOKS=1`. No `rules.json` → silent no-op.
+
+Register the file path in `opencode.json(c)` `plugins` alongside the
+stderr adapter. Keep in sync with `rules.yaml` (SSOT), `eval-rule.sh`,
+`parse-input.sh`, and `pre-bash-stale-push.sh`.
+
 ## IP-leak guard (opt-in, gitignored)
 
 If the build output says `IP-leak guard active`, you have a local
