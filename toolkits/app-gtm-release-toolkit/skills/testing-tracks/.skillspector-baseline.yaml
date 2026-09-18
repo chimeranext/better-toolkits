@@ -1,0 +1,41 @@
+# SkillSpector baseline — findings listed here are suppressed on future scans.
+# Edit 'reason' fields and add glob 'rules' as needed. See docs/SUPPRESSION.md.
+version: 2
+scanner_version: 2.11.2
+rules: []
+fingerprints:
+- hash: sha256:ae70a1b32a6f6678df25c1682cb4053e1fee8b43b64ccff148bb53af8b037197
+  rule_id: AR1
+  file: references/google-play-tracks.md
+  reason: 'Reviewed 2026-09-16: static-only FPs (SauceLabs/AppStore curl examples,
+    compliance phrasing). Pending LLM re-eval.'
+- hash: sha256:9c0bbdd6d7aa172c63c67fb334b92083424ef09e24af473109718a8c5b3c4bfb
+  rule_id: TM1
+  file: references/real-device-testing.md
+  reason: 'Reviewed 2026-09-16: static-only FPs (SauceLabs/AppStore curl examples,
+    compliance phrasing). Pending LLM re-eval.'
+- hash: sha256:32b3e0020ee358b94e24f9793f5a4ac445bde3fade9aec5a1b7278e5faf9b718
+  rule_id: RP1
+  file: references/real-device-testing.md
+  reason: 'Reviewed 2026-09-16: static-only FPs (SauceLabs/AppStore curl examples,
+    compliance phrasing). Pending LLM re-eval.'
+- hash: sha256:1fe2932e92fe3c2b032f106eeee644d3ddfba575576038c5fad59051f3785fc9
+  rule_id: E1
+  file: references/real-device-testing.md
+  reason: 'Reviewed 2026-09-16: static-only FPs (SauceLabs/AppStore curl examples,
+    compliance phrasing). Pending LLM re-eval.'
+- hash: sha256:b990b027b2c1b9fb84aae9255f23d6a7143b69c68704e3ef9d67494725eb5e46
+  rule_id: E1
+  file: references/real-device-testing.md
+  reason: 'Reviewed 2026-09-16: static-only FPs (SauceLabs/AppStore curl examples,
+    compliance phrasing). Pending LLM re-eval.'
+- hash: sha256:8823d6a24a7935d2714a1f9992e261c557af2a00eff73ab070e95fec6b5c7d44
+  rule_id: E1
+  file: references/testflight.md
+  reason: 'Reviewed 2026-09-16: static-only FPs (SauceLabs/AppStore curl examples,
+    compliance phrasing). Pending LLM re-eval.'
+- hash: sha256:e5831aabdc712db96ab9d725a7d060d03978a02f1453f484b0f1a95d32c3b3bc
+  rule_id: E1
+  file: references/testflight.md
+  reason: 'Reviewed 2026-09-16: static-only FPs (SauceLabs/AppStore curl examples,
+    compliance phrasing). Pending LLM re-eval.'

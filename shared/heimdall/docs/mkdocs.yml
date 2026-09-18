@@ -1,0 +1,121 @@
+# =============================================================================
+# Material for MkDocs — Heimdall
+# Reviewer de PRs con IA, multi-proveedor (NVIDIA NIM / Kimi)
+# =============================================================================
+
+site_name: Heimdall
+site_description: "Reviewer de PRs con IA, multi-proveedor (NVIDIA NIM / Kimi) — arquitectura, topología y uso"
+site_url: https://chimeranext.github.io/heimdall
+repo_url: https://github.com/chimeranext/heimdall
+repo_name: chimeranext/heimdall
+edit_uri: edit/main/docs/site/content/
+
+docs_dir: content
+site_dir: site
+
+# =============================================================================
+# Theme
+# =============================================================================
+theme:
+  name: material
+  language: es
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Cambiar a modo oscuro
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Cambiar a modo claro
+  font:
+    text: Inter
+    code: JetBrains Mono
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.indexes
+    - navigation.top
+    - search.highlight
+    - search.share
+    - search.suggest
+    - content.code.copy
+    - content.action.edit
+    - content.action.view
+    - toc.follow
+  icon:
+    repo: fontawesome/brands/github
+    edit: material/pencil
+    view: material/eye
+
+# =============================================================================
+# Plugins
+# =============================================================================
+plugins:
+  - search:
+      lang: es
+
+# =============================================================================
+# Markdown Extensions
+# =============================================================================
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      title: En esta página
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+# =============================================================================
+# Navigation
+# =============================================================================
+nav:
+  - Inicio: index.md
+  - Arquitectura:
+    - architecture/index.md
+  - Topología:
+    - topology/index.md
+  - Uso:
+    - usage/index.md
+  - Decisiones:
+    - decisions/index.md
+    - Routing de OpenRouter: decisions/openrouter-routing.md
+
+# =============================================================================
+# Extra
+# =============================================================================
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/chimeranext/heimdall
+  generator: false
+
+dev_addr: 0.0.0.0:8002

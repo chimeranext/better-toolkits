@@ -1,0 +1,30 @@
+# SkillSpector baseline — findings listed here are suppressed on future scans.
+# Edit 'reason' fields and add glob 'rules' as needed. See docs/SUPPRESSION.md.
+version: 2
+scanner_version: 2.11.2
+rules:
+- id: "TM1"
+  path: "SKILL.md"
+  message: "*push --force*"
+  reason: 'Reviewed 2026-09-16: documents lease-guarded git push in rebase workflow (with user confirmation); not tool misuse. Drift-tolerant: survives line shifts.'
+fingerprints:
+- hash: sha256:b5a9ef4cbb623e3661f26b7d45bb334af8d369d7f10eee4d8ef900211c399c51
+  rule_id: TM1
+  file: SKILL.md
+  reason: 'Reviewed 2026-09-16 (regen post-main-OST): static-only FPs (git push --force
+    docs, autonomy phrasing). Pending LLM re-eval.'
+- hash: sha256:bf488b7ad7ae01720ac243fa561198849a9bd92ae16e86bb1323757287d4dbd5
+  rule_id: P3
+  file: SKILL.md
+  reason: 'Reviewed 2026-09-16 (regen post-main-OST): static-only FPs (git push --force
+    docs, autonomy phrasing). Pending LLM re-eval.'
+- hash: sha256:5098b61098bffd179f6eb17a4fccabfdc6118fd9992adf1b565745ba7c6ea626
+  rule_id: EA2
+  file: SKILL.md
+  reason: 'Reviewed 2026-09-16 (regen post-main-OST): static-only FPs (git push --force
+    docs, autonomy phrasing). Pending LLM re-eval.'
+- hash: sha256:9c11a8644c19b4a8fd2d2f5e3e27e02e0c1ddeae105a3c8b83a7bb9efe7adde7
+  rule_id: EA2
+  file: SKILL.md
+  reason: 'Reviewed 2026-09-16 (regen post-main-OST): static-only FPs (git push --force
+    docs, autonomy phrasing). Pending LLM re-eval.'

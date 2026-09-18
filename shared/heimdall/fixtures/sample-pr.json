@@ -1,0 +1,28 @@
+{
+  "number": 42,
+  "title": "fix(auth): validar expiración del token antes de confiar en el claim",
+  "body": "El middleware de auth leía `payload.sub` sin verificar `exp`. Este PR agrega el chequeo de expiración y un test. Cierra VRTV-123.",
+  "author": "lapc506",
+  "branch": "fix/auth-token-exp",
+  "base_branch": "main",
+  "head_sha": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0",
+  "labels": ["security", "bug"],
+  "mergeable": true,
+  "diff_truncated": false,
+  "changed_files": [
+    {
+      "filename": "src/auth/middleware.ts",
+      "status": "modified",
+      "additions": 9,
+      "deletions": 2,
+      "patch": "@@ -10,8 +10,15 @@ export function authMiddleware(req: Request): AuthContext {\n   const token = extractBearer(req)\n   if (!token) throw new UnauthorizedError(\"missing token\")\n \n-  const payload = decodeJwt(token)\n-  return { userId: payload.sub }\n+  const payload = decodeJwt(token)\n+\n+  // VRTV-123 — antes confiábamos en el claim sin validar expiración.\n+  const nowSeconds = Math.floor(Date.now() / 1000)\n+  if (typeof payload.exp !== \"number\" || payload.exp < nowSeconds) {\n+    throw new UnauthorizedError(\"token expired\")\n+  }\n+\n+  return { userId: payload.sub }\n }\n"
+    },
+    {
+      "filename": "src/auth/middleware.test.ts",
+      "status": "modified",
+      "additions": 14,
+      "deletions": 0,
+      "patch": "@@ -20,4 +20,18 @@ describe(\"authMiddleware\", () => {\n     expect(() => authMiddleware(req)).toThrow(\"missing token\")\n   })\n+\n+  it(\"rechaza un token expirado\", () => {\n+    const expired = signJwt({ sub: \"u1\", exp: 1 })\n+    const req = mockRequest({ authorization: `Bearer ${expired}` })\n+    expect(() => authMiddleware(req)).toThrow(\"token expired\")\n+  })\n+\n+  it(\"acepta un token vigente\", () => {\n+    const future = Math.floor(Date.now() / 1000) + 3600\n+    const valid = signJwt({ sub: \"u1\", exp: future })\n+    const req = mockRequest({ authorization: `Bearer ${valid}` })\n+    expect(authMiddleware(req).userId).toBe(\"u1\")\n+  })\n }\n"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+# Heimdall — imagen de contenedor para el dry-run (Podman / Docker).
+# Base: oven/bun (Bun 1.2.x, Node 22). NVIDIA_API_KEY se pasa por env en
+# tiempo de ejecución — NUNCA se hornea en la imagen.
+
+FROM docker.io/oven/bun:1.2
+
+WORKDIR /app
+
+# Instala dependencias primero (capa cacheable).
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile --production=false
+
+# Copia el código.
+COPY tsconfig.json ./
+COPY src ./src
+COPY scripts ./scripts
+COPY fixtures ./fixtures
+
+# El dry-run Mode A (fixture) es el comando por defecto. Necesita SOLO
+# NVIDIA_API_KEY (y REVIEWER_PROVIDER, que el script defaultea a nim-kimi).
+# Ejemplo de uso:
+#   podman build -t heimdall -f Containerfile .
+#   podman run --rm -e NVIDIA_API_KEY=nvapi-... heimdall
+ENV REVIEWER_PROVIDER=nim-kimi
+CMD ["bun", "run", "scripts/dry-run-fixture.ts"]
