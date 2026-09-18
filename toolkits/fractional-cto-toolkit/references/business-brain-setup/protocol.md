@@ -272,6 +272,8 @@ linking it to the MOC.**
   `/sop-authoring`) resolves its `{sops-dir}` to `<brain-root>/_procedimientos/` whenever a
   business brain exists; `./fractional-cto/sops/` is only the fallback for engagements
   without one. The reason the brain exists is that each business's own SOPs live in it.
+  Ops **playbooks** resolve to `_procedimientos/playbooks/` (`/playbook-authoring`);
+  **runbooks** to `_procedimientos/runbooks/` (`/runbook-authoring`).
 - **Spikes and work items live in Linear, not in the brain.** Use
   `/make-no-mistakes:linear-projects-setup` for backlog/spike infrastructure; the brain
   only keeps the distilled knowledge that outlives the ticket (the decision, the learning).
