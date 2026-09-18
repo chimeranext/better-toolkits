@@ -77,18 +77,14 @@ function resolveProdOrigin(
   if (prodOrigins.length === 0) return null
   const isProd = (host: string): boolean => prodOrigins.includes(host)
   const candidate = str(toolInput.url ?? toolInput.href)
-  if (candidate) {
-    const host = hostOf(candidate)
-    if (host && isProd(host)) return { host, source: "tool_input.url" }
-  }
+  const candidateHost = candidate ? hostOf(candidate) : ""
+  if (candidateHost && isProd(candidateHost)) return { host: candidateHost, source: "tool_input.url" }
   const envOrigin = process.env.MNM_QA_ORIGIN ?? ""
-  if (!candidate && envOrigin) {
-    const host = hostOf(envOrigin)
-    if (host && isProd(host)) return { host, source: "MNM_QA_ORIGIN" }
-  }
+  const envHost = envOrigin ? hostOf(envOrigin) : ""
+  if (envHost && isProd(envHost)) return { host: envHost, source: "MNM_QA_ORIGIN" }
   let fileHost = ""
   let fileSource = ""
-  if (!candidate && !envOrigin) {
+  {
     const rel = typeof contract.currentOriginFile === "string" ? contract.currentOriginFile : ""
     if (rel) {
       const abs = join(repoRoot(), rel)
@@ -103,8 +99,8 @@ function resolveProdOrigin(
     }
     if (fileHost && isProd(fileHost)) return { host: fileHost, source: fileSource }
   }
-  const knownHost = candidate ? hostOf(candidate) : envOrigin ? hostOf(envOrigin) : fileHost
-  const knownSource = candidate ? "tool_input.url" : envOrigin ? "MNM_QA_ORIGIN" : fileSource
+  const knownHost = candidateHost || envHost || fileHost
+  const knownSource = candidateHost ? "tool_input.url" : envHost ? "MNM_QA_ORIGIN" : fileSource
   for (const prod of prodOrigins) {
     let re: RegExp
     try {
@@ -212,7 +208,10 @@ export default Plugin.define({
         try {
           renameSync(tokenPath, consumed)
         } catch {
-          return
+          throw new Error(
+            `BLOCKED: armed token exists but could not be consumed (check dir permissions): ${tokenPath}\n` +
+              `Allowing the mutation without consuming would grant unlimited PROD writes — fix permissions and retry.`,
+          )
         }
         return
       }
