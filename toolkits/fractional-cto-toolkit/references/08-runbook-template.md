@@ -19,10 +19,9 @@
 > context. **If a step here disagrees with lived reality, reality wins — fix the page.**
 
 <!--
-A runbook is the TECHNICAL/engineering-operations counterpart of an SOP: a procedure for
-release / deploy / incident response that needs repo/infra context to execute. An SOP is a
-BUSINESS process anyone non-technical can run ("how we onboard a client") — no code. If the
-draft needs no engineering context and is a steady-state business process → /sop-authoring.
+A runbook is sequential HOW (incident / deploy / recover) with repo/infra context.
+A playbook is WHEN/WHY — decision tree, not a click-by-click script → /playbook-authoring.
+An SOP is a recurring COMPANY process anyone non-technical can run → /sop-authoring.
 Two runbook shapes below; delete the one you are not using.
 -->
 
@@ -123,4 +122,5 @@ authoritative: editing a step changes behavior.
 - Sibling runbooks (adjacent layers/stages) with one line on when to use which.
 - Upstream references (vendor docs, man pages, issue trackers) cited — and refuted where
   wrong.
+- The playbook that chooses this runbook, if any (`/playbook-authoring`).
 - The SOP this runbook operationalizes, if any (`/sop-authoring`).

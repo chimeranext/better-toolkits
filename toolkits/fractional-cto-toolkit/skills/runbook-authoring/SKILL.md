@@ -7,30 +7,35 @@ description: >
   runbook", "release runbook", "deploy runbook", "on-call procedure", "responder a este
   incidente", "runbook de release", "escribe un runbook", "make this runbook executable",
   or any situation where a fractional CTO needs a trigger-driven, testable operational
-  procedure. Sibling of /sop-authoring: an SOP documents a steady-state repeatable
-  process; a runbook answers an EVENT. NOT for steady-state processes (that is
-  /sop-authoring) nor for security playbooks (that is /pentest-playbook-setup).
+  procedure. Sibling of /playbook-authoring (when/why/judgment) and /sop-authoring
+  (steady-state company process). A runbook answers HOW to execute after the path is
+  chosen. NOT for decision-tree playbooks (that is /playbook-authoring), NOT for
+  steady-state processes (that is /sop-authoring), and NOT for security-test plans
+  (that is /pentest-playbook-setup).
 ---
 
 # Runbook Authoring
 
 Turns a triggering event — an incident, an alert, a release, a scheduled ops task — into a
 rigorous runbook someone (or an agent) can execute under pressure. Sibling of
-`/sop-authoring`: same executable discipline, different domain.
+`/playbook-authoring` and `/sop-authoring`.
 
 ```
-SOP      = a BUSINESS process anyone non-technical can run; no code    (/sop-authoring)
-Runbook  = a TECHNICAL/engineering-ops procedure — release, deploy,     (this skill)
-           incident response — needing repo/infra context, written
-           bus-factor-1
+Playbook = WHEN / WHY / judgment under uncertainty; decision tree + options
+           — not a click-by-click execute script.               (/playbook-authoring)
+Runbook  = trigger-driven, sequential, testable steps an operator/engineer
+           executes (incident, deploy, recovery, scheduled ops). Bus-factor-1.
+           Repo/infra context OK.                               (this skill)
+SOP      = steady-state recurring COMPANY process; roles not named people;
+           no code required to understand.                      (/sop-authoring)
 ```
 
-The dividing line is **domain and context**, not merely "process vs event". An SOP
-("how Ops launches an event") needs no engineering context — its owner is operations.
-A runbook ("cutting a production release", "responding to a prod data leak in an incident")
-requires repo/infra knowledge and is written **bus-factor-1**: assume the reader operates
-the system alone with zero tribal context. Both can be repeatable and both can be
-triggered; the runbook is the one a software engineer must understand to execute.
+The dividing line is **execute vs decide vs company process**, not merely "process vs
+event". A playbook ("public timeout while origin is healthy — diagnose vs recover vs
+escalate") chooses a branch. A runbook ("cut a production release", "run the recover
+script for this signature") is the numbered how, written **bus-factor-1**. An SOP
+("how Ops launches an event") needs no engineering context. Do not treat "playbook"
+as a runbook or a post-mortem.
 
 ## Language rule
 
@@ -50,23 +55,26 @@ Resolve `{runbooks-dir}` first, in this order:
 
 ## Flujo del skill
 
-### Paso 1 — Routing test (the canonical 4-way + runbook)
+### Paso 1 — Routing test (three-way ops taxonomy + docs)
 
-Confirm the thing is actually a runbook. Use the canonical documentation taxonomy (SOP /
-PDR / ADR / Product Documentation), extended with the runbook case:
+Confirm the thing is actually a runbook. Use the three-way ops taxonomy (playbook /
+runbook / SOP) plus the usual product-docs cases:
 
 | If the draft answers… | It is a… | Route it to… |
 |---|---|---|
-| A technical/engineering-ops procedure needing repo/infra context (release, deploy, incident) | **Runbook** | continue here |
-| How the **company** operates a business process; no code required to understand | **SOP** | `/sop-authoring` |
+| Sequential, testable steps an engineer executes (release, deploy, incident, recover) | **Runbook** | continue here |
+| *When / why* to choose a path under uncertainty; decision tree, options, RACI | **Playbook** | `/playbook-authoring` |
+| How the **company** operates a recurring business process; no code required to understand | **SOP** | `/sop-authoring` |
+| A one-off timeline of what happened in a single incident | **Post-mortem** | write a post-mortem; extract reusable judgment with `/playbook-authoring` |
 | *What* to build, for whom, and why | **PDR** (Product Decision Record) | `openspec/changes/{date-slug}/proposal.md` |
 | *How* it's built technically (stack, schema, infra, APIs) | **ADR** (Architecture Decision Record) | `openspec/changes/{date-slug}/design.md` |
 | How an end user *uses* the finished product | **Product Documentation** | product docs |
-| How to security-test a system | **Security playbook** | `/pentest-playbook-setup` |
+| How to security-test a system (authorized engagement) | **Security playbook** | `/pentest-playbook-setup` |
 
 Rule of thumb: if a **software engineer must understand it to execute it**, it is a
-runbook, not an SOP. A one-off playbook that will not repeat is a runbook or a
-post-mortem — never an SOP (promote it to an SOP only once it becomes a pattern).
+runbook, not an SOP. If they must **choose among branches** first, it is a playbook —
+stop and route to `/playbook-authoring`. Never treat "playbook" as a synonym for
+runbook or post-mortem.
 
 ### Paso 2 — Pick the runbook shape
 
@@ -149,8 +157,10 @@ Present the deliverables and how to use them:
 
 ## Notas para el modelo
 
-- `/sop-authoring` (process) and this (event) are siblings and share the executable-form
-  discipline and the business-brain home; the routing test is what separates them.
+- `/playbook-authoring` (judgment), this skill (execute), and `/sop-authoring`
+  (company process) are siblings and share the business-brain home; the routing
+  test is what separates them. This skill and `/sop-authoring` also share the
+  executable-form discipline.
 - Do not fabricate automation for steps that are genuinely manual.
 - The incident shape values the *failed attempts*, not just the working fix — the trail is
   what makes the runbook re-usable when the same failure appears elsewhere.
