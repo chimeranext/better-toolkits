@@ -78,6 +78,18 @@ The global `CLAUDE_DISABLE_PLUGIN_HOOKS=1` env var disables both atomic
 hooks (and every other rule in the toolkit). Use temporarily if you need
 to bypass enforcement for an entire session.
 
+## OpenCode V2 adapter
+
+[`adapters/opencode-atomic.ts`](adapters/opencode-atomic.ts)
+(`local.mnm-atomic`) mirrors both hooks: `execute.before` blocks
+canonical-folder / junk-drawer / atomic-level / cross-pillar violations
+(same `.atomic-design-rules.json` opt-in, same `@atomic-exempt`
+markers), and `execute.after` appends the four drift warnings to the
+result output (organisms cap, flat pillar root, stale `Public*` files,
+duplicate filenames). Opt-out: remove the plugin from `plugins`,
+`MNM_DISABLE_ATOMIC_HOOK=1`, or `CLAUDE_DISABLE_PLUGIN_HOOKS=1`.
+Keep in sync with `pre-atomic.sh` and `post-atomic-drift.sh`.
+
 ## Performance
 
 Both hooks target < 500ms per call:
