@@ -115,6 +115,46 @@ discovery dir installed above):
 Per-toolkit **npm** packages may add their own `plugins` entries — merge all requested toolkits in one
 proposal; user approves the combined diff.
 
+## MCP servers (chrome-devtools, context7, linear)
+
+Merge these three entries verbatim under `mcp` (verified working set —
+do not alter keys/URLs; only append alongside existing entries):
+
+```jsonc
+// NOTE: `//` comments need `.jsonc` — for strict `opencode.json`, drop them.
+{
+  "mcp": {
+    "chrome-devtools-mcp": {
+      "type": "local",
+      "command": ["npx", "-y", "chrome-devtools-mcp@latest"]
+      // no auth; requires Node + network for first npx fetch
+    },
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+      // no auth; optional higher rate-limits via CONTEXT7_API_KEY header
+    },
+    "linear-project": {
+      "type": "remote",
+      "url": "https://mcp.linear.app/mcp",
+      "enabled": true
+      // OAuth (browser) — after merging config, run:
+      //   opencode mcp auth linear-project
+      // then `opencode mcp list` must show it connected.
+      // Ref: https://linear.app/docs/mcp
+    }
+  }
+}
+```
+
+Rules:
+
+- Additive only: never remove or rewrite entries the user already has
+  (Slack OAuth, custom headers, other servers).
+- `linear-project` needs the interactive auth step — propose the exact
+  command above and wait for the user to complete it in the browser;
+  verify afterwards with `opencode mcp list`.
+
 ### Config file resolution
 
 1. Prefer existing `opencode.json`, else `opencode.jsonc`, else create `opencode.json`.
@@ -151,6 +191,7 @@ Report a table:
 | Legacy key `"plugin"` (singular) | warn if present — migrate to `"plugins"` |
 | `skills` entries (one per installed toolkit) | list / missing → agent cannot auto-invoke toolkit skills (note: skills do NOT appear in `/` autocomplete — see `commands/` row) |
 | `commands/` autocomplete wiring | `~/.config/opencode/commands/<plugin>/<cmd>.md` symlinks present? missing → nothing in `/` suggestions despite skills loading; fix with `shared/bootstrap/scripts/setup-opencode-commands.sh` |
+| MCP servers (chrome-devtools, context7, linear) | entries present under `mcp`? `linear-project` authenticated (`opencode mcp list` connected)? missing auth → run `opencode mcp auth linear-project` |
 | npm packages registered | which of the four |
 | Claude hooks.json in repo | note: not loaded by OpenCode |
 
@@ -170,7 +211,12 @@ Report a table:
    Idempotent; names follow install names in `.claude-plugin/marketplace.json`
    (e.g. `/make-no-mistakes/implement`). Skills-only toolkits
    (e.g. `venture-studio-toolkit`) contribute no commands — expected.
-5. If `--also-npm`: for each package, run `npx --yes <pkg> install` with matching
+5. Merge the MCP servers section (chrome-devtools-mcp, context7,
+   linear-project) per the section above (additive only — never remove the
+   user's existing entries); for `linear-project`, have the user run
+   `opencode mcp auth linear-project` in the browser and verify with
+   `opencode mcp list`.
+6. If `--also-npm`: for each package, run `npx --yes <pkg> install` with matching
    `--config-dir` / `--dry-run` / force policy consistent with existing CLIs.
    Do not claim stderr is covered by npm install alone.
 
