@@ -29,7 +29,7 @@ OpenCode does **not** consume Claude Code `hooks/hooks.json` / shell matchers.
 | Surface | What this adapter does |
 | --- | --- |
 | **Stderr baseline** (`local.mnm-no-stderr-redirect`) | **Yes** — copy the dependency-free `opencode-plugin.ts` to the global discovery dir as `~/.config/opencode/plugins/mnm-no-stderr-redirect/index.ts` (no `"plugins"` entry - file entries are rejected on v2.0.5) |
-| **npm OpenCode packages** (`@lapc506/…`) | **Optional** `--also-npm` — run their `install` (commands/skills assets + package name in `"plugins"`) |
+| **npm OpenCode packages** (`@chimeranext/…`) | **Optional** `--also-npm` — run their `install` (commands/skills assets + package name in `"plugins"`) |
 | **Claude-only hooks** (MNM hygiene, atomic, QA, aaarrr spend-safety, …) | **No** — stay on Claude marketplace plugins until dedicated OpenCode adapters exist |
 
 “All toolkit hooks on OpenCode” today means: **one installed stderr adapter
@@ -56,8 +56,8 @@ entry at all.
 - Default config dir → `~/.config/opencode` (user).
 - `--dry-run` → print planned edits; no writes.
 - `--also-npm` → after stderr registration, offer/run the four CLI installs:
-  `@lapc506/make-no-mistakes`, `@lapc506/atomic-design-toolkit`,
-  `@lapc506/business-model-toolkit`, `@lapc506/app-gtm-release-toolkit`
+  `@chimeranext/make-no-mistakes`, `@chimeranext/atomic-design-toolkit`,
+  `@chimeranext/business-model-toolkit`, `@chimeranext/app-gtm-release-toolkit`
   (each with their own `--dry-run` when requested).
 
 ## Resolve stderr adapter path (one only)
@@ -168,9 +168,14 @@ Report a table:
    ```
 
    Idempotent; names follow install names in `.claude-plugin/marketplace.json`
-   (e.g. `/make-no-mistakes/implement`). Skills-only toolkits
-   (e.g. `venture-studio-toolkit`) contribute no commands — expected.
-5. If `--also-npm`: for each package, run `npx --yes <pkg> install` with matching
+   (e.g. `/make-no-mistakes/implement`).
+5. Wire one **`skills`** entry per toolkit in `opencode.json(c)` (all ten
+   `toolkits/*/skills` dirs, absolute paths — see "`opencode.json(c)` merge"
+   above). This step is REQUIRED, not optional: OpenCode has no marketplace
+   concept, so without it skills-only toolkits are unreachable —
+   `venture-studio-toolkit` ships 22 skills and 0 commands, and commands
+   wiring alone leaves it with nothing invokable.
+6. If `--also-npm`: for each package, run `npx --yes <pkg> install` with matching
    `--config-dir` / `--dry-run` / force policy consistent with existing CLIs.
    Do not claim stderr is covered by npm install alone.
 

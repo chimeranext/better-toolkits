@@ -13,7 +13,7 @@ claude plugin add chimeranext/app-gtm-release-toolkit
 ## Install (OpenCode)
 
 ```bash
-npx @lapc506/app-gtm-release-toolkit install
+npx @chimeranext/app-gtm-release-toolkit install
 ```
 
 ### CLI Commands
@@ -257,7 +257,7 @@ app-gtm-release-toolkit/
 │   ├── kmp-build/               # KMP-specific (Phase 2)
 │   └── maui-publishing/         # MAUI-specific (Phase 2)
 ├── src/                      # OpenCode CLI installer (TypeScript, builds to dist/)
-├── dist/                     # Built CLI — distributed via npm @lapc506/app-gtm-release-toolkit
+├── dist/                     # Built CLI — distributed via npm @chimeranext/app-gtm-release-toolkit
 ├── package.json
 └── README.md
 ```

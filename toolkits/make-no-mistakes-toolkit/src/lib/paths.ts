@@ -3,7 +3,7 @@ import os from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-export const PACKAGE_NAME = "@lapc506/make-no-mistakes";
+export const PACKAGE_NAME = "@chimeranext/make-no-mistakes";
 export const CLI_NAME = "make-no-mistakes";
 export const CONFIG_SCHEMA_URL = "https://opencode.ai/config.json";
 export const MANIFEST_FILE_NAME = ".lapc506-make-no-mistakes.manifest.json";

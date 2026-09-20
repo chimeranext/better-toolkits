@@ -37,7 +37,7 @@ Or install `better-toolkits-bootstrap@better-toolkits` and run `/toolkits-initia
 Legacy (single-toolkit, personal scope — do not use for new setups):
 
 ```bash
-npx @lapc506/make-no-mistakes install
+npx @chimeranext/make-no-mistakes install
 ```
 
 ### CLI Commands
