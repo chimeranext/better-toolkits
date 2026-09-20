@@ -104,6 +104,11 @@ if [[ "$CHECK" -eq 1 ]]; then
       missing=$((missing + 1))
     fi
   done < <(find "$DEST_BASE" -type l -print0 2>/dev/null || true)
+  # Top-level bootstrap alias (see below).
+  if [[ ! -L "$DEST_BASE/toolkits-initial-setup.md" || ! -e "$DEST_BASE/toolkits-initial-setup.md" ]]; then
+    echo "MISSING: toolkits-initial-setup.md (top-level alias)" >&2
+    missing=$((missing + 1))
+  fi
   if [[ "$missing" -gt 0 ]]; then
     echo "CHECK FAILED: $missing problem(s)" >&2
     exit 1
@@ -126,4 +131,19 @@ if [[ "$DRY_RUN" -eq 1 ]]; then
   echo "--dry-run: no changes made"
 else
   echo "linked=$linked pruned=$pruned dest=$DEST_BASE"
+fi
+
+# Top-level bootstrap alias: users expect `/toolkits-initial-setup`, but
+# nested paths surface as `/better-toolkits-bootstrap/toolkits-initial-setup`.
+# A top-level symlink is never pruned (prune only removes broken links).
+BOOT_SRC="$ROOT/shared/bootstrap/commands/toolkits-initial-setup.md"
+BOOT_DEST="$DEST_BASE/toolkits-initial-setup.md"
+if [[ -f "$BOOT_SRC" ]]; then
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    echo "LINK: toolkits-initial-setup.md -> $BOOT_SRC"
+  elif [[ ! -L "$BOOT_DEST" || "$(readlink "$BOOT_DEST")" != "$BOOT_SRC" ]]; then
+    rm -f "$BOOT_DEST"
+    ln -s "$BOOT_SRC" "$BOOT_DEST"
+    echo "linked top-level alias: $BOOT_DEST"
+  fi
 fi

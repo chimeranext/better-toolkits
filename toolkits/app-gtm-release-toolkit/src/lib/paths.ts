@@ -3,7 +3,7 @@ import os from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-export const PACKAGE_NAME = "@lapc506/app-gtm-release-toolkit";
+export const PACKAGE_NAME = "@chimeranext/app-gtm-release-toolkit";
 export const CLI_NAME = "app-gtm-release-toolkit";
 export const CONFIG_SCHEMA_URL = "https://opencode.ai/config.json";
 export const MANIFEST_FILE_NAME = ".lapc506-app-gtm-release-toolkit.manifest.json";

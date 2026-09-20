@@ -1,5 +1,5 @@
 {
-  "name": "@lapc506/business-model-toolkit",
+  "name": "@chimeranext/business-model-toolkit",
   "version": "2.2.1",
   "description": "Interactive business model brainstorming — guided dialogue covering the full startup lifecycle. OpenCode + Claude Code plugin.",
   "type": "module",
