@@ -82,7 +82,7 @@ skills (e.g. `implement`, `sync-advisor`).
 ## Toolkits with npm OpenCode CLI
 
 `make-no-mistakes`, `app-gtm-release`, `atomic-design`, `business-model` — run their
-`npx @lapc506/<pkg> install` **and** ensure the stderr file plugin path above is
+`npx @chimeranext/<pkg> install` **and** ensure the stderr file plugin path above is
 present (or use bootstrap `setup --also-npm`). Install registers the package plugin;
 stderr is the local file adapter.
 

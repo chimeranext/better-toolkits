@@ -13,7 +13,7 @@ claude plugin add chimeranext/business-model-toolkit
 ## Install (OpenCode)
 
 ```bash
-npx @lapc506/business-model-toolkit install
+npx @chimeranext/business-model-toolkit install
 ```
 
 ### CLI Commands

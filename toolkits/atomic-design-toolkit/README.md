@@ -15,15 +15,15 @@ claude plugin add chimeranext/atomic-design-toolkit
 ### OpenCode (npm)
 
 ```bash
-npx @lapc506/atomic-design-toolkit install
+npx @chimeranext/atomic-design-toolkit install
 ```
 
 Other commands:
 
 ```bash
-npx @lapc506/atomic-design-toolkit update      # Sync assets to latest version
-npx @lapc506/atomic-design-toolkit doctor       # Health check
-npx @lapc506/atomic-design-toolkit uninstall    # Remove all managed files
+npx @chimeranext/atomic-design-toolkit update      # Sync assets to latest version
+npx @chimeranext/atomic-design-toolkit doctor       # Health check
+npx @chimeranext/atomic-design-toolkit uninstall    # Remove all managed files
 ```
 
 Also register the local stderr adapter so shell redirects are blocked even when this package is the only toolkit installed: `hooks/stderr/adapters/opencode-plugin.ts` — see [`docs/opencode-stderr.md`](../../docs/opencode-stderr.md).
