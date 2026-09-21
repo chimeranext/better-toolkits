@@ -15,6 +15,7 @@ import {
   toolkitSkillsDirs,
   missingSkills,
 } from "../lib/skills.js";
+import { canonicalServers, planMcpStep } from "../lib/mcp.js";
 
 const REAL_ROOT = resolveRepoRoot();
 
@@ -71,6 +72,29 @@ describe("install plan", () => {
       const plan = planInstall({ alsoNpm: true });
       const npm = plan.steps.filter((s) => s.kind === "npm");
       assert.equal(npm.length, 4);
+    } finally {
+      process.chdir(cwd);
+    }
+  });
+});
+
+describe("mcp phase", () => {
+  it("defines exactly the canonical 6 servers", () => {
+    const names = Object.keys(canonicalServers({}));
+    assert.deepEqual(names.sort(), ["chrome-devtools-mcp", "context7", "dart", "linear", "slack", "stitch"].sort());
+  });
+
+  it("never embeds secrets in clear", () => {
+    const raw = JSON.stringify(canonicalServers({ slackClientId: "1.2" }));
+    assert.ok(raw.includes("{env:SLACK_MCP_CLIENT_SECRET}"));
+  });
+
+  it("plan detects missing servers", () => {
+    const cwd = process.cwd();
+    process.chdir(REAL_ROOT);
+    try {
+      const plan = planInstall({});
+      assert.ok(plan.steps.some((s) => s.kind === "mcp" || s.kind === "skip"));
     } finally {
       process.chdir(cwd);
     }
