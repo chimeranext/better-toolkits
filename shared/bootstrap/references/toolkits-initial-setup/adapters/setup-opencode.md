@@ -219,6 +219,32 @@ audit if `claude` is also detected.
   (different product — Claude-hook compat layer). Document as optional external
   if the user already uses them; do not require them.
 
+## Local MCP servers: Node must be on the server's PATH
+
+`npx`-based local servers (e.g. `chrome-devtools-mcp`) fail with a bare
+`Connection closed` when the OpenCode **server process** cannot resolve `node`
+(their binaries use a `#!/usr/bin/env node` shebang; your interactive shell
+PATH from `~/.bashrc` does not apply to the server). Reproduced 2026-09-21:
+manual stdio handshake worked, server log only said `Connection closed`.
+Fix — pin `environment.PATH` on the server entry (no shell expansion in JSON,
+so spell the full value):
+
+```json
+{
+  "chrome-devtools": {
+    "type": "local",
+    "command": ["<abs-path>/npx", "-y", "chrome-devtools-mcp@latest"],
+    "environment": {
+      "PATH": "<node-bin-dir>:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    }
+  }
+}
+```
+
+Reference: [chrome-devtools-mcp README](https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/README.md)
+(OpenCode snippet), [troubleshooting](https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/docs/troubleshooting.md)
+(WSL section: needs a Linux-side Chrome only when a tool actually launches a browser).
+
 ## Deprecated command
 
 **`/make-no-mistakes:opencode-setup` was removed** — use this adapter via
