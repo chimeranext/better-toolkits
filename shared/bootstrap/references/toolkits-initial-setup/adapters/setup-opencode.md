@@ -245,6 +245,27 @@ Reference: [chrome-devtools-mcp README](https://github.com/ChromeDevTools/chrome
 (OpenCode snippet), [troubleshooting](https://github.com/ChromeDevTools/chrome-devtools-mcp/blob/main/docs/troubleshooting.md)
 (WSL section: needs a Linux-side Chrome only when a tool actually launches a browser).
 
+## Canonical MCP set (SSOT — do not invent other lists)
+
+Every OpenCode session must converge on exactly these servers. This section
+exists because sessions diverged (one claimed `/toolkits-initial-setup`
+defines no MCP list — true at the time — while the user asserted five).
+The list below is now the single source of truth.
+
+| Server | Type | Config | Auth |
+|---|---|---|---|
+| `slack` | remote `https://mcp.slack.com/mcp` | own-app OAuth: `client_id` + `client_secret: "{env:SLACK_MCP_CLIENT_SECRET}"` + `redirect_uri: http://localhost:3118/callback` | browser OAuth (`opencode mcp auth slack`); see `../opencode-mcp-config/protocol.md` |
+| `linear` | remote `https://mcp.linear.app/mcp` | OAuth default | browser OAuth (`opencode mcp auth linear`) |
+| `chrome-devtools-mcp` | local `npx -y chrome-devtools-mcp@latest` (abs path) | + `environment.PATH` with node bin dir (see Node-PATH section above) | none |
+| `context7` | remote `https://mcp.context7.com/mcp` | no headers (anonymous rate limit); add `Authorization: Bearer {env:CONTEXT7_API_KEY}` only for higher limits | none (or API key) |
+| `stitch` | local `npx -y google-stitch-mcp@latest` | **disabled until auth is resolved**: `X-Goog-Api-Key` must never be exposed — pending proxy-with-env design | blocked |
+| `dart` | local `<abs-path>/dart mcp-server --force-roots-fallback` | absolute binary path (no npx/PATH dependency) | none |
+
+Rules:
+- Server key must be exactly `chrome-devtools-mcp` (never shortened).
+- Secrets only via `{env:VAR}` + 0600 env files (`/secret-input` → `/secret-use` → `/secret-clear`); never in clear JSON, chat, or logs.
+- Remote-without-key is acceptable where the vendor allows anonymous limits (context7); do not invent API keys.
+
 ## Deprecated command
 
 **`/make-no-mistakes:opencode-setup` was removed** — use this adapter via
