@@ -9,6 +9,7 @@ import {
   commandsScript,
 } from "./paths.js";
 import { toolkitSkillsDirs, readSkills, missingSkills } from "./skills.js";
+import { canonicalServers } from "./mcp.js";
 
 function readBytes(p) {
   try {
@@ -141,6 +142,17 @@ export function audit(opts = {}) {
   // Commands wiring
   const cc = commandsCheck(repoRoot);
   add("commands/ autocomplete wiring", cc.detail, !cc.ok);
+
+  // Canonical MCP set (mcp.servers)
+  const wanted = canonicalServers({});
+  const have = (cfg.parsed && cfg.parsed.mcp && cfg.parsed.mcp.servers) || {};
+  const wantNames = Object.keys(wanted);
+  const missingMcp = wantNames.filter((n) => !(n in have));
+  add(
+    "mcp servers (canonical 6)",
+    `${wantNames.length - missingMcp.length}/${wantNames.length} present${missingMcp.length ? ` — missing: ${missingMcp.join(", ")}` : ""}`,
+    missingMcp.length > 0,
+  );
 
   return { repoRoot, adapter, configDir, rows };
 }
