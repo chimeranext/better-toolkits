@@ -142,6 +142,16 @@ do not alter keys/URLs; only append alongside existing entries):
       //   opencode mcp auth linear-project
       // then `opencode mcp list` must show it connected.
       // Ref: https://linear.app/docs/mcp
+    },
+    "stitch": {
+      "type": "remote",
+      "url": "https://stitch.googleapis.com/mcp",
+      "headers": {
+        "Accept": "application/json",
+        // NEVER a literal key (GitHub secret-scanning auto-removed it before).
+        // Reference only: the server resolves it from the process env.
+        "X-Goog-Api-Key": "{env:STITCH_API_KEY}"
+      }
     }
   }
 }
