@@ -155,6 +155,12 @@ Rules:
   command above and wait for the user to complete it in the browser;
   verify afterwards with `opencode mcp list`.
 
+Multi-connection (several repos, same server): drop a project `opencode.json`
+with the same `linear-project` name + URL in each repo root
+(e.g. `habitanexus/monorepo/opencode.json`, `vertivolatam/monorepo/opencode.json`).
+Project configs merge with the global one and reuse its OAuth token — auth once,
+use everywhere. No secrets in these files (safe to commit).
+
 ### Config file resolution
 
 1. Prefer existing `opencode.json`, else `opencode.jsonc`, else create `opencode.json`.
