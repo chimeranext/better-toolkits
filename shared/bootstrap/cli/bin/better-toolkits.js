@@ -23,6 +23,7 @@ export function parseArgs(argv) {
     dryRun: false,
     alsoNpm: false,
     yes: false,
+    slackClientId: null,
     configDir: null,
   };
   const rest = [...argv];
@@ -34,6 +35,8 @@ export function parseArgs(argv) {
     else if (a === "--dry-run") opts.dryRun = true;
     else if (a === "--also-npm") opts.alsoNpm = true;
     else if (a === "--yes") opts.yes = true;
+    else if (a === "--slack-client-id") opts.slackClientId = rest[++i] ?? null;
+    else if (a.startsWith("--slack-client-id=")) opts.slackClientId = a.slice("--slack-client-id=".length);
     else if (a === "--config-dir") opts.configDir = rest[++i] ?? null;
     else if (a.startsWith("--config-dir=")) opts.configDir = a.slice("--config-dir=".length);
     else {
@@ -59,6 +62,7 @@ Flags:
   --project        mutate ./opencode.json(c) in the cwd (HITL — shared repo config)
   --dry-run        audit + propose only, no writes
   --also-npm       also run the four @chimeranext/* CLI installs
+  --slack-client-id <id>  Slack app Client ID for the mcp.slack entry (secret stays {env:})
   --config-dir     override config dir (default ~/.config/opencode)
   --yes            apply without TTY confirm (CI only)
 

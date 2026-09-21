@@ -15,6 +15,7 @@ import {
   readSkills,
   missingSkills,
 } from "./skills.js";
+import { planMcpStep, applyMcpStep } from "./mcp.js";
 
 /**
  * Optional npm CLIs (--also-npm), published under the @chimeranext scope.
@@ -51,6 +52,7 @@ export function planInstall(opts = {}) {
   steps.push({ kind: "commands", detail: "run setup-opencode-commands.sh (link all)" });
   const skillsStep = planSkillsStep(opts, repoRoot);
   if (skillsStep) steps.push(skillsStep);
+  steps.push(planMcpStep(opts));
   if (opts.alsoNpm) {
     for (const pkg of NPM_PACKAGES) steps.push({ kind: "npm", detail: `npx --yes ${pkg} install` });
   }
@@ -132,6 +134,8 @@ export function applyInstall(plan, opts = {}) {
       execFileSync("bash", [script], { stdio: "inherit", timeout: 120000 });
     } else if (s.kind === "skills") {
       applySkillsStep(s);
+    } else if (s.kind === "mcp") {
+      applyMcpStep(s);
     } else if (s.kind === "npm") {
       const pkg = s.detail.match(/npx --yes (\S+) install/)[1];
       const args = ["--yes", pkg, "install"];
