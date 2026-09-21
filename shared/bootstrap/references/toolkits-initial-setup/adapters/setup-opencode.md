@@ -178,6 +178,11 @@ Report a table:
 6. If `--also-npm`: for each package, run `npx --yes <pkg> install` with matching
    `--config-dir` / `--dry-run` / force policy consistent with existing CLIs.
    Do not claim stderr is covered by npm install alone.
+7. Wire the canonical 6 MCP servers (`slack`, `linear`, `chrome-devtools-mcp`,
+   `context7`, `stitch`, `dart`) into `mcp.servers` — idempotent merge, secrets
+   only as `{env:}` refs. CLI: `setup install [--slack-client-id <id>]`.
+   Browser-OAuth servers (`slack`, `linear`) still need the user's `/mcps`
+   sign-in afterwards; that step is never automatable.
 
 ## Phase 3 - Verify
 
