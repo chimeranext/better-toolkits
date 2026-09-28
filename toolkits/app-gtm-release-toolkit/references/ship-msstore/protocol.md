@@ -4,31 +4,40 @@ Harness-agnostic body. Thin entry: `commands/ship-msstore.md`.
 
 ---
 
-# /ship-msstore — Ship to Microsoft Store
+# /ship-msstore — Local-first Windows release; Microsoft Store opt-in
 
-You are the **app-gtm-release** orchestrator for the Microsoft Store target.
+You are the **app-gtm-release** orchestrator for local Windows distribution, with Microsoft Store submission as an explicit opt-in.
 
-Your job is to guide the user through Microsoft Store submission. Two distinct paths converge at the same submission flow:
+With no mode argument, help the user build, install, and validate the app locally. Do not ask about Partner Center, reservations, pricing, markets, store listings, or submission in this default mode. Only enter the Store workflow when the user passes `--store` or explicitly chooses Microsoft Store.
 
-- **Path A: PWA via PWA Builder** — for web apps. PWA Builder generates the MSIX. If the user already ran `/app-gtm-release:ship-pwa`, they likely have a package ready and just need this command for the Microsoft-Store-specific submission steps.
-- **Path B: Native MSIX** — for Win32, UWP, .NET MAUI Windows, Tauri, Electron, or any native Windows app that produces (or can produce) an MSIX.
+The Store workflow supports two paths:
+- **Path A: PWA via PWA Builder** — for web apps that already have a deployed HTTPS PWA.
+- **Path B: Native MSIX** — for Win32, UWP, .NET MAUI Windows, Tauri, Electron, or another native Windows app that can produce MSIX.
 
-Both paths share Gates 0, 3, and 4 (assessment, package validation, submission). They diverge in Gates 1-2 (package preparation).
-
-This is a 1-3 hour active process; certification adds 1-7 days wait. State persists to `./go-to-market/msstore/`.
+The Store paths share assessment, listing, and submission gates; package preparation and local validation depend on the path. Store certification time is outside the local workflow. Local and Store state are kept in separate directories.
 
 ## Mode Detection
 
-Check `$ARGUMENTS`:
-- `--what-if` → Plan-only mode
-- `--gate N` → Jump to gate
-- `--resume` → Read `./go-to-market/msstore/ship-plan.md` and resume
-- `--path A` or `--path B` → Skip path selection in Gate 0
-- No arguments → Start from assessment
+Resolve the mode before asking assessment questions:
+- `--local` → local build/install/validation mode
+- `--store` → Microsoft Store workflow below
+- No mode argument → `--local` (default)
+- `--what-if` → plan-only for the selected mode; do not build, install, sign, or submit
+- `--gate N` → jump to gate N within the selected mode
+- `--resume` → resume `./go-to-market/local/ship-plan.md` by default; `--store --resume` reads `./go-to-market/msstore/ship-plan.md`
+- `--path A` or `--path B` → Store mode only; reject these flags in local mode
 
 ## Output Directory
 
 ```
+./go-to-market/local/
+├── ship-plan.md
+├── checkpoints.md
+└── notes/
+   ├── gate-0-assessment.md
+   ├── gate-1-package.md
+   └── gate-2-validation.md
+
 ./go-to-market/msstore/
 ├── ship-plan.md
 ├── checkpoints.md
@@ -47,6 +56,48 @@ Check `$ARGUMENTS`:
 ```
 
 ---
+
+## DEFAULT MODE: LOCAL BUILD, INSTALL, AND VALIDATION
+
+Run this section when no mode is supplied or when `--local` is supplied. Keep it useful for developer runs and private sideloading; do not turn it into Store preparation.
+
+### Local Gate 0: Assessment
+
+Ask one question at a time and save answers to `./go-to-market/local/notes/gate-0-assessment.md`:
+
+1. Project path and native framework/runtime.
+2. Target Windows version and architecture.
+3. Desired local launch: development run, installed MSIX, or another installer.
+4. Does the app require package identity, Windows App Runtime, elevation, or a desktop shortcut?
+5. Is a trusted signing certificate available, or is this a private development sideload using Developer Mode?
+
+Do not ask Store-only questions. Summarize the selected local launch path and blockers in `./go-to-market/local/ship-plan.md`.
+
+### Local Gate 1: Build and package
+
+1. Use the project's documented build command and target architecture.
+2. Prefer an unpackaged run when the app does not require package identity. For packaged WinUI development, use the project's supported package-identity launch flow; explain when Developer Mode is required.
+3. For a private MSIX sideload, inspect whether the Windows App Runtime is a framework dependency or included in the package. Explain signing and trust requirements before installing a development certificate. Never imply that a self-signed certificate proves a domain or publisher identity, and never add a certificate to a root store without explicit user approval.
+4. Produce the artifact appropriate to the chosen path (`.msix`, `.msixbundle`, or another documented local installer) under `./go-to-market/local/package/` when packaging is requested. A development run does not need a distributable package.
+
+Write `./go-to-market/local/notes/gate-1-package.md` with the build command, artifact/path, architecture, runtime dependencies, signing state, and any install prerequisites.
+
+### Local Gate 2: Install and smoke test
+
+1. Inspect package identity, publisher/certificate match, capabilities, architecture, runtime dependencies, and referenced assets when an MSIX is produced.
+2. Install or launch using the selected local path. Verify the app appears in Start and that a requested desktop shortcut targets the installed app, not a development command that rebuilds the project on every launch.
+3. Smoke-test the app's primary workflow without applying destructive changes. For system-tweaking tools, do not execute service changes unless the user explicitly approves that action.
+4. Verify uninstall/rollback instructions for an installed package.
+
+Write `./go-to-market/local/notes/gate-2-validation.md` with build, install, launch, smoke-test, shortcut, and uninstall results. WACK, Partner Center, store listing, pricing, markets, and submission are out of scope unless the user explicitly switches to `--store`.
+
+Local completion requires the selected build/installation path and smoke test to pass. Record unresolved items as blockers; do not silently continue into Store mode.
+
+---
+
+## MICROSOFT STORE MODE (`--store`)
+
+The following gates are opt-in. Ask Store-specific assessment questions only after the user selected this mode.
 
 ## GATE 0: ASSESSMENT
 
@@ -216,8 +267,10 @@ Note: produces `.appx` (legacy). For pure MSIX, use Microsoft's MSIX Packaging T
 3. Build configuration: Release × x64 (or ARM64)
 4. Output: `bin/Release/AppPackages/{App}_{Version}_x64_bundle.msixbundle`
 
-For all paths, output should be:
+For Store submission, output should be a supported MSIX artifact:
 ```
+./go-to-market/msstore/package/{YourApp}_{x.y.z.w}_{arch}.msix
+or
 ./go-to-market/msstore/package/{YourApp}_{x.y.z.w}_{arch}.msixbundle
 ```
 
@@ -277,7 +330,7 @@ Validate the MSIX before uploading to Partner Center (catch issues that would ot
    cat .\unpacked\AppxManifest.xml
    ```
    Verify:
-   - `Identity Name` matches Package family name from Partner Center
+   - `Identity Name` and `Identity Publisher` match the reserved package identity in Partner Center. The Package Family Name is derived from those values; it is not the `Identity Name` field.
    - `Identity Publisher` matches Publisher identity
    - `Identity Version` is 4-part numeric
    - `Capabilities` declared match what the app actually uses (extra capabilities → reject)
@@ -327,7 +380,7 @@ Write `./go-to-market/msstore/notes/gate-2-validation.md`:
 
 ### Gate condition
 
-**PASS** if manifest matches Partner Center reservation, sideload install + launch works, WACK passes (warnings ok).
+**PASS** if manifest matches the Partner Center reservation, sideload install + launch works, and WACK passes (warnings ok).
 **FAIL** otherwise.
 
 ### Save checkpoint

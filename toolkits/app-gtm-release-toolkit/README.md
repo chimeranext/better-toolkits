@@ -66,7 +66,7 @@ Also register the local stderr adapter so shell redirects are blocked even when 
 | `/app-gtm-release:ship-advisor` | ✅ Phase 0 | Strategic advisor — picks the right ship command for your stack and stores |
 | `/app-gtm-release:ship-flutter` | ✅ Phase 0 | Full guided lifecycle for Flutter → Play + App Store (4 spaces with validation gates) |
 | `/app-gtm-release:ship-pwa` | ✅ Phase 1 | PWA → Microsoft Store + Google Play (TWA) + App Store via PWA Builder (5 gates) |
-| `/app-gtm-release:ship-msstore` | ✅ Phase 1 | App → Microsoft Store (path A PWA Builder MSIX or path B native MSIX, 5 gates) |
+| `/app-gtm-release:ship-msstore` | ✅ Phase 1 | Local Windows build/install and sideload validation by default; pass `--store` for the PWA Builder or native MSIX Store workflow |
 | `/app-gtm-release:ship-snap` | ✅ Phase 1 | Linux desktop → Snap Store with channels strategy (5 gates) |
 | `/app-gtm-release:ship-flatpak` | ✅ Phase 1 | Linux desktop → Flathub via Flatpak manifest + offline Node/Rust sources + PR (5 gates) |
 | `/app-gtm-release:ship-everywhere` | ✅ Phase 1 | Mass-publish orchestrator — runs all applicable ship-X children in sequence |
