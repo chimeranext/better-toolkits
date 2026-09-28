@@ -32,9 +32,11 @@ Copy into every PR body (or mirror in `.github/PULL_REQUEST_TEMPLATE.md`). Fill 
 
 ## Tracker
 
-Fixes TICKET-N
+Use the tracker configured for the target repository:
+- GitHub Issues: `Fixes #N`
+- Configured external tracker: `Fixes TEAM-123`
 
-- Issue: <url>
+- Issue: <canonical issue URL>
 - OpenSpec (if any): `openspec/changes/YYYY-MM-DD-slug/`
 - Cross-repo siblings (if any): link other PR URLs here
 
@@ -62,15 +64,15 @@ Fixes TICKET-N
 | Section | Required when |
 | --- | --- |
 | **Summary** | Always — 2–4 bullets; lead with **what** and **why** |
-| **Tracker** | Always — `Fixes TICKET-N` (or `Closes` / `Resolves`) for auto-link |
+| **Tracker** | Always — use a real issue ID and canonical URL from the target repository's configured tracker. GitHub Issues use `Fixes #N`; external trackers use their native key (for example, `Fixes TEAM-123`). |
 | **Test plan** | Always — checkboxes reviewers can tick; name commands or environments |
 | **Scope boundaries** | Always — prevents surprise files in the diff |
 | **Risk / rollout** | When deploy, schema, infra, or user-visible behavior changes |
 | **Screenshots / evidence** | UI, design-system, or hard-to-verify backend/infra changes |
 
-**Title:** `<type>(<scope>): <outcome> (TICKET-N)` — not `Fix bug` or `WIP updates`.
+**Title:** `<type>(<scope>): <outcome> (<issue-ref>)` — use `(#N)` for GitHub Issues or the configured external key (for example `(TEAM-123)`). Not `Fix bug` or `WIP updates`.
 
-**Branch:** `type/ticket-n-slug` (lowercase ticket id). Prefer the tracker’s suggested branch name when available.
+**Branch:** `type/<issue-ref>-slug`. For GitHub Issues use the numeric issue number (for example `feat/43-native-tracking`); for external trackers use the lowercased native key (for example `feat/team-123-summary`). Prefer the configured tracker's suggested branch name when available.
 
 ---
 
