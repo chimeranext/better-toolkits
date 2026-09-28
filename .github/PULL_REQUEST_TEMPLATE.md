@@ -6,9 +6,11 @@
 
 ## Tracker
 
-Fixes TICKET-N
+Choose the tracker configured for the target repository:
+- GitHub Issues: `Fixes #N`
+- External tracker: `Fixes TEAM-123`
 
-- Issue: <url>
+- Issue: <canonical issue URL>
 - OpenSpec: `N/A` or path
 
 ## Test plan
@@ -34,10 +36,16 @@ Fixes TICKET-N
 ---
 
 Title format:
-`<type>(<scope>): <outcome> (TICKET-N)`
+`<type>(<scope>): <outcome> (<issue-ref>)`
 
 Examples:
-- `docs(pr): add repo PRDS template (TICKET-PRDS-1)`
-- `feat(runbooks): add Windows AI safety guidance (TICKET-WS-42)`
+- `docs(pr): support GitHub-native tracking (#43)`
+- `feat(runbooks): add Windows AI safety guidance (TEAM-123)`
+
+For `better-toolkits` itself, use native GitHub issue numbers in branch names,
+titles, and bodies (`docs/43-short-slug`, `(#43)`, `Fixes #43`). Client
+repositories may use their configured external tracker. `/toolkits-initial-setup`
+still wires Linear MCP for clients; it does not assign a Linear project to this
+public monorepo.
 
 Conventional Commit subject required for every PR title.
