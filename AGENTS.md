@@ -1,64 +1,72 @@
-# Agent guidance — better-toolkits
+﻿# AGENTS.md
 
-Repo-level instructions for Cursor, Claude Code, and other agents working in this
-repository. Prefer this file over inventing workspace layouts under the parent
-`chimeranext/` folder (that folder is **not** a git root).
+This repository follows the PRDS standard from chimeranext/better-toolkits and requires PRs to be reviewable, scoped, and human-approved.
 
-Related: [`docs/hitl.md`](docs/hitl.md) (ask-and-wait before shared-state
-mutations), [`docs/multi-harness-ssot.md`](docs/multi-harness-ssot.md).
+## Required PR behavior
 
-## Marketplace SSOT (mandatory)
+- Use a conventional-commit style title for every PR subject:
+  - `feat(scope): add capability`
+  - `fix(scope): resolve regression`
+  - `docs(pr): align repo to PRDS`
+  - `chore(ci): update templates`
+- Branch names must follow the pattern: `type/ticket-n-slug`
+- Every PR must include the PRDS sections in the body:
+  - Summary
+  - Tracker
+  - Test plan
+  - Scope boundaries
+  - Risk / rollout
+  - Screenshots / evidence
+- The PR description is part of the deliverable and must be written before the PR is marked ready for review.
+- Keep each PR focused; do not bundle unrelated refactors or broad cleanup into the same change.
+- Draft PRs are the default until a human explicitly approves the review.
 
-**One** Claude Code marketplace manifest exists for this monorepo:
+## Required title format
 
-[`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json)
+`<type>(<scope>): <outcome> (TICKET-N)`
 
-- Install surface: `claude plugin marketplace add chimeranext/better-toolkits`
-- **Bootstrap first:** `claude plugin install better-toolkits-bootstrap@better-toolkits` → `/toolkits-initial-setup` (HITL). OpenCode: `npx @chimeranext/better-toolkits setup`. SSOT: `shared/bootstrap/references/toolkits-initial-setup/protocol.md`.
-- **Deprecated** as monorepo SSOT: `npx @lapc506/make-no-mistakes install` (legacy single-toolkit scope).
-- Each toolkit keeps only `.claude-plugin/plugin.json` (plugin identity + version).
-- **Forbidden:** `toolkits/*/.claude-plugin/marketplace.json` — those were standalone-repo
-  leftovers and cause version drift. Do not recreate them.
-- When bumping a toolkit version, update **root** `marketplace.json` + that toolkit's
-  `plugin.json` (and `package.json` / CHANGELOG / README when they exist) in the same PR.
+Examples:
 
-## Runtime hooks (stderr + PRDS)
+- `docs(pr): add PRDS template and repo conventions (TICKET-PRDS-1)`
+- `feat(runbooks): add AI-safe debloat launch guidance (TICKET-WS-42)`
 
-| Runtime | Path | Harnesses |
-| --- | --- | --- |
-| Stderr baseline | [`shared/hooks/stderr/`](shared/hooks/stderr/) | Claude / Cursor / OpenCode |
-| PRDS body gate | [`shared/hooks/prds/`](shared/hooks/prds/) | Claude / Cursor / OpenCode |
+## Required PR body template
 
-Vendor with `scripts/sync-stderr-from-shared.sh` and `scripts/sync-prds-from-shared.sh`.
-See [`docs/multi-harness-ssot.md`](docs/multi-harness-ssot.md).
+```md
+## Summary
 
-## Git worktrees (mandatory when parallel)
+- What changed
+- Why now
+- How it was implemented
 
-When more than one branch/PR is active, or the primary checkout is dirty, use an
-isolated worktree — never ad-hoc sibling folders under `../chimeranext/`.
+## Tracker
 
-**Canonical paths (inside this repo):**
+Fixes TICKET-N
 
-| Harness | Path |
-| --- | --- |
-| Cursor / generic agents | `.agents/worktrees/<slug>` |
-| Claude Code / `/make-no-mistakes:implement` | `.claude/worktrees/<issue-id>` |
-| Manual fallback | `.worktrees/<slug>` |
+- Issue: <url>
+- OpenSpec: `N/A` or path
 
-**Create:**
+## Test plan
 
-```bash
-mkdir -p .agents/worktrees
-git worktree add .agents/worktrees/<slug> -b <branch> <base-ref>
-cd .agents/worktrees/<slug>
+- [ ] <concrete verification command>
+- [ ] <validation result>
+
+## Scope boundaries
+
+- Out of scope:
+- No unrelated refactors
+
+## Risk / rollout
+
+- Risk: low / medium / high
+- Rollout: `N/A` or specific steps
+
+## Screenshots / evidence
+
+- UI: `N/A` or screenshots
+- Logs: `N/A` or link
 ```
 
-**Rules:**
+## Enforcement
 
-- One worktree per issue/agent; do not `git switch` the primary tree to steal a branch.
-- Slug = short kebab case (`feat-og-preview-images`, `APP-1234-widget`).
-- Every mutation: `cd` to the worktree path first (see MNM `feedback_cd_between_worktrees`).
-- Remove worktrees after merge (HITL) — `git worktree remove .agents/worktrees/<slug>`.
-
-**Forbidden:** `../better-toolkits-og`, `../better-toolkits-fcto`, or any flat sibling
-directory under `chimeranext/` — those are accidental, not convention.
+The repository owners expect all future PRs to follow this policy from this point onward.
