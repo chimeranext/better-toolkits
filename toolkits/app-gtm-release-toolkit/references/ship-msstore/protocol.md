@@ -11,7 +11,7 @@ You are the **app-gtm-release** orchestrator for local Windows distribution, wit
 With no mode argument, help the user build, install, and validate the app locally. Do not ask about Partner Center, reservations, pricing, markets, store listings, or submission in this default mode. Only enter the Store workflow when the user passes `--store` or explicitly chooses Microsoft Store.
 
 The Store workflow supports two paths:
-- **Path A: PWA via PWA Builder** — for web apps that already have a deployed HTTPS PWA.
+- **Path A: PWA via PWA Builder** — for web apps that already have a deployed HTTPS PWA. If `/app-gtm-release:ship-pwa` has already produced `./go-to-market/pwa/pwa-builder-packages/windows.msix`, reuse that package instead of generating it again.
 - **Path B: Native MSIX** — for Win32, UWP, .NET MAUI Windows, Tauri, Electron, or another native Windows app that can produce MSIX.
 
 The Store paths share assessment, listing, and submission gates; package preparation and local validation depend on the path. Store certification time is outside the local workflow. Local and Store state are kept in separate directories.
@@ -113,7 +113,7 @@ Ask **one question at a time**. Save answers to `./go-to-market/msstore/notes/ga
 2. **Project source path?** (path to repo root or PWA URL for path A)
 
 3. **Have you already run `/app-gtm-release:ship-pwa`?** (path A only)
-   - If yes, find their `./go-to-market/pwa/pwa-builder-packages/windows.msix` and skip to Gate 3
+   - If yes, find `./go-to-market/pwa/pwa-builder-packages/windows.msix` and skip package preparation; continue to Gate 2 for local package validation.
    - If no, walk through PWA Builder in Gate 1
 
 4. **Native build framework** (path B only)?
