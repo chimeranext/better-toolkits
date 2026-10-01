@@ -116,10 +116,15 @@ If no `openspec/` directory exists, fall back to reading raw spec files. The bri
 
 For each SRD task (or group of related tasks):
 
-1. **Create OpenSpec change:**
-   ```bash
-   openspec new change "{kebab-case-name}"
-   ```
+1. **Create OpenSpec change (OPSX only — legacy phase commands forbidden):**
+   Verify `openspec init` ran in the target repo (`openspec/config.yaml` exists with
+   an explicit `schema:`); if missing, STOP and run `openspec init` first. Check
+   profiles with `openspec schemas --json`. Default `core` profile: `/opsx:propose`
+   (plan) → `/opsx:apply` (implement) → `/opsx:sync` (optional) → `/opsx:archive`.
+   Expanded profile adds `/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`.
+   NEVER use legacy `/openspec:proposal`, `openspec new change`, or any linear
+   propose→apply→archive phasing. Confirm state any time with
+   `openspec status --change "{change}"`.
    Folder name must embed the primary tracker id (`YYYY-MM-DD-{TEAM}-{N}-{slug}` when the
    client uses that convention). **OST:** one issue → one folder → **one store PR → one
    merge** on the store default branch — never bundle another issue's folder into a
@@ -140,10 +145,15 @@ For each SRD task (or group of related tasks):
    - Implementation plan (pre-flight, step-by-step actions, post-flight)
    - Each task as a checkbox that `/opsx:apply` can execute
 
-5. **Create/link Linear issue:**
-   - Use Linear MCP to create issue with: title, project (from `linear-setup.json` mapping), priority, labels, description
-   - Link the OpenSpec change path in the issue description
-   - If issue already exists, add a comment with the OpenSpec change reference
+5. **Create/link tracker issue (Linear-native, GitHub issues as fallback):**
+   - Default: Linear via MCP — create with title, project (from `linear-setup.json`
+     mapping), priority, labels, description; link the OpenSpec change path in the
+     description. If the issue already exists, add a comment with the change reference.
+   - Fallback ONLY when `linear-setup.json` is absent or maps nothing for the domain:
+     `gh issue create` in the owning repo with the same content. Never invent a
+     Linear workspace, team, or project — missing mapping means GitHub-native.
+   - Cross-reference existing tracker issues (search by title/description match)
+     before creating duplicates.
 
 ---
 
@@ -467,24 +477,23 @@ When done, send a summary to the user via Slack MCP with:
 
 ### OpenSpec Workflow
 
-{If an `openspec/` directory exists, the implementation follows the propose/apply/archive cycle:}
+{If an `openspec/` directory exists, the implementation follows OPSX actions (never linear phases):}
 
-**1. Propose** --- Generate the change proposal:
-- Create `openspec/changes/{change-id}/proposal.md` with intent and high-level design
-- Create `openspec/changes/{change-id}/design.md` with technical decisions
-- Create `openspec/changes/{change-id}/tasks.md` with atomic task checklist
-- Generate spec deltas in `openspec/changes/{change-id}/specs/` with ADDED/MODIFIED/REMOVED markers
-- Validate: `openspec validate {change-id}`
+**1. Plan** --- Generate planning artifacts with the change's configured profile
+(`openspec schemas --json`; default `core`):
+- Core: `/opsx:propose` creates proposal + specs + design + tasks in one pass
+- Expanded: `/opsx:new`, then `/opsx:continue` per artifact, or `/opsx:ff` for all
+- Spec deltas go in `openspec/changes/{change-id}/specs/` with ADDED/MODIFIED/REMOVED markers
+- Validate: `openspec status --change "{change-id}"` (all artifacts READY/DONE)
 - **STOP for human review** before proceeding to Apply
 
 **2. Apply** --- Execute the tasks:
-- Implement source code changes based on the task checklist
+- `/opsx:apply` works through `tasks.md`; revise artifacts mid-flight with `/opsx:update`
 - Follow the /make-no-mistakes execution protocol
 
 **3. Archive** --- After merge:
-- Merge deltas into `openspec/specs/` (main spec files)
-- Clean up `openspec/changes/{change-id}/`
-- Run: `openspec archive {change-id}`
+- `/opsx:sync` merges deltas into `openspec/specs/` (or sync during the archive prompt)
+- `/opsx:archive` closes the change
 
 {If no `openspec/` directory exists, proceed directly to the step-by-step actions.}
 
@@ -709,9 +718,9 @@ Evaluate the **long-term implications** of this step's implementation:
 
 ## Requirements
 
-* Linear MCP server configured (for creating issues if requested)
+* Linear MCP server configured (native tracker; `gh` CLI is the fallback when `linear-setup.json` maps nothing)
 * Slack MCP server configured (for notification step and E2E test planning)
-* OpenSpec CLI installed (optional --- enhances workflow with propose/apply/archive)
+* OpenSpec CLI installed with an OPSX profile (`openspec schemas --json`; legacy phase commands forbidden)
 * TaskMaster AI MCP configured (optional --- enhances task decomposition)
 * Spec files must exist at one of the supported discovery locations
-* `linear-setup.json` at repo root (optional --- provides project mappings and path configuration)
+* `linear-setup.json` at repo root (optional --- provides project mappings and path configuration; absent means GitHub-native issues)
