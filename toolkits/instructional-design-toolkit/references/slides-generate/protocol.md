@@ -308,6 +308,18 @@ zero overlays in a consumer without `.claude-plugin/plugin.json` — the base
 deck is generated directly with neutral defaults (no brand palette, no
 logo embedding), with no warning.
 
+## Appendix — HyperFrames rendering notes
+
+When the deck renders as a HeyGen HyperFrames composition (timed scenes,
+player chrome, static hosting), the design rules above still apply, but the
+delivery medium adds its own failure modes: no native deep-linking, player-init
+races against seeks, full-bleed photo geometry, GSAP transform leftovers
+mimicking misalignment, fragment stops reading as broken, font-metric
+measurement for one-line headlines, and contrast-gated accent colors. The
+verified patterns live in
+[`references/slides-generate/hyperframes-lessons.md`](./slides-generate/hyperframes-lessons.md)
+— read it before authoring or debugging a HyperFrames deck.
+
 ## Delegation
 
 This command delegates slide design to the `slides-generate` skill
