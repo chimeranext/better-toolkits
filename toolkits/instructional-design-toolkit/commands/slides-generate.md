@@ -13,4 +13,9 @@ arguments:
 
 Read and follow [`references/slides-generate/protocol.md`](../references/slides-generate/protocol.md) (protocol SSOT). Behavior is unchanged — only structure moved for multi-harness reuse.
 
+For HeyGen HyperFrames decks, also read the appendix pointer at the end of
+the protocol (`references/slides-generate/hyperframes-lessons.md`): deep-link
+params, init-race seeks, full-bleed geometry, alignment triage, and
+contrast-gated accents.
+
 `$ARGUMENTS` are unchanged from the pre-split command.
