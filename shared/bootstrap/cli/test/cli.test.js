@@ -15,7 +15,7 @@ import {
   toolkitSkillsDirs,
   missingSkills,
 } from "../lib/skills.js";
-import { canonicalServers, planMcpStep } from "../lib/mcp.js";
+import { canonicalServers, planMcpStep, whichBin } from "../lib/mcp.js";
 import {
   ENV_FILE_NAME,
   SECRET_NAME,
@@ -218,5 +218,34 @@ describe("shell env sourcing (#52)", () => {
     } finally {
       process.chdir(cwd);
     }
+  });
+});
+
+describe("node path autodetect (#54)", () => {
+  function fakeBinDir() {
+    const dir = mkdtempSync(join(tmpdir(), "bt-bindir-"));
+    writeFileSync(join(dir, "npx"), "#!/bin/sh\n");
+    return dir;
+  }
+
+  it("whichBin finds binaries on the given PATH", () => {
+    const dir = fakeBinDir();
+    assert.equal(whichBin("npx", "FALLBACK", dir), join(dir, "npx"));
+  });
+
+  it("whichBin falls back when absent or PATH empty", () => {
+    const dir = fakeBinDir();
+    assert.equal(whichBin("missing-tool", "FALLBACK", dir), "FALLBACK");
+    assert.equal(whichBin("npx", "FALLBACK", ""), "FALLBACK");
+    assert.equal(whichBin("npx", "FALLBACK", null), "FALLBACK");
+  });
+
+  it("canonicalServers prefers PATH binaries, keeps explicit overrides", () => {
+    const dir = fakeBinDir();
+    const wanted = canonicalServers({ pathEnv: dir });
+    assert.equal(wanted["chrome-devtools-mcp"].command[0], join(dir, "npx"));
+    assert.ok(wanted["chrome-devtools-mcp"].environment.PATH.startsWith(`${dir}:`));
+    const custom = canonicalServers({ nodeBin: "/custom/npx" });
+    assert.equal(custom["chrome-devtools-mcp"].command[0], "/custom/npx");
   });
 });
