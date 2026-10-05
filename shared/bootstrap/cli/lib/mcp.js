@@ -6,18 +6,36 @@
  */
 import { existsSync, readFileSync, writeFileSync, appendFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { homedir } from "node:os";
 import { resolveConfigDir } from "./paths.js";
+
+/** Resolve a binary from PATH (#54): `setup` used to hardcode
+ * `~/.local/node-v22/bin/npx`, which breaks every machine where node lives
+ * elsewhere (`NotFound: ChildProcess.spawn (.../npx ...)` at MCP startup).
+ * `pathEnv` is a test seam; production uses the real `PATH`.
+ */
+export function whichBin(name, fallback, pathEnv = process.env.PATH) {
+  if (!pathEnv) return fallback;
+  for (const dir of pathEnv.split(":")) {
+    if (!dir) continue;
+    const candidate = join(dir, name);
+    try {
+      if (existsSync(candidate)) return candidate;
+    } catch {
+      continue;
+    }
+  }
+  return fallback;
+}
 
 /** Canonical set — mirrors the SSOT table in setup-opencode.md. */
 export function canonicalServers(opts = {}) {
   const home = homedir();
-  const nodeBin = opts.nodeBin || join(home, ".local", "node-v22", "bin", "npx");
-  const dartBin = opts.dartBin || join(home, "flutter", "bin", "dart");
-  const nodePath =
-    opts.nodePath ||
-    `${join(home, ".local", "node-v22", "bin")}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin`;
+  const nodeBin =
+    opts.nodeBin || whichBin("npx", join(home, ".local", "node-v22", "bin", "npx"), opts.pathEnv);
+  const dartBin = opts.dartBin || whichBin("dart", join(home, "flutter", "bin", "dart"), opts.pathEnv);
+  const nodePath = opts.nodePath || `${dirname(nodeBin)}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin`;
   return {
     slack: {
       type: "remote",
