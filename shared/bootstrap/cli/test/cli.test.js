@@ -197,6 +197,7 @@ describe("shell env sourcing (#52)", () => {
     }
     assert.equal(existsSync(marker), true); // stub ran instead of printing next-steps
     assert.ok(logs.some((l) => l.includes("opencode mcp logout slack")));
+    assert.ok(logs.some((l) => l.includes("opencode service restart")));
   });
 
   it("status reports secret presence from the environment", () => {
