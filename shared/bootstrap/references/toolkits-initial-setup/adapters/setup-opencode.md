@@ -186,7 +186,11 @@ Report a table:
    else terminal no-echo) through `setup-opencode-mcp-slack.sh`, which persists
    it mode 0600 — the same script `/secret-input` users run manually.
    Non-interactive runs only print the manual next steps; `audit` flags an
-   unsourced or unexported secret as `(!)`.
+   unsourced or unexported secret as `(!)`. The OAuth code exchange runs in
+   the opencode SERVER process, so `setup` also prints `opencode service
+   restart` before auth: a server started before the secret existed sends an
+   empty secret and Slack answers `bad_client_secret` even with the secret
+   correctly exported in every shell (#52).
 7. Wire the canonical 6 MCP servers (`slack`, `linear`, `chrome-devtools-mcp`,
    `context7`, `stitch`, `dart`) into `mcp.servers` — idempotent merge, secrets
    only as `{env:}` refs. CLI: `setup install [--slack-client-id <id>]`.
