@@ -178,6 +178,19 @@ Report a table:
 6. If `--also-npm`: for each package, run `npx --yes <pkg> install` with matching
    `--config-dir` / `--dry-run` / force policy consistent with existing CLIs.
    Do not claim stderr is covered by npm install alone.
+7. Ensure shells export `{env:}` MCP secrets (#52): `setup` plans an idempotent
+   `shell-env` step that appends one `source …/mcp-secrets.env` line per
+   *existing* `~/.bashrc` / `~/.zshrc` (never creates rc files, never touches
+   secret values). When `SLACK_MCP_CLIENT_SECRET` is still absent and stdin is
+   a TTY, `setup` prompts for the value right there (GUI via zenity/kdialog,
+   else terminal no-echo) through `setup-opencode-mcp-slack.sh`, which persists
+   it mode 0600 — the same script `/secret-input` users run manually.
+   Non-interactive runs only print the manual next steps; `audit` flags an
+   unsourced or unexported secret as `(!)`. The OAuth code exchange runs in
+   the opencode SERVER process, so `setup` also prints `opencode service
+   restart` before auth: a server started before the secret existed sends an
+   empty secret and Slack answers `bad_client_secret` even with the secret
+   correctly exported in every shell (#52).
 7. Wire the canonical 6 MCP servers (`slack`, `linear`, `chrome-devtools-mcp`,
    `context7`, `stitch`, `dart`) into `mcp.servers` — idempotent merge, secrets
    only as `{env:}` refs. CLI: `setup install [--slack-client-id <id>]`.
