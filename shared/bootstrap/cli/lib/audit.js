@@ -9,7 +9,7 @@ import {
   commandsScript,
 } from "./paths.js";
 import { toolkitSkillsDirs, readSkills, missingSkills } from "./skills.js";
-import { canonicalServers } from "./mcp.js";
+import { canonicalServers, shellEnvStatus, ENV_FILE_NAME, SECRET_NAME } from "./mcp.js";
 
 function readBytes(p) {
   try {
@@ -153,6 +153,37 @@ export function audit(opts = {}) {
     `${wantNames.length - missingMcp.length}/${wantNames.length} present${missingMcp.length ? ` — missing: ${missingMcp.join(", ")}` : ""}`,
     missingMcp.length > 0,
   );
+
+  // Shell sourcing for {env:} MCP secrets (#52) — without this, `opencode mcp
+  // auth slack` can never complete and the panel is stuck at Sign In.
+  const se = shellEnvStatus();
+  if (!se.rcs.length) {
+    add(
+      "shell env (slack secret)",
+      `(no shell rc files found — export ${SECRET_NAME} manually)`,
+      true,
+    );
+  } else if (se.unsourced.length) {
+    add(
+      "shell env (slack secret)",
+      `${ENV_FILE_NAME} NOT sourced in: ${se.unsourced.join(", ")} — run install`,
+      true,
+    );
+  } else if (!se.envFileExists) {
+    add(
+      "shell env (slack secret)",
+      `rc files source ${ENV_FILE_NAME} but file is missing — run setup-opencode-mcp-slack.sh`,
+      true,
+    );
+  } else if (!se.secretSet) {
+    add(
+      "shell env (slack secret)",
+      `${ENV_FILE_NAME} sourced but secret absent in current env — open a new shell`,
+      true,
+    );
+  } else {
+    add("shell env (slack secret)", `sourced + ${SECRET_NAME} exported`);
+  }
 
   return { repoRoot, adapter, configDir, rows };
 }
