@@ -187,4 +187,9 @@ export function applyShellEnvStep(step, opts = {}) {
     console.log("    bash shared/bootstrap/scripts/setup-opencode-mcp-slack.sh");
     console.log(`    source ${st.envFile} && opencode mcp logout slack && opencode mcp auth slack`);
   }
+  // The OAuth code exchange runs in the opencode SERVER process: a server
+  // started before the secret existed sends an empty secret and Slack answers
+  // `bad_client_secret` even with LEN=32 in every shell (#52). Restart first.
+  console.log("  next: restart the server so it picks up the env, then auth:");
+  console.log("    opencode service restart");
 }
