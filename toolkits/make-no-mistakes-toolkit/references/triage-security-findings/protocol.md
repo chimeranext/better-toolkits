@@ -1,3 +1,5 @@
+> **MOVED:** SSOT now lives in `toolkits/assurance-toolkit/references/security/protocol.md`. This file is retained read-only until shims are removed.
+
 # /triage-security-findings — protocol SSOT
 
 Harness-agnostic body. Thin entry: `commands/triage-security-findings.md`.
