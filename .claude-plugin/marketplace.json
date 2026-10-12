@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "better-toolkits",
-  "description": "Source-available Claude Code toolkits monorepo — pick the toolkits your startup needs. One marketplace, ten toolkits.",
+  "description": "Source-available Claude Code toolkits monorepo — pick the toolkits your startup needs. One marketplace, eleven toolkits.",
   "owner": {
     "name": "Luis Andres Pena Castillo",
     "email": "lapc506@users.noreply.github.com",
@@ -330,6 +330,39 @@
         "accelerator",
         "three-horizons",
         "govclab"
+      ]
+    },
+    {
+      "name": "assurance",
+      "description": "Release-assurance evidence toolkit — 2 pillars (testing, liveness) + security transversal with its own runner, plus governance (DORA/DER metrics, stage gates, traceable receipts). Migrated quality-evidence commands from make-no-mistakes with shims.",
+      "version": "0.1.0",
+      "source": "./toolkits/assurance-toolkit",
+      "author": {
+        "name": "Luis Andres Pena Castillo",
+        "url": "https://github.com/lapc506"
+      },
+      "homepage": "https://toolkits.chimeranext.dev",
+      "repository": "https://github.com/chimeranext/better-toolkits",
+      "license": "BSL-1.1",
+      "category": "productivity",
+      "keywords": [
+        "claude-code",
+        "claude-code-plugin",
+        "assurance",
+        "quality-engineering",
+        "testing",
+        "e2e",
+        "playwright",
+        "maestro",
+        "pest",
+        "exunit",
+        "observability",
+        "pentest",
+        "masvs",
+        "supply-chain",
+        "slsa",
+        "dora",
+        "quality-gates"
       ]
     }
   ]

@@ -7,8 +7,9 @@ description: >
   capable of firing. Runtime audit against live systems — not a static repo scan. Accepts a
   target as $ARGUMENTS.
 ---
-# /observability-audit
+# /observability-audit — MOVED (shim)
 
-Read and follow [`references/observability-audit/protocol.md`](../references/observability-audit/protocol.md) (protocol SSOT).
-
-`$ARGUMENTS` unchanged from the upstream protocol.
+> **DEPRECATION WARNING:** this command moved to `/assurance:observability-audit`
+> (assurance-toolkit, pilar liveness). This file is a thin shim and will be removed
+> in a future minor. Behavior is unchanged — follow the new SSOT:
+> [`references/liveness/protocol.md`](../../assurance-toolkit/references/liveness/protocol.md).

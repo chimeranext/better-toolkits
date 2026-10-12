@@ -3,8 +3,9 @@ description: Triage security scan findings (pentest playbook + CI) into owned ba
 argument-hint: "[list|dry-run|scanner|phase2|phase7|manual|pentest-report] [--pr N] [--run ID] [--repo org/repo]"
 priority: 25
 ---
-# /triage-security-findings
+# /triage-security-findings — MOVED (shim)
 
-Read and follow [`references/triage-security-findings/protocol.md`](../references/triage-security-findings/protocol.md) (protocol SSOT). Behavior is unchanged — only structure moved for multi-harness reuse.
-
-`$ARGUMENTS` are unchanged from the pre-split command.
+> **DEPRECATION WARNING:** this command moved to `/assurance:triage-security-findings`
+> (assurance-toolkit, transversal security). This file is a thin shim and will be removed
+> in a future minor. Behavior is unchanged (cola → dueño → SLA → receipt, security-owned) — follow the new SSOT:
+> [`references/security/protocol.md`](../../assurance-toolkit/references/security/protocol.md).
