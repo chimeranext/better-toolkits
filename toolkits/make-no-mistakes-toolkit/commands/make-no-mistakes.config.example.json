@@ -24,7 +24,18 @@
   "readyToReview": {
     "remoteReview": { "required": true },
     "localReview": { "mode": "fallback-only" },
-    "implement": { "stopAfter": "phase-3-step-12" }
+    "implement": { "stopAfter": "phase-3-step-12" },
+    "assurance": {
+      "beforeRemoteReview": true,
+      "invoke": "/assurance:triage pr",
+      "receipt": { "path": ".local/receipts/assurance-pr-{pr}.json" },
+      "pillars": {
+        "testing": "required",
+        "security": "required",
+        "liveness": "skip",
+        "governance": "required"
+      }
+    }
   },
-  "_readyToReview": "Behaviour for `/ready-to-review-mergeable`. Remote PR bot review is mandatory by default; local diff review (e.g. `/local-pr-review`, harness `/review-bugbot`) runs only when remote cannot run. Always delegates to `/implement` through Phase 3 step 12 — no merge, no Linear Done, no worktree cleanup from this command. Issue ID required in $ARGUMENTS; optional `remoteReview.bots` overrides default bot list; optional `localReview.fallback` array for harness-specific invocations when remote is unavailable."
+  "_readyToReview": "Behaviour for `/ready-to-review-mergeable`. Order: `/implement` through Phase 3 step 12 (skip steps 9–10) → `/assurance:triage pr` → mandatory remote PR review → local diff review only if remote unavailable → human handoff. Issue ID required in $ARGUMENTS. See assurance-toolkit `references/triage/protocol.md`."
 }

@@ -34,39 +34,41 @@ npx @chimeranext/better-toolkits setup
 
 Or install `better-toolkits-bootstrap@better-toolkits` and run `/toolkits-initial-setup`.
 
-## Start here: `/assurance:triage-security-findings`
+## Start here: `/assurance:triage`
 
 **If you only run one command from this plugin, understand this split first.**
 
-assurance writes **evidence**; the dev workflow consumes it in gates. The two
-pillars answer different questions, and security runs on its own cadence:
+assurance writes **evidence**; the dev workflow consumes it in gates. `/assurance:triage`
+routes **per-pillar sub-protocols** (see `references/*/triage.md`). Default mode
+**`pr`** runs before remote code review in `/ready-to-review-mergeable`.
 
-| Pillar | Question | Commands | Cadence |
-|--------|----------|----------|---------|
-| testing | Does it do what it says? | [`/e2e-test-builder`](#commands-7), [`/e2e-test-runner`](#commands-7), [`/e2e-test-preview`](#commands-7) | Per PR |
-| liveness | Is it still alive? | [`/observability-audit`](#commands-7) | Always (schedule/daemon) |
-| security (transversal) | Is it safe? | [`/pentest-runner`](#commands-7), [`/pentest-playbook-setup`](#commands-7), [`/triage-security-findings`](#commands-7) | Per release / finding SLA |
-| governance (no runners) | How do we measure, block, prove? | DORA/DER metrics, stage gates, receipts | Per release |
+| Pillar | Question | PR triage | Runners / deep commands | Cadence |
+|--------|----------|-----------|-------------------------|---------|
+| testing | Does it do what it says? | [`testing/triage.md`](references/testing/triage.md) | [`/e2e-test-builder`](#commands-8), [`/e2e-test-runner`](#commands-8), [`/e2e-test-preview`](#commands-8) | Per PR |
+| liveness | Is it still alive? | [`liveness/triage.md`](references/liveness/triage.md) (default **skip** on PR) | [`/observability-audit`](#commands-8) | Always (schedule/daemon) |
+| security (transversal) | Is it safe? | [`security/triage.md`](references/security/triage.md) | [`/pentest-runner`](#commands-8), [`/pentest-playbook-setup`](#commands-8), [`/triage-security-findings`](#commands-8) | Per release / finding SLA |
+| governance (no runners) | How do we measure, block, prove? | [`governance/triage.md`](references/governance/triage.md) | DORA/DER metrics, stage gates, receipts | Per release |
 
 Security reports are never mixed with test reports — each release demands
 separate verdicts. Full teaching sections in `references/*/protocol.md`.
 
 ## What's Inside
 
-### Commands (7)
+### Commands (8)
 
 Migrated from `make-no-mistakes-toolkit` with shims (behavior unchanged).
 Deliberate actions you invoke explicitly.
 
 | Command | Description |
 |---------|-------------|
+| [`/assurance:triage [pr\|pillar]`](commands/triage.md) | **PR-stage hub** — per-pillar triage before remote code review; sub-protocols in `references/*/triage.md` |
 | [`/assurance:e2e-test-builder <source>`](commands/e2e-test-builder.md) | Generate a TestSprite-compatible `test-suite.json` from docs or PRDs (pilar testing) |
 | [`/assurance:e2e-test-runner [filter]`](commands/e2e-test-runner.md) | Execute E2E tests from `test-suite.json` with runner selection and reporting (pilar testing) |
 | [`/assurance:e2e-test-preview [path]`](commands/e2e-test-preview.md) | Qt-based visual previewer for `test-suite.json` — interactive table, filtering, CSV export (pilar testing) |
 | [`/assurance:observability-audit <target>`](commands/observability-audit.md) | Audit whether observability actually WORKS (telemetry received, live destinations, demonstrated alerts) — runtime audit, not a static scan (pilar liveness) |
 | [`/assurance:pentest-runner <phase>`](commands/pentest-runner.md) | Automated pentesting following Cyber Kill Chain + OWASP methodology, plus OWASP ASI01–ASI10 agentic red-team (transversal security) |
 | [`/assurance:pentest-playbook-setup [audit\|sync\|workflows\|gaps]`](commands/pentest-playbook-setup.md) | Audit/sync pentest playbook ↔ CI ↔ tenant triage config (transversal security) |
-| [`/assurance:triage-security-findings <scanner\|phase2\|pentest-report>`](commands/triage-security-findings.md) | Triage CI + pentest findings into owned backlog issues — cola → dueño → SLA → receipt (transversal security) |
+| [`/assurance:triage-security-findings <scanner\|phase2\|pentest-report>`](commands/triage-security-findings.md) | Security **backlog** triage (invoked from `security/triage.md` when needed) — cola → dueño → SLA → receipt |
 
 Not migrated (stay in `make-no-mistakes`): `ready-to-review-mergeable`, `premortem`, audits, coordination, rituals. `gemini-code-review` merges into `local-pr-review --provider gemini`.
 
@@ -107,6 +109,7 @@ Auto-activate by context — you don't need to remember the command name.
 | [`references/liveness/protocol.md`](references/liveness/protocol.md) | Observability escalera, chaos + resilience score, baselines, K8s pre-flight signals, playbook/runbook taxonomy |
 | [`references/security/protocol.md`](references/security/protocol.md) | Pentest trilogy, MASVS→MASWE→MASTG, SAST/DAST/SCA, signed supply-chain, mobile REA, agentic red-team, K8s runtime + policy engines |
 | [`references/governance/protocol.md`](references/governance/protocol.md) | DORA/DER metrics, stage gates, GitOps pipeline, K8s layered pre-flight, receipts, SemVer universal |
+| [`references/triage/protocol.md`](references/triage/protocol.md) | `/assurance:triage` hub — routes PR-stage sub-protocols per pillar |
 
 ## Architecture
 
@@ -114,14 +117,15 @@ Auto-activate by context — you don't need to remember the command name.
 assurance-toolkit/
 ├── .claude-plugin/     # Claude Code plugin metadata
 │   └── plugin.json
-├── commands/           # 7 explicit commands (thin entries → references/)
+├── commands/           # 8 explicit commands (thin entries → references/)
 ├── skills/             # 22 auto-activating skills
 │   └── */SKILL.md
 ├── references/         # Protocol SSOT per pillar
-│   ├── testing/protocol.md
-│   ├── liveness/protocol.md
-│   ├── security/protocol.md
-│   └── governance/protocol.md
+│   ├── triage/protocol.md
+│   ├── testing/protocol.md + triage.md
+│   ├── liveness/protocol.md + triage.md
+│   ├── security/protocol.md + triage.md
+│   └── governance/protocol.md + triage.md
 ├── CHANGELOG.md
 └── README.md
 ```
