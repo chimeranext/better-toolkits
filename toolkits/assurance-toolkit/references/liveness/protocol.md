@@ -25,3 +25,17 @@ abort criteria con auto-stop. Matriz Litmus (hub, GitOps, ChaosCenter, MCP) vs C
 
 p95/p99 de perf → baselines versionadas que liveness vigila. Al cambiar de herramienta,
 re-baselinear (métricas no comparables entre herramientas).
+
+## Migrated skills (flutter-boilerplate-monorepo-template, reinterpretados)
+
+- **flutter-error-tracking**: Sentry/Crashlytics + breadcrumbs + source maps; errores como señal MTTD.
+- **sre-observability-stack**: Prometheus/Grafana/Jaeger/OTel; liveness, heartbeat, absence-detection.
+- **sre-alerting-incident-management**: PagerDuty/Opsgenie, on-call, monitoring-as-code; cada alerta con dueño y runbook linkeado.
+- **sre-chaos-engineering**: Litmus, failure injection, game days (principlesofchaos); alimenta la PoC Litmus vs Chaos Mesh.
+- **sre-database-reliability (liveness)**: replication lag y failover readiness como señales; drills en testing.
+
+## Playbook + runbooks (taxonomía fractional-cto 08/09)
+
+El **playbook** decide (árbol diagnose/recover/escalate, pattern-IDs MDAA/MASWE);
+los **runbooks** ejecutan (diagnose read-only con Events → stern → k9s, recover/restore).
+Prosa sin árbol ni trigger = post-mortem, no playbook/runbook.
