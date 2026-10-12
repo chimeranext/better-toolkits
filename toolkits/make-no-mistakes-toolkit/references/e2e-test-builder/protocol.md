@@ -1,3 +1,5 @@
+> **MOVED:** SSOT now lives in `toolkits/assurance-toolkit/references/testing/protocol.md`. This file is retained read-only until shims are removed.
+
 # /e2e-test-builder — protocol SSOT
 
 Harness-agnostic body. Thin entry: `commands/e2e-test-builder.md`.
