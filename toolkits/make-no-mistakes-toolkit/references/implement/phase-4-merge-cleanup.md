@@ -6,10 +6,12 @@ Merge + Linear Done + worktree cleanup HITL gates; sync for next issue.
 
 13. **Merge the PR** (HITL gate per "Hard STOP #2") — **In Review + Ready to Merge only; skipped for Draft**:
     - **In Review mode** → STOP and ask the user: "Ready to merge? CI is green: `<one-line summary of checks + reviewer states>`." Wait for an explicit OK before running `gh pr merge`. _Sub-agents: emit a `pause` signal with gate `"merge"` instead — see "Sub-agent exception"._
-    - **Ready to Merge mode** → Surface merge intent in chat (1–2 lines, e.g., "All checks green; merging squash with branch delete in 5s.") then proceed without an additional approval prompt.
+    - **Ready to Merge mode** → Surface merge intent in chat (1–2 lines, e.g., "All checks green; merging with merge commit in 5s.") then proceed without an additional approval prompt.
     - **Draft mode** → This step does not run; proceed to step 14.
     ```bash
-    gh pr merge {pr-number} --squash --delete-branch
+    # Prefer merge commit (traceability). Never --squash unless the human explicitly asked.
+    # better-toolkits monorepo: squash is forbidden — see docs/git-merge-policy.md
+    gh pr merge {pr-number} --merge
     ```
 
 14. **Update Linear** (HITL gate per "Hard STOP #3" — applies regardless of mode):
