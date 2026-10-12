@@ -256,3 +256,31 @@ El sistema SHALL tratar los scenarios Widgetbook como espejo Flutter de las stor
 
 - **WHEN** un refactor quita un label sin cambiar un píxel
 - **THEN** el diff de semántica lo detecta aunque el diff visual pase
+
+### Requirement: Eval-driven development para features con LLM
+
+El sistema SHALL aplicar evaluation-driven development (Huyen Ch4): criterios medibles primero (factual consistency local/global, safety, capabilities de dominio), benchmarks con desconfianza (mayoría close-ended tipo MMLU: verificar qué miden antes de confiar), judges especializados y calibrados sobre LLM-judges genéricos, pipeline de eval que guía el desarrollo y feedback conversacional como dato (Ch10). Defensa de prompt attacks en capas con system prompt priorizado (Ch5).
+
+#### Scenario: Criterios antes que código
+
+- **WHEN** arranca una feature con LLM
+- **THEN** existen criterios medibles + baseline antes del primer deploy (una app desplegada sin evaluación es peor que no desplegarla)
+
+#### Scenario: Judge calibrado, no opinión genérica
+
+- **WHEN** se usa AI-judge
+- **THEN** es especializado, calibrado contra anotadores y versionado con el pipeline
+
+### Requirement: Suites risk-driven con self-testing (Fowler)
+
+El sistema SHALL diseñar suites risk-driven: testear lo que más preocupa que falle (no "todo método público"); tests incompletos que corren valen más que tests completos inexistentes; auto-verificantes, frecuentes y aislados (cualquier orden); characterization tests antes de refactorizar legacy sin red.
+
+#### Scenario: Suite económica priorizada por riesgo
+
+- **WHEN** el tiempo es limitado
+- **THEN** la cobertura prioriza riesgo documentado, y el resto queda como deuda explícita, no como hueco silencioso
+
+#### Scenario: Refactor con red
+
+- **WHEN** se refactoriza código sin tests
+- **THEN** hay characterization tests en verde antes y después de cada paso pequeño

@@ -36,3 +36,16 @@ Los stacks iniciales son los primeros adapters, no una lista cerrada (ver matriz
 
 - Golden rules exigibles antes del merge; taxonomía de flakes dirige el fix (nunca subir timeouts).
 - Reportes de tests nunca mezclados con reportes de seguridad (veredictos separados).
+
+## Eval-driven + risk-driven (Huyen + Fowler)
+
+- **Eval-driven development**: criterios medibles primero (factual consistency local/global, safety, capabilities); benchmarks con desconfianza; judges especializados y calibrados; feedback conversacional como dato.
+- **Risk-driven**: testear lo que más preocupa; incompletos que corren > completos inexistentes; auto-verificantes, frecuentes, aislados; characterization tests antes de refactorizar legacy.
+
+## Migrated skills (flutter-boilerplate-monorepo-template, reinterpretados)
+
+- **flutter-testing-strategy**: pirámide unit/widget/integration + TDD; correr desde la raíz del proyecto.
+- **flutter-mobile-testing**: device testing vía Dart/Flutter MCP + Mobile Next MCP; inspección del widget tree en vivo (RenderFlex overflow), sims + devices reales.
+- **flutter-accessibility**: Semantics, TalkBack/VoiceOver, focus management, contraste; mapea al gate a11y escalonado.
+- **flutter-performance**: rebuilds, listas, memoria, lazy loading, profiling; resultados → baselines de SLOs.
+- **sre-load-testing-performance**: recetas k6/JMeter, stress, capacity planning, benchmarking.

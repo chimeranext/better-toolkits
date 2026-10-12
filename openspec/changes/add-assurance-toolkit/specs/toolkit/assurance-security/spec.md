@@ -33,6 +33,30 @@ El sistema SHALL mapear cada hallazgo móvil a control MASVS vía debilidad MASW
 - **WHEN** el pentest reporta un hallazgo
 - **THEN** incluye IDs MASVS/MASWE/MASTG y perfil aplicable, o queda marcado como no-mapeado
 
+### Requirement: Red-team agentic con OWASP ASI01–ASI10 + LLM02
+
+El sistema SHALL evaluar apps agénticas contra OWASP Top 10 Agentic 2026 (ASI01 Goal Hijack, ASI02 Tool Misuse, ASI03 Identity Abuse, ASI04 Supply Chain incl. MCPs comprometidos, ASI05 Code Exec, ASI06 Memory Poison, ASI07 Inter-Agent Comms, ASI08 Cascading Failures, ASI09 Human-Agent Trust, ASI10 Rogue Agents) más LLM02 PII cross-cutting. Método en 4 fases: Build → Audit (scenario maps por ASI) → Define controls → Monitor & iterate; prioridades Foundation (ASI01/02/PII) → Coverage (métricas + audit trail) → Depth (custom) → Extension (GDPR/EU AI Act como policies). Defensas en capas (gateway heurístico, guardrails SLM context-aware en línea, controles de salida); SoD (quien codea el agente no define sus policies); gateway + code layer. Training-data alignment: cada escenario OWASP mapea a datos de detección; validar con suites OWASP-aligned, no benchmarks genéricos.
+
+#### Scenario: Cobertura completa, no solo prompt injection
+
+- **WHEN** un agente entra en scope
+- **THEN** el audit cubre ASI01–ASI10 con scenario maps (2–3/10 es el gap documentado, no el objetivo)
+
+#### Scenario: Tool scoping frena exfiltración legítima
+
+- **WHEN** un tool acepta parámetros de alcance (segmentos, tenants, regiones)
+- **THEN** la policy de mínimo alcance bloquea bulk queries aunque el permiso exista
+
+#### Scenario: Agent graph auditable
+
+- **WHEN** ocurre un tool call, planning step o mensaje inter-agente
+- **THEN** queda en el agent graph con detección de patrones anómalos (volúmenes, secuencias de escalación)
+
+#### Scenario: PII tolerancia cero
+
+- **WHEN** un output contiene PII contextual (nombre + actividad + ubicación sin campo sensible aislado)
+- **THEN** el gate lo detecta (regex no basta) antes de que salga del agente
+
 ### Requirement: Capa automatizada SAST/DAST/SCA
 
 El sistema SHALL correr escaneo automatizado antes del pentest manual: SAST (Semgrep), DAST (OWASP ZAP), SCA sobre el SBOM (Trivy/Grype, Dependency-Track) más dependency-review en PR. Críticas bloquean; el resto va a triage con SLA.
@@ -50,3 +74,12 @@ El sistema SHALL exigir por artefacto desplegable: SBOM canónico (CycloneDX o S
 
 - **WHEN** un deploy presenta imagen sin firma o proveniencia válida
 - **THEN** admission lo rechaza y el evento queda auditado
+
+### Requirement: Supply-chain móvil sin fuente (modelo REA)
+
+El sistema SHALL verificar artefactos móviles sin código fuente: apps Flutter por snapshot hash de Dart, digests por ABI y proveniencia del engine (parseo estático del APK); APKs por manifest, clases y métodos decompilados (JADX); firmware/EVM/WASM según aplique. Todo hallazgo se reporta con evidencia + limitaciones explícitas (qué se inspeccionó, qué no), mismo formato que los receipts.
+
+#### Scenario: APK verificado sin fuente
+
+- **WHEN** llega un APK release sin acceso al repo
+- **THEN** se verifica snapshot hash, engine build y superficie (permisos, clases) contra el baseline firmado, con limitaciones declaradas

@@ -42,3 +42,17 @@ El sistema SHALL convertir p95/p99 de los runs de perf en baselines versionadas 
 
 - **WHEN** el p99 supera baseline + delta configurado
 - **THEN** se emite alerta de regresión de performance con el run responsable
+
+### Requirement: Playbook de diagnóstico + runbooks ejecutables (taxonomía fractional-cto)
+
+El sistema SHALL separar según templates 08/09: el **playbook** decide (WHEN/WHY: árbol diagnose vs recover vs escalate por clase de síntoma, con pattern-IDs estables modelo MDAA/MASWE como firmas); los **runbooks** ejecutan (HOW secuencial disparado por trigger: scripts diagnose read-only con la jerarquía Events → stern → k9s → built-ins, y scripts recover/restore). Capturas por criterio (modelo ProcDump) en vez de captura ciega. Los receipts referencian pattern-IDs del playbook + salida de los runbooks, no prosa.
+
+#### Scenario: Playbook decide, runbook ejecuta
+
+- **WHEN** un Pod falla silencioso
+- **THEN** el playbook elige rama (diagnose: jerarquía de señales en orden) y dispara el runbook correspondiente; el hallazgo queda con pattern-ID reutilizable
+
+#### Scenario: Prosa sin árbol ni trigger no es playbook/runbook
+
+- **WHEN** un documento de diagnóstico no tiene árbol de decisión ni trigger con pasos
+- **THEN** se clasifica como post-mortem o nota, no como playbook/runbook del toolkit
