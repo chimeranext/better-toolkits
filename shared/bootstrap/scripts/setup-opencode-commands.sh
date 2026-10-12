@@ -103,7 +103,7 @@ if [[ "$CHECK" -eq 1 ]]; then
       echo "BROKEN: $link" >&2
       missing=$((missing + 1))
     fi
-  done < <(find "$DEST_BASE" -type l -print0 2>/dev/null || true)
+  done < <(find "$DEST_BASE" -type l -print0 || true)
   # Top-level bootstrap alias (see below).
   if [[ ! -L "$DEST_BASE/toolkits-initial-setup.md" || ! -e "$DEST_BASE/toolkits-initial-setup.md" ]]; then
     echo "MISSING: toolkits-initial-setup.md (top-level alias)" >&2
@@ -125,7 +125,7 @@ while IFS= read -r -d '' link; do
     rm -f "$link"
     pruned=$((pruned + 1))
   fi
-done < <(find "$DEST_BASE" -type l ! -exec test -e {} \; -print0 2>/dev/null || true)
+done < <(find "$DEST_BASE" -type l ! -exec test -e {} \; -print0 || true)
 
 if [[ "$DRY_RUN" -eq 1 ]]; then
   echo "--dry-run: no changes made"
