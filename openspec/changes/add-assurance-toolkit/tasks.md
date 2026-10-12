@@ -36,16 +36,29 @@
 - [x] 5.4 Documentar Patrol gris + Maestro humo (caveat CI, pin de versiones, device OS fijo) y a11y escalonada (axe-core, Axe DevTools Mobile, fail critical/serious) y verificar contra una app Flutter de ejemplo
 - [x] 5.5 Documentar component testing con stories portables (play + queries por rol, Vitest addon vs test-runner, a11y error/todo/off, tags) y verificar una story corriendo en Vitest + a11y + E2E iframe
 - [x] 5.6 Documentar scenarios Widgetbook (args fijos + modes + `run`, matriz global, goldens con entorno fijo, 4 guidelines + semantics diff, tokens como cheapest fix) y verificar un scenario en matriz theme × locale × text-scale
+- [x] 5.7 Documentar eval-driven development (criterios, judges calibrados, benchmark hygiene, feedback conversacional) y suites risk-driven + characterization tests (Fowler) y verificar criterios medibles en una feature con LLM de ejemplo
 
 ## 6. Security desde research (solo docs + gates)
 
 - [x] 6.1 Documentar trazabilidad MASVS → MASWE → MASTG v2 con perfiles L1/L2/R/P y guía de fix MASTG-BEST; verificar un hallazgo de ejemplo mapeado de punta a punta
 - [x] 6.2 Documentar capa SAST/DAST/SCA (Semgrep, ZAP, Trivy/Grype, dependency-review) y supply-chain firmada (SBOM canónico, Sigstore, SLSA L2/L3, admission fail-closed); verificar un deploy sin firma rechazado en un cluster de prueba
+- [x] 6.3 Documentar red-team agentic (ASI01–ASI10 + LLM02, 4 fases, SoD, tool scoping, agent graph, PII tolerancia cero) y verificar scenario maps versionados para un agente de ejemplo
 
 ## 7. Liveness y gobierno (solo docs + gates)
 
 - [x] 7.1 Decidir Litmus vs Chaos Mesh con PoC (hipótesis SLO, probes, abort criteria) y evaluar Antithesis para sistemas con estado; verificar un experimento con veredicto objetivo
 - [x] 7.2 Documentar métricas (DORA, DER/DRE, MTTD/MTTR, `found_env`, ventana 14d, anti-gaming), gates por etapa y formato de receipts fase 7; verificar un release reconstruible desde receipts
+- [x] 7.3 Documentar pipeline de gates GitOps (waves, hooks Pre/PostSync, `ignoreDifferences` como baseline, health assessment, App of Apps) y verificar orden infra-primero en un deploy de ejemplo
+
+## 9. Migración 21 skills del template (ejecutada con shims)
+
+- [x] 9.1 Migrar 6 skills flutter (testing-strategy, mobile-testing, accessibility, performance → testing; error-tracking → liveness; security → security) con thin skills + protocolo + shim
+- [x] 9.2 Migrar 7 skills SRE testing/liveness (load, observability, alerting, logging, chaos, db-part, DR-part) con thin skills + protocolo + shim
+- [x] 9.3 Migrar 4 skills SRE security+gobierno (sec-compliance, container, network, slo) con thin skills + protocolo + shim
+- [x] 9.4 Migrar 4 restantes (argocd, github-actions, static-analysis, versioning universal SemVer+commits) con thin skills + protocolo + shim
+- [x] 9.5 Verificar 21 shims en el template y licencia compatible (BSL-1.1, mismo org)
+- [ ] 9.6 Validar change + PR en ambos repos (better-toolkits y monorepo-template) con HITL y mergear
+- [x] 9.7 Documentar en protocolo: eval-driven + Fowler (testing), red-team agentic + REA móvil (security), GitOps + K8s pre-flight (governance), playbook/runbook taxonomy (liveness) — implementado y verificado en archivos
 
 ## 8. Validación e integración
 
