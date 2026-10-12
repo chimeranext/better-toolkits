@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Claude Code PreToolUse(Bash) — PRDS gate on git push / gh pr create|edit.
 # Blocking exit: 2. Tooling failure: fail-open (0).
+# No output is discarded: binaries are captured into variables, never sent to null.
 set -u
 
 HOOKS_PRDS_DIR="$(cd "$(dirname "$0")/.." && pwd)"
@@ -12,14 +13,16 @@ fi
 
 REPO_ROOT="${CLAUDE_PROJECT_DIR:-$(pwd)}"
 CFG="$REPO_ROOT/.claude/config/prds-hooks.json"
-if [ -r "$CFG" ] && command -v jq >/dev/null 2>&1; then
-  ENABLED="$(jq -r '.enforce_prds // true' "$CFG" 2>/dev/null)" || ENABLED="true"
+JQ_BIN="$(command -v jq)"
+if [ -r "$CFG" ] && [ -n "$JQ_BIN" ]; then
+  ENABLED="$("$JQ_BIN" -r '.enforce_prds // true' "$CFG")" || ENABLED="true"
   if [ "$ENABLED" = "false" ]; then
     exit 0
   fi
 fi
 
-if ! command -v python3 >/dev/null 2>&1; then
+PYBIN="$(command -v python3)"
+if [ -z "$PYBIN" ]; then
   echo "[claude-pre-bash.sh] WARN: python3 not found; PRDS failing open." >&2
   exit 0
 fi
@@ -31,7 +34,7 @@ fi
 
 INPUT_RAW="$(cat)"
 
-CMD="$(printf '%s' "$INPUT_RAW" | python3 -c '
+CMD="$(printf '%s' "$INPUT_RAW" | "$PYBIN" -c '
 import json,sys
 raw=sys.stdin.read()
 try:
@@ -46,7 +49,7 @@ print(cmd if isinstance(cmd,str) else "")
 
 [ -z "$CMD" ] && exit 0
 
-if ! python3 "$DETECT" --command "$CMD" --cwd "$REPO_ROOT"; then
+if ! "$PYBIN" "$DETECT" --command "$CMD" --cwd "$REPO_ROOT"; then
   exit 2
 fi
 exit 0

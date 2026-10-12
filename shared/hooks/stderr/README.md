@@ -3,7 +3,9 @@
 **On by default. Opt-out** when you need to.
 
 Blocks agent shell commands that discard stderr (`2>/dev/null`, `&>/dev/null`,
-`>/dev/null 2>&1`) or fold stderr with bare `2>&1` without a file/`tee` sink.
+`>/dev/null 2>&1`) or stdout (`>/dev/null` bare or reversed as `2>&1 >/dev/null`),
+or fold stderr with bare `2>&1` without a file/`tee` sink. No stream goes to null, ever:
+capture with `out=$(cmd)` or sink to log files.
 
 Shared detector: [`detect.py`](detect.py).
 
@@ -49,7 +51,7 @@ python3 hooks/stderr/detect.py --command 'cmd 2>&1 | tee run.log' # exit 0
 
 ## Allowed patterns
 
-- `cmd 2>&1 >/dev/null` — stderr duplicated to original stdout first
+- `out=$(cmd)` — capture instead of discarding
 - `cmd >out.log 2>err.log` / `cmd >all.log 2>&1` / `cmd 2>&1 | tee run.log`
 - `out=$(cmd)` when you only need the exit code
 
