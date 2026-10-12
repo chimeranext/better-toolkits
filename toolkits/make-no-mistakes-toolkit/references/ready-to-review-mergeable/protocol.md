@@ -39,6 +39,8 @@ below apply when the block is absent.
 | `readyToReview.remoteReview.required` | `true` | Remote bot review on the PR is mandatory before exit. |
 | `readyToReview.localReview.mode` | `fallback-only` | Local diff review runs **only** when remote review cannot run. |
 | `readyToReview.implement.stopAfter` | `phase-3-step-12` | `/implement` stops before merge / Linear-Done / worktree cleanup. |
+| `readyToReview.assurance.beforeRemoteReview` | `true` | Run `/assurance:triage pr` before tagging remote code-review bots. |
+| `readyToReview.assurance.pillars.*` | testing/security/governance `required`, liveness `skip` | Per-pillar PR triage; see assurance `references/triage/protocol.md`. |
 
 ---
 
@@ -56,11 +58,12 @@ below apply when the block is absent.
 Invoke **`make-no-mistakes:implement`** for every parsed issue ID.
 
 **Scope boundary:** implement runs through **Phase 3, step 12** (PR exists, not
-Draft unless the user chose Draft at the PR open-state HITL gate, remote
-reviewers tagged per project config, reviewer feedback addressed, CI green,
-no merge conflicts). **Do not** run implement Phase 4 (merge, Linear → Done,
-worktree removal) from this command unless the user explicitly invoked full
-`/implement` in the same session for merge.
+Draft unless the user chose Draft at the PR open-state HITL gate, CI green,
+no merge conflicts). **Skip implement Phase 3 steps 9–10** (remote bot tag /
+wait loop) — those run in **§3** after **§2b** assurance triage. **Do not**
+run implement Phase 4 (merge, Linear → Done, worktree removal) from this
+command unless the user explicitly invoked full `/implement` in the same
+session for merge.
 
 Implement still owns:
 
@@ -72,6 +75,24 @@ Implement still owns:
 
 See `references/implement/phase-3-pr-review.md` and
 `references/implement/hitl-boundaries.md`.
+
+### 2b. Assurance PR triage (mandatory before remote review)
+
+When `readyToReview.assurance.beforeRemoteReview` is true (default):
+
+1. Invoke **`/assurance:triage pr`** with `--pr <N>` and the tracker issue id
+   (assurance plugin or thin harness entry pointing at
+   `toolkits/assurance-toolkit/references/triage/protocol.md`).
+2. Hub runs pillar sub-protocols in order (testing → security → governance →
+   liveness only if not `skip`). See `readyToReview.assurance.pillars` in config.
+3. **BLOCKED** → fix, push, re-run §2b; **do not** tag remote code-review bots.
+4. **PASS** → proceed to §3.
+
+If the assurance plugin is not installed and config does not set
+`readyToReview.assurance.required: false`, run the same protocol body from the
+monorepo reference path or report **BLOCKED** — do not skip silently.
+
+Local diff review (§4) does **not** replace assurance triage or remote review.
 
 ### 3. Remote review (mandatory)
 
@@ -100,7 +121,7 @@ If `readyToReview.remoteReview.bots` is set in config, use that list; else use
 project `linear-setup.json` defaults (e.g. Greptile / CodeRabbit / Graphite)
 when present.
 
-### 4. Local review (fallback only)
+### 4. Local review (fallback only — remote code review unavailable)
 
 Run a **local** diff review **only** when remote review cannot be executed, for
 example:
@@ -126,6 +147,7 @@ You are **not done** until for every issue:
 
 | Check | Required |
 | --- | --- |
+| Assurance PR triage | PASS per §2b (or explicitly waived in config) |
 | Remote review | Passed per §3, or documented fallback per §4 with user visibility |
 | CI | All required PR checks green (or out-of-scope failures explicitly listed) |
 | Mergeability | `mergeable` / no unresolved conflicts |
@@ -164,6 +186,7 @@ or in `/implement` after an issue exists — not in `/ready-to-review-mergeable`
 ## Anti-patterns
 
 - Running this command without a tracker issue ID
+- Tagging remote code-review bots before §2b assurance PASS
 - Skipping remote review when GitHub bots are available
 - Using local review as the primary gate when remote works
 - Claiming "ready for human" while remote is red or CI is failing in-scope
