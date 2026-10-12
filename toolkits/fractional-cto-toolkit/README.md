@@ -51,7 +51,8 @@ OpenSpec specs/changes  →  Linear issue (Bilingual Layer)  →  /opsx-* flow
 
 - **requirements-authoring** — write a versioned PRD/SRS per the standards (vendored bare
   template from `jam01/SRS-Template`, CC0) with 29148 quality checklists and a
-  verification traceability table.
+  verification traceability table. Shared home: `shared/skills/requirements-authoring/`
+  + `shared/references/requirements-authoring/` (deduped, like engineering-standards).
 - Any client adopting this can bootstrap the **6 engineering standards**
   (DSMS, IFS, CPS, PRDS, BrS, QT4L) from day one — see `shared/references/engineering-standards/`
   (SSOT compartido a nivel monorepo). Clients with an OpenSpec **store** repo also adopt
@@ -74,7 +75,7 @@ OpenSpec specs/changes  →  Linear issue (Bilingual Layer)  →  /opsx-* flow
 | 9 | `business-brain-setup` | "business brain", "cerebro de negocio", "convert our business model folder" | Git/Obsidian knowledge vault (scaffold or BMC migration) |
 | 10 | `playbook-authoring` | "write a playbook", "ops playbook", "decision tree", "playbook vs runbook", "escribe un playbook" | When/why playbook (decision tree + options) linking diagnose/recover runbooks |
 | 11 | `runbook-authoring` | "write a runbook", "incident runbook", "release runbook", "on-call procedure", "runbook de release" | Trigger-driven runbook (incident or operational) + paired diagnose/repair scripts + executable form |
-| 12 | `requirements-authoring` | "PRD", "SRS", "requisitos", "29148", "IEEE 830", "spec for this feature" | Versioned PRD/SRS per ISO/IEEE 830 + ISO/IEC/IEEE 29148:2018 + OpenSpec derived + Linear Bilingual brief |
+| 12 | `requirements-authoring` (shared: `shared/skills/requirements-authoring/`) | "PRD", "SRS", "requisitos", "29148", "IEEE 830", "spec for this feature" | Versioned PRD/SRS per ISO/IEEE 830 + ISO/IEC/IEEE 29148:2018 + OpenSpec derived + Linear Bilingual brief |
 
 ## Commands
 
