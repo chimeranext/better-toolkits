@@ -43,3 +43,10 @@ OWASP-aligned. PII tolerancia cero (detectores contextuales, tenant-scoped SQL).
 Flutter por snapshot hash + engine provenance (parseo estático del APK); APKs por
 manifest/clases decompiladas (JADX). Todo hallazgo con evidencia + limitaciones
 explícitas, mismo formato que los receipts.
+
+## Runtime K8s: detectar vs prevenir + policy engines
+
+- **Falco** (detect/alert, graduado) cluster-wide → triage/SIEM; **KubeArmor** (LSM)
+  o **Tetragon** (eBPF, sinergia Cilium) en workloads de alto valor. Audit-first.
+- **Kyverno** default K8s (YAML, mutate/generate, image verification) vs **Gatekeeper**
+  (Rego, reuso cross-platform). Admission = backstop, pair con CI-stage scanning.

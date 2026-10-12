@@ -43,12 +43,14 @@
 - [x] 6.1 Documentar trazabilidad MASVS → MASWE → MASTG v2 con perfiles L1/L2/R/P y guía de fix MASTG-BEST; verificar un hallazgo de ejemplo mapeado de punta a punta
 - [x] 6.2 Documentar capa SAST/DAST/SCA (Semgrep, ZAP, Trivy/Grype, dependency-review) y supply-chain firmada (SBOM canónico, Sigstore, SLSA L2/L3, admission fail-closed); verificar un deploy sin firma rechazado en un cluster de prueba
 - [x] 6.3 Documentar red-team agentic (ASI01–ASI10 + LLM02, 4 fases, SoD, tool scoping, agent graph, PII tolerancia cero) y verificar scenario maps versionados para un agente de ejemplo
+- [x] 6.4 Documentar runtime K8s (Falco detect + KubeArmor/Tetragon prevent, matriz de decisión) y policy engines (Kyverno vs Gatekeeper, audit-first) y verificar audit-mode antes de enforce
 
 ## 7. Liveness y gobierno (solo docs + gates)
 
 - [x] 7.1 Decidir Litmus vs Chaos Mesh con PoC (hipótesis SLO, probes, abort criteria) y evaluar Antithesis para sistemas con estado; verificar un experimento con veredicto objetivo
 - [x] 7.2 Documentar métricas (DORA, DER/DRE, MTTD/MTTR, `found_env`, ventana 14d, anti-gaming), gates por etapa y formato de receipts fase 7; verificar un release reconstruible desde receipts
 - [x] 7.3 Documentar pipeline de gates GitOps (waves, hooks Pre/PostSync, `ignoreDifferences` como baseline, health assessment, App of Apps) y verificar orden infra-primero en un deploy de ejemplo
+- [x] 7.4 Documentar pre-flight en capas (kubeconform → kube-score → Trivy → Checkov/kubeaudit; Kubescape/RBAC; kube-bench CIS), gates con exit codes y thresholds por env, y health score 8D; verificar stack sin doble-reporte
 
 ## 9. Migración 21 skills del template (ejecutada con shims)
 
