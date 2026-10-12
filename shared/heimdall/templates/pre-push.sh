@@ -16,14 +16,16 @@ fi
 
 echo "[heimdall pre-push] corriendo review local del diff…"
 
-if command -v heimdall-review >/dev/null 2>&1; then
-  REVIEW_CMD=(heimdall-review diff)
+HEIMDALL_BIN="$(command -v heimdall-review)"
+if [ -n "$HEIMDALL_BIN" ]; then
+  REVIEW_CMD=("$HEIMDALL_BIN" diff)
 else
   REVIEW_CMD=(bunx github:chimeranext/heimdall@main review diff)
 fi
 
-if command -v infisical >/dev/null 2>&1; then
-  infisical run -- "${REVIEW_CMD[@]}" || {
+INFISICAL_BIN="$(command -v infisical)"
+if [ -n "$INFISICAL_BIN" ]; then
+  "$INFISICAL_BIN" run -- "${REVIEW_CMD[@]}" || {
     echo "[heimdall pre-push] el review falló (¿NVIDIA_API_KEY?). Push abortado." >&2
     exit 1
   }

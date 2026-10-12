@@ -13,6 +13,6 @@ for tk in "$ROOT"/toolkits/*/; do
   chmod +x "$dest/detect.py" \
     "$dest/adapters/claude-pre-bash.sh" \
     "$dest/adapters/cursor-before-shell.sh" \
-    "$dest/tests/test-detect.sh" 2>/dev/null || true
+    "$dest/tests/test-detect.sh" || true
   echo "synced $(basename "$tk")"
 done
