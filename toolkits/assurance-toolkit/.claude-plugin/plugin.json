@@ -1,0 +1,33 @@
+{
+  "name": "assurance",
+  "version": "0.1.0",
+  "description": "Release-assurance evidence toolkit — 2 pillars (testing, liveness) + security transversal with its own runner, plus governance (DORA/DER metrics, stage gates, traceable receipts). Migrated quality-evidence commands from make-no-mistakes with shims.",
+  "author": {
+    "name": "Luis Andres Pena Castillo",
+    "url": "https://github.com/lapc506"
+  },
+  "homepage": "https://toolkits.chimeranext.dev",
+  "repository": "https://github.com/chimeranext/better-toolkits",
+  "license": "BSL-1.1",
+  "keywords": [
+    "claude-code",
+    "claude-code-plugin",
+    "assurance",
+    "quality-engineering",
+    "testing",
+    "e2e",
+    "playwright",
+    "maestro",
+    "pest",
+    "exunit",
+    "observability",
+    "sre",
+    "pentest",
+    "devsecops",
+    "masvs",
+    "supply-chain",
+    "slsa",
+    "dora",
+    "quality-gates"
+  ]
+}
