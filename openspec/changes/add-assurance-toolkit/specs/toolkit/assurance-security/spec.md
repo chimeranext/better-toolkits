@@ -83,3 +83,21 @@ El sistema SHALL verificar artefactos móviles sin código fuente: apps Flutter 
 
 - **WHEN** llega un APK release sin acceso al repo
 - **THEN** se verifica snapshot hash, engine build y superficie (permisos, clases) contra el baseline firmado, con limitaciones declaradas
+
+### Requirement: Runtime K8s — detectar vs prevenir (Falco / KubeArmor / Tetragon)
+
+El sistema SHALL separar runtime en dos capas: detección cluster-wide con Falco (eBPF, ruleset comunitario, graduado CNCF → alimenta triage/SIEM) y prevención inline en workloads de alto valor con KubeArmor (LSM least-permissive, sandbox CNCF) o Tetragon (eBPF nativo con sinergia Cilium, syscall kill/block). Regla: Falco detecta y alerta, KubeArmor/Tetragon bloquean; no dos motores de enforcement sin scopear (audit mode antes de block; un owner por workload).
+
+#### Scenario: Detección alimenta prevención
+
+- **WHEN** Falco alerta un comportamiento anómalo recurrente
+- **THEN** la alerta genera propuesta de policy KubeArmor/Tetragon en audit mode antes de enforce
+
+### Requirement: Policy engines con matriz de decisión (Kyverno / OPA Gatekeeper)
+
+El sistema SHALL elegir motor de admission por matriz: Kyverno (YAML declarativo, mutate/generate nativo, verificación de imágenes, solo K8s — default para equipos K8s-native) vs OPA Gatekeeper (Rego, reuso cross-platform en APIs/Terraform/CI, lógica programática compleja). Split válido: Kyverno in-cluster + OPA standalone fuera. Rollout siempre audit-first; admission es backstop, no el único gate (pair con CI-stage scanning).
+
+#### Scenario: Policy bloquea en admission con causa
+
+- **WHEN** un manifest viola policy en enforce
+- **THEN** admission lo rechaza con la policy y severidad responsables, y el evento entra al audit trail
