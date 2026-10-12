@@ -19,6 +19,10 @@ code-review bots run.
 | **`pr`** (default) | Ready-to-review / PR gate | Every pillar marked `required` or `optional` for stage `pr` in config; skips `skip`. |
 | **`<pillar>`** | Deep dive on one pillar | That pillar's sub-protocol only. |
 
+**Liveness on PR:** default is **SKIP** — not “forgotten”. SSOT:
+`readyToReview.assurance.pillars.liveness: "skip"` (observability cadence is schedule/daemon,
+not per-PR). Set `required` only when the consumer repo opts in.
+
 Resolve PR number from `--pr N`, else `gh pr view` for the current branch.
 
 ---
