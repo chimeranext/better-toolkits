@@ -22,11 +22,12 @@ if [[ -f "${STAMP_FILE}" ]]; then
   fi
 fi
 
-if ! command -v agent >/dev/null 2>"${ERR_LOG}"; then
+AGENT_BIN="$(command -v agent)"
+if [ -z "$AGENT_BIN" ]; then
   exit 0
 fi
 
-if agent plugin marketplace update better-toolkits >"${OUT_LOG}" 2>"${ERR_LOG}"; then
+if "$AGENT_BIN" plugin marketplace update better-toolkits >"${OUT_LOG}" 2>"${ERR_LOG}"; then
   date +%s >"${STAMP_FILE}"
 fi
 

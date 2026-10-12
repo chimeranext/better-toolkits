@@ -25,7 +25,7 @@ if [ "${1:-}" = "--system" ]; then
   SYSTEM_MODE=1
 fi
 
-need() { command -v "$1" >/dev/null 2>&1; }
+need() { _need_bin="$(command -v "$1")" && [ -n "$_need_bin" ]; }
 
 prompt_secret() {
   local secret=""

@@ -31,7 +31,6 @@ ORDERED_BOTH_NULL = re.compile(
 )
 
 BARE_STDOUT_NULL = re.compile(r"(^|[^0-9&>])1?>>?\s*/dev/null\b")
-ALLOWED_REVERSE = re.compile(r"2>&1\s*1?>>?\s*/dev/null")
 
 BARE_FOLD = re.compile(r"2\s*>&\s*1")
 HAS_FILE_SINK = re.compile(
@@ -98,24 +97,24 @@ def deny_reason(command: str) -> str | None:
     if ORDERED_BOTH_NULL.search(scan):
         return (
             ">/dev/null 2>&1 discards stderr after stdout — forbidden. "
-            "Use cmd 2>&1 >/dev/null (reverse order) or log files / tee."
+            "Use out=$(cmd) or log files / tee."
         )
 
-    remainder = ALLOWED_REVERSE.sub("", scan)
-    if BARE_STDOUT_NULL.search(remainder):
+    if BARE_STDOUT_NULL.search(scan):
         return (
-            "bare >/dev/null throws away the answer; use out=$(cmd) or "
-            "cmd 2>&1 >/dev/null when you only need the exit code with stderr kept."
+            "stdout redirect to /dev/null is forbidden (bare or reversed "
+            "as cmd 2>&1 >/dev/null) — it throws away the answer. "
+            "Use out=$(cmd) or log files / tee."
         )
 
-    # Allowed idiom `2>&1 >/dev/null` keeps stderr on the original stdout —
-    # strip those spans before judging bare folds / remaining null redirects.
-    fold_scan = ALLOWED_REVERSE.sub("", scan)
-    if BARE_FOLD.search(fold_scan):
+    # NOTE: there is intentionally NO allowance for `2>&1 >/dev/null`.
+    # Reversed order still sends stdout to null. Fold checks below run
+    # on the raw scan.
+    if BARE_FOLD.search(scan):
         if not (
-            HAS_FILE_SINK.search(fold_scan)
-            or HAS_TEE_FILE.search(fold_scan)
-            or HAS_STDERR_FILE.search(fold_scan)
+            HAS_FILE_SINK.search(scan)
+            or HAS_TEE_FILE.search(scan)
+            or HAS_STDERR_FILE.search(scan)
         ):
             return (
                 "bare 2>&1 folds errors into stdout without a log sink. "
