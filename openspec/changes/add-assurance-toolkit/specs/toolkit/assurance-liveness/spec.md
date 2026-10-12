@@ -34,6 +34,24 @@ El sistema SHALL soportar experimentos de chaos como CRDs versionados con hipót
 - **WHEN** el error rate supera el abort threshold
 - **THEN** el experimento se detiene solo y deja registro
 
+### Requirement: Chaos con resilience score (workflow en 5 pasos)
+
+El sistema SHALL correr chaos como workflow: validar steady-state → inyectar con blast-radius acotado → observar impacto → verificar recovery → puntuar resiliencia (tiempo de recovery, error rate, degradación, cascading). Primitivas mínimas: pod kill, network partition, CPU stress, node drain; abort conditions + auto-rollback + techo de duración. El score es determinista y trendable (referencia: kubeqa chaos CLI, Apache-2.0, a evaluar junto a Litmus/Chaos Mesh).
+
+#### Scenario: Score comparable entre runs
+
+- **WHEN** dos experimentos iguales corren en fechas distintas
+- **THEN** sus resilience scores son comparables y el trend decide si la resiliencia mejora
+
+### Requirement: Cluster health score en 8 dimensiones
+
+El sistema SHALL medir salud del cluster con score determinista 0–100 en 8 dimensiones (resources, security, networking, storage, availability, observability, configuration, cost), read-only y sin agentes (modelo kubeqa health / Popeye sanitizer). Cada hallazgo trae remediación exacta (patch, no link a docs). Popeye = sanitización read-only (dead resources, health score); Polaris = dashboard + admission backstop + CI. Score apto para gatear y trendear.
+
+#### Scenario: Dimensión débil no se esconde
+
+- **WHEN** security puntúa 95 pero availability 60 (single-replica)
+- **THEN** el score agregado lo refleja y el gate puede exigir mínimos por dimensión, no solo promedio
+
 ### Requirement: Baselines de performance alimentan los SLOs
 
 El sistema SHALL convertir p95/p99 de los runs de perf en baselines versionadas que liveness vigila; la degradación contra baseline dispara revisión. Al cambiar de herramienta se re-baselinea (las métricas no son comparables entre herramientas).
