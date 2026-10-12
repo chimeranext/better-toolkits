@@ -60,3 +60,21 @@ El sistema SHALL convertir el catálogo de fallos (Ultimate K8s Troubleshooting 
 
 - **WHEN** un Deployment no declara liveness/readiness
 - **THEN** el gate lo frena con el capítulo del guide que ese fallo produce
+
+### Requirement: Pre-flight en capas con un owner por hallazgo (matrices kubernetes.qa)
+
+El sistema SHALL ordenar el pre-flight en capas: kubeconform primero (schema + CRDs; kubeval deprecated, prohibido en pipelines nuevos) → kube-score (PR gate best-practice: probes, limits, securityContext) → Trivy (imágenes + misconfig + secrets + SBOM) → Checkov (policy cross-IaC) + kubeaudit (auditoría security-only estrecha); Kubescape para posture multi-framework (NSA/CISA, MITRE, CIS, SOC2) + RBAC; kube-bench para CIS authoritative en nodos (Job); kube-hunter excluido del pipeline (unmaintained 2022, solo labs). Regla anti-duplicados: un owner por tipo de hallazgo + un solo esquema de severidad. Trivy default OSS; Snyk (Code SAST + fix PRs) solo si se usa su workflow dev.
+
+#### Scenario: Capas sin doble-reporte
+
+- **WHEN** kube-score y Trivy flaggean el mismo securityContext
+- **THEN** solo el owner configurado reporta; el otro silencia la regla duplicada
+
+### Requirement: Gates con contrato de salida y thresholds por env (patrón kubeqa gates)
+
+El sistema SHALL implementar gates con exit codes (0 pass / 1 fail / 2 warnings-only), thresholds de severidad por ambiente (dev: critical, prod: warning), rollout audit-first (baseline, luego tighten progresivo), 5 capas (manifest, image, policy YAML sin Rego, compliance pre-check CIS, diff contra lo corriendo) y pares admission (Kyverno/Gatekeeper) como backstop, no como único gate.
+
+#### Scenario: Prod más estricto que dev sin duplicar config
+
+- **WHEN** el mismo gate corre en dev y prod
+- **THEN** prod falla en warning y dev solo en critical, con overrides por namespace versionados

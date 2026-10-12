@@ -36,3 +36,18 @@ Un receipt por veredicto: qué corrió, dónde, contra qué baseline, con qué I
 Waves (infra primero), hooks Pre/PostSync, `ignoreDifferences` como baseline, health
 assessment, App of Apps. Pre-flight: cada fallo del troubleshooting guide es un gate
 (probes, requests/limits, RBAC, quotas, HPA con métrica, smoke post-deploy).
+
+## Pre-flight en capas (matrices kubernetes.qa)
+
+kubeconform (schema+CRDs; kubeval prohibido) → kube-score (PR gate) → Trivy
+(imágenes+misconfig+secrets+SBOM) → Checkov (cross-IaC) + kubeaudit (security-only);
+Kubescape (posture multi-framework + RBAC); kube-bench (CIS en nodos); kube-hunter
+excluido (unmaintained). Un owner por hallazgo + una severidad; Snyk solo por su
+workflow dev (Code + fix PRs).
+
+## Gates con contrato + health score
+
+Exit codes 0/1/2, thresholds por env (dev:critical, prod:warning), audit-first,
+diff contra lo corriendo. Health score determinista 0–100 en 8 dimensiones
+(resources, security, networking, storage, availability, observability,
+configuration, cost); mínimos por dimensión, remediación exacta por hallazgo.

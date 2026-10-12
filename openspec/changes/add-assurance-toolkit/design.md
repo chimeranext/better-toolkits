@@ -32,6 +32,7 @@ Ver `proposal.md` (Why). Estado actual: los 7 comandos viven en `make-no-mistake
 - **Simetría web ↔ Flutter.** Storybook (stories CSF) y Widgetbook (scenarios congelados) son el mismo patrón en dos ecosistemas: authoring exploratorio + fixtures congeladas + matriz de entorno + diffs (visual y semántica). El protocolo los trata como un solo adapter de component testing con dos drivers.
 - **Los agentes también son el sistema bajo test.** El red-team agentic (ASI01–10) aplica el mismo protocolo de evidencia a agentes propios: scenario maps versionados, agent graph como audit trail, SoD entre quien codea el agente y quien define policies. Gateway + code layer, nunca uno solo.
 - **Prevenir es un gate, diagnosticar es playbook + runbook.** Los fallos K8s conocidos se frenan en pre-flight; lo que igual escapa lo decide el playbook (diagnose/recover/escalate) y lo ejecutan runbooks con pattern-IDs que alimentan los receipts. Misma información, dos momentos del ciclo.
+- **Capas con un owner, nunca raw en paralelo.** Cada comparativa K8s termina igual: dos herramientas crudas sobre el mismo check = ruido que se ignora. El protocolo exige owner único por tipo de hallazgo + un esquema de severidad + audit-first antes de enforce.
 
 ## Risks / Trade-offs
 
