@@ -2,6 +2,7 @@
 # Cursor beforeShellExecution adapter — JSON permission deny/allow on stdin/stdout.
 # On by default; opt-out via MNM_DISABLE_STDERR_HOOK=1 or
 # .claude/config/stderr-hooks.json {"preserve_stderr": false}.
+# No output is discarded: binaries are captured into variables, never sent to null.
 set -u
 
 HOOKS_STDERR_DIR="$(cd "$(dirname "$0")/.." && pwd)"
@@ -14,16 +15,22 @@ fi
 
 input="$(cat)"
 
+PYBIN="$(command -v python3)"
+if [ -z "$PYBIN" ]; then
+  printf '%s\n' '{"permission":"allow"}'
+  exit 0
+fi
+
 # Opt-out config (best-effort from cwd)
 CFG="$(pwd)/.claude/config/stderr-hooks.json"
-if [ -r "$CFG" ] && command -v python3 >/dev/null 2>&1; then
-  if python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); sys.exit(0 if d.get("preserve_stderr",True) is False else 1)' "$CFG" 2>/dev/null; then
+if [ -r "$CFG" ]; then
+  if "$PYBIN" -c 'import json,sys; d=json.load(open(sys.argv[1])); sys.exit(0 if d.get("preserve_stderr",True) is False else 1)' "$CFG"; then
     printf '%s\n' '{"permission":"allow"}'
     exit 0
   fi
 fi
 
-python3 - "$DETECT" "$input" <<'PY'
+"$PYBIN" - "$DETECT" "$input" <<'PY'
 import json, subprocess, sys
 
 detect, raw = sys.argv[1], sys.argv[2]
