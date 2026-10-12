@@ -59,7 +59,7 @@
 - [x] 9.3 Migrar 4 skills SRE security+gobierno (sec-compliance, container, network, slo) con thin skills + protocolo + shim
 - [x] 9.4 Migrar 4 restantes (argocd, github-actions, static-analysis, versioning universal SemVer+commits) con thin skills + protocolo + shim
 - [x] 9.5 Verificar 21 shims en el template y licencia compatible (BSL-1.1, mismo org)
-- [ ] 9.6 Validar change + PR en ambos repos (better-toolkits y monorepo-template) con HITL y mergear
+- [x] 9.6 Validar change + PR en ambos repos (better-toolkits y monorepo-template) con HITL y mergear
 - [x] 9.7 Documentar en protocolo: eval-driven + Fowler (testing), red-team agentic + REA móvil (security), GitOps + K8s pre-flight (governance), playbook/runbook taxonomy (liveness) — implementado y verificado en archivos
 
 ## 8. Validación e integración
