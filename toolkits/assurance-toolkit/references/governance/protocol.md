@@ -21,3 +21,18 @@ Barato y rápido primero. Flaky = defecto (cuarentena, fix o remove).
 
 Un receipt por veredicto: qué corrió, dónde, contra qué baseline, con qué IDs
 (Linear, MASWE/MASTG, contrato). Formato auditable del release.
+
+## Migrated skills (flutter-boilerplate-monorepo-template, reinterpretados)
+
+- **sre-slo-sli-sla**: SLOs, error budgets, MTTD/MTTR (SRE workbook); alimenta métricas outcome-based.
+- **cicd-argocd**: GitOps sync como gate (waves/hooks/health) — ver requirement GitOps.
+- **cicd-github-actions**: wiring de gates en CI (workflows de testing → deploy).
+- **sre-logging-log-aggregation**: Loki/ES/Fluentd, structured logs como evidencia adjunta a receipts.
+- **versioning-management**: SemVer + conventional commits UNIVERSALES (todo repo, no solo Flutter): commitlint en pre-push/CI, releases con release-please/semantic-release, changelog generado del historial; linkage versión↔evidencia en cada receipt. Misma disciplina que el versionado del marketplace (root `marketplace.json` + `plugin.json` juntos).
+- **sre-alerting-incident-management (gobierno)**: SLA timers y breach alerts como métricas del dashboard.
+
+## Pipeline GitOps + pre-flight K8s
+
+Waves (infra primero), hooks Pre/PostSync, `ignoreDifferences` como baseline, health
+assessment, App of Apps. Pre-flight: cada fallo del troubleshooting guide es un gate
+(probes, requests/limits, RBAC, quotas, HPA con métrica, smoke post-deploy).

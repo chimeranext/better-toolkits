@@ -22,3 +22,24 @@ reportes nunca mezclados con tests. Cada release exige veredictos separados.
 - **Supply-chain**: SBOM canónico (CycloneDX/SPDX) por build + escaneo continuo, firma keyless
   Sigstore/cosign, proveniencia SLSA (L2/L3), admission fail-closed (Kyverno).
   Generar sin gates es dashboard, no control.
+
+## Migrated skills (flutter-boilerplate-monorepo-template, reinterpretados)
+
+- **flutter-security**: certificate pinning, secure storage, obfuscation, biometría, root/jailbreak detection → mapea a MASVS móvil.
+- **sre-security-compliance-automation**: OPA policy-as-code, CIS benchmarks, vulnerability scanning continuo.
+- **sre-container-security**: image scanning + signing (notary/cosign), Falco runtime, CVE → supply-chain.
+- **sre-network-policies-security**: Calico/Cilium, egress/ingress como controles verificables en gates.
+- **static-analysis**: lint multi-lenguaje como gate SAST (dart-analyze, ruff, golangci-lint, eslint, shellcheck, clippy, super-linter).
+
+## Red-team agentic (OWASP ASI01–ASI10 + LLM02)
+
+Método en 4 fases (Build → Audit con scenario maps → Define controls → Monitor & iterate);
+prioridades Foundation (ASI01/02/PII) → Coverage → Depth → Extension.
+Defensas en capas, SoD, gateway + code layer. Training-data alignment con suites
+OWASP-aligned. PII tolerancia cero (detectores contextuales, tenant-scoped SQL).
+
+## Supply-chain móvil sin fuente (modelo REA)
+
+Flutter por snapshot hash + engine provenance (parseo estático del APK); APKs por
+manifest/clases decompiladas (JADX). Todo hallazgo con evidencia + limitaciones
+explícitas, mismo formato que los receipts.
