@@ -6,176 +6,199 @@ Harness-agnostic body. Thin entry: `commands/ready-to-review-mergeable.md`.
 
 # /ready-to-review-mergeable: $ARGUMENTS
 
-Two modes, one invariant: **never merge**.
+**One pipeline, one invariant: never merge.**
 
-- **Issue-pipeline mode** (primary — any issue IDs in `$ARGUMENTS`): implement
-  each tracker issue to a **bot-approved, mergeable PR** and refuse to stop
-  until every PR is green at the confidence threshold.
-- **Branch-ready mode** (fallback — no issue IDs): prepare the **current git
-  work** so a human can review and merge it (CI green where fixable in-scope,
-  pushed, PR open/updated, not draft).
+**Exit means:** the PR is **ready for human review** — remote automated review
+has passed, CI is mergeable, the tracker issue is **In Review**, and a human
+owns the next step on GitHub. This command does **not** mean the human already
+approved, that the issue is **Done**, or that merge is authorized.
 
 The user input can be provided directly by the agent or as a command argument —
-you MUST consider it before proceeding (if not empty).
+you MUST consider it before proceeding.
 
 ---
 
-## Mode 1 — Issue pipeline (current behavior when issue IDs are present)
+## Prerequisites
 
-### Parse arguments
+### Tracker issue ID (mandatory)
 
-- Issue IDs: every `<TEAM>-<number>` token in `$ARGUMENTS` (one PR per issue).
-- Threshold: `--confidence X.X` if present, else **5.0** (default) — exigent by
-  default.
-  - `--confidence` is the **relaxer**: pass a lower value to accept the review
-    bot's strict curve. **Usage guidance:** a strict reviewer bot typically
-    scores genuinely mergeable PRs `4.20`–`4.80`, so the default `5.0` gate
-    will keep iterating on cosmetic findings. If you don't want that, pass
-    `--confidence 4.0`. Never silently raise the threshold above what the
-    caller asked for.
+- `$ARGUMENTS` MUST include at least one `<TEAM>-<number>` token (one PR per
+  issue).
+- If no issue ID is present: **STOP**. Tell the user to pass an issue ID or use
+  a different command (e.g. branch-only CI repair is not this command).
+- Do **not** infer issue IDs from branch names or PR bodies for this command.
 
-### Run the pipeline
+### Configuration (optional)
 
-Invoke the **`make-no-mistakes:implement`** skill with the parsed issue IDs.
-That skill owns the disciplined flow and you must let it:
+Read `make-no-mistakes.config.json` at the repo root when present. See
+`readyToReview` in `commands/make-no-mistakes.config.example.json`. Defaults
+below apply when the block is absent.
 
-- one worktree + one branch per issue (worktree isolation),
-- the reviewer loop,
-- **HITL on push / PR / merge** per the repo's non-negotiables (never
-  auto-push, auto-open, or auto-merge without the per-action approval the repo
-  requires).
-
-### Tracker hygiene (per issue)
-
-Keep every issue out of the team's orphan views (unassigned / no-project /
-no-priority) and in sync with the pipeline. These are steps **for you**, not
-the Stop hook.
-
-**On start:** read the issue via the tracker MCP; backfill missing **project**
-(inherit parent's / infer from area), **assignee** (the invoker), **priority**
-(inherit parent's, else Medium). Report which fields you set. Flip **state →
-"In Progress"** as you begin.
-
-**On reaching the goal (PR hits the threshold):** flip **state → "In Review"**.
-**Never set "Done"** — that is always the PO's HITL call.
-
-**Verify, don't assume:** some tracker MCPs silently no-op certain field writes
-(observed: Linear `state`/`assignee` writes with unchanged `updatedAt`). After
-every state/assignee write, re-read the issue and compare. If it did not apply,
-collect `issue → target value` into a **"manual flips pending"** list and
-surface it explicitly in the final report.
-
-### Per-PR contract
-
-1. **Ready for Review**, never Draft — unless the repo's rules require Draft
-   for that class of change (e.g. cross-cutting/cross-pillar); don't tag the
-   review bot on a Draft.
-2. Trigger the review bot per the repo's convention (e.g. comment
-   `@<review-bot> review`).
-3. **Append the PR number** to `.claude/.implement-prs`. Create the file if
-   missing; its **first line is the threshold** (write it once, before the
-   first PR number). This file is the Stop-hook's state — keep it accurate.
-
-### Exit condition (the whole point)
-
-You are **not done** until *every* PR listed in `.claude/.implement-prs` is:
-
-- not a Draft, **and**
-- has a review from the repo's **review bot** — read the verdict from the PR's
-  **`.reviews[*]`**, never `.comments[*]`, and beware login-suffix mismatches
-  (a bot may appear without the `[bot]` suffix in reviews) — whose state is
-  **APPROVED**, **and**
-- carries **Confidence ≥ threshold** (the review body has
-  `Confidence: X.XX/5.00`).
-
-If any PR's confidence is below threshold: read the bot's findings, fix them,
-push, re-trigger the review, and iterate. **Do not lower the bar.**
-
-The `stop-prs-green.sh` Stop hook enforces this — it blocks the session from
-ending while `.claude/.implement-prs` lists any PR that is draft, unreviewed,
-not APPROVED, or below threshold.
-
-### On success
-
-1. Delete `.claude/.implement-prs` (the hook also clears it once everything is
-   green, but delete it explicitly when you finish).
-2. Report a table, one row per issue: **Issue → PR → Confidence → tracker
-   state**, marking each state flip **applied** (verified by re-read) or
-   **PENDING-MANUAL** (the MCP no-op'd the write). End with the explicit
-   "manual flips pending" list — `issue → target state` — so the user can flip
-   by hand.
+| Key | Default | Meaning |
+| --- | --- | --- |
+| `readyToReview.remoteReview.required` | `true` | Remote bot review on the PR is mandatory before exit. |
+| `readyToReview.localReview.mode` | `fallback-only` | Local diff review runs **only** when remote review cannot run. |
+| `readyToReview.implement.stopAfter` | `phase-3-step-12` | `/implement` stops before merge / Linear-Done / worktree cleanup. |
+| `readyToReview.assurance.beforeRemoteReview` | `true` | Run `/assurance:triage pr` before tagging remote code-review bots. |
+| `readyToReview.assurance.pillars.*` | testing/security/governance `required`, liveness `skip` | Per-pillar PR triage; see assurance `references/triage/protocol.md`. |
 
 ---
 
-## Mode 2 — Branch-ready (no issue IDs in `$ARGUMENTS`)
+## Pipeline overview
 
-**Input**: `$ARGUMENTS` — optional overrides (e.g. `status=draft`, skip-push, upstream PR URLs for chain, tracker IDs). Empty = apply defaults below.
+**Invariant:** exit = **human review handoff** on GitHub — never merge, never Linear **Done**.
 
-**Output**: PR URL(s), mergeability / remaining failing checks, and the next human action. No merge.
+```mermaid
+flowchart TD
+  start(["/ready-to-review-mergeable ISSUE-ID"])
+  s1["§1 Parse issue IDs — STOP if missing"]
+  s2["§2 /implement through Phase 3 step 12<br/>skip Phase 3 steps 9–10"]
+  s2b["§2b /assurance:triage pr"]
+  ass{"§2b PASS?"}
+  s3["§3 Mandatory remote PR review<br/>PR must be Ready for review not Draft"]
+  rem{"Remote gate pass?"}
+  s4["§4 Local review — fallback only<br/>when remote truly unavailable"]
+  s5["§5 Human handoff — tracker In Review<br/>never merge"]
+  blocked["BLOCKED — fix, push, re-run from failed step"]
 
-### Defaults (do not re-ask unless `$ARGUMENTS` overrides)
+  start --> s1 --> s2 --> s2b --> ass
+  ass -->|no| blocked
+  ass -->|yes| s3 --> rem
+  rem -->|yes| s5
+  rem -->|no, remote available| blocked
+  rem -->|no, remote unavailable per §4| s4 --> s5
+```
 
-1. **Diátaxis `status`:** when the change set includes docs that use YAML front matter with a Diátaxis schema, set `status: review` on pages meant for review (not `draft`, not invalid values like `active`). Allowed enum when the repo enforces it: `draft` | `review` | `accepted` | `deprecated`.
-2. **Push:** after local fixes and commit(s), `git push -u origin HEAD` (or push to the existing PR branch).
-3. **No merge:** never merge the PR; never mark tracker issues Done unless `$ARGUMENTS` explicitly asks in this invocation.
-4. **No draft:** if a PR exists and is draft, mark it ready (`gh pr ready`) unless `$ARGUMENTS` says keep-draft.
+**Assurance liveness on PR:** default pillar config is **`skip`** (`readyToReview.assurance.pillars.liveness: "skip"`) — observability runs on schedule/daemon, not every PR. Set `required` only when the consumer repo opts in.
 
-### Execution steps
+---
 
-#### 1. Context
+## Pipeline (always)
 
-Identify:
-- repo root and remote (`gh repo view`)
-- current branch
-- whether a PR already exists (`gh pr view` / `gh pr list --head "$(git branch --show-current)"`)
-- base branch (`main` unless the branch tracks another base)
+### 1. Parse arguments
 
-#### 2. Diff
+- Issue IDs: every `<TEAM>-<number>` token in `$ARGUMENTS`.
+- `--confidence X.X` if present: **advisory only** for reporting; the Stop hook
+  gates on **findings**, not the Confidence float (see `stop-prs-green.sh`).
+  Never silently raise a threshold the caller set.
 
-Diff vs base. List changed files. Decide which validators apply.
+### 2. Delegate implementation — `/make-no-mistakes:implement`
 
-#### 3. Docs / Diátaxis (when applicable)
+Invoke **`make-no-mistakes:implement`** for every parsed issue ID.
 
-If this repo (or the diff) includes Diátaxis-style markdown with required YAML front matter:
+**Scope boundary:** implement runs through **Phase 3, step 12** (PR exists, not
+Draft unless the user chose Draft at the PR open-state HITL gate, CI green,
+no merge conflicts). **Skip implement Phase 3 steps 9–10** (remote bot tag /
+wait loop) — those run in **§3** after **§2b** assurance triage. **Do not**
+run implement Phase 4 (merge, Linear → Done, worktree removal) from this
+command unless the user explicitly invoked full `/implement` in the same
+session for merge.
 
-- Set `status: review` on **changed** doc pages intended for publication/review.
-- Respect repo exemptions (do **not** invent front matter for meta files). Common patterns: `AGENTS.md`, `openspec/`, `templates/`, `archive/`, root `README.md` / `MAINTENANCE.md` / `index.md`, and any paths listed in the repo's front-matter checker / pre-commit `exclude`.
-- Run the validators CI runs (`pre-commit`, `npm run check:front-matter`, markdownlint with `--fix` as configured). Commit autofixes.
+Implement still owns:
 
-If the repo has no Diátaxis front-matter schema, skip this step (do not invent a schema).
+- worktree isolation,
+- PR open-state HITL (`Draft` / `In Review` / `Ready to Merge` — for this
+  command prefer **In Review**; never choose **Ready to Merge** unless the user
+  explicitly overrides in `$ARGUMENTS`),
+- push and PR creation per repo rules.
 
-#### 4. Non-docs repos
+See `references/implement/phase-3-pr-review.md` and
+`references/implement/hitl-boundaries.md`.
 
-Run the **minimal CI-equivalent checks** for the change set (e.g. `terraform validate`, lint, unit tests, gitops validate). Fix failures that are clearly in scope of this branch.
+### 2b. Assurance PR triage (mandatory before remote review)
 
-If a check fails due to **repo-wide misconfiguration unrelated to the change set** (wrong cache path, missing sibling checkout, org secrets), report it explicitly as out-of-scope and continue — do not silently claim mergeable.
+When `readyToReview.assurance.beforeRemoteReview` is true (default):
 
-#### 5. Commit
+1. Invoke **`/assurance:triage pr`** with `--pr <N>` and the tracker issue id
+   (assurance plugin or thin harness entry pointing at
+   `toolkits/assurance-toolkit/references/triage/protocol.md`).
+2. Hub runs pillar sub-protocols in order (testing → security → governance →
+   liveness only if not `skip`). See `readyToReview.assurance.pillars` in config.
+3. **BLOCKED** → fix, push, re-run §2b; **do not** tag remote code-review bots.
+4. **PASS** → proceed to §3.
 
-If there are uncommitted fixes, create a conventional commit focused on **why** (CI / ready-for-review), not a file laundry list.
+If the assurance plugin is not installed and config does not set
+`readyToReview.assurance.required: false`, run the same protocol body from the
+monorepo reference path or report **BLOCKED** — do not skip silently.
 
-#### 6. Push
+Local diff review (§4) does **not** replace assurance triage or remote review.
 
-Push the branch (`git push -u origin HEAD` or update the existing PR remote). Push is the default; only skip if `$ARGUMENTS` says so.
+### 3. Remote review (mandatory)
 
-#### 7. PR create / update
+When `readyToReview.remoteReview.required` is true (default):
 
-- If no PR: `gh pr create` with Summary, Test plan, and chain links when applicable.
-- If PR exists: ensure **not draft** (`gh pr ready`); update body with chain links if missing.
-- Chain / stack (when `$ARGUMENTS` or session context lists upstream PRs / tracker blockers):
-  - Put `Depends on: <url>` in the PR body.
-  - Set the tracker's `blockedBy` when the issue graph requires it.
-  - Do **not** merge the chain.
+1. PR must be **Ready for review** (not Draft) before tagging bots.
+2. Trigger remote review per repo convention (e.g. comment `@greptile review`,
+   or re-tag the login configured for the consumer repo — often `code-reviewer`
+   on Claude Code–wired projects).
+3. Read verdicts from **`.reviews[*]`**, never `.comments[*]`. Mind login suffix
+   mismatches (`code-reviewer` vs `code-reviewer[bot]`).
+4. Iterate: fix → push → re-trigger until the remote gate passes.
 
-#### 8. Report
+**Remote pass contract** (align with `stop-prs-green.sh` when state file is used):
 
-Report:
-- PR URL
-- `mergeable` / `mergeStateStatus` / failing checks (name + one-line cause)
-- whether it meets **ready-to-review-mergeable** (all required checks green or explicitly waived as out-of-scope)
-- next human action
+- Latest verdict review from the configured reviewer login is **APPROVED**, and
+- **0 blockers, 0 P1, 0 P2** in the parseable verdict headline.
+
+Optional `--confidence` in the review body is **reported, not gated**.
+
+Register each PR in `.claude/.implement-prs` (line 1: advisory threshold if
+any; line 2+: PR URL or number). The Stop hook enforces remote green while this
+file exists.
+
+If `readyToReview.remoteReview.bots` is set in config, use that list; else use
+project `linear-setup.json` defaults (e.g. Greptile / CodeRabbit / Graphite)
+when present.
+
+### 4. Local review (fallback only — remote code review unavailable)
+
+Run a **local** diff review **only** when remote review cannot be executed, for
+example:
+
+- no GitHub bot configured and `gh` cannot post or read reviews,
+- PR cannot be opened yet (user chose Draft and refuses to flip — then this
+  command cannot complete; do not substitute local review),
+- harness has no remote integration and config documents `remote_unavailable`.
+
+**Fallback order** (first runnable wins; record which ran):
+
+1. Harness command from config `readyToReview.localReview.fallback[]` (e.g.
+   `/local-pr-review`, `/review-bugbot`).
+2. If none runnable: **BLOCKED** — report `remote_unavailable` and do not claim
+   ready-to-review.
+
+Local review is **never** a substitute for a working remote gate when remote is
+available.
+
+### 5. Human handoff (exit)
+
+You are **not done** until for every issue:
+
+| Check | Required |
+| --- | --- |
+| Assurance PR triage | PASS per §2b (or explicitly waived in config) |
+| Remote review | Passed per §3, or documented fallback per §4 with user visibility |
+| CI | All required PR checks green (or out-of-scope failures explicitly listed) |
+| Mergeability | `mergeable` / no unresolved conflicts |
+| Tracker | **In Review** (never **Done**) — verify MCP writes |
+| Agent | Explicit handoff message: PR URL, remote verdict summary, **next action: human review on GitHub** |
+
+Then:
+
+1. Delete `.claude/.implement-prs` when the Stop hook would clear it (or delete
+   explicitly after success).
+2. Report one row per issue: **Issue → PR → remote verdict → tracker state**
+   (`applied` vs `PENDING-MANUAL` on MCP no-ops).
 
 **Never merge.**
+
+---
+
+## Deprecated: branch-only mode
+
+Earlier revisions described a **branch-ready** path with no issue IDs. That path
+is **removed**. Branch-only CI hygiene belongs in a separate maintenance command
+or in `/implement` after an issue exists — not in `/ready-to-review-mergeable`.
 
 ---
 
@@ -184,16 +207,19 @@ Report:
 - Slack status posts
 - Applying terraform / promoting environments
 - Granting GitHub org/team ACL
-- Marking tracker issues Done
+- Marking tracker issues **Done**
+- `gh pr merge`
 
 ---
 
 ## Anti-patterns
 
-- Claiming "ready" while required CI is red for in-scope failures
-- Inventing Diátaxis front matter on exempt/meta files
-- Merging "just to unblock the next wave"
-- Re-asking defaults that this command already defines
-- Silently raising the confidence threshold above what the caller asked for
-- Reading the bot verdict from `.comments[*]` instead of `.reviews[*]`
+- Running this command without a tracker issue ID
+- Tagging remote code-review bots before §2b assurance PASS
+- Skipping remote review when GitHub bots are available
+- Using local review as the primary gate when remote works
+- Claiming "ready for human" while remote is red or CI is failing in-scope
+- Confusing bot APPROVED with human approval or merge permission
+- Reading bot verdicts from `.comments[*]` instead of `.reviews[*]`
 - Assuming a tracker MCP write applied without re-reading the issue
+- Merging "just to unblock the next wave"
