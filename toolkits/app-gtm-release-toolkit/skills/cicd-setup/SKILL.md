@@ -7,6 +7,13 @@ description: "Set up CI/CD pipelines for Flutter app builds and releases using C
 
 This skill configures automated build, test, and deployment pipelines for Flutter mobile apps. It produces three workflows that cover the full release lifecycle.
 
+## Agent constraints (mandatory)
+
+- Treat `references/*.md` as **templates to adapt**, not commands to run verbatim on the user's laptop unless they explicitly ask for a local repro.
+- **Never** paste, log, or commit values from the [Required Secrets](#required-secrets) section — use the CI platform's secret store (GitHub Actions secrets, Codemagic env groups, etc.).
+- iOS keychain / `security` CLI steps belong on **ephemeral CI runners** with imported certs from secrets; confirm with the human before changing production branch triggers or store publishing credentials.
+- Prefer Codemagic's signing UI or platform-managed signing when the human is not comfortable with raw keychain scripts.
+
 ## Three Workflows
 
 Every Flutter CI/CD setup needs these three workflows, regardless of platform:
