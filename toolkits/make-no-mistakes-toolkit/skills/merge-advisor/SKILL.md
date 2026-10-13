@@ -15,4 +15,4 @@ description: >
 
 # merge-advisor
 
-Read and follow [`skill-protocol.md`](../../references/merge-advisor/skill-protocol.md) (protocol SSOT). Frontmatter triggers unchanged.
+Read and follow [`protocol.md`](../../references/merge-advisor/protocol.md) (protocol SSOT). Frontmatter triggers unchanged.
