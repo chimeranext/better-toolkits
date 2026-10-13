@@ -64,7 +64,7 @@ Use the tracker configured for the target repository:
 | Section | Required when |
 | --- | --- |
 | **Summary** | Always — 2–4 bullets; lead with **what** and **why** |
-| **Tracker** | Always — use a real issue ID and canonical URL from the target repository's configured tracker. GitHub Issues use `Fixes #N`; external trackers use their native key (for example, `Fixes TEAM-123`). |
+| **Tracker** | Always — use a real issue ID and canonical URL from the target repository's configured tracker. GitHub Issues use `Fixes #N`; external trackers use their native key (for example, `Fixes TEAM-123`). On PRs to **integration** branches (`devel`, `stage`, …), use **`Ref TEAM-N`** instead of `Fixes`/`Closes`/`Resolves` so merge does not auto-close the issue; reserve closing keywords for promote/QA merges (for example `main`). |
 | **Test plan** | Always — checkboxes reviewers can tick; name commands or environments |
 | **Scope boundaries** | Always — prevents surprise files in the diff |
 | **Risk / rollout** | When deploy, schema, infra, or user-visible behavior changes |
