@@ -49,3 +49,32 @@ Los stacks iniciales son los primeros adapters, no una lista cerrada (ver matriz
 - **flutter-accessibility**: Semantics, TalkBack/VoiceOver, focus management, contraste; mapea al gate a11y escalonado.
 - **flutter-performance**: rebuilds, listas, memoria, lazy loading, profiling; resultados → baselines de SLOs.
 - **sre-load-testing-performance**: recetas k6/JMeter, stress, capacity planning, benchmarking.
+
+## Evidence pipeline
+
+```mermaid
+flowchart LR
+    S[Stack: Flutter / Laravel / Elixir / TS / Web] --> R[Runner adapter]
+    R --> T[run: unit / widget / e2e / contract / mutation]
+    T --> C[collect: qf / JUnit / trace.zip / MSI]
+    C --> L[link: Linear issue + qualflare.link]
+    L --> K{cluster: dedupe por firma}
+    K --> G[Gate: pass / quarantine / fail]
+```
+
+## References
+
+- Flutter/Dart: https://docs.flutter.dev/testing · https://dart.dev/tools/testing · https://api.flutter.dev/flutter/flutter_test/ · https://api.flutter.dev/flutter/flutter_driver/
+- Maestro: https://maestro.dev/insights/maestro-flutter-integration-testing · https://maestro.dev/insights/top-5-end-to-end-testing-frameworks-compared
+- Patrol vs Maestro: https://leancode.co/blog/patrol-vs-maestro-flutter-e2e-testing · https://devicelab.dev/blog/flutter-testing-maestro-patrol-appium
+- Storybook: https://storybook.js.org/docs/writing-tests/interaction-testing · https://storybook.js.org/docs/writing-tests/integrations/vitest-addon · https://storybook.js.org/docs/writing-tests/integrations/stories-in-end-to-end-tests · https://storybook.js.org/docs/writing-tests/accessibility-testing
+- Widgetbook: https://docs.widgetbook.io/~v4/core-concepts · https://docs.widgetbook.io/~v4/testing/create-scenario · https://docs.widgetbook.io/glossary/golden-tests · https://www.widgetbook.io/blog/accessibility-testing-for-flutter
+- Laravel/Pest: https://laravel.com/docs/testing · https://www.honeybadger.io/blog/laravel-pest-architecture-testing/
+- Elixir: https://github.com/WTTJ/elixir-backend-learning-path#testing-your-code
+- TypeScript 7: https://code.visualstudio.com/blogs/2026/06/26/iterating-faster-with-ts-7 · https://www.prisma.io/blog/typescript-7-native-compiler-faster-type-checking
+- Playwright: https://playwright.dev/docs/writing-tests · skill `testdino-hq/playwright-skill` (MIT)
+- MobileWright: https://mobilewright.dev/docs · https://github.com/mobile-next/mobilewright (Apache-2.0)
+- Mutation: https://stryker-mutator.io/docs/ · https://infection.github.io/guide/
+- Contracts: https://schemathesis.io/ · https://docs.pact.io/
+- Load: k6 / Locust / Gatling / JMeter (ver matrices en spec)
+- A11y engine: https://github.com/dequelabs/axe-core

@@ -53,3 +53,26 @@ explícitas, mismo formato que los receipts.
   o **Tetragon** (eBPF, sinergia Cilium) en workloads de alto valor. Audit-first.
 - **Kyverno** default K8s (YAML, mutate/generate, image verification) vs **Gatekeeper**
   (Rego, reuso cross-platform). Admission = backstop, pair con CI-stage scanning.
+
+## Traceability + layered defense
+
+```mermaid
+flowchart LR
+    C[MASVS control] --> W[MASWE weakness]
+    W --> T[MASTG-TEST atómico]
+    T --> V[veredicto release: tests + seguridad por separado]
+    subgraph defense [4 capas agentic]
+    G[gateway heurístico] --> S[guardrails SLM en línea]
+    S --> O[controles de salida]
+    O --> M[monitor + audit trail]
+    end
+```
+
+## References
+
+- MASVS/MASTG/MASWE: https://mas.owasp.org/MASVS/ · https://mas.owasp.org/MASTG/ (v2: 285 tests, 152 demos)
+- OWASP Agentic AI: Galileo `Operationalizing the OWASP Top 10 for Agentic AI` (PDF local, abr-2026) — ASI01–ASI10, control plane, SoD, 4 fases
+- Supply chain: https://slsa.dev/ · Sigstore/cosign · SBOM CycloneDX/SPDX
+- Scanners: Trivy/Grype, Semgrep, OWASP ZAP, Kubescape, Checkov
+- Runtime: Falco (graduado) + KubeArmor (LSM) / Tetragon (eBPF) — ver matrices kubernetes.qa
+- Mobile REA: https://github.com/morluto/rea (MIT) — APK/Flutter sin fuente, evidencia + limitaciones
