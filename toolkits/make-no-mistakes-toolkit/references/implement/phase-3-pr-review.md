@@ -72,7 +72,8 @@ The ready-to-review command then runs, in order:
 1. **`/assurance:triage pr` (§2b)** — before any bot tag.
 2. **§3 Remote review** — **§3b execute** (steps 9–10 moved here: tag, wait,
    fix/push loop) then **§3c gate**; on **`yes`**, record **§3 gate green**.
-3. **§4 Local review** — only when §3c is `remote unavailable`.
+3. **§4a Gate fallback** — only when §3c is `remote unavailable`. **§4b**
+   adversarial local review is optional HITL and does not replace §3.
 4. **§5 Human handoff** — never merge.
 
 See `references/ready-to-review-mergeable/protocol.md` (normative order + diagram).
