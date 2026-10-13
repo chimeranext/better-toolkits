@@ -39,6 +39,26 @@ Resolve PR number from `--pr N`, else `gh pr view` for the current branch.
 Run sub-protocols **in order**: testing → security → governance → liveness (only if
 not `skip`). Stop on first `BLOCKED` unless config sets `continueOnOptionalFailure`.
 
+```mermaid
+flowchart TD
+    I["/assurance:triage [modo]"] --> M{modo?}
+    M -->|pr| T[testing/triage.md]
+    M -->|pillar| P[ese pillar solamente]
+    T --> VT{PASS?}
+    VT -->|no: BLOCKED| B[BLOCKED: pillar + razón + links]
+    VT -->|sí| S[security/triage.md]
+    S --> VS{PASS?}
+    VS -->|no: BLOCKED| B
+    VS -->|sí| G[governance/triage.md + receipt PR-stage]
+    G --> VG{PASS?}
+    VG -->|no: BLOCKED| B
+    VG -->|sí| L{liveness required?}
+    L -->|no| V[PASS agregado]
+    L -->|sí| LV[liveness/triage.md]
+    LV --> V
+    P --> V
+```
+
 ---
 
 ## Verdict contract

@@ -39,3 +39,28 @@ re-baselinear (métricas no comparables entre herramientas).
 El **playbook** decide (árbol diagnose/recover/escalate, pattern-IDs MDAA/MASWE);
 los **runbooks** ejecutan (diagnose read-only con Events → stern → k9s, recover/restore).
 Prosa sin árbol ni trigger = post-mortem, no playbook/runbook.
+
+## Liveness loop
+
+```mermaid
+flowchart TD
+    P[probe] --> H[heartbeat]
+    H --> A[absence detection]
+    A --> S[synthetic]
+    S --> C{chaos: steady-state?}
+    C -->|sí| I[inject con blast-radius]
+    C -->|no| W[abort: no experimentar sobre incidente]
+    I --> O[observe: error rate, p99, cascading]
+    O --> R[verify recovery]
+    R --> SC[resilience score + baseline SLO]
+    SC --> C
+```
+
+## References
+
+- K8s troubleshooting: `FINAL_The Ultimate Kubernetes Throubleshooting Guide_26.03.2026.pdf` (Documentos, local) — señales Events → stern → k9s
+- K8s Book (Poulton 2024, local): Deployments, RBAC (ch14), threat modeling (ch16)
+- Chaos: https://litmuschaos.io/ · https://chaos-mesh.org/ · https://kubernetes.qa/features/chaos/ · Antithesis https://antithesis.com/ (deterministic simulation, en evaluación)
+- Health: https://kubernetes.qa/features/health/ (8 dimensiones, score determinista)
+- Sysinternals: https://learn.microsoft.com/en-us/sysinternals/resources/troubleshooting-book (ProcDump por criterios, casos "Unexplained")
+- MDAA Diagnomicon (Vostokov, local): pattern-IDs estables para diagnósticos

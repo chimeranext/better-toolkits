@@ -91,7 +91,7 @@ After the audit(s), it runs a **premortem** on the aggregated remediation plan, 
 
 ## What's Inside
 
-### Commands (39)
+### Commands (40)
 
 Deliberate actions you invoke explicitly.
 
@@ -99,6 +99,7 @@ Deliberate actions you invoke explicitly.
 |---------|-------------|
 | [`/make-no-mistakes:implement <ISSUE-ID>`](commands/implement.md) | Disciplined execution of Linear issues — worktree isolation, all-reviewer loops, CI verification, clean merges |
 | [`/make-no-mistakes:merge-advisor [<base>]`](commands/merge-advisor.md) | Merge **ORDER** for a set of open PRs (pairwise collisions + latent conflicts), then **HITL** to execute the plan (AskUserQuestion / Cursor equivalent — no `--execute` flag) |
+| [`/make-no-mistakes:sync-advisor [<base-ref>]`](commands/sync-advisor.md) | Measure checkout drift vs base ref, recommend the smallest sync (`git pull` / single rebase / `/rebase`). Read-only — never syncs itself |
 | [`/make-no-mistakes:disk-cleanup [target-GB]`](commands/disk-cleanup.md) | Reclaim disk in ascending risk (docker images → worktree node_modules → worktrees; volumes listed only). Measured free-space deltas, never predictions |
 | [`/make-no-mistakes:parallelize <brief>`](commands/parallelize.md) | Plan how to split work across subagents / worktrees / agent teams before implementing |
 | [`/make-no-mistakes:explain <topic>`](commands/explain.md) | Explain a decision, command, or failure mode from project + toolkit context |
@@ -143,7 +144,7 @@ Deliberate actions you invoke explicitly.
 | [`/make-no-mistakes:e2e-test-preview [path]`](commands/e2e-test-preview.md) | Launch a Qt-based visual previewer for `test-suite.json` — interactive table with filtering, detail pane, and CSV export (auto-installs PySide6) |
 | [`/make-no-mistakes:gemini-code-review [target]`](commands/gemini-code-review.md) | Cheap first-pass code review (one-shot via liteLLM) on a parametrizable model — Gemini 3.5 Flash by default; supports `--model` and `--adversarial`, curated against the repo's CLAUDE.md |
 
-### Skills (15)
+### Skills (16)
 
 Auto-activate by context — you don't need to remember the command name.
 
@@ -155,7 +156,6 @@ Auto-activate by context — you don't need to remember the command name.
 | [`sync-advisor`](skills/sync-advisor/SKILL.md) | Ask "am I up to date", "is my checkout stale", or sync-after-release — measures drift, routes to `git pull` / single rebase / `/rebase`. Never syncs itself |
 | [`merge-advisor`](skills/merge-advisor/SKILL.md) | Ask "in what order do I merge these" — computes ORDER, then HITL-asks to merge (re-measure between merges) |
 | [`worktree-cleanup`](skills/worktree-cleanup/SKILL.md) | Classify/reclaim worktree disk without destroying work; stages 2–3 of `/disk-cleanup` |
-| [`rebase-advisor`](skills/rebase-advisor/SKILL.md) | **Deprecated alias** of `sync-advisor` (kept for muscle memory) |
 | [`spec-recommend`](skills/spec-recommend/SKILL.md) | Discuss specs, SRDs, implementation briefs, or say "what should I build" |
 | [`spike-recommend`](skills/spike-recommend/SKILL.md) | Paste a Linear issue URL or ask to analyze an issue |
 | [`review-open-prs`](skills/review-open-prs/SKILL.md) | Ask about open PRs, merge readiness, or Greptile scores |
