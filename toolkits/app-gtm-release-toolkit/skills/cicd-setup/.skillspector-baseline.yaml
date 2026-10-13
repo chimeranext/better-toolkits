@@ -1,0 +1,42 @@
+# SkillSpector baseline — findings listed here are suppressed on future scans.
+# Edit 'reason' fields and add glob 'rules' as needed. See docs/SUPPRESSION.md.
+version: 2
+scanner_version: 2.11.2
+rules:
+- id: PE3
+  path: references/github-actions.md
+  message: "*keychain*"
+  reason: 'Reviewed 2026-10-12: documented ephemeral iOS CI keychain setup; secrets from CI vault only.'
+- id: RA2
+  path: references/codemagic.md
+  message: "*plist*"
+  reason: 'Reviewed 2026-10-12: export-options plist is standard iOS CI packaging; no credential exfiltration.'
+- id: AE1
+  path: SKILL.md
+  message: "*references/*"
+  reason: 'Reviewed 2026-10-12: points to committed workflow templates; agent must not auto-run signing steps without human confirmation.'
+fingerprints:
+- hash: sha256:d3d2f8aafec8ff4396c8a26d4b904b8f469eff133b069ae0f252ad77d85423de
+  rule_id: AE1
+  file: SKILL.md
+  reason: 'Reviewed 2026-10-12: instructional Flutter CI/CD and beta-testing docs;
+    keychain/plist/API examples run only in CI or with user-owned credentials from
+    secret stores; not exfiltration or unconstrained agent autonomy.'
+- hash: sha256:23c482f8a2358b9440b345e22c5c45698443a5e6359bf1e5864a39773ccb39ea
+  rule_id: AE1
+  file: SKILL.md
+  reason: 'Reviewed 2026-10-12: instructional Flutter CI/CD and beta-testing docs;
+    keychain/plist/API examples run only in CI or with user-owned credentials from
+    secret stores; not exfiltration or unconstrained agent autonomy.'
+- hash: sha256:3be79361d1c720c9131281897bfb8d0bee4a8e1062b5e2972b6d1f19fb019c2e
+  rule_id: PE3
+  file: references/github-actions.md
+  reason: 'Reviewed 2026-10-12: instructional Flutter CI/CD and beta-testing docs;
+    keychain/plist/API examples run only in CI or with user-owned credentials from
+    secret stores; not exfiltration or unconstrained agent autonomy.'
+- hash: sha256:e8f21b92a42769f7b9f582281f979fa862fcf6bf1c1b351d8f88b9f018a7bc43
+  rule_id: RA2
+  file: references/codemagic.md
+  reason: 'Reviewed 2026-10-12: instructional Flutter CI/CD and beta-testing docs;
+    keychain/plist/API examples run only in CI or with user-owned credentials from
+    secret stores; not exfiltration or unconstrained agent autonomy.'
