@@ -1,7 +1,10 @@
 # Transversal security — protocol SSOT
 
-Harness-agnostic body. Thin entries: `commands/pentest-runner.md`,
-`commands/pentest-playbook-setup.md`, `commands/triage-security-findings.md`.
+Harness-agnostic body. Thin entries: `commands/triage.md`,
+`commands/pentest-runner.md`, `commands/pentest-playbook-setup.md`,
+`commands/triage-security-findings.md`. PR-stage hub:
+[`references/triage/protocol.md`](../triage/protocol.md); security PR gate:
+[`triage.md`](triage.md).
 Full behavior contract: `openspec/changes/add-assurance-toolkit/specs/toolkit/assurance-security/spec.md`.
 
 ## Principio

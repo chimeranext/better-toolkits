@@ -26,7 +26,7 @@ the `/implement` application of that doctrine — not HITL’s only home.
 
    Store the answer — it drives Phase 3 + Phase 4 downstream behavior.
 
-2. **`gh pr merge`** — STOP unless the user pre-authorized "Ready to Merge" mode at PR creation. Even in "Ready to Merge" mode, surface the merge attempt's expected outcome before triggering it (e.g., "all checks green; merging squash with branch delete in 5s").
+2. **`gh pr merge`** — STOP unless the user pre-authorized "Ready to Merge" mode at PR creation. Even in "Ready to Merge" mode, surface the merge attempt's expected outcome before triggering it (e.g., "all checks green; merging with **merge commit** (`--merge`) in 5s."). **Never `--squash`** on better-toolkits — see monorepo `docs/git-merge-policy.md`.
 
 3. **Linear status → Done** — STOP, always. Even after a successful auto-merge, ask the user before flipping Linear from In Review to Done. The user reserves the right to keep an issue in "In Review" until they personally verify the deploy or staging.
 

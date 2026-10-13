@@ -59,3 +59,15 @@ PR open-state HITL, create PR, reviewer loop, CI, conflicts.
     ```
     - If conflicts exist, rebase onto {baseBranch} and resolve
     - Never force-merge over conflicts
+
+### Boundary: `/ready-to-review-mergeable`
+
+When `/implement` is invoked **from** `/ready-to-review-mergeable` (or
+`make-no-mistakes.config.json` → `readyToReview.implement.stopAfter` is
+`phase-3-step-12`), **stop here**. Do not run Phase 4 merge, Linear → Done, or
+worktree cleanup from that invocation.
+
+The ready-to-review command then runs **`/assurance:triage pr` (§2b)**,
+**mandatory remote review** (steps 9–10 moved here), optional **local review
+only as fallback**, and ends with an explicit **human review handoff** — never
+merge.
