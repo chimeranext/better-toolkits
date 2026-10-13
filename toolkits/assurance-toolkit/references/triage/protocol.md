@@ -59,6 +59,36 @@ flowchart TD
     P --> V
 ```
 
+## Sequence (RTR §2b — before remote bots)
+
+```mermaid
+sequenceDiagram
+  participant RTR as /ready-to-review-mergeable
+  participant Hub as /assurance:triage pr
+  participant T as testing/triage
+  participant S as security/triage
+  participant G as governance/triage
+  participant L as liveness/triage
+  participant Bots as Greptile / CodeRabbit
+
+  RTR->>Hub: §2b --pr N --issue SCRT-N
+  Hub->>T: required pillar
+  T-->>Hub: PASS | BLOCKED
+  Hub->>S: required pillar
+  S-->>Hub: PASS | BLOCKED
+  Hub->>G: required pillar + receipt
+  G-->>Hub: PASS | BLOCKED
+  opt liveness not skip
+    Hub->>L: optional/required
+    L-->>Hub: PASS | BLOCKED | SKIP
+  alt aggregate PASS
+    Hub-->>RTR: PASS → §3b tag bots
+    RTR->>Bots: remote review (after §3a preconditions)
+  else BLOCKED
+    Hub-->>RTR: BLOCKED — no bot tag
+  end
+```
+
 ---
 
 ## Verdict contract

@@ -7,6 +7,39 @@ Parent hub: [`references/triage/protocol.md`](../triage/protocol.md).
 Is this PR **safe to expose to code review** under PR-stage security gates
 (critical findings = 0)?
 
+## Flow (PR stage)
+
+```mermaid
+flowchart TD
+  start([security/triage.md]) --> c1[Read PR CI security workflows]
+  c1 --> c2{critical / blocking open?}
+  c2 -->|no| p[PASS]
+  c2 -->|sí, triageable| t[assurance triage-security-findings]
+  t --> c3{fixed or downgraded per SLA?}
+  c3 -->|no| b[BLOCKED]
+  c3 -->|sí| p
+  c2 -->|sí, not triageable| b
+```
+
+## Sequence (agent ↔ scanners)
+
+```mermaid
+sequenceDiagram
+  participant Hub as assurance hub
+  participant Agent as Agent
+  participant CI as Security CI workflows
+  participant Triage as triage-security-findings
+
+  Hub->>Agent: run security pillar (PR N)
+  Agent->>CI: read SAST/SCA/container/dep review
+  CI-->>Agent: findings for head SHA
+  alt critical open + triage path
+    Agent->>Triage: --pr N + scanner/phase
+    Triage-->>Agent: disposition
+  end
+  Agent-->>Hub: PASS | BLOCKED + evidence links
+```
+
 ## Steps
 
 1. Read PR CI / security workflows (SAST, SCA, container scan, dependency review —
