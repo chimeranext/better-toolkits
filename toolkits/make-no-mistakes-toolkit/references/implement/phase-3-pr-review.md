@@ -67,7 +67,13 @@ When `/implement` is invoked **from** `/ready-to-review-mergeable` (or
 `phase-3-step-12`), **stop here**. Do not run Phase 4 merge, Linear → Done, or
 worktree cleanup from that invocation.
 
-The ready-to-review command then runs **`/assurance:triage pr` (§2b)**,
-**mandatory remote review** (steps 9–10 moved here), optional **local review
-only as fallback**, and ends with an explicit **human review handoff** — never
-merge.
+The ready-to-review command then runs, in order:
+
+1. **`/assurance:triage pr` (§2b)** — before any bot tag.
+2. **§3 Remote review** — **§3b execute** (steps 9–10 moved here: tag, wait,
+   fix/push loop) then **§3c gate**; on **`yes`**, record **§3 gate green**.
+3. **§4a Gate fallback** — only when §3c is `remote unavailable`. **§4b**
+   adversarial local review is optional HITL and does not replace §3.
+4. **§5 Human handoff** — never merge.
+
+See `references/ready-to-review-mergeable/protocol.md` (normative order + diagram).
