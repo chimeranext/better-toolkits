@@ -44,6 +44,10 @@ If `linear-setup.json` exists at the repo root, read it for:
 - `openspec.changesPath` — Path to OpenSpec changes directory
 - `output.briefsPath` — Path for implementation briefs (fallback: `./implementation-briefs/`)
 
+## Tracker selection
+
+Before creating or linking issues (Mode B step 5), follow [`references/tracker-selection.md`](../references/tracker-selection.md). **Linear by default; GitHub Issues as fallback**; **GitHub-native short-circuit** when `linear-setup.json` is absent or maps nothing for the domain. Same doctrine as `spike-recommend`.
+
 ## How to use
 
 ```bash
@@ -145,15 +149,10 @@ For each SRD task (or group of related tasks):
    - Implementation plan (pre-flight, step-by-step actions, post-flight)
    - Each task as a checkbox that `/opsx:apply` can execute
 
-5. **Create/link tracker issue (Linear-native, GitHub issues as fallback):**
-   - Default: Linear via MCP — create with title, project (from `linear-setup.json`
-     mapping), priority, labels, description; link the OpenSpec change path in the
-     description. If the issue already exists, add a comment with the change reference.
-   - Fallback ONLY when `linear-setup.json` is absent or maps nothing for the domain:
-     `gh issue create` in the owning repo with the same content. Never invent a
-     Linear workspace, team, or project — missing mapping means GitHub-native.
-   - Cross-reference existing tracker issues (search by title/description match)
-     before creating duplicates.
+5. **Create/link tracker issue** — apply [`references/tracker-selection.md`](../references/tracker-selection.md):
+   - **Linear-mapped:** create/link via Linear MCP (`save_issue`) with title, project (from `linear-setup.json`), priority, labels, description; link the OpenSpec change path. If the issue exists, add a comment with the change reference.
+   - **GitHub-native or `gh` fallback:** `gh issue create` / link in the owning repo with the same content when selection resolves to GitHub per the SSOT.
+   - Cross-reference existing tracker issues (search by title/description match) before creating duplicates.
 
 ---
 
@@ -718,9 +717,10 @@ Evaluate the **long-term implications** of this step's implementation:
 
 ## Requirements
 
-* Linear MCP server configured (native tracker; `gh` CLI is the fallback when `linear-setup.json` maps nothing)
+* **Linear MCP** configured when the repo is Linear-mapped (primary tracker)
+* **GitHub CLI (`gh`)** authenticated (GitHub Issues fallback; required for GitHub-native repos)
+* `linear-setup.json` at repo root when Linear-mapped (optional for GitHub-native repos)
 * Slack MCP server configured (for notification step and E2E test planning)
 * OpenSpec CLI installed with an OPSX profile (`openspec schemas --json`; legacy phase commands forbidden)
 * TaskMaster AI MCP configured (optional --- enhances task decomposition)
 * Spec files must exist at one of the supported discovery locations
-* `linear-setup.json` at repo root (optional --- provides project mappings and path configuration; absent means GitHub-native issues)
