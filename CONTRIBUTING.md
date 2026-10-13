@@ -27,6 +27,7 @@ development; do not turn this into a competing product.**
 1. Prefer issues and PRs against [chimeranext/better-toolkits](https://github.com/chimeranext/better-toolkits).
 2. Branch names: `feat/…`, `fix/…`, `docs/…` — no employer-specific ticket prefixes in public branch names.
 3. Keep commits focused. If you touch `hooks/`, add or update the relevant synthetic tests.
+3a. **Marketplace versions:** agent-facing toolkit edits must bump the plugin version in `.claude-plugin/marketplace.json` and `toolkits/*/.claude-plugin/plugin.json`. Install `pre-commit install --hook-type pre-push` or symlink `scripts/git-hooks/pre-push-marketplace-versions.sh` → `.git/hooks/pre-push`. Helper: `python3 scripts/ci/marketplace_versioning.py write --range origin/main..HEAD`.
 3b. **Merge PRs with merge commits only** — [`docs/git-merge-policy.md`](docs/git-merge-policy.md). Squash and rebase merges are **forbidden** on this repo (`gh pr merge --merge`). Toolkit docs that show `gh pr merge` must not use `--squash` for better-toolkits.
 4. Do not commit secrets. Do not silence stderr with `2>/dev/null` in agent harness commands (see make-no-mistakes stderr hooks).
 5. **HITL is repo doctrine** ([`docs/hitl.md`](docs/hitl.md)): after a plan whose natural next step mutates shared state (`gh pr merge`, tracker → Done, force-with-lease on published history, …), ask and wait — Claude `AskUserQuestion` / Cursor **`AskQuestion`** (fallback: numbered options). Do not bury the happy path behind `--execute`.
