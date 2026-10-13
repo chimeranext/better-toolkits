@@ -45,7 +45,7 @@ One protocol markdown contract (`references/` + thin entries). One stderr detect
 With **make-no-mistakes** installed, the delivery gate before a human merges on GitHub is
 `/make-no-mistakes:ready-to-review-mergeable <ISSUE-ID>` — **issue ID required**, **never merge** from the command.
 
-Order: **`/implement` (Phase 3 through step 12, skip 9–10)** → **`/assurance:triage pr`** → **mandatory remote PR review** → **local review only if remote unavailable** → **handoff (Linear In Review)**.
+Order: **`/implement` (Phase 3 through step 12, skip 9–10)** → **`/assurance:triage pr`** → **execute remote PR review (§3b) until gate green (§3c)** → **local review only if remote unavailable** → **handoff (Linear In Review)**.
 
 Mermaid SSOT: [`toolkits/make-no-mistakes-toolkit/references/ready-to-review-mergeable/protocol.md`](toolkits/make-no-mistakes-toolkit/references/ready-to-review-mergeable/protocol.md) (section **Pipeline overview**). Config: `readyToReview` in [`make-no-mistakes.config.example.json`](toolkits/make-no-mistakes-toolkit/commands/make-no-mistakes.config.example.json). Assurance hub: [`toolkits/assurance-toolkit/references/triage/protocol.md`](toolkits/assurance-toolkit/references/triage/protocol.md).
 
