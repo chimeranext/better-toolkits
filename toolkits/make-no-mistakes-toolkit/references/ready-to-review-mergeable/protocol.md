@@ -50,7 +50,7 @@ below apply when the block is absent.
 
 ```mermaid
 flowchart TD
-  start(["/ready-to-review-mergeable &lt;ISSUE-ID&gt;"])
+  start(["/ready-to-review-mergeable ISSUE-ID"])
   s1["§1 Parse issue IDs — STOP if missing"]
   s2["§2 /implement through Phase 3 step 12<br/>skip Phase 3 steps 9–10"]
   s2b["§2b /assurance:triage pr"]
