@@ -40,6 +40,15 @@ One protocol markdown contract (`references/` + thin entries). One stderr detect
 
 **Human-in-the-loop is the other pillar** of this monorepo — orthogonal to multi-harness SSOT. After a plan whose natural next step mutates shared state, agents **ask and wait**. No buried `--execute`. Canonical: [`docs/hitl.md`](docs/hitl.md). Cursor agents: [`.cursor/rules/hitl-doctrine.mdc`](.cursor/rules/hitl-doctrine.mdc).
 
+### Issue → PR → human review (`ready-to-review-mergeable`)
+
+With **make-no-mistakes** installed, the delivery gate before a human merges on GitHub is
+`/make-no-mistakes:ready-to-review-mergeable <ISSUE-ID>` — **issue ID required**, **never merge** from the command.
+
+Order: **`/implement` (Phase 3 through step 12, skip 9–10)** → **`/assurance:triage pr`** → **mandatory remote PR review** → **local review only if remote unavailable** → **handoff (Linear In Review)**.
+
+Mermaid SSOT: [`toolkits/make-no-mistakes-toolkit/references/ready-to-review-mergeable/protocol.md`](toolkits/make-no-mistakes-toolkit/references/ready-to-review-mergeable/protocol.md) (section **Pipeline overview**). Config: `readyToReview` in [`make-no-mistakes.config.example.json`](toolkits/make-no-mistakes-toolkit/commands/make-no-mistakes.config.example.json). Assurance hub: [`toolkits/assurance-toolkit/references/triage/protocol.md`](toolkits/assurance-toolkit/references/triage/protocol.md).
+
 ### Main selling point — stderr baseline
 
 Agents that discard stderr (`2>/dev/null`, bare `2>&1` without a log sink) hide failures. Every toolkit in this monorepo vendors [`shared/hooks/stderr/`](shared/hooks/stderr/) and registers it on install. **On by default; opt-out** via `MNM_DISABLE_STDERR_HOOK=1`, `.claude/config/stderr-hooks.json` → `{"preserve_stderr": false}`, or OpenCode `"plugins": ["-local.mnm-no-stderr-redirect"]`.
