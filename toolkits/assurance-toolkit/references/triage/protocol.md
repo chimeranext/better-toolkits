@@ -76,5 +76,5 @@ See `toolkits/make-no-mistakes-toolkit/commands/make-no-mistakes.config.example.
 
 - **`/assurance:triage-security-findings`** — security pillar implementation for
   backlog triage; invoked **from** `references/security/triage.md` when needed.
-- **`/ready-to-review-mergeable`** — calls this hub at **§2b** before mandatory
-  remote PR review.
+- **`/ready-to-review-mergeable`** — calls this hub at **§2b** before **§3b**
+  execute remote PR review (§3c gate green before §5 handoff).

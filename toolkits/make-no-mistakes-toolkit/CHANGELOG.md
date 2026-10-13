@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `review-open-prs`, and `/clean-code-standards-{setup,audit}`.
 
 ### Changed
+- **`/ready-to-review-mergeable` protocol:** normative §3a–3c (execute remote review → gate decision → gate green before §5); mapping table vs implement Phase 3; aligned `phase-3-pr-review.md`, config comment, assurance §2b→§3b cross-link, root README.
 - **`spike-recommend` / `spec-recommend`:** shared tracker SSOT `references/tracker-selection.md` (#46) — config-first short-circuit; Linear by default; GitHub Issues fallback.
 - **`/ready-to-review-mergeable` (breaking semantics):** single pipeline — **tracker issue ID required** in `$ARGUMENTS`; always delegates to `/implement` through **Phase 3 step 12** (skip steps 9–10; no merge / Done / worktree cleanup); **`/assurance:triage pr` (§2b)** before **mandatory remote** PR review; **local review fallback-only** when remote cannot run; exit = **human review handoff**, not merge. Removes branch-only mode. Config: `readyToReview` + `readyToReview.assurance` in `make-no-mistakes.config.example.json`. Protocol aligned with `stop-prs-green.sh` (findings gate; Confidence advisory).
 - **`/resolve-open-questions`:** Cursor harness uses **`AskQuestion`** (Claude keeps `AskUserQuestion`); fallback to numbered chat options only if the tool is unavailable. HITL doctrine (`docs/hitl.md`, `.cursor/rules/hitl-doctrine.mdc`) aligned.

@@ -37,5 +37,5 @@
       }
     }
   },
-  "_readyToReview": "Behaviour for `/ready-to-review-mergeable`. Order: `/implement` through Phase 3 step 12 (skip steps 9–10) → `/assurance:triage pr` → mandatory remote PR review → local diff review only if remote unavailable → human handoff. Issue ID required in $ARGUMENTS. See assurance-toolkit `references/triage/protocol.md`."
+  "_readyToReview": "Behaviour for `/ready-to-review-mergeable`. Order: `/implement` Phase 3 through step 12 (skip 9–10) → `/assurance:triage pr` → §3b execute remote review → §3c gate (yes = gate green) → §5 handoff; §4 local only when remote unavailable. Issue ID required. SSOT: `references/ready-to-review-mergeable/protocol.md`."
 }

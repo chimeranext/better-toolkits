@@ -70,9 +70,30 @@ flowchart TD
   rem -->|no, remote unavailable per §4| s4 --> s5
 ```
 
-**Diagram note:** the **`yes`** branch on `Remote gate pass?` only fires **after** §3 has run (trigger, wait, iterate). The `§3 Remote gate green` node is the explicit “remote review done” checkpoint before §5 — not a substitute for §3 when remote is available.
+**Diagram note:** `Remote gate pass?` is **§3c** below. **`yes`** means the execute loop (§3b) already finished and the pass contract holds; then **`§3 Remote gate green`** is recorded before §5. It is not a shortcut that skips tagging bots.
 
 **Assurance liveness on PR:** default pillar config is **`skip`** (`readyToReview.assurance.pillars.liveness: "skip"`) — observability runs on schedule/daemon, not every PR. Set `required` only when the consumer repo opts in.
+
+### Normative order (whole command)
+
+| Step | Section | Required before next |
+| --- | --- | --- |
+| 1 | §1 Parse issue IDs | At least one `<TEAM>-<number>` |
+| 2 | §2 `/implement` → Phase 3 **step 12** only | PR exists, CI green, mergeable; **steps 9–10 not run here** |
+| 3 | §2b `/assurance:triage pr` | **PASS** (or explicit config waiver) |
+| 4 | §3 Remote review | **§3b execute** then **§3c gate** = **yes** when remote is available |
+| 5 | §4 Local review | **Only** when §3c = `no, remote unavailable per §4` |
+| 6 | §5 Human handoff | §3 gate green **or** §4 documented fallback; never merge |
+
+**Hard rule:** when remote review **can** run, you **must** complete §3b (tag/wait/iterate) and §3c **`yes`** before §5. §4 never replaces a failing remote gate (`no, remote available` → **BLOCKED**, stay in §3b).
+
+### Mapping: `/implement` Phase 3 vs this command
+
+| Phase 3 step | Default `/implement` | `/ready-to-review-mergeable` |
+| --- | --- | --- |
+| 8a–8, 11–12 | PR + CI + conflicts | §2 — implement stops at **12** |
+| 9–10 | Tag remote bots + fix loop | **Deferred** — run as **§3b** after §2b PASS |
+| 13–15 | Merge / Done / worktree | **Out of scope** — never from this command |
 
 ---
 
@@ -126,32 +147,61 @@ monorepo reference path or report **BLOCKED** — do not skip silently.
 
 Local diff review (§4) does **not** replace assurance triage or remote review.
 
-### 3. Remote review (mandatory)
+### 3. Remote review (mandatory when available)
 
-When `readyToReview.remoteReview.required` is true (default):
+Applies when `readyToReview.remoteReview.required` is `true` (default). This
+section is **three substeps** — match the diagram: **§3a → §3b → §3c**, then
+**§3 gate green** on success.
 
-1. PR must be **Ready for review** (not Draft) before tagging bots.
-2. Trigger remote review per repo convention (e.g. comment `@greptile review`,
-   or re-tag the login configured for the consumer repo — often `code-reviewer`
-   on Claude Code–wired projects).
-3. Read verdicts from **`.reviews[*]`**, never `.comments[*]`. Mind login suffix
-   mismatches (`code-reviewer` vs `code-reviewer[bot]`).
-4. Iterate: fix → push → re-trigger until the remote gate passes.
+#### 3a. Preconditions (before tagging bots)
 
-**Remote pass contract** (align with `stop-prs-green.sh` when state file is used):
+- §2b assurance **PASS** (do not tag bots on BLOCKED assurance).
+- PR is **Ready for review** (not Draft). If the user chose Draft at implement
+  step 8a, flip to ready-for-review or **STOP** — do not skip §3 by jumping to §5.
+- `.claude/.implement-prs` lists this PR (line 1: advisory `--confidence` if
+  any; line 2+: PR URL or number) so `stop-prs-green.sh` can enforce green until
+  handoff clears the file.
+
+#### 3b. Execute remote review (always when remote is available)
+
+This is **implement Phase 3 steps 9–10**, relocated here after assurance:
+
+1. Tag remote reviewers per repo convention — e.g. comment `@greptile review`,
+   and/or logins from `readyToReview.remoteReview.bots`, else
+   `linear-setup.json` defaults (Greptile / CodeRabbit / Graphite when present).
+2. Wait for configured bot verdicts; read **`.reviews[*]`**, never
+   `.comments[*]` (mind `code-reviewer` vs `code-reviewer[bot]`).
+3. On findings: fix → push → re-tag / re-poll until §3c passes or you hit
+   `no, remote unavailable per §4`.
+
+Do **not** enter §5 without having run §3b at least once when GitHub remote
+review is available.
+
+#### 3c. Remote gate decision
+
+After each §3b iteration, classify:
+
+| Branch | When | Next |
+| --- | --- | --- |
+| **yes** | Remote pass contract below is satisfied | Record **§3 gate green** → proceed to **§5** |
+| **no, remote available** | Contract not met; `gh`/bots still usable | **BLOCKED** — fix, push, repeat **§3b** (not §4, not §5) |
+| **no, remote unavailable per §4** | Remote cannot be executed at all | **§4** local fallback → then **§5** |
+
+**Remote pass contract** (align with `stop-prs-green.sh`):
 
 - Latest verdict review from the configured reviewer login is **APPROVED**, and
 - **0 blockers, 0 P1, 0 P2** in the parseable verdict headline.
 
 Optional `--confidence` in the review body is **reported, not gated**.
 
-Register each PR in `.claude/.implement-prs` (line 1: advisory threshold if
-any; line 2+: PR URL or number). The Stop hook enforces remote green while this
-file exists.
+**§3 gate green (checkpoint):** explicitly confirm the contract above for every
+issue/PR, then continue. This is the diagram node between **`yes`** and §5 — it
+documents that remote review **executed and passed**, not merely that assurance
+passed.
 
-If `readyToReview.remoteReview.bots` is set in config, use that list; else use
-project `linear-setup.json` defaults (e.g. Greptile / CodeRabbit / Graphite)
-when present.
+When `readyToReview.remoteReview.required` is `false`, document the waiver in
+the handoff table; §4 may become primary only if config and user visibility say
+so — never silently skip §3b when bots are available.
 
 ### 4. Local review (fallback only — remote code review unavailable)
 
@@ -171,16 +221,21 @@ example:
    ready-to-review.
 
 Local review is **never** a substitute for a working remote gate when remote is
-available.
+available. If §3c is **`no, remote available`**, local review is **forbidden** —
+return to §3b.
 
 ### 5. Human handoff (exit)
+
+**Entry condition:** for every issue, either **§3 gate green** (normal path) or
+**§4 completed** with `remote_unavailable` documented. If remote was available
+but the gate is red, you are still in §3b — **not** eligible for §5.
 
 You are **not done** until for every issue:
 
 | Check | Required |
 | --- | --- |
 | Assurance PR triage | PASS per §2b (or explicitly waived in config) |
-| Remote review | Passed per §3, or documented fallback per §4 with user visibility |
+| Remote review | **§3b executed** and **§3c yes** / gate green, **or** §4 fallback only when §3c = remote unavailable |
 | CI | All required PR checks green (or out-of-scope failures explicitly listed) |
 | Mergeability | `mergeable` / no unresolved conflicts |
 | Tracker | **In Review** (never **Done**) — verify MCP writes |
@@ -219,7 +274,10 @@ or in `/implement` after an issue exists — not in `/ready-to-review-mergeable`
 
 - Running this command without a tracker issue ID
 - Tagging remote code-review bots before §2b assurance PASS
-- Skipping remote review when GitHub bots are available
+- Running implement Phase 3 steps 9–10 **before** §2b, or skipping §3b while bots work
+- Jumping from assurance PASS (or from `Remote gate pass?` **no**) straight to §5
+- Skipping §3b execute when GitHub bots are available
+- Using local review when §3c is `no, remote available` (red remote gate)
 - Using local review as the primary gate when remote works
 - Claiming "ready for human" while remote is red or CI is failing in-scope
 - Confusing bot APPROVED with human approval or merge permission
