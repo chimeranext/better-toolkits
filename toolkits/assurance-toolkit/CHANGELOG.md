@@ -4,6 +4,12 @@
 
 ### Added
 
+- Bibliography + mermaid diagrams (evidence pipeline, liveness loop,
+  traceability + layered defense, release-gates sequence) in the 4 pillar
+  protocols; hub routing flowchart in `references/triage/protocol.md`.
+
+### Added
+
 - **`/assurance:triage`** hub command + `references/triage/protocol.md`.
 - Per-pillar PR triage sub-protocols: `references/testing/triage.md`,
   `references/security/triage.md`, `references/liveness/triage.md`,
