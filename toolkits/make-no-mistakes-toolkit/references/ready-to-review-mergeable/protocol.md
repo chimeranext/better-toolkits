@@ -44,6 +44,35 @@ below apply when the block is absent.
 
 ---
 
+## Pipeline overview
+
+**Invariant:** exit = **human review handoff** on GitHub — never merge, never Linear **Done**.
+
+```mermaid
+flowchart TD
+  start(["/ready-to-review-mergeable &lt;ISSUE-ID&gt;"])
+  s1["§1 Parse issue IDs — STOP if missing"]
+  s2["§2 /implement through Phase 3 step 12<br/>skip Phase 3 steps 9–10"]
+  s2b["§2b /assurance:triage pr"]
+  ass{"§2b PASS?"}
+  s3["§3 Mandatory remote PR review<br/>PR must be Ready for review not Draft"]
+  rem{"Remote gate pass?"}
+  s4["§4 Local review — fallback only<br/>when remote truly unavailable"]
+  s5["§5 Human handoff — tracker In Review<br/>never merge"]
+  blocked["BLOCKED — fix, push, re-run from failed step"]
+
+  start --> s1 --> s2 --> s2b --> ass
+  ass -->|no| blocked
+  ass -->|yes| s3 --> rem
+  rem -->|yes| s5
+  rem -->|no, remote available| blocked
+  rem -->|no, remote unavailable per §4| s4 --> s5
+```
+
+**Assurance liveness on PR:** default pillar config is **`skip`** (`readyToReview.assurance.pillars.liveness: "skip"`) — observability runs on schedule/daemon, not every PR. Set `required` only when the consumer repo opts in.
+
+---
+
 ## Pipeline (always)
 
 ### 1. Parse arguments
