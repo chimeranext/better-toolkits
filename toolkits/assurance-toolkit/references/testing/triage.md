@@ -6,6 +6,38 @@ Parent hub: [`references/triage/protocol.md`](../triage/protocol.md).
 
 Does this PR have **testing evidence** that satisfies the PR-stage gate?
 
+## Flow (PR stage)
+
+```mermaid
+flowchart TD
+  start([testing/triage.md]) --> c1[gh pr checks — required test jobs]
+  c1 --> c2{invokeRunner true?}
+  c2 -->|sí| r[e2e-test-runner / test-suite.json]
+  c2 -->|no| v{required checks green?}
+  r --> v
+  v -->|no| b[BLOCKED — job + URL]
+  v -->|sí| p[PASS]
+```
+
+## Sequence (agent ↔ CI)
+
+```mermaid
+sequenceDiagram
+  participant Hub as assurance hub
+  participant Agent as Agent
+  participant GH as GitHub PR checks
+  participant Runner as optional test runner
+
+  Hub->>Agent: run testing pillar (PR N)
+  Agent->>GH: gh pr checks N
+  alt readyToReview.assurance.testing.invokeRunner
+    Agent->>Runner: e2e-test-runner (test-suite.json)
+    Runner-->>Agent: exit code + artifacts
+  end
+  GH-->>Agent: required jobs success / fail
+  Agent-->>Hub: PASS | BLOCKED + links
+```
+
 ## Steps
 
 1. Confirm PR checks include required test jobs for this repo (unit/integration/E2E
