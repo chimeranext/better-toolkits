@@ -15,7 +15,7 @@ description: >
   NOT for authoring operational SOPs (that is /sop-authoring) nor contracts.
 ---
 
-# Requirements Authoring
+# Requirements Authoring (shared)
 
 Turns a fuzzy product idea into a versioned **PRD / SRS** compliant with
 **ISO/IEEE 830:1998** and **ISO/IEC/IEEE 29148:2018**, using a blank template derived
@@ -37,7 +37,10 @@ Issue Linear (formato Bilingual Layer)  →  /opsx-explore → /opsx-propose
 > El PRD/SRS se escribe primero según el estándar; los archivos OpenSpec se
 > **derivan** de él para guiar la implementación de cada issue.
 
-Read and follow [`references/requirements-authoring/protocol.md`](../../references/requirements-authoring/protocol.md) (protocol SSOT), the vendored
-[`references/requirements-authoring/srs-bare-template.md`](../../references/requirements-authoring/srs-bare-template.md), and
+Shared home (deduped from `fractional-cto-toolkit`, same as engineering-standards):
+read and follow [`references/requirements-authoring/protocol.md`](../../references/requirements-authoring/protocol.md)
+(protocol SSOT), the vendored
+[`references/requirements-authoring/srs-bare-template.md`](../../references/requirements-authoring/srs-bare-template.md),
+and
 [`references/requirements-authoring/openspec-quick-guide.md`](../../references/requirements-authoring/openspec-quick-guide.md).
 Frontmatter triggers unchanged.
