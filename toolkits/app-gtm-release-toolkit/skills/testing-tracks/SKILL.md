@@ -7,6 +7,12 @@ description: "Set up and manage app testing tracks across Google Play (internal,
 
 This skill manages the progressive testing workflow that validates your app with real users before production release. The key principle: start narrow (internal), expand gradually (closed/external), then go wide (open/production).
 
+## Agent constraints (mandatory)
+
+- `references/*.md` may include **example** `curl` calls and API URLs — use placeholders; never invent or exfiltrate real API keys, JWTs, or tester PII.
+- Creating testers, uploading builds, or deleting remote sessions requires the human's **App Store Connect / Play Console / device-lab credentials**; do not call vendor APIs autonomously.
+- Promoting a build toward production always needs explicit human confirmation after checklist review.
+
 ## Testing Progression
 
 ```
