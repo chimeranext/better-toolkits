@@ -51,3 +51,30 @@ Exit codes 0/1/2, thresholds por env (dev:critical, prod:warning), audit-first,
 diff contra lo corriendo. Health score determinista 0–100 en 8 dimensiones
 (resources, security, networking, storage, availability, observability,
 configuration, cost); mínimos por dimensión, remediación exacta por hallazgo.
+
+## Release gates (sequence)
+
+```mermaid
+sequenceDiagram
+    participant Dev as Dev/Agent
+    participant CI as CI + assurance
+    participant Lin as Linear
+    participant K8s as Cluster/admission
+    Dev->>CI: commit (lint, unit, coverage cambio)
+    CI-->>Dev: fail rápido o pass
+    Dev->>CI: PR (tests 100%, sec críticas 0, coverage_delta)
+    CI->>Lin: link issues + qualflare.link
+    CI-->>Dev: merge solo en verde
+    Dev->>K8s: release (e2e, p95, DER, can-i-deploy)
+    K8s->>K8s: waves + hooks + health + admission
+    K8s-->>Lin: receipts (qué, dónde, baseline, IDs, versión)
+```
+
+## References
+
+- DORA: https://dora.dev/guides/dora-metrics/ · escape rate, MTTR, anti-gaming
+- Gates: https://kubernetes.qa/features/gates/ (exit codes, thresholds por env, audit-first, diff)
+- Contratos: `can-i-deploy` (Pact Broker) como gate de deploy
+- GitOps: `ArgoCD Up & Running` (O'Reilly 2025, local) — waves, hooks Pre/PostSync
+- AI evals: Huyen `AI Engineering` Ch4/Ch10 (local) — eval-driven development
+- Refactor: Fowler `Refactoring` 2e Ch4 (local) — self-testing, risk-driven, characterization tests
