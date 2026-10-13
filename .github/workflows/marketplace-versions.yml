@@ -1,0 +1,35 @@
+name: marketplace versions
+
+on:
+  pull_request:
+    paths:
+      - ".claude-plugin/marketplace.json"
+      - "toolkits/**"
+      - "shared/bootstrap/**"
+      - "scripts/ci/marketplace_versioning.py"
+  push:
+    branches: [main]
+    paths:
+      - ".claude-plugin/marketplace.json"
+      - "toolkits/**"
+      - "shared/bootstrap/**"
+
+permissions:
+  contents: read
+
+jobs:
+  sync-and-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: marketplace.json ↔ plugin.json sync
+        run: python3 scripts/ci/marketplace_versioning.py sync
+      - name: version bump discipline vs base branch
+        run: |
+          BASE="${{ github.event.pull_request.base.sha || 'HEAD~1' }}"
+          python3 scripts/ci/marketplace_versioning.py check --range "${BASE}..HEAD"

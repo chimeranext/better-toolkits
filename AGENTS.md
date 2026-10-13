@@ -19,6 +19,7 @@ mutations), [`docs/multi-harness-ssot.md`](docs/multi-harness-ssot.md).
 - Each toolkit keeps only `.claude-plugin/plugin.json` (plugin identity + version).
 - **Forbidden:** `toolkits/*/.claude-plugin/marketplace.json` — those were standalone-repo leftovers and cause version drift. Do not recreate them.
 - When bumping a toolkit version, update **root** `marketplace.json` + that toolkit's `plugin.json` (and `package.json` / CHANGELOG / README when they exist) in the same PR.
+- **Pre-push gate:** `scripts/git-hooks/pre-push-marketplace-versions.sh` (or `pre-commit install --hook-type pre-push`) blocks pushes when `commands/`, `references/`, `skills/`, or `hooks/` changed without a semver increase. Apply bumps: `python3 scripts/ci/marketplace_versioning.py write --range origin/main..HEAD`. Cursor refresh: `agent plugin marketplace update better-toolkits` (optional `workspaceOpen` hook in bootstrap adapter).
 
 ## Runtime hooks (stderr + PRDS)
 
