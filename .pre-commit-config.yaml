@@ -1,0 +1,16 @@
+# better-toolkits — install: pre-commit install && pre-commit install --hook-type pre-push
+repos:
+  - repo: local
+    hooks:
+      - id: marketplace-version-sync
+        name: marketplace.json matches plugin.json versions
+        entry: python3 scripts/ci/marketplace_versioning.py sync
+        language: system
+        pass_filenames: false
+        always_run: true
+      - id: marketplace-version-check-push
+        name: toolkit changes require marketplace version bump (pre-push)
+        entry: python3 scripts/ci/marketplace_versioning.py check --range origin/main..HEAD
+        language: system
+        pass_filenames: false
+        stages: [pre-push]
