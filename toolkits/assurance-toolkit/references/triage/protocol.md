@@ -39,6 +39,56 @@ Resolve PR number from `--pr N`, else `gh pr view` for the current branch.
 Run sub-protocols **in order**: testing → security → governance → liveness (only if
 not `skip`). Stop on first `BLOCKED` unless config sets `continueOnOptionalFailure`.
 
+```mermaid
+flowchart TD
+    I["/assurance:triage [modo]"] --> M{modo?}
+    M -->|pr| T[testing/triage.md]
+    M -->|pillar| P[ese pillar solamente]
+    T --> VT{PASS?}
+    VT -->|no: BLOCKED| B[BLOCKED: pillar + razón + links]
+    VT -->|sí| S[security/triage.md]
+    S --> VS{PASS?}
+    VS -->|no: BLOCKED| B
+    VS -->|sí| G[governance/triage.md + receipt PR-stage]
+    G --> VG{PASS?}
+    VG -->|no: BLOCKED| B
+    VG -->|sí| L{liveness required?}
+    L -->|no| V[PASS agregado]
+    L -->|sí| LV[liveness/triage.md]
+    LV --> V
+    P --> V
+```
+
+## Sequence (RTR §2b — before remote bots)
+
+```mermaid
+sequenceDiagram
+  participant RTR as /ready-to-review-mergeable
+  participant Hub as /assurance:triage pr
+  participant T as testing/triage
+  participant S as security/triage
+  participant G as governance/triage
+  participant L as liveness/triage
+  participant Bots as Greptile / CodeRabbit
+
+  RTR->>Hub: §2b --pr N --issue SCRT-N
+  Hub->>T: required pillar
+  T-->>Hub: PASS | BLOCKED
+  Hub->>S: required pillar
+  S-->>Hub: PASS | BLOCKED
+  Hub->>G: required pillar + receipt
+  G-->>Hub: PASS | BLOCKED
+  opt liveness not skip
+    Hub->>L: optional/required
+    L-->>Hub: PASS | BLOCKED | SKIP
+  alt aggregate PASS
+    Hub-->>RTR: PASS → §3b tag bots
+    RTR->>Bots: remote review (after §3a preconditions)
+  else BLOCKED
+    Hub-->>RTR: BLOCKED — no bot tag
+  end
+```
+
 ---
 
 ## Verdict contract

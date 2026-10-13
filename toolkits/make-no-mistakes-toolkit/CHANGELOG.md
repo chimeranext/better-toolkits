@@ -18,6 +18,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **`/sync-advisor` command** (`commands/sync-advisor.md`): the skill now has a
+  slash-command entry like `merge-advisor`; measures checkout drift, recommends
+  the smallest sync, read-only.
+
+### Removed
+- **`rebase-advisor` deprecated alias** (`skills/rebase-advisor/SKILL.md` deleted);
+  use `sync-advisor` directly.
+
 ## [1.39.0] - 2026-10-13
 
 ### Added
