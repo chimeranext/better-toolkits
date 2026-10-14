@@ -65,12 +65,30 @@ only"'
 # bypass → allow even without body
 assert_exit 0 "bypass flag" --command 'gh pr create --title x  # hook-bypass: prds-body-deferred'
 
+REF_BODY='## Summary
+- what
+
+## Tracker
+Ref SCRT-998
+
+## Test plan
+- [x] unit
+
+## Scope boundaries
+- docs only
+'
+
 # body-file
 TMP="$(mktemp)"
 printf '%s' "$GOOD_BODY" >"$TMP"
 assert_exit 0 "gh pr create --body-file good" --command "gh pr create --body-file $TMP"
 printf '%s' "$BAD_BODY" >"$TMP"
 assert_exit 2 "gh pr create --body-file bad" --command "gh pr create --body-file $TMP"
+printf '%s' "$REF_BODY" >"$TMP"
+assert_exit 0 "gh pr create devel + Ref tracker" --command "gh pr create --base devel --body-file $TMP"
+assert_exit 2 "gh pr create main + Ref only" --command "gh pr create --base main --body-file $TMP"
+printf '%s' "# hook-bypass: prds-body-deferred\n$REF_BODY" >"$TMP"
+assert_exit 0 "body-file hook-bypass" --command "gh pr create --base main --body-file $TMP"
 rm -f "$TMP"
 
 # git push dry-run → allow
