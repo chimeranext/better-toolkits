@@ -7,8 +7,7 @@ priority: 6
 Updates the installed better-toolkits to the latest marketplace state and re-runs
 per-harness wiring. This command **NEVER deletes anything** — it does not purge
 caches and never invokes the prune script. For stale cached copies, see
-`/cursor-better-toolkits-cache-refresh` (purge; `/prune-better-toolkits-cache` when shipped) —
-separate command, either order, or standalone.
+`/prune-better-toolkits-cache` (separate command, either order, or standalone).
 
 Cursor CLI and Cursor Desktop are treated as **independent targets**: updating one
 does not imply the other. Verify each one you use.
@@ -28,22 +27,21 @@ agent plugin list
 
 ## Cursor Desktop (UI)
 
-Evidencia de UI (screenshots, Linux): la página de marketplace solo ofrece
-**Add / Added / Remove** por toolkit y un diálogo **Import Marketplace**
-(Repository URL + Scope User/Project). **No hay botón Refresh ni Update.**
-(A diferencia de lo que sugieren los docs web de Dashboard→Plugins, que
-describen otra superficie.)
+UI evidence (screenshots, Linux): the marketplace page only offers **Add / Added / Remove**
+per toolkit and an **Import Marketplace** dialog (Repository URL + Scope User/Project).
+**There is no Refresh or Update button.** (Unlike Dashboard→Plugins web docs, which describe
+a different surface.)
 
-Refresh en Desktop = reinstalar:
+Desktop refresh = reinstall:
 
-1. En la página del marketplace, menú `...` del toolkit → **Remove**.
-2. **Add** de nuevo en el scope necesario (User/Project).
-3. Reiniciar o re-enfocar la ventana — el cliente re-resuelve plugins al inicio/foco.
-4. Verificar en disco: `~/.cursor/plugins/cache/*/*/` lleva SHA de commit;
-   revisar versión en `.cursor-plugin/plugin.json`.
+1. On the marketplace page, toolkit `...` menu → **Remove**.
+2. **Add** again in the needed scope (User/Project).
+3. Restart or refocus the window — the client re-resolves plugins on startup/focus.
+4. Verify on disk: `~/.cursor/plugins/cache/*/*/` dirs are named by commit SHA;
+   check version in `.cursor-plugin/plugin.json`.
 
-Si tras reinstalar sigue la versión vieja, es el bug de pinning documentado
-abajo — pasar a `/prune-better-toolkits-cache` y reinstalar de nuevo.
+If the old version persists after reinstall, that is the pinning bug documented below —
+run `/prune-better-toolkits-cache` and reinstall again.
 
 Known upstream bugs (forum reports, not official docs — including vendor repro
 acknowledgment; re-verify before citing elsewhere):
@@ -69,6 +67,6 @@ npx @chimeranext/better-toolkits setup
 ## If behavior stays stale
 
 Do **not** purge from here. If old behavior persists after refresh, run
-`/cursor-better-toolkits-cache-refresh` (deletes stale Cursor cache trees), then refresh again.
+`/prune-better-toolkits-cache` (deletes stale Cursor cache trees), then refresh again.
 
 **Not** a make-no-mistakes product command — lives in `shared/bootstrap/`.
