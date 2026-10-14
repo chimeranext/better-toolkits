@@ -110,6 +110,64 @@ these is a row in a menu. If the ordering is blocked, the block is the finding.
 Regeneration commands and any `git rebase` / `git push --force-with-lease`
 needed to unblock a PR also require HITL.
 
+## Delivery surface vs merge order (mandatory — do not conflate)
+
+`/merge-advisor` answers **in what order to merge existing open PRs** against
+`$BASE`. It is **not** a substitute for implement/draft-PR handoff and it does
+**not** authorize:
+
+- Opening a **new** PR whose diff **replays** several stack PRs already in the
+  plan (a “mega-PR” to `$BASE` while #84–#89 remain separate).
+- Running `gh pr create --draft` because a worktree has a coherent cut **without
+  first** identifying which **issue** and which **existing PR** (if any) owns
+  the delivery.
+
+### Issue anchor before `gh pr create` (draft PR first gate)
+
+When work is tracked by a **GitHub issue** (e.g. #90), **do not** treat “open
+any draft PR” as success. Success is **one primary open PR bound to that issue**.
+
+Before `gh pr create` (draft or ready):
+
+1. **Anchor:** `gh issue view <N> --json number,title,url,closedByPullRequestsReferences`
+2. **Existing PR for the same work:** linked PRs from that JSON; plus
+   `gh pr list --state open --search "repo:<owner>/<repo> <N> in:body"` and
+   `gh pr list --head <branch>` for the worktree branch.
+3. **If a PR already exists for issue #N:** **append** — commit and push to
+   **that PR’s head branch**; update body if needed. **Forbidden:** a second
+   open PR for the same issue unless the human explicitly OKs superseding/closing
+   the duplicate.
+4. **If the issue has no PR yet:** create **exactly one** PR with linking
+   keywords in the body (`Fixes #<N>` / `Closes #<N>`), **or** use GitHub
+   **Development** on the issue (branch linked on the issue → open/convert to
+   pull request). Do not hand off “issue #90 + unrelated PR #91” as the default.
+5. **Handoff must name:** PR **URL + number**, **base branch**, and **scope vs
+   that base** (file count or explicit “delta only”), not merely “hay draft PR”.
+
+**GitHub uses one repository-wide number sequence** for issues and pull requests
+(the same counter: #90 is an issue, #91 may be the next PR — not two parallel
+numbering systems). Link with `Fixes #<N>` / Development; **do not** expect the
+issue integer to match the PR integer. The contract is still **one issue → one
+primary open PR** unless the human intentionally splits work.
+
+### Local integration git ≠ GitHub delivery
+
+Merging stack branches **locally** to resolve conflicts or to measure predicates
+does **not** mean the deliverable is a new PR to `$BASE` containing the whole
+stack. Stack integration belongs in **merge-advisor order** (Half B) or in
+explicit stacked PR bases — not in an extra PR that duplicates PRs already in
+the plan.
+
+## Subagents and halt (hard stop)
+
+- **No background subagents**, parallel `Task` workers, or `/implement`
+  fan-out while running `/merge-advisor` Half A or Half B unless the user
+  **explicitly** requests parallel measurement.
+- Half B merges: **parent orchestrator only** — one `gh pr merge` per HITL OK.
+- If the user says **detener subagents**, **stop goal**, **DETENGA EL GOAL**, or
+  equivalent: **halt immediately** — no merges, no new PRs, no child agents,
+  no autonomous continuation of a prior goal.
+
 ## Step 0 — Resolve the base and the PR set
 
 `$BASE` is a **bare branch name** (`develop`, never `origin/develop`). Every
