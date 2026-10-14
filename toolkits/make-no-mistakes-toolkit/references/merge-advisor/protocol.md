@@ -119,36 +119,45 @@ needed to unblock a PR also require HITL.
 - Opening a **new** PR whose diff **replays** several stack PRs already in the
   plan (a “mega-PR” to `$BASE` while #84–#89 remain separate).
 - Running `gh pr create --draft` because a worktree has a coherent cut **without
-  first** identifying which **issue** and which **existing PR** (if any) owns
-  the delivery.
+  first** identifying which **tracker item** and which **existing PR** (if any)
+  owns the delivery.
 
-### Issue anchor before `gh pr create` (draft PR first gate)
+### Tracker anchor before `gh pr create` (draft PR first gate)
 
-When work is tracked by a **GitHub issue** (e.g. #90), **do not** treat “open
-any draft PR” as success. Success is **one primary open PR bound to that issue**.
+Align with `/implement`: **Linear is the native tracker** on Seacrets consumer
+repos (`TEAM-N`, branch `*/scrt-N-*`, PR body `Fixes SCRT-N`). **GitHub issues**
+are **fallback** when the repo has no Linear workspace (e.g. `chimeranext/better-toolkits`
+epics as `github.com/.../issues/77`). Do not write this gate as if GitHub issues
+were the default product tracker.
+
+**Do not** treat “open any draft PR” as success. Success is **one primary open
+PR** for that work item (Linear issue or fallback GitHub issue).
 
 Before `gh pr create` (draft or ready):
 
-1. **Anchor:** `gh issue view <N> --json number,title,url,closedByPullRequestsReferences`
-2. **Existing PR for the same work:** linked PRs from that JSON; plus
-   `gh pr list --state open --search "repo:<owner>/<repo> <N> in:body"` and
-   `gh pr list --head <branch>` for the worktree branch.
-3. **If a PR already exists for issue #N:** **append** — commit and push to
-   **that PR’s head branch**; update body if needed. **Forbidden:** a second
-   open PR for the same issue unless the human explicitly OKs superseding/closing
-   the duplicate.
-4. **If the issue has no PR yet:** create **exactly one** PR with linking
-   keywords in the body (`Fixes #<N>` / `Closes #<N>`), **or** use GitHub
-   **Development** on the issue (branch linked on the issue → open/convert to
-   pull request). Do not hand off “issue #90 + unrelated PR #91” as the default.
-5. **Handoff must name:** PR **URL + number**, **base branch**, and **scope vs
-   that base** (file count or explicit “delta only”), not merely “hay draft PR”.
+1. **Resolve the anchor (in order):**
+   - **Linear (default):** issue id from branch, session, or `make-no-mistakes.config.json`
+     → `get_issue` / equivalent; note `gitBranchName` and linked PRs if any.
+   - **GitHub issue (fallback only):** when Linear is absent or explicitly scoped
+     to a GH issue → `gh issue view <N> --json number,title,url,closedByPullRequestsReferences`.
+2. **Existing PR for the same work:** `gh pr list --head <branch>`; for Linear,
+   search PR body for `Fixes TEAM-N` / magic words; for GitHub fallback, linked
+   PRs from issue JSON plus `gh pr list --state open --search "repo:<owner>/<repo> <N> in:body"`.
+3. **If a PR already exists:** **append** — commit and push to **that PR’s head
+   branch**; update body (`Fixes …`, `Depends on:`) if needed. **Forbidden:** a
+   second open PR for the same Linear/GitHub work item unless the human explicitly
+   OKs superseding/closing the duplicate.
+4. **If no PR yet:** create **exactly one** PR — body links the anchor (`Fixes SCRT-N`
+   or `Fixes #<N>` / GitHub Development on a fallback issue). Do not hand off
+   “tracker #90 + unrelated PR #91” as the default.
+5. **Handoff must name:** tracker id **and** PR **URL + number**, **base branch**,
+   and **scope vs that base** (file count or explicit “delta only”), not merely
+   “hay draft PR”.
 
-**GitHub uses one repository-wide number sequence** for issues and pull requests
-(the same counter: #90 is an issue, #91 may be the next PR — not two parallel
-numbering systems). Link with `Fixes #<N>` / Development; **do not** expect the
-issue integer to match the PR integer. The contract is still **one issue → one
-primary open PR** unless the human intentionally splits work.
+**GitHub numbering (PRs and fallback issues):** one repository-wide sequence — an
+issue #90 and a later PR #91 share the **same counter**, not two parallel systems.
+Linear ids (`SCRT-N`) are **orthogonal** to GitHub PR numbers. The contract is
+**one work item → one primary open PR** unless the human intentionally splits work.
 
 ### Local integration git ≠ GitHub delivery
 

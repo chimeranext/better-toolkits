@@ -9,9 +9,9 @@ Read and follow [`references/merge-advisor/protocol.md`](../references/merge-adv
 
 **Hard stops (protocol SSOT):** no subagents unless the user explicitly asks;
 on **detener subagents** / **stop goal** → halt (no merges, no new PRs). Before
-any `gh pr create`, resolve **issue anchor + existing PR** — append to that PR,
-do not open a duplicate for the same issue (GitHub **one number sequence** for
-issues and PRs; link with `Fixes #N`, numbers need not match). `/merge-advisor`
+any `gh pr create`, resolve **tracker anchor** (Linear native; GitHub issue
+fallback) + **existing PR** — append, do not duplicate. GitHub issues/PRs share
+one repo number sequence; Linear `TEAM-N` is separate. `/merge-advisor`
 orders **existing** PRs; it does not authorize a mega-PR that replays the stack.
 
 `$ARGUMENTS` unchanged from the upstream protocol.
