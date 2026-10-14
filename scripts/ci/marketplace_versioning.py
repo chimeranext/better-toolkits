@@ -7,8 +7,8 @@ When agent-facing toolkit files change, the plugin version MUST increase (patch 
 default) so Cursor/Claude can fetch updates via `agent plugin marketplace update`.
 
 After bumping, maintainers on Cursor should run
-`shared/bootstrap/scripts/refresh-cursor-better-toolkits-plugin-cache.sh` with **no
-arguments** (see `/cursor-better-toolkits-cache-refresh`). That script `rm -rf`s only
+`shared/bootstrap/scripts/prune-better-toolkits-cache.sh` with **no
+arguments** (see `/prune-better-toolkits-cache`). That script `rm -rf`s only
 `~/.cursor/plugins/cache/chimeranext-better-toolkits` and
 `~/.cursor/plugins/cache/better-toolkits`, then runs
 `agent plugin marketplace update better-toolkits`.
