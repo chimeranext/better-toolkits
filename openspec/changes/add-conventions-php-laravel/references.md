@@ -26,7 +26,7 @@ better-toolkits; product repos link to their own docs SSOT.
 | Pest `arch()` how-to | `how-to/testing/pest-architecture-tests.md`  | L5, L8, DSMS boundaries; complements Feature Pest for onboarding flows |
 | Domain coverage (Clover, optional `--min`) | `how-to/testing/domain-coverage-audit.md` | L7, coverage audit |
 | DSMS + Inertia adapter composition | `reference/process/code-organization-standards.md` §1b | L8 |
-| Runtime ADR (first Inertia DSMS reference) | `reference/decisions/adr-006-agency-home-inertia-dsms-layering.md` | L8, unit tests without Inertia |
+| Runtime ADR (Inertia + DSMS layering, product example) | `reference/decisions/<adr-slug>.md` in the consumer docs repo | L8, unit tests without Inertia |
 | OpenSpec scenario → Pest mapping | `reference/process/qa-traceability-four-layers.md` | `tasks.md` QA section |
 | Branch CI gates (Larastan, PHPUnit/Pest) | `reference/process/branching-strategy.md` | L9 static analysis |
 | Tactical DDD / hexagonal | `explanation/architecture/tactical-ddd-hexagonal-clean-plan.md` | ports/adapters context |
