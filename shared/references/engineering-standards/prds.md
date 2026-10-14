@@ -152,19 +152,39 @@ Reviewable work lands in the **owning repo** as a **draft** GitHub PR — not ch
 
 ## Runtime enforcement (multi-harness)
 
-Protocol stays here; **runtime** SSOT is [`shared/hooks/prds/`](../../../../shared/hooks/prds/)
-(vendored into toolkit `hooks/prds/`).
+This document is the **protocol** (what belongs in a PR body). **Runtime** gates live in
+`shared/hooks/` and are vendored into toolkit trees (`hooks/prds/`, `hooks/stderr/`, …).
 
-| Harness | Wire-up |
-| --- | --- |
-| Claude Code | PreToolUse Bash → `hooks/prds/adapters/claude-pre-bash.sh` (fractional-cto `hooks.json`) |
-| Cursor | `beforeShellExecution` → `cursor-before-shell.sh` |
-| OpenCode | `"plugin"` → `opencode-plugin.ts` ([OpenCode plugins](https://opencode.ai/docs/plugins/)) |
+| Policy | Runtime SSOT | What it blocks |
+| --- | --- | --- |
+| **PRDS** (this doc) | [`shared/hooks/prds/`](../../../../shared/hooks/prds/) | `gh pr create\|edit` without Summary / Tracker / Test plan / Scope boundaries; `git push` when an open PR body is non-compliant |
+| **stderr preserve** | [`shared/hooks/stderr/`](../../../../shared/hooks/stderr/) | Agent shell that silences streams to `/dev/null` or folds stderr with bare `2>&1` without a file/`tee` sink |
 
-**Blocks** `gh pr create|edit` without the four always-on sections, and `git push` when an
-open PR already exists with a non-PRDS body. Progressive `git push` **before** any PR
-exists remains allowed (this draft workflow). Opt-out: `FCTO_DISABLE_PRDS_HOOK=1` or
-`# hook-bypass: prds-body-deferred`.
+| Harness | PRDS adapter | stderr adapter |
+| --- | --- | --- |
+| Claude Code | `hooks/prds/adapters/claude-pre-bash.sh` | `hooks/stderr/adapters/claude-pre-bash.sh` |
+| Cursor | `beforeShellExecution` → `hooks/prds/adapters/cursor-before-shell.sh` | `beforeShellExecution` → `hooks/stderr/adapters/cursor-before-shell.sh` |
+| OpenCode | `hooks/prds/adapters/opencode-plugin.ts` | `hooks/stderr/adapters/opencode-plugin.ts` |
+
+**PRDS behavior:** Progressive `git push` **before** any PR exists remains allowed (draft
+workflow). Opt-out: `FCTO_DISABLE_PRDS_HOOK=1` or `# hook-bypass: prds-body-deferred`.
+**stderr opt-out:** `MNM_DISABLE_STDERR_HOOK=1` or `.claude/config/stderr-hooks.json` →
+`{"preserve_stderr": false}`.
+
+### Runtime vs committed shell (important)
+
+`beforeShellExecution` / PreToolUse / OpenCode plugins inspect **commands the agent runs in
+the terminal**. They do **not** scan committed `.sh` files in git. Maintainers still follow
+the same rules in repo scripts (no `/dev/null` redirects); CI runs
+`bash shared/hooks/stderr/tests/test-detect.sh` on pull requests.
+
+### Dogfooding (better-toolkits monorepo)
+
+This repository registers Cursor hooks at [`.cursor/hooks.json`](../../../../.cursor/hooks.json):
+thin wrappers under [`.cursor/hooks/`](../../../../.cursor/hooks/) delegate to the shared
+adapters above (parity with OpenCode plugins in the same PR). Consumer repos copy that
+pattern or point `${workspaceFolder}` at `shared/hooks/*/adapters/cursor-before-shell.sh`
+(see bootstrap [`setup-cursor.md`](../../../../shared/bootstrap/references/toolkits-initial-setup/adapters/setup-cursor.md)).
 
 ---
 

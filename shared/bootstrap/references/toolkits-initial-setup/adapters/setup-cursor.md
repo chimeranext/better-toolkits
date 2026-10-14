@@ -16,12 +16,16 @@ agent plugin install better-toolkits-bootstrap@better-toolkits
 agent plugin install make-no-mistakes@better-toolkits
 ```
 
-## Stderr — `beforeShellExecution`
+## Stderr + PRDS — `beforeShellExecution`
 
-Propose merge into **user** or **project** `hooks.json` (ask which). Idempotent: skip if an entry
-already points at `cursor-before-shell.sh` from this marketplace.
+Propose merge into **user** or **project** `hooks.json` (ask which). Idempotent: skip if entries
+already point at `cursor-before-shell.sh` from this marketplace.
 
-**From monorepo clone** (dev):
+**better-toolkits monorepo (dogfood):** [`.cursor/hooks.json`](../../../../.cursor/hooks.json)
+wires stderr + PRDS via [`.cursor/hooks/`](../../../../.cursor/hooks/) wrappers — same SSOT as
+OpenCode plugins under `shared/hooks/*/adapters/`. Reload the workspace after pull.
+
+**From monorepo clone** (consumers without the committed `.cursor` tree):
 
 ```json
 {
@@ -29,7 +33,11 @@ already points at `cursor-before-shell.sh` from this marketplace.
   "hooks": {
     "beforeShellExecution": [
       {
-        "command": "bash ${workspaceFolder}/shared/hooks/stderr/adapters/cursor-before-shell.sh"
+        "command": "bash ${workspaceFolder}/shared/hooks/stderr/adapters/cursor-before-shell.sh",
+        "failClosed": true
+      },
+      {
+        "command": "bash ${workspaceFolder}/shared/hooks/prds/adapters/cursor-before-shell.sh"
       }
     ]
   }
@@ -75,6 +83,31 @@ Script requirements (see design):
 - Throttle (~30 min), fail-open (`exit 0`)
 - Runs `agent plugin marketplace update better-toolkits`
 - No `2>/dev/null`
+
+## After marketplace version bump (maintainers)
+
+CI requires a version bump in `.claude-plugin/marketplace.json` when release-relevant
+files change (`scripts/ci/marketplace_versioning.py`). Cursor does not always drop stale
+cached plugin trees after `agent plugin marketplace update`.
+
+1. List cached versions (optional):
+
+```bash
+find "${HOME}/.cursor/plugins/cache/chimeranext-better-toolkits" \
+  -path '*/.claude-plugin/plugin.json' \
+  -exec jq -r '.version' {} \;
+```
+
+2. Purge the **whole** marketplace cache directories (script logs to `~/.cursor/hooks/logs/`).
+   Fixed paths only: `~/.cursor/plugins/cache/chimeranext-better-toolkits` and
+   `~/.cursor/plugins/cache/better-toolkits` (legacy). Do not delete individual plugin
+   slugs by hand after a bump — stale siblings break skills/commands.
+
+```bash
+bash shared/bootstrap/scripts/refresh-cursor-better-toolkits-plugin-cache.sh
+```
+
+Slash command SSOT: `/cursor-better-toolkits-cache-refresh` in `shared/bootstrap/commands/`.
 
 ## Verify
 

@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "hooks": {
+    "beforeShellExecution": [
+      {
+        "command": "bash .cursor/hooks/stderr-before-shell.sh",
+        "failClosed": true
+      },
+      {
+        "command": "bash .cursor/hooks/prds-before-shell.sh"
+      }
+    ]
+  }
+}
