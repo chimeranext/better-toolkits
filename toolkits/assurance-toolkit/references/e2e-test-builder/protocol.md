@@ -1,8 +1,8 @@
-> **MOVED:** SSOT now lives in `toolkits/assurance-toolkit/references/testing/protocol.md`. This file is retained read-only until shims are removed.
-
 # /e2e-test-builder — protocol SSOT
 
-Harness-agnostic body. Thin entry: `commands/e2e-test-builder.md`.
+Harness-agnostic body. Thin entry: [`commands/e2e-test-builder.md`](../../commands/e2e-test-builder.md).
+
+Generates a TestSprite-compatible `test-suite.json`. Execution is [`/assurance:e2e-test-runner`](../../commands/e2e-test-runner.md). Visual inspection is [`/assurance:e2e-test-preview`](../../commands/e2e-test-preview.md). The testing pillar ([`../testing/protocol.md`](../testing/protocol.md)) does not replace this protocol.
 
 ---
 
@@ -238,11 +238,11 @@ If a `test-suite.json` already exists at the target path:
 
 ```bash
 # Generate from a URL
-/e2e-test-builder https://github.com/org/repo/blob/main/docs/workflow-overview.md
+/assurance:e2e-test-builder https://github.com/org/repo/blob/main/docs/workflow-overview.md
 
 # Generate from a local file
-/e2e-test-builder ./docs/PRD.md
+/assurance:e2e-test-builder ./docs/PRD.md
 
 # Interactive (no arguments)
-/e2e-test-builder
+/assurance:e2e-test-builder
 ```
