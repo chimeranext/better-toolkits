@@ -51,7 +51,7 @@ For EACH issue in the sequence:
 
 ### Phase 2: Build
 4. Build in the Phase 1 worktree. When Phase 0 left an OpenSpec change, run `/opsx-apply` on its `tasks.md` there
-5. Write the product tests for this change (E2E with browser in focus, never headless)
+5. Write the product tests the convention record requires (`shared/references/conventions/language/`). Evidence links through Kiwi, Qase, or Qualflare per the assurance testing protocol
 
 ### Phase 3: PR + Review Loop
 7. Create PR with Linear issue link
