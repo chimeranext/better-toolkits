@@ -99,6 +99,9 @@ flowchart TD
 | 9–10 | Tag remote bots + fix loop | **Deferred** — run as **§3b** after §2b PASS |
 | 13–15 | Merge / Done / worktree | **Out of scope** — never from this command |
 
+Implement-centric flow (same split, no duplicate steps 9–10):
+`commands/implement.md` → **Pipeline overview** and **Split with `/ready-to-review-mergeable`**.
+
 ---
 
 ## Pipeline (always)
