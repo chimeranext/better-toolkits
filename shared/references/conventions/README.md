@@ -17,6 +17,8 @@ enforceables. Lo transversal vive acá; los toolkits (incl. assurance) las
 | [`language/elixir/frameworks/phoenix`](./language/elixir/frameworks/phoenix.md) | framework | draft | hereda Elixir |
 | [`language/php`](./language/php/README.md) | language | draft | `php -l` + Pint `--test` |
 | [`language/php/frameworks/laravel`](./language/php/frameworks/laravel.md) | framework | draft | hereda PHP + Pest + arch |
+| [`platform/markdown`](./platform/markdown/README.md) | platform | draft | docs SSOT en toolkits |
+| [`platform/diagrams/mermaid-github`](./platform/diagrams/mermaid-github.md) | platform | draft | Mermaid en vista GitHub |
 
 ## Ejemplares 2-4 (change `add-conventions-exemplars`)
 
