@@ -2,8 +2,10 @@
 description: Generate or update a TestSprite-compatible test-suite.json from use case documentation. Accepts a URL or file path as $ARGUMENTS.
 priority: 30
 ---
-# /e2e-test-builder
+# /assurance:e2e-test-builder
 
-Read and follow [`references/testing/protocol.md`](../references/testing/protocol.md) (protocol SSOT). Migrated from make-no-mistakes-toolkit; behavior unchanged.
+Read and follow [`references/e2e-test-builder/protocol.md`](../references/e2e-test-builder/protocol.md).
 
-`$ARGUMENTS` are unchanged from the pre-move command.
+This command writes the suite. It does not execute it (`/assurance:e2e-test-runner`) and it does not open the Qt preview (`/assurance:e2e-test-preview`).
+
+`$ARGUMENTS` is the use-case source (URL or file path).
