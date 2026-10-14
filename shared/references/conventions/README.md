@@ -15,8 +15,6 @@ enforceables. Lo transversal vive acá; los toolkits (incl. assurance) las
 |---|---|---|---|
 | [`language/elixir`](./language/elixir/README.md) | language | draft | mix compile + format + Credo + Dialyzer |
 | [`language/elixir/frameworks/phoenix`](./language/elixir/frameworks/phoenix.md) | framework | draft | hereda Elixir |
-| [`language/php`](./language/php/README.md) | language | draft | `php -l` + Pint `--test` |
-| [`language/php/frameworks/laravel`](./language/php/frameworks/laravel.md) | framework | draft | hereda PHP + Pest + arch |
 
 ## Ejemplares 2-4 (change `add-conventions-exemplars`)
 
