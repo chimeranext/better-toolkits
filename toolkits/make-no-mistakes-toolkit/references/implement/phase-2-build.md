@@ -15,12 +15,6 @@ When Phase 0 left an OpenSpec change, run `/opsx-apply` in this worktree and wal
    - Synthesize the best parts of multiple solutions if needed
    - Close losing sub-agent branches/PRs after synthesis
 
-7. **Write tests:**
-   - Model E2E test cases with Slack MCP first (plan them in a test channel or thread)
-   - Split test cases: some for **Playwright**, others for **Chrome DevTools MCP**
-   - Browser ALWAYS in focus. **NEVER headless.** Both Playwright and Chrome DevTools MCP.
-   - Plan to merge E2E tests sequentially (not in parallel)
-   - If the project has `pubspec.yaml` (Flutter project detected):
-     - Run `flutter build web` before browser-based E2E tests
-     - Serve the build with `dart run dhttpd --path build/web --port 8080` or `python3 -m http.server 8080 -d build/web`
-     - Point Chrome DevTools MCP / Playwright to `http://localhost:8080`
+7. **Write the product tests this change needs.** Resolve the consumer stack and follow its convention record under [`shared/references/conventions/language/`](../../../../shared/references/conventions/language/) (language record, plus the framework child when one exists). The record's `## RULES` and `## GATES` name the levels and commands — format, unit, architecture, integration, browser, device, contract, mutation — whichever that record actually requires. A single E2E manifest (`test-suite.json`, Playwright-only, or headed Chrome) is one adapter, and only when that record or this change's `tasks.md` asks for that level.
+
+   Evidence for those runs follows [`toolkits/assurance-toolkit/references/testing/protocol.md`](../../../../toolkits/assurance-toolkit/references/testing/protocol.md) and the testing spec in `openspec/changes/add-assurance-toolkit/`: collect the runner's output (JUnit, `flutter test` JSON, trace, or `qf collect`) and link it to the issue through the configured provider — Kiwi TCMS, Qase, or Qualflare (`qualflare.link`). `/assurance:triage` later checks that CI evidence; it does not choose the suite in this step.
