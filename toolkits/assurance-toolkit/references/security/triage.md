@@ -12,10 +12,10 @@ Is this PR **safe to expose to code review** under PR-stage security gates
 ```mermaid
 flowchart TD
   start(["security pillar PR N"])
-  c1["Read PR CI security workflows"]
+  start --> c1["Read PR CI security workflows"]
   c1 --> c2{"critical or blocking open?"}
   c2 -->|no| p["PASS security pillar"]
-  c2 -->|yes triageable| t["triage-security-findings"]
+  c2 -->|yes triageable| t["triage security findings protocol"]
   t --> c3{"fixed or downgraded per SLA?"}
   c3 -->|no| b["BLOCKED"]
   c3 -->|yes| p
@@ -29,7 +29,7 @@ sequenceDiagram
   participant Hub as assurance hub
   participant Agent as Agent
   participant CI as Security CI workflows
-  participant Triage as triage-security-findings
+  participant Triage as triage security mode
 
   Hub->>Agent: run security pillar (PR N)
   Agent->>CI: read SAST/SCA/container/dep review
@@ -47,13 +47,14 @@ sequenceDiagram
    whatever the repo wires). Align with [`references/security/protocol.md`](../security/protocol.md).
 2. **PASS** when no **critical** (or repo-defined blocking) security findings remain
    open for this PR head SHA.
-3. When findings exist but are triageable:
-   - Invoke **`/assurance:triage-security-findings`** (or
-     `make-no-mistakes:triage-security-findings` shim) with `--pr N` and the
-     appropriate scanner/phase argument per tenant config (`securityFindingTriage`
-     in `linear-setup.json` when present).
-   - **BLOCK** until criticals are fixed or explicitly downgraded per tenant SLA
-     policy (document in hub report; never silent).
+3. When findings exist but are triageable, stay in this mode. Follow
+   [`findings-protocol.md`](findings-protocol.md) as
+   **`/assurance:triage security`** with `--pr N` and the scanner or phase
+   argument (`list`, `dry-run`, `phase2`, `phase7`, `manual`, `pentest-report`,
+   or a scanner id) per tenant config (`securityFindingTriage` in
+   `linear-setup.json` when present). There is no second slash command.
+   **BLOCK** until criticals are fixed or explicitly downgraded per tenant SLA
+   policy (document in hub report; never silent).
 4. Do **not** substitute local diff security review for failing CI security gates
    when CI is available.
 

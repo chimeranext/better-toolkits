@@ -2,285 +2,285 @@
 
 ## Purpose
 
-Pilar testing del assurance-toolkit: construir, ejecutar y previsualizar evidencia (E2E incl. Maestro/Flutter; suites Laravel/Pest, Elixir/ExUnit, TypeScript 7) y colectarla en providers trazables a Linear.
+Testing pillar of assurance-toolkit: build, run, and preview evidence (E2E including Maestro/Flutter; Laravel/Pest, Elixir/ExUnit, and TypeScript 7 suites) and collect it in providers traceable to Linear.
 
 ## ADDED Requirements
 
-### Requirement: E2E builder, runner y preview con protocolo propio
+### Requirement: E2E builder, runner, and preview each with its own protocol
 
-El sistema SHALL proveer `e2e-test-builder`, `e2e-test-runner` y `e2e-test-preview` solo desde `assurance-toolkit`. Cada comando SHALL seguir su protocolo (`references/e2e-test-builder/protocol.md`, `references/e2e-test-runner/protocol.md`, `references/e2e-test-preview/protocol.md`). Esos tres protocolos SHALL permanecer distintos del pilar `references/testing/protocol.md`. `make-no-mistakes-toolkit` SHALL NOT conservar shims de estos comandos.
+The system SHALL provide `/assurance:e2e-test-builder`, `/assurance:e2e-test-runner`, and `/assurance:e2e-test-preview` only from `assurance-toolkit`. Each command SHALL follow its own protocol (`references/e2e-test-builder/protocol.md`, `references/e2e-test-runner/protocol.md`, `references/e2e-test-preview/protocol.md`). Those three protocols SHALL stay distinct from the pillar `references/testing/protocol.md`. `make-no-mistakes-toolkit` SHALL NOT keep shims for these commands.
 
-#### Scenario: Cada comando resuelve su protocolo
+#### Scenario: Each command resolves its own protocol
 
-- **WHEN** un agente invoca `/assurance:e2e-test-builder`, `/assurance:e2e-test-runner` o `/assurance:e2e-test-preview`
-- **THEN** sigue el protocolo de ese comando (generar suite, ejecutar suite, o abrir el preview Qt) y no el pilar testing ni un shim en make-no-mistakes
+- **WHEN** an agent invokes `/assurance:e2e-test-builder`, `/assurance:e2e-test-runner`, or `/assurance:e2e-test-preview`
+- **THEN** it follows that command's protocol (generate the suite, execute the suite, or open the Qt preview) and not the testing pillar or a shim in make-no-mistakes
 
-#### Scenario: Maestro flow mínimo
+#### Scenario: Minimum Maestro flow
 
-- **WHEN** existe `.maestro/negotiation_happy_path.yaml` y backend de prueba levantado
-- **THEN** el runner ejecuta el flow y produce un reporte colectable (`qf collect` o equivalente)
+- **WHEN** `.maestro/negotiation_happy_path.yaml` exists and a test backend is up
+- **THEN** the runner executes the flow and produces a collectable report (`qf collect` or equivalent)
 
-### Requirement: Providers de evidencia con trazabilidad a Linear
+### Requirement: Evidence providers with traceability to Linear
 
-El sistema SHALL soportar Kiwi TCMS (piloto self-hosted opcional), Qase y Qualflare como destinos de resultados, con link del test al issue Linear (`qualflare.link` o campo equivalente).
+The system SHALL support Kiwi TCMS (optional self-hosted pilot), Qase, and Qualflare as result destinations, with a link from the test to the Linear issue (`qualflare.link` or an equivalent field).
 
-#### Scenario: Collect de flutter test a Qualflare
+#### Scenario: Collect flutter test into Qualflare
 
-- **WHEN** `flutter test` produce JSON y hay proyecto Qualflare configurado
-- **THEN** `qf collect` sube los resultados y cada test enlaza a su issue Linear
+- **WHEN** `flutter test` produces JSON and a Qualflare project is configured
+- **THEN** `qf collect` uploads the results and each test links to its Linear issue
 
-#### Scenario: Sin mezcla de reportes de seguridad
+#### Scenario: No mixing of security reports
 
-- **WHEN** se colectan resultados de testing
-- **THEN** ningún hallazgo de pentest aparece en el reporte de tests (veredictos separados)
+- **WHEN** testing results are collected
+- **THEN** no pentest finding appears in the test report (separate verdicts)
 
-### Requirement: Clustering de fallos del lado testing
+### Requirement: Failure clustering on the testing side
 
-El sistema SHALL agrupar fallos de runs (patrón triage: cola → dueño → SLA → receipt) operado por el dueño de testing, separado del triage de seguridad.
+The system SHALL group run failures (triage pattern: queue → owner → SLA → receipt) operated by the testing owner, separate from security triage.
 
-#### Scenario: Fallos duplicados se clusterizan
+#### Scenario: Duplicate failures are clustered
 
-- **WHEN** un webhook `defect.created` llega con la misma firma de fallo
-- **THEN** se vincula al cluster existente en vez de abrir un issue Linear duplicado
+- **WHEN** a `defect.created` webhook arrives with the same failure signature
+- **THEN** it links to the existing cluster instead of opening a duplicate Linear issue
 
-### Requirement: Runner Laravel/Pest bajo el mismo protocolo de evidencia
+### Requirement: Laravel/Pest runner under the same evidence protocol
 
-El sistema SHALL soportar suites Laravel vía `php artisan test` (Pest/PHPUnit): ejecución en paralelo con `brianium/paratest` y DBs por proceso (sufijo por token, hooks `ParallelTesting`), cobertura con `--coverage --min`, profiling con `--profile`, entorno `.env.testing`, y suite `tests/Architecture` con arch-testing de Pest; la skill `pest-testing-laraveldaily` es la referencia de autoría de tests.
+The system SHALL support Laravel suites via `php artisan test` (Pest/PHPUnit): parallel execution with `brianium/paratest` and per-process DBs (suffix per token, `ParallelTesting` hooks), coverage with `--coverage --min`, profiling with `--profile`, `.env.testing` environment, and a `tests/Architecture` suite with Pest arch-testing; the skill `pest-testing-laraveldaily` is the test-authoring reference.
 
-#### Scenario: Suite Laravel colectable
+#### Scenario: A Laravel suite is collectable
 
-- **WHEN** un repo Laravel tiene suites Feature/Unit/Architecture y `phpunit.xml` válido
-- **THEN** el runner ejecuta `php artisan test` (o `--parallel`), colecta resultados al provider configurado y falla el gate si la cobertura bajo `--min` no se cumple
+- **WHEN** a Laravel repo has Feature/Unit/Architecture suites and a valid `phpunit.xml`
+- **THEN** the runner executes `php artisan test` (or `--parallel`), collects results to the configured provider, and fails the gate if coverage under `--min` is not met
 
-#### Scenario: Arch-testing bloquea violaciones estructurales
+#### Scenario: Arch-testing blocks structural violations
 
-- **WHEN** una clase viola una regla de `tests/Architecture` (p. ej. un modelo que no extiende `Model`, un `dd()` en `app/`)
-- **THEN** la suite Architecture falla con el archivo y la expectativa violada, sin mezclar ese fallo con reportes de seguridad
+- **WHEN** a class violates a `tests/Architecture` rule (for example a model that does not extend `Model`, a `dd()` under `app/`)
+- **THEN** the Architecture suite fails with the file and the violated expectation, without mixing that failure into security reports
 
-### Requirement: Runner Elixir/ExUnit bajo el mismo protocolo de evidencia
+### Requirement: Elixir/ExUnit runner under the same evidence protocol
 
-El sistema SHALL soportar suites Elixir vía `mix test` (ExUnit, incl. Phoenix/Ecto), property-based testing (PropEr/StreamData) y mocks con Mox/Hammox bajo contratos explícitos.
+The system SHALL support Elixir suites via `mix test` (ExUnit, including Phoenix/Ecto), property-based testing (PropEr/StreamData), and mocks with Mox/Hammox under explicit contracts.
 
-#### Scenario: Suite Elixir colectable
+#### Scenario: An Elixir suite is collectable
 
-- **WHEN** un proyecto Elixir/Phoenix tiene suite ExUnit
-- **THEN** el runner ejecuta `mix test`, colecta resultados al provider configurado y los vincula a sus issues Linear
+- **WHEN** an Elixir/Phoenix project has an ExUnit suite
+- **THEN** the runner executes `mix test`, collects results to the configured provider, and links them to their Linear issues
 
-### Requirement: Validación de compatibilidad TypeScript 7
+### Requirement: TypeScript 7 compatibility validation
 
-El sistema SHALL validar la migración a TypeScript 7 (`tsgo`, port nativo en Go) como checklist: versión única del compilador en el repo, `tsconfig` sin `baseUrl` (paths relativos, `vite-tsconfig-paths` compatible), plan para código que importa `typescript` como librería (clásico en paralelo hasta API 7.1 u `oxc-parser`), CI dual TS6+TS7 durante la transición, y revisión de sharp edges (genéricos de typed-arrays, `Buffer` vs `Uint8Array`, mapped types recursivos, flags de memoria eliminados).
+The system SHALL validate the migration to TypeScript 7 (`tsgo`, native Go port) as a checklist: a single compiler version in the repo, `tsconfig` without `baseUrl` (relative paths, compatible `vite-tsconfig-paths`), a plan for code that imports `typescript` as a library (classic in parallel until API 7.1 or `oxc-parser`), dual CI TS6+TS7 during the transition, and a review of sharp edges (typed-array generics, `Buffer` vs `Uint8Array`, recursive mapped types, removed memory flags).
 
-#### Scenario: Migración TS7 verificada
+#### Scenario: A TS7 migration is verified
 
-- **WHEN** un paquete declara TypeScript 7
-- **THEN** el gate verifica `tsgo --noEmit` en verde, ausencia de `baseUrl`, y que ningún script dependa de la compiler API sin plan de respaldo
+- **WHEN** a package declares TypeScript 7
+- **THEN** the gate verifies `tsgo --noEmit` is green, `baseUrl` is absent, and no script depends on the compiler API without a fallback plan
 
-#### Scenario: Regresión entre compiladores detectada
+#### Scenario: A regression between compilers is detected
 
-- **WHEN** CI dual reporta verde en clásico y rojo en `tsgo` (o viceversa)
-- **THEN** el resultado se reporta como issue de compatibilidad de compilador, no como fallo funcional del código
+- **WHEN** dual CI reports green on classic and red on `tsgo` (or the reverse)
+- **THEN** the result is reported as a compiler-compatibility issue, not as a functional failure of the code
 
-### Requirement: Runner Flutter/Dart por niveles (unit/widget/integration)
+### Requirement: Flutter/Dart runner by level (unit/widget/integration)
 
-El sistema SHALL soportar la pirámide Flutter/Dart: unit con `package:test`/`flutter_test` (`flutter test`, mocks con mockito, tags y `dart_test.yaml`), widget con `WidgetTester` + finders, e integración con `integration_test` en device real/simulado más Maestro YAML (capa de accesibilidad, `Semantics.identifier` desde Flutter 3.19, release builds, diálogos nativos, auto-waits, un flow Android+iOS, `runFlow` modular, Studio). `flutter_driver` queda como legacy (solo debug/profile, sin diálogos nativos). Referencias de suites: `flutter/gallery` y `flutter/dev/manual_tests`.
+The system SHALL support the Flutter/Dart pyramid: unit with `package:test`/`flutter_test` (`flutter test`, mocks with mockito, tags and `dart_test.yaml`), widget with `WidgetTester` plus finders, and integration with `integration_test` on a real/simulated device plus Maestro YAML (accessibility layer, `Semantics.identifier` since Flutter 3.19, release builds, native dialogs, auto-waits, one Android+iOS flow, modular `runFlow`, Studio). `flutter_driver` stays legacy (debug/profile only, no native dialogs). Suite references: `flutter/gallery` and `flutter/dev/manual_tests`.
 
-#### Scenario: Pirámide completa colectable
+#### Scenario: The full pyramid is collectable
 
-- **WHEN** un paquete tiene tests unit/widget/integration y flows Maestro
-- **THEN** el runner ejecuta `flutter test` + integración en device + flows, y colecta todo al provider configurado con links a Linear
+- **WHEN** a package has unit/widget/integration tests and Maestro flows
+- **THEN** the runner executes `flutter test` plus on-device integration plus flows, and collects all of it to the configured provider with links to Linear
 
-#### Scenario: Maestro exige identifiers
+#### Scenario: Maestro requires identifiers
 
-- **WHEN** un flow Maestro referencia un widget sin `Semantics.identifier`
-- **THEN** el protocolo lo marca no testeable y exige el identifier por lint antes del gate
+- **WHEN** a Maestro flow references a widget without `Semantics.identifier`
+- **THEN** the protocol marks it untestable and requires the identifier via lint before the gate
 
-#### Scenario: flutter_driver marcado legacy
+#### Scenario: flutter_driver marked legacy
 
-- **WHEN** un proyecto aún usa `flutter_driver`
-- **THEN** el protocolo lo marca deprecated y propone migración a `integration_test` + Maestro
+- **WHEN** a project still uses `flutter_driver`
+- **THEN** the protocol marks it deprecated and proposes a migration to `integration_test` plus Maestro
 
-### Requirement: Adapters agnósticos al framework, no lista cerrada
+### Requirement: Framework-agnostic adapters, not a closed list
 
-El sistema SHALL definir cada runner como adapter del protocolo de evidencia (run → collect → link a Linear → cluster); los stacks iniciales son los primeros adapters, no los únicos.
+The system SHALL define each runner as an adapter of the evidence protocol (run → collect → link to Linear → cluster); the initial stacks are the first adapters, not the only ones.
 
-#### Scenario: Nuevo adapter sin cambiar el protocolo
+#### Scenario: A new adapter without changing the protocol
 
-- **WHEN** un equipo necesita un framework no cubierto (p. ej. Playwright para web)
-- **THEN** se agrega un adapter que implementa run/collect/link/cluster sin modificar los existentes
+- **WHEN** a team needs an uncovered framework (for example Playwright for web)
+- **THEN** an adapter is added that implements run/collect/link/cluster without modifying the existing ones
 
-### Requirement: Selección E2E y JS unit por matriz
+### Requirement: E2E and JS unit selection by matrix
 
-El sistema SHALL seleccionar framework por matriz documentada: Maestro default mobile-first (YAML, release builds, auto-wait, un flow Android+iOS); Playwright para web cross-browser multi-lenguaje (trace viewer, paralelo); Cypress para web con DX JS (time-travel, screenshots/videos); Appium para nativo/híbrido sin cambios de código (XCUITest/UiAutomator2, Device Farm); Selenium solo donde ya exista infraestructura; JS unit con Vitest/Jest.
+The system SHALL select a framework by a documented matrix: Maestro default mobile-first (YAML, release builds, auto-wait, one Android+iOS flow); Playwright for cross-browser multi-language web (trace viewer, parallel); Cypress for web with JS DX (time-travel, screenshots/videos); Appium for native/hybrid with no code changes (XCUITest/UiAutomator2, Device Farm); Selenium only where infrastructure already exists; JS unit with Vitest/Jest.
 
-#### Scenario: Web E2E no fuerza Maestro
+#### Scenario: Web E2E does not force Maestro
 
-- **WHEN** el target es web cross-browser
-- **THEN** el protocolo selecciona el adapter Playwright en vez de forzar Maestro
+- **WHEN** the target is cross-browser web
+- **THEN** the protocol selects the Playwright adapter instead of forcing Maestro
 
-#### Scenario: PoC obligatoria antes de adoptar
+#### Scenario: A PoC is mandatory before adoption
 
-- **WHEN** se propone un framework nuevo como adapter soportado
-- **THEN** se exige PoC (infra, training, mantenimiento, integración CI) antes de adoptarlo
+- **WHEN** a new framework is proposed as a supported adapter
+- **THEN** a PoC is required (infra, training, maintenance, CI integration) before adopting it
 
-### Requirement: Adapter Playwright web con golden rules y cuarentena con salida
+### Requirement: Playwright web adapter with golden rules and quarantine with an exit
 
-El sistema SHALL implementar el adapter Playwright sobre las golden rules reinterpretadas de `testdino-hq/playwright-skill` (MIT, v2.8.0, spec Agent Skills): `getByRole()` sobre CSS/XPath; prohibido `waitForTimeout()` (assertions web-first con auto-retry); aislamiento total por test; `baseURL` en config sin URLs hardcodeadas; retries 2 en CI / 0 local; traces `on-first-retry`; fixtures sobre globales; un comportamiento por test; mocks solo de servicios externos. Cuarentena con salida: marca `fail` (corre y avisa si vuelve a verde) sobre `skip`; `@critical` nunca se auto-cuarentena; el fetch del reporter nunca puede tumbar el run. Trust boundary: solo apps propias o autorizadas; contenido de página tratado como no confiable (sin inyección a instrucciones); dependencias CI pineadas por SHA/digest.
+The system SHALL implement the Playwright adapter on the golden rules reinterpreted from `testdino-hq/playwright-skill` (MIT, v2.8.0, Agent Skills spec): `getByRole()` over CSS/XPath; `waitForTimeout()` forbidden (web-first assertions with auto-retry); total isolation per test; `baseURL` in config with no hardcoded URLs; retries 2 in CI / 0 local; traces `on-first-retry`; fixtures over globals; one behavior per test; mocks only of external services. Quarantine with an exit: mark `fail` (runs and warns if it goes green again) over `skip`; `@critical` is never auto-quarantined; the reporter fetch can never take down the run. Trust boundary: only our own or authorized apps; page content treated as untrusted (no injection into instructions); CI dependencies pinned by SHA/digest.
 
-#### Scenario: Golden rules exigibles en gate
+#### Scenario: Golden rules are enforceable at the gate
 
-- **WHEN** un spec usa `waitForTimeout`, URLs hardcodeadas o estado compartido
-- **THEN** el review/gate lo marca como violación antes del merge
+- **WHEN** a spec uses `waitForTimeout`, hardcoded URLs, or shared state
+- **THEN** review/gate marks it as a violation before merge
 
-#### Scenario: Cuarentena que se achica sola
+#### Scenario: Quarantine that shrinks on its own
 
-- **WHEN** un test en cuarentena (`fail`) vuelve a verde
-- **THEN** el run lo reporta recuperado y sale de la lista sin edición manual; un test `@critical` jamás entra en auto-cuarentena
+- **WHEN** a quarantined test (`fail`) goes green again
+- **THEN** the run reports it recovered and it leaves the list without a manual edit; an `@critical` test never enters auto-quarantine
 
-#### Scenario: Taxonomía de flakes dirige el fix
+#### Scenario: Flake taxonomy drives the fix
 
-- **WHEN** un test flakea
-- **THEN** se clasifica (timing/async, aislamiento, entorno, infra) con el flowchart (`--repeat-each`, `--workers=1`, comparación de traces CI/local) y el fix corresponde a su categoría, no a subir timeouts
+- **WHEN** a test flakes
+- **THEN** it is classified (timing/async, isolation, environment, infra) with the flowchart (`--repeat-each`, `--workers=1`, CI/local trace comparison) and the fix matches its category, not a timeout increase
 
-### Requirement: Adapter MobileWright para móvil con API Playwright-style
+### Requirement: MobileWright adapter for mobile with a Playwright-style API
 
-El sistema SHALL soportar MobileWright (Apache-2.0) como adapter móvil: fixtures `screen` (`getByText/Label/TestId/Role/Type`, tap/fill/swipe, assertions con auto-retry) y `device` (`openUrl`), un solo spec para iOS+Android, árbol de accesibilidad como superficie agent-first (sin modelo de visión), y metadata `testResult` (name/tags/environment) que viaja al provider para link/cluster. `getByTestId` equivale a widget Key de Flutter en debug. Estado: candidato en PoC — Maestro sigue default mobile-first hasta completar la PoC (madurez, acople al cloud del vendor).
+The system SHALL support MobileWright (Apache-2.0) as a mobile adapter: `screen` fixtures (`getByText/Label/TestId/Role/Type`, tap/fill/swipe, assertions with auto-retry) and `device` (`openUrl`), one spec for iOS+Android, the accessibility tree as the agent-first surface (no vision model), and `testResult` metadata (name/tags/environment) that travels to the provider for link/cluster. `getByTestId` equals a Flutter widget Key in debug. Status: PoC candidate — Maestro stays the mobile-first default until the PoC is complete (maturity, coupling to the vendor cloud).
 
-#### Scenario: Un spec, dos plataformas
+#### Scenario: One spec, two platforms
 
-- **WHEN** la suite corre en iOS y Android
-- **THEN** el mismo spec ejecuta en ambas sin branches por plataforma
+- **WHEN** the suite runs on iOS and Android
+- **THEN** the same spec executes on both with no per-platform branches
 
-#### Scenario: Metadata de evidencia viaja al provider
+#### Scenario: Evidence metadata travels to the provider
 
-- **WHEN** termina un run MobileWright con `testResult` configurado
-- **THEN** name/tags/environment se colectan como evidencia trazable a Linear
+- **WHEN** a MobileWright run finishes with `testResult` configured
+- **THEN** name/tags/environment are collected as evidence traceable to Linear
 
-### Requirement: Mutation testing con gates MSI por stack
+### Requirement: Mutation testing with per-stack MSI gates
 
-El sistema SHALL soportar mutación por stack: Infection (PHP/PHPUnit, `minMsi`/`minCoveredMsi`, integración PHPStan/Mago), Stryker (TS/JS, incremental), muex (Elixir). El MSI es gate (el coverage solo no aprueba); en CI se muta incremental (líneas tocadas).
+The system SHALL support mutation per stack: Infection (PHP/PHPUnit, `minMsi`/`minCoveredMsi`, PHPStan/Mago integration), Stryker (TS/JS, incremental), muex (Elixir). MSI is a gate (coverage alone does not approve); in CI, mutation is incremental (touched lines).
 
-#### Scenario: MSI bajo bloquea aunque el coverage sea alto
+#### Scenario: Low MSI blocks even when coverage is high
 
-- **WHEN** la suite tiene 90% coverage pero MSI bajo el umbral
-- **THEN** el gate falla (los tests ejecutan código sin verificarlo)
+- **WHEN** the suite has 90% coverage but MSI under the threshold
+- **THEN** the gate fails (the tests execute code without verifying it)
 
-#### Scenario: Survivors triageados con ubicación exacta
+#### Scenario: Survivors are triaged with an exact location
 
-- **WHEN** un mutante sobrevive
-- **THEN** se reporta con archivo, línea y mutador para crear el test faltante
+- **WHEN** a mutant survives
+- **THEN** it is reported with file, line, and mutator so the missing test can be written
 
-### Requirement: Contract testing en dos capas
+### Requirement: Contract testing in two layers
 
-El sistema SHALL cubrir contratos en dos capas: schema-driven primero con Schemathesis (CLI contra OpenAPI, sin infra nueva, baseline de fallos conocidos, nightly o PR del provider — también fuerza higiene del spec), y consumer-driven con Pact + Broker + `can-i-deploy` como gate de deploy para pares con historial de rupturas; Microcks/Prism para mocks consistentes; BDCT (PactFlow) donde el provider no instala verificación.
+The system SHALL cover contracts in two layers: schema-driven first with Schemathesis (CLI against OpenAPI, no new infra, baseline of known failures, nightly or on the provider PR — it also forces spec hygiene), and consumer-driven with Pact plus Broker plus `can-i-deploy` as the deploy gate for pairs with a history of breaks; Microcks/Prism for consistent mocks; BDCT (PactFlow) where the provider does not install verification.
 
-#### Scenario: Spec drift detectado en el provider
+#### Scenario: Spec drift detected on the provider
 
-- **WHEN** Schemathesis corre contra staging y la respuesta viola el OpenAPI
-- **THEN** la violación bloquea o entra al baseline como fallo conocido, nunca se ignora en silencio
+- **WHEN** Schemathesis runs against staging and the response violates the OpenAPI
+- **THEN** the violation blocks or enters the baseline as a known failure, and is never silently ignored
 
-#### Scenario: Deploy bloqueado por incompatibilidad
+#### Scenario: Deploy blocked by incompatibility
 
-- **WHEN** `can-i-deploy` da rojo para la versión candidata
-- **THEN** el pipeline frena el deploy con el par consumer/provider responsable
+- **WHEN** `can-i-deploy` is red for the candidate version
+- **THEN** the pipeline stops the deploy with the responsible consumer/provider pair
 
-### Requirement: Performance testing con thresholds como gates
+### Requirement: Performance testing with thresholds as gates
 
-El sistema SHALL soportar perf por lenguaje del equipo: k6 default JS/TS (thresholds → exit code, executors de arrival-rate), Locust Python (distribuido gratis), Gatling JVM (reportes HTML), JMeter protocolos legacy o testers no-code. Se reportan percentiles (p95/p99, no promedios) y alimentan los SLOs de liveness. Nota licencia: k6 es AGPL-3.0 (decisión legal si se embebe; usarlo como herramienta CLI contra sistemas propios no dispara copyleft).
+The system SHALL support perf by the team's language: k6 default JS/TS (thresholds → exit code, arrival-rate executors), Locust Python (distributed for free), Gatling JVM (HTML reports), JMeter for legacy protocols or no-code testers. Percentiles are reported (p95/p99, not averages) and feed the liveness SLOs. License note: k6 is AGPL-3.0 (a legal decision if it is embedded; using it as a CLI tool against our own systems does not trigger copyleft).
 
-#### Scenario: Threshold roto frena la promoción
+#### Scenario: A broken threshold stops promotion
 
-- **WHEN** el p99 supera el umbral declarado
-- **THEN** el run sale non-zero y bloquea el gate correspondiente
+- **WHEN** p99 exceeds the declared threshold
+- **THEN** the run exits non-zero and blocks the corresponding gate
 
-### Requirement: Patrol gris para regresión, Maestro para humo (Flutter)
+### Requirement: Patrol grey for regression, Maestro for smoke (Flutter)
 
-El sistema SHALL usar Patrol como default de regresión dev-owned (Dart, Keys, `$.native` para permisos/WebViews/notificaciones, corre en farms que soportan tests nativos) y Maestro para smoke QA-owned y restart; `integration_test` para checks dev rápidos. Caveat registrado: inestabilidad CI de Patrol → pinear versiones y fijar imágenes de device OS.
+The system SHALL use Patrol as the default for dev-owned regression (Dart, Keys, `$.native` for permissions/WebViews/notifications, runs on farms that support native tests) and Maestro for QA-owned smoke and restart; `integration_test` for fast dev checks. Recorded caveat: Patrol CI instability → pin versions and fix device OS images.
 
-#### Scenario: Flujo con permiso nativo
+#### Scenario: A flow with a native permission
 
-- **WHEN** el flujo exige diálogo de permiso del SO
-- **THEN** se usa Patrol o Maestro, nunca solo `integration_test`
+- **WHEN** the flow requires an OS permission dialog
+- **THEN** Patrol or Maestro is used, never `integration_test` alone
 
-### Requirement: Accesibilidad por niveles con gate escalonado
+### Requirement: Accessibility by level with a staged gate
 
-El sistema SHALL auditar a11y por niveles: axe-core en web/WebView (WCAG 2.0–2.2 A/AA), Axe DevTools Mobile + comandos Maestro (`axeStartScanSession`/`axeScan`) en nativo, XCTest/Espresso donde aplique, MCP scanner para auditorías agent-first. Gate: critical/serious bloquean, moderate/minor solo advierten.
+The system SHALL audit a11y by level: axe-core on web/WebView (WCAG 2.0–2.2 A/AA), Axe DevTools Mobile plus Maestro commands (`axeStartScanSession`/`axeScan`) on native, XCTest/Espresso where it applies, MCP scanner for agent-first audits. Gate: critical/serious block, moderate/minor only warn.
 
-#### Scenario: Violación crítica bloquea
+#### Scenario: A critical violation blocks
 
-- **WHEN** el scan reporta una violación critical o serious
-- **THEN** el gate falla con criterio WCAG y elemento afectado
+- **WHEN** the scan reports a critical or serious violation
+- **THEN** the gate fails with the WCAG criterion and the affected element
 
-### Requirement: Regresión visual y PBT general
+### Requirement: Visual regression and general PBT
 
-El sistema SHALL soportar regresión visual web con `toHaveScreenshot` (baselines WebP, umbral `maxDiffPixelRatio`) y property-based testing por stack: fast-check (TS), Hypothesis/Schemathesis (API/Python), PropEr/StreamData (Elixir) — invariantes sobre rangos y bordes, no solo ejemplos.
+The system SHALL support web visual regression with `toHaveScreenshot` (WebP baselines, `maxDiffPixelRatio` threshold) and property-based testing per stack: fast-check (TS), Hypothesis/Schemathesis (API/Python), PropEr/StreamData (Elixir) — invariants over ranges and edges, not only examples.
 
-#### Scenario: Diff visual decide con umbral
+#### Scenario: A visual diff decides with a threshold
 
-- **WHEN** la UI cambia y el diff supera el umbral configurado
-- **THEN** el caso falla con screenshots de baseline/actual/diff adjuntos
+- **WHEN** the UI changes and the diff exceeds the configured threshold
+- **THEN** the case fails with baseline/actual/diff screenshots attached
 
-### Requirement: Stories como unidades portables de test (component testing)
+### Requirement: Stories as portable test units (component testing)
 
-El sistema SHALL tratar las stories (CSF) como fixture única que alimenta todos los niveles sin reescribir: render test (smoke), interacción con play function (queries Testing Library con prioridad rol → testid como último recurso, `userEvent`/`expect` siempre awaited, spies `fn()`, agrupación `step()`, aislamiento `beforeEach/afterEach`), a11y vía addon (axe-core, `parameters.a11y.test` en `error`/`todo`/`off`), visual (Chromatic), coverage desde stories, unit (portable stories) y E2E (iframe `?id=` con Cypress/Playwright). Runner default: Vitest addon (browser mode Chromium real, tags `include/exclude/skip`, UI/CLI/CI/editor); test-runner (Jest) solo donde el framework no usa Vite. La migración a11y `error` → `todo` → fix mapea al gate escalonado.
+The system SHALL treat stories (CSF) as the single fixture that feeds every level without rewriting: render test (smoke), interaction with a play function (Testing Library queries with role priority → testid as last resort, `userEvent`/`expect` always awaited, `fn()` spies, `step()` grouping, `beforeEach/afterEach` isolation), a11y via addon (axe-core, `parameters.a11y.test` at `error`/`todo`/`off`), visual (Chromatic), coverage from stories, unit (portable stories), and E2E (iframe `?id=` with Cypress/Playwright). Default runner: Vitest addon (real Chromium browser mode, `include/exclude/skip` tags, UI/CLI/CI/editor); test-runner (Jest) only where the framework does not use Vite. The a11y migration `error` → `todo` → fix maps to the staged gate.
 
-#### Scenario: Una story, muchos runners
+#### Scenario: One story, many runners
 
-- **WHEN** existe una story con play function
-- **THEN** corre como component test (Vitest), a11y, visual y E2E vía iframe sin duplicar autoría
+- **WHEN** a story with a play function exists
+- **THEN** it runs as a component test (Vitest), a11y, visual, and E2E via iframe without duplicating authoring
 
-#### Scenario: A11y error/todo/off mapea al gate
+#### Scenario: A11y error/todo/off maps to the gate
 
-- **WHEN** `a11y.test` es `error` y hay violación
-- **THEN** bloquea; si es `todo` advierte; `off` solo en antipatterns documentados
+- **WHEN** `a11y.test` is `error` and there is a violation
+- **THEN** it blocks; if it is `todo` it warns; `off` only on documented anti-patterns
 
-#### Scenario: Tags gobiernan la suite
+#### Scenario: Tags govern the suite
 
-- **WHEN** una story lleva tag `experimental`
-- **THEN** queda excluida del gate pero visible en resultados
+- **WHEN** a story carries the tag `experimental`
+- **THEN** it is excluded from the gate but visible in results
 
-### Requirement: Scenarios Widgetbook como unidades portables Flutter
+### Requirement: Widgetbook scenarios as portable Flutter units
 
-El sistema SHALL tratar los scenarios Widgetbook como espejo Flutter de las stories web: Story (un estado, `$`-var en `.stories.dart`) + Args type-safe (`Arg.fixed` pineado) + Modes (theme/locale/viewport/text-scale vía addons) + Scenario congelado (args fijos, determinista, corre en `flutter_test` con callback `run` para taps/pumps/asserts, screenshot a `build/.widgetbook`). Definitions globales con estrategias `perScenario`/`perStory`/`both` multiplican la matriz (theme × locale × text-scale × device) en un solo `flutter test`. Goldens: entorno fijo + review colaborativo (cero goldens escritos a mano en Cloud); guidelines a11y de `flutter_test` (androidTapTarget 48, iOSTapTarget 44, labeledTapTarget → WCAG 4.1.2, textContrast → WCAG 1.4.3) en cada celda; semantics-tree diff para regresiones invisibles al diff visual. Cheapest fix: tokens del design system (contraste, target size) antes que tests.
+The system SHALL treat Widgetbook scenarios as the Flutter mirror of web stories: Story (one state, `$`-var in `.stories.dart`) plus type-safe Args (`Arg.fixed` pinned) plus Modes (theme/locale/viewport/text-scale via addons) plus a frozen Scenario (fixed args, deterministic, runs in `flutter_test` with a `run` callback for taps/pumps/asserts, screenshot to `build/.widgetbook`). Global definitions with strategies `perScenario`/`perStory`/`both` multiply the matrix (theme × locale × text-scale × device) in a single `flutter test`. Goldens: fixed environment plus collaborative review (zero hand-written goldens in Cloud); `flutter_test` a11y guidelines (androidTapTarget 48, iOSTapTarget 44, labeledTapTarget → WCAG 4.1.2, textContrast → WCAG 1.4.3) in each cell; semantics-tree diff for regressions invisible to the visual diff. Cheapest fix: design-system tokens (contrast, target size) before tests.
 
-#### Scenario: Un scenario, matriz completa
+#### Scenario: One scenario, full matrix
 
-- **WHEN** un scenario cruza definitions globales
-- **THEN** corre en theme × locale × viewport × text-scale con las 4 guidelines en cada celda
+- **WHEN** a scenario crosses global definitions
+- **THEN** it runs on theme × locale × viewport × text-scale with the 4 guidelines in each cell
 
-#### Scenario: Golden sin falsos positivos de plataforma
+#### Scenario: A golden without platform false positives
 
-- **WHEN** los goldens corren en entorno controlado con review colaborativo
-- **THEN** no fallan por rendering de plataforma y solo cambios intencionales actualizan la referencia
+- **WHEN** goldens run in a controlled environment with collaborative review
+- **THEN** they do not fail on platform rendering and only intentional changes update the reference
 
-#### Scenario: Semantics diff detecta lo invisible
+#### Scenario: Semantics diff detects the invisible
 
-- **WHEN** un refactor quita un label sin cambiar un píxel
-- **THEN** el diff de semántica lo detecta aunque el diff visual pase
+- **WHEN** a refactor removes a label without changing a pixel
+- **THEN** the semantics diff detects it even when the visual diff passes
 
-### Requirement: Eval-driven development para features con LLM
+### Requirement: Eval-driven development for LLM features
 
-El sistema SHALL aplicar evaluation-driven development (Huyen Ch4): criterios medibles primero (factual consistency local/global, safety, capabilities de dominio), benchmarks con desconfianza (mayoría close-ended tipo MMLU: verificar qué miden antes de confiar), judges especializados y calibrados sobre LLM-judges genéricos, pipeline de eval que guía el desarrollo y feedback conversacional como dato (Ch10). Defensa de prompt attacks en capas con system prompt priorizado (Ch5).
+The system SHALL apply evaluation-driven development (Huyen Ch4): measurable criteria first (local/global factual consistency, safety, domain capabilities), benchmarks with distrust (mostly close-ended MMLU-style: verify what they measure before trusting them), specialized judges calibrated over generic LLM-judges, an eval pipeline that guides development, and conversational feedback as data (Ch10). Layered prompt-attack defense with a prioritized system prompt (Ch5).
 
-#### Scenario: Criterios antes que código
+#### Scenario: Criteria before code
 
-- **WHEN** arranca una feature con LLM
-- **THEN** existen criterios medibles + baseline antes del primer deploy (una app desplegada sin evaluación es peor que no desplegarla)
+- **WHEN** an LLM feature starts
+- **THEN** measurable criteria plus a baseline exist before the first deploy (a deployed app with no evaluation is worse than not deploying it)
 
-#### Scenario: Judge calibrado, no opinión genérica
+#### Scenario: A calibrated judge, not a generic opinion
 
-- **WHEN** se usa AI-judge
-- **THEN** es especializado, calibrado contra anotadores y versionado con el pipeline
+- **WHEN** an AI-judge is used
+- **THEN** it is specialized, calibrated against annotators, and versioned with the pipeline
 
-### Requirement: Suites risk-driven con self-testing (Fowler)
+### Requirement: Risk-driven suites with self-testing (Fowler)
 
-El sistema SHALL diseñar suites risk-driven: testear lo que más preocupa que falle (no "todo método público"); tests incompletos que corren valen más que tests completos inexistentes; auto-verificantes, frecuentes y aislados (cualquier orden); characterization tests antes de refactorizar legacy sin red.
+The system SHALL design risk-driven suites: test what is most worrying if it fails (not "every public method"); incomplete tests that run are worth more than complete tests that do not exist; self-verifying, frequent, and isolated (any order); characterization tests before refactoring legacy with no net.
 
-#### Scenario: Suite económica priorizada por riesgo
+#### Scenario: An economical suite prioritized by risk
 
-- **WHEN** el tiempo es limitado
-- **THEN** la cobertura prioriza riesgo documentado, y el resto queda como deuda explícita, no como hueco silencioso
+- **WHEN** time is limited
+- **THEN** coverage prioritizes documented risk, and the rest stays as explicit debt, not as a silent hole
 
-#### Scenario: Refactor con red
+#### Scenario: A refactor with a net
 
-- **WHEN** se refactoriza código sin tests
-- **THEN** hay characterization tests en verde antes y después de cada paso pequeño
+- **WHEN** code without tests is refactored
+- **THEN** characterization tests are green before and after each small step

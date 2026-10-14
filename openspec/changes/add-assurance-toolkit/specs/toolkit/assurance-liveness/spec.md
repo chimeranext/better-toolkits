@@ -2,75 +2,75 @@
 
 ## Purpose
 
-Pilar liveness del assurance-toolkit: verificar continuamente que el sistema sigue vivo (readiness) con la escalera de observabilidad, independiente del ritmo de PRs.
+Liveness pillar of assurance-toolkit: continuously verify that the system is still alive (readiness) with the observability ladder, independent of PR pace.
 
 ## ADDED Requirements
 
-### Requirement: Observability-audit mudado con escalera de liveness
+### Requirement: Observability-audit moved, with a liveness ladder
 
-El sistema SHALL proveer `observability-audit` desde `assurance-toolkit` (shim en el toolkit viejo), evaluando probe/heartbeat/absence/synthetic como niveles ordenados.
+The system SHALL provide `/assurance:observability-audit` from `assurance-toolkit` (shim in the old toolkit), evaluating probe/heartbeat/absence/synthetic as ordered levels.
 
-#### Scenario: Audit distingue pasa de dejó-de-pasar
+#### Scenario: The audit distinguishes passes from stopped-passing
 
-- **WHEN** se ejecuta `observability-audit` sobre un servicio con historial
-- **THEN** el reporte distingue "pasa" de "dejó de pasar" (detección de regresión de liveness) en vez de un solo veredicto plano
+- **WHEN** `/assurance:observability-audit` runs on a service with history
+- **THEN** the report distinguishes "passes" from "stopped passing" (liveness regression detection) instead of a single flat verdict
 
-#### Scenario: Corre siempre, no solo por PR
+#### Scenario: It always runs, not only per PR
 
-- **WHEN** no hay PR abierto
-- **THEN** la señal de liveness sigue evaluable (schedule/daemon), sin depender del gate de PR
+- **WHEN** there is no open PR
+- **THEN** the liveness signal stays evaluable (schedule/daemon), without depending on the PR gate
 
-### Requirement: Chaos con hipótesis de steady-state y abort criteria
+### Requirement: Chaos with a steady-state hypothesis and abort criteria
 
-El sistema SHALL soportar experimentos de chaos como CRDs versionados con hipótesis medible (SLO: p99, error rate), probes que la validan (HTTP/Prometheus/StatusCheck), blast radius acotado y abort criteria con auto-stop. Matriz: Litmus (hub de experimentos, workflows GitOps, ChaosCenter multi-cluster, MCP server) vs Chaos Mesh (faults granulares pod/network/IO/kernel, dashboard, arranque rápido); staging primero, prod solo con guardrails y on-call avisado.
+The system SHALL support chaos experiments as versioned CRDs with a measurable hypothesis (SLO: p99, error rate), probes that validate it (HTTP/Prometheus/StatusCheck), a bounded blast radius, and abort criteria with auto-stop. Matrix: Litmus (experiment hub, GitOps workflows, multi-cluster ChaosCenter, MCP server) vs Chaos Mesh (granular pod/network/IO/kernel faults, dashboard, fast start); staging first, prod only with guardrails and on-call notified.
 
-#### Scenario: Experimento con veredicto objetivo
+#### Scenario: An experiment with an objective verdict
 
-- **WHEN** corre un experimento con hipótesis SLO
-- **THEN** el veredicto sale de las probes, no de "se cayó o no"
+- **WHEN** an experiment runs with an SLO hypothesis
+- **THEN** the verdict comes from the probes, not from "it fell over or it did not"
 
-#### Scenario: Abort automático
+#### Scenario: Automatic abort
 
-- **WHEN** el error rate supera el abort threshold
-- **THEN** el experimento se detiene solo y deja registro
+- **WHEN** the error rate exceeds the abort threshold
+- **THEN** the experiment stops itself and leaves a record
 
-### Requirement: Chaos con resilience score (workflow en 5 pasos)
+### Requirement: Chaos with a resilience score (5-step workflow)
 
-El sistema SHALL correr chaos como workflow: validar steady-state → inyectar con blast-radius acotado → observar impacto → verificar recovery → puntuar resiliencia (tiempo de recovery, error rate, degradación, cascading). Primitivas mínimas: pod kill, network partition, CPU stress, node drain; abort conditions + auto-rollback + techo de duración. El score es determinista y trendable (referencia: kubeqa chaos CLI, Apache-2.0, a evaluar junto a Litmus/Chaos Mesh).
+The system SHALL run chaos as a workflow: validate steady state → inject with a bounded blast radius → observe impact → verify recovery → score resilience (recovery time, error rate, degradation, cascading). Minimum primitives: pod kill, network partition, CPU stress, node drain; abort conditions plus auto-rollback plus a duration ceiling. The score is deterministic and trendable (reference: kubeqa chaos CLI, Apache-2.0, to evaluate alongside Litmus/Chaos Mesh).
 
-#### Scenario: Score comparable entre runs
+#### Scenario: Scores are comparable across runs
 
-- **WHEN** dos experimentos iguales corren en fechas distintas
-- **THEN** sus resilience scores son comparables y el trend decide si la resiliencia mejora
+- **WHEN** two identical experiments run on different dates
+- **THEN** their resilience scores are comparable and the trend decides whether resilience improved
 
-### Requirement: Cluster health score en 8 dimensiones
+### Requirement: Cluster health score in 8 dimensions
 
-El sistema SHALL medir salud del cluster con score determinista 0–100 en 8 dimensiones (resources, security, networking, storage, availability, observability, configuration, cost), read-only y sin agentes (modelo kubeqa health / Popeye sanitizer). Cada hallazgo trae remediación exacta (patch, no link a docs). Popeye = sanitización read-only (dead resources, health score); Polaris = dashboard + admission backstop + CI. Score apto para gatear y trendear.
+The system SHALL measure cluster health with a deterministic 0–100 score across 8 dimensions (resources, security, networking, storage, availability, observability, configuration, cost), read-only and agentless (kubeqa health / Popeye sanitizer model). Each finding brings an exact remediation (a patch, not a link to docs). Popeye = read-only sanitization (dead resources, health score); Polaris = dashboard plus admission backstop plus CI. The score is fit to gate and to trend.
 
-#### Scenario: Dimensión débil no se esconde
+#### Scenario: A weak dimension does not hide
 
-- **WHEN** security puntúa 95 pero availability 60 (single-replica)
-- **THEN** el score agregado lo refleja y el gate puede exigir mínimos por dimensión, no solo promedio
+- **WHEN** security scores 95 but availability scores 60 (single replica)
+- **THEN** the aggregate score reflects it and the gate may require per-dimension minimums, not only the average
 
-### Requirement: Baselines de performance alimentan los SLOs
+### Requirement: Performance baselines feed the SLOs
 
-El sistema SHALL convertir p95/p99 de los runs de perf en baselines versionadas que liveness vigila; la degradación contra baseline dispara revisión. Al cambiar de herramienta se re-baselinea (las métricas no son comparables entre herramientas).
+The system SHALL turn p95/p99 from perf runs into versioned baselines that liveness watches; degradation against the baseline triggers a review. When the tool changes, re-baseline (metrics are not comparable across tools).
 
-#### Scenario: Regresión contra baseline
+#### Scenario: Regression against the baseline
 
-- **WHEN** el p99 supera baseline + delta configurado
-- **THEN** se emite alerta de regresión de performance con el run responsable
+- **WHEN** p99 exceeds baseline plus the configured delta
+- **THEN** a performance-regression alert is emitted with the responsible run
 
-### Requirement: Playbook de diagnóstico + runbooks ejecutables (taxonomía fractional-cto)
+### Requirement: Diagnostic playbook plus executable runbooks (fractional-cto taxonomy)
 
-El sistema SHALL separar según templates 08/09: el **playbook** decide (WHEN/WHY: árbol diagnose vs recover vs escalate por clase de síntoma, con pattern-IDs estables modelo MDAA/MASWE como firmas); los **runbooks** ejecutan (HOW secuencial disparado por trigger: scripts diagnose read-only con la jerarquía Events → stern → k9s → built-ins, y scripts recover/restore). Capturas por criterio (modelo ProcDump) en vez de captura ciega. Los receipts referencian pattern-IDs del playbook + salida de los runbooks, no prosa.
+The system SHALL split according to templates 08/09: the **playbook** decides (WHEN/WHY: diagnose vs recover vs escalate tree by symptom class, with stable pattern-IDs in the MDAA/MASWE signature model); the **runbooks** execute (sequential HOW fired by a trigger: read-only diagnose scripts with the Events → stern → k9s → built-ins hierarchy, and recover/restore scripts). Captures by criteria (ProcDump model) instead of a blind capture. Receipts reference playbook pattern-IDs plus runbook output, not prose.
 
-#### Scenario: Playbook decide, runbook ejecuta
+#### Scenario: The playbook decides, the runbook executes
 
-- **WHEN** un Pod falla silencioso
-- **THEN** el playbook elige rama (diagnose: jerarquía de señales en orden) y dispara el runbook correspondiente; el hallazgo queda con pattern-ID reutilizable
+- **WHEN** a Pod fails silently
+- **THEN** the playbook picks a branch (diagnose: signal hierarchy in order) and fires the matching runbook; the finding is stored with a reusable pattern-ID
 
-#### Scenario: Prosa sin árbol ni trigger no es playbook/runbook
+#### Scenario: Prose with no tree and no trigger is not a playbook/runbook
 
-- **WHEN** un documento de diagnóstico no tiene árbol de decisión ni trigger con pasos
-- **THEN** se clasifica como post-mortem o nota, no como playbook/runbook del toolkit
+- **WHEN** a diagnostic document has no decision tree and no trigger with steps
+- **THEN** it is classified as a post-mortem or a note, not as a toolkit playbook/runbook

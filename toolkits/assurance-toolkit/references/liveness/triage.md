@@ -15,12 +15,13 @@ daemon** cadence, not on every PR. See assurance README pillar table.
 
 ```mermaid
 flowchart TD
-  start([liveness/triage.md]) --> d{pillar skip?}
-  d -->|default PR| sk[SKIP]
-  d -->|required/optional| a[observability-audit or repo smoke]
-  a --> v{protocol PASS?}
-  v -->|sí| p[PASS]
-  v -->|no| b[BLOCKED]
+  start(["liveness pillar PR N"])
+  start --> d{"pillar skip?"}
+  d -->|default PR| sk["SKIP"]
+  d -->|required or optional| a["observability-audit or repo smoke"]
+  a --> v{"protocol PASS?"}
+  v -->|yes| p["PASS liveness pillar"]
+  v -->|no| b["BLOCKED"]
 ```
 
 ## Sequence (schedule vs PR opt-in)

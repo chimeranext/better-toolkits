@@ -2,54 +2,56 @@
 
 ## Context
 
-Ver `proposal.md` (Why). Estado actual: los 7 comandos viven en `make-no-mistakes-toolkit/commands/` + protocolos en `references/`; el monorepo exige protocolo markdown en `toolkits/<name>/references/` + entradas thin en `commands/` + Cursor skills, un solo store OpenSpec en raíz, y shims como patrón de migración (precedente `disk-cleanup`).
+See `proposal.md` (Why). Current state: the 7 commands live in `make-no-mistakes-toolkit/commands/` plus protocols in `references/`; the monorepo requires a markdown protocol under `toolkits/<name>/references/` plus thin entries under `commands/` plus Cursor skills, a single OpenSpec store at the root, and shims as the migration pattern (precedent `disk-cleanup`).
 
 ## Goals / Non-Goals
 
 **Goals:**
-- Nuevo `toolkits/assurance-toolkit/` que pase `openspec validate` y siga el layout multi-harness.
-- Migración sin ruptura: shims delegantes con warning.
-- Frontera clara: assurance escribe evidencia, dev-workflow la consume.
+
+- New `toolkits/assurance-toolkit/` that passes `openspec validate` and follows the multi-harness layout.
+- Migration without breakage: delegating shims with a warning.
+- Clear boundary: assurance writes evidence, the dev workflow consumes it.
 
 **Non-Goals:**
-- No implementar el broker webhook Qualflare→Linear ni providers (solo protocolo).
-- No borrar shims ni tocar gates (`ready-to-review-mergeable`, `premortem`).
-- No definir `receipts/` (slot reservado vacío).
+
+- Do not implement the Qualflare→Linear webhook broker or the providers (protocol only).
+- Do not delete the pentest or observability shims. Do not touch `premortem`.
+- Do not define `receipts/` (reserved empty slot).
 
 ## Decisions
 
-- **Layout espejo + shims, no move puro.** Por qué: evita romper sesiones/scripts que invocan los comandos viejos; alternativa (mover y romper) descartada por costo de migración en HabitaNexus.
-- **2 pilares + transversal con runner propio** (testing, liveness; security transversal). Por qué: decisión consolidada de la sesión HabitaNexus (seq 1519-1532); alternativa 3-pilares (correctness/liveness/safety como pilares iguales) descartada porque seguridad tiene cadencia/owner/gate distintos y como tercer pilar igualitario presiona a mezclar veredictos.
-- **Triage compartido como patrón, no como comando único.** Misma forma (cola → dueño → SLA → receipt), dos owners (testing vs seguridad). Evita duplicar código y evita mezclar reportes.
-- **`gemini-code-review` → `--provider gemini` en `local-pr-review`.** Fusión por proveedor (precedente Heimdall/Kimi vía NIM); shim con warning, borrado en minor siguiente.
-- **Tres capabilities OpenSpec** (`assurance-testing`, `assurance-liveness`, `assurance-security`) en vez de una catch-all. Cada una evoluciona con sus requirements sin acoplar cadencias.
-- **Cuarta capability de gobierno, no de ejecución.** `assurance-governance` no corre tests: define cómo se mide (DORA/DER/MTTD), qué bloquea (gates) y qué queda como evidencia (receipts). Sin ella, los tres pilares emiten reportes que nadie puede convertir en decisión de release.
-- **Testing polyglot con un protocolo de evidencia, runners por stack.** Misma forma (run → collect → link a Linear → cluster) para Flutter, Laravel/Pest, Elixir/ExUnit y TS7; cada stack aporta su runner nativo (`php artisan test`, `mix test`, `tsgo`) en vez de un runner genérico que no entiende ningún ecosistema. La skill `pest-testing-laraveldaily` (vía `npx skills add …nativephp-larapackagehunt --skill pest-testing-laraveldaily`) es dependencia de autoría documentada, no código del toolkit.
-- **Pirámide Flutter mapea a comandos existentes.** Unit/widget van a `e2e-test-builder/runner` (nivel código), integración + Maestro a `e2e-test-runner/preview` (nivel device); `flutter_driver` no recibe protocolo nuevo, solo shim de migración. `Semantics.identifier` es AC del design system, no detalle del runner.
-- **Adapter primero, framework después.** El panorama (Maestro/Cypress/Playwright/Selenium/Appium, Vitest/Jest) cambia cada año; lo estable es el protocolo run → collect → link → cluster. Por eso el toolkit bendice adapters iniciales (los 4 stacks) y manda el resto a backlog con PoC obligatoria — adoptar sin PoC repite el error de acoplar el gate a una herramienta.
-- **Reinterpretar skills, no vendorarlos.** Los skills externos se leen y se reescriben como protocolo propio con disclosure progresivo (índice liviano + guías on-demand), igual que el patrón Agent Skills: el repo no carga 79 guías en cada sesión. Licencias respetadas (MIT / Apache-2.0) con atribución en el protocolo.
-- **Stories: escribir una vez, correr en todos lados.** El component testing web no crea una suite nueva: la story es el fixture y cada runner (Vitest, a11y, visual, E2E) la consume. Alternativa descartada: suites separadas por nivel (duplican autoría y divergen en una semana).
-- **Simetría web ↔ Flutter.** Storybook (stories CSF) y Widgetbook (scenarios congelados) son el mismo patrón en dos ecosistemas: authoring exploratorio + fixtures congeladas + matriz de entorno + diffs (visual y semántica). El protocolo los trata como un solo adapter de component testing con dos drivers.
-- **Los agentes también son el sistema bajo test.** El red-team agentic (ASI01–10) aplica el mismo protocolo de evidencia a agentes propios: scenario maps versionados, agent graph como audit trail, SoD entre quien codea el agente y quien define policies. Gateway + code layer, nunca uno solo.
-- **Prevenir es un gate, diagnosticar es playbook + runbook.** Los fallos K8s conocidos se frenan en pre-flight; lo que igual escapa lo decide el playbook (diagnose/recover/escalate) y lo ejecutan runbooks con pattern-IDs que alimentan los receipts. Misma información, dos momentos del ciclo.
-- **Capas con un owner, nunca raw en paralelo.** Cada comparativa K8s termina igual: dos herramientas crudas sobre el mismo check = ruido que se ignora. El protocolo exige owner único por tipo de hallazgo + un esquema de severidad + audit-first antes de enforce.
+- **Mirror layout plus shims, not a pure move.** Why: avoids breaking sessions/scripts that invoke the old commands; the alternative (move and break) was rejected because of migration cost on HabitaNexus.
+- **2 pillars plus a transversal with its own runner** (testing, liveness; security transversal). Why: decision locked in the HabitaNexus session (seq 1519-1532); the 3-pillar alternative (correctness/liveness/safety as equal pillars) was rejected because security has a different cadence/owner/gate and, as an equal third pillar, pressures mixing verdicts.
+- **Shared triage as a pattern, not as a single command.** Same shape (queue → owner → SLA → receipt), two owners (testing vs security). Avoids duplicating code and avoids mixing reports. Security findings are mode `/assurance:triage security`, not a separate command.
+- **`gemini-code-review` → `--provider gemini` on `local-pr-review`.** Merge by provider (Heimdall/Kimi via NIM precedent); shim with a warning, deletion in the next minor.
+- **Three OpenSpec capabilities** (`assurance-testing`, `assurance-liveness`, `assurance-security`) instead of one catch-all. Each evolves with its own requirements without coupling cadences.
+- **Fourth capability is governance, not execution.** `assurance-governance` does not run tests: it defines how to measure (DORA/DER/MTTD), what blocks (gates), and what remains as evidence (receipts). Without it, the three pillars emit reports nobody can turn into a release decision.
+- **Polyglot testing with one evidence protocol, runners per stack.** Same shape (run → collect → link to Linear → cluster) for Flutter, Laravel/Pest, Elixir/ExUnit, and TS7; each stack brings its native runner (`php artisan test`, `mix test`, `tsgo`) instead of a generic runner that understands no ecosystem. The skill `pest-testing-laraveldaily` (via `npx skills add …nativephp-larapackagehunt --skill pest-testing-laraveldaily`) is a documented authoring dependency, not toolkit code.
+- **Flutter pyramid maps to existing commands.** Unit/widget go to `/assurance:e2e-test-builder` and `/assurance:e2e-test-runner` (code level), integration + Maestro to `/assurance:e2e-test-runner` and `/assurance:e2e-test-preview` (device level); `flutter_driver` gets no new protocol, only a migration shim. `Semantics.identifier` is an AC of the design system, not a runner detail.
+- **Adapter first, framework later.** The landscape (Maestro/Cypress/Playwright/Selenium/Appium, Vitest/Jest) changes every year; what stays stable is the protocol run → collect → link → cluster. That is why the toolkit blesses initial adapters (the 4 stacks) and sends the rest to backlog with a mandatory PoC — adopting without a PoC repeats the mistake of coupling the gate to a tool.
+- **Reinterpret skills, do not vendor them.** External skills are read and rewritten as our own protocol with progressive disclosure (light index plus on-demand guides), same as the Agent Skills pattern: the repo does not load 79 guides in every session. Licenses respected (MIT / Apache-2.0) with attribution in the protocol.
+- **Stories: write once, run everywhere.** Web component testing does not create a new suite: the story is the fixture and each runner (Vitest, a11y, visual, E2E) consumes it. Rejected alternative: separate suites per level (they duplicate authoring and diverge within a week).
+- **Web ↔ Flutter symmetry.** Storybook (CSF stories) and Widgetbook (frozen scenarios) are the same pattern in two ecosystems: exploratory authoring plus frozen fixtures plus an environment matrix plus diffs (visual and semantic). The protocol treats them as one component-testing adapter with two drivers.
+- **Agents are also the system under test.** The agentic red team (ASI01–10) applies the same evidence protocol to our own agents: versioned scenario maps, agent graph as the audit trail, SoD between whoever codes the agent and whoever defines policies. Gateway plus code layer, never only one.
+- **Prevent is a gate, diagnose is playbook plus runbook.** Known K8s failures are stopped in pre-flight; what still escapes is decided by the playbook (diagnose/recover/escalate) and executed by runbooks with pattern-IDs that feed the receipts. Same information, two moments in the cycle.
+- **Layers with one owner, never raw tools in parallel.** Every K8s comparison ends the same way: two raw tools on the same check = noise that gets ignored. The protocol requires a single owner per finding type plus one severity schema plus audit-first before enforce.
 
 ## Risks / Trade-offs
 
-- [Shim drift] Los shims pueden divergir del protocolo nuevo → Mitigación: shims thin de una línea que solo delegan + test de que el warning existe.
-- [Regla YAML `specs` del store] El `.openspec.yaml` raíz tiene un item malformado (warning del CLI) → Mitigación: no tocarlo en esta change; reportarlo aparte.
-- [Providers sin contrato] Kiwi/Qase/Qualflare cambian API → Mitigación: protocolo versiona integraciones y pinea `qualflare-maestro`; broker con dedupe por cluster para no amplificar cambios.
-- [Nombre] `assurance-toolkit` vs `quality-engineering`/`release-assurance` → Mitigación: nombre ya confirmado en sesión; alternativas registradas en proposal.
-- [TS7 compiler API ausente hasta 7.1] Scripts que importan `typescript` como librería rompen con `tsgo` → Mitigación: checklist exige clásico en paralelo u `oxc-parser`; CI dual durante la transición.
+- [Shim drift] Shims can diverge from the new protocol → Mitigation: one-line thin shims that only delegate, plus a test that the warning exists.
+- [Store YAML `specs` rule] The root `.openspec.yaml` has a malformed item (CLI warning) → Mitigation: do not touch it in this change; report it separately.
+- [Providers without a contract] Kiwi/Qase/Qualflare change their API → Mitigation: the protocol versions integrations and pins `qualflare-maestro`; broker with cluster dedupe so changes are not amplified.
+- [Name] `assurance-toolkit` vs `quality-engineering` / `release-assurance` → Mitigation: name already confirmed in session; alternatives recorded in the proposal.
+- [TS7 compiler API missing until 7.1] Scripts that import `typescript` as a library break with `tsgo` → Mitigation: checklist requires classic in parallel or `oxc-parser`; dual CI during the transition.
 
 ## Migration Plan
 
-1. Scaffold `toolkits/assurance-toolkit/` (plugin manifest, README, `references/` con los 3 protocolos, `commands/` thin, skills).
-2. Copiar protocolos de los 7 comandos al nuevo toolkit; reemplazar originales por shims delegantes + warning.
-3. Agregar `--provider gemini` a `local-pr-review` + shim de `gemini-code-review`.
-4. Actualizar `marketplace.json` + versiones; `openspec validate`; PR con HITL antes de push.
-5. Rollback: revert del commit (shims hacen que el estado viejo siga resolviendo).
+1. Scaffold `toolkits/assurance-toolkit/` (plugin manifest, README, `references/` with the 3 protocols, thin `commands/`, skills).
+2. Copy protocols of the 7 commands into the new toolkit; replace originals with delegating shims plus a warning. Findings triage is the exception: it is mode `/assurance:triage security`, with no shim.
+3. Add `--provider gemini` to `local-pr-review` plus a shim for `gemini-code-review`.
+4. Update `marketplace.json` plus versions; `openspec validate`; PR with HITL before push.
+5. Rollback: revert the commit (shims keep the old state resolving).
 
 ## Open Questions
 
-- Ninguna que bloquee specs/diseño/tasks. Versiones a pinear de `qualflare-maestro` y forma exacta del `qualflare.link` se fijan en apply con la cuenta Starter. Versión de `tsgo` y de `vite-tsconfig-paths` compatible también se pinean en apply.
+- None that block specs/design/tasks. Versions to pin for `qualflare-maestro` and the exact shape of `qualflare.link` are fixed at apply with the Starter account. The `tsgo` version and the compatible `vite-tsconfig-paths` version are also pinned at apply.

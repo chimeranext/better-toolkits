@@ -129,5 +129,5 @@ Suggest a workflow only when the user asks; do not invent monorepo CI without HI
 - NVIDIA evaluating skills: https://docs.nvidia.com/skills/evaluating-agent-skills  
 - Scanning guide: https://docs.nvidia.com/skills/scanning-agent-skills  
 - Monorepo note: [`docs/evaluate-agent-skills.md`](../../../../docs/evaluate-agent-skills.md)  
-- `/triage-security-findings` — triage scanner output into backlog (after Spector)  
+- `/assurance:triage security` — triage scanner output into backlog (after Spector)  
 - `/gemini-code-review` — code diff review (different surface)
