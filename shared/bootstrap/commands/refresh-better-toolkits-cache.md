@@ -28,16 +28,22 @@ agent plugin list
 
 ## Cursor Desktop (UI)
 
-Docs: https://cursor.com/docs/plugins (Customize page, Dashboard → Plugins).
+Evidencia de UI (screenshots, Linux): la página de marketplace solo ofrece
+**Add / Added / Remove** por toolkit y un diálogo **Import Marketplace**
+(Repository URL + Scope User/Project). **No hay botón Refresh ni Update.**
+(A diferencia de lo que sugieren los docs web de Dashboard→Plugins, que
+describen otra superficie.)
 
-1. **Team marketplace**: Dashboard → Plugins → Refresh button (or enable Auto Refresh;
-   note it re-indexes at most every 10 min and may miss new plugins — re-import the
-   repo URL if a new plugin doesn't appear).
-2. **Installed plugins**: Customize page in the sidebar → find the plugin → reinstall
-   at the needed scope (user/workspace). Restart or refocus the window afterwards —
-   the client re-resolves plugins on startup/focus.
-3. Verify on disk: `~/.cursor/plugins/cache/*/*/` dirs are named by commit SHA;
-   check `.cursor-plugin/plugin.json` version inside.
+Refresh en Desktop = reinstalar:
+
+1. En la página del marketplace, menú `...` del toolkit → **Remove**.
+2. **Add** de nuevo en el scope necesario (User/Project).
+3. Reiniciar o re-enfocar la ventana — el cliente re-resuelve plugins al inicio/foco.
+4. Verificar en disco: `~/.cursor/plugins/cache/*/*/` lleva SHA de commit;
+   revisar versión en `.cursor-plugin/plugin.json`.
+
+Si tras reinstalar sigue la versión vieja, es el bug de pinning documentado
+abajo — pasar a `/prune-better-toolkits-cache` y reinstalar de nuevo.
 
 Known upstream bugs (forum reports, not official docs — including vendor repro
 acknowledgment; re-verify before citing elsewhere):
