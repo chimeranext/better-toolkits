@@ -39,22 +39,38 @@ Resolve PR number from `--pr N`, else `gh pr view` for the current branch.
 Run sub-protocols **in order**: testing → security → governance → liveness (only if
 not `skip`). Stop on first `BLOCKED` unless config sets `continueOnOptionalFailure`.
 
+### OpenSpec PR gate (assurance-governance)
+
+Normative requirement:
+`openspec/changes/add-assurance-toolkit/specs/toolkit/assurance-governance/spec.md`
+→ **Gates por etapa, rápidos primero** (PR row).
+
+| PR gate criterion (spec) | Pillar / sub-protocol |
+| --- | --- |
+| tests 100% | testing → [`references/testing/triage.md`](../testing/triage.md) |
+| security críticas 0 | security → [`references/security/triage.md`](../security/triage.md) |
+| `coverage_delta` ≥ 0 (+ PR receipt when configured) | governance → [`references/governance/triage.md`](../governance/triage.md) |
+
+Mode **`pr`** runs the rows above (per config). Mode **`testing`** (or any single pillar)
+runs **one row only** — it does **not** satisfy the full PR gate alone.
+
 ```mermaid
 flowchart TD
-    I["/assurance:triage [modo]"] --> M{modo?}
-    M -->|pr| T[testing/triage.md]
-    M -->|pillar| P[ese pillar solamente]
-    T --> VT{PASS?}
-    VT -->|no: BLOCKED| B[BLOCKED: pillar + razón + links]
-    VT -->|sí| S[security/triage.md]
-    S --> VS{PASS?}
-    VS -->|no: BLOCKED| B
-    VS -->|sí| G[governance/triage.md + receipt PR-stage]
-    G --> VG{PASS?}
-    VG -->|no: BLOCKED| B
-    VG -->|sí| L{liveness required?}
-    L -->|no| V[PASS agregado]
-    L -->|sí| LV[liveness/triage.md]
+    I["/assurance:triage mode"]
+    M{"mode?"}
+    M -->|pr| T["testing pillar"]
+    M -->|single pillar| P["one sub-protocol only"]
+    T --> VT{"PASS?"}
+    VT -->|no| B["BLOCKED pillar reason links"]
+    VT -->|yes| S["security pillar"]
+    S --> VS{"PASS?"}
+    VS -->|no| B
+    VS -->|yes| G["governance pillar plus PR receipt"]
+    G --> VG{"PASS?"}
+    VG -->|no| B
+    VG -->|yes| L{"liveness required?"}
+    L -->|no| V["aggregate PASS"]
+    L -->|yes| LV["liveness pillar"]
     LV --> V
     P --> V
 ```

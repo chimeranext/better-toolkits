@@ -2,6 +2,10 @@
 
 Parent hub: [`references/triage/protocol.md`](../triage/protocol.md).
 
+OpenSpec contract (PR stage slice): `openspec/changes/add-assurance-toolkit/specs/toolkit/assurance-governance/spec.md`
+→ **Gates por etapa** — PR row **`coverage_delta` ≥ 0** and PR receipt (plus cross-check
+that testing and security pillars already PASS).
+
 ## Question
 
 Do PR-stage **gates and receipts** allow moving to remote code review?
@@ -10,13 +14,14 @@ Do PR-stage **gates and receipts** allow moving to remote code review?
 
 ```mermaid
 flowchart TD
-  start([governance/triage.md]) --> g1[Cross-check testing PASS]
-  g1 --> g2[Cross-check security PASS]
-  g2 --> g3{coverage_delta ≥ 0?}
-  g3 -->|no| b[BLOCKED]
-  g3 -->|sí| r{receipt required?}
-  r -->|sí| w[Write assurance-pr-N.json]
-  r -->|no| p[PASS]
+  start(["governance pillar PR N"])
+  g1["Cross-check testing PASS"]
+  g1 --> g2["Cross-check security PASS"]
+  g2 --> g3{"coverage delta non-negative?"}
+  g3 -->|no| b["BLOCKED"]
+  g3 -->|yes| r{"receipt required?"}
+  r -->|yes| w["Write assurance-pr-N.json"]
+  r -->|no| p["PASS governance pillar"]
   w --> p
 ```
 
