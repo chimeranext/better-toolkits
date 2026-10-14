@@ -8,7 +8,7 @@ Canonical Mermaid extracted from assurance triage hub (post-fix profile).
    `mermaid` blocks (or view `toolkits/assurance-toolkit/references/triage/protocol.md`
    after assurance PR merges).
 2. On github.com, confirm both diagrams render (no “Unable to render rich display”).
-3. Check RULES D1–D5 in `platform/diagrams/mermaid-github.md`.
+3. Check RULES D0–D6 in `platform/diagrams/mermaid-github.md` (hub samples use `flowchart TD`).
 
 ## Optional CLI
 

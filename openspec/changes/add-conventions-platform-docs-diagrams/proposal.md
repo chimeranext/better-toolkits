@@ -16,7 +16,8 @@ perfil pineado **platform/diagrams/mermaid-github**, no reglas mezcladas en
 - `platform/markdown/README.md` — record nivel platform para docs Markdown
   (estructura, enlaces, cuándo diagramar).
 - `platform/diagrams/mermaid-github.md` — perfil GitHub: RULES de sintaxis
-  flowchart/sequence, COUNTEREXAMPLES del incidente assurance hub.
+  flowchart/sequence (`flowchart TD` por defecto en procesos secuenciales),
+  COUNTEREXAMPLES del incidente assurance hub.
 - `_dogfood/docs-diagrams/` — bloques Mermaid canónicos + instrucción de gate
   manual (preview GitHub) hasta automatizar parse en CI.
 - OpenSpec delta `shared/conventions-platform-docs-diagrams`.

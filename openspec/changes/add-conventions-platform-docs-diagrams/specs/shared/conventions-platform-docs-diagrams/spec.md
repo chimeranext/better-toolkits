@@ -19,8 +19,14 @@ RULES mínimas para documentación en repos (encabezados, tablas, enlaces relati
 ### Requirement: Record platform/diagrams/mermaid-github
 
 El sistema SHALL proveer `platform/diagrams/mermaid-github.md` con RULES que
-prohíben `:` en etiquetas de arista flowchart, nodos sin comillas cuando llevan
-`/`, `§` o acentos, y `opt` anidado sin cerrar en sequenceDiagram.
+exigen `flowchart TD` por defecto en procesos secuenciales, prohíben `:` en
+etiquetas de arista flowchart, nodos sin comillas cuando llevan `/`, `§` o
+acentos, y `opt` anidado sin cerrar en sequenceDiagram.
+
+#### Scenario: Flowchart vertical por defecto
+
+- **WHEN** un diagrama modela un flujo de pasos o gates en orden
+- **THEN** el bloque declara `flowchart TD` (no `LR` salvo excepción documentada)
 
 #### Scenario: Flowchart PASS en GitHub
 

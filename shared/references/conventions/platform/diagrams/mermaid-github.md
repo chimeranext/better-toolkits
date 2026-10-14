@@ -18,6 +18,9 @@ github.com** sin “Unable to render rich display”.
 
 ## RULES
 
+- D0 [flowchart-direction] Procesos secuenciales (gates, triage, pipelines) usan
+  **`flowchart TD`** (top-down, vertical) por defecto; `LR` solo con justificación
+  breve en el PR (p. ej. arquitectura ancha con pocos pasos) → S1.
 - D1 [flowchart-edges] Etiquetas de arista **sin** `:` literal (`|no BLOCKED|` no `|no: BLOCKED|`) → S1 + incidente assurance.
 - D2 [flowchart-nodes] Texto con `/`, `§`, acentos o comandos con `:` → nodo entre comillas dobles → S1.
 - D3 [flowchart-ids] IDs de nodo ASCII (`VT`, `Hub`); etiqueta legible en corchetes → S1.
@@ -26,6 +29,14 @@ github.com** sin “Unable to render rich display”.
 - D6 [profile] Validar en GitHub preview antes de marcar PR listo; dogfood en `_dogfood/docs-diagrams/` → S3.
 
 ## COUNTEREXAMPLES
+
+```mermaid
+flowchart LR
+    step1 --> step2 --> step3
+```
+
+(❌ wrong for a vertical gate pipeline — use `flowchart TD` per D0 unless the PR
+documents why horizontal layout is clearer.)
 
 ```mermaid
 flowchart TD
