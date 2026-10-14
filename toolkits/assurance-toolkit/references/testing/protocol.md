@@ -1,7 +1,15 @@
 # Pilar testing — protocol SSOT
 
-Harness-agnostic body. Thin entries: `commands/e2e-test-builder.md`, `commands/e2e-test-runner.md`, `commands/e2e-test-preview.md`.
+Harness-agnostic body for the testing pillar (evidence, stack runners, gates).
 Full behavior contract: `openspec/changes/add-assurance-toolkit/specs/toolkit/assurance-testing/spec.md`.
+
+The TestSprite suite commands are separate protocols. This file does not replace them:
+
+| Command | Protocol |
+| --- | --- |
+| `/assurance:e2e-test-builder` | [`references/e2e-test-builder/protocol.md`](../e2e-test-builder/protocol.md) — write `test-suite.json` |
+| `/assurance:e2e-test-runner` | [`references/e2e-test-runner/protocol.md`](../e2e-test-runner/protocol.md) — execute that suite |
+| `/assurance:e2e-test-preview` | [`references/e2e-test-preview/protocol.md`](../e2e-test-preview/protocol.md) — Qt preview of that suite |
 
 ## Principio
 

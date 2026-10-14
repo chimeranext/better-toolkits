@@ -9,8 +9,9 @@ Los comandos de evidencia de calidad (e2e, pentest, observabilidad, triage) vive
 ## What Changes
 
 - Nuevo toolkit `toolkits/assurance-toolkit/` con protocolo SSOT en `references/` + entradas thin en `commands/` + Cursor skills (patrón multi-harness existente).
-- Migración con shims (no romper nada) desde `make-no-mistakes-toolkit`:
-  - Mudar: `e2e-test-builder`, `e2e-test-runner`, `e2e-test-preview`, `pentest-runner`, `pentest-playbook-setup`, `observability-audit`, `triage-security-findings`.
+- Migración desde `make-no-mistakes-toolkit`:
+  - `e2e-test-builder`, `e2e-test-runner` y `e2e-test-preview` viven solo en assurance. Cada uno conserva el protocolo que tenía antes del shim (`references/e2e-test-builder|runner|preview/protocol.md`). Sin shim en make-no-mistakes. El pilar `references/testing/protocol.md` no los reemplaza.
+  - Shims para el resto mudado: `pentest-runner`, `pentest-playbook-setup`, `observability-audit`, `triage-security-findings`.
   - No mudar: `ready-to-review-mergeable`, `premortem`, audits (`audit*`, `audit-engine`), coordinación (`merge-advisor`, `rebase`, `sync-advisor`, `takeover-pr`, `handover*`), ejecución/rituales (`implement`, `bug-squash-locally`, `secret-*`, `standup*`, `postmortem`).
 - `gemini-code-review` se fusiona en `local-pr-review` como `--provider gemini` (shim con warning de deprecación, mismo precedente que `disk-cleanup`).
 - Providers de evidencia: Kiwi TCMS (piloto self-hosted opcional), Qase, Qualflare (+ `qualflare-maestro`, `qualflare-flutter`, `qf collect`), Maestro flows (`.maestro/*.yaml`, disciplina `Semantics(identifier:)`), broker webhook → Linear con dedupe por cluster.
@@ -42,7 +43,7 @@ Los comandos de evidencia de calidad (e2e, pentest, observabilidad, triage) vive
 
 ## Impact
 
-- Afecta: `toolkits/assurance-toolkit/` (nuevo), `toolkits/make-no-mistakes-toolkit/commands/` + `references/` (shims de los 7 comandos mudados + `gemini-code-review`), `.claude-plugin/marketplace.json` + plugin manifests (versiones), docs del marketplace.
+- Afecta: `toolkits/assurance-toolkit/` (nuevo), `toolkits/make-no-mistakes-toolkit/commands/` + `references/` (shims de pentest, observability y triage-security-findings + `gemini-code-review`; los tres `e2e-test-*` sin shim), `.claude-plugin/marketplace.json` + plugin manifests (versiones), docs del marketplace.
 - Sistemas: Qualflare / Qase / Kiwi TCMS, Maestro, Linear (issues + webhook broker), OpenSpec store repo-local; stacks cubiertos: Flutter/Dart, Laravel/PHP (Pest/PHPUnit), Elixir (ExUnit/Phoenix/Ecto), TypeScript 7 (`tsgo`).
-- Non-goals: no implementar providers ni webhook broker aquí (solo protocolo + shims); no borrar shims; no tocar `ready-to-review-mergeable`/`premortem`; no crear repo nuevo para Kiwi (PRs a `mcp-kiwi-tcms`); no fijar versiones de `qualflare-maestro`/`tsgo` (se pinean en apply).
-- Éxito verificable: `openspec validate --change add-assurance-toolkit` pasa; los 7 comandos resuelven desde el nuevo toolkit y los shims viejos delegan con warning; `assurance-toolkit` lista 2 pilares + transversal en su README/protocolo.
+- Non-goals: no implementar providers ni webhook broker aquí (solo protocolo); no borrar los shims de pentest, observability ni triage-security-findings; no tocar `ready-to-review-mergeable`/`premortem`; no crear repo nuevo para Kiwi (PRs a `mcp-kiwi-tcms`); no fijar versiones de `qualflare-maestro`/`tsgo` (se pinean en apply).
+- Éxito verificable: `openspec validate --change add-assurance-toolkit` pasa; builder, runner y preview resuelven cada uno su protocolo en assurance; el resto de comandos mudados sigue con shim; `assurance-toolkit` lista 2 pilares + transversal en su README/protocolo.

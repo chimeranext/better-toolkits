@@ -1,8 +1,8 @@
-> **MOVED:** SSOT now lives in `toolkits/assurance-toolkit/references/testing/protocol.md`. This file is retained read-only until shims are removed.
-
 # /e2e-test-runner — protocol SSOT
 
-Harness-agnostic body. Thin entry: `commands/e2e-test-runner.md`.
+Harness-agnostic body. Thin entry: [`commands/e2e-test-runner.md`](../../commands/e2e-test-runner.md).
+
+Executes scenarios from a `test-suite.json` and writes result files. The suite is produced by [`/assurance:e2e-test-builder`](../../commands/e2e-test-builder.md). Visual inspection is [`/assurance:e2e-test-preview`](../../commands/e2e-test-preview.md). The testing pillar ([`../testing/protocol.md`](../testing/protocol.md)) does not replace this protocol.
 
 ---
 
@@ -291,14 +291,14 @@ jq '.summary.pass_rate' results/run-*.json
 
 ```bash
 # Run smoke tests (interactive config)
-/e2e-test-runner
+/assurance:e2e-test-runner
 
 # Run full regression on a specific suite
-/e2e-test-runner ./gherkin/test-suite.json
+/assurance:e2e-test-runner ./gherkin/test-suite.json
 
 # Run only security tests
-/e2e-test-runner 'select(.project.coverage_type == "security")'
+/assurance:e2e-test-runner 'select(.project.coverage_type == "security")'
 
 # Run tests for The Tech Lead persona
-/e2e-test-runner 'select(.denorm.agent_persona_id == "projects")'
+/assurance:e2e-test-runner 'select(.denorm.agent_persona_id == "projects")'
 ```
