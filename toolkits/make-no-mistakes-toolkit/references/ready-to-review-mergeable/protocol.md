@@ -40,7 +40,7 @@ below apply when the block is absent.
 | `readyToReview.localReview.mode` | `fallback-only` | Local diff review **satisfies the exit gate** only when remote cannot run (§4a). On-demand adversarial review (§4b) is separate HITL. |
 | `readyToReview.implement.stopAfter` | `phase-3-step-12` | `/implement` stops before merge / Linear-Done / worktree cleanup. |
 | `readyToReview.assurance.beforeRemoteReview` | `true` | Run `/assurance:triage pr` before tagging remote code-review bots. |
-| `readyToReview.assurance.pillars.*` | testing/security/governance `required`, liveness `skip` | Per-pillar PR triage; see assurance `references/triage/protocol.md`. |
+| `readyToReview.assurance.pillars.*` | testing/security/governance/liveness `required` (Seacrets); liveness `skip` only when consumer opts out | Per-pillar PR triage; see assurance `references/triage/protocol.md`. |
 
 ---
 
@@ -50,32 +50,56 @@ below apply when the block is absent.
 
 ```mermaid
 flowchart TD
-  start(["/ready-to-review-mergeable ISSUE-ID"])
+  start(["/make-no-mistakes:ready-to-review-mergeable ISSUE-ID"])
   s1["§1 Parse issue IDs — STOP if missing"]
-  s2["§2 /implement through Phase 3 step 12<br/>skip Phase 3 steps 9–10"]
-  s2b["§2b /assurance:triage pr"]
-  ass{"§2b PASS?"}
-  s3["§3 Execute remote PR review<br/>PR Ready not Draft · tag bots · iterate fix/push"]
+  s2["§2 /make-no-mistakes:implement → Phase 3 step 12<br/>Phase 2 Build: convention GATES + CI evidence<br/>skip implement Phase 3 steps 9–10"]
+  t["§2b.1 /assurance:triage testing"]
+  vt{"PASS?"}
+  sec["§2b.2 /assurance:triage security"]
+  vs{"PASS?"}
+  gov["§2b.3 /assurance:triage governance"]
+  vg{"PASS?"}
+  lreq{"liveness required<br/>per config?"}
+  liv["§2b.4 /assurance:triage liveness"]
+  vl{"PASS?"}
+  s2c["§2c /assurance:e2e-test-builder mandatory<br/>input = testing pillar output"]
+  s3["§3 Remote review §3a–§3c<br/>PR Ready · tag bots · iterate fix/push"]
   rem{"Remote gate pass?"}
-  s3ok["§3 Remote gate green<br/>verdict APPROVED · 0 blockers/P1/P2"]
-  s4["§4a Local gate fallback<br/>remote truly unavailable"]
-  s4b["§4b Adversarial local review<br/>optional HITL on-demand"]
-  s5["§5 Human handoff — tracker In Review<br/>never merge"]
+  s3ok["§3 Remote gate green"]
+  s4["§4a Local gate fallback"]
+  s4b["§4b Adversarial local review HITL"]
+  s5["§5 Human handoff — tracker In Review<br/>never merge · never Done"]
+  qa["Out of RTR RACI — QA analyst<br/>/assurance:e2e-test-runner · /assurance:e2e-test-preview"]
   blocked["BLOCKED — fix, push, re-run from failed step"]
 
-  start --> s1 --> s2 --> s2b --> ass
-  ass -->|no| blocked
-  ass -->|yes| s3 --> rem
+  start --> s1 --> s2 --> t --> vt
+  vt -->|no| blocked
+  vt -->|yes| sec --> vs
+  vs -->|no| blocked
+  vs -->|yes| gov --> vg
+  vg -->|no| blocked
+  vg -->|yes| lreq
+  lreq -->|no| s2c
+  lreq -->|yes| liv --> vl
+  vl -->|no| blocked
+  vl -->|yes| s2c
+  s2c --> s3 --> rem
   rem -->|yes| s3ok --> s5
   rem -->|no, remote available| blocked
   rem -->|no, remote unavailable per §4a| s4 --> s5
-  s3ok -.->|optional| s4b
+  s3ok -.->|optional HITL| s4b
   s4b -.-> s5
+  s5 -.-> qa
 ```
 
-**Diagram note:** `Remote gate pass?` is **§3c** below. **`yes`** means the execute loop (§3b) already finished and the pass contract holds; then **`§3 Remote gate green`** is recorded before §5. It is not a shortcut that skips tagging bots.
+**Diagram notes**
 
-**Assurance liveness on PR:** default pillar config is **`skip`** (`readyToReview.assurance.pillars.liveness: "skip"`) — observability runs on schedule/daemon, not every PR. Set `required` only when the consumer repo opts in.
+- **§2b** is one hub invocation (`/assurance:triage pr`); the diagram shows the **fixed pillar order** the hub runs: testing → security → governance → liveness (only when not `skip`). Single-pillar modes (`/assurance:triage security`, etc.) are for deep dives, not this pipeline.
+- **§2c `/assurance:e2e-test-builder` is mandatory** after aggregate §2b PASS — not optional for implementers. It materializes or extends `test-suite.json` from the testing pillar output (convention record + gates + scenario gaps).
+- **RACI (implementer vs QA):** implementers **do not** run **`/assurance:e2e-test-runner`** or **`/assurance:e2e-test-preview`** inside this command. Those are **QA analyst** steps after stage promotion (e.g. re-run Kiwi, execute the manifest). Preview is visual inspection, not an exit gate here.
+- `Remote gate pass?` is **§3c**. **`yes`** means §3b finished and the pass contract holds before §5. It is not a shortcut that skips tagging bots.
+
+**Assurance liveness on PR:** default pillar config is **`skip`** (`readyToReview.assurance.pillars.liveness: "skip"`) — observability runs on schedule/daemon, not every PR. Set `required` only when the consumer repo opts in; the diagram still shows the branch when opted in.
 
 ### Normative order (whole command)
 
@@ -83,7 +107,8 @@ flowchart TD
 | --- | --- | --- |
 | 1 | §1 Parse issue IDs | At least one `<TEAM>-<number>` |
 | 2 | §2 `/implement` → Phase 3 **step 12** only | PR exists, CI green, mergeable; **steps 9–10 not run here** |
-| 3 | §2b `/assurance:triage pr` | **PASS** (or explicit config waiver) |
+| 3 | §2b `/assurance:triage pr` | **PASS** (or explicit config waiver). Testing output names the convention record and the gates that ran. |
+| 3b | §2c `/assurance:e2e-test-builder` | Suite written from that testing output. Do **not** run `/assurance:e2e-test-runner` here. |
 | 4 | §3 Remote review | **§3b execute** then **§3c gate** = **yes** when remote is available |
 | 5 | §4a Gate fallback (local) | **Only** when §3c = `no, remote unavailable per §4a` |
 | 5b | §4b On-demand adversarial review (optional HITL) | Anytime the **human** asks — **does not** replace §3 or §4a for exit |
@@ -146,7 +171,20 @@ When `readyToReview.assurance.beforeRemoteReview` is true (default):
 2. Hub runs pillar sub-protocols in order (testing → security → governance →
    liveness only if not `skip`). See `readyToReview.assurance.pillars` in config.
 3. **BLOCKED** → fix, push, re-run §2b; **do not** tag remote code-review bots.
-4. **PASS** → proceed to §3.
+4. **PASS** → §2c, then §3.
+
+### 2c. E2E suite from the testing output
+
+After §2b **PASS**, invoke **`/assurance:e2e-test-builder`**. Input is the testing
+pillar output from this run (convention record id, gates that ran, scenario
+gaps). The builder writes or extends `test-suite.json`.
+
+Do **not** invoke **`/assurance:e2e-test-runner`** in this command. The runner
+is the stage QA step: the issue is **In Review** and assigned to the QA owner,
+who executes the suite. Seacrets: that owner is Darío Monestel
+([QA ready (stage)](https://linear.app/hyperlabllc/view/caa6a7d1-d599-4776-b206-4d935268a9d2)).
+
+`/assurance:e2e-test-preview` stays a visual inspection. It is not a gate.
 
 If the assurance plugin is not installed and config does not set
 `readyToReview.assurance.required: false`, run the same protocol body from the

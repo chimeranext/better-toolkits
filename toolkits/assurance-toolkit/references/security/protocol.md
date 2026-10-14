@@ -1,8 +1,9 @@
 # Transversal security — protocol SSOT
 
-Harness-agnostic body. Thin entries: `commands/triage.md`,
-`commands/pentest-runner.md`, `commands/pentest-playbook-setup.md`,
-`commands/triage-security-findings.md`. PR-stage hub:
+Harness-agnostic body. Thin entries: `commands/triage.md` (mode `security`
+runs [`findings-protocol.md`](findings-protocol.md)),
+`commands/pentest-runner.md`, `commands/pentest-playbook-setup.md`.
+PR-stage hub:
 [`references/triage/protocol.md`](../triage/protocol.md); security PR gate:
 [`triage.md`](triage.md).
 Full behavior contract: `openspec/changes/add-assurance-toolkit/specs/toolkit/assurance-security/spec.md`.
@@ -17,7 +18,7 @@ reportes nunca mezclados con tests. Cada release exige veredictos separados.
 - **pentest-runner**: ejecución autorizada (Kill Chain + OWASP). Patrón triage compartido
   con testing (cola → dueño → SLA → receipt), owners distintos.
 - **pentest-playbook-setup**: audit/sync de playbook ↔ CI ↔ tenant config (solo JSON en sync).
-- **triage-security-findings**: hallazgos → backlog owned, sin duplicar issues (dedupe por firma).
+- **`/assurance:triage security`**: findings → owned backlog, no duplicate issues (dedupe by signature). See [`findings-protocol.md`](findings-protocol.md).
 - **Trazabilidad MASVS → MASWE → MASTG v2**: cada hallazgo móvil con IDs estables y perfil
   (MAS-L1/L2/R/P) según threat model; fix vía MASTG-BEST. Modelo para los receipts.
 - **Capa automatizada previa**: Semgrep (SAST), ZAP (DAST), Trivy/Grype + Dependency-Track

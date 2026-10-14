@@ -40,13 +40,13 @@ Or install `better-toolkits-bootstrap@better-toolkits` and run `/toolkits-initia
 
 assurance writes **evidence**; the dev workflow consumes it in gates. `/assurance:triage`
 routes **per-pillar sub-protocols** (see `references/*/triage.md`). Default mode
-**`pr`** runs before remote code review in `/ready-to-review-mergeable`.
+**`pr`** runs before remote code review in `/make-no-mistakes:ready-to-review-mergeable`.
 
 | Pillar | Question | PR triage | Runners / deep commands | Cadence |
 |--------|----------|-----------|-------------------------|---------|
-| testing | Does it do what it says? | [`testing/triage.md`](references/testing/triage.md) | [`/e2e-test-builder`](#commands-8), [`/e2e-test-runner`](#commands-8), [`/e2e-test-preview`](#commands-8) | Per PR |
-| liveness | Is it still alive? | [`liveness/triage.md`](references/liveness/triage.md) (default **skip** on PR) | [`/observability-audit`](#commands-8) | Always (schedule/daemon) |
-| security (transversal) | Is it safe? | [`security/triage.md`](references/security/triage.md) | [`/pentest-runner`](#commands-8), [`/pentest-playbook-setup`](#commands-8), [`/triage-security-findings`](#commands-8) | Per release / finding SLA |
+| testing | Does it do what it says? | [`testing/triage.md`](references/testing/triage.md) | builder after triage PASS; runner is the stage QA assignee; preview is visual only | Builder per PR; runner on stage QA |
+| liveness | Is it still alive? | [`liveness/triage.md`](references/liveness/triage.md) (default **skip** on PR) | [`/assurance:observability-audit`](commands/observability-audit.md) | Always (schedule/daemon) |
+| security (transversal) | Is it safe? | [`security/triage.md`](references/security/triage.md) | [`/assurance:pentest-runner`](commands/pentest-runner.md), [`/assurance:pentest-playbook-setup`](commands/pentest-playbook-setup.md), [`/assurance:triage security`](commands/triage.md) | Per release / finding SLA |
 | governance (no runners) | How do we measure, block, prove? | [`governance/triage.md`](references/governance/triage.md) | DORA/DER metrics, stage gates, receipts | Per release |
 
 Security reports are never mixed with test reports — each release demands
@@ -54,23 +54,21 @@ separate verdicts. Full teaching sections in `references/*/protocol.md`.
 
 ## What's Inside
 
-### Commands (8)
+### Commands (7)
 
-Migrated from `make-no-mistakes-toolkit` with shims (behavior unchanged).
-Deliberate actions you invoke explicitly.
+Deliberate actions you invoke explicitly. Findings triage is mode `security` of `/assurance:triage`, not its own command.
 
 | Command | Description |
 |---------|-------------|
-| [`/assurance:triage [pr\|pillar]`](commands/triage.md) | **PR-stage hub** — per-pillar triage before remote code review; sub-protocols in `references/*/triage.md` |
-| [`/assurance:e2e-test-builder <source>`](commands/e2e-test-builder.md) | Generate a TestSprite-compatible `test-suite.json` from docs or PRDs (pilar testing) |
-| [`/assurance:e2e-test-runner [filter]`](commands/e2e-test-runner.md) | Execute E2E tests from `test-suite.json` with runner selection and reporting (pilar testing) |
+| [`/assurance:triage [pr\|testing\|security\|liveness\|governance]`](commands/triage.md) | **PR-stage hub**. Mode `security` is the findings backlog (queue → owner → SLA → receipt). Mode `testing` output feeds `/assurance:e2e-test-builder`. |
+| [`/assurance:e2e-test-builder <source>`](commands/e2e-test-builder.md) | After `/assurance:triage` PASS, write `test-suite.json` from the testing pillar output |
+| [`/assurance:e2e-test-runner [filter]`](commands/e2e-test-runner.md) | Stage QA assignee executes that suite (Seacrets: Darío, In Review on the QA ready view) |
 | [`/assurance:e2e-test-preview [path]`](commands/e2e-test-preview.md) | Qt-based visual previewer for `test-suite.json` — interactive table, filtering, CSV export (pilar testing) |
 | [`/assurance:observability-audit <target>`](commands/observability-audit.md) | Audit whether observability actually WORKS (telemetry received, live destinations, demonstrated alerts) — runtime audit, not a static scan (pilar liveness) |
 | [`/assurance:pentest-runner <phase>`](commands/pentest-runner.md) | Automated pentesting following Cyber Kill Chain + OWASP methodology, plus OWASP ASI01–ASI10 agentic red-team (transversal security) |
 | [`/assurance:pentest-playbook-setup [audit\|sync\|workflows\|gaps]`](commands/pentest-playbook-setup.md) | Audit/sync pentest playbook ↔ CI ↔ tenant triage config (transversal security) |
-| [`/assurance:triage-security-findings <scanner\|phase2\|pentest-report>`](commands/triage-security-findings.md) | Security **backlog** triage (invoked from `security/triage.md` when needed) — cola → dueño → SLA → receipt |
 
-Not migrated (stay in `make-no-mistakes`): `ready-to-review-mergeable`, `premortem`, audits, coordination, rituals. `gemini-code-review` merges into `local-pr-review --provider gemini`.
+Not migrated (stay in toolkit `make-no-mistakes`): `/make-no-mistakes:ready-to-review-mergeable`, `premortem`, audits, coordination, rituals. `gemini-code-review` merges into `local-pr-review --provider gemini`.
 
 ### Skills (22)
 

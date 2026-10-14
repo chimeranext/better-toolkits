@@ -110,6 +110,77 @@ these is a row in a menu. If the ordering is blocked, the block is the finding.
 Regeneration commands and any `git rebase` / `git push --force-with-lease`
 needed to unblock a PR also require HITL.
 
+## Delivery surface vs merge order (mandatory — do not conflate)
+
+`/merge-advisor` answers **in what order to merge existing open PRs** against
+`$BASE`. It is **not** a substitute for implement/draft-PR handoff and it does
+**not** authorize:
+
+- Opening a **new** PR whose diff **replays** several stack PRs already in the
+  plan (a “mega-PR” to `$BASE` while #84–#89 remain separate).
+- Running `gh pr create --draft` because a worktree has a coherent cut **without
+  first** identifying which **tracker item** and which **existing PR** (if any)
+  owns the delivery.
+
+### Tracker anchor before `gh pr create` (draft PR first gate)
+
+Align with `/implement`: when the consumer repo configures **Linear** in
+`make-no-mistakes.config.json`, that is the native tracker (`TEAM-N`, branch from
+`gitBranchName` or `*/<issue-id>-*`, PR body `Fixes TEAM-N`). **GitHub issues**
+are the anchor when Linear is absent (e.g. planning epics in this monorepo as
+`github.com/<owner>/<repo>/issues/<N>`). Do not write this gate as if GitHub
+issues were always the default when Linear is configured.
+
+**Vendor-neutral docs:** toolkit markdown in `better-toolkits` must not name
+customer orgs or org-specific Linear team keys — use `TEAM-N` and “consumer repo”.
+
+**Do not** treat “open any draft PR” as success. Success is **one primary open
+PR** for that work item (Linear issue or fallback GitHub issue).
+
+Before `gh pr create` (draft or ready):
+
+1. **Resolve the anchor (in order):**
+   - **Linear (default):** issue id from branch, session, or `make-no-mistakes.config.json`
+     → `get_issue` / equivalent; note `gitBranchName` and linked PRs if any.
+   - **GitHub issue (fallback only):** when Linear is absent or explicitly scoped
+     to a GH issue → `gh issue view <N> --json number,title,url,closedByPullRequestsReferences`.
+2. **Existing PR for the same work:** `gh pr list --head <branch>`; for Linear,
+   search PR body for `Fixes TEAM-N` / magic words; for GitHub fallback, linked
+   PRs from issue JSON plus `gh pr list --state open --search "repo:<owner>/<repo> <N> in:body"`.
+3. **If a PR already exists:** **append** — commit and push to **that PR’s head
+   branch**; update body (`Fixes …`, `Depends on:`) if needed. **Forbidden:** a
+   second open PR for the same Linear/GitHub work item unless the human explicitly
+   OKs superseding/closing the duplicate.
+4. **If no PR yet:** create **exactly one** PR — body links the anchor (`Fixes TEAM-N`
+   or `Fixes #<N>` / GitHub Development on a fallback issue). Do not hand off
+   “tracker #90 + unrelated PR #91” as the default.
+5. **Handoff must name:** tracker id **and** PR **URL + number**, **base branch**,
+   and **scope vs that base** (file count or explicit “delta only”), not merely
+   “hay draft PR”.
+
+**GitHub numbering (PRs and fallback issues):** one repository-wide sequence — an
+issue #90 and a later PR #91 share the **same counter**, not two parallel systems.
+Linear ids (`TEAM-N`) are **orthogonal** to GitHub PR numbers. The contract is
+**one work item → one primary open PR** unless the human intentionally splits work.
+
+### Local integration git ≠ GitHub delivery
+
+Merging stack branches **locally** to resolve conflicts or to measure predicates
+does **not** mean the deliverable is a new PR to `$BASE` containing the whole
+stack. Stack integration belongs in **merge-advisor order** (Half B) or in
+explicit stacked PR bases — not in an extra PR that duplicates PRs already in
+the plan.
+
+## Subagents and halt (hard stop)
+
+- **No background subagents**, parallel `Task` workers, or `/implement`
+  fan-out while running `/merge-advisor` Half A or Half B unless the user
+  **explicitly** requests parallel measurement.
+- Half B merges: **parent orchestrator only** — one `gh pr merge` per HITL OK.
+- If the user says **detener subagents**, **stop goal**, **DETENGA EL GOAL**, or
+  equivalent: **halt immediately** — no merges, no new PRs, no child agents,
+  no autonomous continuation of a prior goal.
+
 ## Step 0 — Resolve the base and the PR set
 
 `$BASE` is a **bare branch name** (`develop`, never `origin/develop`). Every

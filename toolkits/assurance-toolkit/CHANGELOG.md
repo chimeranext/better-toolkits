@@ -7,25 +7,26 @@
 - `references/triage/protocol.md` Mermaid blocks: GitHub-compatible flowchart and
   sequence syntax; hub LESSONS L1 points at `platform/diagrams/mermaid-github`.
 
+### Changed
+
+- `/assurance:e2e-test-builder` runs after `/assurance:triage pr` PASS (mandatory
+  in ready-to-review §2c), using the testing pillar output.
+  `/assurance:e2e-test-runner` is the stage QA assignee step (Seacrets: Darío,
+  QA ready view).
+- Security findings are `/assurance:triage security`. Removed the separate
+  `triage-security-findings` command and the make-no-mistakes shim.
+
 ### Added
 
 - Bibliography + mermaid diagrams (evidence pipeline, liveness loop,
   traceability + layered defense, release-gates sequence) in the 4 pillar
   protocols; hub routing flowchart in `references/triage/protocol.md`.
-
-### Added
-
 - **`/assurance:triage`** hub command + `references/triage/protocol.md`.
 - Per-pillar PR triage sub-protocols: `references/testing/triage.md`,
   `references/security/triage.md`, `references/liveness/triage.md`,
   `references/governance/triage.md`.
-- Wired into `make-no-mistakes` `/ready-to-review-mergeable` §2b (before remote
+- Wired into `/make-no-mistakes:ready-to-review-mergeable` §2b (before remote
   code review).
-
-### Changed
-
-- README **Start here** → `/assurance:triage`; `triage-security-findings` documented
-  as security backlog helper under the hub.
 
 ## 0.1.0
 
