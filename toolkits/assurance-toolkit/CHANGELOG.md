@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- `references/triage/protocol.md` Mermaid blocks: GitHub-compatible flowchart and
+  sequence syntax; hub LESSONS L1 points at `platform/diagrams/mermaid-github`.
+
 ### Added
 
 - Bibliography + mermaid diagrams (evidence pipeline, liveness loop,

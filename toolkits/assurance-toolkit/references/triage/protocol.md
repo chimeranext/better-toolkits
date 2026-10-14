@@ -41,20 +41,20 @@ not `skip`). Stop on first `BLOCKED` unless config sets `continueOnOptionalFailu
 
 ```mermaid
 flowchart TD
-    I["/assurance:triage [modo]"] --> M{modo?}
-    M -->|pr| T[testing/triage.md]
-    M -->|pillar| P[ese pillar solamente]
+    I["assurance triage hub"] --> M{modo?}
+    M -->|pr| T["testing triage"]
+    M -->|pillar| P["single pillar only"]
     T --> VT{PASS?}
-    VT -->|no: BLOCKED| B[BLOCKED: pillar + razón + links]
-    VT -->|sí| S[security/triage.md]
+    VT -->|no BLOCKED| B["BLOCKED pillar reason links"]
+    VT -->|yes| S["security triage"]
     S --> VS{PASS?}
-    VS -->|no: BLOCKED| B
-    VS -->|sí| G[governance/triage.md + receipt PR-stage]
+    VS -->|no BLOCKED| B
+    VS -->|yes| G["governance triage plus PR receipt"]
     G --> VG{PASS?}
-    VG -->|no: BLOCKED| B
-    VG -->|sí| L{liveness required?}
-    L -->|no| V[PASS agregado]
-    L -->|sí| LV[liveness/triage.md]
+    VG -->|no BLOCKED| B
+    VG -->|yes| L{liveness required?}
+    L -->|no| V["PASS aggregate"]
+    L -->|yes| LV["liveness triage"]
     LV --> V
     P --> V
 ```
@@ -71,17 +71,15 @@ sequenceDiagram
   participant L as liveness-triage
   participant Bots as Greptile CodeRabbit
 
-  RTR->>Hub: RTR section 2b pr N issue SCRT-N
+  RTR->>Hub: RTR section 2b pr N issue tracker
   Hub->>T: required pillar
   T-->>Hub: PASS or BLOCKED
   Hub->>S: required pillar
   S-->>Hub: PASS or BLOCKED
   Hub->>G: required pillar plus receipt
   G-->>Hub: PASS or BLOCKED
-  opt liveness not skip
-    Hub->>L: optional or required
-    L-->>Hub: PASS BLOCKED or SKIP
-  end
+  Hub->>L: liveness when not skip
+  L-->>Hub: PASS or BLOCKED or SKIP
   alt aggregate PASS
     Hub-->>RTR: PASS then tag bots section 3b
     RTR->>Bots: remote review after section 3a preconditions
@@ -120,6 +118,16 @@ Consumer repo optional keys:
 - or `assurance.config.json` at repo root (same shape)
 
 See `toolkits/make-no-mistakes-toolkit/commands/make-no-mistakes.config.example.json`.
+
+---
+
+## LESSONS (hub)
+
+- L1 (assurance `protocol.md` GitHub Mermaid render failure) Flowcharts on github.com
+  break when edge labels use `:` (e.g. `|no: BLOCKED|`), node text embeds `/` or
+  `§`, or accents in unquoted nodes; sequence diagrams break when `opt` nests
+  inside `alt` without closing. Dogfood profile:
+  `platform/diagrams/mermaid-github` (change `add-conventions-platform-docs-diagrams`).
 
 ---
 
