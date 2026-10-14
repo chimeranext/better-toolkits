@@ -14,6 +14,7 @@ documentado con `///` según Effective Dart.
 |---|------|-----|--------|----------|
 | S1 | repo | `dart-lang/skills` BSD-3 @ `0b8dc54` (2026-10-13) | load-bearing | skills como reglas |
 | S2 | docs | Effective Dart (vía `dart-write-documentation`) | context | estilo doc |
+| S3 | repo | `dartastic_opentelemetry` + `dartastic_opentelemetry_api` 0.12.0, Apache-2.0 (2026-10-14) | load-bearing | instrumentación OTel (ver `platform/observability`) |
 
 TTL corto (30 días): los skills cambian sin versionar → pin por commit en apply.
 
@@ -29,6 +30,9 @@ TTL corto (30 días): los skills cambian sin versionar → pin por commit en app
 - D5 [docs] `///` en declaraciones públicas (Effective Dart) → S1/S2.
 - D6 [patterns] switch expressions + pattern matching donde apliquen
   (`dart-use-pattern-matching`) → S1.
+- D7 [otel] Instrumentación con el par SDK+API pineado (`dartastic_opentelemetry`
+  que emite + `dartastic_opentelemetry_api` no-op); export OTLP, claves con enums
+  tipados. Detalle en `platform/observability` → S3.
 
 ## COUNTEREXAMPLES
 

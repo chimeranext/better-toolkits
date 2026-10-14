@@ -15,6 +15,16 @@ su integración. Hereda todos los GATES de `dart@0.1.0` sin duplicarlos.
 | S1 | repo | `flutter/agent-plugins` BSD-3 @ `0ef3972` (2026-10-13; sin PRs: consumo) | load-bearing | skills+MCP+rules |
 | S2 | docs | docs.flutter.dev testing/* (errors, integration-tests, debugging, devtools) | context | reglas de test |
 | S3 | docs | docs.flutter.dev perf/* + blogs (tree-shaking, placeholders, performant-widgets) | context | reglas de perf |
+| S4 | repo | `artdima/peek` MIT (2026-10-14; 4 stars, single maintainer — adopción mínima) | context | inspector de red in-app dev-time (Dio/Chopper/http/Talker, `enabled: kDebugMode`, export cURL/HAR). NO es replay ni telemetría prod |
+
+## Dev tooling (contexto, no RULES)
+
+- `peek`: inspector de red dentro de la app, solo debug (`enabled: kDebugMode`),
+  con redacción de headers y export para bug reports. Complementa
+  `flutter-error-tracking`, no lo sustituye (local vs. producción).
+- `artdima/peek-pro`: viewer macOS (SwiftUI) para lo que `peek_remote` stremea;
+  mención única, sin reglas (desktop-only, mismo autor). Ver
+  `flutter-error-tracking`.
 
 ## RULES
 
