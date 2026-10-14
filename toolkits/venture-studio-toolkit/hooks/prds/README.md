@@ -15,6 +15,7 @@ on agent shell tools that push or write PR bodies.
 | Command | Behavior |
 | --- | --- |
 | `gh pr create` / `gh pr edit` | **Block** if body (inline or `--body-file`) lacks non-empty **Summary**, **Tracker/Linear**, **Test plan**, **Scope boundaries** |
+| Tracker ticket link | **Fixes/Closes/Resolves** by default; **`Ref TEAM-N`** allowed in ## Tracker when `--base` is an integration branch (`devel`, `stage`, …) or on `gh pr edit` when the open PR targets one |
 | `git push` with open PR for branch | **Block** if live PR body fails the same check (`gh pr view`) |
 | `git push` with **no** PR yet | **Allow** (PRDS progressive-push / draft workflow) |
 | Unrelated shell | Allow |
@@ -25,7 +26,7 @@ Soft warns (stderr only): PR title shape, diff ≳ 400 lines.
 
 - `FCTO_DISABLE_PRDS_HOOK=1`
 - `.claude/config/prds-hooks.json` → `{"enforce_prds": false}`
-- One-shot: `# hook-bypass: prds-body-deferred` in the shell command
+- One-shot: `# hook-bypass: prds-body-deferred` in the shell command **or** at the top of the PR body (`--body-file`)
 
 ## Install
 

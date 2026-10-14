@@ -14,6 +14,8 @@ Policy (v1):
   - Ignore unrelated commands.
   - `gh pr create|edit` → body must include the four always-on PRDS sections
     (Summary, Tracker, Test plan, Scope boundaries) with non-empty content.
+  - Tracker: `Fixes|Closes|Resolves TICKET` (default). PRs targeting integration
+    branches (`devel`, `stage`, …) may use `Ref TICKET` in ## Tracker instead.
   - `git push` with an open PR for the current branch → same body check via
     `gh pr view`. Progressive push before any PR exists → allow (PRDS draft workflow).
   - Soft signals (title shape, ~400-line size) are warnings on stderr but do not deny.
@@ -60,6 +62,10 @@ SECTION_PATTERNS = {
 TRACKER_KEYWORD = re.compile(
     r"(?im)\b(Fixes|Closes|Resolves)\s+[A-Za-z][\w.-]*\d+",
 )
+TRACKER_REF = re.compile(r"(?im)\bRef\s+[A-Za-z][\w.-]*\d+")
+
+# Long-lived integration branches (Seacrets devel/stage; generic develop/staging).
+INTEGRATION_BASE_BRANCHES = frozenset({"devel", "stage", "develop", "staging"})
 
 
 def section_body(markdown: str, heading_re: re.Pattern[str]) -> str | None:
@@ -74,7 +80,24 @@ def section_body(markdown: str, heading_re: re.Pattern[str]) -> str | None:
     return rest.strip()
 
 
-def missing_prds_sections(body: str) -> list[str]:
+def integration_base_branch(base: str | None) -> bool:
+    if not base:
+        return False
+    return base.lower() in INTEGRATION_BASE_BRANCHES
+
+
+def tracker_ticket_linked(body: str, integration_base: bool) -> bool:
+    if TRACKER_KEYWORD.search(body):
+        return True
+    tracker_text = section_body(body, SECTION_PATTERNS["Tracker"]) or ""
+    if re.search(r"(?im)^\s*N/?A\b", tracker_text):
+        return True
+    if integration_base and TRACKER_REF.search(tracker_text):
+        return True
+    return False
+
+
+def missing_prds_sections(body: str, *, integration_base: bool = False) -> list[str]:
     missing: list[str] = []
     if not body or not body.strip():
         return list(SECTION_PATTERNS.keys())
@@ -82,13 +105,40 @@ def missing_prds_sections(body: str) -> list[str]:
         text = section_body(body, pat)
         if text is None or not text:
             missing.append(name)
-    # Tracker keyword (Fixes/Closes/Resolves) somewhere in body
-    if "Tracker" not in missing and not TRACKER_KEYWORD.search(body):
-        # Allow N/A tracker only if section says N/A explicitly
-        tracker_text = section_body(body, SECTION_PATTERNS["Tracker"]) or ""
-        if not re.search(r"(?im)^\s*N/?A\b", tracker_text):
+    if "Tracker" not in missing and not tracker_ticket_linked(body, integration_base):
+        if integration_base:
+            missing.append("Tracker (Ref or Fixes|Closes|Resolves TICKET)")
+        else:
             missing.append("Tracker (Fixes|Closes|Resolves TICKET)")
     return missing
+
+
+def extract_base_from_gh_command(command: str) -> str | None:
+    """Parse --base / -B from gh pr create|edit (best effort)."""
+    try:
+        tokens = shlex.split(command, posix=True)
+    except ValueError:
+        tokens = command.split()
+    i = 0
+    while i < len(tokens):
+        t = tokens[i]
+        if t in ("--base", "-B") and i + 1 < len(tokens):
+            return tokens[i + 1]
+        if t.startswith("--base="):
+            return t.split("=", 1)[1]
+        i += 1
+    return None
+
+
+def integration_base_for_gh_command(command: str, cwd: str | None) -> bool:
+    base = extract_base_from_gh_command(command)
+    if base is not None:
+        return integration_base_branch(base)
+    if re.search(r"(?im)gh\s+pr\s+edit\b", command):
+        pr = run_gh_pr_view(cwd)
+        if pr:
+            return integration_base_branch(pr.get("baseRefName"))
+    return False
 
 
 def extract_body_from_gh_command(command: str) -> str | None:
@@ -139,7 +189,7 @@ def run_gh_pr_view(cwd: str | None) -> dict | None:
                 "pr",
                 "view",
                 "--json",
-                "title,body,isDraft,additions,deletions,url",
+                "title,body,isDraft,additions,deletions,url,baseRefName",
             ],
             cwd=cwd or None,
             capture_output=True,
@@ -188,7 +238,10 @@ def evaluate(command: str, cwd: str | None = None) -> str | None:
             )
         if body.startswith("__READ_ERROR__:"):
             return f"PRDS: cannot read --body-file ({body})."
-        missing = missing_prds_sections(body)
+        if BYPASS.search(body):
+            return None
+        integration = integration_base_for_gh_command(command, cwd)
+        missing = missing_prds_sections(body, integration_base=integration)
         if missing:
             return deny_message(missing, "gh pr create|edit body")
         return None
@@ -201,7 +254,10 @@ def evaluate(command: str, cwd: str | None = None) -> str | None:
             # Progressive push before draft PR — allowed by PRDS workflow
             return None
         body = pr.get("body") or ""
-        missing = missing_prds_sections(body)
+        if BYPASS.search(body):
+            return None
+        integration = integration_base_branch(pr.get("baseRefName"))
+        missing = missing_prds_sections(body, integration_base=integration)
         if missing:
             url = pr.get("url") or "current PR"
             return deny_message(missing, f"git push while PR exists ({url})")
