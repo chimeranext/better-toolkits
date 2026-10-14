@@ -13,3 +13,6 @@ description: >
 
 Metrics, tracing, liveness/heartbeat/absence-detection. Alimenta la escalera
 de liveness (telemetría recibida, no solo emitida).
+
+Convenciones Dart/Flutter OTel (par SDK+API pineado, export OTLP, LGTM):
+`shared/references/conventions/platform/observability/README.md`.
