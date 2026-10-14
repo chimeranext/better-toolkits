@@ -63,29 +63,30 @@ flowchart TD
 
 ```mermaid
 sequenceDiagram
-  participant RTR as /ready-to-review-mergeable
-  participant Hub as /assurance:triage pr
-  participant T as testing/triage
-  participant S as security/triage
-  participant G as governance/triage
-  participant L as liveness/triage
-  participant Bots as Greptile / CodeRabbit
+  participant RTR as ready-to-review-mergeable
+  participant Hub as assurance-triage-pr
+  participant T as testing-triage
+  participant S as security-triage
+  participant G as governance-triage
+  participant L as liveness-triage
+  participant Bots as Greptile CodeRabbit
 
-  RTR->>Hub: §2b --pr N --issue SCRT-N
+  RTR->>Hub: RTR section 2b pr N issue SCRT-N
   Hub->>T: required pillar
-  T-->>Hub: PASS | BLOCKED
+  T-->>Hub: PASS or BLOCKED
   Hub->>S: required pillar
-  S-->>Hub: PASS | BLOCKED
-  Hub->>G: required pillar + receipt
-  G-->>Hub: PASS | BLOCKED
+  S-->>Hub: PASS or BLOCKED
+  Hub->>G: required pillar plus receipt
+  G-->>Hub: PASS or BLOCKED
   opt liveness not skip
-    Hub->>L: optional/required
-    L-->>Hub: PASS | BLOCKED | SKIP
+    Hub->>L: optional or required
+    L-->>Hub: PASS BLOCKED or SKIP
+  end
   alt aggregate PASS
-    Hub-->>RTR: PASS → §3b tag bots
-    RTR->>Bots: remote review (after §3a preconditions)
-  else BLOCKED
-    Hub-->>RTR: BLOCKED — no bot tag
+    Hub-->>RTR: PASS then tag bots section 3b
+    RTR->>Bots: remote review after section 3a preconditions
+  else aggregate BLOCKED
+    Hub-->>RTR: BLOCKED no bot tag
   end
 ```
 
