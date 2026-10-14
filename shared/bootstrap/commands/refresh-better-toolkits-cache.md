@@ -39,11 +39,16 @@ Docs: https://cursor.com/docs/plugins (Customize page, Dashboard → Plugins).
 3. Verify on disk: `~/.cursor/plugins/cache/*/*/` dirs are named by commit SHA;
    check `.cursor-plugin/plugin.json` version inside.
 
-Known upstream bugs (do not work around from here, just know them): personal
-marketplaces added via `/add-plugin` stay pinned to the original commit and
-Update/Reinstall re-applies the same snapshot; team-marketplace Auto Refresh is
-unreliable for content updates. If refresh doesn't take, run
-`/prune-better-toolkits-cache`, then refresh again.
+Known upstream bugs (forum reports, not official docs — including vendor repro
+acknowledgment; re-verify before citing elsewhere):
+- https://forum.cursor.com/t/plugin-update-version-management-how-are-installed-plugins-updated/166454
+- https://forum.cursor.com/t/plugin-marketplace-sync-is-stale-causing-update-reinstall-in-settings-to-have-no-effect/165660
+- https://forum.cursor.com/t/team-marketplace-auto-refresh-does-not-pick-up-plugin-changes-manual-refresh-cache-clear-reinstall-required/154675
+
+In short: personal marketplaces added via `/add-plugin` stay pinned to the
+original commit and Update/Reinstall re-applies the same snapshot;
+team-marketplace Auto Refresh is unreliable for content updates. If refresh
+doesn't take, run `/prune-better-toolkits-cache`, then refresh again.
 
 ## OpenCode
 
