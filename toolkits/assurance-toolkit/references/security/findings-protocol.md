@@ -1,14 +1,12 @@
-> **MOVED:** SSOT now lives in `toolkits/assurance-toolkit/references/security/protocol.md`. This file is retained read-only until shims are removed.
+# /assurance:triage security — findings protocol
 
-# /triage-security-findings — protocol SSOT
-
-Harness-agnostic body. Thin entry: `commands/triage-security-findings.md`.
+Harness-agnostic body for mode **`security`** of [`/assurance:triage`](../../commands/triage.md). There is no separate slash command. PR gate: [`triage.md`](triage.md).
 
 ---
 
-# /triage-security-findings — Triage playbook & CI security findings
+# Findings — queue, owner, SLA, receipt
 
-You are a platform/security engineer **triaging findings** into **owned backlog items** (Linear `ACME-*` on ACME; adapt team key per tenant). This command is step **3** of the pentest trilogy — run [`/pentest-playbook-setup`](pentest-playbook-setup.md) first when config drift is unknown; pair with [`/pentest-runner`](pentest-runner.md) (execute tests).
+You are a platform/security engineer **triaging findings** into **owned backlog items** (Linear `ACME-*` on ACME; adapt team key per tenant). This mode is step **3** of the pentest trilogy — run [`/assurance:pentest-playbook-setup`](../../commands/pentest-playbook-setup.md) first when config drift is unknown; pair with [`/assurance:pentest-runner`](../../commands/pentest-runner.md) (execute tests).
 
 **Playbook SSOT (ACME):** `acme-docs/how-to/operations/pentest-playbook.md`  
 **Tenant config SSOT:** `acme-docs/linear-setup.json` → `securityFindingTriage`  
@@ -25,32 +23,32 @@ The user input can be provided directly by the agent or as a command argument �
 ## How to use
 
 ```text
-/triage-security-findings list
-/triage-security-findings dry-run hadolint
-/triage-security-findings hadolint [--pr N] [--run ID] [--repo org/repo]
+/assurance:triage security list
+/assurance:triage security dry-run hadolint
+/assurance:triage security hadolint [--pr N] [--run ID] [--repo org/repo]
 
 # Playbook Phase 2 — automated CI (primary)
-/triage-security-findings composer-audit
-/triage-security-findings semgrep
-/triage-security-findings gitleaks
-/triage-security-findings checkov
-/triage-security-findings trivy-fs
-/triage-security-findings trivy-config
-/triage-security-findings trivy-image
-/triage-security-findings zap
+/assurance:triage security composer-audit
+/assurance:triage security semgrep
+/assurance:triage security gitleaks
+/assurance:triage security checkov
+/assurance:triage security trivy-fs
+/assurance:triage security trivy-config
+/assurance:triage security trivy-image
+/assurance:triage security zap
 
 # Batch
-/triage-security-findings phase2 [--pr N]    # All Phase 2 CI scanners for a PR
-/triage-security-findings phase7 [--pr N]    # DevSecOps CI gate (subset; see linear-setup phaseBatch)
+/assurance:triage security phase2 [--pr N]    # All Phase 2 CI scanners for a PR
+/assurance:triage security phase7 [--pr N]    # DevSecOps CI gate (subset; see linear-setup phaseBatch)
 
 # Playbook Phase 3–5 — manual / stage-only (no CI log parse)
-/triage-security-findings manual burp
-/triage-security-findings manual testssl
-/triage-security-findings manual kube-bench
-/triage-security-findings pentest-report <url-or-path>   # From /pentest-runner §6.2 findings
+/assurance:triage security manual burp
+/assurance:triage security manual testssl
+/assurance:triage security manual kube-bench
+/assurance:triage security pentest-report <url-or-path>   # From /pentest-runner §6.2 findings
 
 # Dependabot (GitHub API, not Actions log)
-/triage-security-findings dependabot [--repo org/repo]
+/assurance:triage security dependabot [--repo org/repo]
 ```
 
 ---
@@ -89,7 +87,7 @@ Aligned with **pentest-playbook** Phases 2–4, 7–8. Manual-only tools create 
 | `shannon` | §8 | 8 | stage | DOC-GAP-02 stub | — | Spike only |
 | `trufflehog` | §2.3 | 2 | local | not CI SSOT | — | local → manual issue |
 
-**Not in automated triage path:** Phase 1 passive recon (OSINT, dig, Wappalyzer), Phase 5 post-exploit, Phase 6 report archive (`compliance/audit-reports/`), LogQL PII spot-check (manual `pentest-report`), product pentest on PR (use `/pentest-runner` + `pentest-report` here).
+**Not in automated triage path:** Phase 1 passive recon (OSINT, dig, Wappalyzer), Phase 5 post-exploit, Phase 6 report archive (`compliance/audit-reports/`), LogQL PII spot-check (manual `pentest-report`), product pentest on PR (use `/assurance:pentest-runner` + `pentest-report` here).
 
 ---
 
@@ -178,11 +176,11 @@ Apply labels/projects from `securityFindingTriage.scanners.{key}` in tenant conf
 
 | Command | Role |
 | --- | --- |
-| `/pentest-playbook-setup` | Audit/sync playbook ↔ CI ↔ tenant config |
-| `/pentest-runner` | **Run** authorized tests (phases 1–8); produce evidence |
-| `/triage-security-findings` | **Triage** CI + pentest output into owned backlog |
-| `/spec-recommend` | Greenfield specs → OpenSpec + Linear (not for scan triage) |
-| `/ready-to-review-mergeable` | Fix PR + CI green (after fix work) |
+| `/assurance:pentest-playbook-setup` | Audit/sync playbook ↔ CI ↔ tenant config |
+| `/assurance:pentest-runner` | **Run** authorized tests (phases 1–8); produce evidence |
+| `/assurance:triage security` | **Triage** CI + pentest output into owned backlog |
+| `/make-no-mistakes:spec-recommend` | Greenfield specs → OpenSpec + Linear (not for scan triage). Toolkit: `make-no-mistakes`. |
+| `/make-no-mistakes:ready-to-review-mergeable` | Fix PR + CI green (after fix work). Toolkit: `make-no-mistakes`. |
 
 ---
 

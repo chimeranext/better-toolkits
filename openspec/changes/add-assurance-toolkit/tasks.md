@@ -1,69 +1,69 @@
 # Tasks — add-assurance-toolkit
 
-## 1. Scaffold del toolkit
+## 1. Toolkit scaffold
 
-- [x] 1.1 Crear `toolkits/assurance-toolkit/` (plugin manifest, README con 2 pilares + transversal, `references/`, `commands/` thin, skills) y verificar que el layout espeja `make-no-mistakes-toolkit`
-- [x] 1.2 Registrar el toolkit en `.claude-plugin/marketplace.json` (+ versión) y verificar que el marketplace lista `assurance-toolkit`
+- [x] 1.1 Create `toolkits/assurance-toolkit/` (plugin manifest, README with 2 pillars plus transversal, `references/`, thin `commands/`, skills) and verify the layout mirrors `make-no-mistakes-toolkit`
+- [x] 1.2 Register the toolkit in `.claude-plugin/marketplace.json` (plus version) and verify the marketplace lists `assurance-toolkit`
 
-## 2. Migración de protocolos con shims
+## 2. Protocol migration with shims
 
-- [x] 2.1 Mudar `e2e-test-builder`, `e2e-test-runner` y `e2e-test-preview` a assurance, cada uno con su protocolo (`references/e2e-test-*/protocol.md`). Shims en make-no-mistakes eliminados; el pilar `references/testing/protocol.md` no sustituye esos tres protocolos.
-- [x] 2.2 Mudar `pentest-runner` + `pentest-playbook-setup` con shims; verificar delegación con warning y reporte separado de tests
-- [x] 2.3 Mudar `observability-audit` (escalera probe/heartbeat/absence/synthetic) con shim; verificar que distingue "pasa" de "dejó de pasar"
-- [x] 2.4 Mudar `triage-security-findings` (patrón cola → dueño → SLA → receipt) con shim; verificar SLA/escalado sin duplicar issues Linear
-- [x] 2.5 Fusionar `gemini-code-review` en `local-pr-review --provider gemini` + shim con warning; verificar que el shim viejo delega
+- [x] 2.1 Move `/assurance:e2e-test-builder`, `/assurance:e2e-test-runner`, and `/assurance:e2e-test-preview` to assurance, each with its own protocol (`references/e2e-test-*/protocol.md`). Shims in make-no-mistakes removed; the pillar `references/testing/protocol.md` does not replace those three protocols.
+- [x] 2.2 Move `/assurance:pentest-runner` plus `/assurance:pentest-playbook-setup` with shims; verify delegation with a warning and a report separate from tests
+- [x] 2.3 Move `/assurance:observability-audit` (probe/heartbeat/absence/synthetic ladder) with a shim; verify it distinguishes "passes" from "stopped passing"
+- [x] 2.4 Security findings (queue → owner → SLA → receipt) live in mode `/assurance:triage security` (`references/security/findings-protocol.md`). No separate command and no shim.
+- [x] 2.5 Merge `gemini-code-review` into `local-pr-review --provider gemini` plus a shim with a warning; verify the old shim delegates
 
-## 3. Protocolo providers + Maestro (solo docs)
+## 3. Provider protocol plus Maestro (docs only)
 
-- [x] 3.1 Documentar providers Kiwi/Qase/Qualflare (`qf collect`, `qualflare.link`, webhook con dedupe por cluster) en `references/` y verificar que los comandos documentados existen como protocolo (sin implementar broker)
-- [x] 3.2 Documentar convención Maestro (`.maestro/*.yaml`, `Semantics(identifier:)`, `qualflare-maestro` pineado, Studio) y verificar el flow de ejemplo `negotiation_happy_path.yaml` como referencia
+- [x] 3.1 Document Kiwi/Qase/Qualflare providers (`qf collect`, `qualflare.link`, webhook with cluster dedupe) under `references/` and verify the documented commands exist as protocol (do not implement the broker)
+- [x] 3.2 Document the Maestro convention (`.maestro/*.yaml`, `Semantics(identifier:)`, pinned `qualflare-maestro`, Studio) and verify the example flow `negotiation_happy_path.yaml` as the reference
 
-## 4. Protocolo runners polyglot (solo docs)
+## 4. Polyglot runner protocol (docs only)
 
-- [x] 4.1 Documentar runner Laravel/Pest (`php artisan test`, `--parallel` + DBs por token, `--coverage --min`, `--profile`, suite `tests/Architecture`, skill `pest-testing-laraveldaily`) y verificar el protocolo contra una app Laravel de ejemplo
-- [x] 4.2 Documentar runner Elixir/ExUnit (`mix test`, Phoenix/Ecto, PropEr/StreamData, Mox con contratos explícitos) y verificar el protocolo contra un proyecto de ejemplo
-- [x] 4.3 Documentar checklist TS7 (`tsgo`, sin `baseUrl`, plan compiler API, CI dual, sharp edges) y verificarlo contra un paquete TypeScript de ejemplo
-- [x] 4.4 Documentar pirámide Flutter/Dart (unit `flutter test` + mockito, widget `WidgetTester`, `integration_test` + Maestro con `Semantics.identifier`, `flutter_driver` legacy, refs `gallery`/`manual_tests`) y verificarla contra un paquete Flutter de ejemplo
-- [x] 4.5 Documentar anexo de panorama (matriz Maestro/Playwright/Cypress/Appium/Selenium + Vitest/Jest, criterios plataforma/lenguaje/skill/costo) y backlog de adapters con PoC obligatoria; verificar que agregar un adapter no toca el protocolo
-- [x] 4.6 Documentar adapter Playwright (golden rules, taxonomía de flakes + flowchart, cuarentena con salida y exención `@critical`, trust boundary, UI mode `npx playwright test --ui`, trace.zip como evidencia) reinterpretado del skill TestDino; verificar golden rules contra una suite web de ejemplo
-- [x] 4.7 Ejecutar PoC MobileWright (un spec iOS+Android, metadata `testResult` → evidencia) y decidir si comparte default mobile-first con Maestro; verificar que el a11y tree basta sin modelo de visión
+- [x] 4.1 Document the Laravel/Pest runner (`php artisan test`, `--parallel` plus per-token DBs, `--coverage --min`, `--profile`, `tests/Architecture` suite, skill `pest-testing-laraveldaily`) and verify the protocol against a sample Laravel app
+- [x] 4.2 Document the Elixir/ExUnit runner (`mix test`, Phoenix/Ecto, PropEr/StreamData, Mox with explicit contracts) and verify the protocol against a sample project
+- [x] 4.3 Document the TS7 checklist (`tsgo`, no `baseUrl`, compiler API plan, dual CI, sharp edges) and verify it against a sample TypeScript package
+- [x] 4.4 Document the Flutter/Dart pyramid (unit `flutter test` plus mockito, widget `WidgetTester`, `integration_test` plus Maestro with `Semantics.identifier`, legacy `flutter_driver`, refs `gallery`/`manual_tests`) and verify it against a sample Flutter package
+- [x] 4.5 Document the landscape annex (Maestro/Playwright/Cypress/Appium/Selenium plus Vitest/Jest matrix, platform/language/skill/cost criteria) and the adapter backlog with a mandatory PoC; verify that adding an adapter does not touch the protocol
+- [x] 4.6 Document the Playwright adapter (golden rules, flake taxonomy plus flowchart, quarantine with an exit and `@critical` exemption, trust boundary, UI mode `npx playwright test --ui`, trace.zip as evidence) reinterpreted from the TestDino skill; verify golden rules against a sample web suite
+- [x] 4.7 Run the MobileWright PoC (one iOS+Android spec, `testResult` metadata → evidence) and decide whether it shares the mobile-first default with Maestro; verify the a11y tree is enough without a vision model
 
-## 5. Testing P0 desde research (solo docs + gates)
+## 5. Testing P0 from research (docs plus gates only)
 
-- [x] 5.1 Documentar mutación (Infection/Stryker/muex, MSI como gate, scope incremental) y verificar MSI contra una suite de ejemplo
-- [x] 5.2 Documentar contratos en dos capas (Schemathesis + baseline, Pact + `can-i-deploy`, Microcks/Prism) y verificar spec-drift contra una API de ejemplo
-- [x] 5.3 Documentar perf (matriz k6/Locust/Gatling/JMeter, thresholds → exit code, percentiles a SLOs) y verificar un gate de p99 de ejemplo
-- [x] 5.4 Documentar Patrol gris + Maestro humo (caveat CI, pin de versiones, device OS fijo) y a11y escalonada (axe-core, Axe DevTools Mobile, fail critical/serious) y verificar contra una app Flutter de ejemplo
-- [x] 5.5 Documentar component testing con stories portables (play + queries por rol, Vitest addon vs test-runner, a11y error/todo/off, tags) y verificar una story corriendo en Vitest + a11y + E2E iframe
-- [x] 5.6 Documentar scenarios Widgetbook (args fijos + modes + `run`, matriz global, goldens con entorno fijo, 4 guidelines + semantics diff, tokens como cheapest fix) y verificar un scenario en matriz theme × locale × text-scale
-- [x] 5.7 Documentar eval-driven development (criterios, judges calibrados, benchmark hygiene, feedback conversacional) y suites risk-driven + characterization tests (Fowler) y verificar criterios medibles en una feature con LLM de ejemplo
+- [x] 5.1 Document mutation (Infection/Stryker/muex, MSI as a gate, incremental scope) and verify MSI against a sample suite
+- [x] 5.2 Document contracts in two layers (Schemathesis plus baseline, Pact plus `can-i-deploy`, Microcks/Prism) and verify spec drift against a sample API
+- [x] 5.3 Document perf (k6/Locust/Gatling/JMeter matrix, thresholds → exit code, percentiles into SLOs) and verify a sample p99 gate
+- [x] 5.4 Document Patrol grey plus Maestro smoke (CI caveat, version pin, fixed device OS) and staged a11y (axe-core, Axe DevTools Mobile, fail critical/serious) and verify against a sample Flutter app
+- [x] 5.5 Document component testing with portable stories (play plus role-first queries, Vitest addon vs test-runner, a11y error/todo/off, tags) and verify one story running in Vitest plus a11y plus E2E iframe
+- [x] 5.6 Document Widgetbook scenarios (fixed args plus modes plus `run`, global matrix, goldens with a fixed environment, 4 guidelines plus semantics diff, tokens as the cheapest fix) and verify one scenario on the theme × locale × text-scale matrix
+- [x] 5.7 Document eval-driven development (criteria, calibrated judges, benchmark hygiene, conversational feedback) and risk-driven suites plus characterization tests (Fowler) and verify measurable criteria on a sample LLM feature
 
-## 6. Security desde research (solo docs + gates)
+## 6. Security from research (docs plus gates only)
 
-- [x] 6.1 Documentar trazabilidad MASVS → MASWE → MASTG v2 con perfiles L1/L2/R/P y guía de fix MASTG-BEST; verificar un hallazgo de ejemplo mapeado de punta a punta
-- [x] 6.2 Documentar capa SAST/DAST/SCA (Semgrep, ZAP, Trivy/Grype, dependency-review) y supply-chain firmada (SBOM canónico, Sigstore, SLSA L2/L3, admission fail-closed); verificar un deploy sin firma rechazado en un cluster de prueba
-- [x] 6.3 Documentar red-team agentic (ASI01–ASI10 + LLM02, 4 fases, SoD, tool scoping, agent graph, PII tolerancia cero) y verificar scenario maps versionados para un agente de ejemplo
-- [x] 6.4 Documentar runtime K8s (Falco detect + KubeArmor/Tetragon prevent, matriz de decisión) y policy engines (Kyverno vs Gatekeeper, audit-first) y verificar audit-mode antes de enforce
+- [x] 6.1 Document MASVS → MASWE → MASTG v2 traceability with L1/L2/R/P profiles and the MASTG-BEST fix guide; verify a sample finding mapped end to end
+- [x] 6.2 Document the SAST/DAST/SCA layer (Semgrep, ZAP, Trivy/Grype, dependency-review) and the signed supply chain (canonical SBOM, Sigstore, SLSA L2/L3, fail-closed admission); verify an unsigned deploy is rejected on a test cluster
+- [x] 6.3 Document the agentic red team (ASI01–ASI10 plus LLM02, 4 phases, SoD, tool scoping, agent graph, zero PII tolerance) and verify versioned scenario maps for a sample agent
+- [x] 6.4 Document K8s runtime (Falco detect plus KubeArmor/Tetragon prevent, decision matrix) and policy engines (Kyverno vs Gatekeeper, audit-first) and verify audit mode before enforce
 
-## 7. Liveness y gobierno (solo docs + gates)
+## 7. Liveness and governance (docs plus gates only)
 
-- [x] 7.1 Decidir Litmus vs Chaos Mesh con PoC (hipótesis SLO, probes, abort criteria) y evaluar Antithesis para sistemas con estado; verificar un experimento con veredicto objetivo
-- [x] 7.2 Documentar métricas (DORA, DER/DRE, MTTD/MTTR, `found_env`, ventana 14d, anti-gaming), gates por etapa y formato de receipts fase 7; verificar un release reconstruible desde receipts
-- [x] 7.3 Documentar pipeline de gates GitOps (waves, hooks Pre/PostSync, `ignoreDifferences` como baseline, health assessment, App of Apps) y verificar orden infra-primero en un deploy de ejemplo
-- [x] 7.4 Documentar pre-flight en capas (kubeconform → kube-score → Trivy → Checkov/kubeaudit; Kubescape/RBAC; kube-bench CIS), gates con exit codes y thresholds por env, y health score 8D; verificar stack sin doble-reporte
+- [x] 7.1 Decide Litmus vs Chaos Mesh with a PoC (SLO hypothesis, probes, abort criteria) and evaluate Antithesis for stateful systems; verify an experiment with an objective verdict
+- [x] 7.2 Document metrics (DORA, DER/DRE, MTTD/MTTR, `found_env`, 14-day window, anti-gaming), per-stage gates, and the phase-7 receipt format; verify a release is reconstructable from receipts
+- [x] 7.3 Document the GitOps gate pipeline (waves, Pre/PostSync hooks, `ignoreDifferences` as baseline, health assessment, App of Apps) and verify infra-first order on a sample deploy
+- [x] 7.4 Document layered pre-flight (kubeconform → kube-score → Trivy → Checkov/kubeaudit; Kubescape/RBAC; kube-bench CIS), gates with exit codes and per-env thresholds, and the 8D health score; verify the stack does not double-report
 
-## 9. Migración 21 skills del template (ejecutada con shims)
+## 9. Migration of 21 template skills (executed with shims)
 
-- [x] 9.1 Migrar 6 skills flutter (testing-strategy, mobile-testing, accessibility, performance → testing; error-tracking → liveness; security → security) con thin skills + protocolo + shim
-- [x] 9.2 Migrar 7 skills SRE testing/liveness (load, observability, alerting, logging, chaos, db-part, DR-part) con thin skills + protocolo + shim
-- [x] 9.3 Migrar 4 skills SRE security+gobierno (sec-compliance, container, network, slo) con thin skills + protocolo + shim
-- [x] 9.4 Migrar 4 restantes (argocd, github-actions, static-analysis, versioning universal SemVer+commits) con thin skills + protocolo + shim
-- [x] 9.5 Verificar 21 shims en el template y licencia compatible (BSL-1.1, mismo org)
-- [x] 9.6 Validar change + PR en ambos repos (better-toolkits y monorepo-template) con HITL y mergear
-- [x] 9.7 Documentar en protocolo: eval-driven + Fowler (testing), red-team agentic + REA móvil (security), GitOps + K8s pre-flight (governance), playbook/runbook taxonomy (liveness) — implementado y verificado en archivos
+- [x] 9.1 Migrate 6 flutter skills (testing-strategy, mobile-testing, accessibility, performance → testing; error-tracking → liveness; security → security) with thin skills plus protocol plus shim
+- [x] 9.2 Migrate 7 SRE testing/liveness skills (load, observability, alerting, logging, chaos, db-part, DR-part) with thin skills plus protocol plus shim
+- [x] 9.3 Migrate 4 SRE security+governance skills (sec-compliance, container, network, slo) with thin skills plus protocol plus shim
+- [x] 9.4 Migrate the remaining 4 (argocd, github-actions, static-analysis, universal versioning SemVer+commits) with thin skills plus protocol plus shim
+- [x] 9.5 Verify 21 shims in the template and a compatible license (BSL-1.1, same org)
+- [x] 9.6 Validate the change plus PR in both repos (better-toolkits and monorepo-template) with HITL and merge
+- [x] 9.7 Document in the protocol: eval-driven plus Fowler (testing), agentic red team plus mobile REA (security), GitOps plus K8s pre-flight (governance), playbook/runbook taxonomy (liveness) — implemented and verified in files
 
-## 8. Validación e integración
+## 8. Validation and integration
 
-- [x] 8.1 Pasar `openspec validate --change add-assurance-toolkit` y verificar cero errores
-- [x] 8.2 Verificar que `ready-to-review-mergeable`, `premortem`, audits y comandos de coordinación siguen en `make-no-mistakes-toolkit` sin shims
-- [x] 8.3 Abrir PR con HITL (sin push directo a shared state) y verificar CI verde antes de pedir review
+- [x] 8.1 Pass `openspec validate --change add-assurance-toolkit` and verify zero errors
+- [x] 8.2 Verify that `/make-no-mistakes:ready-to-review-mergeable`, `premortem`, audits, and coordination commands stay in `make-no-mistakes-toolkit` without shims
+- [x] 8.3 Open a PR with HITL (no direct push to shared state) and verify CI is green before asking for review

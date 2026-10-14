@@ -113,8 +113,8 @@ Deliberate actions you invoke explicitly.
 | [`/assurance:e2e-test-runner [filter]`](../assurance-toolkit/commands/e2e-test-runner.md) | Execute a `test-suite.json` (assurance; own protocol) |
 | [`/make-no-mistakes:bug-squash-locally [domain]`](commands/bug-squash-locally.md) | HITL QA on **localhost only** — headed Chrome DevTools MCP + [semantic UI locators](references/bug-squash/semantic-ui-locator-policy.md); full multi-env `/bug-squash` ships with OpenSpec `2026-09-09-generalize-bug-squash` |
 | [`/make-no-mistakes:pentest-runner <phase>`](commands/pentest-runner.md) | Automated pentesting following Cyber Kill Chain + OWASP methodology |
-| [`/make-no-mistakes:pentest-playbook-setup [audit\|sync\|workflows\|gaps]`](commands/pentest-playbook-setup.md) | Audit/sync pentest playbook ↔ CI ↔ tenant triage config (setup step; pairs with pentest-runner + triage-security-findings) |
-| [`/make-no-mistakes:triage-security-findings <scanner\|phase2\|pentest-report>`](commands/triage-security-findings.md) | Triage CI + pentest findings into owned backlog issues (tenant config e.g. `linear-setup.json` → `securityFindingTriage`) |
+| [`/make-no-mistakes:pentest-playbook-setup [audit\|sync\|workflows\|gaps]`](commands/pentest-playbook-setup.md) | Audit/sync pentest playbook ↔ CI ↔ tenant triage config (setup step; pairs with pentest-runner + `/assurance:triage security`) |
+| [`/assurance:triage security`](../assurance-toolkit/commands/triage.md) | Triage CI + pentest findings into owned backlog issues (tenant config e.g. `linear-setup.json` → `securityFindingTriage`) |
 | [`/make-no-mistakes:goodmorning`](commands/goodmorning.md) | Bootstrap your session from previous day's handoff files |
 | [`/make-no-mistakes:goodnight [label]`](commands/goodnight.md) | Save full session context as a handoff file for tomorrow |
 | [`/make-no-mistakes:pending-left`](commands/pending-left.md) | Track what's left unfinished across git, Linear, and session context |

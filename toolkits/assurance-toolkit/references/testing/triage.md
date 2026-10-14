@@ -8,22 +8,19 @@ Security criticals and `coverage_delta` are **other pillars** (security + govern
 
 ## Question
 
-Does this PR have **required test CI evidence** for the head SHA (interpreted as the
-**tests 100%** slice of the PR-stage gate)?
+Does this PR have **testing evidence** that satisfies the convention record for this stack
+(the **tests 100%** slice of the PR-stage gate)?
 
 ## Flow (PR stage — testing pillar only)
 
 ```mermaid
 flowchart TD
   start(["testing pillar PR N"])
-  c1["List required test jobs for repo"]
+  c1["Resolve convention GATES for language and framework"]
   c1 --> c2["gh pr checks N"]
-  c2 --> c3{"invokeRunner true?"}
-  c3 -->|yes| r["optional e2e-test-runner / test-suite.json"]
-  c3 -->|no| v{"all required checks success?"}
-  r --> v
-  v -->|no| b["BLOCKED — job name + run URL"]
-  v -->|yes| p["PASS testing pillar"]
+  c2 --> v{"required gates success?"}
+  v -->|no| b["BLOCKED record id job URL"]
+  v -->|yes| p["PASS output for e2e-test-builder"]
 ```
 
 This pillar **does not** emit the PR receipt or evaluate `coverage_delta`; the hub runs
@@ -36,33 +33,41 @@ PR row in assurance-governance when all required pillars PASS.
 sequenceDiagram
   participant Hub as assurance hub
   participant Agent as Agent
+  participant Conv as convention record
   participant GH as GitHub PR checks
-  participant Runner as optional test runner
 
   Hub->>Agent: run testing pillar PR N
+  Agent->>Conv: GATES of language and framework child
   Agent->>GH: gh pr checks N
-  alt readyToReview.assurance.testing.invokeRunner
-    Agent->>Runner: e2e-test-runner test-suite.json
-    Runner-->>Agent: exit code + artifacts
-  end
   GH-->>Agent: required jobs success or fail
-  Agent-->>Hub: PASS or BLOCKED + links
+  Agent-->>Hub: PASS or BLOCKED plus output for builder
 ```
 
 ## Steps
 
-1. Confirm PR checks include required test jobs for this repo (unit/integration/E2E
-   as configured in CI). Use `gh pr checks <N> --watch` or latest completed runs.
-2. If the repo defines an assurance testing runner (e.g. `e2e-test-runner` against
-   `test-suite.json`), run it only when `readyToReview.assurance.testing.invokeRunner`
-   is true; optional runner failure **BLOCKS** even when other checks are green.
-3. **BLOCK** when any **required** test check is failing, pending beyond policy, or
-   missing for in-scope changes.
-4. **PASS** when all required test checks are success (or explicitly waived in
-   config with user-visible reason — never silent).
+1. Resolve the convention record for this change:
+   `shared/references/conventions/language/<id>/README.md` and, when the repo
+   has a framework, `frameworks/<fw>.md`. Example: `php` + `laravel@0.1.0`
+   (`vendor/bin/pint --test`, `php artisan test`, Architecture, PHPStan when
+   the repo declares it).
+2. Confirm PR checks cover those GATES (smoke subset on a branch push, full
+   suite when the record's CI tier says so). Use `gh pr checks <N>`.
+3. **BLOCK** when a required gate is failing or missing for in-scope changes.
+   The report names the record id, the gate, and the check URL.
+4. **PASS** when those gates are success (or explicitly waived in config with
+   a user-visible reason). The PASS output is the input of
+   [`/assurance:e2e-test-builder`](../../commands/e2e-test-builder.md): record
+   id, gates that ran, and any scenario gaps. Ready-to-review invokes the
+   builder **after** aggregate §2b PASS and **before** remote review (§2c).
 
 ## Out of scope
 
+- [`/assurance:e2e-test-runner`](../../commands/e2e-test-runner.md). That command
+  belongs to the stage QA assignee, after the issue is **In Review** and
+  assigned to them. Seacrets: Darío Monestel, view
+  [QA ready (stage)](https://linear.app/hyperlabllc/view/caa6a7d1-d599-4776-b206-4d935268a9d2).
+- [`/assurance:e2e-test-preview`](../../commands/e2e-test-preview.md) — visual
+  inspection, not a gate.
 - `coverage_delta` and PR receipt (governance pillar).
 - Critical security findings (security pillar).
 - Release-only perf/load gates (see governance release stage).

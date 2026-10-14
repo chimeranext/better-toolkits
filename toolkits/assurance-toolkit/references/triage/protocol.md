@@ -19,9 +19,9 @@ code-review bots run.
 | **`pr`** (default) | Ready-to-review / PR gate | Every pillar marked `required` or `optional` for stage `pr` in config; skips `skip`. |
 | **`<pillar>`** | Deep dive on one pillar | That pillar's sub-protocol only. |
 
-**Liveness on PR:** default is **SKIP** — not “forgotten”. SSOT:
-`readyToReview.assurance.pillars.liveness: "skip"` (observability cadence is schedule/daemon,
-not per-PR). Set `required` only when the consumer repo opts in.
+**Liveness on PR:** Seacrets consumer repos set **`required`** on every PR
+(`readyToReview.assurance.pillars.liveness`). Other repos may use **`skip`**
+when observability runs on schedule/daemon only — not “forgotten”, just config.
 
 Resolve PR number from `--pr N`, else `gh pr view` for the current branch.
 
@@ -149,7 +149,11 @@ See `toolkits/make-no-mistakes-toolkit/commands/make-no-mistakes.config.example.
 
 ## Relationship to other commands
 
-- **`/assurance:triage-security-findings`** — security pillar implementation for
-  backlog triage; invoked **from** `references/security/triage.md` when needed.
-- **`/ready-to-review-mergeable`** — calls this hub at **§2b** before **§3b**
-  execute remote PR review (§3c gate green before §5 handoff).
+- **`/assurance:triage security`** — same hub, mode `security`. Findings
+  (queue → owner → SLA → receipt) are [`references/security/findings-protocol.md`](../security/findings-protocol.md).
+  Arguments: `list`, `dry-run`, a scanner id, `phase2`, `phase7`, `manual`,
+  `pentest-report`, plus `--pr`, `--run`, `--repo`. No separate findings command.
+- **`/make-no-mistakes:ready-to-review-mergeable`** — calls this hub at **§2b**. On PASS it
+  runs **§2c** `/assurance:e2e-test-builder` with the testing pillar output,
+  then **§3b** remote review (§3c gate green before §5 handoff).
+  `/assurance:e2e-test-runner` is the stage QA assignee step, not this hub.
