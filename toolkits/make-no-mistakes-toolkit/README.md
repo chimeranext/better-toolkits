@@ -109,8 +109,8 @@ Deliberate actions you invoke explicitly.
 | [`/make-no-mistakes:prioritize <pillar-slug>`](commands/prioritize.md) | MoSCoW + RICE-adapted applied to a pillar's Linear issues, traceable to its PIBER+IDCF sub-spike and the latest vision audit. Outputs priority report + description-footer per issue + snapshot comment on the sub-spike. Chain: `product-vision-audit → prioritize → spike-recommend → implement` |
 | [`/make-no-mistakes:rebase <repo>`](commands/rebase.md) | Team release sync — rebase all branches, auto-merge ready PRs, health report |
 | [`/make-no-mistakes:linear-projects-setup`](commands/linear-projects-setup.md) | Bootstrap Linear workspace with full label taxonomy, projects, and integrations |
-| [`/make-no-mistakes:e2e-test-builder <source>`](commands/e2e-test-builder.md) | Generate a TestSprite-compatible `test-suite.json` from docs or PRDs |
-| [`/make-no-mistakes:e2e-test-runner [filter]`](commands/e2e-test-runner.md) | Execute E2E tests from `test-suite.json` with runner selection and reporting |
+| [`/assurance:e2e-test-builder <source>`](../assurance-toolkit/commands/e2e-test-builder.md) | Generate a TestSprite-compatible `test-suite.json` (assurance; own protocol) |
+| [`/assurance:e2e-test-runner [filter]`](../assurance-toolkit/commands/e2e-test-runner.md) | Execute a `test-suite.json` (assurance; own protocol) |
 | [`/make-no-mistakes:bug-squash-locally [domain]`](commands/bug-squash-locally.md) | HITL QA on **localhost only** — headed Chrome DevTools MCP + [semantic UI locators](references/bug-squash/semantic-ui-locator-policy.md); full multi-env `/bug-squash` ships with OpenSpec `2026-09-09-generalize-bug-squash` |
 | [`/make-no-mistakes:pentest-runner <phase>`](commands/pentest-runner.md) | Automated pentesting following Cyber Kill Chain + OWASP methodology |
 | [`/make-no-mistakes:pentest-playbook-setup [audit\|sync\|workflows\|gaps]`](commands/pentest-playbook-setup.md) | Audit/sync pentest playbook ↔ CI ↔ tenant triage config (setup step; pairs with pentest-runner + triage-security-findings) |
@@ -141,7 +141,7 @@ Deliberate actions you invoke explicitly.
 | [`/make-no-mistakes:audit-enforcement-hooks`](commands/audit-enforcement-hooks.md) | Audit Cure-4 enforcement-hook coverage — are the PreToolUse/PostToolUse hooks that prevent the other audits' drift actually installed? |
 | [`/make-no-mistakes:premortem <plan>`](commands/premortem.md) | Stress-test a plan/launch/decision by imagining it already failed 6 months out, then work backward to expose blind spots; outputs an HTML report + Markdown transcript |
 | [`/make-no-mistakes:atomic-rules-init`](commands/atomic-rules-init.md) | Scaffold a `.atomic-design-rules.json` at the repo root so the atomic-design hooks (PreToolUse ownership enforcement + PostToolUse drift telemetry) start enforcing. No-op if the file already exists |
-| [`/make-no-mistakes:e2e-test-preview [path]`](commands/e2e-test-preview.md) | Launch a Qt-based visual previewer for `test-suite.json` — interactive table with filtering, detail pane, and CSV export (auto-installs PySide6) |
+| [`/assurance:e2e-test-preview [path]`](../assurance-toolkit/commands/e2e-test-preview.md) | Qt preview of `test-suite.json` (assurance; own protocol) |
 | [`/make-no-mistakes:gemini-code-review [target]`](commands/gemini-code-review.md) | Cheap first-pass code review (one-shot via liteLLM) on a parametrizable model — Gemini 3.5 Flash by default; supports `--model` and `--adversarial`, curated against the repo's CLAUDE.md |
 
 ### Skills (16)

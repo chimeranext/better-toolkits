@@ -6,14 +6,14 @@ Pilar testing del assurance-toolkit: construir, ejecutar y previsualizar evidenc
 
 ## ADDED Requirements
 
-### Requirement: E2E builder/runner/preview mudados con shims
+### Requirement: E2E builder, runner y preview con protocolo propio
 
-El sistema SHALL proveer `e2e-test-builder`, `e2e-test-runner` y `e2e-test-preview` desde `assurance-toolkit`, manteniendo shims delegantes en `make-no-mistakes-toolkit` con warning de deprecación.
+El sistema SHALL proveer `e2e-test-builder`, `e2e-test-runner` y `e2e-test-preview` solo desde `assurance-toolkit`. Cada comando SHALL seguir su protocolo (`references/e2e-test-builder/protocol.md`, `references/e2e-test-runner/protocol.md`, `references/e2e-test-preview/protocol.md`). Esos tres protocolos SHALL permanecer distintos del pilar `references/testing/protocol.md`. `make-no-mistakes-toolkit` SHALL NOT conservar shims de estos comandos.
 
-#### Scenario: Comando mudado resuelve en el nuevo toolkit
+#### Scenario: Cada comando resuelve su protocolo
 
-- **WHEN** un agente invoca `e2e-test-runner` vía el nuevo toolkit
-- **THEN** se ejecuta el protocolo de assurance (no el legacy) y el shim viejo delega al nuevo con warning visible
+- **WHEN** un agente invoca `/assurance:e2e-test-builder`, `/assurance:e2e-test-runner` o `/assurance:e2e-test-preview`
+- **THEN** sigue el protocolo de ese comando (generar suite, ejecutar suite, o abrir el preview Qt) y no el pilar testing ni un shim en make-no-mistakes
 
 #### Scenario: Maestro flow mínimo
 

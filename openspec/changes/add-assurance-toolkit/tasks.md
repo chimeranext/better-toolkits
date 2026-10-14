@@ -7,7 +7,7 @@
 
 ## 2. Migración de protocolos con shims
 
-- [x] 2.1 Mudar protocolos de `e2e-test-builder/runner/preview` al nuevo toolkit y dejar shims delegantes con warning; verificar que el comando viejo delega y avisa
+- [x] 2.1 Mudar `e2e-test-builder`, `e2e-test-runner` y `e2e-test-preview` a assurance, cada uno con su protocolo (`references/e2e-test-*/protocol.md`). Shims en make-no-mistakes eliminados; el pilar `references/testing/protocol.md` no sustituye esos tres protocolos.
 - [x] 2.2 Mudar `pentest-runner` + `pentest-playbook-setup` con shims; verificar delegación con warning y reporte separado de tests
 - [x] 2.3 Mudar `observability-audit` (escalera probe/heartbeat/absence/synthetic) con shim; verificar que distingue "pasa" de "dejó de pasar"
 - [x] 2.4 Mudar `triage-security-findings` (patrón cola → dueño → SLA → receipt) con shim; verificar SLA/escalado sin duplicar issues Linear
