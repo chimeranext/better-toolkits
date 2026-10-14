@@ -17,8 +17,15 @@ render all happen on the machine; the only egress is LLM inference
    - env var, or
    - `/secret-input` → `/secret-use NVIDIA_API_KEY -- <comando>` (preferred for
      agents), or
-   - `infisical run -- <comando>` (centralized hygiene).
+   - `infisical run -- <comando>` (centralized hygiene), or
+   - key-chain local (persisted, owner-only): `.{env}.nvidia.env` (repo,
+     gitignored) → `~/.agents/.heimdall.env` (0600, STAGING+PROD conviven con
+     nombres decorados). Env: `--env` / `HEIMDALL_NVIDIA_ENV` (default staging).
    Never paste the key in chat, logs, or tracked files.
+3. Key relocation (dogfooding): `heimdall-review key:migrate --env <e>` moves
+   repo keys into `~/.agents/.heimdall.env` (merge, never deletes the original);
+   `heimdall-review models:free [--match <sub>]` validates the migrated key
+   against the live NIM catalog + NGC tags without ever printing it.
 
 ## Flow
 
