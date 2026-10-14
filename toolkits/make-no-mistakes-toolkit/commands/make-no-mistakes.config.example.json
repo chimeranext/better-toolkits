@@ -37,5 +37,23 @@
       }
     }
   },
-  "_readyToReview": "Behaviour for `/ready-to-review-mergeable`. Order: `/implement` Phase 3 through step 12 (skip 9–10) → `/assurance:triage pr` → §3b execute remote review → §3c gate (yes = gate green) → §5 handoff; §4 local only when remote unavailable. Issue ID required. SSOT: `references/ready-to-review-mergeable/protocol.md`."
+  "_readyToReview": "Behaviour for `/ready-to-review-mergeable`. Order: `/implement` Phase 3 through step 12 (skip 9–10) → `/assurance:triage pr` → §3b execute remote review → §3c gate (yes = gate green) → §5 handoff; §4 local only when remote unavailable. Issue ID required. SSOT: `references/ready-to-review-mergeable/protocol.md`.",
+
+  "_seacretsConsumerProfile": "Seacrets satellite repos (app, docs, infra, gitops, specs, storybook): copy `readyToReview` below into root `make-no-mistakes.config.json`. Liveness is **required** on every PR — not the toolkit default `skip`.",
+  "seacretsReadyToReviewExample": {
+    "remoteReview": { "required": true },
+    "localReview": { "mode": "fallback-only" },
+    "implement": { "stopAfter": "phase-3-step-12" },
+    "assurance": {
+      "beforeRemoteReview": true,
+      "invoke": "/assurance:triage pr",
+      "receipt": { "path": ".local/receipts/assurance-pr-{pr}.json" },
+      "pillars": {
+        "testing": "required",
+        "security": "required",
+        "governance": "required",
+        "liveness": "required"
+      }
+    }
+  }
 }
