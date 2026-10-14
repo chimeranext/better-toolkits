@@ -13,3 +13,6 @@ description: >
 
 Captura automática, contexto enriquecido, integración CI (source maps).
 Los errores son señal MTTD, no solo logs.
+
+Dev-time: `artdima/peek` (MIT) inspecciona red in-app solo en debug y exporta
+cURL/HAR para adjuntar a reportes — ver `language/dart/frameworks/flutter`.
