@@ -107,7 +107,8 @@ find "${HOME}/.cursor/plugins/cache/chimeranext-better-toolkits" \
 bash shared/bootstrap/scripts/prune-better-toolkits-cache.sh
 ```
 
-Slash command SSOT: `/prune-better-toolkits-cache` in `shared/bootstrap/commands/`.
+Slash commands SSOT: `shared/bootstrap/commands/` — e.g. `/toolkits-initial-setup`,
+`/prune-better-toolkits-cache`, `/refresh-better-toolkits-cache` (update-only; never purges).
 
 ## Verify
 
