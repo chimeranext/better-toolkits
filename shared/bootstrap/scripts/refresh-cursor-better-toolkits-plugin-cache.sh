@@ -79,7 +79,7 @@ log_cached_versions() {
     echo "== plugin.json versions under ${root} (before purge) =="
   } >>"${OUT_LOG}"
 
-  if ! command -v jq >/dev/null; then
+  if ! command -v jq; then
     echo "jq not found; skip version listing" >>"${OUT_LOG}"
     return 0
   fi
@@ -124,7 +124,7 @@ while IFS= read -r cache_root; do
   purge_marketplace_cache_root "${cache_root}"
 done < <(marketplace_cache_paths)
 
-if command -v agent >/dev/null; then
+if command -v agent; then
   echo "agent plugin marketplace update better-toolkits" >>"${OUT_LOG}"
   if agent plugin marketplace update better-toolkits >>"${OUT_LOG}" 2>>"${ERR_LOG}"; then
     echo "marketplace update: ok" >>"${OUT_LOG}"
