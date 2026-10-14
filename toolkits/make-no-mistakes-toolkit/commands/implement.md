@@ -20,7 +20,7 @@ flowchart TD
   pf["Pre-flight + branch + worktree"]
   p0["Phase 0 — OpenSpec"]
   p1["Phase 1 — Setup"]
-  p2["Phase 2 — Implement + tests"]
+  p2["Phase 2 — Build"]
   p3a["Phase 3 step 8a — HITL PR open state"]
   p3open["Phase 3 step 8 — Create PR"]
   draft{"Draft mode?"}
@@ -85,7 +85,7 @@ Config key: `make-no-mistakes.config.json` → `readyToReview.implement.stopAfte
 | HITL boundaries | `references/implement/hitl-boundaries.md` |
 | Phase 0 — OpenSpec | `references/implement/phase-0-openspec.md` |
 | Phase 1 — Setup | `references/implement/phase-1-setup.md` |
-| Phase 2 — Implement | `references/implement/phase-2-implement.md` |
+| Phase 2 — Build | `references/implement/phase-2-build.md` |
 | Phase 3 — PR + review | `references/implement/phase-3-pr-review.md` |
 | Phase 4 — Merge + cleanup | `references/implement/phase-4-merge-cleanup.md` |
 | Chain merge | `references/implement/chain-merge.md` |

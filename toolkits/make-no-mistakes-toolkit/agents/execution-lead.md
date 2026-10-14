@@ -49,10 +49,9 @@ For EACH issue in the sequence:
    ```
 4. Assess scope — if >15 files, decompose into multiple PRs
 
-### Phase 2: Implement
-4. Implement in the worktree following all project conventions
-5. Check for OpenSpec context if configured
-6. Write tests (E2E with browser in focus, never headless)
+### Phase 2: Build
+4. Build in the Phase 1 worktree. When Phase 0 left an OpenSpec change, run `/opsx-apply` on its `tasks.md` there
+5. Write the product tests for this change (E2E with browser in focus, never headless)
 
 ### Phase 3: PR + Review Loop
 7. Create PR with Linear issue link

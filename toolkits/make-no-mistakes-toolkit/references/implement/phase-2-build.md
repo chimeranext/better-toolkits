@@ -1,8 +1,12 @@
-Implement in the worktree; tests and parallel approaches.
+Build the change in the Phase 1 worktree, including product tests.
 
-# Phase 2: Implement
+# Phase 2: Build
 
-5. **Implement in the worktree.** Follow all project conventions from CLAUDE.md. If Phase 0 produced an OpenSpec change, treat its `tasks.md` as the authoritative checklist — work through it in order and do not improvise file paths or commit messages outside the spec.
+This phase stays inside the current `/implement` session. It does not start another `/implement`.
+
+When Phase 0 left an OpenSpec change, run `/opsx-apply` in this worktree and walk that change's `tasks.md`. Product tests for the change are step 7 below. `/assurance:triage` runs later, from `/ready-to-review-mergeable`, after the PR exists.
+
+5. **Build in the worktree.** Follow all project conventions from CLAUDE.md. If Phase 0 produced an OpenSpec change, `/opsx-apply` is the checklist runner: work `tasks.md` in order and keep file paths and commit messages inside the spec.
 
 6. **If multiple approaches exist:**
    - Dispatch one sub-agent per approach via Mode A (each gets its own worktree automatically)
