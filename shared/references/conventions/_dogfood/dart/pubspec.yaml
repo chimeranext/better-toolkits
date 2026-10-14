@@ -1,0 +1,6 @@
+name: dogfood
+description: Sample del dogfood dart@0.1.0.
+environment:
+  sdk: ^3.13.0
+dev_dependencies:
+  test: ^1.25.0
