@@ -76,6 +76,31 @@ Script requirements (see design):
 - Runs `agent plugin marketplace update better-toolkits`
 - No `2>/dev/null`
 
+## After marketplace version bump (maintainers)
+
+CI requires a version bump in `.claude-plugin/marketplace.json` when release-relevant
+files change (`scripts/ci/marketplace_versioning.py`). Cursor does not always drop stale
+cached plugin trees after `agent plugin marketplace update`.
+
+1. List cached versions (optional):
+
+```bash
+find "${HOME}/.cursor/plugins/cache/chimeranext-better-toolkits" \
+  -path '*/.claude-plugin/plugin.json' \
+  -exec jq -r '.version' {} \;
+```
+
+2. Purge the **whole** marketplace cache directories (script logs to `~/.cursor/hooks/logs/`).
+   Fixed paths only: `~/.cursor/plugins/cache/chimeranext-better-toolkits` and
+   `~/.cursor/plugins/cache/better-toolkits` (legacy). Do not delete individual plugin
+   slugs by hand after a bump — stale siblings break skills/commands.
+
+```bash
+bash shared/bootstrap/scripts/refresh-cursor-better-toolkits-plugin-cache.sh
+```
+
+Slash command SSOT: `/cursor-better-toolkits-cache-refresh` in `shared/bootstrap/commands/`.
+
 ## Verify
 
 ```bash
