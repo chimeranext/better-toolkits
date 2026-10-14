@@ -23,7 +23,7 @@ better-toolkits; product repos link to their own docs SSOT.
 | --- | --- | --- |
 | Testing architecture, Pest primary, fakes, CI smoke vs full | `reference/architecture/testing-technical-specification.md` | L2–L4, L9–L10, test style |
 | Developer testing how-to | `how-to/testing/run-the-test-suite.md` | strict_types, RefreshDatabase, fakes |
-| Pest `arch()` how-to | `how-to/testing/pest-architecture-tests.md` (Seacrets-Online/seacrets.online-docs#455) | L5, L8, DSMS boundaries; complements SCRT-996 Feature/Kiwi Pest |
+| Pest `arch()` how-to | `how-to/testing/pest-architecture-tests.md` | L5, L8, DSMS boundaries; complements Feature Pest for onboarding flows |
 | Domain coverage (Clover, optional `--min`) | `how-to/testing/domain-coverage-audit.md` | L7, coverage audit |
 | DSMS + Inertia adapter composition | `reference/process/code-organization-standards.md` §1b | L8 |
 | Runtime ADR (first Inertia DSMS reference) | `reference/decisions/adr-006-agency-home-inertia-dsms-layering.md` | L8, unit tests without Inertia |
