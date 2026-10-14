@@ -1,7 +1,7 @@
 {
   "name": "business-model-toolkit",
-  "version": "2.2.1",
-  "description": "Interactive business model brainstorming — guided dialogue covering the full startup lifecycle from problem validation through execution and investor pitch.",
+  "version": "2.2.2",
+  "description": "Interactive business model brainstorming \u2014 guided dialogue covering the full startup lifecycle from problem validation through execution and investor pitch.",
   "author": {
     "name": "Luis Andres Pena Castillo",
     "url": "https://github.com/chimeranext"
