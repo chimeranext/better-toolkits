@@ -104,10 +104,10 @@ find "${HOME}/.cursor/plugins/cache/chimeranext-better-toolkits" \
    slugs by hand after a bump — stale siblings break skills/commands.
 
 ```bash
-bash shared/bootstrap/scripts/refresh-cursor-better-toolkits-plugin-cache.sh
+bash shared/bootstrap/scripts/prune-better-toolkits-cache.sh
 ```
 
-Slash command SSOT: `/cursor-better-toolkits-cache-refresh` in `shared/bootstrap/commands/`.
+Slash command SSOT: `/prune-better-toolkits-cache` in `shared/bootstrap/commands/`.
 
 ## Verify
 

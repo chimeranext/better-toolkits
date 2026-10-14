@@ -3,22 +3,24 @@
 # Use after any marketplace version bump so Cursor does not keep stale copies of any toolkit.
 #
 # Usage:
-#   refresh-cursor-better-toolkits-plugin-cache.sh
+#   prune-better-toolkits-cache.sh
+#
+# Slash command SSOT: /prune-better-toolkits-cache (shared/bootstrap/commands/)
 #
 # Deletes only these fixed directories (if they exist):
 #   ~/.cursor/plugins/cache/chimeranext-better-toolkits
 #   ~/.cursor/plugins/cache/better-toolkits
 # Then runs: agent plugin marketplace update better-toolkits
 #
-# Logs: ~/.cursor/hooks/logs/refresh-better-toolkits-plugin-cache-*.out|err.log
+# Logs: ~/.cursor/hooks/logs/prune-better-toolkits-cache-*.out|err.log
 # Fail-open on marketplace update errors (cache purge is the critical step).
 
 set -euo pipefail
 
 LOG_DIR="${HOME}/.cursor/hooks/logs"
 TS="$(date -u +%Y%m%dT%H%M%SZ)"
-OUT_LOG="${LOG_DIR}/refresh-better-toolkits-plugin-cache-${TS}.out.log"
-ERR_LOG="${LOG_DIR}/refresh-better-toolkits-plugin-cache-${TS}.err.log"
+OUT_LOG="${LOG_DIR}/prune-better-toolkits-cache-${TS}.out.log"
+ERR_LOG="${LOG_DIR}/prune-better-toolkits-cache-${TS}.err.log"
 
 CURSOR_PLUGIN_CACHE="${HOME}/.cursor/plugins/cache"
 
