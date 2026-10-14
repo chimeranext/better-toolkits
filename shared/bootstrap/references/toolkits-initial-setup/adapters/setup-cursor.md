@@ -16,12 +16,16 @@ agent plugin install better-toolkits-bootstrap@better-toolkits
 agent plugin install make-no-mistakes@better-toolkits
 ```
 
-## Stderr — `beforeShellExecution`
+## Stderr + PRDS — `beforeShellExecution`
 
-Propose merge into **user** or **project** `hooks.json` (ask which). Idempotent: skip if an entry
-already points at `cursor-before-shell.sh` from this marketplace.
+Propose merge into **user** or **project** `hooks.json` (ask which). Idempotent: skip if entries
+already point at `cursor-before-shell.sh` from this marketplace.
 
-**From monorepo clone** (dev):
+**better-toolkits monorepo (dogfood):** [`.cursor/hooks.json`](../../../../.cursor/hooks.json)
+wires stderr + PRDS via [`.cursor/hooks/`](../../../../.cursor/hooks/) wrappers — same SSOT as
+OpenCode plugins under `shared/hooks/*/adapters/`. Reload the workspace after pull.
+
+**From monorepo clone** (consumers without the committed `.cursor` tree):
 
 ```json
 {
@@ -29,7 +33,11 @@ already points at `cursor-before-shell.sh` from this marketplace.
   "hooks": {
     "beforeShellExecution": [
       {
-        "command": "bash ${workspaceFolder}/shared/hooks/stderr/adapters/cursor-before-shell.sh"
+        "command": "bash ${workspaceFolder}/shared/hooks/stderr/adapters/cursor-before-shell.sh",
+        "failClosed": true
+      },
+      {
+        "command": "bash ${workspaceFolder}/shared/hooks/prds/adapters/cursor-before-shell.sh"
       }
     ]
   }

@@ -4,8 +4,10 @@ on:
   pull_request:
     paths:
       - ".claude-plugin/marketplace.json"
+      - ".cursor/**"
       - "toolkits/**"
       - "shared/bootstrap/**"
+      - "shared/hooks/**"
       - "scripts/ci/marketplace_versioning.py"
   push:
     branches: [main]
@@ -33,3 +35,5 @@ jobs:
         run: |
           BASE="${{ github.event.pull_request.base.sha || 'HEAD~1' }}"
           python3 scripts/ci/marketplace_versioning.py check --range "${BASE}..HEAD"
+      - name: stderr policy detector tests
+        run: bash shared/hooks/stderr/tests/test-detect.sh
