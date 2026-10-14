@@ -11,7 +11,7 @@
     {
       "name": "better-toolkits-bootstrap",
       "description": "Install first \u2014 bootstrap marketplace and harness wiring via /toolkits-initial-setup (HITL). OpenCode: npx @chimeranext/better-toolkits setup.",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "source": "./shared/bootstrap",
       "category": "workflow",
       "keywords": [
