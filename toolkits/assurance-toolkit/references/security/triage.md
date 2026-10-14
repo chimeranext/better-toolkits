@@ -12,7 +12,7 @@ Is this PR **safe to expose to code review** under PR-stage security gates
 ```mermaid
 flowchart TD
   start(["security pillar PR N"])
-  c1["Read PR CI security workflows"]
+  start --> c1["Read PR CI security workflows"]
   c1 --> c2{"critical or blocking open?"}
   c2 -->|no| p["PASS security pillar"]
   c2 -->|yes triageable| t["triage security findings protocol"]

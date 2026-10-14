@@ -15,7 +15,7 @@ Do PR-stage **gates and receipts** allow moving to remote code review?
 ```mermaid
 flowchart TD
   start(["governance pillar PR N"])
-  g1["Cross-check testing PASS"]
+  start --> g1["Cross-check testing PASS"]
   g1 --> g2["Cross-check security PASS"]
   g2 --> g3{"coverage delta non-negative?"}
   g3 -->|no| b["BLOCKED"]
