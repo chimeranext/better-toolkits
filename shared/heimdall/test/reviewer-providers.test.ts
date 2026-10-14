@@ -16,6 +16,7 @@ import {
   selectEnabledLanes,
   listProviderIds,
   OPENROUTER_API_KEY_ENV,
+  GOOGLE_AI_API_KEY_ENV,
   REVIEWER_PROVIDER_ENV,
   DEFAULT_PROVIDER_ID,
 } from "../src/lib/reviewer-providers.ts"
@@ -89,10 +90,21 @@ test("el mensaje de error nombra el lane y la env var que falta", () => {
 test("env vacío → gemini-direct (back-compat sin regresión)", () => {
   const provider = selectReviewerProvider({
     [OPENROUTER_API_KEY_ENV]: "sk-or-test",
-    GOOGLE_AI_API_KEY: "g-test",
+    [GOOGLE_AI_API_KEY_ENV]: "g-test",
   })
   expect(provider.id).toBe(DEFAULT_PROVIDER_ID)
   expect(provider.kind).toBe("gemini-direct")
+})
+
+test("alias gemini resuelve al lane gemini-direct (local-pr-review --provider gemini)", () => {
+  const provider = selectReviewerProvider({
+    [REVIEWER_PROVIDER_ENV]: "gemini",
+    [GOOGLE_AI_API_KEY_ENV]: "g-test",
+  })
+  expect(provider.id).toBe("gemini")
+  expect(provider.kind).toBe("gemini-direct")
+  expect(provider.model).toBe("gemini-3.5-flash")
+  expect(provider.apiKey).toBe("g-test")
 })
 
 test("los 4 lanes OpenRouter nuevos están registrados", () => {

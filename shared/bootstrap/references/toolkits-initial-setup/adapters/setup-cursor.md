@@ -108,7 +108,8 @@ bash shared/bootstrap/scripts/prune-better-toolkits-cache.sh
 ```
 
 Slash commands SSOT: `shared/bootstrap/commands/` — e.g. `/toolkits-initial-setup`,
-`/prune-better-toolkits-cache`, `/refresh-better-toolkits-cache` (update-only; never purges).
+`/prune-better-toolkits-cache`, `/refresh-better-toolkits-cache` (update-only; never purges),
+`/local-pr-review` (default **Heimdall / Kimi / NVIDIA NIM**; skill SSOT `shared/skills/local-pr-review/`).
 
 ## Verify
 

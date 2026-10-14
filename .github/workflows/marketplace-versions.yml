@@ -9,12 +9,18 @@ on:
       - "shared/bootstrap/**"
       - "shared/hooks/**"
       - "scripts/ci/marketplace_versioning.py"
+      - "scripts/lint/**"
+      - ".cursor/hooks/**"
+      - ".cursor/hooks.json"
   push:
     branches: [main]
     paths:
       - ".claude-plugin/marketplace.json"
       - "toolkits/**"
       - "shared/bootstrap/**"
+      - "scripts/lint/**"
+      - ".cursor/hooks/**"
+      - ".cursor/hooks.json"
 
 permissions:
   contents: read
@@ -37,3 +43,7 @@ jobs:
           python3 scripts/ci/marketplace_versioning.py check --range "${BASE}..HEAD"
       - name: stderr policy detector tests
         run: bash shared/hooks/stderr/tests/test-detect.sh
+      - name: no stale deprecated agent shims (baseline shrink-only)
+        run: |
+          python3 scripts/lint/check_no_stale_deprecated_shims.py --repo
+          bash scripts/lint/tests/test_no_stale_deprecated_shims.sh

@@ -20,6 +20,17 @@ export function toolkitSkillsDirs(repoRoot) {
   return found.sort();
 }
 
+/** Transversal skills under `shared/skills/` (e.g. local-pr-review, requirements-authoring). */
+export function sharedSkillsDir(repoRoot) {
+  const p = join(repoRoot, "shared", "skills");
+  return existsSync(p) ? [p] : [];
+}
+
+/** Toolkit + transversal dirs for OpenCode `skills` wiring during /toolkits-initial-setup. */
+export function installSkillsDirs(repoRoot) {
+  return [...toolkitSkillsDirs(repoRoot), ...sharedSkillsDir(repoRoot)].sort();
+}
+
 function configPaths(configDir) {
   return [join(configDir, "opencode.json"), join(configDir, "opencode.jsonc")];
 }

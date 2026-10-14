@@ -8,6 +8,10 @@
       },
       {
         "command": "bash .cursor/hooks/prds-before-shell.sh"
+      },
+      {
+        "command": "bash .cursor/hooks/deprecated-shim-before-shell.sh",
+        "failClosed": true
       }
     ]
   }

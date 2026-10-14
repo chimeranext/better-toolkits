@@ -11,7 +11,7 @@ import {
   commandsScript,
 } from "./paths.js";
 import {
-  toolkitSkillsDirs,
+  installSkillsDirs,
   readSkills,
   missingSkills,
 } from "./skills.js";
@@ -68,7 +68,7 @@ export function planInstall(opts = {}) {
  */
 export function planSkillsStep(opts, repoRoot) {
   const configDir = resolveConfigDir(opts);
-  const wanted = toolkitSkillsDirs(repoRoot);
+  const wanted = installSkillsDirs(repoRoot);
   if (!wanted.length) return null;
   const current = readSkills(configDir);
   if (current.unparseable) {
