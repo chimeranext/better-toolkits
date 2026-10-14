@@ -2,79 +2,79 @@
 
 ## Purpose
 
-Gobierno de evidencia del assurance-toolkit: métricas outcome-based, gates por etapa y receipts trazables que convierten corridas de tests en decisiones de release defendibles.
+Evidence governance for assurance-toolkit: outcome-based metrics, per-stage gates, and traceable receipts that turn test runs into defensible release decisions.
 
 ## ADDED Requirements
 
-### Requirement: Métricas outcome-based (DORA / DER / MTTD)
+### Requirement: Outcome-based metrics (DORA / DER / MTTD)
 
-El sistema SHALL medir outcomes, no actividad: DORA (deployment frequency, lead time, change fail rate, failed deployment recovery time, rework rate) más DER/DRE, MTTD/MTTR y flaky rate. El join test-results ↔ tracker usa `found_env` y `commit_sha` (Sentry/PagerDuty/rollbacks entran con `found_env=production` automático); ventana de atribución de 14 días y defectos `unattributed` como señal propia. Anti-gaming: ratios y tendencias, nada de targets individuales, cobertura como diagnóstico (Goodhart).
+The system SHALL measure outcomes, not activity: DORA (deployment frequency, lead time, change fail rate, failed deployment recovery time, rework rate) plus DER/DRE, MTTD/MTTR, and flaky rate. The test-results ↔ tracker join uses `found_env` and `commit_sha` (Sentry/PagerDuty/rollbacks enter with `found_env=production` automatically); a 14-day attribution window and `unattributed` defects as their own signal. Anti-gaming: ratios and trends, no individual targets, coverage as a diagnostic (Goodhart).
 
-#### Scenario: Escape computable sin trabajo manual
+#### Scenario: Escape is computable without manual work
 
-- **WHEN** un defecto de producción entra por cualquier canal
-- **THEN** queda etiquetado y el DER/DRE del release se recalcula solo
+- **WHEN** a production defect arrives through any channel
+- **THEN** it is labeled and the release DER/DRE is recalculated on its own
 
-#### Scenario: Flaky backlog sube, escape bajo sospecha
+#### Scenario: Flaky backlog rises, escape is suspect
 
-- **WHEN** crece la cuarentena de flakies
-- **THEN** el dashboard marca riesgo de escape (cobertura en deuda), no solo molestia
+- **WHEN** the flake quarantine grows
+- **THEN** the dashboard marks escape risk (coverage in debt), not only annoyance
 
-### Requirement: Gates por etapa, rápidos primero
+### Requirement: Per-stage gates, fast ones first
 
-El sistema SHALL definir gates por etapa: commit (lint, unit, coverage del cambio), PR (tests 100%, security críticas 0, `coverage_delta` ≥ 0), release (e2e pass, p95, DER bajo umbral, `can-i-deploy` donde aplique). Lo barato y rápido primero; cada gate previene una clase de fallo vista o temida; flaky = defecto (cuarentena, fix o remove).
+The system SHALL define gates per stage: commit (lint, unit, coverage of the change), PR (tests 100%, security criticals 0, `coverage_delta` ≥ 0), release (e2e pass, p95, DER under threshold, `can-i-deploy` where it applies). Cheap and fast first; each gate prevents a failure class that was seen or feared; flaky = defect (quarantine, fix, or remove).
 
-#### Scenario: Gate rojo frena con causa linkeada
+#### Scenario: A red gate stops with a linked cause
 
-- **WHEN** un gate falla
-- **THEN** la promoción se bloquea con link directo a la evidencia que lo tumbó
+- **WHEN** a gate fails
+- **THEN** promotion is blocked with a direct link to the evidence that failed it
 
-### Requirement: Receipts trazables (fase 7, slot ocupado)
+### Requirement: Traceable receipts (phase 7, slot filled)
 
-El sistema SHALL emitir un receipt por veredicto (tests, liveness, security): qué corrió, dónde, contra qué baseline, con qué IDs (Linear, MASWE/MASTG, contrato) y bajo qué versión (SemVer + conventional commits, exigible en todo repo vía commitlint y releases automatizados). El slot `transversals/receipts/` deja de estar vacío y es el formato auditable del release.
+The system SHALL emit one receipt per verdict (tests, liveness, security): what ran, where, against which baseline, with which IDs (Linear, MASWE/MASTG, contract), and under which version (SemVer plus conventional commits, required in every repo via commitlint and automated releases). The `transversals/receipts/` slot stops being empty and is the auditable format of the release.
 
-#### Scenario: Release reconstruible
+#### Scenario: A release is reconstructable
 
-- **WHEN** se pide la evidencia de un release
-- **THEN** los receipts reconstruyen qué se verificó, con qué resultado y quién lo firmó
+- **WHEN** the evidence for a release is requested
+- **THEN** the receipts reconstruct what was verified, with what result, and who signed it
 
-### Requirement: Pipeline de gates con patrones GitOps (ArgoCD)
+### Requirement: Gate pipeline with GitOps patterns (ArgoCD)
 
-El sistema SHALL ordenar gates como sync waves (infra/CRDs primero, app después), con hooks PreSync (verificación previa), Sync y PostSync (validación posterior + deletion policies); `ignoreDifferences` como baseline conocida (lo conocido no bloquea, lo nuevo sí — mismo patrón que el baseline de Schemathesis); health assessment como veredicto de liveness; App of Apps para gobernar fleets. Gap registrado: el cap. CI del libro venía ausente en early release — no inventar su contenido.
+The system SHALL order gates as sync waves (infra/CRDs first, app after), with PreSync hooks (prior verification), Sync, and PostSync (later validation plus deletion policies); `ignoreDifferences` as a known baseline (what is known does not block, what is new does — same pattern as the Schemathesis baseline); health assessment as the liveness verdict; App of Apps to govern fleets. Recorded gap: the book's CI chapter was missing in the early release — do not invent its content.
 
-#### Scenario: Infra verifica primero
+#### Scenario: Infra verifies first
 
-- **WHEN** un deploy incluye infra + app
-- **THEN** la wave de infra pasa su gate antes de que la app se toque
+- **WHEN** a deploy includes infra plus app
+- **THEN** the infra wave passes its gate before the app is touched
 
-#### Scenario: Baseline conocida no bloquea
+#### Scenario: A known baseline does not block
 
-- **WHEN** el diff coincide con `ignoreDifferences`/baseline registrada
-- **THEN** no bloquea; si es nuevo, bloquea o entra al baseline como cambio conocido
+- **WHEN** the diff matches registered `ignoreDifferences` / baseline
+- **THEN** it does not block; if it is new, it blocks or enters the baseline as a known change
 
-### Requirement: Pre-flight K8s — cada fallo del troubleshooting guide es un gate
+### Requirement: K8s pre-flight — every troubleshooting-guide failure is a gate
 
-El sistema SHALL convertir el catálogo de fallos (Ultimate K8s Troubleshooting Guide) en gates pre-deploy: requests/limits presentes y cuerdos (Polaris/kube-linter, el "error más común"), probes definidas, imagen/secrets existentes, métrica del HPA existente, RBAC least-privilege + security contexts revisados en PR, quotas contra namespace, smoke de service discovery post-deploy (hook PostSync).
+The system SHALL turn the failure catalog (Ultimate K8s Troubleshooting Guide) into pre-deploy gates: requests/limits present and sane (Polaris/kube-linter, the "most common error"), probes defined, image/secrets exist, the HPA metric exists, least-privilege RBAC plus security contexts reviewed on the PR, quotas against the namespace, post-deploy service-discovery smoke (PostSync hook).
 
-#### Scenario: Manifiesto sin probes no avanza
+#### Scenario: A manifest without probes does not advance
 
-- **WHEN** un Deployment no declara liveness/readiness
-- **THEN** el gate lo frena con el capítulo del guide que ese fallo produce
+- **WHEN** a Deployment does not declare liveness/readiness
+- **THEN** the gate stops it with the guide chapter that failure produces
 
-### Requirement: Pre-flight en capas con un owner por hallazgo (matrices kubernetes.qa)
+### Requirement: Layered pre-flight with one owner per finding (kubernetes.qa matrices)
 
-El sistema SHALL ordenar el pre-flight en capas: kubeconform primero (schema + CRDs; kubeval deprecated, prohibido en pipelines nuevos) → kube-score (PR gate best-practice: probes, limits, securityContext) → Trivy (imágenes + misconfig + secrets + SBOM) → Checkov (policy cross-IaC) + kubeaudit (auditoría security-only estrecha); Kubescape para posture multi-framework (NSA/CISA, MITRE, CIS, SOC2) + RBAC; kube-bench para CIS authoritative en nodos (Job); kube-hunter excluido del pipeline (unmaintained 2022, solo labs). Regla anti-duplicados: un owner por tipo de hallazgo + un solo esquema de severidad. Trivy default OSS; Snyk (Code SAST + fix PRs) solo si se usa su workflow dev.
+The system SHALL order pre-flight in layers: kubeconform first (schema plus CRDs; kubeval deprecated, forbidden in new pipelines) → kube-score (PR gate best-practice: probes, limits, securityContext) → Trivy (images plus misconfig plus secrets plus SBOM) → Checkov (cross-IaC policy) plus kubeaudit (narrow security-only audit); Kubescape for multi-framework posture (NSA/CISA, MITRE, CIS, SOC2) plus RBAC; kube-bench for authoritative CIS on nodes (Job); kube-hunter excluded from the pipeline (unmaintained 2022, labs only). Anti-duplicate rule: one owner per finding type plus a single severity schema. Trivy is the OSS default; Snyk (Code SAST plus fix PRs) only if its dev workflow is in use.
 
-#### Scenario: Capas sin doble-reporte
+#### Scenario: Layers without double-reporting
 
-- **WHEN** kube-score y Trivy flaggean el mismo securityContext
-- **THEN** solo el owner configurado reporta; el otro silencia la regla duplicada
+- **WHEN** kube-score and Trivy flag the same securityContext
+- **THEN** only the configured owner reports; the other silences the duplicate rule
 
-### Requirement: Gates con contrato de salida y thresholds por env (patrón kubeqa gates)
+### Requirement: Gates with an exit contract and per-env thresholds (kubeqa gates pattern)
 
-El sistema SHALL implementar gates con exit codes (0 pass / 1 fail / 2 warnings-only), thresholds de severidad por ambiente (dev: critical, prod: warning), rollout audit-first (baseline, luego tighten progresivo), 5 capas (manifest, image, policy YAML sin Rego, compliance pre-check CIS, diff contra lo corriendo) y pares admission (Kyverno/Gatekeeper) como backstop, no como único gate.
+The system SHALL implement gates with exit codes (0 pass / 1 fail / 2 warnings-only), severity thresholds per environment (dev: critical, prod: warning), audit-first rollout (baseline, then progressive tighten), 5 layers (manifest, image, YAML policy without Rego, CIS compliance pre-check, diff against what is running), and admission pairs (Kyverno/Gatekeeper) as a backstop, not as the only gate.
 
-#### Scenario: Prod más estricto que dev sin duplicar config
+#### Scenario: Prod is stricter than dev without duplicating config
 
-- **WHEN** el mismo gate corre en dev y prod
-- **THEN** prod falla en warning y dev solo en critical, con overrides por namespace versionados
+- **WHEN** the same gate runs in dev and prod
+- **THEN** prod fails on warning and dev only on critical, with versioned per-namespace overrides
