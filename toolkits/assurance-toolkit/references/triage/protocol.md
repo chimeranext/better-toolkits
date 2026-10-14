@@ -19,9 +19,9 @@ code-review bots run.
 | **`pr`** (default) | Ready-to-review / PR gate | Every pillar marked `required` or `optional` for stage `pr` in config; skips `skip`. |
 | **`<pillar>`** | Deep dive on one pillar | That pillar's sub-protocol only. |
 
-**Liveness on PR:** Seacrets consumer repos set **`required`** on every PR
-(`readyToReview.assurance.pillars.liveness`). Other repos may use **`skip`**
-when observability runs on schedule/daemon only — not “forgotten”, just config.
+**Liveness on PR:** default is **`skip`** in the toolkit example — not “forgotten”.
+Consumer repos may set `readyToReview.assurance.pillars.liveness` to **`required`**
+when observability must gate every PR; otherwise liveness runs on schedule/daemon.
 
 Resolve PR number from `--pr N`, else `gh pr view` for the current branch.
 
@@ -74,6 +74,9 @@ flowchart TD
     LV --> V
     P --> V
 ```
+
+Per-pillar **gate steps** (CI checks, scanners, `coverage_delta`, receipt) are in each
+sub-protocol flowchart linked in the table above — the hub diagram is orchestration only.
 
 ## Sequence (RTR §2b — before remote bots)
 

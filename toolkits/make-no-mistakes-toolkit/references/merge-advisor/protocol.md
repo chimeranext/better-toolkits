@@ -124,11 +124,15 @@ needed to unblock a PR also require HITL.
 
 ### Tracker anchor before `gh pr create` (draft PR first gate)
 
-Align with `/implement`: **Linear is the native tracker** on Seacrets consumer
-repos (`TEAM-N`, branch `*/scrt-N-*`, PR body `Fixes SCRT-N`). **GitHub issues**
-are **fallback** when the repo has no Linear workspace (e.g. `chimeranext/better-toolkits`
-epics as `github.com/.../issues/77`). Do not write this gate as if GitHub issues
-were the default product tracker.
+Align with `/implement`: when the consumer repo configures **Linear** in
+`make-no-mistakes.config.json`, that is the native tracker (`TEAM-N`, branch from
+`gitBranchName` or `*/<issue-id>-*`, PR body `Fixes TEAM-N`). **GitHub issues**
+are the anchor when Linear is absent (e.g. planning epics in this monorepo as
+`github.com/<owner>/<repo>/issues/<N>`). Do not write this gate as if GitHub
+issues were always the default when Linear is configured.
+
+**Vendor-neutral docs:** toolkit markdown in `better-toolkits` must not name
+customer orgs or org-specific Linear team keys — use `TEAM-N` and “consumer repo”.
 
 **Do not** treat “open any draft PR” as success. Success is **one primary open
 PR** for that work item (Linear issue or fallback GitHub issue).
@@ -147,7 +151,7 @@ Before `gh pr create` (draft or ready):
    branch**; update body (`Fixes …`, `Depends on:`) if needed. **Forbidden:** a
    second open PR for the same Linear/GitHub work item unless the human explicitly
    OKs superseding/closing the duplicate.
-4. **If no PR yet:** create **exactly one** PR — body links the anchor (`Fixes SCRT-N`
+4. **If no PR yet:** create **exactly one** PR — body links the anchor (`Fixes TEAM-N`
    or `Fixes #<N>` / GitHub Development on a fallback issue). Do not hand off
    “tracker #90 + unrelated PR #91” as the default.
 5. **Handoff must name:** tracker id **and** PR **URL + number**, **base branch**,
@@ -156,7 +160,7 @@ Before `gh pr create` (draft or ready):
 
 **GitHub numbering (PRs and fallback issues):** one repository-wide sequence — an
 issue #90 and a later PR #91 share the **same counter**, not two parallel systems.
-Linear ids (`SCRT-N`) are **orthogonal** to GitHub PR numbers. The contract is
+Linear ids (`TEAM-N`) are **orthogonal** to GitHub PR numbers. The contract is
 **one work item → one primary open PR** unless the human intentionally splits work.
 
 ### Local integration git ≠ GitHub delivery

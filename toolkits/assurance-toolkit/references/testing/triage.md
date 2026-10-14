@@ -16,7 +16,7 @@ Does this PR have **testing evidence** that satisfies the convention record for 
 ```mermaid
 flowchart TD
   start(["testing pillar PR N"])
-  c1["Resolve convention GATES for language and framework"]
+  start --> c1["Resolve convention GATES for language and framework"]
   c1 --> c2["gh pr checks N"]
   c2 --> v{"required gates success?"}
   v -->|no| b["BLOCKED record id job URL"]
