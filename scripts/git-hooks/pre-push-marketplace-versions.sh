@@ -38,3 +38,4 @@ fi
 
 "${PYTHON}" scripts/ci/marketplace_versioning.py sync >&2 || exit 1
 "${PYTHON}" scripts/ci/marketplace_versioning.py check --range "${RANGE}"
+"${PYTHON}" scripts/lint/check_no_stale_deprecated_shims.py --range "${RANGE}"

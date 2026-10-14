@@ -104,7 +104,7 @@ Deliberate actions you invoke explicitly.
 | [`/make-no-mistakes:parallelize <brief>`](commands/parallelize.md) | Plan how to split work across subagents / worktrees / agent teams before implementing |
 | [`/make-no-mistakes:explain <topic>`](commands/explain.md) | Explain a decision, command, or failure mode from project + toolkit context |
 | [`/make-no-mistakes:handover-pr <pr>`](commands/handover-pr.md) | Hand a specific PR to a teammate with verify-don't-remember context |
-| [`/make-no-mistakes:observability-audit`](commands/observability-audit.md) | Audit observability coverage against the consumer contract JSON |
+| [`/assurance:observability-audit`](../assurance-toolkit/commands/observability-audit.md) | Audit whether observability actually works (pilar liveness; assurance-toolkit) |
 | [`/make-no-mistakes:secret-generate`](commands/secret-generate.md) | Generate and stage secrets via the secret-store helpers (pairs with secret-input/use/clear) |
 | [`/make-no-mistakes:prioritize <pillar-slug>`](commands/prioritize.md) | MoSCoW + RICE-adapted applied to a pillar's Linear issues, traceable to its PIBER+IDCF sub-spike and the latest vision audit. Outputs priority report + description-footer per issue + snapshot comment on the sub-spike. Chain: `product-vision-audit → prioritize → spike-recommend → implement` |
 | [`/make-no-mistakes:rebase <repo>`](commands/rebase.md) | Team release sync — rebase all branches, auto-merge ready PRs, health report |
@@ -112,8 +112,8 @@ Deliberate actions you invoke explicitly.
 | [`/assurance:e2e-test-builder <source>`](../assurance-toolkit/commands/e2e-test-builder.md) | Generate a TestSprite-compatible `test-suite.json` (assurance; own protocol) |
 | [`/assurance:e2e-test-runner [filter]`](../assurance-toolkit/commands/e2e-test-runner.md) | Execute a `test-suite.json` (assurance; own protocol) |
 | [`/make-no-mistakes:bug-squash-locally [domain]`](commands/bug-squash-locally.md) | HITL QA on **localhost only** — headed Chrome DevTools MCP + [semantic UI locators](references/bug-squash/semantic-ui-locator-policy.md); full multi-env `/bug-squash` ships with OpenSpec `2026-09-09-generalize-bug-squash` |
-| [`/make-no-mistakes:pentest-runner <phase>`](commands/pentest-runner.md) | Automated pentesting following Cyber Kill Chain + OWASP methodology |
-| [`/make-no-mistakes:pentest-playbook-setup [audit\|sync\|workflows\|gaps]`](commands/pentest-playbook-setup.md) | Audit/sync pentest playbook ↔ CI ↔ tenant triage config (setup step; pairs with pentest-runner + `/assurance:triage security`) |
+| [`/assurance:pentest-runner <phase>`](../assurance-toolkit/commands/pentest-runner.md) | Automated pentesting following Cyber Kill Chain + OWASP methodology (assurance-toolkit) |
+| [`/assurance:pentest-playbook-setup [audit\|sync\|workflows\|gaps]`](../assurance-toolkit/commands/pentest-playbook-setup.md) | Audit/sync pentest playbook ↔ CI ↔ tenant triage config (pairs with `/assurance:triage security`) |
 | [`/assurance:triage security`](../assurance-toolkit/commands/triage.md) | Triage CI + pentest findings into owned backlog issues (tenant config e.g. `linear-setup.json` → `securityFindingTriage`) |
 | [`/make-no-mistakes:goodmorning`](commands/goodmorning.md) | Bootstrap your session from previous day's handoff files |
 | [`/make-no-mistakes:goodnight [label]`](commands/goodnight.md) | Save full session context as a handoff file for tomorrow |

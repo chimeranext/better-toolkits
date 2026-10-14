@@ -13,6 +13,7 @@ import {
 import { planInstall } from "../lib/install.js";
 import {
   toolkitSkillsDirs,
+  installSkillsDirs,
   missingSkills,
 } from "../lib/skills.js";
 import { canonicalServers, planMcpStep, whichBin } from "../lib/mcp.js";
@@ -111,10 +112,16 @@ describe("mcp phase", () => {
 });
 
 describe("skills wiring", () => {
-  it("finds all ten toolkit skills dirs in the real repo", () => {
+  it("finds toolkit skills dirs in the real repo", () => {
     const dirs = toolkitSkillsDirs(REAL_ROOT);
-    assert.equal(dirs.length, 10);
+    assert.equal(dirs.length, 11);
     assert.ok(dirs.some((d) => d.endsWith("venture-studio-toolkit/skills")));
+  });
+
+  it("installSkillsDirs includes shared/skills (transversal)", () => {
+    const dirs = installSkillsDirs(REAL_ROOT);
+    assert.equal(dirs.length, 12);
+    assert.ok(dirs.some((d) => d.endsWith("shared/skills")));
   });
 
   it("missingSkills detects unwired dirs", () => {
