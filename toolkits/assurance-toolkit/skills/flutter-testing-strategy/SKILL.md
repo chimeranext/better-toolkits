@@ -8,7 +8,7 @@ description: >
 # flutter-testing-strategy — multi-harness entry (migrated)
 
 > Source: `flutter-boilerplate-monorepo-template/skills/flutter/integration-testing`.
-> Protocol SSOT: `toolkits/assurance-toolkit/references/testing/protocol.md`.
+> Protocol SSOT: `toolkits/assurance-toolkit/references/testing/e2e-protocol.md`.
 > Template copy retained as shim.
 
 Estrategia completa unit/widget/integration + TDD. Corre desde la raíz del proyecto.

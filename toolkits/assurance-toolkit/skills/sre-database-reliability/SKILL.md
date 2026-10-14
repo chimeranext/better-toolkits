@@ -8,7 +8,7 @@ description: >
 # sre-database-reliability — multi-harness entry (migrated, split)
 
 > Source: `flutter-boilerplate-monorepo-template/skills/system-reliability-engineering/database-reliability`.
-> Protocol SSOT: `toolkits/assurance-toolkit/references/testing/protocol.md` (restore drills),
+> Protocol SSOT: `toolkits/assurance-toolkit/references/testing/e2e-protocol.md` (restore drills),
 > `toolkits/assurance-toolkit/references/liveness/protocol.md` (replication/failover signals).
 > Template copy retained as shim.
 

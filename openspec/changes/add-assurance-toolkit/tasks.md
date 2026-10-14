@@ -7,7 +7,7 @@
 
 ## 2. Protocol migration with shims
 
-- [x] 2.1 Move `/assurance:e2e-test-builder`, `/assurance:e2e-test-runner`, and `/assurance:e2e-test-preview` to assurance, each with its own protocol (`references/e2e-test-*/protocol.md`). Shims in make-no-mistakes removed; the pillar `references/testing/protocol.md` does not replace those three protocols.
+- [x] 2.1 Move `/assurance:e2e-test-builder`, `/assurance:e2e-test-runner`, and `/assurance:e2e-test-preview` to assurance, each with its own protocol (`references/e2e-test-*/protocol.md`). Shims in make-no-mistakes removed; the pillar `references/testing/e2e-protocol.md` does not replace those three protocols.
 - [x] 2.2 Move `/assurance:pentest-runner` plus `/assurance:pentest-playbook-setup` with shims; verify delegation with a warning and a report separate from tests
 - [x] 2.3 Move `/assurance:observability-audit` (probe/heartbeat/absence/synthetic ladder) with a shim; verify it distinguishes "passes" from "stopped passing"
 - [x] 2.4 Security findings (queue → owner → SLA → receipt) live in mode `/assurance:triage security` (`references/security/findings-protocol.md`). No separate command and no shim.

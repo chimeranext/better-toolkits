@@ -8,7 +8,7 @@ description: >
 # flutter-performance — multi-harness entry (migrated)
 
 > Source: `flutter-boilerplate-monorepo-template/skills/flutter/performance`.
-> Protocol SSOT: `toolkits/assurance-toolkit/references/testing/protocol.md`.
+> Protocol SSOT: `toolkits/assurance-toolkit/references/testing/e2e-protocol.md`.
 > Template copy retained as shim.
 
 Velocidad, fluidez y eficiencia (rebuilds, listas, memoria, imágenes).

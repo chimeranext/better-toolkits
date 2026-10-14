@@ -44,7 +44,7 @@ routes **per-pillar sub-protocols** (see `references/*/triage.md`). Default mode
 
 | Pillar | Question | PR triage | Runners / deep commands | Cadence |
 |--------|----------|-----------|-------------------------|---------|
-| testing | Does it do what it says? | [`testing/triage.md`](references/testing/triage.md) | builder after triage PASS; runner is the stage QA assignee; preview is visual only | Builder per PR; runner on stage QA |
+| testing | Does it do what it says? | [`testing/triage-protocol.md`](references/testing/triage-protocol.md) | builder after triage PASS; runner is the stage QA assignee; preview is visual only | Builder per PR; runner on stage QA |
 | liveness | Is it still alive? | [`liveness/triage.md`](references/liveness/triage.md) (default **skip** on PR) | [`/assurance:observability-audit`](commands/observability-audit.md) | Always (schedule/daemon) |
 | security (transversal) | Is it safe? | [`security/triage.md`](references/security/triage.md) | [`/assurance:pentest-runner`](commands/pentest-runner.md), [`/assurance:pentest-playbook-setup`](commands/pentest-playbook-setup.md), [`/assurance:triage security`](commands/triage.md) | Per release / finding SLA |
 | governance (no runners) | How do we measure, block, prove? | [`governance/triage.md`](references/governance/triage.md) | DORA/DER metrics, stage gates, receipts | Per release |
@@ -103,7 +103,7 @@ Auto-activate by context — you don't need to remember the command name.
 
 | Protocol | Covers |
 |----------|--------|
-| [`references/testing/protocol.md`](references/testing/protocol.md) | Polyglot runners (Flutter, Laravel/Pest, Elixir, TS7, Playwright, MobileWright), stories/scenarios, mutation, contracts, perf, a11y, visual, PBT, eval-driven + risk-driven |
+| [`references/testing/e2e-protocol.md`](references/testing/e2e-protocol.md) | Polyglot runners (Flutter, Laravel/Pest, Elixir, TS7, Playwright, MobileWright), stories/scenarios, mutation, contracts, perf, a11y, visual, PBT, eval-driven + risk-driven |
 | [`references/liveness/protocol.md`](references/liveness/protocol.md) | Observability escalera, chaos + resilience score, baselines, K8s pre-flight signals, playbook/runbook taxonomy |
 | [`references/security/protocol.md`](references/security/protocol.md) | Pentest trilogy, MASVS→MASWE→MASTG, SAST/DAST/SCA, signed supply-chain, mobile REA, agentic red-team, K8s runtime + policy engines |
 | [`references/governance/protocol.md`](references/governance/protocol.md) | DORA/DER metrics, stage gates, GitOps pipeline, K8s layered pre-flight, receipts, SemVer universal |
@@ -120,7 +120,7 @@ assurance-toolkit/
 │   └── */SKILL.md
 ├── references/         # Protocol SSOT per pillar
 │   ├── triage/protocol.md
-│   ├── testing/protocol.md + triage.md
+│   ├── testing/e2e-protocol.md + triage.md
 │   ├── liveness/protocol.md + triage.md
 │   ├── security/protocol.md + triage.md
 │   └── governance/protocol.md + triage.md
