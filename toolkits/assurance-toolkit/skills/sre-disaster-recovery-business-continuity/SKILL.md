@@ -8,7 +8,7 @@ description: >
 # sre-disaster-recovery-business-continuity — multi-harness entry (migrated, split)
 
 > Source: `flutter-boilerplate-monorepo-template/skills/system-reliability-engineering/disaster-recovery-business-continuity`.
-> Protocol SSOT: `toolkits/assurance-toolkit/references/testing/protocol.md` (DR drills),
+> Protocol SSOT: `toolkits/assurance-toolkit/references/testing/e2e-protocol.md` (DR drills),
 > `toolkits/assurance-toolkit/references/governance/protocol.md` (RTO/RPO en receipts).
 > Template copy retained as shim.
 

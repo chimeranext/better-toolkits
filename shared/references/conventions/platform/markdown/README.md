@@ -18,7 +18,7 @@ GitHub, enlaces relativos entre records sin acoplar producto consumidor.
 ## RULES
 
 - M1 [structure] Un `#` título por archivo; secciones `##` en orden lógico (invocación → contrato → config) → S1.
-- M2 [links] Preferir rutas relativas (`../testing/triage.md`) sobre URLs absolutas a repos consumidores → S2.
+- M2 [links] Preferir rutas relativas (`../testing/triage-protocol.md`) sobre URLs absolutas a repos consumidores → S2.
 - M3 [diagrams] Bloques Mermaid siguen el hijo `platform/diagrams/mermaid-github` (no inventar perfil por archivo) → hijo.
 - M4 [ssot] Un hub por comando (`protocol.md`); entradas finas en `commands/*.md` → convención assurance.
 

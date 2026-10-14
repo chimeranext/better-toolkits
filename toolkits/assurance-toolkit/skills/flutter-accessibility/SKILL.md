@@ -8,7 +8,7 @@ description: >
 # flutter-accessibility — multi-harness entry (migrated)
 
 > Source: `flutter-boilerplate-monorepo-template/skills/flutter/accessibility`.
-> Protocol SSOT: `toolkits/assurance-toolkit/references/testing/protocol.md`.
+> Protocol SSOT: `toolkits/assurance-toolkit/references/testing/e2e-protocol.md`.
 > Template copy retained as shim.
 
 Semantic widgets, screen readers, focus management y contrast ratios.

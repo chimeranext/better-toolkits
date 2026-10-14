@@ -10,7 +10,7 @@ Quality-evidence commands (e2e, pentest, observability, triage) currently live i
 
 - New toolkit `toolkits/assurance-toolkit/` with the SSOT protocol under `references/` plus thin entries under `commands/` plus Cursor skills (existing multi-harness pattern).
 - Migration from `make-no-mistakes-toolkit`:
-  - `e2e-test-builder`, `e2e-test-runner`, and `e2e-test-preview` live only in assurance. Each keeps the protocol it had before the shim (`references/e2e-test-builder|runner|preview/protocol.md`). No shim in make-no-mistakes. The pillar `references/testing/protocol.md` does not replace them.
+  - `e2e-test-builder`, `e2e-test-runner`, and `e2e-test-preview` live only in assurance. Each keeps the protocol it had before the shim (`references/e2e-test-builder|runner|preview/protocol.md`). No shim in make-no-mistakes. The pillar `references/testing/e2e-protocol.md` does not replace them.
   - Shims for the rest that moved: `/assurance:pentest-runner`, `/assurance:pentest-playbook-setup`, `/assurance:observability-audit`. Security findings are mode `/assurance:triage security`, with no separate command and no shim.
   - Do not move: `/make-no-mistakes:ready-to-review-mergeable`, `premortem`, audits (`audit*`, `audit-engine`), coordination (`merge-advisor`, `rebase`, `sync-advisor`, `takeover-pr`, `handover*`), execution/rituals (`implement`, `bug-squash-locally`, `secret-*`, `standup*`, `postmortem`).
 - `gemini-code-review` merges into `local-pr-review` as `--provider gemini` (shim with a deprecation warning, same precedent as `disk-cleanup`).

@@ -31,7 +31,7 @@ Resolve PR number from `--pr N`, else `gh pr view` for the current branch.
 
 | Pillar | Sub-protocol | Typical PR stage |
 | --- | --- | --- |
-| testing | [`references/testing/triage.md`](../testing/triage.md) | `required` |
+| testing | [`references/testing/triage-protocol.md`](../testing/triage-protocol.md) | `required` |
 | security | [`references/security/triage.md`](../security/triage.md) | `required` |
 | liveness | [`references/liveness/triage.md`](../liveness/triage.md) | `skip` (default) |
 | governance | [`references/governance/triage.md`](../governance/triage.md) | `required` |
@@ -47,7 +47,7 @@ Normative requirement:
 
 | PR gate criterion (spec) | Pillar / sub-protocol |
 | --- | --- |
-| tests 100% | testing → [`references/testing/triage.md`](../testing/triage.md) |
+| tests 100% | testing → [`references/testing/triage-protocol.md`](../testing/triage-protocol.md) |
 | security críticas 0 | security → [`references/security/triage.md`](../security/triage.md) |
 | `coverage_delta` ≥ 0 (+ PR receipt when configured) | governance → [`references/governance/triage.md`](../governance/triage.md) |
 

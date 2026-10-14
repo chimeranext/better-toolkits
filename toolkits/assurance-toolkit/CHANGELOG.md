@@ -9,6 +9,9 @@
 
 ### Changed
 
+- Rename testing pillar SSOT files to avoid hub collisions:
+  `references/testing/triage.md` → `triage-protocol.md`,
+  `references/testing/protocol.md` → `e2e-protocol.md` (all in-repo links updated).
 - `/assurance:e2e-test-builder` runs after `/assurance:triage pr` PASS (mandatory
   in ready-to-review §2c), using the testing pillar output.
   `/assurance:e2e-test-runner` is the stage QA assignee step (Seacrets: Darío,
@@ -22,7 +25,7 @@
   traceability + layered defense, release-gates sequence) in the 4 pillar
   protocols; hub routing flowchart in `references/triage/protocol.md`.
 - **`/assurance:triage`** hub command + `references/triage/protocol.md`.
-- Per-pillar PR triage sub-protocols: `references/testing/triage.md`,
+- Per-pillar PR triage sub-protocols: `references/testing/triage-protocol.md`,
   `references/security/triage.md`, `references/liveness/triage.md`,
   `references/governance/triage.md`.
 - Wired into `/make-no-mistakes:ready-to-review-mergeable` §2b (before remote

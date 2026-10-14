@@ -2,7 +2,7 @@
 
 Harness-agnostic body. Thin entry: [`commands/e2e-test-runner.md`](../../commands/e2e-test-runner.md).
 
-Executes scenarios from a `test-suite.json` and writes result files. The suite is produced by [`/assurance:e2e-test-builder`](../../commands/e2e-test-builder.md) after `/assurance:triage` PASS. This command is the stage QA assignee step (Seacrets: Darío, In Review on the QA ready view), not the PR triage gate. Visual inspection is [`/assurance:e2e-test-preview`](../../commands/e2e-test-preview.md). The testing pillar ([`../testing/protocol.md`](../testing/protocol.md)) does not replace this protocol.
+Executes scenarios from a `test-suite.json` and writes result files. The suite is produced by [`/assurance:e2e-test-builder`](../../commands/e2e-test-builder.md) after `/assurance:triage` PASS. This command is the stage QA assignee step (Seacrets: Darío, In Review on the QA ready view), not the PR triage gate. Visual inspection is [`/assurance:e2e-test-preview`](../../commands/e2e-test-preview.md). The testing pillar ([`../testing/e2e-protocol.md`](../testing/e2e-protocol.md)) does not replace this protocol.
 
 ---
 

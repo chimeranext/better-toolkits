@@ -2,7 +2,7 @@
 
 Harness-agnostic body. Thin entry: [`commands/e2e-test-builder.md`](../../commands/e2e-test-builder.md).
 
-Generates a TestSprite-compatible `test-suite.json`. Ready-to-review calls this command after `/assurance:triage pr` PASS, with the testing pillar output as input. Execution is later, by the stage QA assignee, via [`/assurance:e2e-test-runner`](../../commands/e2e-test-runner.md). Visual inspection is [`/assurance:e2e-test-preview`](../../commands/e2e-test-preview.md). The testing pillar ([`../testing/protocol.md`](../testing/protocol.md)) does not replace this protocol.
+Generates a TestSprite-compatible `test-suite.json`. Ready-to-review calls this command after `/assurance:triage pr` PASS, with the testing pillar output as input. Execution is later, by the stage QA assignee, via [`/assurance:e2e-test-runner`](../../commands/e2e-test-runner.md). Visual inspection is [`/assurance:e2e-test-preview`](../../commands/e2e-test-preview.md). The testing pillar ([`../testing/e2e-protocol.md`](../testing/e2e-protocol.md)) does not replace this protocol.
 
 ---
 

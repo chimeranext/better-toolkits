@@ -8,7 +8,7 @@ description: >
 # flutter-mobile-testing — multi-harness entry (migrated)
 
 > Source: `flutter-boilerplate-monorepo-template/skills/flutter/mobile-testing`.
-> Protocol SSOT: `toolkits/assurance-toolkit/references/testing/protocol.md`.
+> Protocol SSOT: `toolkits/assurance-toolkit/references/testing/e2e-protocol.md`.
 > Template copy retained as shim.
 
 Automatización en devices/simuladores vía MCPs oficiales; inspección en vivo

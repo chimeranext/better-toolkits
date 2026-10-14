@@ -8,7 +8,7 @@ Testing pillar of assurance-toolkit: build, run, and preview evidence (E2E inclu
 
 ### Requirement: E2E builder, runner, and preview each with its own protocol
 
-The system SHALL provide `/assurance:e2e-test-builder`, `/assurance:e2e-test-runner`, and `/assurance:e2e-test-preview` only from `assurance-toolkit`. Each command SHALL follow its own protocol (`references/e2e-test-builder/protocol.md`, `references/e2e-test-runner/protocol.md`, `references/e2e-test-preview/protocol.md`). Those three protocols SHALL stay distinct from the pillar `references/testing/protocol.md`. `make-no-mistakes-toolkit` SHALL NOT keep shims for these commands.
+The system SHALL provide `/assurance:e2e-test-builder`, `/assurance:e2e-test-runner`, and `/assurance:e2e-test-preview` only from `assurance-toolkit`. Each command SHALL follow its own protocol (`references/e2e-test-builder/protocol.md`, `references/e2e-test-runner/protocol.md`, `references/e2e-test-preview/protocol.md`). Those three protocols SHALL stay distinct from the pillar `references/testing/e2e-protocol.md`. `make-no-mistakes-toolkit` SHALL NOT keep shims for these commands.
 
 #### Scenario: Each command resolves its own protocol
 
