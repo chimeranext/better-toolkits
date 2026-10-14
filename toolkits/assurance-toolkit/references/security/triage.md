@@ -11,14 +11,15 @@ Is this PR **safe to expose to code review** under PR-stage security gates
 
 ```mermaid
 flowchart TD
-  start([security/triage.md]) --> c1[Read PR CI security workflows]
-  c1 --> c2{critical / blocking open?}
-  c2 -->|no| p[PASS]
-  c2 -->|sí, triageable| t[assurance triage-security-findings]
-  t --> c3{fixed or downgraded per SLA?}
-  c3 -->|no| b[BLOCKED]
-  c3 -->|sí| p
-  c2 -->|sí, not triageable| b
+  start(["security pillar PR N"])
+  c1["Read PR CI security workflows"]
+  c1 --> c2{"critical or blocking open?"}
+  c2 -->|no| p["PASS security pillar"]
+  c2 -->|yes triageable| t["triage-security-findings"]
+  t --> c3{"fixed or downgraded per SLA?"}
+  c3 -->|no| b["BLOCKED"]
+  c3 -->|yes| p
+  c2 -->|yes not triageable| b
 ```
 
 ## Sequence (agent ↔ scanners)
