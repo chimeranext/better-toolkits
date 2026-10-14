@@ -2,7 +2,7 @@
 description: "After any better-toolkits marketplace version bump — purge ALL cached Cursor plugin trees, then marketplace update (no per-toolkit slug)."
 priority: 6
 ---
-# /cursor-better-toolkits-cache-refresh
+# /prune-better-toolkits-cache
 
 Maintainers: when `scripts/ci/marketplace_versioning.py write` bumps **any** plugin version in
 `.claude-plugin/marketplace.json`, Cursor may keep old copies under
@@ -11,17 +11,17 @@ Maintainers: when `scripts/ci/marketplace_versioning.py write` bumps **any** plu
 **Always purge the full cache** — not a single toolkit. A bump can touch bootstrap, make-no-mistakes,
 assurance, etc.; leaving one slug behind keeps stale skills/commands.
 
-Read and run [`../scripts/refresh-cursor-better-toolkits-plugin-cache.sh`](../scripts/refresh-cursor-better-toolkits-plugin-cache.sh).
+Read and run [`../scripts/prune-better-toolkits-cache.sh`](../scripts/prune-better-toolkits-cache.sh).
 
 ## Run (no arguments)
 
 ```bash
-bash shared/bootstrap/scripts/refresh-cursor-better-toolkits-plugin-cache.sh
+bash shared/bootstrap/scripts/prune-better-toolkits-cache.sh
 ```
 
 The script:
 
-1. Logs every cached `plugin.json` version (via `jq`) to `~/.cursor/hooks/logs/`.
+1. Logs every cached `plugin.json` version (via `jq`) to `~/.cursor/hooks/logs/prune-better-toolkits-cache-*.out.log`.
 2. Removes **only** these two fixed paths (entire directories, if present):
    - `~/.cursor/plugins/cache/chimeranext-better-toolkits`
    - `~/.cursor/plugins/cache/better-toolkits`
