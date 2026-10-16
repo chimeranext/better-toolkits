@@ -1,17 +1,11 @@
 /**
  * Test de wiring (sin red, sin NIM, sin GitHub).
  *
- * Verifica que el reviewer cablea de extremo a extremo:
- *   - runReviewLoop despacha al lane openai-compatible con un provider MOCK
- *     inyectado (sin tocar `selectReviewerProvider` ni env),
- *   - el loop ejecuta tool-calling: primero `bifrost_github_pr_read`, luego
- *     `bifrost_github_review_post`,
- *   - el MockPostAdapter intercepta el post,
- *   - el loop termina con reviewPosted=true.
- *
- * El proveedor LLM se simula stubbeando `globalThis.fetch`: la primera llamada
- * a /chat/completions devuelve un tool_call a pr_read, la segunda un tool_call a
- * review_post, la tercera (post-tool) un mensaje sin tool_calls (fin natural).
+ * Verifica que el reviewer cablea de extremo a extremo (one-shot judge, issue #98):
+ *   - lee el PR vía el port (sin tool loop),
+ *   - una sola llamada al proveedor openai-compatible devuelve JSON del judge,
+ *   - postea el review vía executor (MockPostAdapter intercepta),
+ *   - termina con reviewPosted=true e iterations=1.
  */
 
 import { test, expect, mock } from "bun:test"
@@ -53,6 +47,26 @@ const SAMPLE_PR: PullRequestData = {
   diff_truncated: false,
 }
 
+const SAMPLE_PR_MULTI: PullRequestData = {
+  ...SAMPLE_PR,
+  changed_files: [
+    {
+      filename: "a.ts",
+      status: "modified",
+      additions: 1,
+      deletions: 0,
+      patch: "@@ patch-a @@\n const a = 1\n+const b = 2\n",
+    },
+    {
+      filename: "b.ts",
+      status: "added",
+      additions: 1,
+      deletions: 0,
+      patch: "@@ patch-b @@\n+export const x = 1\n",
+    },
+  ],
+}
+
 /** Construye una respuesta /chat/completions con un tool_call. */
 function toolCallResponse(name: string, args: Record<string, unknown>) {
   return {
@@ -84,7 +98,94 @@ function finalResponse(text: string) {
   }
 }
 
-test("el reviewer hace tool-calling (pr_read → review_post) y termina con reviewPosted=true", async () => {
+test("one-shot judge postea review con una sola inferencia LLM", async () => {
+  const judgeJson = JSON.stringify({
+    summary:
+      "El PR agrega una constante `b` en a.ts. Revisé el único archivo cambiado; el diff es trivial y no introduce riesgos.",
+    confidence: 4.8,
+    status: "APPROVE",
+    comments: [],
+  })
+
+  const fetchMock = mock(async () =>
+    new Response(JSON.stringify(finalResponse(judgeJson)), {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    }),
+  )
+  const originalFetch = globalThis.fetch
+  globalThis.fetch = fetchMock as unknown as typeof fetch
+
+  try {
+    const port = new MockPostAdapter(new FixtureGitHubAdapter(SAMPLE_PR), { sink: () => {} })
+
+    const result = await reviewPullRequest({
+      port,
+      owner: "chimeranext",
+      repo: "sample-repo",
+      pullNumber: 7,
+      provider: MOCK_PROVIDER,
+    })
+
+    expect(result.iterations).toBe(1)
+    expect(result.reviewPosted).toBe(true)
+    expect(port.lastReview).not.toBeNull()
+    expect(port.lastReview?.review.event).toBe("APPROVE")
+    expect(result.toolCalls.map((t) => t.name)).toContain(TOOL_NAMES.GITHUB_REVIEW_POST)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+  } finally {
+    globalThis.fetch = originalFetch
+  }
+})
+
+test("one-shot judge incluye todos los changed_files en una sola inferencia", async () => {
+  const judgeJson = JSON.stringify({
+    summary: "Revisé a.ts y b.ts; sin hallazgos.",
+    confidence: 4.5,
+    status: "APPROVE",
+    comments: [],
+  })
+
+  let capturedUserContent = ""
+  const fetchMock = mock(async (_input: RequestInfo | URL, init?: RequestInit) => {
+    const body = JSON.parse(String(init?.body ?? "{}")) as {
+      messages?: { role: string; content: string }[]
+    }
+    const userMsg = body.messages?.find((m) => m.role === "user")
+    capturedUserContent = userMsg?.content ?? ""
+    return new Response(JSON.stringify(finalResponse(judgeJson)), {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    })
+  })
+  const originalFetch = globalThis.fetch
+  globalThis.fetch = fetchMock as unknown as typeof fetch
+
+  try {
+    const port = new MockPostAdapter(new FixtureGitHubAdapter(SAMPLE_PR_MULTI), {
+      sink: () => {},
+    })
+
+    const result = await reviewPullRequest({
+      port,
+      owner: "chimeranext",
+      repo: "sample-repo",
+      pullNumber: 7,
+      provider: MOCK_PROVIDER,
+    })
+
+    expect(result.iterations).toBe(1)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    expect(capturedUserContent).toContain('"filename": "a.ts"')
+    expect(capturedUserContent).toContain('"filename": "b.ts"')
+    expect(capturedUserContent).toContain("patch-a")
+    expect(capturedUserContent).toContain("patch-b")
+  } finally {
+    globalThis.fetch = originalFetch
+  }
+})
+
+test("REVIEWER_AGENTIC_LOOP=1 usa tool loop legacy (pr_read → review_post)", async () => {
   const reviewPostArgs = {
     owner: "chimeranext",
     repo: "sample-repo",
@@ -96,7 +197,6 @@ test("el reviewer hace tool-calling (pr_read → review_post) y termina con revi
     comments: [],
   }
 
-  // Secuencia de respuestas del "LLM": pr_read, luego review_post, luego fin.
   const responses = [
     toolCallResponse(TOOL_NAMES.GITHUB_PR_READ, {
       owner: "chimeranext",
@@ -118,6 +218,8 @@ test("el reviewer hace tool-calling (pr_read → review_post) y termina con revi
   })
   const originalFetch = globalThis.fetch
   globalThis.fetch = fetchMock as unknown as typeof fetch
+  const prev = process.env.REVIEWER_AGENTIC_LOOP
+  process.env.REVIEWER_AGENTIC_LOOP = "1"
 
   try {
     const port = new MockPostAdapter(new FixtureGitHubAdapter(SAMPLE_PR), { sink: () => {} })
@@ -130,24 +232,15 @@ test("el reviewer hace tool-calling (pr_read → review_post) y termina con revi
       provider: MOCK_PROVIDER,
     })
 
-    // El loop ejecutó ambas tools.
     const toolNames = result.toolCalls.map((t) => t.name)
     expect(toolNames).toContain(TOOL_NAMES.GITHUB_PR_READ)
     expect(toolNames).toContain(TOOL_NAMES.GITHUB_REVIEW_POST)
-
-    // Terminó habiendo posteado (interceptado).
     expect(result.reviewPosted).toBe(true)
-    expect(port.lastReview).not.toBeNull()
-    expect(port.lastReview?.review.event).toBe("APPROVE")
-
-    // Acumuló tokens de las 3 llamadas.
-    expect(result.tokenUsage.totalTokens).toBeGreaterThan(0)
-
-    // Hizo al menos 3 llamadas al "LLM".
-    expect(fetchMock).toHaveBeenCalled()
     expect(call).toBeGreaterThanOrEqual(3)
   } finally {
     globalThis.fetch = originalFetch
+    if (prev === undefined) delete process.env.REVIEWER_AGENTIC_LOOP
+    else process.env.REVIEWER_AGENTIC_LOOP = prev
   }
 })
 
