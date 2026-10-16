@@ -691,7 +691,7 @@ const REGISTRY: Readonly<Record<string, ProviderDescriptor>> = Object.freeze({
     kind: "gemini-direct",
     model: GEMINI_DEFAULT_MODEL,
     apiKeyEnv: GOOGLE_AI_API_KEY_ENV,
-    label: "gemini (gemini-3.5-flash, Heimdall agentic)",
+    label: "gemini (gemini-3.5-flash, Heimdall one-shot judge)",
   },
   "nim-kimi": {
     kind: "openai-compatible",

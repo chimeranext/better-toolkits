@@ -18,6 +18,7 @@ import { REVIEWER_SYSTEM_INSTRUCTION } from "./lib/reviewer-prompts.ts"
 import { createGithubToolExecutor, REVIEWER_TOOL_DEFINITIONS } from "./tools/github-tool-defs.ts"
 import { runReviewLoop } from "./lib/review-loop.ts"
 import type { ReviewLoopResult } from "./lib/review-loop.ts"
+import { runOneShotReview } from "./lib/one-shot-judge.ts"
 import type { ReviewerProvider } from "./lib/reviewer-providers.ts"
 
 export interface ReviewPullRequestOptions {
@@ -64,15 +65,26 @@ export async function reviewPullRequest(
 ): Promise<ReviewLoopResult> {
   const { port, owner, repo, pullNumber, maxIterations, logger, provider } = options
 
-  const executeTool = createGithubToolExecutor(port)
-  const userPrompt = buildReviewUserPrompt(owner, repo, pullNumber)
+  if (process.env.REVIEWER_AGENTIC_LOOP === "1") {
+    const executeTool = createGithubToolExecutor(port)
+    const userPrompt = buildReviewUserPrompt(owner, repo, pullNumber)
 
-  return runReviewLoop({
-    systemInstruction: REVIEWER_SYSTEM_INSTRUCTION,
-    userPrompt,
-    tools: REVIEWER_TOOL_DEFINITIONS,
-    executeTool,
-    maxIterations,
+    return runReviewLoop({
+      systemInstruction: REVIEWER_SYSTEM_INSTRUCTION,
+      userPrompt,
+      tools: REVIEWER_TOOL_DEFINITIONS,
+      executeTool,
+      maxIterations,
+      logger,
+      provider,
+    })
+  }
+
+  return runOneShotReview({
+    port,
+    owner,
+    repo,
+    pullNumber,
     logger,
     provider,
   })

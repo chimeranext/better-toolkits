@@ -14,7 +14,7 @@ backends share one slash and the same “print only, never post” rules:
 |--------------|--------|------------|--------|
 | `heimdall` (default) | Kimi K2.6 via **NVIDIA NIM** | `NVIDIA_API_KEY` | **shipped** |
 | `openrouter-*` lanes (e.g. `openrouter-free`, `openrouter-kimi-k2.7-code`, `:free` slugs) | Models via [OpenRouter](https://openrouter.ai/) (OpenAI-compatible API) | `OPENROUTER_API_KEY` (optional; same `~/.agents/.heimdall.env` chain as NIM — `--openrouter-env` / `HEIMDALL_OPENROUTER_ENV`) | **shipped** — registry + ADR: `shared/heimdall/docs/content/decisions/openrouter-routing.md` |
-| `gemini` / `gemini-direct` (Heimdall agentic) | Gemini 3.5 Flash, tool loop | `GOOGLE_AI_API_KEY` (Google AI `generateContent`; mismo catálogo Gemini / GCP) | **shipped** — `/local-pr-review --provider gemini` (alias de `gemini-direct`) o `heimdall-review diff --provider gemini-direct` |
+| `gemini` / `gemini-direct` (Heimdall one-shot judge) | Gemini 3.5 Flash, **single JSON inference** (no tool loop by default) | `GOOGLE_AI_API_KEY` (Google AI `generateContent`) | **shipped** — `/local-pr-review --provider gemini` o `heimdall-review diff --provider gemini-direct` |
 
 **Do not confuse:** `heimdall-review models:free` lists **NIM / NGC** models tagged
 FREE/PREVIEW (validates `NVIDIA_API_KEY` against the integrate catalog). That is
@@ -22,10 +22,11 @@ FREE/PREVIEW (validates `NVIDIA_API_KEY` against the integrate catalog). That is
 `openrouter/free`). Use both when you want cheap NIM tiers vs OpenRouter’s
 rotating free pool.
 
-Heimdall reviews the `git diff` of the current branch with an agentic LLM loop
-and returns a verdict. **Local except for one network call**: diff → prompt →
-render all happen on the machine; the only egress is LLM inference
-(NVIDIA NIM, Kimi K2.6 default). It never touches GitHub nor CI in default mode.
+Heimdall reviews the `git diff` of the current branch with a **one-shot LLM-as-Judge**
+(single inference → score 1.0–5.0 + P1–P4 findings; GitHub APPROVE/REQUEST_CHANGES
+derived in `review-body-formatter`). **Local except for one network call**: diff →
+prompt → render on the machine; egress is one LLM call per review (NVIDIA NIM default).
+Legacy multi-turn tool loop: `REVIEWER_AGENTIC_LOOP=1`. Default mode never posts to GitHub.
 
 ## Preconditions
 
