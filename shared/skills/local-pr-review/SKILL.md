@@ -12,7 +12,9 @@ Read and follow [`shared/references/heimdall/protocol.md`](../../references/heim
 (protocol SSOT). Pass `$ARGUMENTS` through to `heimdall-review diff`.
 
 Engine: `shared/heimdall/` (needs `NVIDIA_API_KEY`; see protocol for
-secret handling). Default prints the review; never posts.
+secret handling). Default path is **one-shot LLM-as-Judge** (single inference over
+the full PR JSON). Legacy multi-turn tool loop: `REVIEWER_AGENTIC_LOOP=1`.
+Default prints the review; never posts.
 
 **Cursor (bootstrap):** `/local-pr-review` in `shared/bootstrap/commands/`; plugin
 path `skills/local-pr-review/` (symlink to this folder). After marketplace bumps:
