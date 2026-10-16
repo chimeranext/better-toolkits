@@ -1,0 +1,2 @@
+# Grandfathered agent-facing shims (shrink-only). One path per line.
+# Target state: this file has no entries — CI --repo passes with zero debt.

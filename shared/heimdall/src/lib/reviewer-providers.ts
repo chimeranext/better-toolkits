@@ -580,6 +580,7 @@ export function resolveAdversarialProviderChain(
  */
 export const LANE_FLAG_ENV: Readonly<Record<string, string>> = Object.freeze({
   "gemini-direct": "REVIEWER_GEMINI_ENABLED",
+  gemini: "REVIEWER_GEMINI_ENABLED",
   "nim-kimi": "REVIEWER_NIM_KIMI_ENABLED",
   "nim-glm": "REVIEWER_NIM_GLM_ENABLED",
   "nim-deepseek": "REVIEWER_NIM_DEEPSEEK_ENABLED",
@@ -624,6 +625,7 @@ export const LANE_FLAG_ENV: Readonly<Record<string, string>> = Object.freeze({
  */
 const LANE_DEFAULT_ENABLED: Readonly<Record<string, boolean>> = Object.freeze({
   "gemini-direct": true,
+  gemini: true,
   "nim-kimi": false,
   "nim-glm": false,
   "nim-deepseek": false,
@@ -683,6 +685,13 @@ const REGISTRY: Readonly<Record<string, ProviderDescriptor>> = Object.freeze({
     model: GEMINI_DEFAULT_MODEL,
     apiKeyEnv: GOOGLE_AI_API_KEY_ENV,
     label: "gemini-direct (gemini-3.5-flash)",
+  },
+  /** Alias for docs / `/local-pr-review --provider gemini` (same lane as gemini-direct). */
+  gemini: {
+    kind: "gemini-direct",
+    model: GEMINI_DEFAULT_MODEL,
+    apiKeyEnv: GOOGLE_AI_API_KEY_ENV,
+    label: "gemini (gemini-3.5-flash, Heimdall agentic)",
   },
   "nim-kimi": {
     kind: "openai-compatible",

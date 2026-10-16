@@ -18,6 +18,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **Local PR review:** bootstrap `/local-pr-review` + skill symlink; Gemini only via
+  Heimdall `--provider gemini` / `gemini-direct` (protocol SSOT). Removed
+  `/make-no-mistakes:gemini-code-review` command and `gemini-code-review.sh`.
+- README: point observability/pentest entries at `/assurance:*` (no MNM command shims).
+- Repo lint: `check_no_stale_deprecated_shims` + hook guard for stale agent shims.
+
 ### Added
 - **`/sync-advisor` command** (`commands/sync-advisor.md`): the skill now has a
   slash-command entry like `merge-advisor`; measures checkout drift, recommends

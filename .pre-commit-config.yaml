@@ -14,3 +14,8 @@ repos:
         language: system
         pass_filenames: false
         stages: [pre-push]
+      - id: no-stale-deprecated-shims
+        name: no deprecated command/script shims in touched agent paths
+        entry: bash scripts/lint/check-no-stale-deprecated-shims.sh
+        language: system
+        files: ^(toolkits/[^/]+/(commands|scripts)/|shared/bootstrap/(commands|scripts)/|\.cursor/commands/).+\.(md|sh)$
