@@ -68,7 +68,7 @@ Deliberate actions you invoke explicitly. Findings triage is mode `security` of 
 | [`/assurance:pentest-runner <phase>`](commands/pentest-runner.md) | Automated pentesting following Cyber Kill Chain + OWASP methodology, plus OWASP ASI01–ASI10 agentic red-team (transversal security) |
 | [`/assurance:pentest-playbook-setup [audit\|sync\|workflows\|gaps]`](commands/pentest-playbook-setup.md) | Audit/sync pentest playbook ↔ CI ↔ tenant triage config (transversal security) |
 
-Not migrated (stay in toolkit `make-no-mistakes`): `/make-no-mistakes:ready-to-review-mergeable`, `premortem`, audits, coordination, rituals. `gemini-code-review` merges into `local-pr-review --provider gemini`.
+Not migrated (stay in toolkit `make-no-mistakes`): `/make-no-mistakes:ready-to-review-mergeable`, `premortem`, audits, coordination, rituals. **Local review:** `/local-pr-review` (default **Heimdall / Kimi via NVIDIA NIM**); Gemini **adds** `--provider gemini` (Heimdall agentic) and `/make-no-mistakes:gemini-code-review` (liteLLM one-shot).
 
 ### Skills (22)
 

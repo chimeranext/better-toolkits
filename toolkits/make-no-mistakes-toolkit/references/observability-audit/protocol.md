@@ -1,8 +1,8 @@
-> **MOVED:** SSOT now lives in `toolkits/assurance-toolkit/references/liveness/protocol.md`. This file is retained read-only until shims are removed.
+> **MOVED:** SSOT is `toolkits/assurance-toolkit/references/liveness/protocol.md`. Slash command: `/assurance:observability-audit` (`assurance-toolkit/commands/observability-audit.md`).
 
-# /observability-audit — protocol SSOT
+# /observability-audit — protocol SSOT (legacy copy)
 
-Harness-agnostic body. Thin entry: `commands/observability-audit.md`.
+Harness-agnostic body. Thin entry: `../../assurance-toolkit/commands/observability-audit.md`.
 
 ---
 

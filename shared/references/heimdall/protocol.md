@@ -1,8 +1,26 @@
 # Heimdall — protocol SSOT (local PR review)
 
 Harness-agnostic body. Thin entries: `shared/skills/local-pr-review/SKILL.md`
-(opencode/skills), toolkit commands that wrap it. Tool implementation:
+(skill SSOT), `shared/bootstrap/commands/local-pr-review.md` (Cursor slash;
+plugin `skills/local-pr-review` → same skill). Tool implementation:
 `shared/heimdall/` (Heimdall engine).
+
+## Multi-provider (additive)
+
+Default stays **Heimdall / Kimi / NVIDIA NIM** (`heimdall-review diff`). Extra
+backends share one slash and the same “print only, never post” rules:
+
+| `--provider` | Engine | Auth / API | Status |
+|--------------|--------|------------|--------|
+| `heimdall` (default) | Kimi K2.6 via **NVIDIA NIM** | `NVIDIA_API_KEY` | **shipped** |
+| `openrouter-*` lanes (e.g. `openrouter-free`, `openrouter-kimi-k2.7-code`, `:free` slugs) | Models via [OpenRouter](https://openrouter.ai/) (OpenAI-compatible API) | `OPENROUTER_API_KEY` (optional; same `~/.agents/.heimdall.env` chain as NIM — `--openrouter-env` / `HEIMDALL_OPENROUTER_ENV`) | **shipped** — registry + ADR: `shared/heimdall/docs/content/decisions/openrouter-routing.md` |
+| `gemini` / `gemini-direct` (Heimdall agentic) | Gemini 3.5 Flash, tool loop | `GOOGLE_AI_API_KEY` (Google AI `generateContent`; mismo catálogo Gemini / GCP) | **shipped** — `/local-pr-review --provider gemini` (alias de `gemini-direct`) o `heimdall-review diff --provider gemini-direct` |
+
+**Do not confuse:** `heimdall-review models:free` lists **NIM / NGC** models tagged
+FREE/PREVIEW (validates `NVIDIA_API_KEY` against the integrate catalog). That is
+**not** the OpenRouter **free router** (`--provider openrouter-free` → slug
+`openrouter/free`). Use both when you want cheap NIM tiers vs OpenRouter’s
+rotating free pool.
 
 Heimdall reviews the `git diff` of the current branch with an agentic LLM loop
 and returns a verdict. **Local except for one network call**: diff → prompt →
@@ -22,6 +40,10 @@ render all happen on the machine; the only egress is LLM inference
      gitignored) → `~/.agents/.heimdall.env` (0600, STAGING+PROD conviven con
      nombres decorados). Env: `--env` / `HEIMDALL_NVIDIA_ENV` (default staging).
    Never paste the key in chat, logs, or tracked files.
+   **OpenRouter (optional):** for `openrouter-*` providers, set
+   `OPENROUTER_API_KEY` (or decorated `OPENROUTER_API_KEY_STAGING` /
+   `OPENROUTER_API_KEY_PROD` in `~/.agents/.heimdall.env` via `key:init`). NIM
+   remains required for the default lane even when OpenRouter is configured.
 3. Key relocation (dogfooding): `heimdall-review key:migrate --env <e>` moves
    repo keys into `~/.agents/.heimdall.env` (merge, never deletes the original);
    `heimdall-review models:free [--match <sub>]` validates the migrated key

@@ -11,7 +11,7 @@
     {
       "name": "better-toolkits-bootstrap",
       "description": "Install first \u2014 bootstrap marketplace and harness wiring via /toolkits-initial-setup (HITL). OpenCode: npx @chimeranext/better-toolkits setup.",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "source": "./shared/bootstrap",
       "category": "workflow",
       "keywords": [
@@ -28,7 +28,7 @@
     {
       "name": "make-no-mistakes",
       "description": "The disciplined dev lifecycle \u2014 implement issues, review PRs, sync releases, test E2E, manage sessions, stash secrets, and enforce manifest-driven tool-call hooks. Includes /evaluate-agent-skills (NVIDIA SkillSpector/SkillEvaluator wrappers). OpenCode stderr: better-toolkits-bootstrap /toolkits-initial-setup.",
-      "version": "1.39.4",
+      "version": "1.39.6",
       "source": "./toolkits/make-no-mistakes-toolkit",
       "category": "workflow",
       "keywords": [
@@ -100,7 +100,7 @@
     {
       "name": "ux-research-toolkit",
       "description": "Guided UX research map creation \u2014 experience maps, customer journey maps, service blueprints, storyboards, and user story maps. Helps non-experts create professional UX artifacts through dialogue, JSON data, and interactive HTML visualization.",
-      "version": "2.1.3",
+      "version": "2.1.4",
       "source": "./toolkits/ux-research-toolkit",
       "category": "productivity",
       "keywords": [
@@ -335,7 +335,7 @@
     {
       "name": "assurance",
       "description": "Release-assurance evidence toolkit \u2014 2 pillars (testing, liveness) + security transversal with its own runner, plus governance (DORA/DER metrics, stage gates, traceable receipts). Migrated quality-evidence commands from make-no-mistakes with shims.",
-      "version": "0.1.7",
+      "version": "0.1.8",
       "source": "./toolkits/assurance-toolkit",
       "author": {
         "name": "Luis Andres Pena Castillo",

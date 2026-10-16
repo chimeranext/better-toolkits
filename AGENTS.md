@@ -1,4 +1,4 @@
-﻿# Agent guidance — better-toolkits
+# Agent guidance — better-toolkits
 
 Repo-level instructions for Cursor, Claude Code, and other agents working in this
 repository. Prefer this file over inventing workspace layouts under the parent
@@ -27,6 +27,9 @@ mutations), [`docs/multi-harness-ssot.md`](docs/multi-harness-ssot.md).
 | --- | --- | --- |
 | Stderr baseline | [`shared/hooks/stderr/`](shared/hooks/stderr/) | Claude / Cursor / OpenCode |
 | PRDS body gate | [`shared/hooks/prds/`](shared/hooks/prds/) | Claude / Cursor / OpenCode |
+| No deprecated shims | [`scripts/lint/check_no_stale_deprecated_shims.py`](scripts/lint/check_no_stale_deprecated_shims.py) | CI, pre-commit, pre-push, Cursor `beforeShellExecution` on `git commit` |
+
+Renames of slash commands or bootstrap scripts are **clean-cut** — update references and delete the old path. Do not add “MOVED (shim)” commands or `exec` wrapper scripts. Policy: [`shared/references/engineering-standards/no-deprecated-agent-shims.md`](shared/references/engineering-standards/no-deprecated-agent-shims.md).
 
 Vendor with `scripts/sync-stderr-from-shared.sh` and `scripts/sync-prds-from-shared.sh`.
 See [`docs/multi-harness-ssot.md`](docs/multi-harness-ssot.md).
