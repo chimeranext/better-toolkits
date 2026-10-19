@@ -1,5 +1,5 @@
 /** Verify phase: bytes match + offline detect.py gate + commands --check. */
-import { readFileSync, writeFileSync, mkdtempSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdtempSync, existsSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -9,10 +9,13 @@ import {
   discoveryIndex,
   commandsScript,
   detectScript,
+  autoUpdatePluginIndex,
+  resolveAutoUpdatePluginSource,
 } from "./paths.js";
 
 export function verify(opts = {}) {
   const repoRoot = resolveRepoRoot();
+  const configDir = resolveConfigDir(opts);
   const results = [];
   const add = (check, ok, detail) => results.push({ check, ok, detail });
 
@@ -27,11 +30,26 @@ export function verify(opts = {}) {
     let same = false;
     try {
       same =
-        Buffer.compare(readFileSync(adapter), readFileSync(discoveryIndex())) === 0;
+        Buffer.compare(readFileSync(adapter), readFileSync(discoveryIndex(configDir))) === 0;
     } catch {
       same = false;
     }
     add("discovery copy", same, same ? "bytes match source" : "missing or stale");
+  }
+
+  // 1b. auto-update plugin (#110) — discovery copy must match the source
+  const auSource = resolveAutoUpdatePluginSource(repoRoot);
+  if (!existsSync(auSource)) {
+    add("auto-update plugin", false, `source missing (${auSource})`);
+  } else {
+    let same = false;
+    try {
+      same =
+        Buffer.compare(readFileSync(auSource), readFileSync(autoUpdatePluginIndex(configDir))) === 0;
+    } catch {
+      same = false;
+    }
+    add("auto-update plugin", same, same ? "bytes match source" : "missing or stale");
   }
 
   // 2. offline gate: detect.py must exit 2 on a silenced-stderr probe.

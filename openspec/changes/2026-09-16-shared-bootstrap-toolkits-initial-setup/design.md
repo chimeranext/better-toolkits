@@ -57,7 +57,7 @@ Cursor monorepo dev: `.cursor/commands/toolkits-initial-setup.md` points at prot
 ### D5 — Cursor marketplace auto-update (optional)
 
 - Not a separate slash command.
-- Adapter `cursor.md` offers checkbox: register `workspaceOpen` → `update-better-toolkits-marketplace.sh`.
+- Adapter `cursor.md` offers checkbox: register `workspaceOpen` → `update-better-toolkits-marketplace-cursor.sh`.
 - Default **off** until user opts in.
 
 ### D6 — Deprecate `@lapc506/make-no-mistakes install`

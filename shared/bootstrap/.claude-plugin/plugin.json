@@ -1,6 +1,6 @@
 {
   "name": "better-toolkits-bootstrap",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "description": "Bootstrap layer for the better-toolkits marketplace \u2014 install first, then run /toolkits-initial-setup to wire harnesses and product toolkits with HITL consent.",
   "author": {
     "name": "Luis Andres Pena Castillo",
