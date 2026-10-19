@@ -191,10 +191,10 @@ Report a table:
    restart` before auth: a server started before the secret existed sends an
    empty secret and Slack answers `bad_client_secret` even with the secret
    correctly exported in every shell (#52).
-7. Wire the canonical 6 MCP servers (`slack`, `linear`, `chrome-devtools-mcp`,
+7. Wire the canonical 7 MCP servers (`slack`, `linear`, `notion`, `chrome-devtools-mcp`,
    `context7`, `stitch`, `dart`) into `mcp.servers` — idempotent merge, secrets
    only as `{env:}` refs. CLI: `setup install [--slack-client-id <id>]`.
-   Browser-OAuth servers (`slack`, `linear`) still need the user's `/mcps`
+   Browser-OAuth servers (`slack`, `linear`, `notion`) still need the user's `/mcps`
    sign-in afterwards; that step is never automatable.
 
 ## Phase 3 - Verify
@@ -274,6 +274,7 @@ The list below is now the single source of truth.
 |---|---|---|---|
 | `slack` | remote `https://mcp.slack.com/mcp` | own-app OAuth: `client_id` + `client_secret: "{env:SLACK_MCP_CLIENT_SECRET}"` + `redirect_uri: http://localhost:3118/callback` | browser OAuth (`opencode mcp auth slack`); see `../opencode-mcp-config/protocol.md` |
 | `linear` | remote `https://mcp.linear.app/mcp` | OAuth default | browser OAuth (`opencode mcp auth linear`) |
+| `notion` | remote `https://mcp.notion.com/mcp` | OAuth default (no secret, no client_id) | browser OAuth (`opencode mcp auth notion`) — Streamable HTTP; SSE fallback `https://mcp.notion.com/sse` only if client lacks Streamable HTTP |
 | `chrome-devtools-mcp` | local `npx -y chrome-devtools-mcp@latest` (abs path) | + `environment.PATH` with node bin dir (see Node-PATH section above) | none |
 | `context7` | remote `https://mcp.context7.com/mcp` | no headers (anonymous rate limit); add `Authorization: Bearer {env:CONTEXT7_API_KEY}` only for higher limits | none (or API key) |
 | `stitch` | local `npx -y google-stitch-mcp@latest` | **disabled until auth is resolved**: `X-Goog-Api-Key` must never be exposed — pending proxy-with-env design | blocked |
