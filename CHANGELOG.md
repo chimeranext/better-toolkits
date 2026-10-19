@@ -32,6 +32,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   `@chimeranext/better-toolkits` 0.1.0 → 0.2.0.
 - **`setup-opencode-commands.sh`** honours `OPENCODE_CONFIG_DIR` (was hardcoded to
   `~/.config/opencode/commands`), so `--config-dir` is now fully respected.
+- **Slack MCP auth (opencode-mcp-config):** §8–§10 are now mandatory and must be
+  run end-to-end without exceptions (no `2>/dev/null`, no skipped steps); the
+  setup adapter no longer treats the restart flow as an optional HITL gate.
 - **OpenCode stderr SSOT:** consolidated into
   [`setup-opencode.md`](shared/bootstrap/references/toolkits-initial-setup/adapters/setup-opencode.md)
   (`/toolkits-initial-setup` / `npx @chimeranext/better-toolkits setup`). Removed duplicate
