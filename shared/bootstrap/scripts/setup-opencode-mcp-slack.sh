@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
-# setup-opencode-mcp-slack.sh — pide SLACK_MCP_CLIENT_SECRET por diálogo GUI
-# (estilo /secret-input: nunca queda en historial de terminal ni en el chat)
-# y lo persiste con mode 0600.
+# setup-opencode-mcp-slack.sh — pide SLACK_MCP_CLIENT_SECRET (y opcionalmente el
+# Client ID) por diálogo GUI (estilo /secret-input: nunca queda en historial de
+# terminal ni en el chat) y lo persiste con mode 0600.
 #
 # Uso:
 #   setup-opencode-mcp-slack.sh            # persiste per-user (default, sin sudo)
@@ -25,6 +25,7 @@ USER_ENV_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/opencode/mcp-secrets.env"
 SYSTEM_ENV_FILE="/etc/profile.d/opencode-mcp.sh"
 SYSTEM_MODE=0
 WITH_CLIENT_ID=0
+CLIENT_ID_OUT=""
 
 while [ $# -gt 0 ]; do
   case "${1:-}" in
@@ -36,40 +37,99 @@ done
 
 need() { _need_bin="$(command -v "$1")" && [ -n "$_need_bin" ]; }
 
+detect_platform() {
+  case "$(uname -s 2>/dev/null || printf '')" in
+    Darwin*) printf 'macos' ;;
+    MINGW*|MSYS*|CYGWIN*) printf 'windows' ;;
+    *)
+      if [ -n "${WSL_DISTRO_NAME:-}" ] || [ -n "${WSL_INTEROP:-}" ]; then
+        printf 'linux'
+      elif need powershell.exe; then
+        printf 'windows'
+      else
+        printf 'linux'
+      fi
+      ;;
+  esac
+}
+PLATFORM="$(detect_platform)"
+
+# Prompt de un solo campo. Imprime el valor en stdout; retorna 1 si cancela/vacío.
+# $1 = title, $2 = text, $3 = "hidden" (1) o "plain" (0).
+gui_prompt_single() {
+  local title="$1" text="$2" hidden="${3:-0}" value=""
+  case "$PLATFORM" in
+    macos)
+      if need osascript; then
+        if [ "$hidden" = "1" ]; then
+          value="$(osascript -e "display dialog \"${text}\" with title \"${title}\" default answer \"\" with hidden answer" \
+            -e 'text returned of result' 2>/dev/null)" || return 1
+        else
+          value="$(osascript -e "display dialog \"${text}\" with title \"${title}\" default answer \"\"" \
+            -e 'text returned of result' 2>/dev/null)" || return 1
+        fi
+      else
+        return 1
+      fi
+      ;;
+    windows)
+      if need powershell.exe; then
+        value="$(powershell.exe -NoProfile -Command "
+          Add-Type -AssemblyName Microsoft.VisualBasic
+          [Microsoft.VisualBasic.Interaction]::InputBox('${text}','${title}','') " 2>/dev/null)" || return 1
+      else
+        return 1
+      fi
+      ;;
+    *)
+      # Linux: zenity (GUI) o kdialog (KDE).
+      if need zenity; then
+        if [ "$hidden" = "1" ]; then
+          value="$(zenity --password --title="$title" --text="$text" \
+            --ok-label="Guardar" --cancel-label="Cancelar" 2>/dev/null)" || return 1
+        else
+          value="$(zenity --entry --title="$title" --text="$text" \
+            --ok-label="Guardar" --cancel-label="Cancelar" 2>/dev/null)" || return 1
+        fi
+      elif need kdialog; then
+        if [ "$hidden" = "1" ]; then
+          value="$(kdialog --password "$text" --title "$title" 2>/dev/null)" || return 1
+        else
+          value="$(kdialog --inputbox "$text" --title "$title" 2>/dev/null)" || return 1
+        fi
+      else
+        return 1
+      fi
+      ;;
+  esac
+  if [ -z "$value" ]; then
+    return 1
+  fi
+  printf '%s' "$value"
+}
+
+# Prompt del secret (y del Client ID si --with-client-id).
+# Imprime el secret en stdout. Si --with-client-id, setea CLIENT_ID_OUT.
 prompt_secret() {
-  local secret=""
+  local secret="" result=""
+
   if [ "$WITH_CLIENT_ID" = "1" ]; then
-    # zenity --forms supports multiple text boxes in one popup.
-    local result=""
+    # Preferir zenity --forms (un solo popup con ambos campos). Fallback a dos
+    # prompts secuenciales en macOS/Windows/terminal.
     if need zenity; then
       result="$(zenity --forms \
         --title="OpenCode Slack MCP" \
         --text="Pega el Client ID y el Client Secret de tu Slack app (api.slack.com/apps → Basic Information → App Credentials):" \
         --add-entry="Client ID" \
         --add-entry="Client Secret" \
-        --ok-label="Guardar" --cancel-label="Cancelar")" || return 1
-    elif need kdialog; then
-      # kdialog has no multi-field form; fall back to two sequential prompts.
-      local cid sec
-      cid="$(kdialog --inputbox "Pega el Client ID de tu Slack app:" --title "OpenCode Slack MCP")" || return 1
-      sec="$(kdialog --password "Pega el Client Secret de tu Slack app:" --title "OpenCode Slack MCP")" || return 1
-      result="${cid}|${sec}"
+        --ok-label="Guardar" --cancel-label="Cancelar" 2>/dev/null)" || return 1
+      CLIENT_ID_OUT="${result%%|*}"
+      secret="${result#*|}"
     else
-      printf 'zenity/kdialog no encontrados. Leo en terminal sin echo.\n' >&2
-      printf 'Client ID: ' >&2
-      IFS= read -r _cid || return 1
-      printf 'Client Secret (no se muestra): ' >&2
-      IFS= read -rs _sec || return 1
-      printf '\n' >&2
-      result="${_cid}|${_sec}"
+      # kdialog / macOS / Windows / terminal: dos prompts secuenciales.
+      CLIENT_ID_OUT="$(gui_prompt_single "OpenCode Slack MCP" "Pega el Client ID de tu Slack app (api.slack.com/apps → Basic Information → App Credentials):" 0)" || return 1
+      secret="$(gui_prompt_single "OpenCode Slack MCP" "Pega el Client Secret de tu Slack app:" 1)" || return 1
     fi
-    if [ -z "$result" ]; then
-      printf 'ERROR: cancelado.\n' >&2
-      return 1
-    fi
-    # zenity --forms separates fields with '|'.
-    CLIENT_ID_OUT="${result%%|*}"
-    secret="${result#*|}"
     if [ -z "$secret" ]; then
       printf 'ERROR: secret vacío, cancelado.\n' >&2
       return 1
@@ -78,21 +138,8 @@ prompt_secret() {
     return 0
   fi
 
-  # Secret-only (original behaviour).
-  if need zenity; then
-    secret="$(zenity --password \
-      --title="OpenCode Slack MCP" \
-      --text="Pega el Client Secret de tu Slack app (api.slack.com/apps → Basic Information → App Credentials → Client Secret):" \
-      --ok-label="Guardar" --cancel-label="Cancelar")" || return 1
-  elif need kdialog; then
-    secret="$(kdialog --password "Pega el Client Secret de tu Slack app:" \
-      --title "OpenCode Slack MCP")" || return 1
-  else
-    printf 'zenity/kdialog no encontrados. Leo en terminal sin echo.\n' >&2
-    printf 'Pega el Client Secret (no se muestra): ' >&2
-    IFS= read -rs secret || return 1
-    printf '\n' >&2
-  fi
+  # Secret-only (comportamiento original).
+  secret="$(gui_prompt_single "OpenCode Slack MCP" "Pega el Client Secret de tu Slack app (api.slack.com/apps → Basic Information → App Credentials → Client Secret):" 1)" || return 1
   if [ -z "$secret" ]; then
     printf 'ERROR: secret vacío, cancelado.\n' >&2
     return 1
