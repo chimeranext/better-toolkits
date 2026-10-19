@@ -8,7 +8,7 @@
 This toolkit covers the complete journey of a freelancer or digital nomad:
 
 ```
-Form LLC → Tax compliance → Remote banking → International billing → Visa options
+Form LLC → Tax compliance → Remote banking → International billing → Visa options → Study / found abroad → Route decision
 ```
 
 ## Audience
@@ -28,6 +28,15 @@ Freelancers and digital nomads who:
 | `/digital-nomad:banking` | Remote bank account opening (Mercury, Relay, Wise) |
 | `/digital-nomad:msa-b2b` | How to bill international services as an LLC |
 | `/digital-nomad:visa-options` | Visa options for digital nomads (B-1, E-2, H-1B) |
+| `/digital-nomad:study-in-germany` | Student visa §16b rules + LLC posture (Germany) |
+| `/digital-nomad:study-in-canada` | Study permit work rules + PGWP exit (Canada) |
+| `/digital-nomad:study-in-ireland` | Stamp 2 rules + Third Level Graduate exit (Ireland) |
+| `/digital-nomad:study-in-australia` | Subclass 500 cap + self-employment + 485 exit (Australia) |
+| `/digital-nomad:study-in-japan` | Student visa + Startup Visa / Business Manager (Japan) |
+| `/digital-nomad:study-in-singapore` | Student Pass + EntrePass / ONE Pass (Singapore) |
+| `/digital-nomad:study-in-south-korea` | D-2 permit + OASIS D-10-2 → D-8-4 pipeline (South Korea) |
+| `/digital-nomad:maintain-llc-abroad` | Keep the SMLLC alive from a student/founder address |
+| `/digital-nomad:route-decision` | Compare 7 countries × posture × graduation exit |
 
 ## Structure
 
@@ -41,13 +50,31 @@ toolkits/digital-nomad-toolkit/
 │   ├── tax-compliance/
 │   ├── banking/
 │   ├── msa-b2b/
-│   └── visa-options/
+│   ├── visa-options/
+│   ├── study-in-germany/
+│   ├── study-in-canada/
+│   ├── study-in-ireland/
+│   ├── study-in-australia/
+│   ├── study-in-japan/
+│   ├── study-in-singapore/
+│   ├── study-in-south-korea/
+│   ├── maintain-llc-abroad/
+│   └── route-decision/
 ├── commands/
 │   ├── entity-formation.md
 │   ├── tax-compliance.md
 │   ├── banking.md
 │   ├── msa-b2b.md
-│   └── visa-options.md
+│   ├── visa-options.md
+│   ├── study-in-germany.md
+│   ├── study-in-canada.md
+│   ├── study-in-ireland.md
+│   ├── study-in-australia.md
+│   ├── study-in-japan.md
+│   ├── study-in-singapore.md
+│   ├── study-in-south-korea.md
+│   ├── maintain-llc-abroad.md
+│   └── route-decision.md
 ├── CHANGELOG.md
 └── README.md
 ```
@@ -56,3 +83,4 @@ toolkits/digital-nomad-toolkit/
 
 This toolkit is an educational guide. **NOT legal, tax, or financial advice**.
 Always consult with a lawyer and accountant before making legal or tax decisions.
+Immigration and tax rules change frequently — verify current official sources before acting.
