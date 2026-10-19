@@ -9,10 +9,11 @@ and global plugin installs.
 
 | In scope | Out of scope |
 |----------|--------------|
-| Marketplace registration, bootstrap plugin, stderr hooks, optional marketplace auto-update (opt-in) | `/make-no-mistakes:*` product commands |
+| Marketplace registration, bootstrap plugin, stderr hooks, auto-update (per harness, default ON) | `/make-no-mistakes:*` product commands |
 | Installing N product toolkit plugins / OpenCode merges (`setup-opencode.md`) | Repo-specific `/hygiene-hooks-setup` |
 | OpenCode stderr + optional npm CLIs via `setup-opencode.md` | `/make-no-mistakes:opencode-setup` (removed — use bootstrap) |
 | OpenCode: `npx @chimeranext/better-toolkits setup` | Per-toolkit `npx @lapc506/* install` (deprecated) |
+| Auto-update: `git pull --ff-only` the clone + per-harness wiring re-sync | Third-party `opencode-plugin-auto-update` (migrates `"plugins"`→`"plugin"`, npm-registry only) |
 
 ## Phase 1 — Detect harness
 
@@ -41,7 +42,10 @@ For each harness, collect **read-only** state:
 2. **Bootstrap plugin** — `better-toolkits-bootstrap` installed?
 3. **Product plugins** — which of the 10 toolkits are installed?
 4. **Stderr hooks** — `beforeShellExecution` (Cursor), PreToolUse Bash (Claude), OpenCode `plugins` array.
-5. **Marketplace auto-update** (Cursor only) — `workspaceOpen` hook for `update-better-toolkits-marketplace.sh`?
+5. **Auto-update** — Cursor: `workspaceOpen` hook for `update-better-toolkits-marketplace-cursor.sh`?
+   OpenCode: `better-toolkits-auto-update` discovery plugin + mode sidecar present?
+6. **Clone state** — a better-toolkits clone resolvable (env / walk-up / OS-aware GitHub roots)?
+   On which branch, and is the tree dirty?
 
 Emit an audit table. Do not fix anything yet.
 
@@ -54,7 +58,12 @@ Produce explicit **diffs** and command lists:
 - `agent plugin install better-toolkits-bootstrap@better-toolkits` (Cursor, if applicable)
 - Product toolkit installs the user selected (or recommend defaults: `make-no-mistakes`, etc.)
 - Merged `hooks.json` / `opencode.jsonc` snippets (idempotent append, never clobber unrelated hooks)
-- **Optional** Cursor checkbox: register marketplace auto-update on `workspaceOpen` (default **off**)
+- **Auto-update plugin (default ON)** — install the OpenCode discovery-dir plugin
+  `better-toolkits-auto-update` + its mode sidecar; register the Cursor `workspaceOpen`
+  hook. Opt out with `--no-auto-update` or `BETTER_TOOLKITS_AUTO_UPDATE=0`.
+- **Branch mode** — default **consumer**: always converge the clone on `main` and
+  fast-forward. `--expert-mode` (author) never switches branch and never touches a
+  dirty tree. The mode is persisted in the sidecar so background runs honor it.
 
 Show full proposed file contents or unified diff. Link [stderr README](../../../../hooks/stderr/README.md).
 
@@ -65,8 +74,9 @@ Stop. Present numbered options:
 1. Apply all proposed changes
 2. Apply stderr hooks only
 3. Apply marketplace + bootstrap only
-4. Skip optional marketplace auto-update (or include if user checks opt-in)
-5. Cancel — no writes
+4. Auto-update plugin: install (default) / skip (`--no-auto-update`)
+5. Branch mode: consumer `main` (default) / `--expert-mode` (author — never switch branch, leave a dirty tree alone)
+6. Cancel — no writes
 
 Wait for an **explicit** reply. Silence is not approval.
 
@@ -86,14 +96,19 @@ Only after OK:
 3. **Stderr probe** — attempt a forbidden pattern in a dry explanation or run toolkit's stderr test if present:
    `shared/hooks/stderr/tests/test-detect.sh`
 4. `npx @chimeranext/better-toolkits doctor` when CLI is available.
+5. **Auto-update** — `opencode plugin list` shows `local.better-toolkits-auto-update`; the sidecar
+   records the chosen branch mode; `better-toolkits self-update --dry-run` reports the planned pull.
 
 Report pass/fail per harness. If verify fails, propose rollback diffs (HITL again).
 
-## Deprecations (document in summary)
+## Arguments
 
-- **Deprecated:** `npx @lapc506/make-no-mistakes install` as monorepo SSOT.
-- **Use instead:** install `better-toolkits-bootstrap` → `/toolkits-initial-setup` (Claude/Cursor) or
-  `npx @chimeranext/better-toolkits setup` (OpenCode/headless).
+```
+/toolkits-initial-setup [cursor|claude|opencode] [--expert-mode] [--no-auto-update] [toolkit names…]
+```
+
+- `--expert-mode` — author flow: never switch the clone's branch, never touch a dirty tree.
+- `--no-auto-update` — do not install the auto-update plugin (or `BETTER_TOOLKITS_AUTO_UPDATE=0`).
 
 ## Related
 

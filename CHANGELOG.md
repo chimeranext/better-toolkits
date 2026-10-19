@@ -10,6 +10,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **OpenCode auto-update (#110):** `better-toolkits self-update` pulls the monorepo
+  clone (`git pull --ff-only`, always `main` unless `--expert-mode`) and re-runs the
+  wiring. New discovery-dir plugin `better-toolkits-auto-update` (startup, detached,
+  single-flight) + mode sidecar; `/enable-better-toolkits-auto-update` and
+  `/disable-better-toolkits-auto-update`; per-harness scripts
+  `update-better-toolkits-marketplace-{cursor,opencode}.sh` and
+  `prune-better-toolkits-cache-{cursor,opencode}.sh`.
 - **`/make-no-mistakes:evaluate-agent-skills`:** wrap NVIDIA SkillSpector / SkillEvaluator
   (peer CLIs; auto-install via `uv tool install` unless `--no-install` — see
   [`docs/evaluate-agent-skills.md`](docs/evaluate-agent-skills.md)).
@@ -19,6 +26,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- **Bootstrap script renames (clean-cut, no shims):** `update-better-toolkits-marketplace.sh`
+  → `update-better-toolkits-marketplace-cursor.sh`; `prune-better-toolkits-cache.sh`
+  → `prune-better-toolkits-cache-cursor.sh`. **better-toolkits-bootstrap** 0.1.6 → 0.2.0,
+  `@chimeranext/better-toolkits` 0.1.0 → 0.2.0.
+- **`setup-opencode-commands.sh`** honours `OPENCODE_CONFIG_DIR` (was hardcoded to
+  `~/.config/opencode/commands`), so `--config-dir` is now fully respected.
+- **Slack MCP auth (opencode-mcp-config):** §8–§10 are now mandatory and must be
+  run end-to-end without exceptions (no `2>/dev/null`, no skipped steps); the
+  setup adapter no longer treats the restart flow as an optional HITL gate.
 - **OpenCode stderr SSOT:** consolidated into
   [`setup-opencode.md`](shared/bootstrap/references/toolkits-initial-setup/adapters/setup-opencode.md)
   (`/toolkits-initial-setup` / `npx @chimeranext/better-toolkits setup`). Removed duplicate

@@ -146,6 +146,7 @@ Report a table:
 | Config file path | … |
 | `"plugins"` array | list entries (the stderr adapter file must NOT be here) |
 | Stderr discovery copy | `~/.config/opencode/plugins/mnm-no-stderr-redirect/index.ts` present + bytes match source? |
+| Auto-update plugin | `~/.config/opencode/plugins/better-toolkits-auto-update/index.ts` present + bytes match? mode sidecar (`config.json`) branch = consumer/expert? |
 | Plugin loaded | `opencode plugin list` shows `local.mnm-no-stderr-redirect`? (present is not loaded) |
 | Duplicate stderr installs | none / list |
 | Legacy key `"plugin"` (singular) | warn if present — migrate to `"plugins"` |
@@ -196,6 +197,25 @@ Report a table:
    only as `{env:}` refs. CLI: `setup install [--slack-client-id <id>]`.
    Browser-OAuth servers (`slack`, `linear`, `notion`) still need the user's `/mcps`
    sign-in afterwards; that step is never automatable.
+   For Slack specifically, after wiring the server run §8–§10 of
+   `opencode-mcp-config/protocol.md` **to completion and without exceptions**
+   (fresh OAuth flow, `mcp list`/`debug`, kill any hung auth, verify
+   `echo ${#SLACK_MCP_CLIENT_SECRET}` > 0, `opencode service restart`,
+   relaunch with inherited env — no `2>/dev/null`, no HTTPS downgrade, no
+   skipped steps). This is mandatory, not a HITL option; only `linear`/`notion`
+   fall back to a manual `/mcps` sign-in.
+
+   **Setup flow (agent-facing, Slack MCP):** before doing anything, ask the user
+   one clean question with exactly these two options — never the technical
+   `§1 variante v2 / redirectUri / app-assistant` jargon:
+
+   - **A) Ya tengo mi Slack App configurada y tengo a mano el Client ID y el
+     Client Secret.** → collect both (GUI form or terminal, no echo) and wire
+     `setup install --slack-client-id <id>` + `setup-opencode-mcp-slack.sh`,
+     then run §8–§10 to completion.
+   - **B) Necesitamos configurar nuestro Slack App ID desde cero.** → walk
+     §2–§7 of `opencode-mcp-config/protocol.md` first (create app, scopes,
+     redirect URIs, enable MCP toggle), then continue as A.
 
 ## Phase 3 - Verify
 
@@ -203,16 +223,19 @@ Report a table:
     shows `local.mnm-no-stderr-redirect` (loaded - presence alone is not enough).
  2. `shared/bootstrap/scripts/setup-opencode-commands.sh --check` -> `CHECK OK`
     (exit 0 = every expected symlink resolves; orphans pruned on next run).
- 3. Offline gate: `python3 shared/hooks/stderr/detect.py --command "$(cat /tmp/opencode/probe.txt)"`
+ 3. Auto-update plugin: `opencode plugin list` shows `local.better-toolkits-auto-update`;
+    the sidecar records the chosen branch mode; `better-toolkits self-update --dry-run`
+    reports the planned pull without applying it.
+ 4. Offline gate: `python3 shared/hooks/stderr/detect.py --command "$(cat /tmp/opencode/probe.txt)"`
     -> exit **2**, where probe.txt holds a silenced-stderr command written with
     your editor (never type the literal in the shell - the live hook blocks it
     before it runs; that block IS the next check).
- 4. Live gate: submit any silenced-stderr command -> expect rejection with
+ 5. Live gate: submit any silenced-stderr command -> expect rejection with
     `PROHIBIDO: no se permite redirigir stderr ...`. A clean command still runs.
- 5. No restart needed in the common case - the server hot-reloads the discovery
+ 6. No restart needed in the common case - the server hot-reloads the discovery
     dir. If the id is missing from `plugin list`, `opencode service restart`
     is the fallback.
- 6. Opt-out reminder: `"plugins": ["-local.mnm-no-stderr-redirect"]` or
+ 7. Opt-out reminder: `"plugins": ["-local.mnm-no-stderr-redirect"]` or
     `MNM_DISABLE_STDERR_HOOK=1`.
 
 ```bash
@@ -223,6 +246,45 @@ Confirm `opencode plugin list` shows `local.mnm-no-stderr-redirect` loaded,
 without duplicates unless the user opted out. Then confirm a new session
 advertises toolkit skills (e.g. `implement`) - if none appear, the `skills`
 array is missing or mispointed (restart is only a fallback).
+
+## Auto-update (default ON — #110)
+
+OpenCode keeps better-toolkits fresh by pulling the **monorepo clone** at startup
+and re-running the wiring. No npm publish is involved.
+
+**Plugin** — `shared/bootstrap/opencode-plugins/better-toolkits-auto-update/index.ts`,
+installed as a discovery-dir copy at `~/.config/opencode/plugins/better-toolkits-auto-update/index.ts`
+(like the stderr adapter: copy, never symlink, never a `"plugins"` entry). At startup it
+spawns `better-toolkits self-update --harness opencode` **detached** (no session latency),
+with a single-flight lock and an optional throttle
+(`BETTER_TOOLKITS_AUTO_UPDATE_INTERVAL_HOURS`, default 0 = every startup).
+
+**Mode sidecar** — `~/.config/opencode/plugins/better-toolkits-auto-update/config.json`:
+
+```json
+{ "cloneRoot": "/abs/path/to/better-toolkits", "expertMode": false, "branch": "main" }
+```
+
+`expertMode: true` (author) makes the background run keep the current branch and skip a
+dirty tree; `false` (consumer) always converges on `main`. The sidecar is written by
+`setup` and preserved by `auto-update enable`.
+
+**Why not the third-party `opencode-plugin-auto-update`?** It migrates `"plugins"` →
+legacy `"plugin"` (singular) — the opposite of the OpenCode V2 contract above — and it
+only updates npm-registry entries of the plugins array, while our wiring is a
+discovery-dir copy + `commands/` symlinks + `skills` entries. It also rewrites
+`opencode.json` in a background process with no consent.
+
+**Control surface:**
+
+```bash
+better-toolkits auto-update enable     # install/refresh the plugin + sidecar
+better-toolkits auto-update disable    # remove the plugin (stops background updates)
+BETTER_TOOLKITS_AUTO_UPDATE=0          # soft-disable without uninstalling
+```
+
+Slash commands: `/enable-better-toolkits-auto-update`, `/disable-better-toolkits-auto-update`.
+Manual refresh: `/refresh-better-toolkits-cache`. Purge: `/prune-better-toolkits-cache`.
 
 ## Marketplace parity
 
