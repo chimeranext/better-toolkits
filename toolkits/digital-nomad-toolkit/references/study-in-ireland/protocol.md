@@ -35,6 +35,13 @@ student permission.
 - 183+ days → Irish residence → worldwide income; effective management of the
   LLC from Ireland draws Revenue scrutiny (§10-AO-style).
 
+## Official sources
+
+- [Irish Immigration Service — Coming to study in Ireland](https://www.irishimmigration.ie/coming-to-study-in-ireland/)
+- [ISD — Third Level Graduate Programme (Stamp 1G)](https://www.irishimmigration.ie/my-situation-has-changed-since-i-arrived-in-ireland/third-level-graduate-programme/)
+- [Citizens Information — working while studying](https://www.citizensinformation.ie/education/third-level-education/working-while-studying/)
+- [Revenue — taxes for students and workers](https://www.revenue.ie/)
+
 ## Disclaimer
 
 This document is an educational guide. NOT legal, tax, or financial advice.

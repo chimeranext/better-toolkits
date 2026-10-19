@@ -37,6 +37,13 @@ Operating a US Single-Member LLC within an Australian student visa
 - DHA financial-capity evidence at application (living + tuition + travel —
   verify current figure); OSHC health cover mandatory.
 
+## Official sources
+
+- [Home Affairs — Student visa (subclass 500)](https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/student-500)
+- [Home Affairs — Temporary Graduate visa (subclass 485)](https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/temporary-graduate-485)
+- [VEVO — check your visa conditions](https://immi.homeaffairs.gov.au/visas/already-have-a-visa/check-visa-details-and-conditions/conditions-list)
+- [Study Australia (official)](https://www.studyaustralia.gov.au/)
+
 ## Disclaimer
 
 This document is an educational guide. NOT legal, tax, or financial advice.

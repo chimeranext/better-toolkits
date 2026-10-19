@@ -46,6 +46,13 @@ activity rules.
   country of residence. Stripe: consistency. US cards + persistent foreign
   IP = review risk.
 
+## Official sources
+
+- [Wyoming Business Division (wyobiz) — filings, annual reports](https://wyobiz.wyo.gov/)
+- [FinCEN — Beneficial Ownership Information (BOI)](https://www.fincen.gov/boi)
+- [IRS — Form 8822-B (change of address)](https://www.irs.gov/forms-pubs/about-form-8822-b)
+- [IRS — Small business & self-employed](https://www.irs.gov/businesses/small-businesses-self-employed)
+
 ## Disclaimer
 
 This document is an educational guide. NOT legal, tax, or financial advice.

@@ -39,6 +39,13 @@ the student route).
 - **Sperrkonto** ≈ €11,904/year (≈ €992/month released) + tuition payments;
   student jobs ≈ €14–20/h in tech.
 
+## Official sources
+
+- [AufenthG (Residence Act) §§16b, 21 — statutory text](https://www.gesetze-im-internet.de/aufenthg_2004/)
+- [Make it in Germany — student visas](https://www.make-it-in-germany.com/en/visa-residence/types/studying) — official federal portal
+- [Berlin Office for Immigration (LEA)](https://www.berlin.de/einwanderung/en/) — §21 Abs. 6 decisions
+- [Bundeszentralamt für Steuern (BZSt)](https://www.bzst.de/) — tax residence and federal filings
+
 ## Disclaimer
 
 This document is an educational guide. NOT legal, tax, or financial advice.
