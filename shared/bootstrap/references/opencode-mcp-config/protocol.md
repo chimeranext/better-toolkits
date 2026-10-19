@@ -185,6 +185,13 @@ con env (ver §10 paso 4):
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/secret-store.sh" use SLACK_MCP_CLIENT_SECRET -- bash -c 'printf "export SLACK_MCP_CLIENT_SECRET=%s\n" "$SLACK_MCP_CLIENT_SECRET" > ~/.config/opencode/mcp-secrets.env && chmod 600 ~/.config/opencode/mcp-secrets.env'
 ```
 
+> **Mandatory — no exceptions.** §8 (error diagnosis), §9 (verification) and §10
+> (full restart flow) must be executed **end-to-end** whenever Slack MCP auth is
+> being (re)established. Do not stop at §8, do not ask whether to continue, and
+> never use `2>/dev/null` or skip steps: the restart in §10 is what resolves
+> `bad_client_secret` / stale `Needs auth`. Partial execution is the #1 cause of
+> a half-working setup.
+
 ## 8. Tabla de errores vistos
 
 | Síntoma | Causa | Fix |

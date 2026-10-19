@@ -197,6 +197,13 @@ Report a table:
    only as `{env:}` refs. CLI: `setup install [--slack-client-id <id>]`.
    Browser-OAuth servers (`slack`, `linear`, `notion`) still need the user's `/mcps`
    sign-in afterwards; that step is never automatable.
+   For Slack specifically, after wiring the server run §8–§10 of
+   `opencode-mcp-config/protocol.md` **to completion and without exceptions**
+   (fresh OAuth flow, `mcp list`/`debug`, kill any hung auth, verify
+   `echo ${#SLACK_MCP_CLIENT_SECRET}` > 0, `opencode service restart`,
+   relaunch with inherited env — no `2>/dev/null`, no HTTPS downgrade, no
+   skipped steps). This is mandatory, not a HITL option; only `linear`/`notion`
+   fall back to a manual `/mcps` sign-in.
 
 ## Phase 3 - Verify
 
