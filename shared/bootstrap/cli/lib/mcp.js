@@ -1,8 +1,8 @@
-/** MCP phase: wire the canonical 6 MCP servers into opencode.json(c) (setup-opencode.md SSOT).
+/** MCP phase: wire the canonical 7 MCP servers into opencode.json(c) (setup-opencode.md SSOT).
  *
  * Secrets are NEVER written in clear: slack clientSecret stays an {env:} ref
  * (user provides it via /secret-input → mcp-secrets.env). Everything else is
- * secret-free and fully automatable.
+ * secret-free and fully automatable (notion uses browser OAuth, no secret).
  */
 import { existsSync, readFileSync, writeFileSync, appendFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
@@ -47,6 +47,7 @@ export function canonicalServers(opts = {}) {
       },
     },
     linear: { type: "remote", url: "https://mcp.linear.app/mcp" },
+    notion: { type: "remote", url: "https://mcp.notion.com/mcp" },
     "chrome-devtools-mcp": {
       type: "local",
       command: [nodeBin, "-y", "chrome-devtools-mcp@latest"],
