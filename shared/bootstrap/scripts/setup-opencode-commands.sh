@@ -42,7 +42,7 @@ if [[ -z "$ROOT" ]]; then
   ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
 fi
 MARKETPLACE="$ROOT/.claude-plugin/marketplace.json"
-DEST_BASE="${HOME}/.config/opencode/commands"
+DEST_BASE="${OPENCODE_CONFIG_DIR:-${HOME}/.config/opencode}/commands"
 
 if [[ ! -f "$MARKETPLACE" ]]; then
   echo "ERROR: marketplace manifest not found: $MARKETPLACE" >&2
