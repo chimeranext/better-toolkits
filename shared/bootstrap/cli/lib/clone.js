@@ -181,6 +181,21 @@ export function execGit(cwd, args) {
  * action: "up-to-date" | "pull" | "switch-and-pull" | "skip" | "none"
  * `ok: false` means the reason is a hard problem the caller should surface.
  */
+function branchCheckedOutElsewhere(cloneRoot, branch) {
+  const list = execGit(cloneRoot, ["worktree", "list", "--porcelain"]);
+  if (!list.ok) return false;
+  const target = `refs/heads/${branch}`;
+  let currentPath = null;
+  for (const line of list.out.split("\n")) {
+    if (line.startsWith("worktree ")) {
+      currentPath = line.slice("worktree ".length).trim();
+    } else if (line === `branch ${target}` && currentPath && resolve(currentPath) !== resolve(cloneRoot)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 export function planPull(opts = {}) {
   const cloneRoot = opts.cloneRoot ?? null;
   const expertMode = opts.expertMode === true;
@@ -216,6 +231,16 @@ export function planPull(opts = {}) {
 
   const target = expertMode ? head.out : branch;
   if (!expertMode && head.out !== branch) {
+    // If `main` is already checked out in another worktree we cannot switch
+    // here (git refuses); behave like expert mode for the switch only and
+    // leave the current branch alone instead of failing the whole pass.
+    if (branchCheckedOutElsewhere(cloneRoot, branch)) {
+      return {
+        action: "skip",
+        ok: true,
+        reason: `'${branch}' is checked out in another worktree — staying on '${head.out}', pull skipped (run from a main checkout or use --expert-mode)`,
+      };
+    }
     return {
       action: "switch-and-pull",
       ok: true,
@@ -253,7 +278,13 @@ export function applyPull(plan, opts = {}) {
 
   if (plan.action === "switch-and-pull") {
     const checkout = git(cloneRoot, ["checkout", branch]);
-    if (!checkout.ok) return { ok: false, detail: `git checkout ${branch} failed: ${checkout.err}` };
+    if (!checkout.ok) {
+      return {
+        ok: true,
+        skipped: true,
+        detail: `could not switch to '${branch}' (${checkout.err}) — pull skipped, wiring still runs`,
+      };
+    }
     log(`switched ${plan.from} → ${branch}`);
   }
 
