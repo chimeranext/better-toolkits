@@ -149,7 +149,7 @@ export function audit(opts = {}) {
   const wantNames = Object.keys(wanted);
   const missingMcp = wantNames.filter((n) => !(n in have));
   add(
-    "mcp servers (canonical 6)",
+    `mcp servers (canonical ${wantNames.length})`,
     `${wantNames.length - missingMcp.length}/${wantNames.length} present${missingMcp.length ? ` — missing: ${missingMcp.join(", ")}` : ""}`,
     missingMcp.length > 0,
   );
