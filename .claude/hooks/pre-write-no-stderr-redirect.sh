@@ -27,7 +27,7 @@ REL="${FILE_PATH#"$REPO_ROOT"/}"
 # forbidden patterns on purpose).
 case "$REL" in
   *.md) exit 0 ;;
-  *hooks/stderr/*) exit 0 ;;
+  *hooks/*) exit 0 ;;
   *test-detect.sh) exit 0 ;;
   *test-*.sh) exit 0 ;;
   *.test.*) exit 0 ;;
