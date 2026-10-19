@@ -172,7 +172,16 @@ def plugins_needing_bump(range_spec: str) -> list[Plugin]:
     for pl in plugins:
         if pl.name not in touched:
             continue
-        old = version_at_rev(pl, base_rev) or pl.version
+        old = version_at_rev(pl, base_rev)
+        if old is None:
+            # Added in this range: the plugin had no version at the base rev,
+            # so its initial version IS the release — no further bump required.
+            continue
+        if not pl.root.exists():
+            # Toolkit files removed in this range (entry pending removal from
+            # marketplace.json — `sync` warns about that separately).
+            # Nothing to version-bump for a plugin being deleted.
+            continue
         cur = pl.version
         try:
             if parse_semver(cur) <= parse_semver(old):
