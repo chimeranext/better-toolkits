@@ -6,7 +6,23 @@ aplica a cualquier MCP remoto con OAuth confidencial.
 
 ---
 
-## 1. Forma de la config (v1.15.5)
+## 0. Setup flow (agent-facing) — AskQuestion A/B
+
+When a user needs Slack MCP configured, the agent MUST ask **one** clean question
+with exactly these two options — never the technical `§1 variante v2 /
+redirectUri pineado / app-assistant toggle` jargon:
+
+- **A) Ya tengo mi Slack App configurada y tengo a mano nuestro Client ID y
+  Client Secret.** → collect both (GUI form with two fields, or terminal without
+  echo) and wire `setup install --slack-client-id <id>` + `setup-opencode-mcp-slack.sh
+  --with-client-id`, then run §8–§10 to completion.
+- **B) Necesitamos configurar nuestro Slack App ID desde cero.** → walk §2–§7
+  first (create app, scopes, redirect URIs, enable the MCP toggle), then continue
+  as A.
+
+GUI note: `zenity --forms --add-entry="Client ID" --add-entry="Client Secret"`
+opens a single popup with both text boxes at once (kdialog/terminal fall back to
+two sequential prompts).
 
 Claves planas bajo `mcp`, SIN wrapper `servers` (el formato `mcp.servers` de la
 doc V2 es rechazado por esta versión con `Missing key mcp.servers.enabled`):

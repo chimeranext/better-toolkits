@@ -205,6 +205,18 @@ Report a table:
    skipped steps). This is mandatory, not a HITL option; only `linear`/`notion`
    fall back to a manual `/mcps` sign-in.
 
+   **Setup flow (agent-facing, Slack MCP):** before doing anything, ask the user
+   one clean question with exactly these two options — never the technical
+   `§1 variante v2 / redirectUri / app-assistant` jargon:
+
+   - **A) Ya tengo mi Slack App configurada y tengo a mano el Client ID y el
+     Client Secret.** → collect both (GUI form or terminal, no echo) and wire
+     `setup install --slack-client-id <id>` + `setup-opencode-mcp-slack.sh`,
+     then run §8–§10 to completion.
+   - **B) Necesitamos configurar nuestro Slack App ID desde cero.** → walk
+     §2–§7 of `opencode-mcp-config/protocol.md` first (create app, scopes,
+     redirect URIs, enable MCP toggle), then continue as A.
+
 ## Phase 3 - Verify
 
  1. Discovery copy exists and bytes match the repo source; `opencode plugin list`
