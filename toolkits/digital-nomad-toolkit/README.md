@@ -35,8 +35,10 @@ Freelancers and digital nomads who:
 | `/digital-nomad:study-in-japan` | Student visa + Startup Visa / Business Manager (Japan) |
 | `/digital-nomad:study-in-singapore` | Student Pass + EntrePass / ONE Pass (Singapore) |
 | `/digital-nomad:study-in-south-korea` | D-2 permit + OASIS D-10-2 → D-8-4 pipeline (South Korea) |
+| `/digital-nomad:study-in-china` | X1/X2 endorsement rules + WFOE + work permit A/B / K visa (China) |
+| `/digital-nomad:study-in-taiwan` | ARC permit + Digital Nomad Visa / Gold Card / Entrepreneur Visa (Taiwan) |
 | `/digital-nomad:maintain-llc-abroad` | Keep the SMLLC alive from a student/founder address |
-| `/digital-nomad:route-decision` | Compare 7 countries × posture × graduation exit |
+| `/digital-nomad:route-decision` | Compare 9 countries × posture × graduation exit |
 
 ## Structure
 
@@ -58,6 +60,8 @@ toolkits/digital-nomad-toolkit/
 │   ├── study-in-japan/
 │   ├── study-in-singapore/
 │   ├── study-in-south-korea/
+│   ├── study-in-china/
+│   ├── study-in-taiwan/
 │   ├── maintain-llc-abroad/
 │   └── route-decision/
 ├── commands/
@@ -73,6 +77,8 @@ toolkits/digital-nomad-toolkit/
 │   ├── study-in-japan.md
 │   ├── study-in-singapore.md
 │   ├── study-in-south-korea.md
+│   ├── study-in-china.md
+│   ├── study-in-taiwan.md
 │   ├── maintain-llc-abroad.md
 │   └── route-decision.md
 ├── CHANGELOG.md
