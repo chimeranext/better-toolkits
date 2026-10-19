@@ -89,9 +89,9 @@ describe("install plan", () => {
 });
 
 describe("mcp phase", () => {
-  it("defines exactly the canonical 6 servers", () => {
+  it("defines exactly the canonical 7 servers", () => {
     const names = Object.keys(canonicalServers({}));
-    assert.deepEqual(names.sort(), ["chrome-devtools-mcp", "context7", "dart", "linear", "slack", "stitch"].sort());
+    assert.deepEqual(names.sort(), ["chrome-devtools-mcp", "context7", "dart", "linear", "notion", "slack", "stitch"].sort());
   });
 
   it("never embeds secrets in clear", () => {
