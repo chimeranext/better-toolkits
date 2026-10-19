@@ -1,22 +1,50 @@
 ---
-description: "Update better-toolkits marketplace + re-run harness wiring (Cursor CLI, Cursor Desktop, OpenCode). Never purges caches."
+description: "Update better-toolkits (git pull --ff-only the monorepo clone) + re-run harness wiring (Cursor, OpenCode). Never purges caches."
 priority: 6
 ---
 # /refresh-better-toolkits-cache
 
-Updates the installed better-toolkits to the latest marketplace state and re-runs
+Updates the installed better-toolkits to the latest clone state and re-runs
 per-harness wiring. This command **NEVER deletes anything** — it does not purge
-caches and never invokes the prune script. For stale cached copies, see
+caches and never invokes a prune script. For stale cached copies, see
 `/prune-better-toolkits-cache` (separate command, either order, or standalone).
 
-Cursor CLI and Cursor Desktop are treated as **independent targets**: updating one
-does not imply the other. Verify each one you use.
+The source of truth is **`git pull --ff-only` on the monorepo clone** — never an
+npm publish. Branch policy: always converge on `main` unless the clone was set
+up with `--expert-mode` (author flow), which never switches branch and never
+touches a dirty tree.
 
-## Cursor CLI (`agent`)
+## OpenCode
+
+Read and run [`../scripts/update-better-toolkits-marketplace-opencode.sh`](../scripts/update-better-toolkits-marketplace-opencode.sh).
 
 ```bash
-agent plugin marketplace update better-toolkits
+bash shared/bootstrap/scripts/update-better-toolkits-marketplace-opencode.sh
 ```
+
+Equivalent direct invocation:
+
+```bash
+node <clone>/shared/bootstrap/cli/bin/better-toolkits.js self-update --harness opencode
+```
+
+1. Fast-forwards the clone's `main` (skips a dirty tree, never force-merges).
+2. Re-syncs the wiring idempotently: discovery-dir stderr copy, `commands/`
+   symlinks, `skills` entries, auto-update plugin.
+
+## Cursor CLI + Cursor Desktop
+
+Cursor CLI and Cursor Desktop are **independent targets**: updating one does not
+imply the other. Verify each one you use.
+
+Read and run [`../scripts/update-better-toolkits-marketplace-cursor.sh`](../scripts/update-better-toolkits-marketplace-cursor.sh).
+
+```bash
+bash shared/bootstrap/scripts/update-better-toolkits-marketplace-cursor.sh
+```
+
+1. Fast-forwards the clone's `main`.
+2. Runs `agent plugin marketplace update better-toolkits`.
 
 Verify:
 
@@ -28,45 +56,19 @@ agent plugin list
 ## Cursor Desktop (UI)
 
 UI evidence (screenshots, Linux): the marketplace page only offers **Add / Added / Remove**
-per toolkit and an **Import Marketplace** dialog (Repository URL + Scope User/Project).
-**There is no Refresh or Update button.** (Unlike Dashboard→Plugins web docs, which describe
-a different surface.)
+per toolkit and an **Import Marketplace** dialog (Repository URL + Scope User/Org).
+There is no **Refresh** button — so the OpenCode-style `marketplace update` path does not
+exist in the Desktop UI. After a bump, either run the Cursor CLI line above or use
+**Remove + Add** for each toolkit.
 
-Desktop refresh = reinstall:
+## Background (no command needed)
 
-1. On the marketplace page, toolkit `...` menu → **Remove**.
-2. **Add** again in the needed scope (User/Project).
-3. Restart or refocus the window — the client re-resolves plugins on startup/focus.
-4. Verify on disk: `~/.cursor/plugins/cache/*/*/` dirs are named by commit SHA;
-   check version in `.cursor-plugin/plugin.json`.
-
-If the old version persists after reinstall, that is the pinning bug documented below —
-run `/prune-better-toolkits-cache` and reinstall again.
-
-Known upstream bugs (forum reports, not official docs — including vendor repro
-acknowledgment; re-verify before citing elsewhere):
-- https://forum.cursor.com/t/plugin-update-version-management-how-are-installed-plugins-updated/166454
-- https://forum.cursor.com/t/plugin-marketplace-sync-is-stale-causing-update-reinstall-in-settings-to-have-no-effect/165660
-- https://forum.cursor.com/t/team-marketplace-auto-refresh-does-not-pick-up-plugin-changes-manual-refresh-cache-clear-reinstall-required/154675
-
-In short: personal marketplaces added via `/add-plugin` stay pinned to the
-original commit and Update/Reinstall re-applies the same snapshot;
-team-marketplace Auto Refresh is unreliable for content updates. If refresh
-doesn't take, run `/prune-better-toolkits-cache`, then refresh again.
-
-## OpenCode
-
-OpenCode has no plugin cache to purge — refresh is re-running setup, which rewrites
-the skills wiring in `opencode.json` (see
-[`setup-opencode.md`](../references/toolkits-initial-setup/adapters/setup-opencode.md)):
+With the auto-update plugin installed, OpenCode runs this refresh itself at startup
+(`better-toolkits-auto-update` in the discovery dir). Control it with:
 
 ```bash
-npx @chimeranext/better-toolkits setup
+better-toolkits auto-update enable | disable
+BETTER_TOOLKITS_AUTO_UPDATE=0   # soft-disable without uninstalling
 ```
-
-## If behavior stays stale
-
-Do **not** purge from here. If old behavior persists after refresh, run
-`/prune-better-toolkits-cache` (deletes stale Cursor cache trees), then refresh again.
 
 **Not** a make-no-mistakes product command — lives in `shared/bootstrap/`.

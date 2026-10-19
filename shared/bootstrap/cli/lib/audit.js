@@ -7,6 +7,9 @@ import {
   resolveConfigDir,
   discoveryIndex,
   commandsScript,
+  autoUpdatePluginIndex,
+  autoUpdateConfigPath,
+  resolveAutoUpdatePluginSource,
 } from "./paths.js";
 import { toolkitSkillsDirs, readSkills, missingSkills } from "./skills.js";
 import { canonicalServers, shellEnvStatus, ENV_FILE_NAME, SECRET_NAME } from "./mcp.js";
@@ -33,6 +36,33 @@ function tryPluginList() {
   } catch (err) {
     return { ok: false, loaded: false, error: String(err?.message ?? err).split("\n")[0] };
   }
+}
+
+function readJson(path) {
+  try {
+    return JSON.parse(readFileSync(path, "utf8"));
+  } catch {
+    return null;
+  }
+}
+
+function autoUpdateCheck(repoRoot, configDir) {
+  const source = resolveAutoUpdatePluginSource(repoRoot);
+  const installed = readBytes(autoUpdatePluginIndex(configDir));
+  const src = existsSync(source) ? readBytes(source) : null;
+  const sidecar = readJson(autoUpdateConfigPath(configDir));
+  const mode = sidecar?.expertMode ? "expert (branch per clone)" : "consumer (branch main)";
+  if (!existsSync(source)) {
+    return { detail: `source missing (${source})`, warn: true };
+  }
+  if (installed === null) {
+    return { detail: `missing — run install (${autoUpdatePluginIndex()})`, warn: true };
+  }
+  const same = src !== null && Buffer.compare(installed, src) === 0;
+  return {
+    detail: `${same ? "present + bytes match" : "STALE (bytes differ) — run install"} — ${mode}`,
+    warn: !same,
+  };
 }
 
 function commandsCheck(repoRoot) {
@@ -113,7 +143,7 @@ export function audit(opts = {}) {
   } catch (err) {
     add("Adapter source", `MISSING — ${err.message}`, true);
   }
-  const installed = readBytes(discoveryIndex());
+  const installed = readBytes(discoveryIndex(configDir));
   const source = adapter ? readBytes(adapter) : null;
   if (adapter) add("Adapter source", adapter);
   if (!installed) {
@@ -126,6 +156,10 @@ export function audit(opts = {}) {
 
   // Duplicates: other copies of the adapter registered anywhere obvious
   add("Duplicate stderr installs", "none checked beyond discovery dir");
+
+  // Auto-update plugin (#110)
+  const au = autoUpdateCheck(repoRoot, configDir);
+  add("Auto-update plugin (OpenCode)", au.detail, au.warn);
 
   // Plugin loaded?
   const pl = tryPluginList();

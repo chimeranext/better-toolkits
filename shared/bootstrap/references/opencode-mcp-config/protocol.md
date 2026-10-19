@@ -6,7 +6,23 @@ aplica a cualquier MCP remoto con OAuth confidencial.
 
 ---
 
-## 1. Forma de la config (v1.15.5)
+## 0. Setup flow (agent-facing) — AskQuestion A/B
+
+When a user needs Slack MCP configured, the agent MUST ask **one** clean question
+with exactly these two options — never the technical `§1 variante v2 /
+redirectUri pineado / app-assistant toggle` jargon:
+
+- **A) Ya tengo mi Slack App configurada y tengo a mano nuestro Client ID y
+  Client Secret.** → collect both (GUI form with two fields, or terminal without
+  echo) and wire `setup install --slack-client-id <id>` + `setup-opencode-mcp-slack.sh
+  --with-client-id`, then run §8–§10 to completion.
+- **B) Necesitamos configurar nuestro Slack App ID desde cero.** → walk §2–§7
+  first (create app, scopes, redirect URIs, enable the MCP toggle), then continue
+  as A.
+
+GUI note: `zenity --forms --add-entry="Client ID" --add-entry="Client Secret"`
+opens a single popup with both text boxes at once (kdialog/terminal fall back to
+two sequential prompts).
 
 Claves planas bajo `mcp`, SIN wrapper `servers` (el formato `mcp.servers` de la
 doc V2 es rechazado por esta versión con `Missing key mcp.servers.enabled`):
@@ -184,6 +200,13 @@ con env (ver §10 paso 4):
 ```sh
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/secret-store.sh" use SLACK_MCP_CLIENT_SECRET -- bash -c 'printf "export SLACK_MCP_CLIENT_SECRET=%s\n" "$SLACK_MCP_CLIENT_SECRET" > ~/.config/opencode/mcp-secrets.env && chmod 600 ~/.config/opencode/mcp-secrets.env'
 ```
+
+> **Mandatory — no exceptions.** §8 (error diagnosis), §9 (verification) and §10
+> (full restart flow) must be executed **end-to-end** whenever Slack MCP auth is
+> being (re)established. Do not stop at §8, do not ask whether to continue, and
+> never use `2>/dev/null` or skip steps: the restart in §10 is what resolves
+> `bad_client_secret` / stale `Needs auth`. Partial execution is the #1 cause of
+> a half-working setup.
 
 ## 8. Tabla de errores vistos
 
