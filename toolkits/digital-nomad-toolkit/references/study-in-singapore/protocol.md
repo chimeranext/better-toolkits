@@ -34,6 +34,14 @@ operators.
 - Headline **17%**, territorial framing; a company managed and controlled
   from Singapore can be pulled into net; US filings unchanged.
 
+## Official sources
+
+- [ICA — Student's Pass application](https://www.ica.gov.sg/reside/STP/apply)
+- [MOM — Work pass exemption for foreign students](https://www.mom.gov.sg/passes-and-permits/work-pass-exemption-for-foreign-students)
+- [MOM — EntrePass eligibility](https://www.mom.gov.sg/passes-and-permits/entrepass)
+- [EDB — Tech.Pass (sunset notice included)](https://www.edb.gov.sg/en/how-we-help/incentives-and-facilitation/tech-pass)
+- [IRAS — taxes in Singapore](https://www.iras.gov.sg/)
+
 ## Disclaimer
 
 This document is an educational guide. NOT legal, tax, or financial advice.

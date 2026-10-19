@@ -35,6 +35,13 @@ K-Startup Grand Challenge adds recognition/points.
   of foreign entities controlled by Korean residents — active management of
   a Wyoming LLC from Seoul is in scope.
 
+## Official sources
+
+- [Hi Korea — immigration portal (part-time work permits)](https://www.hikorea.go.kr/)
+- [OASIS — Overall Assistance for Startup Immigration System](https://www.oasisvisa.com/)
+- [Study in Korea (official, government-run)](https://www.studyinkorea.go.kr/)
+- [National Tax Service (NTS)](https://www.nts.go.kr/)
+
 ## Disclaimer
 
 This document is an educational guide. NOT legal, tax, or financial advice.

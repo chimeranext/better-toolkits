@@ -33,6 +33,12 @@ The student and founder faces of Japan for US Single-Member LLC operators.
 - Foreign company with **effective management** in Japan → treated as a
   Japanese corporation for tax; worldwide income for residents.
 
+## Official sources
+
+- [ISA — Business Manager (経営・管理) status page](https://www.moj.go.jp/isa/applications/status/businessmanager.html?lang=en)
+- [Immigration Services Agency (ISA) portal](https://www.moj.go.jp/isa/)
+- [JETRO — promoting acceptance of foreign entrepreneurs (Startup Visa)](https://www.jetro.go.jp/en/invest/setting_up/section2/page12.html)
+
 ## Disclaimer
 
 This document is an educational guide. NOT legal, tax, or financial advice.

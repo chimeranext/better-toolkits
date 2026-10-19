@@ -35,6 +35,13 @@ program-dependent) → resume active work; or move on via visa-options.
 
 - On-campus roles (TA, research assistant, campus jobs) only.
 
+## Official sources
+
+- [IRCC — Study in Canada](https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada.html)
+- [IRCC — Post-Graduation Work Permit](https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/work/after-graduation.html)
+- [CRA — Determining your residency status](https://www.canada.ca/en/revenue-agency/services/tax/international-non-residents/individuals-leaving-entering-canada-residents.html)
+- [CRA — Foreign income verification (T1135)](https://www.canada.ca/en/revenue-agency/services/tax/international-non-residents/foreign-income-verification.html)
+
 ## Disclaimer
 
 This document is an educational guide. NOT legal, tax, or financial advice.

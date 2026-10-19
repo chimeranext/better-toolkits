@@ -39,6 +39,14 @@ founder phase; keep the LLC passive until then.
 5. Tax tolerance: all seven → worldwide income + effective-management/CFC
    scrutiny; passive LLC + clean US filings is the zero-exposure posture.
 
+## Official sources
+
+Each country protocol in this toolkit carries its own official-source list
+(`references/study-in-*/protocol.md`): immigration, work-permit, and tax
+authorities for Germany, Canada, Ireland, Australia, Japan, Singapore, and
+South Korea. Start from the country command, then follow its government
+links.
+
 ## Disclaimer
 
 This document is an educational guide. NOT legal, tax, or financial advice.
