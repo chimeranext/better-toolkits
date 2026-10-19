@@ -73,6 +73,67 @@ Si no tenés estas señales, probably Services Hub es premature optimization.
 
 ---
 
+## Architecture Reference (Generic)
+
+Diagrama genérico del patrón Services Hub — una Services LLC central provee servicios
+a múltiples Venture LLCs independientes vía MSAs bilaterales.
+
+```mermaid
+graph TD
+    subgraph Layer1 ["1. FOUNDER + SERVICES LLC"]
+        YOU(("Founder / CTO"))
+        SERVICES["Services LLC<br><i>(Delaware / Wyoming LLC)</i><br>• Shared services factory"]
+        YOU -->|"100% Owner"| SERVICES
+    end
+
+    subgraph Layer2 ["2. INDEPENDENT VENTURES (ISOLATED RISK)"]
+        subgraph Col1 ["Venture A"]
+            VC1["Investors / VCs"]
+            VENTURE_A["<b>Venture A Inc.</b><br><i>(Delaware C-Corp / LLC)</i><br>• Product / Vertical A"]
+            VC1 -->|"Investment"| VENTURE_A
+        end
+
+        subgraph Col2 ["Venture B"]
+            VC2["Investors / VCs"]
+            VENTURE_B["<b>Venture B Inc.</b><br><i>(Delaware C-Corp / LLC)</i><br>• Product / Vertical B"]
+            VC2 -->|"Investment"| VENTURE_B
+        end
+
+        subgraph Col3 ["Venture C"]
+            VC3["Investors / VCs"]
+            VENTURE_C["<b>Venture C Inc.</b><br><i>(Delaware C-Corp / LLC)</i><br>• Product / Vertical C"]
+            VC3 -->|"Investment"| VENTURE_C
+        end
+    end
+
+    YOU ==>|"Equity / Founder Shares (Class A)"| Col1
+    YOU ==>|"Equity / Founder Shares (Class A)"| Col2
+    YOU ==>|"Equity / Founder Shares (Class A)"| Col3
+
+    SERVICES -.-|"B2B Service Contracts (MSA/SLA)"| Col1
+    SERVICES -.-|"B2B Service Contracts (MSA/SLA)"| Col2
+    SERVICES -.-|"B2B Service Contracts (MSA/SLA)"| Col3
+
+    classDef founder fill:#1e3a8a,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef services fill:#7c2d12,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef startup fill:#1f2937,stroke:#fff,stroke-width:1px,color:#fff;
+    classDef vc fill:#581c87,stroke:#fff,stroke-width:1px,color:#fff;
+
+    class YOU founder;
+    class SERVICES services;
+    class VENTURE_A,VENTURE_B,VENTURE_C startup;
+    class VC1,VC2,VC3 vc;
+```
+
+### Key Structural Principles
+
+- **Risk isolation**: Cada venture es una entidad legal independiente. Un problema en uno no contagia a los otros.
+- **Centralized services**: Dev, QA, y herramientas se proveen desde la Services LLC vía MSAs.
+- **Independent cap tables**: Cada venture tiene su propio cap table con VCs independientes.
+- **No holding formal**: No hay holding company por ahora. El control es directo del founder.
+
+---
+
 ## El flujo (7 pasos)
 
 ### Paso 1 — Context del founder + ventures
