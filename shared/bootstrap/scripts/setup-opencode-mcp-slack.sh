@@ -38,7 +38,7 @@ done
 need() { _need_bin="$(command -v "$1")" && [ -n "$_need_bin" ]; }
 
 detect_platform() {
-  case "$(uname -s 2>/dev/null || printf '')" in
+  case "$(uname -s || printf '')" in
     Darwin*) printf 'macos' ;;
     MINGW*|MSYS*|CYGWIN*) printf 'windows' ;;
     *)
@@ -63,10 +63,10 @@ gui_prompt_single() {
       if need osascript; then
         if [ "$hidden" = "1" ]; then
           value="$(osascript -e "display dialog \"${text}\" with title \"${title}\" default answer \"\" with hidden answer" \
-            -e 'text returned of result' 2>/dev/null)" || return 1
+            -e 'text returned of result')" || return 1
         else
           value="$(osascript -e "display dialog \"${text}\" with title \"${title}\" default answer \"\"" \
-            -e 'text returned of result' 2>/dev/null)" || return 1
+            -e 'text returned of result')" || return 1
         fi
       else
         return 1
@@ -76,7 +76,7 @@ gui_prompt_single() {
       if need powershell.exe; then
         value="$(powershell.exe -NoProfile -Command "
           Add-Type -AssemblyName Microsoft.VisualBasic
-          [Microsoft.VisualBasic.Interaction]::InputBox('${text}','${title}','') " 2>/dev/null)" || return 1
+          [Microsoft.VisualBasic.Interaction]::InputBox('${text}','${title}','') ")" || return 1
       else
         return 1
       fi
@@ -86,16 +86,16 @@ gui_prompt_single() {
       if need zenity; then
         if [ "$hidden" = "1" ]; then
           value="$(zenity --password --title="$title" --text="$text" \
-            --ok-label="Guardar" --cancel-label="Cancelar" 2>/dev/null)" || return 1
+            --ok-label="Guardar" --cancel-label="Cancelar")" || return 1
         else
           value="$(zenity --entry --title="$title" --text="$text" \
-            --ok-label="Guardar" --cancel-label="Cancelar" 2>/dev/null)" || return 1
+            --ok-label="Guardar" --cancel-label="Cancelar")" || return 1
         fi
       elif need kdialog; then
         if [ "$hidden" = "1" ]; then
-          value="$(kdialog --password "$text" --title "$title" 2>/dev/null)" || return 1
+          value="$(kdialog --password "$text" --title "$title")" || return 1
         else
-          value="$(kdialog --inputbox "$text" --title "$title" 2>/dev/null)" || return 1
+          value="$(kdialog --inputbox "$text" --title "$title")" || return 1
         fi
       else
         return 1
@@ -122,7 +122,7 @@ prompt_secret() {
         --text="Pega el Client ID y el Client Secret de tu Slack app (api.slack.com/apps → Basic Information → App Credentials):" \
         --add-entry="Client ID" \
         --add-entry="Client Secret" \
-        --ok-label="Guardar" --cancel-label="Cancelar" 2>/dev/null)" || return 1
+        --ok-label="Guardar" --cancel-label="Cancelar")" || return 1
       CLIENT_ID_OUT="${result%%|*}"
       secret="${result#*|}"
     else
@@ -173,7 +173,7 @@ persist_user() {
 
   # Auto-source desde la shell interactiva (idempotente).
   for rc in "$HOME/.bashrc" "$HOME/.zshrc"; do
-    if [ -f "$rc" ] && ! grep -qF "mcp-secrets.env" "$rc" 2>&1; then
+    if [ -f "$rc" ] && ! grep -qF "mcp-secrets.env" "$rc"; then
       printf '\n# OpenCode MCP secrets (ver better-toolkits: opencode-mcp-config)\n[ -f "%s" ] && source "%s"\n' \
         "$USER_ENV_FILE" "$USER_ENV_FILE" >> "$rc"
       printf 'Agregado source en %s.\n' "$rc"
