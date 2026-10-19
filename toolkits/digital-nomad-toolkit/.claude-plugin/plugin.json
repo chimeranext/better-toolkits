@@ -1,0 +1,23 @@
+{
+  "name": "digital-nomad-toolkit",
+  "version": "1.0.0",
+  "description": "Guide for freelancers and digital nomads who want to operate as a US Single-Member LLC without jumping to a startup or shared services. Covers entity formation, tax compliance, remote banking, international billing (MSA B2B), and visa options. FREE.",
+  "author": {
+    "name": "Luis Andres Pena Castillo",
+    "url": "https://github.com/lapc506"
+  },
+  "homepage": "https://toolkits.chimeranext.dev",
+  "repository": "https://github.com/chimeranext/better-toolkits",
+  "license": "BSL-1.1",
+  "keywords": [
+    "claude-code",
+    "claude-code-plugin",
+    "digital-nomad",
+    "freelancer",
+    "single-member-llc",
+    "remote-work",
+    "tax-compliance",
+    "international-billing",
+    "visa"
+  ]
+}
