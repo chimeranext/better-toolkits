@@ -4,6 +4,12 @@
 
 - **hooks/prds/README.md:** OpenCode stderr registration points to `better-toolkits-bootstrap` / `setup-opencode.md` (not `/make-no-mistakes:opencode-setup`).
 
+## [1.2.3] — 2026-10-19
+
+### Added
+
+- **references/services-hub-setup/protocol.md:** generic Sister Entities (Services Hub) Mermaid diagram showing Founder → Shared Services LLC → venture entities with MSA/SLA flows.
+
 # Changelog
 
 All notable changes to `venture-studio-toolkit` documented in this file. Format follows
