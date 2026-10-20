@@ -20,7 +20,7 @@ mutations), [`docs/multi-harness-ssot.md`](docs/multi-harness-ssot.md).
 - **Forbidden:** `toolkits/*/.claude-plugin/marketplace.json` — those were standalone-repo leftovers and cause version drift. Do not recreate them.
 - When bumping a toolkit version, update **root** `marketplace.json` + that toolkit's `plugin.json` (and `package.json` / CHANGELOG / README when they exist) in the same PR.
 - **Pre-push gate:** `scripts/git-hooks/pre-push-marketplace-versions.sh` (or `pre-commit install --hook-type pre-push`) blocks pushes when `commands/`, `references/`, `skills/`, or `hooks/` changed without a semver increase. Apply bumps: `python3 scripts/ci/marketplace_versioning.py write --range origin/main..HEAD`. Cursor refresh: `agent plugin marketplace update better-toolkits` (optional `workspaceOpen` hook in bootstrap adapter).
-- **Agent-agnostic catalog:** each toolkit `package.json` `"skills"` field (antfu/skills-npm: `{ source, skills }`) lists its `SKILL.md` folders. Refresh with `python3 scripts/ci/sync_skills_field.py write`. Install with `npx skills add chimeranext/better-toolkits --skill <name> --agent '*' -g -y`, or `--all -g` for every skill. Do not hand-edit the `skills` list.
+- **Agent-agnostic catalog:** each toolkit `package.json` `"skills"` field (antfu/skills-npm: `{ source, skills }`) lists its `SKILL.md` folders. Update that list when a skill folder is added or removed. Install with `npx skills add chimeranext/better-toolkits --skill <name> --agent '*' -g -y`, or `--all -g` for every skill.
 
 ## Runtime hooks (stderr + PRDS)
 

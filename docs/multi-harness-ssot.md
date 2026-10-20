@@ -15,7 +15,7 @@ Install stderr on Claude Code / Cursor / OpenCode2: see the **Multi-harness SSOT
 
 ## Catalog rules
 
-1. Skill directories stay `skills/<name>/SKILL.md`. The `package.json` `"skills"` field lists those folder names for source `chimeranext/better-toolkits`. Refresh with `python3 scripts/ci/sync_skills_field.py write`.
+1. Skill directories stay `skills/<name>/SKILL.md`. The `package.json` `"skills"` field lists those folder names for source `chimeranext/better-toolkits`. Add or remove a name in that field when the folder changes.
 2. Install with the skills CLI. `--all` is every skill for every agent. `--agent '*'` with `--skill` is a subset for every agent:
 
 ```bash
