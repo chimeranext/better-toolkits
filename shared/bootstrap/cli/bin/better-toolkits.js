@@ -14,8 +14,9 @@ import { verify, printVerify } from "../lib/verify.js";
 import { confirm } from "../lib/hitl.js";
 import { planSelfUpdate, applySelfUpdate, withUpdateLock } from "../lib/self-update.js";
 import { planAutoUpdateToggle, applyAutoUpdateToggle, AUTO_UPDATE_ACTIONS } from "../lib/auto-update.js";
-import { resolveConfigDir } from "../lib/paths.js";
+import { resolveConfigDir, resolveRepoRoot } from "../lib/paths.js";
 import { join } from "node:path";
+import { applyAgentSkillsInstall, planAgentSkillsInstall } from "../lib/agent-skills.js";
 
 const PROTOCOL = "shared/bootstrap/references/toolkits-initial-setup/protocol.md";
 
@@ -36,6 +37,10 @@ export function parseArgs(argv) {
     harness: null,
     clone: null,
     autoUpdateAction: null,
+    toolkits: [],
+    agent: null,
+    skills: false,
+    all: false,
   };
   const rest = [...argv];
   if (rest.length && !rest[0].startsWith("-")) opts.cmd = rest.shift();
@@ -57,6 +62,13 @@ export function parseArgs(argv) {
     else if (a.startsWith("--harness=")) opts.harness = a.slice("--harness=".length);
     else if (a === "--clone") opts.clone = rest[++i] ?? null;
     else if (a.startsWith("--clone=")) opts.clone = a.slice("--clone=".length);
+    else if (a === "--toolkit") opts.toolkits.push(rest[++i] ?? "");
+    else if (a.startsWith("--toolkit=")) opts.toolkits.push(a.slice("--toolkit=".length));
+    else if (a === "--agent") opts.agent = rest[++i] ?? null;
+    else if (a.startsWith("--agent=")) opts.agent = a.slice("--agent=".length);
+    else if (a === "--skills") opts.skills = true;
+    else if (a === "--all") opts.all = true;
+    else if (!a.startsWith("-")) opts.toolkits.push(a);
     else if (a === "--slack-client-id") opts.slackClientId = rest[++i] ?? null;
     else if (a.startsWith("--slack-client-id=")) opts.slackClientId = a.slice("--slack-client-id=".length);
     else if (a === "--config-dir") opts.configDir = rest[++i] ?? null;
@@ -73,13 +85,15 @@ function printHelp() {
   console.log(`@chimeranext/better-toolkits — harness bootstrap (Phase B)
 
 Usage:
-  better-toolkits setup [audit|install|verify] [--project] [--dry-run] [--also-npm] [--config-dir <path>] [--yes] [--expert-mode]
+  better-toolkits setup [audit|install|verify] [--project] [--dry-run] [--also-npm] [--skills] [--toolkit <name>] [--agent <name>] [--all] [--config-dir <path>] [--yes] [--expert-mode]
+  better-toolkits skills-install (--all | --toolkit <name>...) [--agent <name>] [--project] [--dry-run] [--yes]
   better-toolkits self-update [--harness opencode|cursor|all] [--expert-mode] [--no-pull] [--dry-run] [--quiet]
   better-toolkits auto-update <enable|disable> [--config-dir <path>] [--dry-run]
   better-toolkits doctor
   better-toolkits help
 
   setup            detect → audit → propose → confirm → install → verify (default: all phases)
+  skills-install   install toolkit.json skills with \`npx skills add\` for any agent
   self-update      git pull --ff-only the monorepo clone + re-sync harness wiring
   auto-update      enable/disable the OpenCode auto-update plugin (idempotent)
   doctor           audit + loaded-state health check (read-only)
@@ -98,6 +112,10 @@ Flags:
   --no-pull        re-sync wiring without touching the clone (used by prune)
   --clone <path>   explicit monorepo clone root (or BETTER_TOOLKITS_ROOT)
   --quiet          self-update: no per-step output (plugin/background runs)
+  --skills         setup: also install the selected toolkit skills for --agent
+  --all            every toolkit.json (plugins + shared/skills)
+  --toolkit <name> toolkit.json name (repeatable). Bare words after the command count too
+  --agent <name>   skills CLI agent (cursor, claude-code, opencode, codex, or *). Default *
 
 Auto-update plugin (#110):
   better-toolkits auto-update enable     install/refresh the plugin + mode sidecar
@@ -111,6 +129,32 @@ Claude/Cursor: install better-toolkits-bootstrap@better-toolkits, then /toolkits
 function detectHarness() {
   if (process.env.CLAUDE_PLUGIN_ROOT) return "claude";
   return "opencode";
+}
+
+function repoRootFor(opts) {
+  return opts.clone || resolveRepoRoot();
+}
+
+async function cmdSkillsInstall(opts) {
+  const plan = planAgentSkillsInstall(opts, repoRootFor(opts));
+  console.log("== skills-install ==");
+  if (plan.error) {
+    console.error(`ERROR: ${plan.error}`);
+    process.exit(64);
+  }
+  console.log(`  - [${plan.kind}] ${plan.detail}`);
+  if (opts.dryRun) {
+    applyAgentSkillsInstall(plan, opts);
+    return;
+  }
+  let ok = opts.yes;
+  if (!ok) ok = await confirm("Install these skills?");
+  if (!ok) {
+    console.log("Aborted — no changes applied.");
+    process.exit(1);
+  }
+  const applied = applyAgentSkillsInstall(plan, opts);
+  process.exit(applied ? 0 : 1);
 }
 
 async function cmdSetup(opts) {
@@ -227,6 +271,7 @@ async function cmdSelfUpdate(opts) {
 const opts = parseArgs(process.argv.slice(2));
 if (opts.cmd === "help" || opts.cmd === "--help" || opts.cmd === "-h") printHelp();
 else if (opts.cmd === "setup") await cmdSetup(opts);
+else if (opts.cmd === "skills-install") await cmdSkillsInstall(opts);
 else if (opts.cmd === "self-update") await cmdSelfUpdate(opts);
 else if (opts.cmd === "auto-update") await cmdAutoUpdate(opts);
 else if (opts.cmd === "doctor") cmdDoctor();

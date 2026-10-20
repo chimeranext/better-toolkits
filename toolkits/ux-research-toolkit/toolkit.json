@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "name": "ux-research-toolkit",
+  "version": "2.1.4",
+  "source": "./toolkits/ux-research-toolkit",
+  "repository": "chimeranext/better-toolkits",
+  "skills": [
+    "customer-journey-map",
+    "design-studio",
+    "experience-map",
+    "fidelity-guide",
+    "map-workshop",
+    "research-cadence",
+    "service-blueprint",
+    "session-replay",
+    "storyboard",
+    "user-story-map"
+  ],
+  "commands": [
+    "map-workshop"
+  ],
+  "hooks": [
+    "prds",
+    "stderr"
+  ]
+}

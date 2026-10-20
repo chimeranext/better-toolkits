@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "name": "startup-lifecycle-toolkit",
+  "version": "1.3.0",
+  "source": "./toolkits/startup-lifecycle-toolkit",
+  "repository": "chimeranext/better-toolkits",
+  "skills": [
+    "startup-lifecycle"
+  ],
+  "commands": [
+    "advisor-matching",
+    "b-corp-certification",
+    "bootstrap-to-offshore",
+    "cayman-sandwich",
+    "cofounder-matching",
+    "entity-formation",
+    "fundraising",
+    "investor-matching",
+    "subsidiary-conversion",
+    "vesting"
+  ],
+  "hooks": []
+}

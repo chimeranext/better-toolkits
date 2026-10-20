@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "name": "assurance",
+  "version": "0.1.8",
+  "source": "./toolkits/assurance-toolkit",
+  "repository": "chimeranext/better-toolkits",
+  "skills": [
+    "assurance",
+    "cicd-argocd",
+    "cicd-github-actions",
+    "flutter-accessibility",
+    "flutter-error-tracking",
+    "flutter-mobile-testing",
+    "flutter-performance",
+    "flutter-security",
+    "flutter-testing-strategy",
+    "sre-alerting-incident-management",
+    "sre-chaos-engineering",
+    "sre-container-security",
+    "sre-database-reliability",
+    "sre-disaster-recovery-business-continuity",
+    "sre-load-testing-performance",
+    "sre-logging-log-aggregation",
+    "sre-network-policies-security",
+    "sre-observability-stack",
+    "sre-security-compliance-automation",
+    "sre-slo-sli-sla",
+    "static-analysis",
+    "versioning-management"
+  ],
+  "commands": [
+    "e2e-test-builder",
+    "e2e-test-preview",
+    "e2e-test-runner",
+    "observability-audit",
+    "pentest-playbook-setup",
+    "pentest-runner",
+    "triage"
+  ],
+  "hooks": [
+    "prds",
+    "stderr"
+  ]
+}

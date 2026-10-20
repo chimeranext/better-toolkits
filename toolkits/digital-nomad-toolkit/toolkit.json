@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "name": "digital-nomad-toolkit",
+  "version": "1.1.0",
+  "source": "./toolkits/digital-nomad-toolkit",
+  "repository": "chimeranext/better-toolkits",
+  "skills": [
+    "digital-nomad"
+  ],
+  "commands": [
+    "banking",
+    "entity-formation",
+    "maintain-llc-abroad",
+    "msa-b2b",
+    "route-decision",
+    "study-in-australia",
+    "study-in-canada",
+    "study-in-germany",
+    "study-in-ireland",
+    "study-in-japan",
+    "study-in-singapore",
+    "study-in-south-korea",
+    "tax-compliance",
+    "visa-options"
+  ],
+  "hooks": []
+}
