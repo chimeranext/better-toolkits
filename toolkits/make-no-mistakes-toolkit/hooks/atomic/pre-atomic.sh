@@ -43,7 +43,7 @@ fi
 # shellcheck source=/dev/null
 source "$LIB_DIR/parse-input.sh"
 
-if ! command -v jq >/dev/null 2>&1; then
+if ! command -v jq >/dev/null; then
   # No jq → fail open. We never block on toolkit installation problems.
   exit 0
 fi
@@ -92,7 +92,7 @@ if [ -z "$CONFIG_PATH" ] || [ ! -f "$CONFIG_PATH" ]; then
 fi
 
 # Validate config is parseable JSON. A broken config should warn (not block).
-if ! jq empty "$CONFIG_PATH" 2>/dev/null; then
+if ! jq empty "$CONFIG_PATH" ; then
   echo "make-no-mistakes:atomic: ${CONFIG_PATH} is not valid JSON; atomic-design hook disabled" >&2
   exit 0
 fi
@@ -132,7 +132,7 @@ while IFS= read -r MARKER; do
   # ^[a-z@][a-z0-9_-]*$ so only `@` and `-` need escaping for ERE, but we
   # quote defensively.
   ESCAPED_MARKER="$(printf '%s' "$MARKER" | sed 's/[][\.^$()*+?{|/@]/\\&/g')"
-  if printf '%s' "$INPUT_CONTENT" | grep -qE "(//|#)[[:space:]]*${ESCAPED_MARKER}:" 2>/dev/null; then
+  if printf '%s' "$INPUT_CONTENT" | grep -qE "(//|#)[[:space:]]*${ESCAPED_MARKER}:" ; then
     exit 0
   fi
 done <<< "$EXEMPT_MARKERS"
@@ -242,7 +242,7 @@ while IFS=$'\t' read -r LEVEL_KEY LEVEL_FOLDER LEVEL_MSG; do
       p=0
       while [ "$p" -lt "$N_PATTERNS" ]; do
         PATTERN="$(jq -r ".atomic_levels.${LEVEL_KEY}.forbid_content_patterns[$p]" "$CONFIG_PATH")"
-        if [ -n "$PATTERN" ] && printf '%s' "$INPUT_CONTENT" | grep -qE -- "$PATTERN" 2>/dev/null; then
+        if [ -n "$PATTERN" ] && printf '%s' "$INPUT_CONTENT" | grep -qE -- "$PATTERN" ; then
           MSG="Forbidden pattern '${PATTERN}' detected in a file written to the '${LEVEL_KEY}' atomic level.
 
 ${LEVEL_MSG}"
@@ -290,7 +290,7 @@ if [ -n "$TARGET_PILLAR" ] && [ -n "$INPUT_CONTENT" ]; then
     # Scan content for `from "@/components/<other>/..."` or
     # `from "@/components/<other>"` imports. POSIX ERE — no lookaround.
     if printf '%s' "$INPUT_CONTENT" \
-      | grep -qE "from[[:space:]]+[\"']@/${COMPONENTS_ROOT##*/}/${OTHER_FOLDER}(/|[\"'])" 2>/dev/null; then
+      | grep -qE "from[[:space:]]+[\"']@/${COMPONENTS_ROOT##*/}/${OTHER_FOLDER}(/|[\"'])" ; then
       OWNER="$(jq -r --arg f "$OTHER_FOLDER" '.pillars[]? | select(.folder == $f) | .owner // ""' "$CONFIG_PATH")"
       SHARED_LIST="$(jq -r '(.shared_pillars // []) | join(", ")' "$CONFIG_PATH")"
       MSG="Cross-pillar import detected: file under pillar '${TARGET_PILLAR}' imports from pillar '${OTHER_FOLDER}' (${OWNER:-unknown owner}).

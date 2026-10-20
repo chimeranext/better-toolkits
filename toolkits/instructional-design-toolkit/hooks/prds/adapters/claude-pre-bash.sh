@@ -12,14 +12,14 @@ fi
 
 REPO_ROOT="${CLAUDE_PROJECT_DIR:-$(pwd)}"
 CFG="$REPO_ROOT/.claude/config/prds-hooks.json"
-if [ -r "$CFG" ] && command -v jq >/dev/null 2>&1; then
-  ENABLED="$(jq -r '.enforce_prds // true' "$CFG" 2>/dev/null)" || ENABLED="true"
+if [ -r "$CFG" ] && command -v jq >/dev/null; then
+  ENABLED="$(jq -r '.enforce_prds // true' "$CFG" )" || ENABLED="true"
   if [ "$ENABLED" = "false" ]; then
     exit 0
   fi
 fi
 
-if ! command -v python3 >/dev/null 2>&1; then
+if ! command -v python3 >/dev/null; then
   echo "[claude-pre-bash.sh] WARN: python3 not found; PRDS failing open." >&2
   exit 0
 fi

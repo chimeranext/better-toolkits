@@ -82,8 +82,8 @@ BUILTIN_TAILS='SERVICE_ROLE|JWT_SECRET|PRIVATE_KEY|CLIENT_SECRET|ADMIN_TOKEN|PAS
 
 # Per-repo extras (additive only — never removes built-ins).
 EXTRA_PATTERNS_PIPE=""
-if command -v jq >/dev/null 2>&1; then
-  EXTRA_PATTERNS_PIPE=$(printf '%s' "$CONFIG_JSON" | jq -r "(.${SURFACE}.extra_block_patterns // []) | join(\"|\")" 2>/dev/null) || EXTRA_PATTERNS_PIPE=""
+if command -v jq >/dev/null; then
+  EXTRA_PATTERNS_PIPE=$(printf '%s' "$CONFIG_JSON" | jq -r "(.${SURFACE}.extra_block_patterns // []) | join(\"|\")" ) || EXTRA_PATTERNS_PIPE=""
 fi
 
 TAILS="$BUILTIN_TAILS"
@@ -103,8 +103,8 @@ HIGH_IMPACT_RE='\$\{[A-Z_]*('"${TAILS}"')[A-Z0-9_]*\}'
 # ─── Cure-shape suffixes (placeholders ending in these are OK) ──────────────
 BUILTIN_SUFFIXES="_FILE|_PATH"
 EXTRA_SUFFIXES_PIPE=""
-if command -v jq >/dev/null 2>&1; then
-  EXTRA_SUFFIXES_PIPE=$(printf '%s' "$CONFIG_JSON" | jq -r "(.${SURFACE}.extra_cure_suffixes // []) | join(\"|\")" 2>/dev/null) || EXTRA_SUFFIXES_PIPE=""
+if command -v jq >/dev/null; then
+  EXTRA_SUFFIXES_PIPE=$(printf '%s' "$CONFIG_JSON" | jq -r "(.${SURFACE}.extra_cure_suffixes // []) | join(\"|\")" ) || EXTRA_SUFFIXES_PIPE=""
 fi
 
 CURE_SUFFIXES="$BUILTIN_SUFFIXES"

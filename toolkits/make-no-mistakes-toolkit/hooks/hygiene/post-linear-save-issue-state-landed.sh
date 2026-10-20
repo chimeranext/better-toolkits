@@ -58,20 +58,20 @@
 
 set -u
 
-command -v jq >/dev/null 2>&1 || exit 0  # fail-open: never interfere on missing infra
+command -v jq >/dev/null || exit 0  # fail-open: never interfere on missing infra
 
-INPUT="$(cat 2>/dev/null || true)"
+INPUT="$(cat  || true)"
 [ -n "$INPUT" ] || exit 0
 
 # Scope: Linear save_issue only (the matcher already scopes this, but be defensive).
-TOOL_NAME="$(printf '%s' "$INPUT" | jq -r '.tool_name // empty' 2>/dev/null)" || exit 0
+TOOL_NAME="$(printf '%s' "$INPUT" | jq -r '.tool_name // empty' )" || exit 0
 case "$TOOL_NAME" in
   *linear*save_issue*) : ;;
   *) exit 0 ;;
 esac
 
 # If the MCP call errored, there is nothing landed to trust — fail open.
-IS_ERROR="$(printf '%s' "$INPUT" | jq -r '.tool_response.isError // false' 2>/dev/null)" || IS_ERROR="false"
+IS_ERROR="$(printf '%s' "$INPUT" | jq -r '.tool_response.isError // false' )" || IS_ERROR="false"
 [ "$IS_ERROR" = "true" ] && exit 0
 
 # ── The triage fields, not just the state (tracker issue, measured 2026-08-06) ─────
@@ -99,7 +99,7 @@ report_missing() {
 }
 
 DROPPED=()
-IS_CREATE="$(printf '%s' "$INPUT" | jq -r '(.tool_input | has("id")) | not' 2>/dev/null)" || IS_CREATE="false"
+IS_CREATE="$(printf '%s' "$INPUT" | jq -r '(.tool_input | has("id")) | not' )" || IS_CREATE="false"
 
 if [ "$IS_CREATE" = "true" ]; then
   # One jq pass over both sides, joined on US (0x1f) and NOT on a tab.
@@ -127,7 +127,7 @@ if [ "$IS_CREATE" = "true" ]; then
       , ($in.assignee // ""      | tostring), (($r.assignee // $r.assigneeId // "") | tostring)
       , (($in.labels // []) | length | tostring), (($r.labels // []) | length | tostring)
       ] | join("")
-  ' 2>/dev/null)" || FIELDS=""
+  ' )" || FIELDS=""
 
   if [ -n "$FIELDS" ]; then
     IFS=$'\037' read -r REQ_PROJ GOT_PROJ REQ_MS GOT_MS REQ_ASG GOT_ASG REQ_LBL GOT_LBL <<<"$FIELDS"
@@ -152,7 +152,7 @@ if [ "${#DROPPED[@]}" -gt 0 ]; then
     (.tool_response | parse) as $raw
     | (if ($raw.content? | type) == "array" then (($raw.content[0].text) | parse) else $raw end) as $r
     | (($r.identifier) // ($r.id) // "")
-  ' 2>/dev/null)" || CREATED_ID=""
+  ' )" || CREATED_ID=""
   [ -n "$CREATED_ID" ] || CREATED_ID="<the issue you just created>"
   {
     echo ""
@@ -176,7 +176,7 @@ fi
 
 # ── The state check (tracker issue) ───────────────────────────────────────────────
 # The state the request ASKED for. No state requested → nothing to verify.
-REQ_STATE="$(printf '%s' "$INPUT" | jq -r '.tool_input.state // empty' 2>/dev/null)" || exit 0
+REQ_STATE="$(printf '%s' "$INPUT" | jq -r '.tool_input.state // empty' )" || exit 0
 REQ_STATE="$(printf '%s' "$REQ_STATE" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
 [ -n "$REQ_STATE" ] || exit 0
 
@@ -188,7 +188,7 @@ LANDED="$(printf '%s' "$INPUT" | jq -r '
   | (($r.status)     // (try (($r.content[0].text) | parse | .status)     catch null) // "") as $s
   | (($r.statusType) // (try (($r.content[0].text) | parse | .statusType) catch null) // "") as $t
   | [$s, $t] | @tsv
-' 2>/dev/null)" || exit 0
+' )" || exit 0
 
 LANDED_STATUS="$(printf '%s' "$LANDED" | cut -f1 | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
 LANDED_TYPE="$(printf '%s' "$LANDED" | cut -f2 | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
@@ -237,7 +237,7 @@ ISSUE_ID="$(printf '%s' "$INPUT" | jq -r '
   def parse: if type == "string" then (fromjson? // {}) elif type == "object" then . else {} end;
   (.tool_response | parse) as $r
   | (($r.identifier) // ($r.id) // (try (($r.content[0].text) | parse | (.identifier // .id)) catch null) // "")
-' 2>/dev/null)" || ISSUE_ID=""
+' )" || ISSUE_ID=""
 [ -n "$ISSUE_ID" ] || ISSUE_ID="<the issue you just saved>"
 
 {

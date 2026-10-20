@@ -30,11 +30,11 @@ INPUT_RAW="$(cat)"
 
 # If jq is missing, we can't parse the command — fail open silently. The
 # user shouldn't be blocked by our installation issues.
-if ! command -v jq >/dev/null 2>&1; then
+if ! command -v jq >/dev/null; then
   exit 0
 fi
 
-COMMAND="$(printf '%s' "$INPUT_RAW" | jq -r '.tool_input.command // empty' 2>/dev/null || true)"
+COMMAND="$(printf '%s' "$INPUT_RAW" | jq -r '.tool_input.command // empty'  || true)"
 if [ -z "$COMMAND" ]; then
   exit 0
 fi
@@ -60,7 +60,7 @@ fi
 # fixed candidate list. If none exist, exit 0 — we can't help.
 BASE=""
 
-if SYMREF="$(git symbolic-ref refs/remotes/origin/HEAD --short 2>/dev/null)"; then
+if SYMREF="$(git symbolic-ref refs/remotes/origin/HEAD --short )"; then
   # SYMREF is like "origin/develop"; strip "origin/" prefix.
   BASE="${SYMREF#origin/}"
 fi
@@ -82,7 +82,7 @@ fi
 
 # Compute behind count. If git fails (not in a repo, no fetch yet, etc.),
 # silently exit 0 — we never want this hook to be noisy on unrelated repos.
-BEHIND="$(git rev-list --count "HEAD..origin/${BASE}" 2>/dev/null || true)"
+BEHIND="$(git rev-list --count "HEAD..origin/${BASE}"  || true)"
 
 # Guard against empty / non-numeric results from git (e.g. "fatal: ...").
 case "$BEHIND" in
