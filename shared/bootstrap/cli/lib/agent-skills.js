@@ -1,37 +1,71 @@
 /**
- * Install a toolkit's skills for any agent via the skills CLI.
+ * Install skills with the skills CLI.
  *
- * Catalog SSOT is each plugin's toolkit.json (plus shared/skills/toolkit.json).
- * Claude marketplace plugins and Cursor's "Added" list are adapters of that tree.
+ * Declaration: package.json "skills" (antfu/skills-npm). An object entry is
+ * `{ source, skills }` — source is the GitHub repo, skills are folder names.
+ * Install: `npx skills add <source> --skill <name> --agent '*'`.
+ * Every skill, every agent: `npx skills add <source> --all`.
  */
 import { existsSync, readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { join } from "node:path";
 
-export function readManifestFile(path) {
+export const SKILLS_SOURCE = "chimeranext/better-toolkits";
+
+export function readJson(path) {
   return JSON.parse(readFileSync(path, "utf8"));
 }
 
-/** Marketplace plugins, then the transversal shared/skills catalog when present. */
-export function loadManifests(repoRoot) {
-  const marketPath = join(repoRoot, ".claude-plugin", "marketplace.json");
-  if (!existsSync(marketPath)) {
-    throw new Error(`missing ${marketPath}`);
+/** Skill folder names from a package.json `skills` array. Strings are whole sources. */
+export function skillNamesFromField(field) {
+  if (!Array.isArray(field)) {
+    throw new Error('package.json: "skills" must be an array');
   }
-  const market = readManifestFile(marketPath);
-  const manifests = [];
-  for (const entry of market.plugins ?? []) {
-    const rel = String(entry.source ?? "").replace(/^\.\//, "").replace(/\/$/, "");
-    const file = join(repoRoot, rel, "toolkit.json");
-    if (!existsSync(file)) {
+  const names = [];
+  for (const entry of field) {
+    if (typeof entry === "string") continue;
+    if (!entry || typeof entry !== "object" || !Array.isArray(entry.skills)) {
       throw new Error(
-        `missing ${file}; run python3 scripts/ci/sync_toolkit_manifests.py write`,
+        'package.json: "skills" entries must be a source string or { source, skills }',
       );
     }
-    manifests.push(readManifestFile(file));
+    if (entry.source !== SKILLS_SOURCE) {
+      throw new Error(`package.json skills source must be ${SKILLS_SOURCE}`);
+    }
+    names.push(...entry.skills);
   }
-  const shared = join(repoRoot, "shared", "skills", "toolkit.json");
-  if (existsSync(shared)) manifests.push(readManifestFile(shared));
+  return [...new Set(names)].sort();
+}
+
+function packagePath(repoRoot, source) {
+  const rel = String(source).replace(/^\.\//, "").replace(/\/$/, "");
+  return join(repoRoot, rel, "package.json");
+}
+
+/** Marketplace plugins that declare skills, plus shared/skills. */
+export function loadManifests(repoRoot) {
+  const marketPath = join(repoRoot, ".claude-plugin", "marketplace.json");
+  if (!existsSync(marketPath)) throw new Error(`missing ${marketPath}`);
+  const market = readJson(marketPath);
+  const manifests = [];
+  for (const entry of market.plugins ?? []) {
+    const file = packagePath(repoRoot, entry.source);
+    if (!existsSync(file)) continue;
+    const pkg = readJson(file);
+    if (!pkg.skills) continue;
+    manifests.push({
+      name: entry.name,
+      skills: skillNamesFromField(pkg.skills),
+    });
+  }
+  const shared = join(repoRoot, "shared", "skills", "package.json");
+  if (existsSync(shared)) {
+    const pkg = readJson(shared);
+    manifests.push({
+      name: pkg.name,
+      skills: skillNamesFromField(pkg.skills),
+    });
+  }
   return manifests;
 }
 
@@ -39,9 +73,7 @@ export function selectManifests(manifests, opts = {}) {
   if (opts.all) return manifests;
   const wanted = opts.toolkits ?? [];
   if (!wanted.length) {
-    return {
-      error: "pass --all or one or more --toolkit <name> (see toolkit.json name)",
-    };
+    return { error: "pass --all or one or more --toolkit <name>" };
   }
   const byName = new Map(manifests.map((m) => [m.name, m]));
   const selected = [];
@@ -67,45 +99,55 @@ export function skillNames(manifests) {
 }
 
 /**
- * argv for `npx skills add <repo> --skill … --agent <agent>`.
- * Global (`-g`) unless opts.project. execFile (no shell), so `*` is literal.
+ * argv matches the skills CLI README.
+ * `--all` is `--skill '*' --agent '*' -y`. A named agent uses `--skill` + `--agent`.
+ * `-g` is user scope. execFile, so `*` is not a shell glob.
  */
 export function planAgentSkillsInstall(opts = {}, repoRoot) {
+  const agent = opts.agent || "*";
+  const globalFlag = opts.project ? [] : ["-g"];
+  if (opts.all && agent === "*") {
+    const argv = ["npx", "--yes", "skills", "add", SKILLS_SOURCE, "--all", ...globalFlag];
+    return {
+      kind: "agent-skills",
+      argv,
+      skills: ["*"],
+      toolkits: [],
+      detail: `npx skills add ${SKILLS_SOURCE} --all${opts.project ? "" : " -g"}`,
+    };
+  }
   let manifests;
   try {
     manifests = loadManifests(repoRoot);
   } catch (err) {
     return { error: String(err?.message ?? err) };
   }
-  const selected = selectManifests(manifests, opts);
+  const selected = opts.all ? manifests : selectManifests(manifests, opts);
   if (!Array.isArray(selected)) return selected;
-  const skills = skillNames(selected);
+  const skills = opts.all ? ["*"] : skillNames(selected);
   if (!skills.length) {
-    return {
-      error: `no skills in ${selected.map((m) => m.name).join(", ")}`,
-    };
+    return { error: `no skills declared for ${selected.map((m) => m.name).join(", ")}` };
   }
-  const agent = opts.agent || "*";
+  const skillArgs = skills.flatMap((name) => ["--skill", name]);
   const argv = [
     "npx",
     "--yes",
     "skills",
     "add",
-    repoRoot,
-    "--skill",
-    ...skills,
+    SKILLS_SOURCE,
+    ...skillArgs,
     "--agent",
     agent,
     "-y",
+    ...globalFlag,
   ];
-  if (!opts.project) argv.push("-g");
-  const label = selected.map((m) => m.name).join(", ");
+  const label = opts.all ? "all toolkits" : selected.map((m) => m.name).join(", ");
   return {
     kind: "agent-skills",
     argv,
     skills,
     toolkits: selected.map((m) => m.name),
-    detail: `npx skills add ${skills.length} skill(s) from ${label} --agent ${agent}${opts.project ? "" : " -g"}`,
+    detail: `npx skills add ${SKILLS_SOURCE} ${skills.length} skill(s) from ${label} --agent ${agent}${opts.project ? "" : " -g"}`,
   };
 }
 
@@ -124,9 +166,4 @@ export function applyAgentSkillsInstall(plan, opts = {}) {
   });
   console.log(`  done: ${plan.detail}`);
   return true;
-}
-
-/** Names a consumer can pass to --toolkit. */
-export function listToolkitNames(repoRoot) {
-  return loadManifests(repoRoot).map((m) => m.name);
 }

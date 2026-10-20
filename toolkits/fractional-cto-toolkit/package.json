@@ -1,0 +1,25 @@
+{
+  "name": "fractional-cto-toolkit",
+  "version": "1.4.1",
+  "private": true,
+  "description": "Operational toolkit for freelance and fractional CTOs — contracts, project-takeover SOPs, process-engineering + requirements-first pipelines, ops playbook/runbook authoring, clean-code standards (DSMS/IFS/CPS/PRDS/BrS/QT4L), and multi-harness PRDS pre-push hooks.",
+  "license": "BSL-1.1",
+  "skills": [
+    {
+      "source": "chimeranext/better-toolkits",
+      "skills": [
+        "automation-triage",
+        "business-brain-setup",
+        "contract-nda",
+        "contract-psa",
+        "contract-retainer",
+        "playbook-authoring",
+        "process-standardization",
+        "project-takeover",
+        "runbook-authoring",
+        "sop-authoring",
+        "takeover-assessment"
+      ]
+    }
+  ]
+}

@@ -20,13 +20,13 @@ claude plugin install make-no-mistakes@better-toolkits
 
 ## Agent-agnostic skills
 
-`claude plugin install` wires this host. The same skill set for any other agent:
+`claude plugin install` wires this host. The same skills for every agent:
 
 ```bash
-npx @chimeranext/better-toolkits skills-install --toolkit make-no-mistakes --agent claude-code
+npx skills add chimeranext/better-toolkits --skill merge-advisor --agent '*' -g -y
 ```
 
-Catalog: `toolkit.json` in the plugin source. See [`docs/multi-harness-ssot.md`](../../../../docs/multi-harness-ssot.md).
+Skill names live in each toolkit `package.json` `"skills"` field. See [`docs/multi-harness-ssot.md`](../../../../docs/multi-harness-ssot.md).
 
 ## Stderr
 

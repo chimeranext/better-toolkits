@@ -93,7 +93,7 @@ Usage:
   better-toolkits help
 
   setup            detect → audit → propose → confirm → install → verify (default: all phases)
-  skills-install   install toolkit.json skills with \`npx skills add\` for any agent
+  skills-install   npx skills add from package.json "skills" (--all = every agent)
   self-update      git pull --ff-only the monorepo clone + re-sync harness wiring
   auto-update      enable/disable the OpenCode auto-update plugin (idempotent)
   doctor           audit + loaded-state health check (read-only)
@@ -112,10 +112,10 @@ Flags:
   --no-pull        re-sync wiring without touching the clone (used by prune)
   --clone <path>   explicit monorepo clone root (or BETTER_TOOLKITS_ROOT)
   --quiet          self-update: no per-step output (plugin/background runs)
-  --skills         setup: also install the selected toolkit skills for --agent
-  --all            every toolkit.json (plugins + shared/skills)
-  --toolkit <name> toolkit.json name (repeatable). Bare words after the command count too
-  --agent <name>   skills CLI agent (cursor, claude-code, opencode, codex, or *). Default *
+  --skills         setup: also run npx skills add for the selected toolkit
+  --all            npx skills add <source> --all (every skill, every agent)
+  --toolkit <name> marketplace plugin name (repeatable). Bare words after the command count too
+  --agent <name>   skills CLI --agent (cursor, claude-code, opencode, or *). Default *
 
 Auto-update plugin (#110):
   better-toolkits auto-update enable     install/refresh the plugin + mode sidecar

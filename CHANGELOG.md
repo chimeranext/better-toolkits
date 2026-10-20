@@ -10,12 +10,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- **Agent-agnostic toolkit catalog (#123):** generated `toolkit.json` per plugin
-  (skills, slash commands, hook packages) via
-  `scripts/ci/sync_toolkit_manifests.py`. Install that set on any skills-CLI agent
-  with `better-toolkits skills-install --toolkit <name> --agent <agent>`
-  (`--all` for every toolkit). Claude marketplace and Cursor plugin installs stay
-  the host adapters.
+- **Agent-agnostic skill catalog (#123):** each toolkit `package.json` `"skills"`
+  field follows the skills CLI / antfu/skills-npm shape (`{ source, skills }`).
+  Install with `npx skills add chimeranext/better-toolkits --skill <name> --agent '*'`,
+  or `--all` for every skill and every agent. Claude marketplace and Cursor plugin
+  installs stay the host adapters.
 - **OpenCode auto-update (#110):** `better-toolkits self-update` pulls the monorepo
   clone (`git pull --ff-only`, always `main` unless `--expert-mode`) and re-runs the
   wiring. New discovery-dir plugin `better-toolkits-auto-update` (startup, detached,
