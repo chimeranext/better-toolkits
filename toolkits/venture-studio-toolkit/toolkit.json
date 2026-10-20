@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "name": "venture-studio-toolkit",
+  "version": "1.2.3",
+  "source": "./toolkits/venture-studio-toolkit",
+  "repository": "chimeranext/better-toolkits",
+  "skills": [
+    "accelerator-launchpad",
+    "attached-fund-structure",
+    "cap-table-per-venture",
+    "cost-of-delay-cd3",
+    "explore-exploit",
+    "improvement-kata",
+    "innovation-scorecard",
+    "liability-contagion-analysis",
+    "mensarius-oath-adoption",
+    "secret-sauce",
+    "services-hub-setup",
+    "shared-services-ledger",
+    "structure-decision",
+    "structure-evolution-roadmap",
+    "studio-archetype-selector",
+    "studio-focus",
+    "studio-thesis",
+    "sweat-equity-agreement",
+    "three-horizons",
+    "venture-spin-out-playbook",
+    "vertical-charter",
+    "when-to-become-studio"
+  ],
+  "commands": [],
+  "hooks": [
+    "prds",
+    "stderr"
+  ]
+}

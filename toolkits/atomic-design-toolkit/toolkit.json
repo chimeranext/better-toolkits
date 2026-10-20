@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "name": "atomic-design-toolkit",
+  "version": "1.3.2",
+  "source": "./toolkits/atomic-design-toolkit",
+  "repository": "chimeranext/better-toolkits",
+  "skills": [
+    "design-system-analyzer",
+    "widget-decomposition"
+  ],
+  "commands": [
+    "audit",
+    "generate",
+    "migrate",
+    "storybook-audit",
+    "storybook-setup",
+    "tokens-consolidate",
+    "wcag-audit",
+    "widgetbook-setup"
+  ],
+  "hooks": [
+    "prds",
+    "stderr"
+  ]
+}

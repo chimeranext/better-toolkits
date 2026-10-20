@@ -38,6 +38,7 @@ import {
 } from "../lib/clone.js";
 import { resolveHarnesses, onPath, withUpdateLock } from "../lib/self-update.js";
 import { planAutoUpdateToggle, applyAutoUpdateToggle } from "../lib/auto-update.js";
+import { planAgentSkillsInstall } from "../lib/agent-skills.js";
 
 const REAL_ROOT = resolveRepoRoot();
 
@@ -449,5 +450,70 @@ describe("auto-update enable/disable (#110)", () => {
 
   it("rejects an unknown action", () => {
     assert.throws(() => planAutoUpdateToggle("nope", { configDir: "/tmp/x/opencode" }), /unknown action/);
+  });
+});
+
+describe("agent skills install", () => {
+  function catalogRoot() {
+    const dir = fakeRoot();
+    const plugin = join(dir, "toolkits", "example");
+    mkdirSync(join(plugin, ".claude-plugin"), { recursive: true });
+    writeFileSync(
+      join(dir, ".claude-plugin", "marketplace.json"),
+      JSON.stringify({
+        plugins: [{ name: "example", version: "1.0.0", source: "./toolkits/example" }],
+      }),
+    );
+    writeFileSync(
+      join(plugin, "toolkit.json"),
+      JSON.stringify({
+        schemaVersion: 1,
+        name: "example",
+        version: "1.0.0",
+        skills: ["merge-advisor", "implement-advisor"],
+        commands: ["implement"],
+        hooks: ["stderr"],
+      }),
+    );
+    mkdirSync(join(dir, "shared", "skills"), { recursive: true });
+    writeFileSync(
+      join(dir, "shared", "skills", "toolkit.json"),
+      JSON.stringify({
+        schemaVersion: 1,
+        name: "better-toolkits-shared",
+        skills: ["requirements-authoring"],
+      }),
+    );
+    return dir;
+  }
+
+  it("plans one skills add for the named toolkit", () => {
+    const plan = planAgentSkillsInstall(
+      { toolkits: ["example"], agent: "cursor" },
+      catalogRoot(),
+    );
+    assert.equal(plan.error, undefined);
+    assert.deepEqual(plan.skills, ["implement-advisor", "merge-advisor"]);
+    assert.equal(plan.argv[0], "npx");
+    assert.ok(plan.argv.includes("--agent"));
+    assert.equal(plan.argv[plan.argv.indexOf("--agent") + 1], "cursor");
+    assert.ok(plan.argv.includes("-g"));
+    assert.equal(plan.argv.includes("requirements-authoring"), false);
+  });
+
+  it("refuses a selection that names no toolkit", () => {
+    const plan = planAgentSkillsInstall({}, catalogRoot());
+    assert.match(plan.error, /pass --all or/);
+  });
+
+  it("--all includes shared skills and stays global unless --project", () => {
+    const plan = planAgentSkillsInstall({ all: true, project: true }, catalogRoot());
+    assert.deepEqual(plan.skills, [
+      "implement-advisor",
+      "merge-advisor",
+      "requirements-authoring",
+    ]);
+    assert.equal(plan.argv.includes("-g"), false);
+    assert.equal(plan.argv[plan.argv.indexOf("--agent") + 1], "*");
   });
 });

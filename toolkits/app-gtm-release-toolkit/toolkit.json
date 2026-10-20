@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "name": "app-gtm-release",
+  "version": "2.4.2",
+  "source": "./toolkits/app-gtm-release-toolkit",
+  "repository": "chimeranext/better-toolkits",
+  "skills": [
+    "alt-distribution",
+    "app-security",
+    "cicd-setup",
+    "code-push",
+    "desktop-signing",
+    "flatpak-build",
+    "gtm-fit",
+    "kmp-build",
+    "launch-plan",
+    "maui-publishing",
+    "monetization",
+    "msstore-submission",
+    "pre-launch-checklist",
+    "pwa-quality",
+    "snap-build",
+    "store-listing",
+    "store-setup",
+    "testing-tracks"
+  ],
+  "commands": [
+    "audit",
+    "ship-advisor",
+    "ship-everywhere",
+    "ship-flatpak",
+    "ship-flutter",
+    "ship-kmp",
+    "ship-maui",
+    "ship-msstore",
+    "ship-pwa",
+    "ship-snap",
+    "ship-swift"
+  ],
+  "hooks": [
+    "prds",
+    "stderr"
+  ]
+}

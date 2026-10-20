@@ -19,6 +19,7 @@ import {
   missingSkills,
 } from "./skills.js";
 import { planMcpStep, applyMcpStep, planShellEnvStep, applyShellEnvStep } from "./mcp.js";
+import { applyAgentSkillsInstall, planAgentSkillsInstall } from "./agent-skills.js";
 
 /**
  * Optional npm CLIs (--also-npm), published under the @chimeranext scope.
@@ -74,6 +75,14 @@ export function planInstall(opts = {}) {
   const { adapter, steps } = planWiringSteps(opts, repoRoot);
   steps.push(planMcpStep(opts));
   steps.push(planShellEnvStep(opts, repoRoot));
+  if (opts.skills) {
+    const skillsPlan = planAgentSkillsInstall(opts, repoRoot);
+    steps.push(
+      skillsPlan.error
+        ? { kind: "manual", detail: skillsPlan.error }
+        : skillsPlan,
+    );
+  }
   if (opts.alsoNpm) {
     for (const pkg of NPM_PACKAGES) steps.push({ kind: "npm", detail: `npx --yes ${pkg} install` });
   }
@@ -217,6 +226,8 @@ export function applyInstall(plan, opts = {}) {
       applyMcpStep(s);
     } else if (s.kind === "shell-env") {
       applyShellEnvStep(s, opts);
+    } else if (s.kind === "agent-skills") {
+      applyAgentSkillsInstall(s, opts);
     } else if (s.kind === "npm") {
       const pkg = s.detail.match(/npx --yes (\S+) install/)[1];
       const args = ["--yes", pkg, "install"];

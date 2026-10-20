@@ -18,6 +18,16 @@ claude plugin install make-no-mistakes@better-toolkits
 # … additional toolkits from user selection
 ```
 
+## Agent-agnostic skills
+
+`claude plugin install` wires this host. The same skill set for any other agent:
+
+```bash
+npx @chimeranext/better-toolkits skills-install --toolkit make-no-mistakes --agent claude-code
+```
+
+Catalog: `toolkit.json` in the plugin source. See [`docs/multi-harness-ssot.md`](../../../../docs/multi-harness-ssot.md).
+
 ## Stderr
 
 Installing `better-toolkits-bootstrap` registers `hooks/hooks.json` → PreToolUse `Bash` →

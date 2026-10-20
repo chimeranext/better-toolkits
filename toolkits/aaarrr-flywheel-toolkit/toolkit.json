@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "name": "aaarrr-flywheel-toolkit",
+  "version": "0.3.2",
+  "source": "./toolkits/aaarrr-flywheel-toolkit",
+  "repository": "chimeranext/better-toolkits",
+  "skills": [
+    "landing-instrumentation",
+    "landing-page-design",
+    "meta-graph-api"
+  ],
+  "commands": [
+    "aaarrr-analyze",
+    "aaarrr-launch",
+    "acquire",
+    "activate",
+    "kill-funnel",
+    "landing-instrument",
+    "landing-page",
+    "refer",
+    "retain",
+    "revenue"
+  ],
+  "hooks": [
+    "adapters",
+    "prds",
+    "stderr"
+  ]
+}

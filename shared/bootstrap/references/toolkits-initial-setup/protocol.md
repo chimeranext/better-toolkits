@@ -85,9 +85,18 @@ Wait for an **explicit** reply. Silence is not approval.
 Only after OK:
 
 1. Run marketplace / plugin install commands.
-2. Merge hooks idempotently (see adapter for paths).
-3. For OpenCode, run or guide `npx @chimeranext/better-toolkits setup` (same protocol; `--yes` only when user pre-approved).
-4. Never use `2>/dev/null` or bare `2>&1` without a log file — stderr hooks doctrine applies to the agent too.
+2. Agent-agnostic skill install from `toolkit.json` (any host the skills CLI supports). Plugin install does not publish the skill set to Codex, OpenCode skills dirs, or other agents:
+
+```bash
+npx @chimeranext/better-toolkits skills-install --toolkit make-no-mistakes --agent cursor
+# every toolkit, every agent the CLI knows:
+npx @chimeranext/better-toolkits skills-install --all --agent '*'
+```
+
+`setup --skills --toolkit <name> --agent <name>` plans the same step. Default agent is `*`.
+3. Merge hooks idempotently (see adapter for paths).
+4. For OpenCode, run or guide `npx @chimeranext/better-toolkits setup` (same protocol; `--yes` only when user pre-approved).
+5. Never use `2>/dev/null` or bare `2>&1` without a log file — stderr hooks doctrine applies to the agent too.
 
 ## Phase 6 — Verify
 
