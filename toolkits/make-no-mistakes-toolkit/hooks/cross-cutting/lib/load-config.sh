@@ -68,7 +68,7 @@ cc_load_config() {
   CONFIG_VERSION=0
   CONFIG_PATH=""
 
-  if ! command -v jq >/dev/null 2>&1; then
+  if ! command -v jq >/dev/null; then
     return 1
   fi
 
@@ -80,18 +80,18 @@ cc_load_config() {
     return 0   # file missing → CONFIG_FOUND stays "0", caller exits 0
   fi
 
-  if ! CONFIG_JSON="$(cat "$CONFIG_PATH" 2>/dev/null)"; then
+  if ! CONFIG_JSON="$(cat "$CONFIG_PATH" )"; then
     return 2
   fi
 
-  if ! printf '%s' "$CONFIG_JSON" | jq -e . >/dev/null 2>&1; then
+  if ! printf '%s' "$CONFIG_JSON" | jq -e . >/dev/null; then
     # Malformed JSON — emit a warning and fail-open
     echo "[cross-cutting-hooks] WARN: malformed config at ${CONFIG_PATH}; failing open." >&2
     CONFIG_JSON="{}"
     return 2
   fi
 
-  CONFIG_VERSION=$(printf '%s' "$CONFIG_JSON" | jq -r '.version // 0' 2>/dev/null)
+  CONFIG_VERSION=$(printf '%s' "$CONFIG_JSON" | jq -r '.version // 0' )
   if [[ "$CONFIG_VERSION" != "1" ]]; then
     echo "[cross-cutting-hooks] WARN: unsupported version=${CONFIG_VERSION} at ${CONFIG_PATH} (expected 1); failing open." >&2
     return 2
@@ -105,7 +105,7 @@ cc_load_config() {
 cc_surface_enabled() {
   local surface="$1"
   local value
-  value=$(printf '%s' "$CONFIG_JSON" | jq -r ".${surface}.enabled // false" 2>/dev/null)
+  value=$(printf '%s' "$CONFIG_JSON" | jq -r ".${surface}.enabled // false" )
   [[ "$value" == "true" ]]
 }
 
@@ -113,6 +113,6 @@ cc_surface_enabled() {
 cc_surface_defer_to_local() {
   local surface="$1"
   local value
-  value=$(printf '%s' "$CONFIG_JSON" | jq -r ".${surface}.defer_to_local_hook // false" 2>/dev/null)
+  value=$(printf '%s' "$CONFIG_JSON" | jq -r ".${surface}.defer_to_local_hook // false" )
   [[ "$value" == "true" ]]
 }

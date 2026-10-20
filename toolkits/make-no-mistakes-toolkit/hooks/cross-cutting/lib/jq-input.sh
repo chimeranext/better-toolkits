@@ -39,7 +39,7 @@ cc_parse_hook_input() {
   FILE_PATH=""
   PROPOSED=""
 
-  if ! command -v jq >/dev/null 2>&1; then
+  if ! command -v jq >/dev/null; then
     return 1
   fi
 
@@ -49,18 +49,18 @@ cc_parse_hook_input() {
     return 2
   fi
 
-  TOOL_NAME=$(printf '%s' "$HOOK_INPUT_RAW" | jq -r '.tool_name // empty' 2>/dev/null) || return 2
-  FILE_PATH=$(printf '%s' "$HOOK_INPUT_RAW" | jq -r '.tool_input.file_path // empty' 2>/dev/null) || return 2
+  TOOL_NAME=$(printf '%s' "$HOOK_INPUT_RAW" | jq -r '.tool_name // empty' ) || return 2
+  FILE_PATH=$(printf '%s' "$HOOK_INPUT_RAW" | jq -r '.tool_input.file_path // empty' ) || return 2
 
   case "$TOOL_NAME" in
     Write)
-      PROPOSED=$(printf '%s' "$HOOK_INPUT_RAW" | jq -r '.tool_input.content // empty' 2>/dev/null) || PROPOSED=""
+      PROPOSED=$(printf '%s' "$HOOK_INPUT_RAW" | jq -r '.tool_input.content // empty' ) || PROPOSED=""
       ;;
     Edit)
-      PROPOSED=$(printf '%s' "$HOOK_INPUT_RAW" | jq -r '.tool_input.new_string // empty' 2>/dev/null) || PROPOSED=""
+      PROPOSED=$(printf '%s' "$HOOK_INPUT_RAW" | jq -r '.tool_input.new_string // empty' ) || PROPOSED=""
       ;;
     MultiEdit)
-      PROPOSED=$(printf '%s' "$HOOK_INPUT_RAW" | jq -r '[.tool_input.edits[]?.new_string // empty] | join("\n")' 2>/dev/null) || PROPOSED=""
+      PROPOSED=$(printf '%s' "$HOOK_INPUT_RAW" | jq -r '[.tool_input.edits[]?.new_string // empty] | join("\n")' ) || PROPOSED=""
       ;;
     *)
       PROPOSED=""

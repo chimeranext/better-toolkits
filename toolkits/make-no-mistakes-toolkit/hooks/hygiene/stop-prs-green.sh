@@ -75,11 +75,11 @@ if [[ ! -f "$STATE_FILE" ]]; then
 fi
 
 # 2. Required tooling. Missing jq/gh is infra, not a gate -> fail open.
-if ! command -v jq >/dev/null 2>&1; then
+if ! command -v jq >/dev/null; then
   echo "[stop-prs-green] WARN: jq not found; not blocking." >&2
   exit 0
 fi
-if ! command -v gh >/dev/null 2>&1; then
+if ! command -v gh >/dev/null; then
   echo "[stop-prs-green] WARN: gh not found; not blocking." >&2
   exit 0
 fi
@@ -93,7 +93,7 @@ fi
 # Repo the hook runs in — the fallback for legacy bare-number lines. Resolve via
 # gh; if that fails (no auth / detached), assume the canonical the consumer repo repo so a
 # legacy state file still resolves.
-CURRENT_REPO=$(gh repo view --json nameWithOwner -q .nameWithOwner 2>/dev/null)
+CURRENT_REPO=$(gh repo view --json nameWithOwner -q .nameWithOwner )
 if [[ -z "$CURRENT_REPO" ]]; then
   CURRENT_REPO="unknown/unknown"
 fi
@@ -147,7 +147,7 @@ for i in "${!PR_NUMBERS[@]}"; do
 
   # Fetch draft state + reviews from the PR's OWN repo. gh/network failure ->
   # fail open (no block).
-  if ! PR_JSON=$(gh pr view "$pr" --repo "$repo" --json reviews,isDraft 2>/dev/null); then
+  if ! PR_JSON=$(gh pr view "$pr" --repo "$repo" --json reviews,isDraft ); then
     echo "[stop-prs-green] WARN: gh pr view ${repo}#${pr} failed; not blocking." >&2
     exit 0
   fi

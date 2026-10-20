@@ -45,7 +45,7 @@ if [ ! -f "$RULES_JSON" ]; then
   exit 0
 fi
 
-if ! command -v jq >/dev/null 2>&1; then
+if ! command -v jq >/dev/null; then
   echo "make-no-mistakes: jq not installed; hooks disabled" >&2
   exit 0
 fi

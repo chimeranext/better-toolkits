@@ -54,7 +54,7 @@ if [ -n "$RULES" ] && [ ! -f "$RULES" ]; then echo "ERROR: no existe --rules: $R
 if [ -n "$GLOSSARY" ] && [ ! -f "$GLOSSARY" ]; then echo "ERROR: no existe --glossary: $GLOSSARY" >&2; exit 1; fi
 
 for bin in litellm jq curl; do
-  command -v "$bin" >/dev/null 2>&1 || { echo "ERROR: falta '$bin' en PATH." >&2; exit 1; }
+  command -v "$bin" >/dev/null || { echo "ERROR: falta '$bin' en PATH." >&2; exit 1; }
 done
 
 # --- provider -> API-key env (multi-model; liteLLM routes by model prefix) ---
@@ -128,8 +128,8 @@ litellm_settings:
   drop_params: true
 CFG
 STARTED=false
-ready() { curl -fsS "http://127.0.0.1:${PORT}/health/readiness" >/dev/null 2>&1; }
-cleanup() { $STARTED && [ -n "${PID:-}" ] && kill "$PID" 2>/dev/null || true; rm -f "$PROXY_LOG" "$PROXY_CFG"; }
+ready() { curl -fsS "http://127.0.0.1:${PORT}/health/readiness" >/dev/null; }
+cleanup() { $STARTED && [ -n "${PID:-}" ] && kill "$PID"  || true; rm -f "$PROXY_LOG" "$PROXY_CFG"; }
 trap cleanup EXIT INT TERM
 
 if ! ready; then
@@ -153,7 +153,7 @@ RESP="$(curl -sS "http://127.0.0.1:${PORT}/v1/chat/completions" \
 CONTENT="$(printf '%s' "$RESP" | jq -r '.choices[0].message.content // empty')"
 if [ -z "$CONTENT" ]; then
   echo "ERROR: respuesta sin contenido:" >&2
-  printf '%s\n' "$RESP" | jq -r '.error // .' >&2 2>/dev/null || printf '%s\n' "$RESP" >&2
+  printf '%s\n' "$RESP" | jq -r '.error // .' >&2  || printf '%s\n' "$RESP" >&2
   exit 6
 fi
 
