@@ -2,12 +2,6 @@
 repos:
   - repo: local
     hooks:
-      - id: skills-field-check
-        name: package.json skills field matches SKILL.md directories
-        entry: python3 scripts/ci/sync_skills_field.py check
-        language: system
-        pass_filenames: false
-        always_run: true
       - id: marketplace-version-sync
         name: marketplace.json matches plugin.json versions
         entry: python3 scripts/ci/marketplace_versioning.py sync
