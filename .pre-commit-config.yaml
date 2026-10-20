@@ -2,9 +2,9 @@
 repos:
   - repo: local
     hooks:
-      - id: toolkit-manifest-check
-        name: toolkit.json matches skills, commands, and hooks
-        entry: python3 scripts/ci/sync_toolkit_manifests.py check
+      - id: skills-field-check
+        name: package.json skills field matches SKILL.md directories
+        entry: python3 scripts/ci/sync_skills_field.py check
         language: system
         pass_filenames: false
         always_run: true

@@ -54,5 +54,30 @@
     "@types/node": "^24.0.0",
     "tsup": "^8.5.0",
     "typescript": "^5.9.2"
-  }
+  },
+  "skills": [
+    {
+      "source": "chimeranext/better-toolkits",
+      "skills": [
+        "alt-distribution",
+        "app-security",
+        "cicd-setup",
+        "code-push",
+        "desktop-signing",
+        "flatpak-build",
+        "gtm-fit",
+        "kmp-build",
+        "launch-plan",
+        "maui-publishing",
+        "monetization",
+        "msstore-submission",
+        "pre-launch-checklist",
+        "pwa-quality",
+        "snap-build",
+        "store-listing",
+        "store-setup",
+        "testing-tracks"
+      ]
+    }
+  ]
 }

@@ -38,7 +38,7 @@ import {
 } from "../lib/clone.js";
 import { resolveHarnesses, onPath, withUpdateLock } from "../lib/self-update.js";
 import { planAutoUpdateToggle, applyAutoUpdateToggle } from "../lib/auto-update.js";
-import { planAgentSkillsInstall } from "../lib/agent-skills.js";
+import { planAgentSkillsInstall, SKILLS_SOURCE } from "../lib/agent-skills.js";
 
 const REAL_ROOT = resolveRepoRoot();
 
@@ -465,23 +465,23 @@ describe("agent skills install", () => {
       }),
     );
     writeFileSync(
-      join(plugin, "toolkit.json"),
+      join(plugin, "package.json"),
       JSON.stringify({
-        schemaVersion: 1,
         name: "example",
-        version: "1.0.0",
-        skills: ["merge-advisor", "implement-advisor"],
-        commands: ["implement"],
-        hooks: ["stderr"],
+        skills: [
+          {
+            source: SKILLS_SOURCE,
+            skills: ["merge-advisor", "implement-advisor"],
+          },
+        ],
       }),
     );
     mkdirSync(join(dir, "shared", "skills"), { recursive: true });
     writeFileSync(
-      join(dir, "shared", "skills", "toolkit.json"),
+      join(dir, "shared", "skills", "package.json"),
       JSON.stringify({
-        schemaVersion: 1,
-        name: "better-toolkits-shared",
-        skills: ["requirements-authoring"],
+        name: "@chimeranext/better-toolkits-shared",
+        skills: [{ source: SKILLS_SOURCE, skills: ["requirements-authoring"] }],
       }),
     );
     return dir;
@@ -495,7 +495,7 @@ describe("agent skills install", () => {
     assert.equal(plan.error, undefined);
     assert.deepEqual(plan.skills, ["implement-advisor", "merge-advisor"]);
     assert.equal(plan.argv[0], "npx");
-    assert.ok(plan.argv.includes("--agent"));
+    assert.ok(plan.argv.includes(SKILLS_SOURCE));
     assert.equal(plan.argv[plan.argv.indexOf("--agent") + 1], "cursor");
     assert.ok(plan.argv.includes("-g"));
     assert.equal(plan.argv.includes("requirements-authoring"), false);
@@ -506,14 +506,17 @@ describe("agent skills install", () => {
     assert.match(plan.error, /pass --all or/);
   });
 
-  it("--all includes shared skills and stays global unless --project", () => {
+  it("--all is the skills CLI shorthand and skips -g when --project", () => {
     const plan = planAgentSkillsInstall({ all: true, project: true }, catalogRoot());
-    assert.deepEqual(plan.skills, [
-      "implement-advisor",
-      "merge-advisor",
-      "requirements-authoring",
-    ]);
+    assert.ok(plan.argv.includes("--all"));
     assert.equal(plan.argv.includes("-g"), false);
-    assert.equal(plan.argv[plan.argv.indexOf("--agent") + 1], "*");
+    assert.equal(plan.argv.includes("--skill"), false);
+  });
+
+  it("a named agent with --all passes --skill *", () => {
+    const plan = planAgentSkillsInstall({ all: true, agent: "cursor" }, catalogRoot());
+    assert.equal(plan.argv[plan.argv.indexOf("--skill") + 1], "*");
+    assert.equal(plan.argv[plan.argv.indexOf("--agent") + 1], "cursor");
+    assert.ok(plan.argv.includes("-g"));
   });
 });

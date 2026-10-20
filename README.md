@@ -131,13 +131,12 @@ claude plugin install <plugin-name>@better-toolkits
 The plugin name usually matches the directory, but not always — `app-gtm-release-toolkit`
 installs as `app-gtm-release`, and `make-no-mistakes-toolkit` installs as `make-no-mistakes`.
 The authoritative list of installable names lives in
-[`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json). Each plugin source
-also has a generated [`toolkit.json`](docs/multi-harness-ssot.md) (skills, slash commands,
-hook packages) so the same set installs on any agent:
+[`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json). Each toolkit
+`package.json` `"skills"` field lists the skill folders for the skills CLI:
 
 ```bash
-npx @chimeranext/better-toolkits skills-install --toolkit make-no-mistakes --agent cursor
-npx @chimeranext/better-toolkits skills-install --all --agent '*'
+npx skills add chimeranext/better-toolkits --all -g
+npx skills add chimeranext/better-toolkits --skill merge-advisor --agent '*' -g -y
 ```
 
 Landing + doctrine:

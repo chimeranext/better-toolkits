@@ -9,8 +9,8 @@ on:
       - "shared/bootstrap/**"
       - "shared/hooks/**"
       - "scripts/ci/marketplace_versioning.py"
-      - "scripts/ci/sync_toolkit_manifests.py"
-      - "scripts/ci/test_sync_toolkit_manifests.py"
+      - "scripts/ci/sync_skills_field.py"
+      - "scripts/ci/test_sync_skills_field.py"
       - "scripts/lint/**"
       - ".cursor/hooks/**"
       - ".cursor/hooks.json"
@@ -21,8 +21,8 @@ on:
       - "toolkits/**"
       - "shared/bootstrap/**"
       - "scripts/lint/**"
-      - "scripts/ci/sync_toolkit_manifests.py"
-      - "scripts/ci/test_sync_toolkit_manifests.py"
+      - "scripts/ci/sync_skills_field.py"
+      - "scripts/ci/test_sync_skills_field.py"
       - ".cursor/hooks/**"
       - ".cursor/hooks.json"
 
@@ -43,8 +43,8 @@ jobs:
         run: python3 scripts/ci/marketplace_versioning.py sync
       - name: toolkit.json matches the tree
         run: |
-          python3 scripts/ci/sync_toolkit_manifests.py check
-          python3 scripts/ci/test_sync_toolkit_manifests.py
+          python3 scripts/ci/sync_skills_field.py check
+          python3 scripts/ci/test_sync_skills_field.py
       - name: version bump discipline vs base branch
         run: |
           BASE="${{ github.event.pull_request.base.sha || 'HEAD~1' }}"

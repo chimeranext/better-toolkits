@@ -18,13 +18,14 @@ agent plugin install make-no-mistakes@better-toolkits
 
 ## Agent-agnostic skills
 
-Cursor "Added" installs the plugin. The skill files for other agents come from `toolkit.json`:
+Cursor "Added" installs the plugin. The same skills for every agent:
 
 ```bash
-npx @chimeranext/better-toolkits skills-install --toolkit make-no-mistakes --agent cursor
+npx skills add chimeranext/better-toolkits --skill merge-advisor --agent '*' -g -y
+npx skills add chimeranext/better-toolkits --all -g
 ```
 
-`--agent '*'` installs the same set for every agent the skills CLI supports. Catalog SSOT: [`docs/multi-harness-ssot.md`](../../../../docs/multi-harness-ssot.md).
+The skill names for one toolkit are the `skills` array in that toolkit's `package.json`. See [`docs/multi-harness-ssot.md`](../../../../docs/multi-harness-ssot.md).
 
 ## Stderr + PRDS — `beforeShellExecution`
 
