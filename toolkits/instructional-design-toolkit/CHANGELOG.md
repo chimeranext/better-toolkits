@@ -1,9 +1,10 @@
 # Changelog
 
-## [Unreleased]
+## [1.4.0] — 2026-10-20
 
 ### Changed
 
+- **BREAKING — command rename:** `/notion-recursive-fetch` → `/deep-research`. The command, skill (`skills/deep-research/`) and protocol (`references/deep-research/protocol.md`) were renamed clean-cut with no shim, per the monorepo no-deprecated-shims policy. The command added in 1.3.0 is the one being renamed.
 - **hooks/prds/README.md:** OpenCode stderr registration points to `better-toolkits-bootstrap` / `setup-opencode.md` (not `/make-no-mistakes:opencode-setup`).
 
 ### Fixed
