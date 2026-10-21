@@ -12,9 +12,13 @@ import { mkdtempSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import {
+  HEIMDALL_ENV_BASENAME,
   parseEnvFile,
   pickNvidiaKey,
+  pickNvidiaKeyForEnv,
   findUpwards,
+  findRepoRoot,
+  findProjectEnvFile,
   agentsKeyFile,
   isOwnerOnly,
   resolveNvidiaKey,
@@ -30,6 +34,16 @@ import {
 /** Crea un tmpdir aislado y devuelve su ruta. */
 function freshDir(): string {
   return mkdtempSync(join(tmpdir(), "bifrost-keychain-"))
+}
+
+/**
+ * Tmpdir que se hace pasar por repo (marcador `.git/`), para que el project
+ * scope se resuelva por raíz de repo y no por la raíz del filesystem.
+ */
+function freshRepo(): string {
+  const root = freshDir()
+  require("node:fs").mkdirSync(join(root, ".git"), { recursive: true })
+  return root
 }
 
 /** Mockea process.exit para que lance en vez de terminar el runner. */
@@ -66,9 +80,46 @@ test("findUpwards encuentra el archivo subiendo de un subdir", () => {
   const root = freshDir()
   const sub = join(root, "a", "b")
   require("node:fs").mkdirSync(sub, { recursive: true })
-  writeFileSync(join(root, ".staging.nvidia.env"), "NVIDIA_API_KEY=x\n")
-  expect(findUpwards(".staging.nvidia.env", sub)).toBe(join(root, ".staging.nvidia.env"))
-  expect(findUpwards(".prod.nvidia.env", sub)).toBeUndefined()
+  writeFileSync(join(root, HEIMDALL_ENV_BASENAME), "NVIDIA_API_KEY=x\n")
+  expect(findUpwards(HEIMDALL_ENV_BASENAME, sub)).toBe(join(root, HEIMDALL_ENV_BASENAME))
+  expect(findUpwards(".otro.env", sub)).toBeUndefined()
+})
+
+test("findRepoRoot ancla en el ancestro con .git", () => {
+  const root = freshRepo()
+  const sub = join(root, "shared", "heimdall", "src")
+  require("node:fs").mkdirSync(sub, { recursive: true })
+  expect(findRepoRoot(sub)).toBe(root)
+  // Sin repo, no hay raíz: el project scope no existe.
+  expect(findRepoRoot(freshDir())).toBeUndefined()
+})
+
+test("findProjectEnvFile solo mira la raíz del repo (un .heimdall.env en un subdir no cuenta)", () => {
+  const root = freshRepo()
+  const sub = join(root, "sub")
+  require("node:fs").mkdirSync(sub, { recursive: true })
+  // Archivo en un subdir: NO es project scope.
+  writeFileSync(join(sub, HEIMDALL_ENV_BASENAME), "NVIDIA_API_KEY=sub\n")
+  expect(findProjectEnvFile(sub)).toBeUndefined()
+  // Archivo en la raíz del repo: sí.
+  writeFileSync(join(root, HEIMDALL_ENV_BASENAME), "NVIDIA_API_KEY=root\n")
+  expect(findProjectEnvFile(sub)).toBe(join(root, HEIMDALL_ENV_BASENAME))
+  // Sin repo no hay project scope, aunque el archivo esté en el cwd.
+  const loose = freshDir()
+  writeFileSync(join(loose, HEIMDALL_ENV_BASENAME), "NVIDIA_API_KEY=loose\n")
+  expect(findProjectEnvFile(loose)).toBeUndefined()
+})
+
+test("pickNvidiaKeyForEnv elige la variable del env dentro de un solo archivo", () => {
+  const vars = {
+    NVIDIA_API_KEY_INTERNAL_STAGING: "nvapi-s",
+    NVIDIA_API_KEY_PUBLIC_PROD: "nvapi-p",
+  }
+  expect(pickNvidiaKeyForEnv(vars, "staging")).toBe("nvapi-s")
+  expect(pickNvidiaKeyForEnv(vars, "prod")).toBe("nvapi-p")
+  // Canónico como fallback universal.
+  expect(pickNvidiaKeyForEnv({ NVIDIA_API_KEY: "canon" }, "prod")).toBe("canon")
+  expect(pickNvidiaKeyForEnv({ OTRA: "x" }, "staging")).toBeUndefined()
 })
 
 test("resolveNvidiaKey: la variable de entorno gana (no toca el filesystem)", async () => {
@@ -81,9 +132,9 @@ test("resolveNvidiaKey: la variable de entorno gana (no toca el filesystem)", as
   expect(key).toBe("nvapi-from-env")
 })
 
-test("resolveNvidiaKey: cae al archivo .{env}.nvidia.env cuando está gitignoreado", async () => {
-  const dir = freshDir()
-  writeFileSync(join(dir, ".staging.nvidia.env"), "NVIDIA_API_KEY=nvapi-from-file\n")
+test("resolveNvidiaKey: lee <repo>/.heimdall.env cuando está gitignoreado", async () => {
+  const dir = freshRepo()
+  writeFileSync(join(dir, HEIMDALL_ENV_BASENAME), "NVIDIA_API_KEY=nvapi-from-file\n")
   const key = await resolveNvidiaKey({
     env: "staging",
     overrideEnv: {}, // sin NVIDIA_API_KEY en el env
@@ -93,21 +144,65 @@ test("resolveNvidiaKey: cae al archivo .{env}.nvidia.env cuando está gitignorea
   expect(key).toBe("nvapi-from-file")
 })
 
-test("resolveNvidiaKey: acepta el nombre decorado en el archivo", async () => {
-  const dir = freshDir()
-  writeFileSync(join(dir, ".prod.nvidia.env"), "NVIDIA_API_KEY_PUBLIC_PROD=nvapi-prod\n")
-  const key = await resolveNvidiaKey({
+test("resolveNvidiaKey: un solo archivo sirve staging y prod (nombres decorados)", async () => {
+  const dir = freshRepo()
+  writeFileSync(
+    join(dir, HEIMDALL_ENV_BASENAME),
+    "NVIDIA_API_KEY_INTERNAL_STAGING=nvapi-staging\nNVIDIA_API_KEY_PUBLIC_PROD=nvapi-prod\n",
+  )
+  const staging = await resolveNvidiaKey({
+    env: "staging",
+    overrideEnv: {},
+    cwd: dir,
+    checkIgnored: async () => true,
+  })
+  const prod = await resolveNvidiaKey({
     env: "prod",
     overrideEnv: {},
     cwd: dir,
     checkIgnored: async () => true,
   })
-  expect(key).toBe("nvapi-prod")
+  expect(staging).toBe("nvapi-staging")
+  expect(prod).toBe("nvapi-prod")
 })
 
-test("resolveNvidiaKey: REHÚSA si el archivo existe pero NO está gitignoreado", async () => {
-  const dir = freshDir()
-  writeFileSync(join(dir, ".staging.nvidia.env"), "NVIDIA_API_KEY=nvapi-leak\n")
+test("resolveNvidiaKey: resuelve el archivo en la raíz aunque el cwd sea un subdir", async () => {
+  const root = freshRepo()
+  const sub = join(root, "shared", "heimdall")
+  require("node:fs").mkdirSync(sub, { recursive: true })
+  writeFileSync(join(root, HEIMDALL_ENV_BASENAME), "NVIDIA_API_KEY=nvapi-root\n")
+  const key = await resolveNvidiaKey({
+    env: "staging",
+    overrideEnv: {},
+    cwd: sub,
+    checkIgnored: async () => true,
+  })
+  expect(key).toBe("nvapi-root")
+})
+
+test("resolveNvidiaKey: sin repo, un .heimdall.env en el cwd NO cuenta como project scope", async () => {
+  const loose = freshDir() // sin .git
+  writeFileSync(join(loose, HEIMDALL_ENV_BASENAME), "NVIDIA_API_KEY=nvapi-loose\n")
+  const home = freshRepo()
+  const agentsDir = join(home, ".agents")
+  require("node:fs").mkdirSync(agentsDir, { recursive: true })
+  const f = join(agentsDir, ".heimdall.env")
+  writeFileSync(f, "NVIDIA_API_KEY=nvapi-agents\n")
+  require("node:fs").chmodSync(f, 0o600)
+  const key = await resolveNvidiaKey({
+    env: "staging",
+    overrideEnv: {},
+    cwd: loose,
+    checkIgnored: async () => true,
+    platform: "linux",
+    homeDir: home,
+  })
+  expect(key).toBe("nvapi-agents")
+})
+
+test("resolveNvidiaKey: REHÚSA si el archivo del repo existe pero NO está gitignoreado", async () => {
+  const dir = freshRepo()
+  writeFileSync(join(dir, HEIMDALL_ENV_BASENAME), "NVIDIA_API_KEY=nvapi-leak\n")
   const exitSpy = trapExit()
   try {
     await expect(
@@ -124,7 +219,7 @@ test("resolveNvidiaKey: REHÚSA si el archivo existe pero NO está gitignoreado"
 })
 
 test("resolveNvidiaKey: error claro cuando no hay env ni archivo", async () => {
-  const dir = freshDir()
+  const dir = freshRepo() // repo sin .heimdall.env
   const exitSpy = trapExit()
   try {
     await expect(
@@ -133,6 +228,8 @@ test("resolveNvidiaKey: error claro cuando no hay env ni archivo", async () => {
         overrideEnv: {},
         cwd: dir,
         checkIgnored: async () => true,
+        platform: "linux",
+        homeDir: freshDir(), // user scope vacío: no existe ~/.agents/.heimdall.env
       }),
     ).rejects.toThrow("process.exit(1)")
   } finally {
@@ -225,7 +322,7 @@ test("resolveNvidiaKey: cae a ~/.agents/.heimdall.env cuando no hay env ni archi
   const key = await resolveNvidiaKey({
     env: "staging",
     overrideEnv: {},
-    cwd: freshDir(), // repo limpio, sin .staging.nvidia.env
+    cwd: freshDir(), // repo limpio, sin .heimdall.env
     checkIgnored: async () => true,
     platform: "linux",
     homeDir: home,
@@ -279,8 +376,8 @@ test("resolveNvidiaKey: REHÚSA ~/.agents/.heimdall.env permisivo aunque tenga k
 })
 
 test("resolveNvidiaKey: el archivo del repo gana sobre ~/.agents", async () => {
-  const dir = freshDir()
-  writeFileSync(join(dir, ".staging.nvidia.env"), "NVIDIA_API_KEY=nvapi-repo\n")
+  const dir = freshRepo()
+  writeFileSync(join(dir, HEIMDALL_ENV_BASENAME), "NVIDIA_API_KEY=nvapi-repo\n")
   const home = freshDir()
   const agentsDir = join(home, ".agents")
   require("node:fs").mkdirSync(agentsDir, { recursive: true })
@@ -337,8 +434,8 @@ async function captureLog(fn: () => Promise<void>): Promise<string> {
 
 test("cmdKeyMigrate: mueve la key del repo a ~/.agents/.heimdall.env sin borrar el original", async () => {
   const fs = require("node:fs")
-  const repo = freshDir()
-  writeFileSync(join(repo, ".staging.nvidia.env"), "NVIDIA_API_KEY=nvapi-SECRETO-123\n")
+  const repo = freshRepo()
+  writeFileSync(join(repo, HEIMDALL_ENV_BASENAME), "NVIDIA_API_KEY=nvapi-SECRETO-123\n")
   const home = freshDir()
   const out = await captureLog(() =>
     cmdKeyMigrate({ env: "staging" }, { cwd: repo, platform: "linux", homeDir: home, checkIgnored: async () => true }),
@@ -347,19 +444,36 @@ test("cmdKeyMigrate: mueve la key del repo a ~/.agents/.heimdall.env sin borrar 
   const content = fs.readFileSync(dest, "utf8") as string
   expect(content).toContain("NVIDIA_API_KEY_INTERNAL_STAGING=nvapi-SECRETO-123")
   // El original sigue en su lugar; el comando solo sugiere el rm.
-  expect(fs.existsSync(join(repo, ".staging.nvidia.env"))).toBe(true)
-  expect(out).toContain('rm "')
-  expect(out).toContain(".staging.nvidia.env")
+  expect(fs.existsSync(join(repo, HEIMDALL_ENV_BASENAME))).toBe(true)
+  expect(out).toContain("rm \"")
+  expect(out).toContain(HEIMDALL_ENV_BASENAME)
   // El valor NUNCA se imprime.
   expect(out).not.toContain("nvapi-SECRETO-123")
   // Permisos solo-dueno post-escritura.
   expect(isOwnerOnly(dest, { platform: "linux" })).toBe(true)
 })
 
+test("cmdKeyMigrate: --env prod toma la key PROD del mismo archivo, no la de staging", async () => {
+  const fs = require("node:fs")
+  const repo = freshRepo()
+  writeFileSync(
+    join(repo, HEIMDALL_ENV_BASENAME),
+    "NVIDIA_API_KEY=nvapi-canon\nNVIDIA_API_KEY_PUBLIC_PROD=nvapi-prod\n",
+  )
+  const home = freshDir()
+  await cmdKeyMigrate(
+    { env: "prod" },
+    { cwd: repo, platform: "linux", homeDir: home, checkIgnored: async () => true },
+  )
+  const content = fs.readFileSync(join(home, ".agents", ".heimdall.env"), "utf8") as string
+  expect(content).toContain("NVIDIA_API_KEY_PUBLIC_PROD=nvapi-prod")
+  expect(content).not.toContain("nvapi-canon")
+})
+
 test("cmdKeyMigrate: preserva la key del otro env ya guardada", async () => {
   const fs = require("node:fs")
-  const repo = freshDir()
-  writeFileSync(join(repo, ".staging.nvidia.env"), "NVIDIA_API_KEY=nvapi-staging\n")
+  const repo = freshRepo()
+  writeFileSync(join(repo, HEIMDALL_ENV_BASENAME), "NVIDIA_API_KEY=nvapi-staging\n")
   const home = freshDir()
   const agentsDir = join(home, ".agents")
   fs.mkdirSync(agentsDir, { recursive: true })
@@ -372,8 +486,8 @@ test("cmdKeyMigrate: preserva la key del otro env ya guardada", async () => {
 })
 
 test("cmdKeyMigrate: REHÚSA si el archivo del repo NO está gitignoreado", async () => {
-  const repo = freshDir()
-  writeFileSync(join(repo, ".staging.nvidia.env"), "NVIDIA_API_KEY=nvapi-leak\n")
+  const repo = freshRepo()
+  writeFileSync(join(repo, HEIMDALL_ENV_BASENAME), "NVIDIA_API_KEY=nvapi-leak\n")
   const exitSpy = trapExit()
   try {
     await expect(
@@ -384,11 +498,11 @@ test("cmdKeyMigrate: REHÚSA si el archivo del repo NO está gitignoreado", asyn
   }
 })
 
-test("cmdKeyMigrate: falla claro si no hay archivo del repo", async () => {
+test("cmdKeyMigrate: falla claro si no hay archivo en la raíz del repo", async () => {
   const exitSpy = trapExit()
   try {
     await expect(
-      cmdKeyMigrate({ env: "staging" }, { cwd: freshDir(), platform: "linux", homeDir: freshDir(), checkIgnored: async () => true }),
+      cmdKeyMigrate({ env: "staging" }, { cwd: freshRepo(), platform: "linux", homeDir: freshDir(), checkIgnored: async () => true }),
     ).rejects.toThrow("process.exit(1)")
   } finally {
     exitSpy.mockRestore()
