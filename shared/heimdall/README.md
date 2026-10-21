@@ -76,8 +76,8 @@ git heimdall-review
 | --- | --- | --- | --- |
 | `heimdall-review diff [--base <ref>]` | Revisa el `git diff` local de la rama | no (imprime) | `NVIDIA_API_KEY` |
 | `heimdall-review pr <n> [--post]` | Revisa el PR `#n` | imprime; `--post` postea | `NVIDIA_API_KEY` (+ `GITHUB_TOKEN` si `--post`) |
-| `heimdall-review install [--with-hook]` | Scaffolds slash + Makefile + git alias; agrega `*.nvidia.env` al `.gitignore` | — | — |
-| `heimdall-review key:pull [--env]` | Cachea la NIM key desde Infisical a `.{env}.nvidia.env` | — | Infisical CLI |
+| `heimdall-review install [--with-hook]` | Scaffolds slash + Makefile + git alias; agrega `.heimdall.env` al `.gitignore` | — | — |
+| `heimdall-review key:pull [--env]` | Cachea la NIM key desde Infisical a `.heimdall.env` (raíz del repo) | — | Infisical CLI |
 
 > Más detalle de cada modo (pre-push hook opt-in, `bunx`, ciclo de vida del
 > symlink) en la **[guía de uso](https://chimeranext.github.io/heimdall/usage/)**.
@@ -124,20 +124,25 @@ CLI lo resuelve con esta **precedencia**:
    # o un .env gitignoreado en el cwd — Bun lo auto-carga:
    infisical export --format=dotenv > .env && heimdall-review diff
    ```
-2. **Archivo `.{env}.nvidia.env`** — gitignoreado, buscado subiendo del cwd a la
-   raíz del repo. `env` sale de `--env staging|prod`, o `BIFROST_NVIDIA_ENV`, con
-   **default `staging`**. Acepta `NVIDIA_API_KEY` o los alias
+2. **`.heimdall.env` en la raíz del repo** (project scope) — la CLI sube del cwd
+   hasta el ancestro con `.git/` y lee `<repo>/.heimdall.env`, gitignoreado. Si no
+   hay repo, este paso no existe. Env (`--env staging|prod`, o
+   `HEIMDALL_NVIDIA_ENV`, default `staging`) elige la variable de adentro, no el
+   nombre del archivo: acepta `NVIDIA_API_KEY` o los alias
    `NVIDIA_API_KEY_INTERNAL_STAGING` / `NVIDIA_API_KEY_PUBLIC_PROD`. Generalo sin
    exponer el valor:
    ```bash
    heimdall-review key:pull --env staging   # infisical export → filtra vars NVIDIA → archivo 0600
    ```
-3. **Error claro** si no se encontró nada.
+3. **`~/.agents/.heimdall.env`** (user scope, solo-dueño: `0600` en POSIX o bajo el
+   perfil en Windows). STAGING y PROD conviven en el mismo archivo con nombres
+   decorados (`key:init` lo crea; `key:migrate` mueve el del repo hacia acá).
+4. **Error claro** si no se encontró nada.
 
-> **Guardrail:** antes de leer un `.{env}.nvidia.env`, la CLI verifica con
-> `git check-ignore` que esté gitignoreado. Si existe pero **no** lo está,
+> **Guardrail:** antes de leer el `.heimdall.env` de project scope, la CLI verifica
+> con `git check-ignore` que esté gitignoreado. Si existe pero **no** lo está,
 > **rehúsa** y aborta — para que un secreto no termine commiteado. La key nunca se
-> imprime. `heimdall-review install` agrega `*.nvidia.env` al `.gitignore`.
+> imprime. `heimdall-review install` agrega `.heimdall.env` al `.gitignore`.
 
 ## Verificación
 
