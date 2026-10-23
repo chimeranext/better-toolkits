@@ -80,28 +80,29 @@ function escapeRe(s: string): string {
  * Instala el pre-push hook (opt-in). No pisa un hook existente salvo force.
  * Marca el archivo ejecutable.
  */
-/** Patrón gitignore que protege los archivos de la key-chain (`.{env}.nvidia.env`). */
-const NVIDIA_ENV_IGNORE = "*.nvidia.env"
+/** Patrón gitignore que protege el archivo de la key-chain (`.heimdall.env`). */
+const HEIMDALL_ENV_IGNORE = ".heimdall.env"
 
 /**
- * Asegura que `*.nvidia.env` esté en el `.gitignore` del repo (lo crea si no
+ * Asegura que `.heimdall.env` esté en el `.gitignore` del repo (lo crea si no
  * existe). Idempotente: no duplica el patrón si ya está. Es el guardrail que
- * deja seguros los archivos que `key:pull` materializa.
+ * deja seguro el archivo de project scope que `key:pull` materializa (la
+ * resolución se rehúsa a leerlo si no está ignorado).
  */
-function ensureNvidiaEnvIgnored(cwd: string): "added" | "present" | "created" {
+function ensureHeimdallEnvIgnored(cwd: string): "added" | "present" | "created" {
   const gitignorePath = join(cwd, ".gitignore")
   if (!existsSync(gitignorePath)) {
-    writeFileSync(gitignorePath, `${NVIDIA_ENV_IGNORE}\n`)
+    writeFileSync(gitignorePath, `${HEIMDALL_ENV_IGNORE}\n`)
     return "created"
   }
   const current = readFileSync(gitignorePath, "utf8")
   const already = current
     .split("\n")
     .map((l) => l.trim())
-    .includes(NVIDIA_ENV_IGNORE)
+    .includes(HEIMDALL_ENV_IGNORE)
   if (already) return "present"
   const sep = current.endsWith("\n") || current === "" ? "" : "\n"
-  writeFileSync(gitignorePath, `${current}${sep}${NVIDIA_ENV_IGNORE}\n`)
+  writeFileSync(gitignorePath, `${current}${sep}${HEIMDALL_ENV_IGNORE}\n`)
   return "added"
 }
 
@@ -164,9 +165,9 @@ export async function runInstall(options: InstallOptions): Promise<void> {
     )
   }
 
-  // 4. Guardrail de la key-chain: protegé *.nvidia.env en el .gitignore.
-  const ignoreResult = ensureNvidiaEnvIgnored(cwd)
-  console.log(`  [${ignoreResult}] .gitignore (patrón ${NVIDIA_ENV_IGNORE})`)
+  // 4. Guardrail de la key-chain: protegé .heimdall.env en el .gitignore.
+  const ignoreResult = ensureHeimdallEnvIgnored(cwd)
+  console.log(`  [${ignoreResult}] .gitignore (patrón ${HEIMDALL_ENV_IGNORE})`)
 
   console.log(
     "\n[heimdall-review install] listo. Probá:  infisical run -- heimdall-review diff\n" +
