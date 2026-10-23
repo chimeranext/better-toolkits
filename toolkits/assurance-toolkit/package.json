@@ -1,0 +1,36 @@
+{
+  "name": "assurance",
+  "version": "0.1.8",
+  "private": true,
+  "description": "Release-assurance evidence toolkit — 2 pillars (testing, liveness) + security transversal with its own runner, plus governance (DORA/DER metrics, stage gates, traceable receipts). Migrated quality-evidence commands from make-no-mistakes with shims.",
+  "license": "BSL-1.1",
+  "skills": [
+    {
+      "source": "chimeranext/better-toolkits",
+      "skills": [
+        "assurance",
+        "cicd-argocd",
+        "cicd-github-actions",
+        "flutter-accessibility",
+        "flutter-error-tracking",
+        "flutter-mobile-testing",
+        "flutter-performance",
+        "flutter-security",
+        "flutter-testing-strategy",
+        "sre-alerting-incident-management",
+        "sre-chaos-engineering",
+        "sre-container-security",
+        "sre-database-reliability",
+        "sre-disaster-recovery-business-continuity",
+        "sre-load-testing-performance",
+        "sre-logging-log-aggregation",
+        "sre-network-policies-security",
+        "sre-observability-stack",
+        "sre-security-compliance-automation",
+        "sre-slo-sli-sla",
+        "static-analysis",
+        "versioning-management"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "better-toolkits-bootstrap",
+  "version": "0.2.3",
+  "private": true,
+  "description": "Bootstrap layer for the better-toolkits marketplace — install first, then run /toolkits-initial-setup to wire harnesses and product toolkits with HITL consent.",
+  "license": "BSL-1.1",
+  "skills": [
+    {
+      "source": "chimeranext/better-toolkits",
+      "skills": [
+        "local-pr-review"
+      ]
+    }
+  ]
+}
