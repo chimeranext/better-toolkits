@@ -1,11 +1,12 @@
 ---
 name: digital-nomad
-version: 1.1.0
+version: 1.2.0
 description: >
   Guide for freelancers and digital nomads who want to operate as a US Single-Member LLC
   without jumping to a startup or shared services. Covers entity formation, tax compliance,
   remote banking, international billing (MSA B2B), visa options, and studying or founding
-  abroad (Germany, Canada, Ireland, Australia, Japan, Singapore, South Korea). FREE.
+  abroad (Germany, Canada, Ireland, Australia, Japan, Singapore, South Korea, China,
+  Taiwan). FREE.
   Use when user asks "digital nomad", "freelancer LLC", "single member LLC", "work from anywhere",
   "study abroad", "student visa work", "startup founder visa", "digital-nomad",
   "/digital-nomad:entity-formation", "/digital-nomad:tax-compliance",
@@ -13,7 +14,8 @@ description: >
   "/digital-nomad:study-in-germany", "/digital-nomad:study-in-canada",
   "/digital-nomad:study-in-ireland", "/digital-nomad:study-in-australia",
   "/digital-nomad:study-in-japan", "/digital-nomad:study-in-singapore",
-  "/digital-nomad:study-in-south-korea", "/digital-nomad:maintain-llc-abroad",
+  "/digital-nomad:study-in-south-korea", "/digital-nomad:study-in-china",
+  "/digital-nomad:study-in-taiwan", "/digital-nomad:maintain-llc-abroad",
   "/digital-nomad:route-decision".
 ---
 
@@ -48,8 +50,10 @@ Freelancers and digital nomads who:
 | `/digital-nomad:study-in-japan` | Student visa + Startup Visa / Business Manager (Japan) |
 | `/digital-nomad:study-in-singapore` | Student Pass + EntrePass / ONE Pass (Singapore) |
 | `/digital-nomad:study-in-south-korea` | D-2 permit + OASIS D-10-2 → D-8-4 pipeline (South Korea) |
+| `/digital-nomad:study-in-china` | X1/X2 endorsement rules + WFOE + work permit A/B / K visa (China) |
+| `/digital-nomad:study-in-taiwan` | ARC permit + Digital Nomad Visa / Gold Card / Entrepreneur Visa (Taiwan) |
 | `/digital-nomad:maintain-llc-abroad` | Keep the SMLLC alive from a student/founder address |
-| `/digital-nomad:route-decision` | Compare 7 countries × posture × graduation exit |
+| `/digital-nomad:route-decision` | Compare 9 countries × posture × graduation exit |
 
 ## Structure
 
@@ -71,6 +75,8 @@ toolkits/digital-nomad-toolkit/
 │   ├── study-in-japan/
 │   ├── study-in-singapore/
 │   ├── study-in-south-korea/
+│   ├── study-in-china/
+│   ├── study-in-taiwan/
 │   ├── maintain-llc-abroad/
 │   └── route-decision/
 ├── commands/
@@ -86,6 +92,8 @@ toolkits/digital-nomad-toolkit/
 │   ├── study-in-japan.md
 │   ├── study-in-singapore.md
 │   ├── study-in-south-korea.md
+│   ├── study-in-china.md
+│   ├── study-in-taiwan.md
 │   ├── maintain-llc-abroad.md
 │   └── route-decision.md
 ├── CHANGELOG.md

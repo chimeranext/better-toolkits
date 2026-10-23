@@ -5,6 +5,18 @@ All notable changes to this toolkit will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-10-19
+
+### Added
+
+- China + Taiwan expansion (issue #107): **2 commands + 2 reference protocols**
+- `study-in-china` — X1/X2 study residence, off-campus work-study/internship **residence-permit endorsement** (8 h/week, 40 h/month term; school + PSB approval), WFOE subsidiary of a US LLC (FIL 2020 + Company Law 2023, apostille docs since Nov 2023, paid-in capital ≤5 yrs), work permit A/B → Z visa → residence, new **K visa** (young STEM talent, no employer), Shenzhen/Qianhai anchors
+- `study-in-taiwan` — ARC + WDA part-time permit (20 h/week term, unlimited breaks), **Digital Nomad Visa** (runs your own foreign LLC remotely, 6 mo extendable to 2 yrs), Employment Gold Card (4-in-1), Entrepreneur Visa + company setup, no US–Taiwan income-tax treaty, COMPUTEX/InnoVEX anchors
+
+### Changed
+
+- `route-decision` — study matrix, founder anchors, decision steps, and route cards extended from **7 to 9 countries** (added China + Taiwan rows, R10/R11 route cards)
+
 ## [1.1.0] - 2026-10-19
 
 ### Added
