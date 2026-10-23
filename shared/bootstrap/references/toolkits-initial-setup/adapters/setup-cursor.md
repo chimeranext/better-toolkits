@@ -16,6 +16,17 @@ agent plugin install better-toolkits-bootstrap@better-toolkits
 agent plugin install make-no-mistakes@better-toolkits
 ```
 
+## Agent-agnostic skills
+
+Cursor "Added" installs the plugin. The same skills for every agent:
+
+```bash
+npx skills add chimeranext/better-toolkits --skill merge-advisor --agent '*' -g -y
+npx skills add chimeranext/better-toolkits --all -g
+```
+
+The skill names for one toolkit are the `skills` array in that toolkit's `package.json`. See [`docs/multi-harness-ssot.md`](../../../../docs/multi-harness-ssot.md).
+
 ## Stderr + PRDS — `beforeShellExecution`
 
 Propose merge into **user** or **project** `hooks.json` (ask which). Idempotent: skip if entries

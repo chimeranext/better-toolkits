@@ -1,0 +1,24 @@
+{
+  "name": "ux-research-toolkit",
+  "version": "2.1.4",
+  "private": true,
+  "description": "Guided UX research map creation — experience maps, customer journey maps, service blueprints, storyboards, and user story maps. Helps non-experts create professional UX artifacts through dialogue, JSON data, and interactive HTML visualization.",
+  "license": "BSL-1.1",
+  "skills": [
+    {
+      "source": "chimeranext/better-toolkits",
+      "skills": [
+        "customer-journey-map",
+        "design-studio",
+        "experience-map",
+        "fidelity-guide",
+        "map-workshop",
+        "research-cadence",
+        "service-blueprint",
+        "session-replay",
+        "storyboard",
+        "user-story-map"
+      ]
+    }
+  ]
+}

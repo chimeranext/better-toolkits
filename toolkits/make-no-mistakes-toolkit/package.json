@@ -70,5 +70,28 @@
     "tsup": "^8.5.0",
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"
-  }
+  },
+  "skills": [
+    {
+      "source": "chimeranext/better-toolkits",
+      "skills": [
+        "audit-engine",
+        "domain-driven-advisor",
+        "evaluate-agent-skills",
+        "implement",
+        "implement-advisor",
+        "merge-advisor",
+        "parallelize",
+        "premortem",
+        "prioritize",
+        "resolve-open-questions",
+        "review-active-issues",
+        "review-open-prs",
+        "spec-recommend",
+        "spike-recommend",
+        "sync-advisor",
+        "worktree-cleanup"
+      ]
+    }
+  ]
 }

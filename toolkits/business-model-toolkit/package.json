@@ -31,5 +31,22 @@
     "tsup": "^8.5.0",
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"
-  }
+  },
+  "skills": [
+    {
+      "source": "chimeranext/better-toolkits",
+      "skills": [
+        "brand-identity",
+        "customer-interview-system",
+        "execution-plan",
+        "growth-acceleration",
+        "landing-page-design",
+        "pitch-deck",
+        "pitch-script",
+        "problem-validation",
+        "product-vision-audit",
+        "solution-design"
+      ]
+    }
+  ]
 }
