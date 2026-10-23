@@ -43,17 +43,30 @@ import { dirname, join } from "node:path"
 
 const DEFAULT_PROVIDER = "nim-kimi"
 
-/** Entornos válidos para la key-chain (sufijo del archivo `.{env}.nvidia.env`). */
+/**
+ * Entornos válidos para la key-chain. El env selecciona la **variable dentro del
+ * archivo**, no el nombre del archivo.
+ */
 export type KeyEnv = "staging" | "prod"
 const DEFAULT_KEY_ENV: KeyEnv = "staging"
 
 /**
- * Nombres de variable aceptados dentro de un `.{env}.nvidia.env`, en orden de
+ * Único nombre del archivo de la key-chain, en los dos scopes:
+ *   - project scope: `<repo-root>/.heimdall.env` (gitignoreado; guardrail
+ *     `git check-ignore` antes de leerlo)
+ *   - user scope:    `~/.agents/.heimdall.env` (solo-dueno, 0600)
+ *
+ * Un solo nombre evita que una key válida quede invisible por estar en un
+ * archivo con otro sufijo. El entorno (`--env`) elige la variable de adentro.
+ */
+export const HEIMDALL_ENV_BASENAME = ".heimdall.env"
+
+/**
+ * Nombres de variable aceptados dentro de `.heimdall.env`, en orden de
  * preferencia. Aceptamos el nombre canónico y los nombres "decorados" que
  * Infisical exporta por entorno (`_INTERNAL_STAGING` / `_PUBLIC_PROD`), así el
  * archivo se puede generar tal cual sin renombrar a mano.
- * (Para el archivo de usuario `~/.agents/.heimdall.env` ver
- * `pickNvidiaKeyForEnv`, que distingue por env.)
+ * La selección con conciencia de env vive en `pickNvidiaKeyForEnv`.
  */
 const NVIDIA_KEY_NAMES = [
   "NVIDIA_API_KEY",
@@ -127,16 +140,17 @@ function failMissingNvidiaKey(env: KeyEnv): never {
       "  1. Variable de entorno NVIDIA_API_KEY:\n" +
       "       NVIDIA_API_KEY=nvapi-... heimdall-review …\n" +
       "       # o vía hygiene centralizada:  infisical run -- heimdall-review …\n" +
-      `  2. Archivo .${env}.nvidia.env (gitignoreado) en el cwd o un ancestro:\n` +
+      "  2. Archivo .heimdall.env en la RAÍZ DEL REPO (project scope, gitignoreado):\n" +
       `       heimdall-review key:pull --env ${env}   # lo genera desde Infisical\n` +
-      "       # o a mano:  NVIDIA_API_KEY=nvapi-... → ese archivo (debe estar gitignoreado)\n" +
-      `  3. Archivo de usuario ~/.agents/.heimdall.env con permisos solo-dueno:\n` +
+      "       # o a mano:  NVIDIA_API_KEY=nvapi-... → <repo>/.heimdall.env\n" +
+      "       # (debe estar gitignoreado; `heimdall-review install` agrega el patrón)\n" +
+      `  3. Archivo de usuario ~/.agents/.heimdall.env (user scope) con permisos solo-dueno:\n` +
       "       Linux/macOS:  $HOME/.agents/.heimdall.env  (modo 0600)\n" +
       "       Windows:      %LOCALAPPDATA%/.agents/.heimdall.env\n" +
       "                     (fallback %USERPROFILE%/.agents/; vale el ACL del perfil)\n" +
-      "       STAGING y PROD conviven con nombres decorados:\n" +
+      "       STAGING y PROD conviven en el MISMO archivo con nombres decorados:\n" +
       "         heimdall-review key:init --env staging   # pide las keys por diálogo GUI\n" +
-      "         heimdall-review key:migrate --env staging  # mueve .staging.nvidia.env del repo\n" +
+      "         heimdall-review key:migrate --env staging  # mueve <repo>/.heimdall.env al user scope\n" +
       "  4. Si nada de lo anterior, este error.",
   )
 }
@@ -192,6 +206,34 @@ export function findUpwards(filename: string, startDir: string): string | undefi
     if (parent === dir) return undefined
     dir = parent
   }
+}
+
+/**
+ * Raíz del repo que contiene `startDir`: el ancestro más cercano con `.git`
+ * (directorio o archivo, para soportar worktrees y submódulos). `undefined` si no
+ * hay repo. El project scope se ancla acá y NO en la raíz del filesystem: un
+ * `.heimdall.env` suelto arriba del repo no debe secuestrar la resolución.
+ */
+export function findRepoRoot(startDir: string): string | undefined {
+  let dir = startDir
+  for (;;) {
+    if (existsSync(join(dir, ".git"))) return dir
+    const parent = dirname(dir)
+    if (parent === dir) return undefined
+    dir = parent
+  }
+}
+
+/**
+ * Archivo de key-chain en project scope: `<repo-root>/.heimdall.env`.
+ * Devuelve `undefined` si no hay repo o si el archivo no existe — en ambos casos
+ * la resolución cae al user scope (`~/.agents/.heimdall.env`).
+ */
+export function findProjectEnvFile(startDir: string): string | undefined {
+  const root = findRepoRoot(startDir)
+  if (!root) return undefined
+  const candidate = join(root, HEIMDALL_ENV_BASENAME)
+  return existsSync(candidate) ? candidate : undefined
 }
 
 /**
@@ -284,10 +326,10 @@ export function isOwnerOnly(
 /**
  * Resuelve la NIM key con la precedencia documentada:
  *   1. `process.env.NVIDIA_API_KEY` (o `overrideEnv` inyectado en tests) si está.
- *   2. El archivo `.{env}.nvidia.env` encontrado subiendo del cwd a la raíz,
- *      SIEMPRE que `git check-ignore` confirme que está ignorado. Si existe pero
- *      NO está ignorado, REHÚSA y aborta (no filtramos la key por un archivo que
- *      podría terminar commiteado).
+ *   2. El archivo `.heimdall.env` en la raíz del repo que contiene el cwd
+ *      (project scope), SIEMPRE que `git check-ignore` confirme que está
+ *      ignorado. Si existe pero NO está ignorado, REHÚSA y aborta (no filtramos
+ *      la key por un archivo que podría terminar commiteado).
  *   3. El archivo de usuario `~/.agents/` (ver `agentsKeyFile`), SIEMPRE que
  *      pase el guardrail solo-dueno (`isOwnerOnly`). Si existe pero está
  *      permisivo, REHÚSA y aborta con guía de chmod.
@@ -319,22 +361,21 @@ export async function resolveNvidiaKey(opts: {
   const fromEnv = (sourceEnv.NVIDIA_API_KEY ?? "").trim()
   if (fromEnv) return fromEnv
 
-  // 2. Archivo .{env}.nvidia.env subiendo de cwd a la raíz.
-  const filename = `.${opts.env}.nvidia.env`
-  const filePath = findUpwards(filename, cwd)
+  // 2. Archivo .heimdall.env en la raíz del repo (project scope).
+  const filePath = findProjectEnvFile(cwd)
   if (filePath) {
     if (!(await checkIgnored(filePath))) {
       fail(
         `encontré ${filePath} pero NO está gitignoreado — me niego a leerlo para no ` +
-          `filtrar la key. Agregá "*.nvidia.env" al .gitignore (o corré ` +
+          `filtrar la key. Agregá ".heimdall.env" al .gitignore (o corré ` +
           `\`heimdall-review install\`, que lo hace) y reintentá.`,
       )
     }
     const vars = parseEnvFile(readFileSync(filePath, "utf8"))
-    const key = pickNvidiaKey(vars)
+    const key = pickNvidiaKeyForEnv(vars, opts.env)
     if (key) return key
     fail(
-      `${filePath} existe pero no contiene ninguna de ${NVIDIA_KEY_NAMES.join(", ")} con valor.`,
+      `${filePath} existe pero no contiene ${opts.env === "prod" ? "NVIDIA_API_KEY_PUBLIC_PROD ni " : "NVIDIA_API_KEY_INTERNAL_STAGING ni "}NVIDIA_API_KEY con valor.`,
     )
   }
 
@@ -435,11 +476,12 @@ USO:
       Scaffolds los 3 wrappers (slash Claude Code, Makefile target, git alias +
       pre-push hook) en el repo actual. Idempotente; --force sobreescribe.
       El pre-push hook es opt-in: solo se instala con --with-hook.
-      También agrega "*.nvidia.env" al .gitignore.
+      También agrega ".heimdall.env" al .gitignore.
 
   heimdall-review key:pull [--env staging|prod]
-      Materializa .{env}.nvidia.env (gitignoreado, 0600) desde Infisical, con
-      solo la(s) variable(s) NVIDIA. Nunca imprime el valor. Default env: staging.
+      Materializa .heimdall.env en la raíz del repo (gitignoreado, 0600) desde
+      Infisical, con solo la(s) variable(s) NVIDIA. Nunca imprime el valor.
+      Default env: staging.
 
   heimdall-review key:init [--env staging|prod] [--force]
       Crea o actualiza ~/.agents/.heimdall.env pidiendo las keys por diálogo
@@ -447,7 +489,7 @@ USO:
       (STAGING/PROD conviven con nombres decorados). Nunca imprime valores.
 
   heimdall-review key:migrate [--env staging|prod]
-      Reubica la(s) key(s) de .{env}.nvidia.env (repo, gitignoreado) hacia
+      Reubica la(s) key(s) de <repo>/.heimdall.env (gitignoreado) hacia
       ~/.agents/.heimdall.env con merge por env. NO borra el original:
       imprime el rm exacto para cuando verifiques que todo resuelve.
 
@@ -458,16 +500,20 @@ USO:
 
 RESOLUCIÓN DE LA NIM KEY (precedencia):
   1. NVIDIA_API_KEY del entorno (env var / infisical run).
-  2. Archivo .{env}.nvidia.env (gitignoreado) en el cwd o un ancestro;
-     env = --env, o HEIMDALL_NVIDIA_ENV, o "staging". Si existe pero NO está
-     gitignoreado, el CLI REHÚSA y aborta (no filtra la key).
-  3. Archivo de usuario ~/.agents/.heimdall.env (solo-dueno: 0600 en
-     POSIX, bajo el perfil en Windows) — Linux/macOS $HOME, Windows
-     %LOCALAPPDATA% (fallback %USERPROFILE%). STAGING y PROD conviven con
-     nombres decorados (ver key:init); la key OpenRouter sale del mismo
-     archivo (env propio vía --openrouter-env / HEIMDALL_OPENROUTER_ENV,
-     o hereda el de NVIDIA).
+  2. Archivo .heimdall.env en la raíz del repo que contiene el cwd (project
+     scope). Si existe pero NO está gitignoreado, el CLI REHÚSA y aborta
+     (no filtra la key).
+  3. Archivo de usuario ~/.agents/.heimdall.env (user scope; solo-dueno: 0600
+     en POSIX, bajo el perfil en Windows) — Linux/macOS $HOME, Windows
+     %LOCALAPPDATA% (fallback %USERPROFILE%). STAGING y PROD conviven en el
+     mismo archivo con nombres decorados (ver key:init); la key OpenRouter
+     sale del mismo archivo (env propio vía --openrouter-env /
+     HEIMDALL_OPENROUTER_ENV, o hereda el de NVIDIA).
   4. Si nada, error (sugiere key:init).
+
+  El nombre del archivo es SIEMPRE .heimdall.env. --env no cambia el nombre:
+  elige qué variable se lee de adentro (NVIDIA_API_KEY_INTERNAL_STAGING /
+  NVIDIA_API_KEY_PUBLIC_PROD, con el canónico como fallback).
 
 FLAGS COMUNES:
   --provider <id>   Lane del reviewer (default: ${DEFAULT_PROVIDER}).
@@ -864,7 +910,7 @@ export async function cmdKeyInit(
       console.log("[heimdall-review key:init] ya hay NVIDIA_API_KEY en el entorno — nada que crear (usá --force para re-pedirla).")
       return
     }
-    const repoFile = findUpwards(`.${env}.nvidia.env`, process.cwd())
+    const repoFile = findProjectEnvFile(process.cwd())
     if (repoFile) {
       console.log(`[heimdall-review key:init] ya existe ${repoFile} — nada que crear (usá --force para re-pedirla).`)
       return
@@ -903,14 +949,15 @@ export async function cmdKeyInit(
 }
 /**
  * Subcomando `key:migrate [--env staging|prod]` — reubica la(s) key(s) del
- * archivo del repo `.{env}.nvidia.env` (p. ej. el del monorepo vertivolatam)
- * hacia `~/.agents/.heimdall.env`, con merge por env y nombres decorados.
+ * archivo del repo `<repo-root>/.heimdall.env` hacia `~/.agents/.heimdall.env`,
+ * con merge por env y nombres decorados.
  *
  * - Aplica el MISMO guardrail de lectura que `resolveNvidiaKey`: si el archivo
  *   existe pero NO está gitignoreado, REHÚSA y aborta (no filtra la key).
- * - La key canónica del archivo (`NVIDIA_API_KEY`) se guarda como decorada del
- *   env (`_INTERNAL_STAGING` / `_PUBLIC_PROD`); si el archivo ya trae decoradas
- *   se respetan igual (ver `pickNvidiaKey` + `nvidiaDecoratedName`).
+ * - La key del archivo (`NVIDIA_API_KEY` o la decorada del env) se guarda como
+ *   decorada del env (`_INTERNAL_STAGING` / `_PUBLIC_PROD`); si el archivo ya
+ *   trae decoradas se respetan igual (ver `pickNvidiaKeyForEnv` +
+ *   `nvidiaDecoratedName`).
  * - Hace MERGE en destino (ver `mergeAgentKeys`): el otro env convive.
  * - NO borra el original: imprime el `rm` exacto para que el usuario lo ejecute
  *   cuando verifique que todo resuelve desde el nuevo archivo.
@@ -928,23 +975,22 @@ export async function cmdKeyMigrate(
   const checkIgnored = opts.checkIgnored ?? isGitIgnored
   const { readFileSync, existsSync: exists } = await import("node:fs")
 
-  const filename = `.${env}.nvidia.env`
-  const src = findUpwards(filename, cwd)
+  const src = findProjectEnvFile(cwd)
   if (!src) {
     fail(
-      `no encontré ${filename} subiendo de ${cwd} — nada que migrar. ` +
+      `no encontré ${HEIMDALL_ENV_BASENAME} en la raíz del repo de ${cwd} — nada que migrar. ` +
         `Si la key ya vive en ~/.agents/.heimdall.env, no hay nada que hacer.`,
     )
   }
-  if (!(await checkIgnored(src as string))) {
+  if (!(await checkIgnored(src))) {
     fail(
       `encontré ${src} pero NO está gitignoreado — me niego a leerlo para no ` +
-        `filtrar la key. Agregá "*.nvidia.env" al .gitignore (o corré ` +
+        `filtrar la key. Agregá ".heimdall.env" al .gitignore (o corré ` +
         `\`heimdall-review install\`, que lo hace) y reintentá.`,
     )
   }
   const vars = parseEnvFile(readFileSync(src as string, "utf8"))
-  const nimKey = pickNvidiaKey(vars)
+  const nimKey = pickNvidiaKeyForEnv(vars, env)
   const orKey = pickOpenRouterKey(vars, env)
   if (!nimKey && !orKey) {
     fail(
@@ -972,21 +1018,22 @@ export async function cmdKeyMigrate(
   )
 }
 /**
- * Subcomando `key:pull [--env staging|prod]` — materializa `.{env}.nvidia.env`
+ * Subcomando `key:pull [--env staging|prod]` — materializa `.heimdall.env`
  * (gitignoreado) desde Infisical, sin imprimir el valor.
  *
  * Corre `infisical export --projectId=… --env=<env> --format dotenv`, filtra solo
- * la(s) variable(s) NVIDIA reconocidas y escribe SOLO esas a `.{env}.nvidia.env`
- * en el cwd. GUARDRAIL post-escritura: verifica que el archivo quede gitignoreado;
- * si no, lo borra y aborta (no dejamos un archivo con secreto sin ignorar).
+ * la(s) variable(s) NVIDIA reconocidas y escribe SOLO esas a `.heimdall.env`
+ * en el cwd (project scope). GUARDRAIL post-escritura: verifica que el archivo
+ * quede gitignoreado; si no, lo borra y aborta (no dejamos un archivo con
+ * secreto sin ignorar).
  */
 async function cmdKeyPull(flags: Record<string, string | boolean>): Promise<void> {
   const env = resolveKeyEnv(flags)
   const projectId = "c6dbbe50-0e7c-465d-98ca-4020bc4cbfcb"
-  const dest = join(process.cwd(), `.${env}.nvidia.env`)
+  const dest = join(process.cwd(), HEIMDALL_ENV_BASENAME)
 
   console.log(
-    `[heimdall-review key:pull] exportando vars NVIDIA de Infisical (env=${env}) → .${env}.nvidia.env`,
+    `[heimdall-review key:pull] exportando vars NVIDIA de Infisical (env=${env}) → ${HEIMDALL_ENV_BASENAME}`,
   )
 
   let exported: string
@@ -1036,13 +1083,13 @@ async function cmdKeyPull(flags: Record<string, string | boolean>): Promise<void
     rmSync(dest, { force: true })
     fail(
       `escribí ${dest} pero NO está gitignoreado — lo borré para no filtrar la key. ` +
-        `Agregá "*.nvidia.env" al .gitignore (\`heimdall-review install\` lo hace) y reintentá.`,
+        `Agregá ".heimdall.env" al .gitignore (\`heimdall-review install\` lo hace) y reintentá.`,
     )
   }
 
   console.log(
     `[heimdall-review key:pull] listo — escribí ${lines.length} var(s) NVIDIA a ` +
-      `.${env}.nvidia.env (0600, gitignoreado). Valor NO impreso.`,
+      `${HEIMDALL_ENV_BASENAME} (0600, gitignoreado). Valor NO impreso.`,
   )
 }
 
