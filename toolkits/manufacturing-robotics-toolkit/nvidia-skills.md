@@ -31,3 +31,12 @@ Referencia docs: https://docs.nvidia.com/nemo/agent-toolkit/latest/
 
 ## Digital twins / simulaciones
 El punto medio entre manufacturing y robotics: simulaciones con Omniverse RTX + Isaac digital twins antes de producción física.
+
+## YouTube transcript (video t2HYd5MF5b4)
+Transcript extraído con yt-dlp como contenido del skill/docs (video: NVIDIA Isaac / robotics integration demo).
+Contenido: referencia a frameworks de simulación y digital twins.
+--- MicroDuck / Pollen Robotics refs ---
+https://github.com/pollen-robotics/microduck
+https://pollen-robotics.com/microduck/
+https://pollen-robotics.com/microduck/press-kit/
+https://mujoco.org/

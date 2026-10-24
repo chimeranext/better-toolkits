@@ -50,3 +50,11 @@ SSOT: `references/cad/`. This toolkit owns the mechanical domain: parametric mod
 ## D8 — Reusability
 
 Same as logistics-toolkit D10: Notion-agnostic; any startup with a "Biblioteca" DB can use it.
+
+## Interaction pipeline (multi-toolkit)
+- `schematics-pcb-design-toolkit`: KiCad layers → handoff for enclosure/mechanical mount patterns.
+- `manufacturing-robotics-toolkit`: 3D parametric models + digital twins (Isaac/Omniverse). References: MuJoCo, MicroDuck (Pollen Robotics), Omniverse Libraries.
+- `google-workspace-apps-mcp`: backup outputs (videos/models) to Google Drive.
+- `media-buyer-toolkit`: campaign generation + backlinking (LinkedIn Insight/Conversion Tags, Meta Pixel/Catalog/Advantage Catalog).
+- `aaarrr-flywheel-toolkit`: landing page for campaign landing.
+- `instructional-design-toolkit`: teaches startups to replicate the process.
