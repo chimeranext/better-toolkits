@@ -9,29 +9,31 @@ from tkinter import messagebox
 def run():
     root = tk.Tk()
     root.title("Configuración Inicial del Google Workspace Apps MCP")
-    root.geometry("1300x750")
+    root.geometry("1300x540")
     root.configure(bg="#181818")
 
     # Preguntas originales reemplazadas por header grid-in-grid (abajo)
 
     # Grid-in-grid: preguntas (izq) || referencias (der) — compacto simétrico
     top = tk.Frame(root, bg="#181818")
-    top.pack(pady=2, padx=10, fill="x")
-    top.grid_columnconfigure(0, weight=1, uniform="col")
-    top.grid_columnconfigure(1, weight=1, uniform="col")
+    top.pack(pady=2, padx=10, fill="none")
+    top.grid_columnconfigure(0, weight=1)
+    top.grid_columnconfigure(1, weight=0)
+    top.grid_columnconfigure(2, weight=1)
 
     # Izquierda: preguntas (compacto, igual densidad que referencias)
     left = tk.Frame(top, bg="#181818")
     left.grid(row=0, column=0, sticky="nw", padx=4)
-    tk.Label(left, text="¿Qué estoy solicitándote?", bg="#181818", fg="#ddd", font=("Segoe UI", 10, "bold"), wraplength=500, anchor="w", justify="left").pack(anchor="w", pady=0)
-    tk.Label(left, text="Configurar tu propio OAuth client_id + remote rclone (gdrive) para que el MCP 'google-workspace-apps-mcp' sincronice sin exponer credenciales.", bg="#181818", fg="#ccc", font=("Segoe UI", 8), wraplength=500, anchor="w", justify="left").pack(anchor="w", pady=0)
-    tk.Label(left, text="¿Por qué motivo?", bg="#181818", fg="#ddd", font=("Segoe UI", 10, "bold"), wraplength=500, anchor="w", justify="left").pack(anchor="w", pady=0)
-    tk.Label(left, text="Google obliga (TOS y políticas OAuth) a que cada aplicación tenga su propio OAuth client para acceder a Drive. No puedes usar credenciales compartidas ni embebidas (ver evidencia TOS a continuación). Por eso debes ir a console.cloud.google.com y crear tu propio proyecto para sincronizar con rclone.", bg="#181818", fg="#ccc", font=("Segoe UI", 8), wraplength=500, anchor="w", justify="left").pack(anchor="w", pady=0)
+    tk.Label(left, text="¿Qué estoy solicitándote?", bg="#181818", fg="#ddd", font=("Segoe UI", 10, "bold"), wraplength=600, anchor="w", justify="left").pack(anchor="w", pady=0)
+    tk.Label(left, text="Configurar tu propio OAuth client_id + remote rclone (gdrive) para que el MCP 'google-workspace-apps-mcp' sincronice sin exponer credenciales.", bg="#181818", fg="#ccc", font=("Segoe UI", 8), wraplength=600, anchor="w", justify="left").pack(anchor="w", pady=0)
+    tk.Label(left, text="¿Por qué motivo?", bg="#181818", fg="#ddd", font=("Segoe UI", 10, "bold"), wraplength=600, anchor="w", justify="left").pack(anchor="w", pady=0)
+    tk.Label(left, text="Google obliga (TOS y políticas OAuth) a que cada aplicación tenga su propio OAuth client para acceder a Drive. No puedes usar credenciales compartidas ni embebidas (ver evidencia TOS a continuación). Por eso debes ir a console.cloud.google.com y crear tu propio proyecto para sincronizar con rclone.", bg="#181818", fg="#ccc", font=("Segoe UI", 8), wraplength=600, anchor="w", justify="left").pack(anchor="w", pady=0)
 
     # Derecha: referencias compactas clickeables (APA)
     import webbrowser
     ref_right = tk.Frame(top, bg="#181818")
-    ref_right.grid(row=0, column=1, sticky="ne", padx=4)
+    tk.Label(top, text="", bg="#181818", width=6).grid(row=0, column=1, sticky="w", padx=2)
+    ref_right.grid(row=0, column=2, sticky="ne", padx=4)
     tk.Label(ref_right, text="Referencias Legales", bg="#181818", fg="#ddd", font=("Segoe UI", 9, "bold"), anchor="w").pack(anchor="w", pady=0)
     for ut, url in [
         ("• Google APIs Terms (§b.1): 'Developer credentials ... may not be embedded in open source projects.'", "https://dev.google.com/terms"),
