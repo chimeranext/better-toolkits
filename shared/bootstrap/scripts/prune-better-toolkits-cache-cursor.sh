@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 # Clear ALL Cursor plugin cache for the better-toolkits marketplace, then re-sync.
 # Use after any marketplace version bump so Cursor does not keep stale copies of any toolkit.
+# The OpenCode equivalent is prune-better-toolkits-cache-opencode.sh.
 #
 # Usage:
-#   prune-better-toolkits-cache.sh
+#   prune-better-toolkits-cache-cursor.sh
 #
 # Slash command SSOT: /prune-better-toolkits-cache (shared/bootstrap/commands/)
 #

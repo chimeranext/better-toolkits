@@ -8,7 +8,7 @@ capped / passive) with a clear exit.
 
 Freelancers and digital nomads deciding **where to study or found** while
 keeping (or pausing) their LLC — across Germany, Canada, Ireland, Australia,
-Japan, Singapore, South Korea, or none of the above.
+Japan, Singapore, South Korea, China, Taiwan, or none of the above.
 
 ## The two axes
 
@@ -27,6 +27,8 @@ Japan, Singapore, South Korea, or none of the above.
 | 🇯🇵 **Japan** | 資格外活動許可: **28 h/week** part-time; business management **not covered** | ❌ — LLC stays passive | Startup Visa (Designated Activities ≤2 yrs) → **Business Manager** (¥30M + staff + office + plan) |
 | 🇸🇬 **Singapore** | Student Pass: **≤16 h/week** term (listed institutions only), vacations unlimited; no business | ❌ — LLC stays passive | **EntrePass** / new **ONE Pass (AI and Tech)** (Tech.Pass sunset 28 Jan 2027) — tied to a SG Pte Ltd |
 | 🇰🇷 **South Korea** | D-2 part-time permit: ≤20 h/week Mon–Fri standard (tiered 10–35 h by TOPIK/GPA); weekends free | ❌ — LLC stays passive | **D-10-2 → D-8-4** OASIS pipeline → F-2 → F-5 |
+| 🇨🇳 **China** | X1/X2 study residence: off-campus work only via **residence-permit endorsement** (**8 h/week, 40 h/month** term; school + PSB approval); managing your LLC = unauthorized work | ❌ — LLC stays passive | **WFOE + work permit A/B → Z visa → residence** (young STEM: **K visa**, no employer needed) |
+| 🇹🇼 **Taiwan** | ARC + WDA part-time permit: **20 h/week** term, **unlimited** breaks; no business | ❌ — LLC stays passive | **Digital Nomad Visa** (runs your own foreign LLC remotely, ≤2 yrs) / **Gold Card** / **Entrepreneur Visa** |
 
 ### Founder routes (business visas)
 
@@ -36,40 +38,52 @@ Japan, Singapore, South Korea, or none of the above.
 | 🇯🇵 Japan | Startup Visa → Business Manager | Japanese KK/GK | **¥30M capital** + ≥1 JP-resident FTE + real office + verified plan + JP ability |
 | 🇸🇬 Singapore | EntrePass / ONE Pass (AI and Tech) | ACRA **Pte Ltd** (≥30% yours) | EntrePass: S$100k round **or** top accelerator (YC…) **or** IP/research; ONE Pass: S$22.5k/mo + big-tech leadership |
 | 🇰🇷 South Korea | D-10-2 → D-8-4 via **OASIS** | Korean Yujik Hoesik + registration | OASIS orientation + ≥60/300 points + IP/tech + degree |
+| 🇨🇳 China | Work permit **A** (international entrepreneur) / **B** | **WFOE** subsidiary of the US LLC (Shenzhen/Qianhai) | Capital subscribed, paid-in ≤5 yrs; salary ≥4× (B) / 6× (A) Shenzhen average; **K visa** as STEM entry (no employer) |
+| 🇹🇼 Taiwan | **Digital Nomad Visa** / **Gold Card** / **Entrepreneur Visa** | Taiwan company for the Entrepreneur Visa; no entity needed for DNV/Gold Card | DNV: US$40k (30+) / US$20k (20–29) income proof; Gold Card: professional credentials; Entrepreneur: NTD 2M investment/raise or incubator route |
 | 🇮🇪 Ireland | Critical Skills / STEP (€50k) | Irish company | Employment-permit route or STEP; 1G itself excludes self-employment |
 | 🇨🇦 / 🇦🇺 | No dedicated startup visa | — | Use PGWP / 485 (open work) after studying |
 
-> **Structural rule**: Japan, Singapore, and Korean founder visas anchor to a
-> **local company** — your Wyoming LLC cannot sponsor them. Plan for a local
-> entity (KK/GK, Pte Ltd, Yujik Hoesik) and treat the LLC as passive
-> holding/back-office during that phase.
+> **Structural rule**: Japan, Singapore, Korean, and Chinese founder routes
+> anchor to a **local company** — your Wyoming LLC cannot sponsor them. Plan
+> for a local entity (KK/GK, Pte Ltd, Yujik Hoesik, WFOE) and treat the LLC
+> as passive holding/back-office during that phase. Taiwan's Digital Nomad
+> Visa is the exception: it is built for running **your own foreign LLC**
+> remotely.
 
 ## Decision steps
 
 1. **Do you need active LLC income while there?**
-   - **No** → any of the seven; pick on education/tuition/immigration odds.
+   - **No** → any of the nine; pick on education/tuition/immigration odds.
      Keep LLC passive ([`maintain-llc-abroad`](maintain-llc-abroad.md)).
    - **Yes, a little, tracked** → **Australia** (self-employment inside
-     48 h/fortnight) is the only study route of the seven that tolerates it.
+     48 h/fortnight) is the only study route of the nine that tolerates it.
    - **Yes, unrestricted** → study and operating don't combine; pick a
      founder/nomad route first ([`visa-options`](visa-options.md)), study later.
 2. **Is the study or the business the priority?**
    - Study first → student visa + passive LLC; founder visa as the exit
-     (JP Startup Visa, SG EntrePass, KR D-8-4, IE Critical Skills).
+     (JP Startup Visa, SG EntrePass, KR D-8-4, IE Critical Skills, CN
+     WFOE + work permit, TW Entrepreneur Visa / Gold Card).
    - Business first → founder route directly: Freiberufler (DE), Startup
-     Visa/Business Manager (JP), EntrePass/ONE Pass (SG), OASIS D-8-4 (KR);
+     Visa/Business Manager (JP), EntrePass/ONE Pass (SG), OASIS D-8-4 (KR),
+     WFOE + work permit A/B (CN), Digital Nomad Visa / Gold Card (TW);
      study as a secondary plan.
 3. **How fast do you need to resume work after graduating?**
-   - Unrestricted work fastest: **Australia 485** ≈ **Canada PGWP** >
+   - Unrestricted work fastest: **Taiwan Digital Nomad Visa** (remote work
+     on your own LLC, 6 mo–2 yrs) > **Australia 485** ≈ **Canada PGWP** >
      **Ireland 1G** (no self-employment) > **Korea** (points pipeline) >
-     **Japan** (Business Manager bar: ¥30M + staff).
+     **Japan** (Business Manager bar: ¥30M + staff) ≈ **China** (WFOE +
+     work-permit chain).
 4. **Capital on hand?**
    - High (¥30M+): Japan Business Manager opens directly (via Startup Visa
-     grace). Medium (S$100k round or accelerator): Singapore EntrePass.
-     Low: Korea OASIS (points, not capital) or study-then-485/PGWP.
-5. **Tax exposure tolerance**: all seven make you tax-resident-ish past their
+     grace). Medium (S$100k round or accelerator): Singapore EntrePass;
+     China WFOE (subscribed capital, paid-in ≤5 years). Low: Korea OASIS
+     (points, not capital), Taiwan Entrepreneur Visa (NTD 2M raise or
+     incubator route), or study-then-485/PGWP.
+5. **Tax exposure tolerance**: all nine make you tax-resident-ish past their
    presence thresholds → worldwide income + **effective-management/CFC**
-   scrutiny on the LLC (DE §10 AO, JP, SG, KR CFC). Zero extra exposure
+   scrutiny on the LLC (DE §10 AO, JP, SG, KR CFC, TW CFC since 2023, CN
+   effective-management). Neither mainland China nor Taiwan offers a US
+   income-tax treaty that a disregarded SMLLC can use. Zero extra exposure
    mandates a **passive LLC** posture and clean US filings.
 
 ## Route cards
@@ -85,10 +99,12 @@ Japan, Singapore, South Korea, or none of the above.
 | R7 | 🇸🇬 Study + passive LLC → EntrePass / ONE Pass | SG degree or direct founder ambition; S$100k round or accelerator/YC | Passive while studying; local Pte Ltd required for pass |
 | R8 | 🇰🇷 Study D-2 + passive LLC → D-10-2 → D-8-4 (OASIS) | Korea degree + startup via points pipeline; patience for stages | Fully passive; local entity for D-8-4 |
 | R9 | Nomad visa(s) first, study later | Income now > degree now | Fully active |
+| R10 | 🇨🇳 Study X1 + passive LLC → WFOE + work permit A/B (or K visa for STEM) | China/Shenzhen is the target; hardware/AI founder ready to anchor a WFOE | Passive while studying; WFOE + local entity for the founder phase |
+| R11 | 🇹🇼 Study ARC + passive LLC → Digital Nomad Visa / Gold Card → Entrepreneur Visa | Taipei/Hsinchu hardware scene; wants remote-LLC legality now | DNV = own LLC runs remotely; local company only when scaling in TW |
 
 ## Verification note
 
-Immigration and tax rules in **all seven** countries change frequently (hour
+Immigration and tax rules in **all nine** countries change frequently (hour
 caps, capital thresholds, permits, residency tests). This command is a
 **router**: after picking a route, follow the country command and verify
 current rules with official sources / licensed advisors.
@@ -98,4 +114,5 @@ current rules with official sources / licensed advisors.
 - [`references/route-decision/protocol.md`](../../references/route-decision/protocol.md) — Detailed protocol
 - [`study-in-germany`](study-in-germany.md) · [`study-in-canada`](study-in-canada.md) · [`study-in-ireland`](study-in-ireland.md) · [`study-in-australia`](study-in-australia.md)
 - [`study-in-japan`](study-in-japan.md) · [`study-in-singapore`](study-in-singapore.md) · [`study-in-south-korea`](study-in-south-korea.md)
+- [`study-in-china`](study-in-china.md) · [`study-in-taiwan`](study-in-taiwan.md)
 - [`visa-options`](visa-options.md) · [`maintain-llc-abroad`](maintain-llc-abroad.md)

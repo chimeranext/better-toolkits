@@ -37,9 +37,11 @@ Legacy multi-turn tool loop: `REVIEWER_AGENTIC_LOOP=1`. Default mode never posts
    - `/secret-input` → `/secret-use NVIDIA_API_KEY -- <comando>` (preferred for
      agents), or
    - `infisical run -- <comando>` (centralized hygiene), or
-   - key-chain local (persisted, owner-only): `.{env}.nvidia.env` (repo,
-     gitignored) → `~/.agents/.heimdall.env` (0600, STAGING+PROD conviven con
-     nombres decorados). Env: `--env` / `HEIMDALL_NVIDIA_ENV` (default staging).
+   - key-chain local (persisted, owner-only): `.heimdall.env` — `<repo>/.heimdall.env`
+     (project scope, gitignored) → `~/.agents/.heimdall.env` (user scope, 0600;
+     STAGING+PROD conviven con nombres decorados). Env: `--env` /
+     `HEIMDALL_NVIDIA_ENV` (default staging); el env elige la variable dentro del
+     archivo, no el nombre del archivo.
    Never paste the key in chat, logs, or tracked files.
    **OpenRouter (optional):** for `openrouter-*` providers, set
    `OPENROUTER_API_KEY` (or decorated `OPENROUTER_API_KEY_STAGING` /

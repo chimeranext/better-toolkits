@@ -16,6 +16,17 @@ agent plugin install better-toolkits-bootstrap@better-toolkits
 agent plugin install make-no-mistakes@better-toolkits
 ```
 
+## Agent-agnostic skills
+
+Cursor "Added" installs the plugin. The same skills for every agent:
+
+```bash
+npx skills add chimeranext/better-toolkits --skill merge-advisor --agent '*' -g -y
+npx skills add chimeranext/better-toolkits --all -g
+```
+
+The skill names for one toolkit are the `skills` array in that toolkit's `package.json`. See [`docs/multi-harness-ssot.md`](../../../../docs/multi-harness-ssot.md).
+
 ## Stderr + PRDS — `beforeShellExecution`
 
 Propose merge into **user** or **project** `hooks.json` (ask which). Idempotent: skip if entries
@@ -62,27 +73,35 @@ User-global example (`~/.cursor/hooks.json`):
 }
 ```
 
-## Optional — marketplace auto-update (checkbox, default OFF)
+## Auto-update (default ON — register unless the user opts out)
 
-**Do not** register silently on plugin install. Only when user opts in during Phase 4:
+The source of truth is **`git pull --ff-only` on the monorepo clone**, then
+`agent plugin marketplace update better-toolkits`. One script per harness; the
+OpenCode equivalent is `update-better-toolkits-marketplace-opencode.sh`.
 
-1. Copy or reference `shared/bootstrap/scripts/update-better-toolkits-marketplace.sh` (or user script).
+1. Reference `shared/bootstrap/scripts/update-better-toolkits-marketplace-cursor.sh`
+   by absolute path into the clone (or copy it to `~/.cursor/hooks/`).
 2. Append to `hooks.json`:
 
 ```json
 "workspaceOpen": [
   {
-    "command": "bash ~/.cursor/hooks/update-better-toolkits-marketplace.sh"
+    "command": "bash ~/.cursor/hooks/update-better-toolkits-marketplace-cursor.sh"
   }
 ]
 ```
 
 Script requirements (see design):
 
-- Logs to `~/.cursor/hooks/logs/update-better-toolkits-marketplace-*.out|err.log`
-- Throttle (~30 min), fail-open (`exit 0`)
+- Branch policy: always converge on `main` (consumer). `--expert-mode` (author)
+  never switches branch and never touches a dirty tree.
+- Logs to `~/.cursor/hooks/logs/update-better-toolkits-marketplace-cursor-*.out|err.log`
+- Throttle (`BETTER_TOOLKITS_AUTO_UPDATE_INTERVAL_SECONDS`, default 1800), fail-open (`exit 0`)
 - Runs `agent plugin marketplace update better-toolkits`
 - No `2>/dev/null`
+
+Toggle any time with `better-toolkits auto-update enable|disable` (OpenCode) or by
+removing the `workspaceOpen` entry (Cursor).
 
 ## After marketplace version bump (maintainers)
 
@@ -104,7 +123,7 @@ find "${HOME}/.cursor/plugins/cache/chimeranext-better-toolkits" \
    slugs by hand after a bump — stale siblings break skills/commands.
 
 ```bash
-bash shared/bootstrap/scripts/prune-better-toolkits-cache.sh
+bash shared/bootstrap/scripts/prune-better-toolkits-cache-cursor.sh
 ```
 
 Slash commands SSOT: `shared/bootstrap/commands/` — e.g. `/toolkits-initial-setup`,

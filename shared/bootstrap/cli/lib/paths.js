@@ -97,16 +97,43 @@ export function resolveConfigDir(opts = {}) {
   return globalConfigDir();
 }
 
-export function discoveryDir() {
-  return join(globalConfigDir(), "plugins", "mnm-no-stderr-redirect");
+export function discoveryDir(configDir = globalConfigDir()) {
+  return join(configDir, "plugins", "mnm-no-stderr-redirect");
 }
 
-export function discoveryIndex() {
-  return join(discoveryDir(), "index.ts");
+export function discoveryIndex(configDir = globalConfigDir()) {
+  return join(discoveryDir(configDir), "index.ts");
 }
 
 export function commandsScript(repoRoot) {
   return join(repoRoot, "shared", "bootstrap", "scripts", "setup-opencode-commands.sh");
+}
+
+/**
+ * Auto-update plugin (#110). Installed as a discovery-dir copy (like the stderr
+ * adapter): no `"plugins"` entry, no config-key rewriting.
+ */
+export function autoUpdatePluginDir(configDir = globalConfigDir()) {
+  return join(configDir, "plugins", "better-toolkits-auto-update");
+}
+
+export function autoUpdatePluginIndex(configDir = globalConfigDir()) {
+  return join(autoUpdatePluginDir(configDir), "index.ts");
+}
+
+export function autoUpdateConfigPath(configDir = globalConfigDir()) {
+  return join(autoUpdatePluginDir(configDir), "config.json");
+}
+
+export function resolveAutoUpdatePluginSource(repoRoot) {
+  return join(
+    repoRoot,
+    "shared",
+    "bootstrap",
+    "opencode-plugins",
+    "better-toolkits-auto-update",
+    "index.ts",
+  );
 }
 
 export function detectScript(repoRoot) {
