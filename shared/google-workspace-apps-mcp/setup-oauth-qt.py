@@ -23,18 +23,23 @@ def run():
 
     # Izquierda: preguntas (compacto, igual densidad que referencias)
     left = tk.Frame(top, bg="#181818")
-    left.grid(row=0, column=0, sticky="nw", padx=4)
-    tk.Label(left, text="¿Qué estoy solicitándote?", bg="#181818", fg="#ddd", font=("Segoe UI", 10, "bold"), wraplength=600, anchor="w", justify="left").pack(anchor="w", pady=0)
-    tk.Label(left, text="Configurar tu propio OAuth client_id + remote rclone (gdrive) para que el MCP 'google-workspace-apps-mcp' sincronice sin exponer credenciales.", bg="#181818", fg="#ccc", font=("Segoe UI", 8), wraplength=600, anchor="w", justify="left").pack(anchor="w", pady=0)
-    tk.Label(left, text="¿Por qué motivo?", bg="#181818", fg="#ddd", font=("Segoe UI", 10, "bold"), wraplength=600, anchor="w", justify="left").pack(anchor="w", pady=0)
-    tk.Label(left, text="Google obliga (TOS y políticas OAuth) a que cada aplicación tenga su propio OAuth client para acceder a Drive. No puedes usar credenciales compartidas ni embebidas (ver evidencia TOS a continuación). Por eso debes ir a console.cloud.google.com y crear tu propio proyecto para sincronizar con rclone.", bg="#181818", fg="#ccc", font=("Segoe UI", 8), wraplength=600, anchor="w", justify="left").pack(anchor="w", pady=0)
+    left.grid(row=0, column=0, sticky="nsw", padx=4)
+    # Sub-frame centrado verticalmente para las preguntas
+    left_content = tk.Frame(left, bg="#181818")
+    left_content.pack(expand=True, pady=0)
+    tk.Label(left_content, text="¿Qué estoy solicitándote?", bg="#181818", fg="#ddd", font=("Segoe UI", 10, "bold"), wraplength=600, anchor="w", justify="left").pack(anchor="w", pady=0)
+    tk.Label(left_content, text="Configurar tu propio OAuth client_id + remote rclone (gdrive) para que el MCP 'google-workspace-apps-mcp' sincronice sin exponer credenciales.", bg="#181818", fg="#ccc", font=("Segoe UI", 8), wraplength=600, anchor="w", justify="left").pack(anchor="w", pady=0)
+    tk.Label(left_content, text="¿Por qué motivo?", bg="#181818", fg="#ddd", font=("Segoe UI", 10, "bold"), wraplength=600, anchor="w", justify="left").pack(anchor="w", pady=0)
+    tk.Label(left_content, text="Google obliga (TOS y políticas OAuth) a que cada aplicación tenga su propio OAuth client para acceder a Drive. No puedes usar credenciales compartidas ni embebidas (ver evidencia TOS a continuación). Por eso debes ir a console.cloud.google.com y crear tu propio proyecto para sincronizar con rclone.", bg="#181818", fg="#ccc", font=("Segoe UI", 8), wraplength=600, anchor="w", justify="left").pack(anchor="w", pady=0)
 
     # Derecha: referencias compactas clickeables (APA)
     import webbrowser
     ref_right = tk.Frame(top, bg="#181818")
+    ref_right.grid(row=0, column=2, sticky="nse", padx=4)
+    ref_content = tk.Frame(ref_right, bg="#181818")
+    ref_content.pack(expand=True, pady=0)
     tk.Label(top, text="", bg="#181818", width=6).grid(row=0, column=1, sticky="w", padx=2)
-    ref_right.grid(row=0, column=2, sticky="ne", padx=4)
-    tk.Label(ref_right, text="Referencias Legales", bg="#181818", fg="#ddd", font=("Segoe UI", 9, "bold"), anchor="w").pack(anchor="w", pady=0)
+    tk.Label(ref_content, text="Referencias Legales", bg="#181818", fg="#ddd", font=("Segoe UI", 9, "bold"), anchor="w").pack(anchor="w", pady=1)
     for ut, url in [
         ("• Google APIs Terms (§b.1): 'Developer credentials ... may not be embedded in open source projects.'", "https://dev.google.com/terms"),
         ("→ dev.google.com/terms", "https://dev.google.com/terms"),
@@ -46,11 +51,11 @@ def run():
         ("→ newscydriver.com/2016/12/27/limiting-google-client-id-exposure/", "https://newscydriver.com/2016/12/27/limiting-google-client-id-exposure/"),
     ]:
         if ut.startswith("• "):
-            lbl = tk.Label(ref_right, text=ut, bg="#181818", fg="#ccc", font=("Segoe UI", 8), wraplength=300, anchor="w", justify="left")
+            lbl = tk.Label(ref_content, text=ut, bg="#181818", fg="#ccc", font=("Segoe UI", 8), wraplength=300, anchor="w", justify="left")
         else:
-            lbl = tk.Label(ref_right, text=ut, bg="#181818", fg="#55aaff", font=("Segoe UI", 8, "underline"), cursor="hand2", anchor="w")
+            lbl = tk.Label(ref_content, text=ut, bg="#181818", fg="#55aaff", font=("Segoe UI", 8, "underline"), cursor="hand2", anchor="w")
             lbl.bind("<Button-1>", lambda e, u=url: webbrowser.open(u))
-        lbl.pack(anchor="w", pady=0)
+        lbl.pack(anchor="center", expand=True, fill="x", pady=0)
 
 # 3. FORMULARIO — 4 campos manuales, paso DEBAJO de cada input
     form = tk.LabelFrame(root, text="  Configuración paso a paso (cada paso debajo del campo)  ",
