@@ -12,6 +12,8 @@ When a user needs Slack MCP configured, the agent MUST ask **one** clean questio
 with exactly these two options — never the technical `§1 variante v2 /
 redirectUri pineado / app-assistant toggle` jargon:
 
+- **/secret-input obligatorio sin excepciones:** nunca usar `REPLACE_WITH_*`; pedir valores reales por `/secret-input`; no persistir credenciales en `.env` ni repos.
+
 - **A) Ya tengo mi Slack App configurada y tengo a mano nuestro Client ID y
   Client Secret.** → collect both (GUI form with two fields, or terminal without
   echo) and wire `setup install --slack-client-id <id>` + `setup-opencode-mcp-slack.sh
@@ -23,6 +25,14 @@ redirectUri pineado / app-assistant toggle` jargon:
 GUI note: `zenity --forms --add-entry="Client ID" --add-entry="Client Secret"`
 opens a single popup with both text boxes at once (kdialog/terminal fall back to
 two sequential prompts).
+
+GUI note — Google Workspace (`/secret-input`, 4 fields, scopes opt-in, `~/.local/.google-workspace.env`):
+`zenity --forms --title="/secret-input — Google Workspace" --text="Valores REALES (sin REPLACE_WITH_*):" --add-entry="GOOGLE_CLIENT_ID" --add-entry="GOOGLE_CLIENT_SECRET" --add-entry="GOOGLE_REFRESH_TOKEN" --add-entry="GOOGLE_DRIVE_FOLDER_ID"`
+
+Scopes — elegir todos los que necesites (opción por defecto, no hardcodeado):
+`zenity --list --checklist --title="Scope selection" --text="Selecciona todos los scopes de Google Workspace que usará este MCP:" --column="Seleccionar" --column="Scope" TRUE "https://www.googleapis.com/auth/drive.file" TRUE "https://www.googleapis.com/auth/gmail.readonly" FALSE "https://www.googleapis.com/auth/spreadsheets.readonly" FALSE "https://www.googleapis.com/auth/presentations.readonly" FALSE "https://www.googleapis.com/auth/documents.readonly" FALSE "https://www.googleapis.com/auth/calendar.readonly"`
+Resultado escribir a `~/.local/.google-workspace.env`: `GOOGLE_SCOPES=drive.file,gmail.readonly,...`
+Cross-platform: Linux (`zenity`/`kdialog`); macOS (`brew install zenity` / `osascript`); Windows (`powershell` checklist / WSL zenity). Commands executed and verified: `zenity --forms ...` (4 entries) + `zenity --list --checklist ...`; `google-for-gauth.ts` lee `WORKSPACE_ENV.GOOGLE_SCOPES`.
 
 Claves planas bajo `mcp`, SIN wrapper `servers` (el formato `mcp.servers` de la
 doc V2 es rechazado por esta versión con `Missing key mcp.servers.enabled`):
