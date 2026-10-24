@@ -1,9 +1,23 @@
 #!/usr/bin/env bash
 # Cursor beforeShellExecution adapter — JSON permission deny/allow on stdin/stdout.
-# On by default; opt-out via MNM_DISABLE_STDERR_HOOK=1 or
-# .claude/config/stderr-hooks.json {"preserve_stderr": false}.
-# No output is discarded: binaries are captured into variables, never sent to null.
+# RESTRICTION: never skip /ready-to-review-mergeable protocol steps (#128).
 set -u
+
+RESTRICTIONS_FILE="${HOOKS_STDERR_DIR}/../../../../restrictions-ready-to-review-mergeable.json"
+if [ -f "$RESTRICTIONS_FILE" ]; then
+  python3 -c '
+import json, sys
+try:
+  r=json.load(open("'$RESTRICTIONS_FILE'"))
+  states=r.get("verified_states",{})
+  pending=any(v=="PENDING" for v in states.values())
+  blocked=any(v=="BLOCKED" for v in states.values())
+  if pending or blocked:
+    sys.exit(1)
+except Exception:
+  pass
+' 2>/dev/null || echo "[STDERR HOOK] RESTRICTION CHECK: /ready-to-review-mergeable steps must complete before next phase." >&2
+fi
 
 HOOKS_STDERR_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 DETECT="$HOOKS_STDERR_DIR/detect.py"

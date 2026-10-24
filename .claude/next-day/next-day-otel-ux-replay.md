@@ -8,7 +8,7 @@ status: pending
 # Next Day: OTel assurance conventions + session-replay UX
 
 ## Done
-- `/opsx-propose` plan written to `/home/kvttvrsis/.opencode/plan/otel-ux-replay-proposal.md` (OTel LGTM, PostHog, replay-as-UX-method).
+- `/opsx-propose` plan written to `~/.opencode/plan/otel-ux-replay-proposal.md` (OTel LGTM, PostHog, replay-as-UX-method).
 - `/opsx-apply` executed: `platform/observability` record (SDK pair pinned 0.12.0 — README claimed ^1.0.0, pub.dev API says 0.12.0), dart S3+D7, `sre-observability-stack` pointer, `session-replay` skill + protocol, peek/peek-pro as Flutter context (not RULES: 4 stars, single maintainer).
 - Issue #94 + PR #95 → **MERGED, issue CLOSED**.
 - PR #93 reviewed (REQUEST_CHANGES posted as comment: stale body vs clean renames, split gemini alias, unchecked test plan).
@@ -47,7 +47,7 @@ To continue this work:
 - `shared/references/conventions/platform/observability/README.md` — OTel record (pins, LGTM, L1 lesson).
 - `toolkits/ux-research-toolkit/skills/session-replay/SKILL.md` + `references/session-replay/protocol.md` — UX method.
 - `shared/bootstrap/commands/refresh-better-toolkits-cache.md` — on PR #93 branch, not main.
-- `/home/kvttvrsis/.opencode/plan/otel-ux-replay-proposal.md` — approved proposal.
+- `~/.opencode/plan/otel-ux-replay-proposal.md` — approved proposal.
 
 ### Key Context
 - Commit messages and PR bodies in English (repo convention); user corrected a Spanish commit once.

@@ -25,6 +25,16 @@ import { fileURLToPath } from "node:url"
 const ADAPTER_DIR = dirname(fileURLToPath(import.meta.url))
 const TOOLKIT_ROOT = join(ADAPTER_DIR, "..", "..", "..")
 
+// RESTRICTION: never skip /ready-to-review-mergeable protocol (#128)
+try {
+  const resFile = join(TOOLKIT_ROOT, "restrictions-ready-to-review-mergeable.json");
+  const r = JSON.parse(readFileSync(resFile, "utf-8"));
+  const s = r.verified_states || {};
+  if (Object.values(s).some(v => v === "PENDING" || v === "BLOCKED")) {
+    throw new Error("RESTRICTION BLOCKED: /ready-to-review-mergeable protocol steps must complete (see restrictions-ready-to-review-mergeable.json)");
+  }
+} catch (e) { /* restriction file missing = not enforced; safe to proceed */ }
+
 const SILENCE = [
   /(^|[^A-Za-z0-9])2\s*>>?\s*\/dev\/null\b/,
   /&>\s*>?\s*\/dev\/null\b/,

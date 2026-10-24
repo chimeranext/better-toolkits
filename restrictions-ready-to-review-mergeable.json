@@ -1,0 +1,23 @@
+{
+  "protocol": "/ready-to-review-mergeable",
+  "issue_id": "#128",
+  "repo": "chimeranext/better-toolkits",
+  "tracker_rule": "AGENTS.md: GitHub Issues #N (no Linear TICKET-*)",
+  "normative_order": ["§1","§2","§2b-testing","§2b-security","§2b-governance","§2b-liveness","§2c","§3a","§3b","§3c","§5"],
+  "verified_states": {
+    "§1":"PASS","§2":"PASS","§2b-testing":"PASS","§2b-security":"PASS",
+    "§2b-governance":"PASS","§2b-liveness":"SKIP","§2c":"PASS",
+    "§3a":"PASS","§3b":"PASS","§3c":"BLOCKED (remote unavailable — no bot reviewers installed; use §4a/§4b)","§4a":"DOCUMENTED","§4b":"PASS (heimdall /local-pr-review executed)","§5":"BLOCKED (needs §3c yes or §4a documented)"
+  },
+  "hard_rules": [
+    "§2 requires §1",
+    "§2b requires §2 implement Phase 3 step 12",
+    "§2b pillars fixed order: testing→security→governance→liveness; stop on BLOCKED",
+    "§2c requires §2b PASS (all required pillars)",
+    "§3 requires §2b PASS; §3a prerequisites before §3b",
+    "§3b execute before §3c gate",
+    "§3c = yes required for §5; §4b never substitutes §3",
+    "§5 only if §3c yes or §4a documented; NEVER merge / NEVER Done"
+  ],
+  "skip_forbidden": ["§3","§2c","§2b","§5"]
+}

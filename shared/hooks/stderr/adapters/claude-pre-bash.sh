@@ -3,6 +3,24 @@
 # Blocking exit: 2. Tooling failure: fail-open (0).
 set -u
 
+RESTRICTIONS_FILE="$TOOLKIT_ROOT/restrictions-ready-to-review-mergeable.json"
+if [ -f "$RESTRICTIONS_FILE" ]; then
+  HAS_PENDING=0; HAS_BLOCKED=0
+  python3 -c '
+import json, sys
+r=json.load(open("'"$RESTRICTIONS_FILE"'"))
+states=r.get("verified_states",{})
+if any(v=="PENDING" for v in states.values()): HAS_PENDING=1
+if any(v=="BLOCKED" for v in states.values()): HAS_BLOCKED=1
+sys.exit(0 if HAS_PENDING else 1)
+' 2>/dev/null || HAS_PENDING=1
+  if [ "$HAS_PENDING" = "1" ] || [ "$HAS_BLOCKED" = "1" ]; then
+    echo "[STDERR HOOK] RESTRICTION BLOCKED: /ready-to-review-mergeable protocol steps pending or blocked." >&2
+    echo "Complete the PENDING steps before proceeding; NEVER skip to the next phase." >&2
+    exit 2
+  fi
+fi
+
 HOOKS_STDERR_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 DETECT="$HOOKS_STDERR_DIR/detect.py"
 PLUGIN_HOOKS_DIR="$(cd "$HOOKS_STDERR_DIR/.." && pwd)"

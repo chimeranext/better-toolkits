@@ -203,6 +203,7 @@ Report a table:
     shows `local.mnm-no-stderr-redirect` (loaded - presence alone is not enough).
  2. `shared/bootstrap/scripts/setup-opencode-commands.sh --check` -> `CHECK OK`
     (exit 0 = every expected symlink resolves; orphans pruned on next run).
+  2b. Cache refresh / prune (before re-check): `bash shared/bootstrap/scripts/prune-better-toolkits-cache.sh`; `/refresh-better-toolkits-cache`; then revert to step 2.
  3. Offline gate: `python3 shared/hooks/stderr/detect.py --command "$(cat /tmp/opencode/probe.txt)"`
     -> exit **2**, where probe.txt holds a silenced-stderr command written with
     your editor (never type the literal in the shell - the live hook blocks it
