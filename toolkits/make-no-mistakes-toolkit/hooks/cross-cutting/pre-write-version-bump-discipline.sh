@@ -57,7 +57,7 @@ cc_load_config || exit 0
 
 # version_bumps is an array; this surface has no top-level enabled/defer
 # (the per-entry defer_to_local_hook handles the belt-and-braces).
-ENTRIES_COUNT=$(printf '%s' "$CONFIG_JSON" | jq -r ".${SURFACE} | length // 0" 2>/dev/null)
+ENTRIES_COUNT=$(printf '%s' "$CONFIG_JSON" | jq -r ".${SURFACE} | length // 0" )
 ENTRIES_COUNT=${ENTRIES_COUNT:-0}
 if [[ "$ENTRIES_COUNT" == "0" ]]; then
   exit 0
@@ -66,14 +66,14 @@ fi
 # Locate repo root (needed to resolve validator paths + read HEAD blob).
 REPO_ROOT="${CLAUDE_PROJECT_ROOT:-}"
 if [[ -z "$REPO_ROOT" || ! -d "$REPO_ROOT/.git" ]]; then
-  REPO_ROOT="$(cc_find_repo_root 2>/dev/null)" || REPO_ROOT=""
+  REPO_ROOT="$(cc_find_repo_root )" || REPO_ROOT=""
 fi
 if [[ -z "$REPO_ROOT" || ! -d "$REPO_ROOT/.git" ]]; then
   echo "[${HOOK_NAME}] WARN: cannot locate repo root; failing open." >&2
   exit 0
 fi
 
-if ! command -v git >/dev/null 2>&1; then
+if ! command -v git >/dev/null; then
   echo "[${HOOK_NAME}] WARN: git not on PATH; failing open." >&2
   exit 0
 fi
@@ -87,17 +87,17 @@ MATCH_VALIDATOR_ARGS_JSON="[]"
 MATCH_DEFER="false"
 
 for i in $(seq 0 $((ENTRIES_COUNT - 1))); do
-  fp=$(printf '%s' "$CONFIG_JSON" | jq -r ".${SURFACE}[$i].file_pattern // empty" 2>/dev/null)
+  fp=$(printf '%s' "$CONFIG_JSON" | jq -r ".${SURFACE}[$i].file_pattern // empty" )
   [[ -z "$fp" ]] && continue
   # Match basename or trailing-component glob.
   case "$FILE_PATH" in
     */"$fp"|"$fp"|*"$fp")
       MATCH_IDX="$i"
       MATCH_FILE_PATTERN="$fp"
-      MATCH_VERSION_REGEX=$(printf '%s' "$CONFIG_JSON" | jq -r ".${SURFACE}[$i].version_regex // empty" 2>/dev/null)
-      MATCH_VALIDATOR=$(printf '%s' "$CONFIG_JSON" | jq -r ".${SURFACE}[$i].validator_script // empty" 2>/dev/null)
-      MATCH_VALIDATOR_ARGS_JSON=$(printf '%s' "$CONFIG_JSON" | jq -c ".${SURFACE}[$i].validator_args // []" 2>/dev/null)
-      MATCH_DEFER=$(printf '%s' "$CONFIG_JSON" | jq -r ".${SURFACE}[$i].defer_to_local_hook // false" 2>/dev/null)
+      MATCH_VERSION_REGEX=$(printf '%s' "$CONFIG_JSON" | jq -r ".${SURFACE}[$i].version_regex // empty" )
+      MATCH_VALIDATOR=$(printf '%s' "$CONFIG_JSON" | jq -r ".${SURFACE}[$i].validator_script // empty" )
+      MATCH_VALIDATOR_ARGS_JSON=$(printf '%s' "$CONFIG_JSON" | jq -c ".${SURFACE}[$i].validator_args // []" )
+      MATCH_DEFER=$(printf '%s' "$CONFIG_JSON" | jq -r ".${SURFACE}[$i].defer_to_local_hook // false" )
       break
       ;;
   esac
@@ -160,7 +160,7 @@ case "$REL_PATH" in
   "$REPO_ROOT"/*) REL_PATH="${REL_PATH#${REPO_ROOT}/}" ;;
 esac
 
-OLD_BLOB=$(git -C "$REPO_ROOT" show "HEAD:${REL_PATH}" 2>/dev/null || true)
+OLD_BLOB=$(git -C "$REPO_ROOT" show "HEAD:${REL_PATH}"  || true)
 if [[ -z "$OLD_BLOB" ]]; then
   # File is new at HEAD — no version to compare against; pass.
   exit 0
@@ -192,7 +192,7 @@ EXTRA_ARGS=()
 while IFS= read -r arg; do
   [[ -z "$arg" ]] && continue
   EXTRA_ARGS+=("$arg")
-done < <(printf '%s' "$MATCH_VALIDATOR_ARGS_JSON" | jq -r '.[]' 2>/dev/null)
+done < <(printf '%s' "$MATCH_VALIDATOR_ARGS_JSON" | jq -r '.[]' )
 
 set +e
 "$VALIDATOR_ABS" "$OLD_VERSION" "$NEW_VERSION" "${EXTRA_ARGS[@]}"

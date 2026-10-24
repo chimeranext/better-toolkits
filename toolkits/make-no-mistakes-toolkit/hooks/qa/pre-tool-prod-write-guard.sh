@@ -67,7 +67,7 @@ HOOK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="${CLAUDE_PROJECT_DIR:-$(pwd)}"
 CONTRACT_JSON="${REPO_ROOT}/.claude/qa/prod-origins.json"
 
-if ! command -v jq >/dev/null 2>&1; then
+if ! command -v jq >/dev/null; then
   echo "[pre-tool-prod-write-guard.sh] WARN: jq not found; failing open." >&2
   exit 0
 fi
@@ -79,7 +79,7 @@ fi
 
 HOOK_INPUT=$(cat)
 
-TOOL_NAME=$(printf '%s\n' "$HOOK_INPUT" | jq -r '.tool_name // empty' 2>/dev/null) || {
+TOOL_NAME=$(printf '%s\n' "$HOOK_INPUT" | jq -r '.tool_name // empty' ) || {
   echo "[pre-tool-prod-write-guard.sh] WARN: jq parse failed; failing open." >&2
   exit 0
 }
@@ -93,17 +93,17 @@ while IFS= read -r pat; do
     IS_MUTATING="yes"
     break
   fi
-done < <(jq -r '.mutatingToolPatterns[]?' "$CONTRACT_JSON" 2>/dev/null)
+done < <(jq -r '.mutatingToolPatterns[]?' "$CONTRACT_JSON" )
 [[ -z "$IS_MUTATING" ]] && exit 0
 
 # --- (2) Resolve the page origin --------------------------------------------
-TOOL_INPUT_RAW=$(printf '%s\n' "$HOOK_INPUT" | jq -c '.tool_input // {}' 2>/dev/null) || TOOL_INPUT_RAW="{}"
+TOOL_INPUT_RAW=$(printf '%s\n' "$HOOK_INPUT" | jq -c '.tool_input // {}' ) || TOOL_INPUT_RAW="{}"
 
 ORIGIN=""
 ORIGIN_SOURCE=""
 
 # (a) An explicit URL on the call itself.
-CANDIDATE=$(printf '%s\n' "$HOOK_INPUT" | jq -r '.tool_input.url // .tool_input.href // empty' 2>/dev/null) || CANDIDATE=""
+CANDIDATE=$(printf '%s\n' "$HOOK_INPUT" | jq -r '.tool_input.url // .tool_input.href // empty' ) || CANDIDATE=""
 if [[ -n "$CANDIDATE" ]]; then
   ORIGIN="$CANDIDATE"
   ORIGIN_SOURCE="tool_input.url"
@@ -117,9 +117,9 @@ fi
 
 # (c) The adapter's recorded current origin.
 if [[ -z "$ORIGIN" ]]; then
-  ORIGIN_FILE_REL=$(jq -r '.currentOriginFile // empty' "$CONTRACT_JSON" 2>/dev/null) || ORIGIN_FILE_REL=""
+  ORIGIN_FILE_REL=$(jq -r '.currentOriginFile // empty' "$CONTRACT_JSON" ) || ORIGIN_FILE_REL=""
   if [[ -n "$ORIGIN_FILE_REL" && -f "${REPO_ROOT}/${ORIGIN_FILE_REL}" ]]; then
-    ORIGIN=$(head -1 "${REPO_ROOT}/${ORIGIN_FILE_REL}" 2>/dev/null | tr -d '[:space:]')
+    ORIGIN=$(head -1 "${REPO_ROOT}/${ORIGIN_FILE_REL}"  | tr -d '[:space:]')
     ORIGIN_SOURCE="$ORIGIN_FILE_REL"
   fi
 fi
@@ -148,7 +148,7 @@ while IFS= read -r prod; do
     MATCHED_ORIGIN="$prod"
     break
   fi
-done < <(jq -r '.prodOrigins[]?' "$CONTRACT_JSON" 2>/dev/null)
+done < <(jq -r '.prodOrigins[]?' "$CONTRACT_JSON" )
 
 # (d) Independent corroboration from the payload itself.
 #
@@ -188,7 +188,7 @@ if [[ -z "$IS_PROD" ]]; then
       fi
       break
     fi
-  done < <(jq -r '.prodOrigins[]?' "$CONTRACT_JSON" 2>/dev/null)
+  done < <(jq -r '.prodOrigins[]?' "$CONTRACT_JSON" )
 fi
 
 # Not PROD (or origin unresolvable) -> allow. Local-first rounds run unimpeded.
@@ -197,8 +197,8 @@ if [[ -z "$IS_PROD" ]]; then
 fi
 
 # --- (3)/(4) Armed token ------------------------------------------------------
-SEARCH_ROOT=$(jq -r '.armedTokenSearchRoot // empty' "$CONTRACT_JSON" 2>/dev/null) || SEARCH_ROOT=""
-TOKEN_NAME=$(jq -r '.armedTokenFilename // empty' "$CONTRACT_JSON" 2>/dev/null) || TOKEN_NAME=""
+SEARCH_ROOT=$(jq -r '.armedTokenSearchRoot // empty' "$CONTRACT_JSON" ) || SEARCH_ROOT=""
+TOKEN_NAME=$(jq -r '.armedTokenFilename // empty' "$CONTRACT_JSON" ) || TOKEN_NAME=""
 
 if [[ -z "$SEARCH_ROOT" || -z "$TOKEN_NAME" ]]; then
   echo "[pre-tool-prod-write-guard.sh] WARN: could not read armed-token config; failing open." >&2
@@ -209,18 +209,18 @@ TOKEN_PATH=""
 if [[ -n "${MNM_QA_ARMED_TOKEN:-}" && -f "${MNM_QA_ARMED_TOKEN}" ]]; then
   TOKEN_PATH="${MNM_QA_ARMED_TOKEN}"
 elif [[ -d "${REPO_ROOT}/${SEARCH_ROOT}" ]]; then
-  TOKEN_PATH=$(find "${REPO_ROOT}/${SEARCH_ROOT}" -maxdepth 2 -type f -name "$TOKEN_NAME" 2>/dev/null | head -1)
+  TOKEN_PATH=$(find "${REPO_ROOT}/${SEARCH_ROOT}" -maxdepth 2 -type f -name "$TOKEN_NAME"  | head -1)
 fi
 
 TOKEN_REASON=""
 if [[ -n "$TOKEN_PATH" && -f "$TOKEN_PATH" ]]; then
-  TOKEN_REASON=$(tr -d '\000' < "$TOKEN_PATH" 2>/dev/null | grep -v '^[[:space:]]*$' | head -3)
+  TOKEN_REASON=$(tr -d '\000' < "$TOKEN_PATH"  | grep -v '^[[:space:]]*$' | head -3)
 fi
 
 if [[ -n "$TOKEN_PATH" && -n "$TOKEN_REASON" ]]; then
   # Consume it: single-use, with an audit trail for the residue inventory.
   CONSUMED="${TOKEN_PATH}.consumed-$(date -u +%s)"
-  if mv "$TOKEN_PATH" "$CONSUMED" 2>/dev/null; then
+  if mv "$TOKEN_PATH" "$CONSUMED" ; then
     echo "[pre-tool-prod-write-guard.sh] PROD write ARMED and CONSUMED (${TOOL_NAME} on ${MATCHED_ORIGIN})." >&2
     echo "  authorized: ${TOKEN_REASON}" >&2
     echo "  token spent -> ${CONSUMED#"${REPO_ROOT}/"}" >&2

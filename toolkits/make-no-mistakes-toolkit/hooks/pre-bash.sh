@@ -24,7 +24,7 @@ HOOKS_DIR="$(cd "$(dirname "$0")" && pwd)"
 RULES_JSON="$HOOKS_DIR/rules/rules.json"
 EVAL_RULE="$HOOKS_DIR/lib/eval-rule.sh"
 
-if [ ! -f "$RULES_JSON" ] || ! command -v jq >/dev/null 2>&1; then
+if [ ! -f "$RULES_JSON" ] || ! command -v jq >/dev/null; then
   # Manifest missing or jq absent — fail open. The hook should never block
   # the user because of an installation issue with the plugin itself.
   exit 0

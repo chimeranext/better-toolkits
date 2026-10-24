@@ -15,7 +15,7 @@ REPO="${2:?Usage: check-greptile.sh <PR_NUMBER> <OWNER/REPO>}"
 
 # Fetch issue comments (Greptile posts as issue comments, not PR review comments)
 COMMENTS=$(gh api "repos/${REPO}/issues/${PR_NUMBER}/comments" \
-  --jq '[.[] | select(.user.login | test("greptile"; "i")) | .body]' 2>/dev/null) || {
+  --jq '[.[] | select(.user.login | test("greptile"; "i")) | .body]' ) || {
   echo "ERROR"
   exit 1
 }
@@ -24,7 +24,7 @@ COMMENTS=$(gh api "repos/${REPO}/issues/${PR_NUMBER}/comments" \
 if [ "$COMMENTS" = "[]" ] || [ -z "$COMMENTS" ]; then
   # Check if Greptile bot exists as a collaborator
   GREPTILE_BOT=$(gh api "repos/${REPO}/collaborators" \
-    --jq '[.[].login | select(test("greptile"; "i"))] | length' 2>/dev/null) || GREPTILE_BOT="0"
+    --jq '[.[].login | select(test("greptile"; "i"))] | length' ) || GREPTILE_BOT="0"
 
   if [ "$GREPTILE_BOT" = "0" ]; then
     echo "NO_GREPTILE"

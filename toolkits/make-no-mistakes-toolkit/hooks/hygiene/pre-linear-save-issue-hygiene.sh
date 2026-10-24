@@ -28,7 +28,7 @@ set -euo pipefail
 
 INPUT="$(cat)"
 
-command -v jq >/dev/null 2>&1 || exit 0  # fail-open: never block on missing infra
+command -v jq >/dev/null || exit 0  # fail-open: never block on missing infra
 
 # --- Per-repo opt-in gate (no-op if the consumer repo has not enabled it) ---
 REPO_ROOT="${CLAUDE_PROJECT_DIR:-$(pwd)}"
@@ -36,15 +36,15 @@ CFG="$REPO_ROOT/.claude/config/hygiene-hooks.json"
 # Three explicit fail-open steps: (a) config is readable, (b) config is valid
 # JSON, (c) the opt-in flag is set. Any failure no-ops rather than blocking.
 [ -r "$CFG" ] || exit 0                        # (a) readable (also covers absent)
-jq -e . "$CFG" >/dev/null 2>&1 || exit 0       # (b) valid JSON
-ENABLED="$(jq -r '.linear_create_hygiene // false' "$CFG" 2>/dev/null)" || exit 0
+jq -e . "$CFG" >/dev/null || exit 0       # (b) valid JSON
+ENABLED="$(jq -r '.linear_create_hygiene // false' "$CFG" )" || exit 0
 [ "$ENABLED" = "true" ] || exit 0              # (c) opt-in flag
 
-TOOL_INPUT="$(printf '%s' "$INPUT" | jq -r '.tool_input // empty' 2>/dev/null)" || exit 0
+TOOL_INPUT="$(printf '%s' "$INPUT" | jq -r '.tool_input // empty' )" || exit 0
 [ -n "$TOOL_INPUT" ] || exit 0
 
 # Updates (id present) are out of scope — only creations are gated.
-HAS_ID="$(printf '%s' "$TOOL_INPUT" | jq -r 'has("id")' 2>/dev/null)" || exit 0
+HAS_ID="$(printf '%s' "$TOOL_INPUT" | jq -r 'has("id")' )" || exit 0
 [ "$HAS_ID" = "true" ] && exit 0
 
 MISSING=()
@@ -63,8 +63,8 @@ case "$PRIORITY" in
 esac
 
 # labels must carry at least one (Type/Component/Size per the team's taxonomy)
-LABELS_COUNT="$(printf '%s' "$TOOL_INPUT" | jq -r '(.labels // []) | if type == "array" then length else 0 end' 2>/dev/null)" || LABELS_COUNT=0
-[ "${LABELS_COUNT:-0}" -ge 1 ] 2>/dev/null || MISSING+=("labels (at least one — Type/Component/Size; emoji-prefix labels need the exact emoji)")
+LABELS_COUNT="$(printf '%s' "$TOOL_INPUT" | jq -r '(.labels // []) | if type == "array" then length else 0 end' )" || LABELS_COUNT=0
+[ "${LABELS_COUNT:-0}" -ge 1 ]  || MISSING+=("labels (at least one — Type/Component/Size; emoji-prefix labels need the exact emoji)")
 
 # milestone — the project milestone this issue belongs to
 MILESTONE="$(printf '%s' "$TOOL_INPUT" | jq -r '.milestone // empty')"

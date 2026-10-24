@@ -23,7 +23,7 @@ set -euo pipefail
 ulimit -c 0  # disable core dumps to prevent post-mortem secret extraction
 
 detect_os() {
-  case "$(uname -s 2>/dev/null || echo Unknown)" in
+  case "$(uname -s  || echo Unknown)" in
     Linux*)               echo "linux" ;;
     Darwin*)              echo "macos" ;;
     MINGW*|MSYS*|CYGWIN*) echo "windows" ;;
@@ -51,11 +51,11 @@ prompt_gui() {
   local title="$1" text="$2"
   case "$(detect_os)" in
     linux)
-      if command -v zenity >/dev/null 2>&1; then
-        zenity --password --title="$title" --text="$text" 2>/dev/null
-      elif command -v kdialog >/dev/null 2>&1; then
+      if command -v zenity >/dev/null; then
+        zenity --password --title="$title" --text="$text" 
+      elif command -v kdialog >/dev/null; then
         kdialog --title "$title" --password "$text"
-      elif command -v pinentry-gtk2 >/dev/null 2>&1; then
+      elif command -v pinentry-gtk 2>&1; then
         printf 'SETTITLE %s\nSETPROMPT %s\nGETPIN\n' "$title" "$text" \
           | pinentry-gtk2 \
           | awk '/^D / { sub(/^D /, ""); print }'
@@ -65,7 +65,7 @@ prompt_gui() {
       fi
       ;;
     macos)
-      if ! command -v osascript >/dev/null 2>&1; then
+      if ! command -v osascript >/dev/null; then
         echo "ERROR: osascript not available (macOS standard tool missing)" >&2
         return 1
       fi
@@ -79,10 +79,10 @@ prompt_gui() {
         -e '  return text returned of d' \
         -e 'on error' \
         -e '  return ""' \
-        -e 'end try' 2>/dev/null
+        -e 'end try' 
       ;;
     windows)
-      if ! command -v powershell.exe >/dev/null 2>&1; then
+      if ! command -v powershell.exe >/dev/null; then
         echo "ERROR: powershell.exe not in PATH (need Git Bash, MSYS2, or WSL with Windows interop)" >&2
         return 1
       fi
@@ -93,7 +93,7 @@ prompt_gui() {
         $ErrorActionPreference = "SilentlyContinue"
         $cred = Get-Credential -UserName "secret" -Message $env:MNM_TEXT -Title $env:MNM_TITLE
         if ($cred) { $cred.GetNetworkCredential().Password }
-      ' 2>/dev/null | tr -d '\r'
+      '  | tr -d '\r'
       ;;
     *)
       echo "ERROR: unsupported OS ($(uname -s)) for GUI prompt" >&2
@@ -103,25 +103,25 @@ prompt_gui() {
 }
 
 file_perms() {
-  stat -c '%a' "$1" 2>/dev/null \
-    || stat -f '%OLp' "$1" 2>/dev/null \
+  stat -c '%a' "$1"  \
+    || stat -f '%OLp' "$1"  \
     || echo "unknown"
 }
 
 set_perms_600() {
   # No-op on Windows where chmod doesn't enforce ACLs the same way,
   # but we still try in case POSIX layer respects it (Git Bash, WSL).
-  chmod 600 "$1" 2>/dev/null || true
+  chmod 600 "$1"  || true
 }
 
 secure_delete() {
   local f="$1"
   [ -f "$f" ] || return 0
-  if command -v shred >/dev/null 2>&1; then
-    shred -u "$f" 2>/dev/null && return 0
+  if command -v shred >/dev/null; then
+    shred -u "$f"  && return 0
   fi
   if [ "$(detect_os)" = "macos" ]; then
-    rm -P "$f" 2>/dev/null && return 0
+    rm -P "$f"  && return 0
   fi
   rm -f "$f"
 }
@@ -151,7 +151,7 @@ cmd_prompt() {
   local size perms backing
   size=$(wc -c < "$SECRET_PATH" | tr -d ' ')
   perms=$(file_perms "$SECRET_PATH")
-  backing=$(stat -f -c '%T' "$SECRET_PATH" 2>/dev/null || echo "unknown")
+  backing=$(stat -f -c '%T' "$SECRET_PATH"  || echo "unknown")
 
   echo "Staged at $SECRET_PATH (mode $perms, $size bytes)"
   echo "Backing store: $backing"

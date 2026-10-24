@@ -54,7 +54,7 @@ SECRET_PATH="$(detect_runtime_dir)/mnm-secret"
 # Matches the probe form already used in this repo's Makefile. `command -v`
 # writes nothing to stderr on a miss, so nothing diagnostic is discarded here —
 # which is why this is the one place the plain form is right.
-have() { command -v "$1" >/dev/null 2>&1; }
+have() { command -v "$1" >/dev/null; }
 
 # ---------------------------------------------------------------------------
 # Alphabets. The symbol class deliberately EXCLUDES ' " ` \ — a generated secret

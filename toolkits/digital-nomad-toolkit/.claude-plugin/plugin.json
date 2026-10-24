@@ -1,7 +1,7 @@
 {
   "name": "digital-nomad-toolkit",
-  "version": "1.2.0",
-  "description": "Guide for freelancers and digital nomads who want to operate as a US Single-Member LLC without jumping to a startup or shared services. Covers entity formation, tax compliance, remote banking, international billing (MSA B2B), visa options, and studying or founding abroad (Germany, Canada, Ireland, Australia, Japan, Singapore, South Korea, China, Taiwan). FREE.",
+  "version": "1.1.1",
+  "description": "Guide for freelancers and digital nomads who want to operate as a US Single-Member LLC without jumping to a startup or shared services. Covers entity formation, tax compliance, remote banking, international billing (MSA B2B), visa options, and studying or founding abroad (Germany, Canada, Ireland, Australia, Japan, Singapore, South Korea). FREE.",
   "author": {
     "name": "Luis Andres Pena Castillo",
     "url": "https://github.com/lapc506"
@@ -21,11 +21,6 @@
     "visa",
     "study-abroad",
     "student-visa",
-    "founder-visa",
-    "china",
-    "taiwan",
-    "shenzhen",
-    "wfoe",
-    "gold-card"
+    "founder-visa"
   ]
 }

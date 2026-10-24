@@ -3,12 +3,12 @@
 set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 INPUT="$(cat)"
-CMD="$(printf '%s' "${INPUT}" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("command",""))' 2>/dev/null || true)"
+CMD="$(printf '%s' "${INPUT}" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("command",""))'  || true)"
 if [[ "${CMD}" != git\ commit* ]]; then
   exit 0
 fi
 cd "${REPO_ROOT}"
-mapfile -t FILES < <(git diff --cached --name-only --diff-filter=ACMR 2>/dev/null || true)
+mapfile -t FILES < <(git diff --cached --name-only --diff-filter=ACMR  || true)
 if [[ "${#FILES[@]}" -eq 0 ]]; then
   exit 0
 fi
