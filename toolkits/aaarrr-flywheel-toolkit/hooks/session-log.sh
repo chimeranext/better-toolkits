@@ -17,7 +17,7 @@ find_aaarrr_dir() {
   return 1
 }
 
-AAARRR_DIR=$(find_aaarrr_dir 2>/dev/null) || exit 0
+AAARRR_DIR=$(find_aaarrr_dir ) || exit 0
 
 LEARNINGS_DIR="$AAARRR_DIR/learnings"
 SESSION_LOG="$LEARNINGS_DIR/session-log.md"
@@ -39,17 +39,17 @@ HEADER
 fi
 
 CHANGED_FILES=""
-if command -v git &>/dev/null && git rev-parse --is-inside-work-tree &>/dev/null 2>&1; then
-  CHANGED_FILES=$(git status --porcelain "$AAARRR_DIR" 2>/dev/null | head -20 || true)
+if command -v git >/dev/null && git rev-parse --is-inside-work-tree >/dev/null; then
+  CHANGED_FILES=$(git status --porcelain "$AAARRR_DIR"  | head -20 || true)
 fi
 
 AREAS_TOUCHED=""
 for area in plans metrics learnings diagnoses experiments cohorts; do
-  if echo "$CHANGED_FILES" | grep -q "$area/" 2>/dev/null; then
+  if echo "$CHANGED_FILES" | grep -q "$area/" ; then
     AREAS_TOUCHED="${AREAS_TOUCHED}${area}, "
   fi
 done
-if echo "$CHANGED_FILES" | grep -q "config.json" 2>/dev/null; then
+if echo "$CHANGED_FILES" | grep -q "config.json" ; then
   AREAS_TOUCHED="${AREAS_TOUCHED}config, "
 fi
 AREAS_TOUCHED=$(echo "$AREAS_TOUCHED" | sed 's/, $//')

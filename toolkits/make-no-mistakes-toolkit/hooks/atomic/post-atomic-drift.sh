@@ -26,7 +26,7 @@ fi
 HOOKS_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 LIB_DIR="$HOOKS_DIR/lib"
 
-if [ ! -f "$LIB_DIR/parse-input.sh" ] || ! command -v jq >/dev/null 2>&1; then
+if [ ! -f "$LIB_DIR/parse-input.sh" ] || ! command -v jq >/dev/null; then
   exit 0
 fi
 
@@ -64,7 +64,7 @@ find_config() {
 }
 
 CONFIG_PATH="$(find_config "$INPUT_FILE_PATH" || true)"
-if [ -z "$CONFIG_PATH" ] || [ ! -f "$CONFIG_PATH" ] || ! jq empty "$CONFIG_PATH" 2>/dev/null; then
+if [ -z "$CONFIG_PATH" ] || [ ! -f "$CONFIG_PATH" ] || ! jq empty "$CONFIG_PATH" ; then
   exit 0
 fi
 
@@ -136,7 +136,7 @@ warn() {
 # -----------------------------------------------------------------------------
 ORG_DIR="$PILLAR_DIR/$ORGANISMS_FOLDER"
 if [ -d "$ORG_DIR" ]; then
-  ORG_COUNT="$(find "$ORG_DIR" -type f \( -name '*.tsx' -o -name '*.ts' -o -name '*.jsx' -o -name '*.js' \) 2>/dev/null | wc -l | tr -d ' ')"
+  ORG_COUNT="$(find "$ORG_DIR" -type f \( -name '*.tsx' -o -name '*.ts' -o -name '*.jsx' -o -name '*.js' \)  | wc -l | tr -d ' ')"
   if [ "$ORG_COUNT" -gt "$MAX_ORGANISMS" ]; then
     warn "organisms-cap-exceeded" \
 "Pillar '${TARGET_PILLAR_FOLDER}' has ${ORG_COUNT} organisms (threshold: ${MAX_ORGANISMS}).
@@ -158,7 +158,7 @@ fi
 ROOT_COUNT="$(find "$PILLAR_DIR" -maxdepth 1 -type f \
   \( -name '*.tsx' -o -name '*.ts' -o -name '*.jsx' -o -name '*.js' \) \
   ! -name 'index.ts' ! -name 'index.tsx' ! -name 'index.js' ! -name 'index.jsx' \
-  2>/dev/null | wc -l | tr -d ' ')"
+   | wc -l | tr -d ' ')"
 if [ "$ROOT_COUNT" -gt "$MAX_ROOT_FILES" ]; then
   warn "pillar-root-flat" \
 "Pillar '${TARGET_PILLAR_FOLDER}' has ${ROOT_COUNT} files directly at its root (threshold: ${MAX_ROOT_FILES}).
@@ -175,7 +175,7 @@ fi
 # -----------------------------------------------------------------------------
 STALE_FILES="$(find "$PILLAR_DIR" -type f -name 'Public*' \
   \( -name '*.tsx' -o -name '*.ts' -o -name '*.jsx' -o -name '*.js' \) \
-  -mtime "+$STALE_DAYS" 2>/dev/null | head -5)"
+  -mtime "+$STALE_DAYS"  | head -5)"
 if [ -n "$STALE_FILES" ]; then
   warn "public-prefix-stale" \
 "Stale 'Public*' files in pillar '${TARGET_PILLAR_FOLDER}' (untouched > ${STALE_DAYS} days):
@@ -205,7 +205,7 @@ case "$BASENAME" in
       [ -z "$OTHER_FOLDER" ] && continue
       OTHER_DIR="$COMPONENTS_ABS/$OTHER_FOLDER"
       [ ! -d "$OTHER_DIR" ] && continue
-      HITS="$(find "$OTHER_DIR" -type f -name "$BASENAME" 2>/dev/null | head -3)"
+      HITS="$(find "$OTHER_DIR" -type f -name "$BASENAME"  | head -3)"
       if [ -n "$HITS" ]; then
         if [ -z "$DUPLICATES" ]; then
           DUPLICATES="$HITS"

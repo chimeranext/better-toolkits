@@ -66,7 +66,7 @@ if cc_surface_defer_to_local "$SURFACE"; then
 fi
 
 # Resolve migration_paths (default ["supabase/migrations"]).
-MIG_PATHS_JSON=$(printf '%s' "$CONFIG_JSON" | jq -c ".${SURFACE}.migration_paths // [\"supabase/migrations\"]" 2>/dev/null)
+MIG_PATHS_JSON=$(printf '%s' "$CONFIG_JSON" | jq -c ".${SURFACE}.migration_paths // [\"supabase/migrations\"]" )
 if [[ -z "$MIG_PATHS_JSON" || "$MIG_PATHS_JSON" == "null" || "$MIG_PATHS_JSON" == "[]" ]]; then
   MIG_PATHS_JSON='["supabase/migrations"]'
 fi
@@ -82,15 +82,15 @@ while IFS= read -r p; do
       break
       ;;
   esac
-done < <(printf '%s' "$MIG_PATHS_JSON" | jq -r '.[]' 2>/dev/null)
+done < <(printf '%s' "$MIG_PATHS_JSON" | jq -r '.[]' )
 
 if [[ "$IN_MIG_PATH" != "1" ]]; then
   exit 0
 fi
 
 # Resolve owned_tables.
-OWNED_TABLES_JSON=$(printf '%s' "$CONFIG_JSON" | jq -c ".${SURFACE}.owned_tables // []" 2>/dev/null)
-OWNED_COUNT=$(printf '%s' "$OWNED_TABLES_JSON" | jq -r 'length' 2>/dev/null)
+OWNED_TABLES_JSON=$(printf '%s' "$CONFIG_JSON" | jq -c ".${SURFACE}.owned_tables // []" )
+OWNED_COUNT=$(printf '%s' "$OWNED_TABLES_JSON" | jq -r 'length' )
 OWNED_COUNT=${OWNED_COUNT:-0}
 
 if [[ "$OWNED_COUNT" == "0" ]]; then
@@ -167,7 +167,7 @@ if [[ -z "$REFERENCED_TABLES" ]]; then
 fi
 
 # Build a lookup of owned tables.
-OWNED_LIST=$(printf '%s' "$OWNED_TABLES_JSON" | jq -r '.[]' 2>/dev/null | sort -u)
+OWNED_LIST=$(printf '%s' "$OWNED_TABLES_JSON" | jq -r '.[]'  | sort -u)
 
 UNOWNED=""
 while IFS= read -r t; do

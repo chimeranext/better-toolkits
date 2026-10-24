@@ -41,7 +41,7 @@ if [[ ! -f "$CONTRACT_JSON" && -f "${REPO_ROOT}/.claude/config/observability-gua
   CONTRACT_JSON="${REPO_ROOT}/.claude/config/observability-guardrail.json"
 fi
 
-if ! command -v jq >/dev/null 2>&1; then
+if ! command -v jq >/dev/null; then
   echo "[pre-write-observability-guard.sh] WARN: jq not found; failing open." >&2
   exit 0
 fi
@@ -53,11 +53,11 @@ fi
 
 HOOK_INPUT=$(cat)
 
-TOOL_NAME=$(printf '%s\n' "$HOOK_INPUT" | jq -r '.tool_name // empty' 2>/dev/null) || {
+TOOL_NAME=$(printf '%s\n' "$HOOK_INPUT" | jq -r '.tool_name // empty' ) || {
   echo "[pre-write-observability-guard.sh] WARN: jq parse failed; failing open." >&2
   exit 0
 }
-FILE_PATH=$(printf '%s\n' "$HOOK_INPUT" | jq -r '.tool_input.file_path // empty' 2>/dev/null) || {
+FILE_PATH=$(printf '%s\n' "$HOOK_INPUT" | jq -r '.tool_input.file_path // empty' ) || {
   echo "[pre-write-observability-guard.sh] WARN: jq parse failed; failing open." >&2
   exit 0
 }
@@ -66,13 +66,13 @@ FILE_PATH=$(printf '%s\n' "$HOOK_INPUT" | jq -r '.tool_input.file_path // empty'
 
 case "$TOOL_NAME" in
   Write)
-    PAYLOAD=$(printf '%s\n' "$HOOK_INPUT" | jq -r '.tool_input.content // empty' 2>/dev/null) || PAYLOAD=""
+    PAYLOAD=$(printf '%s\n' "$HOOK_INPUT" | jq -r '.tool_input.content // empty' ) || PAYLOAD=""
     ;;
   Edit)
-    PAYLOAD=$(printf '%s\n' "$HOOK_INPUT" | jq -r '.tool_input.new_string // empty' 2>/dev/null) || PAYLOAD=""
+    PAYLOAD=$(printf '%s\n' "$HOOK_INPUT" | jq -r '.tool_input.new_string // empty' ) || PAYLOAD=""
     ;;
   MultiEdit)
-    PAYLOAD=$(printf '%s\n' "$HOOK_INPUT" | jq -r '[.tool_input.edits[]?.new_string] | join("\n")' 2>/dev/null) || PAYLOAD=""
+    PAYLOAD=$(printf '%s\n' "$HOOK_INPUT" | jq -r '[.tool_input.edits[]?.new_string] | join("\n")' ) || PAYLOAD=""
     ;;
   *)
     exit 0
@@ -105,7 +105,7 @@ glob_allowlisted() {
     if [[ "$path" =~ (^|/)${re}$ ]] || [[ "$path" =~ (^|/)${re}(/|$) ]]; then
       return 0
     fi
-  done < <(jq -r --arg key "$key" '.[$key][]?' "$CONTRACT_JSON" 2>/dev/null)
+  done < <(jq -r --arg key "$key" '.[$key][]?' "$CONTRACT_JSON" )
 
   return 1
 }
@@ -201,7 +201,7 @@ silently:
     product/surface and cannot be joined to anything.
 
 Content allowlist:
-$(jq -r '.allowlist[] | "  - " + .' "$CONTRACT_JSON" 2>/dev/null)
+$(jq -r '.allowlist[] | "  - " + .' "$CONTRACT_JSON" )
 
 To approve a real exception, edit observability-guardrail.json in the same
 change so the contract stays reviewable.
