@@ -21,6 +21,12 @@ sys.exit(0 if HAS_PENDING else 1)
   fi
 fi
 
+# No decorative echoes rule (ADHD / dogfood format — lead with action, suppress tangents)
+if echo "$*" | grep -qE 'echo\s+"={3,}|echo\s+"-{3,}|echo\s+"={2,}"'; then
+  echo "[HOOK] PROHIBITED: decorative echo separator detected. Lead with action; end with concrete next step; suppress tangents." >&2
+  exit 2
+fi
+
 HOOKS_STDERR_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 DETECT="$HOOKS_STDERR_DIR/detect.py"
 PLUGIN_HOOKS_DIR="$(cd "$HOOKS_STDERR_DIR/.." && pwd)"
