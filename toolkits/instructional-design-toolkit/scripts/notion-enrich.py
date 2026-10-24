@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-notion-enrich.py — Enricher for the Notion recursive fetch pipeline.
+notion-enrich.py — Enricher for the deep-research pipeline.
 
-Reads a sitemap.yaml (produced by /notion-recursive-fetch) and, for every
+Reads a sitemap.yaml (produced by /deep-research) and, for every
 external resource, fetches its content using the right tool by `kind`:
 
   youtube  -> yt-dlp --write-subs --skip-download  (transcript)

@@ -1,10 +1,10 @@
-# /notion-recursive-fetch — protocol SSOT
+# /deep-research — protocol SSOT
 
-Harness-agnostic body. Thin entry: `commands/notion-recursive-fetch.md`.
+Harness-agnostic body. Thin entry: `commands/deep-research.md`.
 
 ---
 
-# Notion recursive fetch: $ARGUMENTS
+# Deep research: $ARGUMENTS
 
 Fetch a Notion page/database **tree** to markdown files with **verbatim URLs**
 (bookmarks, videos, embeds, files). Uses the custom `notion-batch` MCP
