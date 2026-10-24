@@ -1,0 +1,17 @@
+flowchart TD
+    I["assurance triage hub"] --> M{modo?}
+    M -->|pr| T["testing triage"]
+    M -->|pillar| P["single pillar only"]
+    T --> VT{PASS?}
+    VT -->|no BLOCKED| B["BLOCKED pillar reason links"]
+    VT -->|yes| S["security triage"]
+    S --> VS{PASS?}
+    VS -->|no BLOCKED| B
+    VS -->|yes| G["governance triage plus PR receipt"]
+    G --> VG{PASS?}
+    VG -->|no BLOCKED| B
+    VG -->|yes| L{liveness required?}
+    L -->|no| V["PASS aggregate"]
+    L -->|yes| LV["liveness triage"]
+    LV --> V
+    P --> V

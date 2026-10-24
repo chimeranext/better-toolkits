@@ -55,4 +55,4 @@ let dev = RefCellDevice::new(&i2c); // un device por sensor, mismo bus
 
 ## RECEIPT
 
-`candidate_sha` + risk tier + verdict + tree-check-at-commit (ver `_dogfood/rust/`).
+`candidate_sha` + risk tier + verdict + tree-check-at-commit (ver `_exemplars/rust/`).

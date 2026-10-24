@@ -57,4 +57,4 @@ function cutPercent(float $pct): float
 
 ## RECEIPT
 
-Ver hijo `laravel` y `_dogfood/php/` para gates ejecutables del stack web.
+Ver hijo `laravel` y `_exemplars/php/` para gates ejecutables del stack web.

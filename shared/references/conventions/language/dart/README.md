@@ -62,4 +62,4 @@ double? parseLux(int raw) {
 
 ## RECEIPT
 
-`candidate_sha` + verdict + tree-check (ver `_dogfood/dart/`).
+`candidate_sha` + verdict + tree-check (ver `_exemplars/dart/`).

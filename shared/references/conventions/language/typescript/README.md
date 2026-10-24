@@ -47,4 +47,4 @@ export const HELP = "usa el comando `flag` real";
 
 ## RECEIPT
 
-`candidate_sha` + verdict + tree-check (ver `_dogfood/typescript/`).
+`candidate_sha` + verdict + tree-check (ver `_exemplars/typescript/`).

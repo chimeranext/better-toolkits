@@ -26,7 +26,7 @@ github.com** sin “Unable to render rich display”.
 - D3 [flowchart-ids] IDs de nodo ASCII (`VT`, `Hub`); etiqueta legible en corchetes → S1.
 - D4 [sequence-participants] Alias de participant sin `/` ni `§` en el alias (`assurance-triage-pr` OK) → S2.
 - D5 [sequence-control] No anidar `opt` dentro de `alt` sin cerrar `opt`; preferir secuencia lineal + `alt`/`else` → S2.
-- D6 [profile] Validar en GitHub preview antes de marcar PR listo; dogfood en `_dogfood/docs-diagrams/` → S3.
+- D6 [profile] Validar en GitHub preview antes de marcar PR listo; dogfood en `_exemplars/docs-diagrams/` → S3.
 
 ## COUNTEREXAMPLES
 
@@ -50,8 +50,8 @@ flowchart TD
 
 ## GATES
 
-- local: checklist en `_dogfood/docs-diagrams/README.md` (abrir preview en PR).
-- CI: (opcional) `mmdc -i _dogfood/docs-diagrams/*.mmd -o /tmp/out.svg` cuando Chromium disponible.
+- local: checklist en `_exemplars/docs-diagrams/README.md` (abrir preview en PR).
+- CI: (opcional) `mmdc -i _exemplars/docs-diagrams/*.mmd -o /tmp/out.svg` cuando Chromium disponible.
 
 ## LESSONS
 
@@ -59,4 +59,4 @@ flowchart TD
 
 ## RECEIPT
 
-Ver `_dogfood/docs-diagrams/` tras pegar bloques en un PR de prueba.
+Ver `_exemplars/docs-diagrams/` tras pegar bloques en un PR de prueba.
