@@ -131,7 +131,15 @@ claude plugin install <plugin-name>@better-toolkits
 The plugin name usually matches the directory, but not always — `app-gtm-release-toolkit`
 installs as `app-gtm-release`, and `make-no-mistakes-toolkit` installs as `make-no-mistakes`.
 The authoritative list of installable names lives in
-[`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json). Landing + doctrine:
+[`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json). Each toolkit
+`package.json` `"skills"` field lists the skill folders for the skills CLI:
+
+```bash
+npx skills add chimeranext/better-toolkits --all -g
+npx skills add chimeranext/better-toolkits --skill merge-advisor --agent '*' -g -y
+```
+
+Landing + doctrine:
 **https://toolkits.chimeranext.dev** (GitHub Pages + custom domain; see [`apps/web/README.md`](apps/web/README.md)).
 
 Discovery / Build with Claude listing prep (external marketplace — not vendoring into

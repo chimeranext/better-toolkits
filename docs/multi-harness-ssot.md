@@ -8,9 +8,23 @@ Install stderr on Claude Code / Cursor / OpenCode2: see the **Multi-harness SSOT
 
 | SSOT | Location | Purpose |
 |------|----------|---------|
+| **Catalog** | `package.json` `"skills"` on each toolkit (antfu/skills-npm: `{ source, skills }`) | Skill folder names for `npx skills add`. Claude `marketplace.json` remains the plugin adapter. |
 | **Protocol** | `toolkits/<name>/references/<cmd-or-domain>/` (+ `templates/` or `assets/templates/`) | HOW for commands/skills — harness-agnostic markdown |
 | **Runtime stderr** | [`shared/hooks/stderr/`](../shared/hooks/stderr/) | Block shell stderr discards; one `detect.py`, N wire-ups |
 | **Runtime PRDS** | [`shared/hooks/prds/`](../shared/hooks/prds/) | Gate `git push` / `gh pr create|edit` to PRDS body sections; one `detect.py`, N wire-ups |
+
+## Catalog rules
+
+1. Skill directories stay `skills/<name>/SKILL.md`. The `package.json` `"skills"` field lists those folder names for source `chimeranext/better-toolkits`. Add or remove a name in that field when the folder changes.
+2. Install with the skills CLI. `--all` is every skill for every agent. `--agent '*'` with `--skill` is a subset for every agent:
+
+```bash
+npx skills add chimeranext/better-toolkits --all -g
+npx skills add chimeranext/better-toolkits --skill merge-advisor --agent '*' -g -y
+```
+
+`npx @chimeranext/better-toolkits skills-install` runs those same commands (`--toolkit` reads the package.json filter).
+3. Slash command files stay hand-written. They carry `argument-hint` and dispatch text the skill entry does not. A skill and a command may share a name; both still point at `references/`.
 
 ## Protocol rules
 

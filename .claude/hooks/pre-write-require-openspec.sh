@@ -6,7 +6,7 @@
 set -euo pipefail
 
 INPUT="$(cat)"
-FILE_PATH="$(printf '%s' "$INPUT" | jq -r '.tool_input.file_path // empty' 2>/dev/null || true)"
+FILE_PATH="$(printf '%s' "$INPUT" | jq -r '.tool_input.file_path // empty' || true)"
 [ -z "$FILE_PATH" ] && exit 0
 
 REPO_ROOT="${CLAUDE_PROJECT_DIR:-$(pwd)}"
@@ -28,7 +28,7 @@ fi
 # Rule 2: engineering writes under apps/ require an active change
 case "$REL" in
   apps/*)
-    ACTIVE="$(find "$REPO_ROOT/openspec/changes" -mindepth 1 -maxdepth 1 -type d ! -name archive 2>/dev/null | head -1 || true)"
+    ACTIVE="$(find "$REPO_ROOT/openspec/changes" -mindepth 1 -maxdepth 1 -type d ! -name archive | head -1 || true)"
     if [ -z "$ACTIVE" ]; then
       echo "BLOCKED by openspec governance: writing under apps/ requires an active change in openspec/changes/." >&2
       echo "Create openspec/changes/<YYYY-MM-DD>-<slug>/{proposal,design,tasks}.md first — see openspec/project.md." >&2

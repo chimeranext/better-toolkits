@@ -1,0 +1,15 @@
+{
+  "name": "@chimeranext/better-toolkits-shared",
+  "private": true,
+  "description": "Transversal skills for the better-toolkits monorepo.",
+  "license": "BSL-1.1",
+  "skills": [
+    {
+      "source": "chimeranext/better-toolkits",
+      "skills": [
+        "local-pr-review",
+        "requirements-authoring"
+      ]
+    }
+  ]
+}
