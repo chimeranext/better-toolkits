@@ -1,0 +1,24 @@
+sequenceDiagram
+  participant RTR as ready-to-review-mergeable
+  participant Hub as assurance-triage-pr
+  participant T as testing-triage
+  participant S as security-triage
+  participant G as governance-triage
+  participant L as liveness-triage
+  participant Bots as Greptile CodeRabbit
+
+  RTR->>Hub: RTR section 2b pr N issue tracker
+  Hub->>T: required pillar
+  T-->>Hub: PASS or BLOCKED
+  Hub->>S: required pillar
+  S-->>Hub: PASS or BLOCKED
+  Hub->>G: required pillar plus receipt
+  G-->>Hub: PASS or BLOCKED
+  Hub->>L: liveness when not skip
+  L-->>Hub: PASS or BLOCKED or SKIP
+  alt aggregate PASS
+    Hub-->>RTR: PASS then tag bots section 3b
+    RTR->>Bots: remote review after section 3a preconditions
+  else aggregate BLOCKED
+    Hub-->>RTR: BLOCKED no bot tag
+  end

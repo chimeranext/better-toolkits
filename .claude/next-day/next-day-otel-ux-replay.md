@@ -31,7 +31,7 @@ status: pending
 - [ ] MQTT/VRTV Linear filing — user-side (needs auth).
 - [ ] OQ3 Zephyr P4 support verification.
 - [ ] Elixir dogfood completion (was blocked on toolchain; podman image pulled — check.
-  Worktree: `.agents/worktrees/elixir-dogfood`).
+  Worktree: `.agents/worktrees/elixir-exemplars`).
 - [ ] Worktree `77-conventions-exemplars`: 19 uncommitted foreign files — ownership unresolved.
 - [ ] Vertivo monorepo: edge-firmware + MQTT drafts + i2c JSON migration state unverified this turn.
 
@@ -60,7 +60,7 @@ To continue this work:
 - Branch: `feat/94-otel-ux-replay`
 - Uncommitted changes: yes — NOT mine (see In Progress; leave alone).
 - Stashes: 3 (resolve-oq backups on other branches — not mine).
-- Open worktrees: 77-conventions-exemplars, chore-prune-merge, chore-refresh-cache, elixir-dogfood, feat-94-merge, pr93-heimdall-rebase.
+- Open worktrees: 77-conventions-exemplars, chore-prune-merge, chore-refresh-cache, elixir-exemplars, feat-94-merge, pr93-heimdall-rebase.
 
 ## Linear Issues
 - None in this repo (GitHub Issues only). #94 CLOSED, PR #95 MERGED (verified via gh).

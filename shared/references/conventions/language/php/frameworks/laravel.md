@@ -88,5 +88,5 @@ Hereda `php@0.1.0`. Propios:
 
 ## RECEIPT
 
-Formato del padre; dogfood en `_dogfood/php/` (comandos pineados, sin `vendor/`
+Formato del padre; dogfood en `_exemplars/php/` (comandos pineados, sin `vendor/`
 en git).

@@ -43,4 +43,4 @@ See consumer docs playbook (pattern only) in the owning repo.
 
 ## RECEIPT
 
-N/A hasta dogfood de diagramas en `_dogfood/docs-diagrams/`.
+N/A hasta dogfood de diagramas en `_exemplars/docs-diagrams/`.
