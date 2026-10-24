@@ -7,7 +7,7 @@
           "npx",
           "-y",
           "tsx",
-          "shared/google-workspace-apps-mcp/google-for-gauth.ts"
+          "shared/google-workspace-apps-mcp/google-for-rclone.ts"
         ]
       }
     }
