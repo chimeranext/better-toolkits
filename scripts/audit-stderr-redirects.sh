@@ -6,8 +6,8 @@ PROHIBITED=('2>/dev/null' '2> /dev/null' '2>>/dev/null' '&>/dev/null')
 EXCLUDES='--exclude-dir=.git --exclude-dir=node_modules --exclude-dir=.dart_tool --exclude-dir=.opencode --exclude-dir=.claude --exclude-dir=.cursor --exclude-dir=.next --exclude-dir=.agents --exclude-dir=.worktrees --exclude="*.jpg" --exclude="*.png" --exclude="*.pack" --exclude="*.swp"'
 
 for v in "${PROHIBITED[@]}"; do
-  hits=$(grep -rEn $EXCLUDES "$v" . | wc -l || true)
-  files=$(grep -rln $EXCLUDES "$v" . | head -10 || true)
+  hits=$(grep -rln $EXCLUDES "$v" . | wc -l || true)
+  files=$(grep -rln $EXCLUDES "$v" . || true)
   echo "PATTERN: $v -> $hits hits"
   echo "$files"
 done

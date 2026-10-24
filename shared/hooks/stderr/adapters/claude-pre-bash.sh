@@ -13,7 +13,7 @@ states=r.get("verified_states",{})
 if any(v=="PENDING" for v in states.values()): HAS_PENDING=1
 if any(v=="BLOCKED" for v in states.values()): HAS_BLOCKED=1
 sys.exit(0 if HAS_PENDING else 1)
-' 2>/dev/null || HAS_PENDING=1
+' || true; HAS_PENDING=1
   if [ "$HAS_PENDING" = "1" ] || [ "$HAS_BLOCKED" = "1" ]; then
     echo "[STDERR HOOK] RESTRICTION BLOCKED: /ready-to-review-mergeable protocol steps pending or blocked." >&2
     echo "Complete the PENDING steps before proceeding; NEVER skip to the next phase." >&2
@@ -40,7 +40,7 @@ fi
 REPO_ROOT="${CLAUDE_PROJECT_DIR:-$(pwd)}"
 CFG="$REPO_ROOT/.claude/config/stderr-hooks.json"
 if [ -r "$CFG" ] && command -v jq >/dev/null 2>&1; then
-  ENABLED="$(jq -r '.preserve_stderr // true' "$CFG" 2>/dev/null)" || ENABLED="true"
+  ENABLED="$(jq -r '.preserve_stderr // true' "$CFG")" || ENABLED="true"
   if [ "$ENABLED" = "false" ]; then
     exit 0
   fi
