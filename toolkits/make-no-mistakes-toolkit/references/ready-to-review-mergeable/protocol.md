@@ -318,6 +318,25 @@ Then:
 
 ---
 
+## Evidence format (SSOT for every issue — same for all #N; never summary, never exception)
+
+Output must list every step (§1 → §5) with PASS/FAIL/PROGRESS/BLOCKED per pillar, no omissions:
+§1 ISSUE ID → PASS/FAIL (GitHub Issues #N; never infer from branch)
+§2 IMPLEMENT → PASS/FAIL (Phase 3 step 12; PR exists; CI green; mergeable; steps 9–10 deferred to §3b)
+§2b ASSURANCE → PASS/FAIL paso a paso (normative order testing → security → governance → liveness; STOP first BLOCKED; no silent skips)
+§2c E2E BUILDER → PASS/FAIL (suite from testing; /assurance:e2e-test-builder; NOT runner — QA stage)
+§3a PRECOND → PASS/FAIL (Ready for review; .claude/.implement-prs; clean base)
+§3b EXECUTE → PASS/FAIL (execute remote; tag bots; wait verdict; fix/push/re-tag; never skip when available; BLOCKED if not executed; restrictions-check-ready-to-review-mergeable.sh exits 1)
+§3c GATE → PASS/FAIL (APPROVED + 0 blockers + 0 P1 + 0 P2; BLOCKED if contract not met; NEVER §4a/§4b bypass when remote available)
+§4a FALLBACK → DOCUMENTED (only when remote unavailable; never claim §5 without §3 green or documented §4a)
+§4b ADVERSARIAL → OPTIONAL HITL (advisory only; never substitutes §3)
+§5 HANDOFF → BLOCKED until entry met (In Review; PR URL + verdict + human review; NEVER merge; NEVER Done; delete .claude/.implement-prs)
+Hard rules embedded: one tracker ID; §2b order fixed; §2c mandatory after §2b PASS; §3b before §3c; §3c green or §4a documented for §5; placeholders `REPLACE_WITH_*`; restrictions enforced (`restrictions-ready-to-review-mergeable.json` + `restrictions-check-ready-to-review-mergeable.sh` + `opencode-plugin.ts` + `claude-pre-bash.sh` / `cursor-before-shell.sh`).
+
+## SSOT correction note — verify remote reviewers are installed before assuming remote available (§3b error fixed)
+
+Before running §3b (tag bots), verify the repo actually has remote reviewers configured (`.github/` must contain bot review config such as `.greptile/`, `.coderabbit/`, or equivalent). If none exist, `remote unavailable` applies — do NOT tag non-existent bots; proceed to §4a (documented fallback: `/local-pr-review` via heimdall) then §4b (advisory adversarial review). The silent error in previous execution was assuming remote was available (`.reviews[*]`) without checking `.github/workflows/` for bot reviewers; after tagging, `.reviews[*]` returned `[]` confirming no bot reviewers installed. Restrictions file (`restrictions-ready-to-review-mergeable.json`) reflects this with `§3c: BLOCKED (remote unavailable)` and `§4b: PASS`.
+
 ## Deprecated: branch-only mode
 
 Earlier revisions described a **branch-ready** path with no issue IDs. That path

@@ -225,7 +225,7 @@ Token v1 de respaldo verificable sin exponerlo (solo `ok` + team):
 ```sh
 python3 -c "
 import json,urllib.request
-d=json.load(open('/home/kvttvrsis/.local/share/opencode/mcp-auth.json'))
+d=json.load(open('~/.local/share/opencode/mcp-auth.json'))
 t=d.get('slack',{}).get('tokens',{}).get('accessToken','')
 req=urllib.request.Request('https://slack.com/api/auth.test', headers={'Authorization':'Bearer '+t})
 r=json.load(urllib.request.urlopen(req, timeout=15)); print(r.get('ok'), r.get('team'))"

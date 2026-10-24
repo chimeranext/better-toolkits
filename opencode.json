@@ -4,7 +4,10 @@
       "google-workspace-apps-mcp": {
         "type": "local",
         "command": [
-          "/home/kvttvrsis/Documentos/GitHub/chimeranext/better-toolkits/toolkits/media-buyer-toolkit"
+          "npx",
+          "-y",
+          "tsx",
+          "shared/google-workspace-apps-mcp/google.ts"
         ]
       }
     }
