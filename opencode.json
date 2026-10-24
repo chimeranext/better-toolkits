@@ -1,0 +1,12 @@
+{
+  "mcp": {
+    "servers": {
+      "google-workspace-apps-mcp": {
+        "type": "local",
+        "command": [
+          "/home/kvttvrsis/Documentos/GitHub/chimeranext/better-toolkits/toolkits/media-buyer-toolkit"
+        ]
+      }
+    }
+  }
+}
