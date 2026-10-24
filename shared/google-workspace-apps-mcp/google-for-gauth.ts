@@ -10,7 +10,7 @@ import { homedir } from "os";
 const WRAPPER = join(__dirname, "../../apps/rust-wrapper-google-auth/target/release/rust-wrapper");
 
 export default Plugin.define({
-  id: "media-buyer.google-gnu",
+  id: "google-workspace-apps-mcp",
   async setup(ctx) {
     const scopes = process.env.GOOGLE_SCOPES || "drive.file,gmail.readonly";
     // Plugin de auth genérico; delega al rust-wrapper.
