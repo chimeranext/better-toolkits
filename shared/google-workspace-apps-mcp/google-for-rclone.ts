@@ -67,8 +67,8 @@ function verify(): void {
 process.stdin.resume();
 process.stdin.setEncoding("utf-8");
 
-const remote = loadRemote();
 verify();
+const remote = loadRemote();
 console.error(`[google-workspace-rclone] MCP server iniciado. Remote: ${remote}`);
 // Handshake inmediato para evitar timeout del cliente MCP
 process.stdout.write(JSON.stringify({ jsonrpc: "2.0", result: { protocolVersion: "2024-11-05", capabilities: {}, serverInfo: { name: "google-workspace-rclone", version: "1.0.0" } }, id: 0 }) + "\n");
