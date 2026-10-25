@@ -34,6 +34,12 @@ def run():
 
     # Derecha: referencias compactas clickeables (APA)
     import webbrowser
+    # Col=1: advertencia UX (entre preguntas y referencias APA)
+    warn = tk.Frame(top, bg="#4a2d00", highlightbackground="#f59e0b", highlightthickness=2)
+    warn.grid(row=0, column=1, sticky="nse", padx=6)
+    tk.Label(warn, text="⚠  ADVERTENCIA — Google Cloud (trial / 2FA)", bg="#4a2d00", fg="#f59e0b", font=("Segoe UI", 9, "bold")).pack(anchor="w", padx=8, pady=(4,1))
+    for wline in ["• Trial gratuito: requiere tarjeta (crédito ~USD 30, 90 días; no se cobra si cancelas antes).", "• Google exige 2FA (MFA) para console.cloud.google.com; prepara Authenticator.", "• Esto es para crear tu propio OAuth client. El MCP NO funciona sin ese paso."]:
+        tk.Label(warn, text=wline, bg="#4a2d00", fg="#e5e7eb", font=("Segoe UI", 8), anchor="w", justify="left").pack(anchor="w", padx=8)
     ref_right = tk.Frame(top, bg="#181818")
     ref_right.grid(row=0, column=2, sticky="nse", padx=4)
     ref_content = tk.Frame(ref_right, bg="#181818")
@@ -56,23 +62,6 @@ def run():
             lbl = tk.Label(ref_content, text=ut, bg="#181818", fg="#55aaff", font=("Segoe UI", 8, "underline"), cursor="hand2", anchor="w")
             lbl.bind("<Button-1>", lambda e, u=url: webbrowser.open(u))
         lbl.pack(anchor="center", expand=True, fill="x", pady=0)
-
-# ⚠ ADVERTENCIA UX — Google Cloud free trial / billing / MFA
-    warn = tk.Frame(root, bg="#4a2d00", highlightbackground="#f59e0b", highlightthickness=2)
-    warn.pack(pady=6, padx=10, fill="x")
-    tk.Label(warn, text="⚠  ADVERTENCIA IMPORTANTE — Consola de Google Cloud", bg="#4a2d00", fg="#f59e0b",
-             font=("Segoe UI", 9, "bold"), anchor="w").pack(anchor="w", padx=6, pady=(3,0))
-    for wline in [
-        "1. Google Cloud te pedirá tarjeta para activar la prueba gratuita (crédito ~USD 30,00, 90 días).",
-        "   No se cobra si cancelas antes de terminar el trial, pero Google pide método de pago.",
-        "2. Google exige 2FA (MFA/2SV) en tu cuenta de Google para acceder a console.cloud.google.com.",
-        "   Prepara tu app de autenticador (Google Authenticator) antes de empezar.",
-        "3. Esto NO es costo del MCP ni de rclone: es el registro propio de tu proyecto en Google Cloud.",
-    ]:
-        tk.Label(warn, text=wline, bg="#4a2d00", fg="#e5e7eb", font=("Segoe UI", 8),
-                 anchor="w", justify="left").pack(anchor="w", padx=16, pady=1)
-    tk.Label(warn, text="  → Si no quieres pagar ni usar 2FA, no abras console.cloud.google.com; el MCP solo usa tu OAuth local.",
-             bg="#4a2d00", fg="#86efac", font=("Segoe UI", 8, "italic"), anchor="w", justify="left").pack(anchor="w", padx=16, pady=(1,3))
 
 # 3. FORMULARIO — 4 campos manuales, paso DEBAJO de cada input
     form = tk.LabelFrame(root, text="  Configuración paso a paso (cada paso debajo del campo)  ",
