@@ -19,6 +19,7 @@ import { execSync } from "child_process";
 import { join, basename } from "path";
 import { readFileSync } from "fs";
 import { homedir } from "os";
+import { createInterface } from "readline";
 
 const RCLONE = join(homedir(), ".local/bin/rclone");
 
@@ -67,17 +68,17 @@ function verify(): string {
 }
 
 // --- MCP server transport (stdio) ---
-process.stdin.resume();
 process.stdin.setEncoding("utf-8");
+const rl = createInterface({ input: process.stdin });
+const send = (obj: any) => process.stdout.write(JSON.stringify(obj) + "\n");
 
 const folderList = verify();
 const remote = loadRemote();
 console.error(`[google-workspace-rclone] MCP server iniciado. Remote: ${remote}`);
 console.error(`[google-workspace-rclone] Carpetas raíz (rclone-verify): ${folderList}`);
-process.stdout.write(JSON.stringify({ jsonrpc: "2.0", result: { protocolVersion: "2024-11-05", capabilities: { tools: {} }, serverInfo: { name: "google-workspace-rclone", version: "1.0.0" }, rootFolders: folderList }, id: 0 }) + "\n");
 
 function sendResult(id: any, result: any) {
-  process.stdout.write(JSON.stringify({ jsonrpc: "2.0", id, result }) + "\n");
+  send({ jsonrpc: "2.0", id, result });
 }
 
 function getCreds(): { cid: string; cs: string } {
@@ -86,44 +87,44 @@ function getCreds(): { cid: string; cs: string } {
   return { cid: j.client_id, cs: j.client_secret };
 }
 
-function handleMcp(msg: any): boolean {
-  if (!msg || typeof msg !== "object" || !msg.method) return false;
-  let result: any;
-  if (msg.method === "initialize") {
-    result = { protocolVersion: "2024-11-05", capabilities: { tools: {} }, serverInfo: { name: "google-workspace-rclone", version: "1.0.0" } };
-  } else if (msg.method === "tools/list") {
-    result = { tools: [{ name: "upload", description: "Sube un archivo local a Google Drive vía rclone con credenciales propias (.json).", inputSchema: { type: "object", properties: { srcPath: { type: "string", description: "Ruta local absoluta del archivo a subir." }, remotePath: { type: "string", description: "Ruta remota destino (default: raiz del remote)." } }, required: ["srcPath"] } }] };
-  } else if (msg.method === "tools/call") {
-    const name = msg.params?.name;
-    const args = msg.params?.arguments || {};
-    if (name !== "upload") {
-      sendResult(msg.id, { content: [{ type: "text", text: `Tool not found: ${name}` }], isError: true });
-      return true;
-    }
-    const srcPath = args.srcPath || args.src;
-    const remotePath = args.remotePath || args.dst || (srcPath ? basename(srcPath) : "");
-    try {
-      const { cid, cs } = getCreds();
-      const out = execSync(`${RCLONE} --drive-client-id ${cid} --drive-client-secret ${cs} copy "${srcPath}" "gdrive:${remotePath}"`, { encoding: "utf-8", timeout: 120000 });
-      sendResult(msg.id, { content: [{ type: "text", text: `upload OK: ${srcPath} -> gdrive:/${remotePath}` }], isError: false });
-    } catch (e: any) {
-      sendResult(msg.id, { content: [{ type: "text", text: `upload FAIL: ${e.message || String(e)}` }], isError: true });
-    }
-    return true;
-  }
-  if (!result) result = { content: [{ type: "text", text: `Method not found: ${msg.method}` }], isError: true };
-  sendResult(msg.id, result);
-  return true;
-}
-
-process.stdin.on("data", (chunk: string) => {
-  const msg = chunk.trim();
+rl.on("line", (line) => {
+  const msg = (line || "").trim();
   if (!msg) return;
   let parsed: any;
-  try { parsed = JSON.parse(msg); } catch { const response = JSON.stringify({ jsonrpc: "2.0", result: { remote, status: "connected" }, id: 1 }); process.stdout.write(response + "\n"); return; }
-  if (handleMcp(parsed)) return;
-  const response = JSON.stringify({ jsonrpc: "2.0", result: { remote, status: "connected" }, id: parsed?.id ?? 1 });
-  process.stdout.write(response + "\n");
+  try { parsed = JSON.parse(msg); } catch { return; }
+  if (!parsed || typeof parsed !== "object" || !parsed.method) return; // responses from client → ignore
+  const isNotification = parsed.id === undefined;
+
+  let result: any;
+  let rpcError: any = null;
+
+  if (parsed.method === "initialize") {
+    result = { protocolVersion: "2024-11-05", capabilities: { tools: {} }, serverInfo: { name: "google-workspace-rclone", version: "1.0.0" } };
+  } else if (parsed.method === "tools/list") {
+    result = { tools: [{ name: "upload", description: "Sube un archivo local a Google Drive vía rclone con credenciales propias (.json).", inputSchema: { type: "object", properties: { srcPath: { type: "string", description: "Ruta local absoluta del archivo a subir." }, remotePath: { type: "string", description: "Ruta remota destino (default: raiz del remote)." } }, required: ["srcPath"] } }] };
+  } else if (parsed.method === "tools/call") {
+    const name = parsed.params?.name;
+    const args = parsed.params?.arguments || {};
+    if (name !== "upload") {
+      result = { content: [{ type: "text", text: `Tool not found: ${name}` }], isError: true };
+    } else {
+      const srcPath = args.srcPath || args.src;
+      const remotePath = args.remotePath || args.dst || (srcPath ? basename(srcPath) : "");
+      try {
+        const { cid, cs } = getCreds();
+        const out = execSync(`${RCLONE} --drive-client-id ${cid} --drive-client-secret ${cs} copy "${srcPath}" "gdrive:${remotePath}"`, { encoding: "utf-8", timeout: 120000 });
+        result = { content: [{ type: "text", text: `upload OK: ${srcPath} -> gdrive:/${remotePath}` }], isError: false };
+      } catch (e: any) {
+        result = { content: [{ type: "text", text: `upload FAIL: ${e.message || String(e)}` }], isError: true };
+      }
+    }
+  } else {
+    rpcError = { code: -32601, message: `Method not found: ${parsed.method}` };
+  }
+
+  if (isNotification) return; // notifications (initialized/cancelled/progress) → no response
+  if (rpcError) send({ jsonrpc: "2.0", id: parsed.id, error: rpcError });
+  else sendResult(parsed.id, result);
 });
 
 // Mantener proceso vivo indefinidamente (transporte stdio)
