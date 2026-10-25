@@ -8,7 +8,7 @@ priority: 70
 
 Invoke the `resolve-open-questions` skill from the make-no-mistakes plugin.
 
-**Harness (validated first, not assumed):** OpenCode (`opencode` available) → numbered options + explicit reply; Claude → `AskUserQuestion`; Cursor → `AskQuestion`. **Do not assume Claude; check `opencode`.** Sub-agents → `pause`; orchestrator asks.
+**Harness (validated first, not assumed):** OpenCode (`opencode` available) → `AskQuestion` + numbered options + explicit reply; Claude → `AskUserQuestion`; Cursor → `AskQuestion`. **Do not assume Claude; check `opencode`.** Sub-agents → `pause`; orchestrator asks.
 
 1. **Sweep**: collect ALL open session decisions — last report questions, unresolved follow-ups, pending HITL checkpoints (push/PR/merge/Linear/cleanup), unfiled issues. If `$ARGUMENTS` provides scope, restrict sweep to that.
 2. **Batch**: build fixed-choice questions — recommended option FIRST with "(Recommended)", trade-off per description, multi-select when not exclusive. Claude: up to 4 per `AskUserQuestion`. Cursor: prefer one `AskQuestion` per message if runtime limits; second round if >4 decisions.
