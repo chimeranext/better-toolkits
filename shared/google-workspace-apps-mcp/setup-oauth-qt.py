@@ -30,8 +30,8 @@ def run():
                         highlightthickness=2)
         card.pack(anchor="w", fill="x", pady=3)
         tk.Label(card, text=f"{emoji}  {title_txt}", bg=title_color, fg="white",
-                 font=("Ubuntu", 11, "bold"), anchor="w").pack(anchor="w", padx=8, pady=(4, 1))
-        tk.Label(card, text=body_txt, bg=body_color, fg="#e5e7eb", font=("Ubuntu", 11),
+                 font=("Ubuntu", 11, "bold"), anchor="w", wraplength=400).pack(anchor="w", padx=8, pady=(4, 1))
+        tk.Label(card, text=body_txt, bg="#181818", fg="#e5e7eb", font=("Ubuntu", 11),
                  anchor="w", justify="left", wraplength=400).pack(anchor="w", padx=8, pady=(0, 4))
         return card
 
