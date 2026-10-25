@@ -176,11 +176,20 @@ def run():
         path = filedialog.askopenfilename(title="Selecciona archivo .json de Google OAuth", filetypes=[("JSON","*.json")])
         if not path: return
         try:
+            import shutil, os
+            target_dir = os.path.expanduser("~/.config/google-workspace")
+            os.makedirs(target_dir, exist_ok=True)
+            target_path = os.path.join(target_dir, "google-oauth-client.json")
+            shutil.copy2(path, target_path)
             with open(path) as f: data = json.load(f)
             installed = data.get("installed", data)
             ent_client.delete(0, tk.END); ent_client.insert(0, installed.get("client_id",""))
             ent_secret.delete(0, tk.END); ent_secret.insert(0, installed.get("client_secret",""))
-            messagebox.showinfo("OK","Cargado .json — Client ID + Secret extraídos. NO compartir archivo.")
+            remote = ent_remote.get().strip() or "gdrive"
+            with open(os.path.join(target_dir, ".rclone-config.json"), "w") as f:
+                json.dump({"remote": remote}, f)
+            messagebox.showinfo("OK", f"Archivo reubicado a: {target_path}
+.rclone-config.json actualizado. NO compartir archivo.")
         except Exception as e: messagebox.showerror("Error",str(e))
 
     def save():
