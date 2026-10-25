@@ -18,7 +18,7 @@ def run():
     top = tk.Frame(root, bg="#181818")
     top.pack(pady=2, padx=10, fill="none")
     top.grid_columnconfigure(0, weight=1)
-    top.grid_columnconfigure(1, weight=0)
+    top.grid_columnconfigure(1, weight=1)
     top.grid_columnconfigure(2, weight=1)
 
     # Izquierda: preguntas con estilo de tarjeta (¿Qué? verde ✅ · ¿Por qué? azul ℹ️)
@@ -32,7 +32,7 @@ def run():
         tk.Label(card, text=f"{emoji}  {title_txt}", bg=title_color, fg="white",
                  font=("Ubuntu", 11, "bold"), anchor="w").pack(anchor="w", padx=8, pady=(4, 1))
         tk.Label(card, text=body_txt, bg=body_color, fg="#e5e7eb", font=("Ubuntu", 11),
-                 anchor="w", justify="left").pack(anchor="w", padx=8, pady=(0, 4))
+                 anchor="w", justify="left", wraplength=400).pack(anchor="w", padx=8, pady=(0, 4))
         return card
 
     _card(left, "", "✅", "#1b5e20", "#2e7d32",
@@ -52,17 +52,16 @@ def run():
     warn = tk.Frame(top, bg="#4a2d00", highlightbackground="#f59e0b", highlightthickness=2)
     warn.grid(row=0, column=1, sticky="nse", padx=6)
     tk.Label(warn, text="⚠  ADVERTENCIA — Google Cloud (trial / 2FA)", bg="#4a2d00", fg="#f59e0b",
-             font=("Ubuntu", 9, "bold")).pack(anchor="w", padx=8, pady=(4, 1))
+             font=("Ubuntu", 9, "bold"), anchor="w", justify="left", wraplength=260).pack(anchor="w", padx=8, pady=(4, 1))
     for wline in ["• Trial gratuito: requiere tarjeta (crédito ~USD 30, 90 días; no se cobra si cancelas antes).",
                   "• Google exige 2FA (MFA) para console.cloud.google.com; prepara Authenticator.",
                   "• Esto es para crear tu propio OAuth client. El MCP NO funciona sin ese paso."]:
         tk.Label(warn, text=wline, bg="#4a2d00", fg="#e5e7eb", font=("Ubuntu", 11),
-                 anchor="w", justify="left").pack(anchor="w", padx=8)
+                 anchor="w", justify="left", wraplength=260).pack(anchor="w", padx=8)
     ref_right = tk.Frame(top, bg="#181818")
     ref_right.grid(row=0, column=2, sticky="nse", padx=4)
     ref_content = tk.Frame(ref_right, bg="#181818")
     ref_content.pack(expand=True, pady=0)
-    tk.Label(top, text="", bg="#181818", width=6).grid(row=0, column=1, sticky="w", padx=2)
     tk.Label(ref_content, text="Referencias Legales", bg="#181818", fg="#ddd", font=("Ubuntu", 9, "bold"), anchor="w").pack(anchor="w", pady=1)
     for ut, url in [
         ("• Google APIs Terms (§b.1): 'Developer credentials ... may not be embedded in open source projects.'", "https://dev.google.com/terms"),
