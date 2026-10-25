@@ -8,9 +8,7 @@ priority: 70
 
 Invocá la skill `resolve-open-questions` del plugin make-no-mistakes.
 
-**Harness:** Claude Code → `AskUserQuestion`. Cursor → **`AskQuestion`** (si el
-tool no está disponible, opciones numeradas en el chat + respuesta explícita).
-Sub-agentes → `pause`; el orquestador pregunta.
+**Harness (validado primero, no asumido):** OpenCode (`opencode` disponible) → opciones numeradas + respuesta explícita; Claude (`AskUserQuestion`) o Cursor (`AskQuestion`) según runtime. **No asumir Claude; validar con `opencode`.** Sub-agentes → `pause`.
 
 1. **Sweep**: juntá TODAS las decisiones abiertas de la sesión — preguntas del
    último reporte, ofertas de follow-up sin resolver, checkpoints HITL
@@ -26,5 +24,5 @@ Sub-agentes → `pause`; el orquestador pregunta.
    acción.
 
 Anti-triggers: investigación socrática activa (prosa, no menús),
-action-handoffs directos, aprobación de plan (eso va por el flujo de plan
-approval de la plataforma).
+action-handoffs directos, aprobación de plan (eso va por flujo de plan approval).
+Anti-boilerplate / anti-mojibake: sin `echo` decorativos, sin `2>/dev/null` ocultos en scripts, sin texto mixto de idiomas en preguntas (fijar opciones en español claro).
