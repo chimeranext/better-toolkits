@@ -16,7 +16,7 @@
 // => Este archivo NO incrusta client_id. El usuario debe configurar su propio
 //    remote vía `rclone config` (OAuth2 con su propio proyecto Google Cloud).
 import { execSync } from "child_process";
-import { join } from "path";
+import { join, basename } from "path";
 import { readFileSync } from "fs";
 import { homedir } from "os";
 
@@ -74,16 +74,56 @@ const folderList = verify();
 const remote = loadRemote();
 console.error(`[google-workspace-rclone] MCP server iniciado. Remote: ${remote}`);
 console.error(`[google-workspace-rclone] Carpetas raíz (rclone-verify): ${folderList}`);
-// Handshake inmediato para evitar timeout del cliente MCP
-process.stdout.write(JSON.stringify({ jsonrpc: "2.0", result: { protocolVersion: "2024-11-05", capabilities: {}, serverInfo: { name: "google-workspace-rclone", version: "1.0.0" }, rootFolders: folderList }, id: 0 }) + "\n");
+process.stdout.write(JSON.stringify({ jsonrpc: "2.0", result: { protocolVersion: "2024-11-05", capabilities: { tools: {} }, serverInfo: { name: "google-workspace-rclone", version: "1.0.0" }, rootFolders: folderList }, id: 0 }) + "\n");
+
+function sendResult(id: any, result: any) {
+  process.stdout.write(JSON.stringify({ jsonrpc: "2.0", id, result }) + "\n");
+}
+
+function getCreds(): { cid: string; cs: string } {
+  const jsonPath = join(homedir(), ".config/google-workspace/google-oauth-client.json");
+  const j = JSON.parse(readFileSync(jsonPath, "utf-8")).installed || JSON.parse(readFileSync(jsonPath, "utf-8"));
+  return { cid: j.client_id, cs: j.client_secret };
+}
+
+function handleMcp(msg: any): boolean {
+  if (!msg || typeof msg !== "object" || !msg.method) return false;
+  let result: any;
+  if (msg.method === "initialize") {
+    result = { protocolVersion: "2024-11-05", capabilities: { tools: {} }, serverInfo: { name: "google-workspace-rclone", version: "1.0.0" } };
+  } else if (msg.method === "tools/list") {
+    result = { tools: [{ name: "upload", description: "Sube un archivo local a Google Drive vía rclone con credenciales propias (.json).", inputSchema: { type: "object", properties: { srcPath: { type: "string", description: "Ruta local absoluta del archivo a subir." }, remotePath: { type: "string", description: "Ruta remota destino (default: raiz del remote)." } }, required: ["srcPath"] } }] };
+  } else if (msg.method === "tools/call") {
+    const name = msg.params?.name;
+    const args = msg.params?.arguments || {};
+    if (name !== "upload") {
+      sendResult(msg.id, { content: [{ type: "text", text: `Tool not found: ${name}` }], isError: true });
+      return true;
+    }
+    const srcPath = args.srcPath || args.src;
+    const remotePath = args.remotePath || args.dst || (srcPath ? basename(srcPath) : "");
+    try {
+      const { cid, cs } = getCreds();
+      const out = execSync(`${RCLONE} --drive-client-id ${cid} --drive-client-secret ${cs} copy "${srcPath}" "gdrive:${remotePath}"`, { encoding: "utf-8", timeout: 120000 });
+      sendResult(msg.id, { content: [{ type: "text", text: `upload OK: ${srcPath} -> gdrive:/${remotePath}` }], isError: false });
+    } catch (e: any) {
+      sendResult(msg.id, { content: [{ type: "text", text: `upload FAIL: ${e.message || String(e)}` }], isError: true });
+    }
+    return true;
+  }
+  if (!result) result = { content: [{ type: "text", text: `Method not found: ${msg.method}` }], isError: true };
+  sendResult(msg.id, result);
+  return true;
+}
 
 process.stdin.on("data", (chunk: string) => {
-  // Respuesta mínima para mantener conexión activa
   const msg = chunk.trim();
-  if (msg) {
-    const response = JSON.stringify({ jsonrpc: "2.0", result: { remote, status: "connected" }, id: 1 });
-    process.stdout.write(response + "\n");
-  }
+  if (!msg) return;
+  let parsed: any;
+  try { parsed = JSON.parse(msg); } catch { const response = JSON.stringify({ jsonrpc: "2.0", result: { remote, status: "connected" }, id: 1 }); process.stdout.write(response + "\n"); return; }
+  if (handleMcp(parsed)) return;
+  const response = JSON.stringify({ jsonrpc: "2.0", result: { remote, status: "connected" }, id: parsed?.id ?? 1 });
+  process.stdout.write(response + "\n");
 });
 
 // Mantener proceso vivo indefinidamente (transporte stdio)
