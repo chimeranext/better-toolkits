@@ -25,6 +25,14 @@ const RCLONE = join(homedir(), ".local/bin/rclone");
 
 interface RcloneConfig { remote: string; }
 
+const TOOLS: Array<{name:string, description:string, inputSchema:{type:string, properties:Record<string,{type:string, description:string}>, required?:string[]}}> = [
+  { name: "upload", description: "Uploads a local file to Google Drive via rclone with own credentials (.json).", inputSchema: { type: "object", properties: { srcPath: { type: "string", description: "Absolute local file path to upload." }, remotePath: { type: "string", description: "Remote destination path (default: remote root)." } }, required: ["srcPath"] } },
+  { name: "list", description: "Lists files in a Google Drive remote folder via rclone with own credentials (.json).", inputSchema: { type: "object", properties: { path: { type: "string", description: "Remote folder path (default: root)." } } } },
+  { name: "download", description: "Downloads a file from Google Drive remote to a local path via rclone with own credentials (.json).", inputSchema: { type: "object", properties: { remotePath: { type: "string", description: "Remote file path." }, localPath: { type: "string", description: "Local destination path (default: ~/Downloads/<name>)." } }, required: ["remotePath"] } },
+  { name: "delete", description: "Deletes a file from Google Drive remote via rclone with own credentials (.json).", inputSchema: { type: "object", properties: { remotePath: { type: "string", description: "Remote file path to delete." } }, required: ["remotePath"] } },
+  { name: "mkdir", description: "Creates a folder in Google Drive remote via rclone with own credentials (.json).", inputSchema: { type: "object", properties: { remotePath: { type: "string", description: "Remote folder path to create." } }, required: ["remotePath"] } },
+];
+
 function loadRemote(): string {
   const configPath = join(homedir(), ".config/google-workspace/.rclone-config.json");
   try {
@@ -101,13 +109,11 @@ rl.on("line", (line) => {
   if (parsed.method === "initialize") {
     result = { protocolVersion: "2024-11-05", capabilities: { tools: {} }, serverInfo: { name: "google-workspace-rclone", version: "1.0.0" } };
   } else if (parsed.method === "tools/list") {
-    result = { tools: [{ name: "upload", description: "Uploads a local file to Google Drive via rclone with own credentials (.json).", inputSchema: { type: "object", properties: { srcPath: { type: "string", description: "Absolute local file path to upload." }, remotePath: { type: "string", description: "Remote destination path (default: remote root)." } }, required: ["srcPath"] } }] };
+    result = { tools: TOOLS.map((t) => ({ name: t.name, description: t.description, inputSchema: t.inputSchema })) };
   } else if (parsed.method === "tools/call") {
     const name = parsed.params?.name;
     const args = parsed.params?.arguments || {};
-    if (name !== "upload") {
-      result = { content: [{ type: "text", text: `Tool not found: ${name}` }], isError: true };
-    } else {
+    if (name === "upload") {
       const srcPath = args.srcPath || args.src;
       const remotePath = args.remotePath || args.dst || (srcPath ? basename(srcPath) : "");
       try {
@@ -117,6 +123,45 @@ rl.on("line", (line) => {
       } catch (e: any) {
         result = { content: [{ type: "text", text: `upload FAIL: ${e.message || String(e)}` }], isError: true };
       }
+    } else if (name === "list") {
+      const folder = args.path || "/";
+      try {
+        const { cid, cs } = getCreds();
+        const out = execSync(`${RCLONE} --drive-client-id ${cid} --drive-client-secret ${cs} ls "gdrive:${folder}"`, { encoding: "utf-8", timeout: 120000 });
+        result = { content: [{ type: "text", text: `list OK: gdrive:${folder}\n${out || "(empty)"}` }], isError: false };
+      } catch (e: any) {
+        result = { content: [{ type: "text", text: `list FAIL: ${e.message || String(e)}` }], isError: true };
+      }
+    } else if (name === "download") {
+      const remotePath = args.remotePath;
+      const localPath = args.localPath || join(homedir(), "Downloads", basename(remotePath));
+      try {
+        const { cid, cs } = getCreds();
+        execSync(`${RCLONE} --drive-client-id ${cid} --drive-client-secret ${cs} copy "gdrive:${remotePath}" "${localPath}"`, { encoding: "utf-8", timeout: 180000 });
+        result = { content: [{ type: "text", text: `download OK: gdrive:${remotePath} -> ${localPath}` }], isError: false };
+      } catch (e: any) {
+        result = { content: [{ type: "text", text: `download FAIL: ${e.message || String(e)}` }], isError: true };
+      }
+    } else if (name === "delete") {
+      const remotePath = args.remotePath;
+      try {
+        const { cid, cs } = getCreds();
+        execSync(`${RCLONE} --drive-client-id ${cid} --drive-client-secret ${cs} delete "gdrive:${remotePath}"`, { encoding: "utf-8", timeout: 120000 });
+        result = { content: [{ type: "text", text: `delete OK: gdrive:${remotePath}` }], isError: false };
+      } catch (e: any) {
+        result = { content: [{ type: "text", text: `delete FAIL: ${e.message || String(e)}` }], isError: true };
+      }
+    } else if (name === "mkdir") {
+      const remotePath = args.remotePath;
+      try {
+        const { cid, cs } = getCreds();
+        execSync(`${RCLONE} --drive-client-id ${cid} --drive-client-secret ${cs} mkdir "gdrive:${remotePath}"`, { encoding: "utf-8", timeout: 120000 });
+        result = { content: [{ type: "text", text: `mkdir OK: gdrive:${remotePath}` }], isError: false };
+      } catch (e: any) {
+        result = { content: [{ type: "text", text: `mkdir FAIL: ${e.message || String(e)}` }], isError: true };
+      }
+    } else {
+      result = { content: [{ type: "text", text: `Tool not found: ${name}` }], isError: true };
     }
   } else {
     rpcError = { code: -32601, message: `Method not found: ${parsed.method}` };
