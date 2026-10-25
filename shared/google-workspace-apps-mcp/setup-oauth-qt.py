@@ -76,7 +76,7 @@ def run():
         if ut.startswith("• "):
             lbl = tk.Label(ref_content, text=ut, bg="#181818", fg="#ccc", font=("Ubuntu", 11), wraplength=300, anchor="w", justify="left")
         else:
-            lbl = tk.Label(ref_content, text=ut, bg="#181818", fg="#55aaff", font=("Ubuntu", 8, "underline"), cursor="hand2", anchor="w")
+            lbl = tk.Label(ref_content, text=ut, bg="#181818", fg="#55aaff", font=("Ubuntu", 11, "underline"), cursor="hand2", anchor="w")
             lbl.bind("<Button-1>", lambda e, u=url: webbrowser.open(u))
         lbl.pack(anchor="center", expand=True, fill="x", pady=0)
 
@@ -95,15 +95,15 @@ def run():
     ent_client.pack(anchor="w", pady=2)
     sb1 = tk.Frame(r1, bg="#181818")
     sb1.pack(anchor="w", pady=1)
-    tk.Label(sb1, text="https://console.cloud.google.com/", bg="#181818", fg="#55aaff", font=("Ubuntu", 8, "underline"), cursor="hand2", anchor="w").pack(anchor="w")
+    tk.Label(sb1, text="https://console.cloud.google.com/", bg="#181818", fg="#55aaff", font=("Ubuntu", 11, "underline"), cursor="hand2", anchor="w").pack(anchor="w")
     sb1.children[list(sb1.children.keys())[-1]].bind("<Button-1>", lambda e: __import__("webbrowser").open("https://console.cloud.google.com/"))
     tk.Label(sb1, text="Ve a console.cloud.google.com, crea un proyecto", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
     tk.Label(sb1, text="Activa APIs y Credenciales, crea el OAuth client ID", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb1, text="https://console.cloud.google.com/apis/credentials/oauthclient", bg="#181818", fg="#55aaff", font=("Ubuntu", 8, "underline"), cursor="hand2", anchor="w").pack(anchor="w")
+    tk.Label(sb1, text="https://console.cloud.google.com/apis/credentials/oauthclient", bg="#181818", fg="#55aaff", font=("Ubuntu", 11, "underline"), cursor="hand2", anchor="w").pack(anchor="w")
     sb1.children[list(sb1.children.keys())[-1]].bind("<Button-1>", lambda e, url="https://console.cloud.google.com/apis/credentials/oauthclient": __import__("webbrowser").open(url))
     tk.Label(sb1, text="Selecciona tipo Desktop app", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb1, text="Copia Client ID y Client Secret", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb1, text="Guarda localmente (NO en repo; evidencia TOS)", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    tk.Label(sb1, text="Copia Client ID", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    tk.Label(sb1, text="Copia Client Secret", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
 
     # Campo 2 — CLIENT_SECRET (vertical)
     r2 = tk.Frame(form, bg="#181818")
@@ -113,7 +113,7 @@ def run():
     ent_secret.pack(anchor="w", pady=2)
     sb2 = tk.Frame(r2, bg="#181818")
     sb2.pack(anchor="w", pady=1)
-    tk.Label(sb2, text="• Copiar Client ID + Client Secret", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    tk.Label(sb2, text="• Copiar Client ID y Client Secret", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
     tk.Label(sb2, text="→ Guardar (NO compartir)", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
     tk.Label(sb2, text="→ Proteger (NO en repo; evidencia TOS)", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
 
