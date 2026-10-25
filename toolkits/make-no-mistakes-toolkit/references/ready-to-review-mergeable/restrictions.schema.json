@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["protocol", "repo", "normative_order", "verified_states", "hard_rules"],
+  "properties": {
+    "protocol": { "type": "string" },
+    "repo": { "type": "string" },
+    "tracker_rule": { "type": "string" },
+    "issue_id": { "type": "string" },
+    "normative_order": { "type": "array", "items": { "type": "string" } },
+    "verified_states": { "type": "object" },
+    "skip_forbidden": { "type": "array", "items": { "type": "string" } },
+    "hard_rules": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false
+}
