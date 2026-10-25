@@ -48,7 +48,7 @@ function loadRemote(): string {
   throw new Error("Después de rclone config, aún no se encontró el remote.");
 }
 
-function verify(): void {
+function verify(): string {
   try {
     const jsonPath = join(homedir(), ".config/google-workspace/google-oauth-client.json");
     const raw = readFileSync(jsonPath, "utf-8");
@@ -57,9 +57,12 @@ function verify(): void {
     const cs = j.client_secret;
     console.error("[rclone-verify] Verificando con --drive-client-id / --drive-client-secret ...");
     const out = execSync(`${RCLONE} --drive-client-id ${cid} --drive-client-secret ${cs} ls gdrive:`, { encoding: "utf-8", timeout: 30000 });
-    console.error("[rclone-verify] exit 0 — rclone funciona directamente con .json:", (out || "").split("\n").slice(0, 3).join("; "));
+    const folders = (out || "").split("\n").filter(l => l.trim()).slice(0, 6).join(" | ");
+    console.error("[rclone-verify] exit 0 — carpetas raíz Drive:", folders || "(lista recibida)");
+    return folders || out || "gdrive OK";
   } catch (e: any) {
-    console.error("[rclone-verify] Fallo de rclone (esperado si aún no hay .conf completo):", e.message || String(e));
+    console.error("[rclone-verify] Fallo de rclone:", e.message || String(e));
+    return "rclone-verify-failed";
   }
 }
 
@@ -67,11 +70,12 @@ function verify(): void {
 process.stdin.resume();
 process.stdin.setEncoding("utf-8");
 
-verify();
+const folderList = verify();
 const remote = loadRemote();
 console.error(`[google-workspace-rclone] MCP server iniciado. Remote: ${remote}`);
+console.error(`[google-workspace-rclone] Carpetas raíz (rclone-verify): ${folderList}`);
 // Handshake inmediato para evitar timeout del cliente MCP
-process.stdout.write(JSON.stringify({ jsonrpc: "2.0", result: { protocolVersion: "2024-11-05", capabilities: {}, serverInfo: { name: "google-workspace-rclone", version: "1.0.0" } }, id: 0 }) + "\n");
+process.stdout.write(JSON.stringify({ jsonrpc: "2.0", result: { protocolVersion: "2024-11-05", capabilities: {}, serverInfo: { name: "google-workspace-rclone", version: "1.0.0" }, rootFolders: folderList }, id: 0 }) + "\n");
 
 process.stdin.on("data", (chunk: string) => {
   // Respuesta mínima para mantener conexión activa
