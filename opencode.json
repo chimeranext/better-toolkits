@@ -1,13 +1,13 @@
 {
   "mcp": {
     "servers": {
-      "google-workspace-apps": {
+      "google-workspace-apps-mcp": {
         "type": "local",
         "command": [
           "npx",
           "-y",
           "tsx",
-          "shared/google-workspace-apps/google-for-rclone.ts"
+          "shared/google-workspace-apps-mcp/google-for-rclone.ts"
         ]
       }
     }

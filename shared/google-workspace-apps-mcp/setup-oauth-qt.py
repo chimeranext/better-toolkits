@@ -38,7 +38,7 @@ def run():
     _card(left, "", "✅", "#1b5e20", "#2e7d32",
           "¿Qué estoy solicitándote?",
           "Configurar tu propio OAuth client_id + remote rclone (gdrive) para que el MCP "
-          "'google-workspace-apps' sincronice sin exponer credenciales.")
+          "'google-workspace-apps-mcp' sincronice sin exponer credenciales.")
     _card(left, "", "ℹ️", "#0d47a1", "#1565c0",
           "¿Por qué motivo?",
           "Google obliga (TOS y políticas OAuth) a que cada aplicación tenga su propio OAuth client "
