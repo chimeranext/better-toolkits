@@ -90,32 +90,58 @@ def run():
     # Campo 1 — CLIENT_ID (paso / input / instrucciones verticales)
     r1 = tk.Frame(form, bg="#181818")
     r1.grid(row=0, column=0, sticky="new", pady=6, padx=4)
-    tk.Label(r1, text="› Paso 1: Crear GOOGLE_CLIENT_ID", bg="#181818", fg="#ddd", font=("Ubuntu", 11, "bold"), anchor="w").pack(anchor="w", pady=2)
-    ent_client = tk.Entry(r1, bg="#222", fg="#fff", insertbackground="#fff", font=("DejaVu Sans Mono", 11), width=55)
-    ent_client.pack(anchor="w", pady=2)
+    tk.Label(r1, text="› Paso 1: Crear proyecto/aplicación de Google Cloud", bg="#181818", fg="#ddd", font=("Ubuntu", 11, "bold"), anchor="w").pack(anchor="w", pady=2)
     sb1 = tk.Frame(r1, bg="#181818")
     sb1.pack(anchor="w", pady=1)
+    
+    tk.Label(sb1, text="→ Crea un proyecto en la consola de Google Cloud accediendo a ", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
     tk.Label(sb1, text="https://console.cloud.google.com/", bg="#181818", fg="#55aaff", font=("Ubuntu", 11, "underline"), cursor="hand2", anchor="w").pack(anchor="w")
     sb1.children[list(sb1.children.keys())[-1]].bind("<Button-1>", lambda e: __import__("webbrowser").open("https://console.cloud.google.com/"))
-    tk.Label(sb1, text="Ve a console.cloud.google.com, crea un proyecto", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb1, text="Activa APIs y Credenciales, crea el OAuth client ID", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb1, text="https://console.cloud.google.com/apis/credentials/oauthclient", bg="#181818", fg="#55aaff", font=("Ubuntu", 11, "underline"), cursor="hand2", anchor="w").pack(anchor="w")
-    sb1.children[list(sb1.children.keys())[-1]].bind("<Button-1>", lambda e, url="https://console.cloud.google.com/apis/credentials/oauthclient": __import__("webbrowser").open(url))
-    tk.Label(sb1, text="Selecciona tipo Desktop app", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb1, text="Copia Client ID", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb1, text="Copia Client Secret", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    
+    tk.Label(sb1, text="→ Activa APIs y Credenciales", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    
+    tk.Label(sb1, text="→ Crea el OAuth client ID en la URL:", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    tk.Label(sb1, text="https://console.cloud.google.com/auth/overview/create", bg="#181818", fg="#55aaff", font=("Ubuntu", 11, "underline"), cursor="hand2", anchor="w").pack(anchor="w")
+    sb1.children[list(sb1.children.keys())[-1]].bind("<Button-1>", lambda e, url="https://console.cloud.google.com/auth/overview/create": __import__("webbrowser").open(url))
 
-    # Campo 2 — CLIENT_SECRET (vertical)
+    tk.Label(sb1, text="→ Ingrese el nombre de la aplicación:", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    tk.Label(sb1, text="Google Drive MCP", bg="#181818", fg="#aaa", font=("DejaVu Sans Mono", 11), anchor="w").pack(anchor="w")
+    
+    tk.Label(sb1, text="→ Seleccione su correo electrónico de la lista desplegable", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    tk.Label(sb1, text="→ Dar click en Siguiente", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    tk.Label(sb1, text="→ Selecciona la opción de Público: 'Interno'", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    tk.Label(sb1, text="→ Dar click en Siguiente", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    tk.Label(sb1, text="→ Ingrese nuevamente su correo electrónico", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    
+    tk.Label(sb1, text="→ Acepte la ", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    tk.Label(sb1, text="Política de Datos del Usuario de los Servicios de las APIs de Google", bg="#181818", fg="#55aaff", font=("Ubuntu", 11, "underline"), cursor="hand2", anchor="w").pack(anchor="w")
+        
+    sb1.children[list(sb1.children.keys())[-1]].bind("<Button-1>", lambda e, url="https://developers.google.com/terms/api-services-user-data-policy": __import__("webbrowser").open(url))
+
+    
     r2 = tk.Frame(form, bg="#181818")
     r2.grid(row=0, column=1, sticky="new", pady=6, padx=4)
-    tk.Label(r2, text="› Paso 2: Copiar GOOGLE_CLIENT_SECRET", bg="#181818", fg="#ddd", font=("Ubuntu", 11, "bold"), anchor="w").pack(anchor="w", pady=2)
-    ent_secret = tk.Entry(r2, bg="#222", fg="#fff", insertbackground="#fff", font=("DejaVu Sans Mono", 11), show="*", width=55)
-    ent_secret.pack(anchor="w", pady=2)
+    
+    tk.Label(r2, text="› Paso 2: Configure el cliente OAuth para la app", bg="#181818", fg="#ddd", font=("Ubuntu", 11, "bold"), anchor="w").pack(anchor="w", pady=2)
+    
     sb2 = tk.Frame(r2, bg="#181818")
     sb2.pack(anchor="w", pady=1)
-    tk.Label(sb2, text="• Copiar Client ID y Client Secret", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb2, text="→ Guardar (NO compartir)", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb2, text="→ Proteger (NO en repo; evidencia TOS)", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+
+    tk.Label(sb2, text="→ Selecciona tipo Desktop app", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    tk.Label(sb2, text="→ Selecciona tipo Desktop app", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+
+    tk.Label(sb2, text="→ Selecciona tipo Desktop app", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    
+    tk.Label(sb2, text="→ Copie aquí el valor del GOOGLE_CLIENT_ID", bg="#181818", fg="#ddd", font=("Ubuntu", 11, "bold"), anchor="w").pack(anchor="w", pady=2)
+    ent_client = tk.Entry(sb2, bg="#222", fg="#fff", insertbackground="#fff", font=("DejaVu Sans Mono", 11), width=55)
+    ent_client.pack(anchor="w", pady=2)
+
+    tk.Label(sb2, text="→ Copie aquí el valor del GOOGLE_CLIENT_SECRET", bg="#181818", fg="#ddd", font=("Ubuntu", 11, "bold"), anchor="w").pack(anchor="w", pady=2)
+    ent_secret = tk.Entry(sb2, bg="#222", fg="#fff", insertbackground="#fff", font=("DejaVu Sans Mono", 11), show="*", width=55)
+    ent_secret.pack(anchor="w", pady=2)
+    
+    tk.Label(sb2, text="→ Guarde éstos valores en un lugar seguro", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    
 
     # Campo 3 — REMOTE (vertical)
     r3 = tk.Frame(form, bg="#181818")
@@ -144,6 +170,19 @@ def run():
     # 5. BOTONES
     btns = tk.Frame(root, bg="#181818")
     btns.pack(pady=10)
+    def load_json():
+        from tkinter import filedialog
+        import json
+        path = filedialog.askopenfilename(title="Selecciona archivo .json de Google OAuth", filetypes=[("JSON","*.json")])
+        if not path: return
+        try:
+            with open(path) as f: data = json.load(f)
+            installed = data.get("installed", data)
+            ent_client.delete(0, tk.END); ent_client.insert(0, installed.get("client_id",""))
+            ent_secret.delete(0, tk.END); ent_secret.insert(0, installed.get("client_secret",""))
+            messagebox.showinfo("OK","Cargado .json — Client ID + Secret extraídos. NO compartir archivo.")
+        except Exception as e: messagebox.showerror("Error",str(e))
+
     def save():
         import os, json
         try:
@@ -159,6 +198,8 @@ def run():
             root.destroy()
         except Exception as e:
             messagebox.showerror("Error", str(e))
+    tk.Button(btns, text="📁 Cargar .json Google OAuth", command=load_json,
+              bg="#2e7d32", fg="#fff", font=("Ubuntu", 9, "bold")).pack(side="left", padx=4)
     tk.Button(btns, text="Aceptar — guardar local", command=save,
               bg="#0a84ff", fg="#fff", font=("Ubuntu", 11, "bold")).pack(side="left", padx=6)
     tk.Button(btns, text="Cancelar", command=root.destroy,
