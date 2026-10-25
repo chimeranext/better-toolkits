@@ -84,7 +84,7 @@ log_cached_versions() {
 
   command -v jq >>"${OUT_LOG}" || { echo "jq not found; skip version listing" >>"${OUT_LOG}"; return 0; }
   # Suppress noisy stdout from jq; log only
-  find "${root}" -path '*/.claude-plugin/plugin.json' -print0 2>/dev/null | xargs -0 -I{} sh -c 'jq -r ".version" "{}"' >>"${OUT_LOG}" 2>>"${ERR_LOG}" || true
+  find "${root}" -path '*/.claude-plugin/plugin.json' -print0 2>>"${ERR_LOG}" | xargs -0 -I{} sh -c 'jq -r ".version" "{}"' >>"${OUT_LOG}" 2>>"${ERR_LOG}" || true
 
   if [[ ! -d "${root}" ]]; then
     echo "(directory absent)" >>"${OUT_LOG}"
