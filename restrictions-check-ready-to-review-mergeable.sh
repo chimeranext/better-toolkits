@@ -10,6 +10,24 @@ BLOCKED="§5"
 
 if [ -f "restrictions-ready-to-review-mergeable.json" ]; then
   echo "RESTRICTION ENFORCED (restrictions-ready-to-review-mergeable.json active):"
+  SCHEMA="toolkits/make-no-mistakes-toolkit/references/ready-to-review-mergeable/restrictions.schema.json"
+  if [ -f "${SCHEMA}" ]; then
+    python3 -c "
+import json, sys
+try:
+    import jsonschema
+except ImportError:
+    print('  schema check: jsonschema module not installed — structural validation skipped (evidence-only)')
+    sys.exit(0)
+data = json.load(open('restrictions-ready-to-review-mergeable.json'))
+schema = json.load(open('${SCHEMA}'))
+jsonschema.validate(data, schema)
+print('  schema check: PASS (${SCHEMA})')
+" || exit 1
+  else
+    echo "  schema check: MISSING ${SCHEMA}"
+    exit 1
+  fi
   python3 -c "
 import json, sys
 r=json.load(open('restrictions-ready-to-review-mergeable.json'))
