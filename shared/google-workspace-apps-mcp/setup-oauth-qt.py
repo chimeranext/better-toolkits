@@ -31,7 +31,7 @@ def run():
         card.pack(anchor="w", fill="x", pady=3)
         tk.Label(card, text=f"{emoji}  {title_txt}", bg=title_color, fg="white",
                  font=("Ubuntu", 11, "bold"), anchor="w", wraplength=400).pack(anchor="w", padx=8, pady=(4, 1))
-        tk.Label(card, text=body_txt, bg="#181818", fg="#e5e7eb", font=("Ubuntu", 11),
+        tk.Label(card, text=body_txt, bg=title_color, fg="#e5e7eb", font=("Ubuntu", 11),
                  anchor="w", justify="left", wraplength=400).pack(anchor="w", padx=8, pady=(0, 4))
         return card
 
@@ -90,8 +90,8 @@ def run():
     # Campo 1 — CLIENT_ID (paso / input / instrucciones verticales)
     r1 = tk.Frame(form, bg="#181818")
     r1.grid(row=0, column=0, sticky="new", pady=6, padx=4)
-    tk.Label(r1, text="› Paso 1: GOOGLE_CLIENT_ID", bg="#181818", fg="#ddd", font=("Ubuntu", 11, "bold"), anchor="w").pack(anchor="w", pady=2)
-    ent_client = tk.Entry(r1, bg="#222", fg="#fff", insertbackground="#fff", font=("Ubuntu", 11), width=55)
+    tk.Label(r1, text="› Paso 1: Crear GOOGLE_CLIENT_ID", bg="#181818", fg="#ddd", font=("DejaVu Sans Mono", 11, "bold"), anchor="w").pack(anchor="w", pady=2)
+    ent_client = tk.Entry(r1, bg="#222", fg="#fff", insertbackground="#fff", font=("DejaVu Sans Mono", 11), width=55)
     ent_client.pack(anchor="w", pady=2)
     sb1 = tk.Frame(r1, bg="#181818")
     sb1.pack(anchor="w", pady=1)
@@ -106,8 +106,8 @@ def run():
     # Campo 2 — CLIENT_SECRET (vertical)
     r2 = tk.Frame(form, bg="#181818")
     r2.grid(row=0, column=1, sticky="new", pady=6, padx=4)
-    tk.Label(r2, text="› Paso 2: GOOGLE_CLIENT_SECRET", bg="#181818", fg="#ddd", font=("Ubuntu", 11, "bold"), anchor="w").pack(anchor="w", pady=2)
-    ent_secret = tk.Entry(r2, bg="#222", fg="#fff", insertbackground="#fff", font=("Ubuntu", 11), show="*", width=55)
+    tk.Label(r2, text="› Paso 2: Copiar GOOGLE_CLIENT_SECRET", bg="#181818", fg="#ddd", font=("DejaVu Sans Mono", 11, "bold"), anchor="w").pack(anchor="w", pady=2)
+    ent_secret = tk.Entry(r2, bg="#222", fg="#fff", insertbackground="#fff", font=("DejaVu Sans Mono", 11), show="*", width=55)
     ent_secret.pack(anchor="w", pady=2)
     sb2 = tk.Frame(r2, bg="#181818")
     sb2.pack(anchor="w", pady=1)
@@ -118,8 +118,8 @@ def run():
     # Campo 3 — REMOTE (vertical)
     r3 = tk.Frame(form, bg="#181818")
     r3.grid(row=0, column=2, sticky="new", pady=6, padx=4)
-    tk.Label(r3, text="› Paso 3: RCLONE_REMOTE (default: gdrive)", bg="#181818", fg="#ddd", font=("Ubuntu", 11, "bold"), anchor="w").pack(anchor="w", pady=2)
-    ent_remote = tk.Entry(r3, bg="#222", fg="#fff", insertbackground="#fff", font=("Ubuntu", 11), width=55)
+    tk.Label(r3, text="› Paso 3: Definir RCLONE_REMOTE (default: gdrive)", bg="#181818", fg="#ddd", font=("DejaVu Sans Mono", 11, "bold"), anchor="w").pack(anchor="w", pady=2)
+    ent_remote = tk.Entry(r3, bg="#222", fg="#fff", insertbackground="#fff", font=("DejaVu Sans Mono", 11), width=55)
     ent_remote.insert(0, "gdrive")
     ent_remote.pack(anchor="w", pady=2)
     sb3 = tk.Frame(r3, bg="#181818")
@@ -130,8 +130,8 @@ def run():
     # Campo 4 — FOLDER_ID + Paso 4 (texto izquierda / input derecha)
     r4 = tk.Frame(form, bg="#181818")
     r4.grid(row=0, column=3, sticky="new", pady=6, padx=4)
-    tk.Label(r4, text="› Paso 4: GOOGLE_DRIVE_FOLDER_ID (opcional)", bg="#181818", fg="#ddd", font=("Ubuntu", 11, "bold"), anchor="w").pack(anchor="w", pady=2)
-    ent_folder = tk.Entry(r4, bg="#222", fg="#fff", insertbackground="#fff", font=("Ubuntu", 11), width=55)
+    tk.Label(r4, text="› Paso 4: Verificar GOOGLE_DRIVE_FOLDER_ID", bg="#181818", fg="#ddd", font=("DejaVu Sans Mono", 11, "bold"), anchor="w").pack(anchor="w", pady=2)
+    ent_folder = tk.Entry(r4, bg="#222", fg="#fff", insertbackground="#fff", font=("DejaVu Sans Mono", 11), width=55)
     ent_folder.pack(anchor="w", pady=2)
     sb4 = tk.Frame(r4, bg="#181818")
     sb4.pack(anchor="w", pady=1)
