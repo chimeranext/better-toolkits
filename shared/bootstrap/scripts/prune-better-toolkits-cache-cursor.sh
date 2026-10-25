@@ -82,10 +82,9 @@ log_cached_versions() {
     echo "== plugin.json versions under ${root} (before purge) =="
   } >>"${OUT_LOG}"
 
-  if ! command -v jq; then
-    echo "jq not found; skip version listing" >>"${OUT_LOG}"
-    return 0
-  fi
+  command -v jq >>"${OUT_LOG}" || { echo "jq not found; skip version listing" >>"${OUT_LOG}"; return 0; }
+  # Suppress noisy stdout from jq; log only
+  find "${root}" -path '*/.claude-plugin/plugin.json' -print0 2>/dev/null | xargs -0 -I{} sh -c 'jq -r ".version" "{}"' >>"${OUT_LOG}" 2>>"${ERR_LOG}" || true
 
   if [[ ! -d "${root}" ]]; then
     echo "(directory absent)" >>"${OUT_LOG}"
@@ -129,7 +128,7 @@ done < <(marketplace_cache_paths)
 
 if command -v agent; then
   echo "agent plugin marketplace update better-toolkits" >>"${OUT_LOG}"
-  if agent plugin marketplace update better-toolkits >>"${OUT_LOG}" 2>>"${ERR_LOG}"; then
+  if agent plugin marketplace update better-toolkits >>"${OUT_LOG}" 2>>"${ERR_LOG}" >>"${OUT_LOG}"; then
     echo "marketplace update: ok" >>"${OUT_LOG}"
   else
     echo "marketplace update: failed (see err log); cache already cleared" >>"${OUT_LOG}"
@@ -138,5 +137,7 @@ else
   echo "agent CLI not on PATH; skipped marketplace update" >>"${OUT_LOG}"
 fi
 
-echo "done — re-enable or reinstall toolkits in Cursor if skills/commands are missing" >>"${OUT_LOG}"
+echo "echo "Wiped ${CURSOR_PLUGIN_CACHE}/chimeranext-better-toolkits ${CURSOR_PLUGIN_CACHE}/better-toolkits" >>"${OUT_LOG}"
+echo "Wiped ${CURSOR_PLUGIN_CACHE}/chimeranext-better-toolkits ${CURSOR_PLUGIN_CACHE}/better-toolkits"
+done — re-enable or reinstall toolkits in Cursor if skills/commands are missing" >>"${OUT_LOG}"
 exit 0
