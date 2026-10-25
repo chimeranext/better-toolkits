@@ -48,11 +48,27 @@ function loadRemote(): string {
   throw new Error("Después de rclone config, aún no se encontró el remote.");
 }
 
+function verify(): void {
+  try {
+    const jsonPath = join(homedir(), ".config/google-workspace/google-oauth-client.json");
+    const raw = readFileSync(jsonPath, "utf-8");
+    const j = JSON.parse(raw).installed || JSON.parse(raw);
+    const cid = j.client_id;
+    const cs = j.client_secret;
+    console.error("[future-proof] Verificando con --drive-client-id / --drive-client-secret ...");
+    const out = execSync(`${RCLONE} --drive-client-id ${cid} --drive-client-secret ${cs} ls gdrive:`, { encoding: "utf-8", timeout: 30000 });
+    console.error("[future-proof] exit 0 — rclone funciona directamente con .json:", (out || "").split("\n").slice(0, 3).join("; "));
+  } catch (e: any) {
+    console.error("[future-proof] Fallo (esperado si aún no hay .conf completo):", e.message || String(e));
+  }
+}
+
 // --- MCP server transport (stdio) ---
 process.stdin.resume();
 process.stdin.setEncoding("utf-8");
 
 const remote = loadRemote();
+verify();
 console.error(`[google-workspace-rclone] MCP server iniciado. Remote: ${remote}`);
 // Handshake inmediato para evitar timeout del cliente MCP
 process.stdout.write(JSON.stringify({ jsonrpc: "2.0", result: { protocolVersion: "2024-11-05", capabilities: {}, serverInfo: { name: "google-workspace-rclone", version: "1.0.0" } }, id: 0 }) + "\n");
