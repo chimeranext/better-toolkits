@@ -188,8 +188,8 @@ def run():
             remote = ent_remote.get().strip() or "gdrive"
             with open(os.path.join(target_dir, ".rclone-config.json"), "w") as f:
                 json.dump({"remote": remote}, f)
-            messagebox.showinfo("OK", f"Archivo reubicado a: {target_path}
-.rclone-config.json actualizado. NO compartir archivo.")
+            msg = "Archivo reubicado a: " + target_path + "\n.rclone-config actualizado. NO compartir archivo."
+            messagebox.showinfo("OK", msg)
         except Exception as e: messagebox.showerror("Error",str(e))
 
     def save():
