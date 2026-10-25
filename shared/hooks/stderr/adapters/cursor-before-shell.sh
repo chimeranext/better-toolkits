@@ -45,7 +45,7 @@ if [ -r "$CFG" ]; then
 fi
 
 "$PYBIN" - "$DETECT" "$input" <<'PY'
-import json, subprocess, sys
+import json, os, subprocess, sys
 
 detect, raw = sys.argv[1], sys.argv[2]
 try:
@@ -64,6 +64,30 @@ proc = subprocess.run(
     capture_output=True,
     text=True,
 )
+
+tk = (command or "").split()
+push_main = False
+if any(t in ("push", "merge") for t in tk) and tk and tk[-1] in ("main", "master"):
+    push_main = True
+
+if push_main:
+    env2 = dict(os.environ)
+    env2["MNM_GIT_TARGET"] = tk[-1]
+    proc2 = subprocess.run(
+        ["bash", detect_dir + "/../../git/pre-push.sh", tk[-1]],
+        capture_output=True,
+        text=True,
+        env=env2,
+    )
+    if proc2.returncode == 2:
+        msg = (proc2.stderr or proc2.stdout or "BLOCKED: push/merge to main requires HITL human approval").strip()
+        print(json.dumps({
+            "permission": "deny",
+            "user_message": msg,
+            "agent_message": msg,
+        }))
+        raise SystemExit(0)
+
 if proc.returncode == 0:
     print(json.dumps({"permission": "allow"}))
     raise SystemExit(0)

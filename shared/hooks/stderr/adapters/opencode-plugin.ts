@@ -21,6 +21,7 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
+import { spawnSync } from "node:child_process"
 
 const ADAPTER_DIR = dirname(fileURLToPath(import.meta.url))
 const TOOLKIT_ROOT = join(ADAPTER_DIR, "..", "..", "..")
@@ -154,6 +155,16 @@ export default {
       if (event.tool !== "shell") return
       const command = (event.input as { command?: unknown })?.command
       if (typeof command !== "string") return
+      // git push/merge to main guard (HITL bypass) — multi-harness pre-merge gate
+      const tokens = (command || "").split(/\s+/).filter((t) => t.length > 0)
+      if (tokens.some((t) => t === "push" || t === "merge") && tokens[tokens.length - 1] === "main") {
+        const res = spawnSync("bash", [join(ADAPTER_DIR, "..", "..", "git", "pre-push.sh"), "main"], {
+          env: { ...process.env, MNM_GIT_TARGET: "main" },
+        })
+        if (res.status === 2) {
+          throw new Error("BLOCKED: push/merge to 'main' requires HITL human approval (pre-push guard). Bypass: set HITL_APPROVED=1 or create the HITL marker via human action.")
+        }
+      }
       const msg = deny(command)
       if (msg) throw new Error(msg)
     })
