@@ -1,4 +1,4 @@
-# google-workspace-apps-mcp
+# google-workspace-apps
 
 MCP server para Google Workspace (Drive) vía `rclone`. Transporte `stdio` persistente (`google-for-rclone.ts`).
 
