@@ -97,11 +97,11 @@ def run():
     sb1.pack(anchor="w", pady=1)
     tk.Label(sb1, text="• https://console.cloud.google.com/", bg="#181818", fg="#55aaff", font=("Ubuntu", 8, "underline"), cursor="hand2", anchor="w").pack(anchor="w")
     sb1.children[list(sb1.children.keys())[-1]].bind("<Button-1>", lambda e: __import__("webbrowser").open("https://console.cloud.google.com/"))
-    tk.Label(sb1, text="→ Proyecto", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb1, text="→ APIs & Services", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb1, text="→ Credenciales", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb1, text="→ OAuth client ID", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb1, text="→ Desktop app", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    tk.Label(sb1, text="→ Obtener proyecto", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    tk.Label(sb1, text="→ Activar APIs & Services", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    tk.Label(sb1, text="→ Crear credenciales", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    tk.Label(sb1, text="→ Crear OAuth client ID", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    tk.Label(sb1, text="→ Crear Desktop app", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
 
     # Campo 2 — CLIENT_SECRET (vertical)
     r2 = tk.Frame(form, bg="#181818")
@@ -112,8 +112,8 @@ def run():
     sb2 = tk.Frame(r2, bg="#181818")
     sb2.pack(anchor="w", pady=1)
     tk.Label(sb2, text="• Copiar Client ID + Client Secret", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb2, text="→ NO compartir", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb2, text="→ NO en repo (evidencia TOS: conf. no embedded)", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    tk.Label(sb2, text="→ Guardar (NO compartir)", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    tk.Label(sb2, text="→ Proteger (NO en repo; evidencia TOS)", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
 
     # Campo 3 — REMOTE (vertical)
     r3 = tk.Frame(form, bg="#181818")
@@ -125,7 +125,7 @@ def run():
     sb3 = tk.Frame(r3, bg="#181818")
     sb3.pack(anchor="w", pady=1)
     tk.Label(sb3, text="• rclone config", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb3, text="→ remote = gdrive (interactivo)", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    tk.Label(sb3, text="→ Configurar remote = gdrive (interactivo)", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
 
     # Campo 4 — FOLDER_ID + Paso 4 (texto izquierda / input derecha)
     r4 = tk.Frame(form, bg="#181818")
@@ -136,7 +136,7 @@ def run():
     sb4 = tk.Frame(r4, bg="#181818")
     sb4.pack(anchor="w", pady=1)
     tk.Label(sb4, text="• Verificar: rclone lsf gdrive:", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb4, text="→ Configurar ENV: export RCLONE_REMOTE=gdrive", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    tk.Label(sb4, text="→ Exportar ENV: export RCLONE_REMOTE=gdrive", bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
     form.grid_columnconfigure(0, weight=1)
 
     # 5. BOTONES
