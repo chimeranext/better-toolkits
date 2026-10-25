@@ -25,7 +25,7 @@ const RCLONE = join(homedir(), ".local/bin/rclone");
 interface RcloneConfig { remote: string; }
 
 function loadRemote(): string {
-  const configPath = join(homedir(), ".rclone-config.json");
+  const configPath = join(homedir(), ".config/google-workspace/.rclone-config.json");
   try {
     const raw = readFileSync(configPath, "utf-8");
     const cfg = JSON.parse(raw) as RcloneConfig;
