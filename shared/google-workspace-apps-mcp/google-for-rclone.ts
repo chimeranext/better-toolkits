@@ -55,11 +55,11 @@ function verify(): void {
     const j = JSON.parse(raw).installed || JSON.parse(raw);
     const cid = j.client_id;
     const cs = j.client_secret;
-    console.error("[future-proof] Verificando con --drive-client-id / --drive-client-secret ...");
+    console.error("[rclone-verify] Verificando con --drive-client-id / --drive-client-secret ...");
     const out = execSync(`${RCLONE} --drive-client-id ${cid} --drive-client-secret ${cs} ls gdrive:`, { encoding: "utf-8", timeout: 30000 });
-    console.error("[future-proof] exit 0 — rclone funciona directamente con .json:", (out || "").split("\n").slice(0, 3).join("; "));
+    console.error("[rclone-verify] exit 0 — rclone funciona directamente con .json:", (out || "").split("\n").slice(0, 3).join("; "));
   } catch (e: any) {
-    console.error("[future-proof] Fallo (esperado si aún no hay .conf completo):", e.message || String(e));
+    console.error("[rclone-verify] Fallo de rclone (esperado si aún no hay .conf completo):", e.message || String(e));
   }
 }
 
