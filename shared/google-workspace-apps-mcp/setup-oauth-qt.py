@@ -21,25 +21,43 @@ def run():
     top.grid_columnconfigure(1, weight=0)
     top.grid_columnconfigure(2, weight=1)
 
-    # Izquierda: preguntas (compacto, igual densidad que referencias)
+    # Izquierda: preguntas con estilo de tarjeta (¿Qué? verde ✅ · ¿Por qué? azul ℹ️)
     left = tk.Frame(top, bg="#181818")
     left.grid(row=0, column=0, sticky="nsw", padx=4)
-    # Sub-frame centrado verticalmente para las preguntas
-    left_content = tk.Frame(left, bg="#181818")
-    left_content.pack(expand=True, pady=0)
-    tk.Label(left_content, text="¿Qué estoy solicitándote?", bg="#181818", fg="#ddd", font=("Ubuntu", 11, "bold"), wraplength=600, anchor="w", justify="left").pack(anchor="w", pady=0)
-    tk.Label(left_content, text="Configurar tu propio OAuth client_id + remote rclone (gdrive) para que el MCP 'google-workspace-apps-mcp' sincronice sin exponer credenciales.", bg="#181818", fg="#ccc", font=("Ubuntu", 11), wraplength=600, anchor="w", justify="left").pack(anchor="w", pady=0)
-    tk.Label(left_content, text="¿Por qué motivo?", bg="#181818", fg="#ddd", font=("Ubuntu", 11, "bold"), wraplength=600, anchor="w", justify="left").pack(anchor="w", pady=0)
-    tk.Label(left_content, text="Google obliga (TOS y políticas OAuth) a que cada aplicación tenga su propio OAuth client para acceder a Drive. No puedes usar credenciales compartidas ni embebidas (ver evidencia TOS a continuación). Por eso debes ir a console.cloud.google.com y crear tu propio proyecto para sincronizar con rclone.", bg="#181818", fg="#ccc", font=("Ubuntu", 11), wraplength=600, anchor="w", justify="left").pack(anchor="w", pady=0)
+
+    def _card(parent, title, emoji, title_color, body_color, title_txt, body_txt):
+        card = tk.Frame(parent, bg=title_color, highlightbackground=body_color,
+                        highlightthickness=2)
+        card.pack(anchor="w", fill="x", pady=3)
+        tk.Label(card, text=f"{emoji}  {title_txt}", bg=title_color, fg="white",
+                 font=("Ubuntu", 11, "bold"), anchor="w").pack(anchor="w", padx=8, pady=(4, 1))
+        tk.Label(card, text=body_txt, bg=body_color, fg="#e5e7eb", font=("Ubuntu", 11),
+                 anchor="w", justify="left").pack(anchor="w", padx=8, pady=(0, 4))
+        return card
+
+    _card(left, "", "✅", "#1b5e20", "#2e7d32",
+          "¿Qué estoy solicitándote?",
+          "Configurar tu propio OAuth client_id + remote rclone (gdrive) para que el MCP "
+          "'google-workspace-apps-mcp' sincronice sin exponer credenciales.")
+    _card(left, "", "ℹ️", "#0d47a1", "#1565c0",
+          "¿Por qué motivo?",
+          "Google obliga (TOS y políticas OAuth) a que cada aplicación tenga su propio OAuth client "
+          "para acceder a Drive. No puedes usar credenciales compartidas ni embebidas (ver evidencia "
+          "TOS a continuación). Por eso debes ir a console.cloud.google.com y crear tu propio proyecto "
+          "para sincronizar con rclone.")
 
     # Derecha: referencias compactas clickeables (APA)
     import webbrowser
     # Col=1: advertencia UX (entre preguntas y referencias APA)
     warn = tk.Frame(top, bg="#4a2d00", highlightbackground="#f59e0b", highlightthickness=2)
     warn.grid(row=0, column=1, sticky="nse", padx=6)
-    tk.Label(warn, text="⚠  ADVERTENCIA — Google Cloud (trial / 2FA)", bg="#4a2d00", fg="#f59e0b", font=("Ubuntu", 9, "bold")).pack(anchor="w", padx=8, pady=(4,1))
-    for wline in ["• Trial gratuito: requiere tarjeta (crédito ~USD 30, 90 días; no se cobra si cancelas antes).", "• Google exige 2FA (MFA) para console.cloud.google.com; prepara Authenticator.", "• Esto es para crear tu propio OAuth client. El MCP NO funciona sin ese paso."]:
-        tk.Label(warn, text=wline, bg="#4a2d00", fg="#e5e7eb", font=("Ubuntu", 11), anchor="w", justify="left").pack(anchor="w", padx=8)
+    tk.Label(warn, text="⚠  ADVERTENCIA — Google Cloud (trial / 2FA)", bg="#4a2d00", fg="#f59e0b",
+             font=("Ubuntu", 9, "bold")).pack(anchor="w", padx=8, pady=(4, 1))
+    for wline in ["• Trial gratuito: requiere tarjeta (crédito ~USD 30, 90 días; no se cobra si cancelas antes).",
+                  "• Google exige 2FA (MFA) para console.cloud.google.com; prepara Authenticator.",
+                  "• Esto es para crear tu propio OAuth client. El MCP NO funciona sin ese paso."]:
+        tk.Label(warn, text=wline, bg="#4a2d00", fg="#e5e7eb", font=("Ubuntu", 11),
+                 anchor="w", justify="left").pack(anchor="w", padx=8)
     ref_right = tk.Frame(top, bg="#181818")
     ref_right.grid(row=0, column=2, sticky="nse", padx=4)
     ref_content = tk.Frame(ref_right, bg="#181818")
