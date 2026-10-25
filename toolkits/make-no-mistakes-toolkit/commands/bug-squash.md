@@ -17,5 +17,4 @@ Source spec: `openspec/changes/2026-09-09-generalize-bug-squash/specs/bug-squash
 If `bug-squash.config.json` missing: run `references/bug-squash/setup-init.md` (bootstrap from template, confirm URLs, never enable prod by default).
 
 ## Reference
-- Concrete instance: `shared/references/google-workspace-apps-mcp-dogfood.md` (separate from `/dogfood` protocol).
 - Protocol generic: `toolkits/make-no-mistakes-toolkit/references/dogfood/protocol.md`.
