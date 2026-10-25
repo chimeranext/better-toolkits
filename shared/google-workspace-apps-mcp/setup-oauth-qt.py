@@ -192,7 +192,7 @@ def run():
             with open(os.path.expanduser("~/.config/google-workspace/client_secret"), "w") as f:
                 f.write(ent_secret.get().strip())
             remote = ent_remote.get().strip() or "gdrive"
-            with open(os.path.expanduser("~/.rclone-config.json"), "w") as f:
+            with open(os.path.expanduser("~/.config/google-workspace/.rclone-config.json"), "w") as f:
                 json.dump({"remote": remote}, f)
             messagebox.showinfo("OK", "Guardado local (NO repo). Luego: rclone config (si aún no configurado) o verificar con rclone lsf gdrive:")
             root.destroy()
