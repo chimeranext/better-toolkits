@@ -57,6 +57,23 @@ def run():
             lbl.bind("<Button-1>", lambda e, u=url: webbrowser.open(u))
         lbl.pack(anchor="center", expand=True, fill="x", pady=0)
 
+# ⚠ ADVERTENCIA UX — Google Cloud free trial / billing / MFA
+    warn = tk.Frame(root, bg="#4a2d00", highlightbackground="#f59e0b", highlightthickness=2)
+    warn.pack(pady=6, padx=10, fill="x")
+    tk.Label(warn, text="⚠  ADVERTENCIA IMPORTANTE — Consola de Google Cloud", bg="#4a2d00", fg="#f59e0b",
+             font=("Segoe UI", 9, "bold"), anchor="w").pack(anchor="w", padx=6, pady=(3,0))
+    for wline in [
+        "1. Google Cloud te pedirá tarjeta para activar la prueba gratuita (crédito ~USD 30,00, 90 días).",
+        "   No se cobra si cancelas antes de terminar el trial, pero Google pide método de pago.",
+        "2. Google exige 2FA (MFA/2SV) en tu cuenta de Google para acceder a console.cloud.google.com.",
+        "   Prepara tu app de autenticador (Google Authenticator) antes de empezar.",
+        "3. Esto NO es costo del MCP ni de rclone: es el registro propio de tu proyecto en Google Cloud.",
+    ]:
+        tk.Label(warn, text=wline, bg="#4a2d00", fg="#e5e7eb", font=("Segoe UI", 8),
+                 anchor="w", justify="left").pack(anchor="w", padx=16, pady=1)
+    tk.Label(warn, text="  → Si no quieres pagar ni usar 2FA, no abras console.cloud.google.com; el MCP solo usa tu OAuth local.",
+             bg="#4a2d00", fg="#86efac", font=("Segoe UI", 8, "italic"), anchor="w", justify="left").pack(anchor="w", padx=16, pady=(1,3))
+
 # 3. FORMULARIO — 4 campos manuales, paso DEBAJO de cada input
     form = tk.LabelFrame(root, text="  Configuración paso a paso (cada paso debajo del campo)  ",
                          bg="#181818", fg="#ccc", font=("Segoe UI", 10, "bold"))
