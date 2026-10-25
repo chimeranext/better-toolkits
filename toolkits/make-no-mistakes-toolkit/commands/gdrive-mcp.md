@@ -6,10 +6,10 @@ priority: 70
 
 # /gdrive-mcp — GDrive list (future-proof, no embedded client_id)
 
-Mechanism (from `shared/google-workspace-apps-mcp/google-for-rclone.ts`):
-- `verify()` → `.config/google-workspace/google-oauth-client.json` (522 B, private `client_id` / `client_secret`); runs `rclone --drive-client-id ... --drive-client-secret ... ls gdrive:`; captures root folder list.
-- `loadRemote()` → `.config/google-workspace/.rclone-config.json` (`{"remote":"gdrive"}`); exclusive; never falls back to deprecated `rclone config`.
-- `stdio` transport persists; handshake includes `rootFolders` from `verify()`.
+Mechanism (`gdrive-mcp.sh` wrapper + `.ts` `stdio`):
+- `verify()` → `.config/google-workspace/google-oauth-client.json` (522 B, private `client_id` / `client_secret`); runs `rclone --drive-client-id ... --drive-client-secret ... ls gdrive:`.
+- `loadRemote()` → `.config/google-workspace/.rclone-config.json` (`{"remote":"gdrive"}`); exclusive; never deprecated `rclone config`.
+- `gdrive-mcp.sh` executes the mechanism with no hidden `2>/dev/null`; error visible.
 
 Evidence:
 - `.json` preserved (`~/.config/google-workspace/google-oauth-client.json`), `client_id` not in repo.
