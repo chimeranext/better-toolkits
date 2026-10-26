@@ -398,6 +398,39 @@
         "dora",
         "quality-gates"
       ]
+    },
+    {
+      "name": "media-buyer-toolkit",
+      "description": "Paid media operations toolkit \u2014 one stateless stdio MCP server (ads-multi-network) fronting Meta, TikTok, LinkedIn, Google Ads, YouTube and Spotify behind one normalized operation contract. Drafts-first by construction (apply flag + explicit activation with human confirmation), spend caps evaluated before any network call, declared capability matrix with loud unsupported/not_implemented errors, unified insights row where null and zero are distinct, and a change journal with directional lift readout.",
+      "version": "0.1.0",
+      "source": "./toolkits/media-buyer-toolkit",
+      "author": {
+        "name": "Luis Andres Pena Castillo",
+        "url": "https://github.com/lapc506"
+      },
+      "homepage": "https://toolkits.chimeranext.dev",
+      "repository": "https://github.com/chimeranext/better-toolkits",
+      "license": "BSL-1.1",
+      "category": "productivity",
+      "keywords": [
+        "media-buyer",
+        "paid-media",
+        "ads",
+        "meta",
+        "tiktok",
+        "linkedin",
+        "google-ads",
+        "youtube",
+        "spotify",
+        "mcp",
+        "mcp-server",
+        "stateless",
+        "campaigns",
+        "insights",
+        "guardrails",
+        "drafts-first",
+        "media-plan"
+      ]
     }
   ]
 }
