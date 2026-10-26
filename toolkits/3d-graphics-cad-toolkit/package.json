@@ -1,0 +1,30 @@
+{
+  "name": "3d-graphics-cad-toolkit",
+  "version": "0.1.0",
+  "description": "3D graphics and CAD toolkit (skills only)",
+  "private": true,
+  "type": "module",
+  "scripts": {},
+  "dependencies": {},
+  "devDependencies": {},
+  "skills": [
+    {
+      "source": "chimeranext/better-toolkits",
+      "skills": [
+        "3d-graphics-cad-toolkit",
+        "3d-model-operations",
+        "animacion-digital",
+        "bevy-iced-integration",
+        "bim",
+        "cad",
+        "cae",
+        "cam",
+        "gemelos-digitales",
+        "rv-otd-schema-management",
+        "vfx",
+        "videojuegos",
+        "vr-ar"
+      ]
+    }
+  ]
+}
