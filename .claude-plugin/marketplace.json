@@ -462,6 +462,33 @@
         "bevy",
         "iced"
       ]
+    },
+    {
+      "name": "game-theory-mechanics-toolkit",
+      "description": "Game theory and game development toolkit \u2014 game design mechanics, player psychology, production process, and visual/interactive storytelling skills. Video-game focused, engine-agnostic (Unity, Unreal Engine, Bevy, Godot, OpenUSD).",
+      "version": "0.1.0",
+      "source": "./toolkits/game-theory-mechanics-toolkit",
+      "author": {
+        "name": "Luis Andres Pena Castillo",
+        "url": "https://github.com/lapc506"
+      },
+      "homepage": "https://toolkits.chimeranext.dev",
+      "repository": "https://github.com/chimeranext/better-toolkits",
+      "license": "BSL-1.1",
+      "category": "productivity",
+      "keywords": [
+        "game-theory",
+        "game-design",
+        "mechanics",
+        "player-psychology",
+        "production",
+        "storytelling",
+        "video-games",
+        "unity",
+        "unreal",
+        "bevy",
+        "godot"
+      ]
     }
   ]
 }
