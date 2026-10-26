@@ -13,7 +13,7 @@
 - Marketing API (`https://developers.facebook.com/documentation/meta-pixel/implementation/marketing-api`)
 
 ## Multi-network OAuth2 env
-See `.media-buyer.env` (separate from `.google-workspace.env`).
+See `.media-buyer.env`.
 
 ## TikTok Ads / Pixel (adicionales)
 - TikTok Pixel setup: https://ads.tiktok.com/business/es/blog/get-started-with-tiktok-pixel

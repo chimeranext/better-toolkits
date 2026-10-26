@@ -170,3 +170,15 @@ Deliberately excluded here, with the reason, so the review can disagree explicit
 3. **TikTok**, then **LinkedIn** — both introduce async reporting and the shifted hierarchy.
 4. **Spotify** — closes phase 1 with the micros and Business-layer case.
 5. Playbooks and command entries.
+
+## D17 — Transport is a stateless stdio MCP
+
+The `mcp/ads-multi-network/` server implements the **stateless** MCP transport from the start, following `vitemcp/server#migrating-from-the-session-based-api` — the same contract already validated on `shared/google-workspace-apps/google-for-rclone.ts`.
+
+Rules:
+
+- Responds to `initialize` with `protocolVersion: "2024-11-05"` and never emits `Mcp-Session-Id`.
+- Does not hold per-session state between requests; every request is independent. Session-scoped data (journal handle, poll cursors for async insights per D9) is addressed explicitly in tool arguments, not kept on a server-side session.
+- This is not a migration: the scaffolding placeholder pointing at an unrelated session-based MCP implementation was removed, and nothing is registered against it.
+
+Rationale: stateful sessions complicate multi-harness reuse (D-opening: one server per harness), break on restart, and the stateless shape was proven equivalent for a single-owner workspace tool. Where the journal or an async report job needs continuity across calls, the continuity lives in on-disk state identified by an explicit ID, not in process memory.
