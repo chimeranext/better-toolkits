@@ -1,0 +1,31 @@
+{
+  "name": "3d-graphics-cad-toolkit",
+  "version": "0.1.0",
+  "description": "3D graphics and CAD toolkit: parametric modeling, additive manufacturing, BIM, VR/AR, digital twins, animation, VFX, and game-dev skills (multi-tool: AutoCAD, Blender, Cinema 4D, Maya, ZBrush, OpenUSD, NVIDIA Omniverse, Bevy, Iced).",
+  "author": {
+    "name": "Luis Andres Pena Castillo",
+    "url": "https://github.com/lapc506"
+  },
+  "homepage": "https://github.com/chimeranext/better-toolkits",
+  "repository": "https://github.com/chimeranext/better-toolkits",
+  "license": "BSL-1.1",
+  "keywords": [
+    "3d",
+    "cad",
+    "cam",
+    "cae",
+    "bim",
+    "vr",
+    "ar",
+    "digital-twin",
+    "animation",
+    "vfx",
+    "game-dev",
+    "opensusd",
+    "omniverse",
+    "bevy",
+    "iced",
+    "claude-code",
+    "claude-code-plugin"
+  ]
+}
