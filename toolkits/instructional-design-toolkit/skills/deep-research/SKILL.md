@@ -8,7 +8,7 @@ description: Deep research (estilo Google Gemini Deep Research) que produce cap�
 Skill de investigación profunda (inspirado en Google Gemini Deep Research) que produce
 capítulos de curso estructurados para el repo `../academia`. Combina:
 
-1. **Notion recursive crawl** — vía `notion-batch` MCP (REST API) para resolver el
+1. **Notion recursive crawl** — vía `notion-chimeranext` MCP (REST API) para resolver el
    blind spot de bookmarks del MCP nativo.
 2. **Scrapers web** — `crw` (rápido, URL→markdown), `Scrapling` (stealth/dynamic
    fallback), `yt-dlp` (transcripts), `webfetch` (último recurso).
@@ -114,7 +114,7 @@ guides:
 - `local_path` of hub = folder; each subguide = `.md`. The wrapper dumps there.
 - `resources` = inventory of external URLs only; NOT resolved in the sitemap.
 - If `local_path` doesn't exist when the wrapper runs → fail explicitly (never silently).
-- The YAML is regenerable from `notion-batch`; never edit by hand.
+- The YAML is regenerable from `notion-chimeranext`; never edit by hand.
 
 ## Reusabilidad
 
@@ -124,6 +124,6 @@ es la instancia de referencia.
 
 ## Related
 
-- `mcp/notion-batch/` — custom MCP (REST API) que bypassa el blind spot del nativo.
+- `shared/mcp/notion-chimeranext/` — custom MCP (REST API) que bypassa el blind spot del nativo.
 - `references/deep-research/protocol.md` — command SSOT.
 - `commands/deep-research.md` — thin entry.

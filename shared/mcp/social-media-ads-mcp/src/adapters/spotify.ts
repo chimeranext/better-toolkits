@@ -7,11 +7,11 @@
 // The `search` objective has no Spotify equivalent: it is declared UNSUPPORTED in the matrix
 // so a keyword-search campaign aimed at Spotify fails loudly with code: unsupported.
 
-import type { Adapter, AdapterStatus, Ctx, Page } from "../index.js";
-import type { Account, Ad, AdGroup, Audience, Budget, Campaign, CapabilityMatrix, EntityLevel, InsightRow } from "../../types.js";
-import { httpRequest } from "../../platform/transport.js";
-import { resolveCredentials } from "../../platform/credentials.js";
-import { fromMicros, toMicros, toDec } from "../../platform/money.js";
+import type { Adapter, AdapterStatus, Ctx, Page } from "./index.js";
+import type { Account, Ad, AdGroup, Audience, Budget, Campaign, CapabilityMatrix, EntityLevel, InsightRow } from "../types.js";
+import { httpRequest } from "../platform/transport.js";
+import { resolveCredentials } from "../platform/credentials.js";
+import { fromMicros, toMicros, toDec } from "../platform/money.js";
 
 const API = "https://api-partner.spotify.com/ads/v3";
 

@@ -8,7 +8,7 @@ Startups importing goods into Costa Rica lack a structured toolkit for supply ch
 
 - New `logistics-toolkit` under `toolkits/` with:
   - `references/` — structured Markdown per domain: procurement (P2P, SRM, Kraljic), customs regimes (CAUCA, Ley 7575, zona primaria/secundaria), import documentation (~19 doc types), INCOTERMS 2020, free trade agreements (CR-China, CR-EEUU), inventory management (WMS, forecasting).
-  - `skills/deep-research/` — shared crawl skill (Notion tree → `sitemap.yaml` with verbatim bookmark URLs via the `notion-batch` MCP). Reused from `instructional-design-toolkit`, not reimplemented.
+  - `skills/deep-research/` — shared crawl skill (Notion tree → `sitemap.yaml` with verbatim bookmark URLs via the `notion-chimeranext` MCP). Reused from `instructional-design-toolkit`, not reimplemented.
   - `scripts/notion-enrich.py` — enricher that classifies each external URL (youtube/article/pdf/image/bookmark) and fetches content via yt-dlp / crw / Scrapling / webfetch.
   - `commands/logistics-import.md` — thin entry: `/logistics-import <notion-url>`.
   - `references/logistics-import/protocol.md` — protocol SSOT (preflight, DFS fetch, enrich, verify).
