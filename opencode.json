@@ -9,6 +9,27 @@
           "tsx",
           "shared/google-workspace-apps/google-for-rclone.ts"
         ]
+      },
+      "social-media-ads-mcp": {
+        "type": "local",
+        "command": [
+          "npx",
+          "-y",
+          "tsx",
+          "shared/mcp/social-media-ads-mcp/src/server.ts"
+        ],
+        "protocol": "2026-07-28"
+      },
+      "notion-chimeranext": {
+        "type": "local",
+        "command": [
+          "node",
+          "shared/mcp/notion-chimeranext/server.js"
+        ],
+        "environment": {
+          "NOTION_API_KEY": "{env:NOTION_API_KEY}"
+        },
+        "protocol": "2026-07-28"
       }
     }
   }

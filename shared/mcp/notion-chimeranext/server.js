@@ -11,12 +11,15 @@
  * integration must be shared with (invited to) every page/database fetched.
  * Secret stays in env — never in config JSON, chat, or logs.
  *
+ * Stateless / ViteMCP: targets MCP revision 2026-07-28. There is no
+ * `initialize` handshake and no `Mcp-Session-Id` — every request is
+ * self-contained and carries its own protocol version and client capabilities.
+ *
  * Tools:
- *   - fetch_tree       recursive page/database → markdown pages + URL inventory
- *   - query_database   flat rows (title + URL + properties) for one database
+ *  -   fetch_tree       recursive page/database → markdown pages + URL inventory
+ *  -   query_database   flat rows (title + URL + properties) for one database
  */
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { ViteMCP, UserError } from "@vitemcp/server";
 import { z } from "zod";
 
 const API = "https://api.notion.com/v1";
@@ -24,7 +27,7 @@ const VERSION = "2022-06-28";
 
 function token() {
   const t = process.env.NOTION_API_KEY;
-  if (!t) throw new Error("NOTION_API_KEY is not set in the server environment");
+  if (!t) throw new UserError("NOTION_API_KEY is not set in the server environment");
   return t;
 }
 
@@ -268,37 +271,37 @@ export async function fetchTree(rootInput, { maxDepth = 4, maxPages = 300, fetch
 // via closure. They reference `queue` declared above — kept as module pattern
 // (single-flight per call since state is per-invocation).
 
-const server = new McpServer({ name: "notion-batch", version: "0.1.0" });
+const server = new ViteMCP({ name: "notion-batch", version: "0.1.0" });
 
-server.tool(
-  "fetch_tree",
-  "Recursively fetch a Notion page or database with VERBATIM bookmark/video/file URLs (fixes the native Notion MCP blind spot). Returns markdown per page plus inventory. Needs NOTION_API_KEY and the integration invited to the pages.",
-  {
+server.addTool({
+  name: "fetch_tree",
+  description:
+    "Recursively fetch a Notion page or database with VERBATIM bookmark/video/file URLs (fixes the native Notion MCP blind spot). Returns markdown per page plus inventory. Needs NOTION_API_KEY and the integration invited to the pages.",
+  parameters: z.object({
     root: z.string().describe("Page/database URL or id (32-hex with or without dashes)"),
     max_depth: z.number().int().min(0).max(6).default(4),
     max_pages: z.number().int().min(1).max(500).default(300),
-  },
-  async ({ root, max_depth, max_pages }) => {
+  }),
+  execute: async ({ root, max_depth, max_pages }) => {
     const tree = await fetchTree(root, { maxDepth: max_depth, maxPages: max_pages });
     return {
       content: [{ type: "text", text: JSON.stringify({ pages: tree.pages.length, truncated: tree.truncated, inventory: tree.pages.map((p) => ({ title: p.title, url: p.url })) }, null, 2) + "\n\n" + tree.pages.map((p) => `--- PAGE ${p.url} ---\n${p.markdown}`).join("\n\n") }],
     };
   },
-);
+});
 
-server.tool(
-  "query_database",
-  "Flat rows (title + URL + raw properties) for one Notion database. No recursion.",
-  { database: z.string().describe("Database URL or id") },
-  async ({ database }) => {
+server.addTool({
+  name: "query_database",
+  description: "Flat rows (title + URL + raw properties) for one Notion database. No recursion.",
+  parameters: z.object({ database: z.string().describe("Database URL or id") }),
+  execute: async ({ database }) => {
     const id = parseId(database);
     const rows = await queryDb(id, fetch, 350);
     const out = rows.map((r) => ({ title: pageTitle(r), url: pageUrl(r.id), properties: r.properties ?? {} }));
     return { content: [{ type: "text", text: JSON.stringify(out, null, 2) }] };
   },
-);
+});
 
 if (process.argv[1]?.endsWith("server.js")) {
-  const transport = new StdioServerTransport();
-  await server.connect(transport);
+  await server.start({ transportType: "stdio" });
 }

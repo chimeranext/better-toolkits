@@ -123,7 +123,7 @@ def enrich_resource(res, guide_local_path, dry_run=False):
 
     if kind == "notion_page":
         # Already a Notion page — the wrapper should fetch_tree it; here we just note
-        return "pending", "notion_page: fetch via notion-batch fetch_tree"
+        return "pending", "notion_page: fetch via notion-chimeranext fetch_tree"
 
     return "skipped", f"unknown kind: {kind}"
 

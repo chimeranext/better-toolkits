@@ -7,9 +7,10 @@ Harness-agnostic body. Thin entry: `commands/deep-research.md`.
 # Deep research: $ARGUMENTS
 
 Fetch a Notion page/database **tree** to markdown files with **verbatim URLs**
-(bookmarks, videos, embeds, files). Uses the custom `notion-batch` MCP
-(`mcp/notion-batch/`, REST API) — NOT the native Notion MCP, which drops
-bookmark destinations (renders `<unknown url="page#fragment">`).
+(bookmarks, videos, embeds, files). Uses the custom `notion-chimeranext` MCP
+(`shared/mcp/notion-chimeranext/`, REST API, ViteMCP stateless) — NOT the native
+Notion MCP, which drops bookmark destinations (renders
+`<unknown url="page#fragment">`).
 
 **Arguments format:** `{url-or-id} [--depth N] [--max-pages N] [--out <dir>]`
 
@@ -20,9 +21,9 @@ bookmark destinations (renders `<unknown url="page#fragment">`).
 
 ## Phase 1 — Preflight
 
-1. Check `notion-batch` is connected (tool available). If not:
+1. Check `notion-chimeranext` is connected (tool available). If not:
    - Is `NOTION_API_KEY` exported (`echo ${#NOTION_API_KEY}` >0)?
-   - Is the server in OpenCode MCP config (see `mcp/notion-batch/README.md`)?
+   - Is the server in OpenCode MCP config (see `shared/mcp/notion-chimeranext/README.md`)?
    - Is the integration invited (Share) to the target pages?
    - Never invent URLs or token values; stop and report which check failed.
 2. Parse root id (the server accepts full URLs too).
