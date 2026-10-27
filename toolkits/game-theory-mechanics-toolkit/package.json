@@ -1,0 +1,21 @@
+{
+  "name": "game-theory-mechanics-toolkit",
+  "version": "0.1.0",
+  "description": "Game theory and game development toolkit (skills only)",
+  "private": true,
+  "type": "module",
+  "scripts": {},
+  "dependencies": {},
+  "devDependencies": {},
+  "skills": [
+    {
+      "source": "chimeranext/better-toolkits",
+      "skills": [
+        "game-design",
+        "player-psychology",
+        "production",
+        "visual-storytelling"
+      ]
+    }
+  ]
+}
