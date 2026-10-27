@@ -369,7 +369,7 @@
     {
       "name": "assurance",
       "description": "Release-assurance evidence toolkit \u2014 2 pillars (testing, liveness) + security transversal with its own runner, plus governance (DORA/DER metrics, stage gates, traceable receipts). Migrated quality-evidence commands from make-no-mistakes with shims.",
-      "version": "0.1.9",
+      "version": "0.1.10",
       "source": "./toolkits/assurance-toolkit",
       "author": {
         "name": "Luis Andres Pena Castillo",
