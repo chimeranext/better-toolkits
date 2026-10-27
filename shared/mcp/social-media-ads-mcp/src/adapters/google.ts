@@ -3,11 +3,11 @@
 // developer token). Money: micros → scaled via fromMicros. The keyword-bearing ad group is
 // preserved: keywords surface inside normalized targeting, never dropped.
 
-import type { Adapter, AdapterStatus, Ctx, Page } from "../index.js";
-import type { Account, Ad, AdGroup, Audience, Campaign, CapabilityMatrix, EntityLevel } from "../../types.js";
-import { httpRequest } from "../../platform/transport.js";
-import { resolveCredentials } from "../../platform/credentials.js";
-import { fromMicros, toMicros, toDec } from "../../platform/money.js";
+import type { Adapter, AdapterStatus, Ctx, Page } from "./index.js";
+import type { Account, Ad, AdGroup, Audience, Campaign, CapabilityMatrix, EntityLevel } from "../types.js";
+import { httpRequest } from "../platform/transport.js";
+import { resolveCredentials } from "../platform/credentials.js";
+import { fromMicros, toMicros, toDec } from "../platform/money.js";
 
 const API = "https://googleads.googleapis.com/v18";
 

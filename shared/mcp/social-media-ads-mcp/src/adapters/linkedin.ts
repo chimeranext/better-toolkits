@@ -6,7 +6,7 @@
 // three-level shape as every other network (network-adapters spec). Audiences = dmpSegmentsV2.
 // Insights are synchronous (/adAnalyticsV2, DAILY granularity); async reports are unsupported.
 
-import type { Adapter, AdapterStatus, Ctx, Page } from "../index.js";
+import type { Adapter, AdapterStatus, Ctx, Page } from "./index.js";
 import type {
   Account,
   Ad,
@@ -17,9 +17,9 @@ import type {
   CapabilityMatrix,
   EntityLevel,
   InsightRow,
-} from "../../types.js";
-import { httpRequest } from "../../platform/transport.js";
-import { resolveCredentials } from "../../platform/credentials.js";
+} from "../types.js";
+import { httpRequest } from "../platform/transport.js";
+import { resolveCredentials } from "../platform/credentials.js";
 
 const API = "https://api.linkedin.com/v2";
 const REST = "https://api.linkedin.com/rest";

@@ -2,11 +2,11 @@
 // (unified-insights-schema spec). Money: spend reported in micros → scaled decimal.
 // Hierarchy is straight (campaign → ad group → ad) with vendor-native identifiers absorbed here.
 
-import type { Adapter, AdapterStatus, Ctx, Page } from "../index.js";
-import type { Account, Ad, AdGroup, Audience, Campaign, CapabilityMatrix, EntityLevel, InsightRow } from "../../types.js";
-import { httpRequest } from "../../platform/transport.js";
-import { resolveCredentials } from "../../platform/credentials.js";
-import { fromMicros, toDec } from "../../platform/money.js";
+import type { Adapter, AdapterStatus, Ctx, Page } from "./index.js";
+import type { Account, Ad, AdGroup, Audience, Campaign, CapabilityMatrix, EntityLevel, InsightRow } from "../types.js";
+import { httpRequest } from "../platform/transport.js";
+import { resolveCredentials } from "../platform/credentials.js";
+import { fromMicros, toDec } from "../platform/money.js";
 
 const API = "https://business-api.tiktok.com/open_api/v1.3";
 

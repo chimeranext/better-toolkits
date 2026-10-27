@@ -2,7 +2,7 @@
 
 Paid media operations across **Meta, TikTok, LinkedIn, Google Ads, YouTube and Spotify** behind one normalized MCP tool contract. The agent sees one vocabulary (`account → campaign → ad_group → ad/creative`); six adapters absorb the vendor differences (LinkedIn's one-level hierarchy shift, Google's keyword-bearing ad group, Spotify's Business layer and micros, Meta's minor units).
 
-## The MCP server — `ads-multi-network`
+## The MCP server — `social-media-ads-mcp`
 
 One **stateless** stdio MCP server is the primary interface (CLI is a thin peer over the same router):
 
@@ -10,9 +10,9 @@ One **stateless** stdio MCP server is the primary interface (CLI is a thin peer 
 {
   "mcp": {
     "servers": {
-      "ads-multi-network": {
+      "social-media-ads-mcp": {
         "type": "local",
-        "command": ["npx", "-y", "tsx", "toolkits/media-buyer-toolkit/mcp/ads-multi-network/src/server.ts"]
+        "command": ["npx", "-y", "tsx", "shared/mcp/social-media-ads-mcp/src/server.ts"]
       }
     }
   }
@@ -36,7 +36,7 @@ Stateless by construction (the proven pattern of `shared/google-workspace-apps/g
 
 ## Layout
 
-- `mcp/ads-multi-network/` — the stateless stdio server, operation router, platform layer, six adapters, offline contract tests against recorded fixtures
+- `shared/mcp/social-media-ads-mcp/` — the stateless stdio server, operation router, platform layer, six adapters, offline contract tests against recorded fixtures
 - `references/` — normalized entity mapping, per-network notes, unified insights schema, guardrail doctrine
 - `skills/` — operator playbooks (media plan, creative testing, pacing, kill rules, attribution readout)
 - `commands/` — thin entries: `/media-plan`, `/media-review`
