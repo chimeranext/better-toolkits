@@ -1,0 +1,13 @@
+{
+  "name": "logistics-toolkit",
+  "version": "0.1.0",
+  "description": "Supply chain / import toolkit (LATAM)",
+  "private": true,
+  "type": "module",
+  "scripts": {},
+  "dependencies": {},
+  "devDependencies": {},
+  "skills": [
+    { "source": "chimeranext/better-toolkits", "skills": ["deep-research", "logistics-supply-chain", "notion-content-ingestion"] }
+  ]
+}
