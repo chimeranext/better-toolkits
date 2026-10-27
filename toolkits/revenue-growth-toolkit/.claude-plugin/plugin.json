@@ -1,0 +1,37 @@
+{
+  "name": "revenue-growth-toolkit",
+  "version": "0.1.0",
+  "description": "Revenue growth toolkit — AAARRR funnel/flywheel strategy over multi-network paid-media execution (shared MCP, Meta via Ads CLI), PostHog analytics, Python metrics.",
+  "author": {
+    "name": "Luis Andres Pena Castillo",
+    "url": "https://github.com/lapc506"
+  },
+  "homepage": "https://toolkits.chimeranext.dev",
+  "repository": "https://github.com/chimeranext/better-toolkits",
+  "license": "BSL-1.1",
+  "category": "growth",
+  "keywords": [
+    "revenue",
+    "growth",
+    "aaarrr",
+    "funnel",
+    "flywheel",
+    "paid-media",
+    "ads",
+    "meta",
+    "tiktok",
+    "linkedin",
+    "google-ads",
+    "youtube",
+    "spotify",
+    "ltv",
+    "cac",
+    "churn",
+    "cohort",
+    "posthog",
+    "ads-cli",
+    "mcp",
+    "claude-code",
+    "claude-code-plugin"
+  ]
+}

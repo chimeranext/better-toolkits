@@ -1,0 +1,31 @@
+{
+  "name": "revenue-growth-toolkit",
+  "version": "0.1.0",
+  "description": "Revenue growth toolkit — fuses AAARRR funnel/flywheel strategy (from aaarrr-flywheel) with multi-network paid-media execution (Meta/TikTok/LinkedIn/Google/YouTube/Spotify) via the shared social-media-ads-mcp MCP; PostHog (self-hosted) analytics; Python derived metrics.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "python3 -m py_compile scripts/ltv_cac_calculator.py scripts/referral_tracker.py scripts/churn_detector.py scripts/cohort_analysis.py"
+  },
+  "skills": [
+    {
+      "source": "chimeranext/better-toolkits",
+      "skills": [
+        "landing-page-design",
+        "landing-instrumentation",
+        "meta-graph-api",
+        "revenue-strategy",
+        "media-plan",
+        "creative-testing",
+        "budget-pacing",
+        "kill-rules",
+        "attribution-readout"
+      ]
+    }
+  ],
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}
