@@ -1,0 +1,29 @@
+{
+  "name": "@chimeranext/ads-multi-network-mcp",
+  "version": "0.1.0",
+  "description": "Stateless MCP server (ViteMCP / 2026-07-28) exposing the ads-multi-network operation router over Meta, TikTok, LinkedIn, Google Ads, YouTube and Spotify.",
+  "type": "module",
+  "bin": {
+    "ads-multi-network-mcp": "./src/server.ts"
+  },
+  "scripts": {
+    "start": "tsx src/server.ts",
+    "test": "node --test test/"
+  },
+  "dependencies": {
+    "@vitemcp/server": "^1.9.7",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "BSL-1.1",
+  "allowScripts": {
+    "esbuild@0.28.2": true
+  }
+}

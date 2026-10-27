@@ -1,7 +1,7 @@
 {
   "name": "media-buyer-toolkit",
   "version": "0.1.0",
-  "description": "Paid media operations toolkit \u2014 one stateless stdio MCP server (ads-multi-network) fronting Meta, TikTok, LinkedIn, Google Ads, YouTube and Spotify behind one normalized operation contract: accounts, campaigns, ad groups, creatives, audiences, insights, async reports. Drafts-first by construction, guardrails evaluated before any network call, capability matrix declared per network, and one unified insights row schema where null and zero are distinct.",
+  "description": "Paid media operations toolkit \u2014 one stateless stdio MCP server (social-media-ads-mcp, en shared/) fronting Meta, TikTok, LinkedIn, Google Ads, YouTube and Spotify behind one normalized operation contract: accounts, campaigns, ad groups, creatives, audiences, insights, async reports. Drafts-first by construction, guardrails evaluated before any network call, capability matrix declared per network, and one unified insights row schema where null and zero are distinct.",
   "author": {
     "name": "Luis Andres Pena Castillo",
     "url": "https://github.com/lapc506"
@@ -34,13 +34,13 @@
     "opencode"
   ],
   "mcp": {
-    "ads-multi-network": {
+    "social-media-ads-mcp": {
       "type": "local",
       "command": [
         "npx",
         "-y",
         "tsx",
-        "toolkits/media-buyer-toolkit/mcp/ads-multi-network/src/server.ts"
+        "shared/mcp/social-media-ads-mcp/src/server.ts"
       ]
     }
   }

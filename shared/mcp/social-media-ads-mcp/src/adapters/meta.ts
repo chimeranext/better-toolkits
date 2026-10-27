@@ -2,11 +2,11 @@
 // boundary (network-adapters spec). Creation is PAUSED — drafts-first (Meta exposes no draft
 // state at campaign level; PAUSED is the only non-spending finite creation state).
 
-import type { Adapter, AdapterStatus, Ctx, Page } from "../index.js";
-import type { Account, Ad, AdGroup, Audience, Campaign, CapabilityMatrix, EntityLevel, InsightRow } from "../../types.js";
-import { httpRequest } from "../../platform/transport.js";
-import { resolveCredentials } from "../../platform/credentials.js";
-import { parseDec, toDec, fromMinorUnits, toMinorUnits, currencyExponent } from "../../platform/money.js";
+import type { Adapter, AdapterStatus, Ctx, Page } from "./index.js";
+import type { Account, Ad, AdGroup, Audience, Campaign, CapabilityMatrix, EntityLevel, InsightRow } from "../types.js";
+import { httpRequest } from "../platform/transport.js";
+import { resolveCredentials } from "../platform/credentials.js";
+import { parseDec, toDec, fromMinorUnits, toMinorUnits, currencyExponent } from "../platform/money.js";
 
 const API = "https://graph.facebook.com/v23.0";
 
