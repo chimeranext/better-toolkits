@@ -11,15 +11,20 @@
     {
       "source": "chimeranext/better-toolkits",
       "skills": [
-        "landing-page-design",
-        "landing-instrumentation",
-        "meta-graph-api",
-        "revenue-strategy",
-        "media-plan",
-        "creative-testing",
+        "attribution-readout",
+        "b2g",
         "budget-pacing",
+        "creative-testing",
         "kill-rules",
-        "attribution-readout"
+        "landing-instrumentation",
+        "landing-page-design",
+        "media-plan",
+        "meta-graph-api",
+        "pricing-strategist",
+        "revenue-ops",
+        "revenue-ops-triage",
+        "revenue-strategy",
+        "social-publishing"
       ]
     }
   ],

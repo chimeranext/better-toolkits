@@ -34,6 +34,16 @@ Change: `revenue-growth-toolkit` · Domain: `toolkit:revenue-growth` · Spec: `s
 - [x] T15: Add `references/posthog/setup.md` (Podman hobby-deploy container, env, init)
 - [x] T16: Register PostHog MCP in `opencode.json` (server entry)
 
+## Phase E2 — RevOps / pricing / social / B2G additions
+
+- [x] T23: Add `scripts/pipeline_analyzer.py`, `forecast_accuracy_tracker.py`, `gtm_efficiency_calculator.py` (RevOps)
+- [x] T24: Add `references/gtm-efficiency-benchmarks.md` (Red/Yellow/Green/Elite por etapa)
+- [x] T25: Add `skills/revenue-ops/` + `skills/revenue-ops-triage/`
+- [x] T26: Add `skills/pricing-strategist/` (model/WTP/packaging surface; scripts pendientes, no fake)
+- [x] T27: Add `skills/social-publishing/` (Publora MCP)
+- [x] T28: Add `skills/b2g/` + `scripts/b2g/` (tender_normalizer, unspsc_map, tender_match, rfp_analyzer) — B2G agnóstico de país
+- [x] T29: Add `references/models/{b2b,b2c,b2g}.md` (agrupación real por modelo de negocio)
+
 ## Phase F — Marketplace + registry
 
 - [x] T17: Remove `aaarrr-flywheel-toolkit` + `media-buyer-toolkit` from `.claude-plugin/marketplace.json`; add `revenue-growth-toolkit` v0.1.0
