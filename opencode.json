@@ -30,6 +30,11 @@
           "NOTION_API_KEY": "{env:NOTION_API_KEY}"
         },
         "protocol": "2026-07-28"
+      },
+      "posthog": {
+        "type": "remote",
+        "url": "https://mcp.posthog.com/mcp",
+        "oauth": true
       }
     }
   }
