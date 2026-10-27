@@ -1,0 +1,13 @@
+{
+  "name": "schematics-pcb-design-toolkit",
+  "version": "0.1.0",
+  "description": "Schematic & PCB design toolkit (hardware)",
+  "private": true,
+  "type": "module",
+  "scripts": {},
+  "dependencies": {},
+  "devDependencies": {},
+  "skills": [
+    { "source": "chimeranext/better-toolkits", "skills": ["deep-research", "schematics-pcb-design"] }
+  ]
+}

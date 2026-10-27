@@ -489,6 +489,30 @@
         "bevy",
         "godot"
       ]
+    },
+    {
+      "name": "logistics-toolkit",
+      "description": "Supply chain / import toolkit for LATAM \u2014 procurement (P2P, SRM, Kraljic), customs regimes, import documents, INCOTERMS 2020, free trade agreements, and inventory management. Notion-agnostic ingestion.",
+      "version": "0.1.0",
+      "source": "./toolkits/logistics-toolkit",
+      "author": { "name": "Luis Andres Pena Castillo", "url": "https://github.com/lapc506" },
+      "homepage": "https://toolkits.chimeranext.dev",
+      "repository": "https://github.com/chimeranext/better-toolkits",
+      "license": "BSL-1.1",
+      "category": "productivity",
+      "keywords": ["logistics", "supply-chain", "procurement", "customs", "incoterms", "trade", "inventory", "scor", "apics"]
+    },
+    {
+      "name": "schematics-pcb-design-toolkit",
+      "description": "Schematic capture and PCB layout toolkit for hardware/IoT startups \u2014 KiCad project structure, design rules, layout guidelines, ERC/DRC, manufacturing outputs, and netlist diff.",
+      "version": "0.1.0",
+      "source": "./toolkits/schematics-pcb-design-toolkit",
+      "author": { "name": "Luis Andres Pena Castillo", "url": "https://github.com/lapc506" },
+      "homepage": "https://toolkits.chimeranext.dev",
+      "repository": "https://github.com/chimeranext/better-toolkits",
+      "license": "BSL-1.1",
+      "category": "productivity",
+      "keywords": ["schematics", "pcb", "kicad", "hardware", "iot", "gerber", "drc", "erc", "bom"]
     }
   ]
 }
