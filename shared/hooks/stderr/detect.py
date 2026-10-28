@@ -81,10 +81,30 @@ def scan_text(command: str) -> str:
     return strip_quoted_spans(command)
 
 
+SCRIPT_INVOKE = re.compile(
+    r"(?:^|[\s;&|])(?:ba|z|k)?sh\s+(?:-[^\s]+\s+)?([^\s;|&]+\.sh)\b"
+)
+
+
+def scan_script_file(command: str) -> str:
+    """If the command runs a local script (`bash foo.sh`), read its content so
+    the detector also scans what executes *inside* the file. Closes the gap
+    where `>/dev/null` hides inside a script rather than in the shell command.
+    Mirrors the OpenCode plugin's scanScriptFile()."""
+    m = SCRIPT_INVOKE.search(command)
+    if not m:
+        return ""
+    try:
+        with open(m.group(1), "r", encoding="utf-8") as fh:
+            return fh.read()
+    except OSError:
+        return ""
+
+
 def deny_reason(command: str) -> str | None:
     if not command or not command.strip():
         return None
-    scan = scan_text(command)
+    scan = scan_text(command) + "\n" + scan_script_file(command)
 
     for pat in SILENCE:
         if pat.search(scan):

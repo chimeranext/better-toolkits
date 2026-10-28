@@ -87,10 +87,24 @@ function scanText(command: string): string {
   return stripQuotedSpans(command)
 }
 
+/** If the command executes a local script (e.g. `bash foo.sh`), read its
+ *  content so the detector can also scan what runs *inside* the file. This
+ *  closes the gap where `>/dev/null` was hidden inside a script rather than
+ *  in the shell command itself. */
+function scanScriptFile(command: string): string {
+  const m = /(?:^|[\s;&|])(?:ba|z|k)?sh\s+(?:-[^\s]+\s+)?([^\s;|&]+\.sh)\b/.exec(command)
+  if (!m) return ""
+  try {
+    return readFileSync(m[1], "utf-8")
+  } catch {
+    return ""
+  }
+}
+
 function deny(command: string): string | null {
   if (process.env.MNM_DISABLE_STDERR_HOOK === "1") return null
   if (!command || !command.trim()) return null
-  const scan = scanText(command)
+  const scan = scanText(command) + "\n" + scanScriptFile(command)
   for (const pat of SILENCE) {
     if (pat.test(scan)) {
       return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). Ejecuta el comando sin descartar stderr.";
