@@ -22,8 +22,10 @@ lugar de block, para permitir registrar la deuda sin frenar el trabajo.
 
 El sistema SHALL registrar cada violación como una entrada en el repo de auditoría de la
 entidad bajo `conventions/code-conventions-audit-YYYY-MM-DD.md` (append-only, filename ISO).
-Por defecto, cada venture/startup usa `<org>/internal-audits`; la centralización en
-`chimeranext/internal-audits` solo ocurre si `auditsRepo` se configura explícitamente (opt-in).
+Por defecto, cada venture/startup/serial entrepreneur independiente usa `<org>/internal-audits`;
+la centralización en un repo compartido (p.ej. `chimeranext/internal-audits`) solo ocurre si
+la entidad la adopta explícitamente vía `auditsRepo` (decisión opinionated de shared services,
+no un requisito universal).
 
 #### Scenario: Registro por día
 
@@ -33,13 +35,15 @@ Por defecto, cada venture/startup usa `<org>/internal-audits`; la centralizació
 
 #### Scenario: Default por entidad
 
-- **WHEN** una entity no configura `auditsRepo`
+- **WHEN** una entidad no configura `auditsRepo`
 - **THEN** el registro escribe a `<org>/internal-audits` (el org del repo auditado)
 
 #### Scenario: Centralización opt-in
 
-- **WHEN** una entidad configura `auditsRepo: chimeranext/internal-audits`
-- **THEN** el registro escribe al repo centralizado (shared services opinionated)
+- **WHEN** una entidad configura `auditsRepo` hacia un repo compartido (p.ej.
+  `chimeranext/internal-audits`)
+- **THEN** el registro escribe al repo compartido, porque la entidad adoptó explícitamente
+  el modelo de shared services
 
 #### Scenario: Append-only preserva historial
 

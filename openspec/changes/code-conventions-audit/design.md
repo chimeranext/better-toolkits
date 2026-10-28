@@ -16,14 +16,16 @@ warn (no-block) y se registra en `internal-audits` (log fechado append-only).
 
 ### D2: Registro versionado — default por entidad, centralización opt-in
 
-- **Por qué:** por defecto cada venture/startup escribe a su propio `<org>/internal-audits`
-  (autonomía); la centralización en `chimeranext/internal-audits` es opt-in (decisión
-  explícita, justificada por el shared services opinionated de ChimeraNext).
+- **Por qué:** por defecto cada venture/startup/serial entrepreneur independiente escribe a su
+  propio `<org>/internal-audits` (autonomía). La centralización en un repo compartido
+  (p.ej. `chimeranext/internal-audits`) es opt-in: solo cuando una entidad adopta
+  explícitamente el modelo de shared services — decisión opinionated del studio, no un
+  requisito universal.
 - **Formato:** `conventions/code-conventions-audit-YYYY-MM-DD.md`, append-only, filename ISO.
 - **Mecanismo (precedencia):** 1) si `auditsRepo` explícito → usa ese (habilita
   centralización opt-in); 2) sino → default `<org>/internal-audits`.
 - **Alternativa rechazada:** wiki de GitHub (no versionable con PRs); centralizar por default
-  (impone shared services a quien no lo adopta).
+  (impondría shared services a quien no lo adopta).
 
 ### D3: Sin ranking persistente
 
@@ -48,7 +50,10 @@ warn (no-block) y se registra en `internal-audits` (log fechado append-only).
 hooks pre-commit/CI (MNM) ──warn──► registrador ──batch──► <org>/internal-audits/   (default)
                                                           conventions/code-conventions-audit-YYYY-MM-DD.md
                                                           (append-only)
-                                                          └─ opt-in: chimeranext/internal-audits (centralización)
+                                                          └─ opt-in: repo compartido
+                                                             (p.ej. chimeranext/internal-audits)
+                                                             — solo si la entidad adopta
+                                                             shared services (opinionated)
 
 /code-conventions-audit (assurance) ──lee──► <org>/internal-audits/ ──► reporte de cumplimiento
 ```
