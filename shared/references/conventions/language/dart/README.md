@@ -55,6 +55,7 @@ double? parseLux(int raw) {
 
 - local: `dart analyze` + `dart test` (SDK 3.13.4 medido en dogfood).
 - CI: lo local + cobertura LCOV con umbral.
+- D8 (prescriptivo): **warn no-block** — `conventions-warn-recorder.sh dart/D8 <file> @<author>`; no bloquea, registra en `internal-audits`.
 
 ## LESSONS
 
