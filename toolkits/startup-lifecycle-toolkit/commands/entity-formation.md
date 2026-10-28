@@ -171,6 +171,14 @@ Founder (You)
 └── Class A → AduaNext Inc. (Delaware PBC) — GovTech VCs
 ```
 
+> **Opinionated — un modelo entre varios, no el default.** Esta es la estructura que
+> **ChimeraNext** resolvió usar (Sister Entities: Shared Services LLC + ventures independientes
+> con cap tables limpios). Es una decisión opinionated del studio, **no** el destino universal
+> para todo serial entrepreneur. Antes de adoptarla, evaluá los otros patrones — **Services
+> Hub** (services LLC + MSAs bilaterales, sin holding) y **Full Studio** (Management Co +
+> Holding centralizado) — y usá `when-to-become-studio` (venture-studio-toolkit) para elegir
+> según tu caso. Para tu startup, esto son recomendaciones que podés adoptar o no.
+
 ## References
 
 - [`references/entity-formation/protocol.md`](../../references/entity-formation/protocol.md) — Detailed protocol
