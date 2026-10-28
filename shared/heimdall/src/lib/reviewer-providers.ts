@@ -195,7 +195,9 @@ const GEMINI_DEFAULT_MODEL = "gemini-3.5-flash"
 const NIM_MODEL_SLUGS = {
   kimi: "moonshotai/kimi-k2.6",
   glm: "z-ai/glm-5.1",
+  glm53Flash: "z-ai/glm-5.3-flash",
   deepseek: "deepseek-ai/deepseek-v4-pro",
+  deepseek41Flash: "deepseek-ai/deepseek-v4.1-flash",
   qwen: "qwen/qwen3-coder-480b-a35b-instruct",
   // ─── NIM catalog expansion (2026-05-27) ──────────────────────────────────
   // Sourced from the live NIM catalog. Each model verified to support
@@ -217,6 +219,7 @@ const NIM_MODEL_SLUGS = {
   // as of the 2026-06-09 probe, so no `nim-minimax-m3` lane exists and the
   // chain skips that id gracefully (unknown-id → next lane).
   nemotronUltra: "nvidia/nemotron-3-ultra-550b-a55b",
+  nemotronLightning: "nvidia/nemotron-3.5-lightning-30b-a3b",
   qwen122: "qwen/qwen3.5-122b-a10b",
   qwen397: "qwen/qwen3.5-397b-a17b",
   gptOss: "openai/gpt-oss-20b",
@@ -386,26 +389,31 @@ export const REVIEWER_ADVERSARIAL_PROVIDER_ENV = "REVIEWER_ADVERSARIAL_PROVIDER"
 export const REVIEWER_ADVERSARIAL_CHAIN_ENV = "REVIEWER_ADVERSARIAL_CHAIN"
 
 /**
- * Default adversarial fallback chain (Andrés 2026-06-09; reordered
- * follow-up): kimi-k2.6 → glm-5.1 → nemotron-3-ultra → minimax-m3.
+ * Default adversarial fallback chain (2026-10-28; reordered to live free NIM
+ * preview endpoints, verified against build.nvidia.com nim_type_preview, and
+ * ordered by MEASURED latency):
+ * nemotron-3.5-lightning-30b → nemotron-3-ultra-550b → deepseek-v4.1-flash →
+ * glm-5-3-flash.
  *
- * Ordering rationale — the adversarial pass READS a diff to find bugs, which is
- * a CODING task, so the chain leads with the strongest coder:
- *   1. `nim-kimi` (Kimi K2.6) — best coder: SWE-Verified 80.2%,
- *      Terminal-Bench 2.0 66.7%, LiveCodeBench 89.6.
- *   2. `nim-glm` (GLM 5.1) — strong coder: SWE-Pro 58.4%.
- *   3. `nim-nemotron-3-ultra` — a REASONING model with weak coding
- *      (SciCode 39.9%, Terminal-Bench Hard 36.4%), so demoted to a fallback.
- *   4. `nim-minimax-m3` — last; still NOT a registered lane.
+ * Ordering rationale — the adversarial pass READS a diff to find bugs (a coding
+ * task); among the free NIM preview lanes, the chain leads with the fastest
+ * reliable responders (measured 2026-10-28):
+ *   1. `nim-nemotron-3.5-lightning` (Nemotron 3.5 Lightning 30B-A3B) — free
+ *      NIM preview, verified responding ~0.6s.
+ *   2. `nim-nemotron-3-ultra` (Nemotron 3 Ultra 550B-A55B) — free NIM preview,
+ *      responds ~0.86s with `enable_thinking: false` (see lane extraBody).
+ *   3. `nim-deepseek-v4.1-flash` (DeepSeek V4.1 Flash) — free NIM preview,
+ *      native multimodal + coding; hung >45s on 2026-10-28 even with
+ *      `reasoning_effort: 1`, so demoted until that is resolved.
+ *   4. `nim-glm-5-3-flash` (GLM 5.3 Flash) — LAST for now; it hung with
+ *      ttfb=0 on 2026-10-28 when `reasoning_effort` defaulted to max (slow /
+ *      non-free). Re-evaluate / re-prioritize when that is resolved.
  *
- * `nim-minimax-m3` is intentionally listed even though it is NOT a registered
- * lane (the NIM catalog has no `minimax-m3` slug — only `minimaxai/minimax-m2.7`,
- * already `nim-minimax-m27`). It documents the operator's PREFERENCE order; the
- * resolver skips unknown ids gracefully and falls through to the next lane.
- * When/if NIM publishes a `minimax-m3` slug, registering a `nim-minimax-m3`
- * lane makes this entry live with no chain change.
+ * The chain always ends with a guaranteed fallback to `gemini-direct` so the
+ * adversarial pass never silently disables itself.
  */
-export const DEFAULT_ADVERSARIAL_CHAIN = "nim-kimi,nim-glm,nim-nemotron-3-ultra,nim-minimax-m3"
+export const DEFAULT_ADVERSARIAL_CHAIN =
+  "nim-nemotron-3.5-lightning,nim-nemotron-3-ultra,nim-deepseek-v4.1-flash,nim-glm-5-3-flash"
 
 /**
  * Returns `true` when the adversarial re-review path should run. Strict
@@ -700,6 +708,20 @@ const REGISTRY: Readonly<Record<string, ProviderDescriptor>> = Object.freeze({
     apiKeyEnv: NVIDIA_API_KEY_ENV,
     label: `nim-kimi (${NIM_MODEL_SLUGS.kimi})`,
   },
+  "nim-glm-5-3-flash": {
+    kind: "openai-compatible",
+    model: NIM_MODEL_SLUGS.glm53Flash,
+    baseURL: NIM_BASE_URL,
+    apiKeyEnv: NVIDIA_API_KEY_ENV,
+    label: `nim-glm-5-3-flash (${NIM_MODEL_SLUGS.glm53Flash})`,
+  },
+  "nim-deepseek-v4.1-flash": {
+    kind: "openai-compatible",
+    model: NIM_MODEL_SLUGS.deepseek41Flash,
+    baseURL: NIM_BASE_URL,
+    apiKeyEnv: NVIDIA_API_KEY_ENV,
+    label: `nim-deepseek-v4.1-flash (${NIM_MODEL_SLUGS.deepseek41Flash})`,
+  },
   "nim-glm": {
     kind: "openai-compatible",
     model: NIM_MODEL_SLUGS.glm,
@@ -739,6 +761,13 @@ const REGISTRY: Readonly<Record<string, ProviderDescriptor>> = Object.freeze({
     apiKeyEnv: NVIDIA_API_KEY_ENV,
     label: `nim-nemotron-nano-30b (${NIM_MODEL_SLUGS.nemotronNano})`,
   },
+  "nim-nemotron-3.5-lightning": {
+    kind: "openai-compatible",
+    model: NIM_MODEL_SLUGS.nemotronLightning,
+    baseURL: NIM_BASE_URL,
+    apiKeyEnv: NVIDIA_API_KEY_ENV,
+    label: `nim-nemotron-3.5-lightning (${NIM_MODEL_SLUGS.nemotronLightning})`,
+  },
   // Heavy-weights — latency may exceed the ~60s wall-clock review SLO.
   // Smoke-test before any default promotion. Kept in the registry because the
   // ensemble follow-up benefits from large-model recall even when
@@ -750,16 +779,17 @@ const REGISTRY: Readonly<Record<string, ProviderDescriptor>> = Object.freeze({
     apiKeyEnv: NVIDIA_API_KEY_ENV,
     label: `nim-nemotron-super-120b (${NIM_MODEL_SLUGS.nemotronSuper})`,
   },
-  // Nemotron 3 Ultra 550B (preferred adversarial-chain head).
-  // Heaviest lane; latency may exceed the ~60s SLO — the adversarial fallback
-  // chain (resolveAdversarialProviderChain) degrades to a lighter lane if this
-  // one can't resolve. Slug confirmed in the NIM `/v1/models` catalog 2026-06-09.
+  // Nemotron 3 Ultra 550B (adversarial chain member).
+  // Heaviest lane; `enable_thinking: false` keeps it responsive (~0.86s) and
+  // inside the free preview tier — verified 2026-10-28. Slug confirmed in the
+  // NIM `/v1/models` catalog 2026-06-09.
   "nim-nemotron-3-ultra": {
     kind: "openai-compatible",
     model: NIM_MODEL_SLUGS.nemotronUltra,
     baseURL: NIM_BASE_URL,
     apiKeyEnv: NVIDIA_API_KEY_ENV,
     label: `nim-nemotron-3-ultra (${NIM_MODEL_SLUGS.nemotronUltra})`,
+    extraBody: { chat_template_kwargs: { enable_thinking: false } },
   },
   "nim-qwen-122b": {
     kind: "openai-compatible",
