@@ -3,8 +3,8 @@
 Comparación de los principales programas de beneficios/cloud credits para startups
 (Google for Startups, AWS Activate, Microsoft for Startups, NVIDIA Inception) y
 lo que exige cada uno en términos de entidad legal, antigüedad, sitio web y funding.
-Objetivo: que el founder sepa **qué necesita tener listo antes de aplicar** — y
-que estos requisitos se cumplan de forma repetible para cada LLC del studio.
+Objetivo: que el founder sepa **qué necesita tener listo antes de aplicar** — y que
+estos requisitos se cumplan de forma repetible para cada venture/entidad del portfolio.
 
 ## Cómo usar este protocolo
 
@@ -53,18 +53,17 @@ Recuperado de https://www.nvidia.com/en-us/startups/ (material LATAM: "Costa Ric
 > "Startups at every stage - from pre-seed to global scale - can apply to Inception. No cohorts, no fees, no application deadlines, no equity requirements."
 > "To be eligible you need to: Employ at least one developer + Maintain a functional website; Be officially incorporated + Be less than 10 years old."
 
-## Implicación para el studio
+## Cómo elegir el programa según tu etapa
 
-Todos los programas giran en torno a una **entidad legal activa**. A fecha de hoy el
-studio opera con LLCs en formación (Vertivo SRL inactiva en Costa Rica, y por formar:
-vertivolatam, altrupets, habitanexus, aduanext, licitanext). Antes de aplicar a
-cualquier programa hay que resolver la entidad correspondiente (ver next-steps en el
-internal-handbook).
+Todos los programas giran en torno a una **entidad legal activa**. Antes de aplicar a
+cualquiera, asegurate de tener la entidad correspondiente constituida y activa, el
+dominio/correo de empresa verificado y (donde aplique) un sitio web funcional.
 
 - **NVIDIA Inception** es el punto de entrada más accesible (sin funding, sin deadlines,
   acepta pre-seed) — pero exige incorporación oficial + 1 developer + sitio web.
 - **Google/Cloud** exigen antigüedad desde la fundación; preparar dominio/correo con
-  Cloudflare E-mail Routing (gratis) y NO comprar Workspace antes de aplicar.
+  un servicio de reenvío (ej. Cloudflare E-mail Routing, gratis) y NO comprar Workspace
+  antes de aplicar (ventana de 31 días).
 - **AWS** exige cuenta en paid tier; **Microsoft** exige entidad registrada + ser B2B.
 
 ## Referencias
