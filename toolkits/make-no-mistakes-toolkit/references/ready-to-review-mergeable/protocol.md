@@ -69,6 +69,7 @@ flowchart TD
   s4["§4a Local gate fallback"]
   s4b["§4b Adversarial local review HITL"]
   s5["§5 Human handoff — tracker In Review<br/>never merge · never Done"]
+  df["§5b Dogfood verify — /dogfood<br/>restrictions script exit 0 · Evidence format<br/>0 PENDING · no stale hardcodes"]
   qa["Out of RTR RACI — QA analyst<br/>/assurance:e2e-test-runner · /assurance:e2e-test-preview"]
   blocked["BLOCKED — fix, push, re-run from failed step"]
 
@@ -89,7 +90,8 @@ flowchart TD
   rem -->|no, remote unavailable per §4a| s4 --> s5
   s3ok -.->|optional HITL| s4b
   s4b -.-> s5
-  s5 -.-> qa
+  s5 --> df
+  df --> qa
 ```
 
 **Diagram notes**
@@ -98,6 +100,7 @@ flowchart TD
 - **§2c `/assurance:e2e-test-builder` is mandatory** after aggregate §2b PASS — not optional for implementers. It materializes or extends `test-suite.json` from the testing pillar output (convention record + gates + scenario gaps).
 - **RACI (implementer vs QA):** implementers **do not** run **`/assurance:e2e-test-runner`** or **`/assurance:e2e-test-preview`** inside this command. Those are **QA analyst** steps after stage promotion (e.g. re-run Kiwi, execute the manifest). Preview is visual inspection, not an exit gate here.
 - `Remote gate pass?` is **§3c**. **`yes`** means §3b finished and the pass contract holds before §5. It is not a shortcut that skips tagging bots.
+- **§5b `/dogfood` verify** runs after §5 handoff: the restrictions script (`restrictions-check-ready-to-review-mergeable.sh`) exits 0, the protocol `Evidence format` section is present, `0 PENDING`, and no stale `/home/kvttvrsis` hardcodes remain in source. If any step fails → BLOCKED; do not claim ready.
 
 **Assurance liveness on PR:** default pillar config is **`skip`** (`readyToReview.assurance.pillars.liveness: "skip"`) — observability runs on schedule/daemon, not every PR. Set `required` only when the consumer repo opts in; the diagram still shows the branch when opted in.
 
@@ -113,6 +116,7 @@ flowchart TD
 | 5 | §4a Gate fallback (local) | **Only** when §3c = `no, remote unavailable per §4a` |
 | 5b | §4b On-demand adversarial review (optional HITL) | Anytime the **human** asks — **does not** replace §3 or §4a for exit |
 | 6 | §5 Human handoff | §3 gate green **or** §4a documented fallback; never merge |
+| 6b | §5b `/dogfood` verify | `/dogfood` exit 0 (restrictions script + Evidence format + 0 PENDING + no stale hardcodes) |
 
 **Hard rule:** when remote review **can** run, exit requires §3b + §3c **`yes`**. A red remote gate (`no, remote available`) → **BLOCKED** in §3b — **do not** treat §4a or §4b as a bypass. **§4b is allowed** while remote is available; it is advisory / adversarial, not the automated gate.
 
