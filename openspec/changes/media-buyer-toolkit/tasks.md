@@ -69,3 +69,4 @@ Change slug for commit messages: `media-buyer-toolkit`. Issue: [#121](https://gi
 - [ ] T40: Grep proof that no credential value or vendor field name reaches tool output, error envelopes or the journal
 - [ ] T41: Grep proof that no script redirects stderr to `/dev/null`
 - [ ] T42: Opt-in credentialed smoke test: one read-only call per configured network, asserting only authentication and account listing
+- [ ] T43: Run `npm run typecheck` (`tsc --noEmit`) clean in `mcp/ads-multi-network`. Today it reports pre-existing TS errors (TS2307 inline `import("../../types.js")`, TS2322 `Budget | undefined` vs `Budget`, TS2305 missing `PacingRow` export, TS2783/TS2345/TS2352/TS2353/TS2538/TS7053 in `adapters/*`, `platform/*`, `router.ts`, `spotify.ts`). These are not runtime blockers (tsx transpiles without type-check; the ViteMCP server boots and `opencode` connects it), but they block a strict `tsc` gate. Fix them so `npm run typecheck` passes.

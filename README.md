@@ -374,6 +374,22 @@ claude plugin install venture-studio-toolkit@better-toolkits
 
 BSL-1.1 — converts to Non-Profit OSL 3.0 five years after publication. `LICENSE` present.
 
+## MCP servers in this monorepo
+
+The monorepo ships its own MCP servers (under `toolkits/*/mcp/`), each **stateless** per the
+vitemcp pattern (protocol revision 2024-11-05 / 2026-07-28, no `Mcp-Session-Id`):
+
+| Server | Toolkit | Transport | Protocol | What it exposes |
+| --- | --- | --- | --- | --- |
+| `notion-batch` | `instructional-design-toolkit/mcp/notion-batch` | stdio (Node) | stateless vitemcp | `fetch_tree`, `query_database` — recursive Notion crawl with verbatim bookmark URLs |
+| `ads-multi-network` | `media-buyer-toolkit/mcp/ads-multi-network` | stdio (Node/tsx) | stateless vitemcp | 20 paid-media operations (Meta/TikTok/LinkedIn/Google/YouTube/Spotify) with guardrails |
+| `docs-to-glb` | `3d-graphics-cad-toolkit/mcp/docs-to-glb` | stdio (Rust) | stateless vitemcp | 3D model / rv-ODT operations scaffold |
+
+Consumer-registered MCP servers (e.g. `context7`, `slack`, `linear-project`, `stitch`,
+`notion`, `dart`, `chrome-devtools-mcp`) live in the consumer's `opencode.json` / global
+config, not in this monorepo. See [`opencode.json`](opencode.json) for the monorepo's own
+registered servers.
+
 ## Repository layout
 
 ```

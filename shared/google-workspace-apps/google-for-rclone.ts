@@ -22,6 +22,7 @@ import { homedir } from "os";
 import { createInterface } from "readline";
 
 const RCLONE = join(homedir(), ".local/bin/rclone");
+const CONFIG = join(homedir(), ".config/google-workspace/rclone.conf");
 
 interface RcloneConfig { remote: string; }
 
@@ -118,7 +119,7 @@ rl.on("line", (line) => {
       const remotePath = args.remotePath || args.dst || (srcPath ? basename(srcPath) : "");
       try {
         const { cid, cs } = getCreds();
-        const out = execSync(`${RCLONE} --drive-client-id ${cid} --drive-client-secret ${cs} copy "${srcPath}" "gdrive:${remotePath}"`, { encoding: "utf-8", timeout: 120000 });
+        const out = execSync(`${RCLONE} --config "${CONFIG}" --drive-client-id ${cid} --drive-client-secret ${cs} copy "${srcPath}" "gdrive:${remotePath}"`, { encoding: "utf-8", timeout: 120000 });
         result = { content: [{ type: "text", text: `upload OK: ${srcPath} -> gdrive:/${remotePath}` }], isError: false };
       } catch (e: any) {
         result = { content: [{ type: "text", text: `upload FAIL: ${e.message || String(e)}` }], isError: true };
@@ -127,7 +128,7 @@ rl.on("line", (line) => {
       const folder = args.path || "/";
       try {
         const { cid, cs } = getCreds();
-        const out = execSync(`${RCLONE} --drive-client-id ${cid} --drive-client-secret ${cs} ls "gdrive:${folder}"`, { encoding: "utf-8", timeout: 120000 });
+        const out = execSync(`${RCLONE} --config "${CONFIG}" --drive-client-id ${cid} --drive-client-secret ${cs} ls "gdrive:${folder}"`, { encoding: "utf-8", timeout: 120000 });
         result = { content: [{ type: "text", text: `list OK: gdrive:${folder}\n${out || "(empty)"}` }], isError: false };
       } catch (e: any) {
         result = { content: [{ type: "text", text: `list FAIL: ${e.message || String(e)}` }], isError: true };
@@ -137,7 +138,7 @@ rl.on("line", (line) => {
       const localPath = args.localPath || join(homedir(), "Downloads", basename(remotePath));
       try {
         const { cid, cs } = getCreds();
-        execSync(`${RCLONE} --drive-client-id ${cid} --drive-client-secret ${cs} copy "gdrive:${remotePath}" "${localPath}"`, { encoding: "utf-8", timeout: 180000 });
+        execSync(`${RCLONE} --config "${CONFIG}" --drive-client-id ${cid} --drive-client-secret ${cs} copy "gdrive:${remotePath}" "${localPath}"`, { encoding: "utf-8", timeout: 180000 });
         result = { content: [{ type: "text", text: `download OK: gdrive:${remotePath} -> ${localPath}` }], isError: false };
       } catch (e: any) {
         result = { content: [{ type: "text", text: `download FAIL: ${e.message || String(e)}` }], isError: true };
@@ -146,7 +147,7 @@ rl.on("line", (line) => {
       const remotePath = args.remotePath;
       try {
         const { cid, cs } = getCreds();
-        execSync(`${RCLONE} --drive-client-id ${cid} --drive-client-secret ${cs} delete "gdrive:${remotePath}"`, { encoding: "utf-8", timeout: 120000 });
+        execSync(`${RCLONE} --config "${CONFIG}" --drive-client-id ${cid} --drive-client-secret ${cs} delete "gdrive:${remotePath}"`, { encoding: "utf-8", timeout: 120000 });
         result = { content: [{ type: "text", text: `delete OK: gdrive:${remotePath}` }], isError: false };
       } catch (e: any) {
         result = { content: [{ type: "text", text: `delete FAIL: ${e.message || String(e)}` }], isError: true };
@@ -155,7 +156,7 @@ rl.on("line", (line) => {
       const remotePath = args.remotePath;
       try {
         const { cid, cs } = getCreds();
-        execSync(`${RCLONE} --drive-client-id ${cid} --drive-client-secret ${cs} mkdir "gdrive:${remotePath}"`, { encoding: "utf-8", timeout: 120000 });
+        execSync(`${RCLONE} --config "${CONFIG}" --drive-client-id ${cid} --drive-client-secret ${cs} mkdir "gdrive:${remotePath}"`, { encoding: "utf-8", timeout: 120000 });
         result = { content: [{ type: "text", text: `mkdir OK: gdrive:${remotePath}` }], isError: false };
       } catch (e: any) {
         result = { content: [{ type: "text", text: `mkdir FAIL: ${e.message || String(e)}` }], isError: true };
