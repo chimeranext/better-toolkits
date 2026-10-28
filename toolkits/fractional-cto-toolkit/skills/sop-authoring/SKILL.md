@@ -45,24 +45,18 @@ Resolve the pipeline directory `{sops-dir}` first, in this order:
 ### Paso 1 — Routing test
 
 Before writing, confirm the thing is actually an Operational SOP. An SOP documents *how the
-**company** operates a recurring process*, no code required to understand it. Use the
-three-way ops taxonomy (playbook / runbook / SOP) plus the usual product-docs cases:
+**company** operates a recurring process*, no code required to understand it. Use the shared
+three-way ops taxonomy in [`references/documentation-taxonomy.md`](../../references/documentation-taxonomy.md)
+(playbook / runbook / SOP) plus the usual product-docs cases.
 
-| If the draft is really about… | It is a… | Route it to… |
-|---|---|---|
-| The steps an operator follows to run a recurring business process (no code) | **SOP** | continue here |
-| *When / why* to choose a path under uncertainty; decision tree, options, RACI | **Playbook** | `/playbook-authoring` |
-| A technical/engineering-ops procedure (release, deploy, incident) needing repo/infra context | **Runbook** | `/runbook-authoring` |
-| A one-off timeline of what happened in a single incident | **Post-mortem** | write a post-mortem; extract reusable judgment with `/playbook-authoring` |
-| *What* to build, for whom, and why | **PDR** (Product Decision Record) | `openspec/changes/{date-slug}/proposal.md` |
-| *How* it is built technically (stack, schema, infra, APIs) | **ADR** (Architecture Decision Record) | `openspec/changes/{date-slug}/design.md` |
-| How an end user *uses* the finished product | **Product Documentation** | product docs |
+Rule of thumb (from the taxonomy): if a **software engineer must understand it to execute it**,
+it is not an SOP — it is a runbook (or an ADR). If they must **choose among branches** first,
+it is a playbook — never a runbook, post-mortem, or SOP. Promote a playbook to an SOP only once
+the work is a recurring company process with no engineering context required. If it fails the
+routing test, tell the user which type it actually is and stop — do not force a non-process into
+the SOP template.
 
-Rule of thumb: if a **software engineer must understand it to execute it**, it is not an SOP — it
-is a runbook (or an ADR). If they must **choose among branches** first, it is a playbook — never a
-runbook, post-mortem, or SOP. Promote a playbook to an SOP only once the work is a recurring
-company process with no engineering context required. If it fails the routing test, tell the user
-which type it actually is and stop — do not force a non-process into the SOP template.
+If the type is ambiguous, run `/document-this` to resolve it before continuing.
 
 ### Paso 2 — Depth by maturity
 
