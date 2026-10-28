@@ -130,16 +130,27 @@ def deny_reason(command: str) -> str | None:
     # NOTE: there is intentionally NO allowance for `2>&1 >/dev/null`.
     # Reversed order still sends stdout to null. Fold checks below run
     # on the raw scan.
+    # stderr to a SEPARATE file is forbidden: separate error files are the
+    # ones that get missed in an audit. Fold stderr into the same log instead.
+    if HAS_STDERR_FILE.search(scan):
+        return (
+            "stderr redirect to a separate file (2> file) is forbidden — "
+            "separate error files get missed in audits. Fold stderr into the "
+            "same log with `> out.log 2>&1` or `2>&1 | tee run.log`. "
+            "Also do not redirect stderr to /dev/null "
+            "(2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null)."
+        )
+
     if BARE_FOLD.search(scan):
         if not (
             HAS_FILE_SINK.search(scan)
             or HAS_TEE_FILE.search(scan)
-            or HAS_STDERR_FILE.search(scan)
         ):
             return (
                 "bare 2>&1 folds errors into stdout without a log sink. "
-                "Use files (cmd >out.log 2>err.log or >all.log 2>&1) or "
-                "cmd 2>&1 | tee run.log."
+                "Use files (`> out.log 2>&1`) or `cmd 2>&1 | tee run.log`. "
+                "Also do not redirect stderr to /dev/null "
+                "(2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null)."
             )
 
     return None
