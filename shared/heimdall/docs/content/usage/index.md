@@ -61,16 +61,16 @@ El reviewer necesita `NVIDIA_API_KEY` (el bearer de NVIDIA NIM para el lane Kimi
 La CLI busca **un solo nombre de archivo**, `.heimdall.env`, en dos scopes, con
 esta **precedencia**:
 
-1. **Variable de entorno `NVIDIA_API_KEY`.** Si está, se usa tal cual. Sirve
-   tanto al modo máximo-offline (`NVIDIA_API_KEY=... heimdall-review …`) como a la
-   hygiene centralizada (`infisical run -- heimdall-review …`, sin secreto en
-   disco).
+1. **`~/.agents/.heimdall.env`** (user scope), solo-dueño: `0600` en POSIX o bajo
+   el perfil del usuario en Windows. Es el archivo que crea `key:init`.
 2. **`.heimdall.env` en la raíz del repo** (project scope). La CLI sube desde el
    cwd hasta el ancestro más cercano con `.git/` y lee `<repo>/.heimdall.env`.
    Debe estar gitignoreado. Si el cwd no está dentro de un repo, este paso no
    existe (no se busca más arriba de la raíz del repo).
-3. **`~/.agents/.heimdall.env`** (user scope), solo-dueño: `0600` en POSIX o bajo
-   el perfil del usuario en Windows. Es el archivo que crea `key:init`.
+3. **Variable de entorno `NVIDIA_API_KEY`.** Si está, se usa tal cual. Sirve
+   tanto al modo máximo-offline (`NVIDIA_API_KEY=... heimdall-review …`) como a la
+   hygiene centralizada (`infisical run -- heimdall-review …`, sin secreto en
+   disco).
 4. **Error claro** si no se encontró nada, con la precedencia completa.
 
 El entorno (`--env staging|prod`, o `HEIMDALL_NVIDIA_ENV`, default `staging`)

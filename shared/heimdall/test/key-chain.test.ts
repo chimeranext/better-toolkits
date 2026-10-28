@@ -1,10 +1,12 @@
 /**
  * Tests de la key-chain de la NIM key (`resolveNvidiaKey` y sus helpers).
  *
- * Cubre la precedencia documentada: env gana / archivo gitignoreado / archivo
- * NO-ignorado rehúsa / nada → error. El guardrail `git check-ignore` se inyecta
+ * Cubre la precedencia documentada: ~/.agents SIEMPRE gana (user scope) → repo
+ * gitignoreado → env. El guardrail `git check-ignore` se inyecta
  * (`checkIgnored`) para no depender de un repo real, y `process.exit` se mockea
- * para capturar los caminos de aborto sin matar el runner.
+ * para capturar los caminos de aborto sin matar el runner. Los tests SIEMPRE
+ * aíslan `homeDir` (con `freshDir()`) para no leer el `~/.agents` real del
+ * sistema que corre los tests.
  */
 
 import { test, expect, spyOn } from "bun:test"
@@ -122,12 +124,13 @@ test("pickNvidiaKeyForEnv elige la variable del env dentro de un solo archivo", 
   expect(pickNvidiaKeyForEnv({ OTRA: "x" }, "staging")).toBeUndefined()
 })
 
-test("resolveNvidiaKey: la variable de entorno gana (no toca el filesystem)", async () => {
+test("resolveNvidiaKey: la variable de entorno gana (sin user ni repo)", async () => {
   const key = await resolveNvidiaKey({
     env: "staging",
     overrideEnv: { NVIDIA_API_KEY: "nvapi-from-env" },
     cwd: "/nonexistent-dir-should-not-matter",
     checkIgnored: async () => true,
+    homeDir: freshDir(), // user scope aislado: no existe ~/.agents/.heimdall.env
   })
   expect(key).toBe("nvapi-from-env")
 })
@@ -140,6 +143,7 @@ test("resolveNvidiaKey: lee <repo>/.heimdall.env cuando está gitignoreado", asy
     overrideEnv: {}, // sin NVIDIA_API_KEY en el env
     cwd: dir,
     checkIgnored: async () => true, // guardrail OK
+    homeDir: freshDir(), // user scope aislado: no interfiere con el repo
   })
   expect(key).toBe("nvapi-from-file")
 })
@@ -155,12 +159,14 @@ test("resolveNvidiaKey: un solo archivo sirve staging y prod (nombres decorados)
     overrideEnv: {},
     cwd: dir,
     checkIgnored: async () => true,
+    homeDir: freshDir(),
   })
   const prod = await resolveNvidiaKey({
     env: "prod",
     overrideEnv: {},
     cwd: dir,
     checkIgnored: async () => true,
+    homeDir: freshDir(),
   })
   expect(staging).toBe("nvapi-staging")
   expect(prod).toBe("nvapi-prod")
@@ -176,6 +182,7 @@ test("resolveNvidiaKey: resuelve el archivo en la raíz aunque el cwd sea un sub
     overrideEnv: {},
     cwd: sub,
     checkIgnored: async () => true,
+    homeDir: freshDir(),
   })
   expect(key).toBe("nvapi-root")
 })
@@ -211,6 +218,7 @@ test("resolveNvidiaKey: REHÚSA si el archivo del repo existe pero NO está giti
         overrideEnv: {},
         cwd: dir,
         checkIgnored: async () => false, // NO ignorado → debe rehusar
+        homeDir: freshDir(), // user scope aislado: llegar al repo
       }),
     ).rejects.toThrow("process.exit(1)")
   } finally {
@@ -375,7 +383,7 @@ test("resolveNvidiaKey: REHÚSA ~/.agents/.heimdall.env permisivo aunque tenga k
   }
 })
 
-test("resolveNvidiaKey: el archivo del repo gana sobre ~/.agents", async () => {
+test("resolveNvidiaKey: ~/.agents (user scope) gana sobre el archivo del repo", async () => {
   const dir = freshRepo()
   writeFileSync(join(dir, HEIMDALL_ENV_BASENAME), "NVIDIA_API_KEY=nvapi-repo\n")
   const home = freshDir()
@@ -392,7 +400,7 @@ test("resolveNvidiaKey: el archivo del repo gana sobre ~/.agents", async () => {
     platform: "linux",
     homeDir: home,
   })
-  expect(key).toBe("nvapi-repo")
+  expect(key).toBe("nvapi-agents")
 })
 
 test("mergeAgentKeys: archivo nuevo trae header + keys pedidas", () => {

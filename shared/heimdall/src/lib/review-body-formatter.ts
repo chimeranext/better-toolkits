@@ -39,7 +39,7 @@
  *     [1,1]) no matter what the LLM emits. When `confidence` is absent the final
  *     score == the clamped deterministic base (byte-for-byte pre-change). The
  *     verdict line prints `X.XX/5.00` (`toFixed(2)`) plus a machine-readable
- *     `<!--bifrost:confidence:{...}-->` provenance marker.
+ *     `<!--heimdall:confidence:{...}-->` provenance marker.
  *
  *   • Footer "Total findings: X security, Y compliance, Z business" uses the
  *     SCHEMA vocabulary, not the visible P-tags. Kept for downstream `grep`
@@ -473,10 +473,10 @@ function buildNitSuffix(nitCount: number, decision?: NitDecision): string {
  * NOTE: this is a PLAIN HTML metadata comment, NOT a `bifrost:component` generative
  * UI marker — the frontend parser in
  * `src/components/platform/utils/parseComponentMarkers.ts` must NOT pick it up.
- * The `bifrost:confidence:` prefix is deliberately distinct from `bifrost:component:`.
+ * The `heimdall:confidence:` prefix is deliberately distinct from `bifrost:component:`.
  *
  * Shape:
- *   <!--bifrost:confidence:{"score":4.20,"floor":4,"ceiling":4.9,"base":4.80,"llm":4.2}-->
+ *   <!--heimdall:confidence:{"score":4.20,"floor":4,"ceiling":4.9,"base":4.80,"llm":4.2}-->
  *
  * `llm` is omitted entirely when no `llmConfidence` is supplied.
  */
@@ -491,7 +491,7 @@ function buildConfidenceMarker(comments: ReviewComment[], llmConfidence?: number
     base: Number(base.toFixed(2)),
   }
   if (llmConfidence != null) payload.llm = llmConfidence
-  return `<!--bifrost:confidence:${JSON.stringify(payload)}-->`
+  return `<!--heimdall:confidence:${JSON.stringify(payload)}-->`
 }
 
 /**
