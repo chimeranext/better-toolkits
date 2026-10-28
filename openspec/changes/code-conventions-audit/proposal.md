@@ -24,10 +24,11 @@ cumplimiento histórico.
 - **Registrador warn (make-no-mistakes)**: un registrador acumula las violaciones en un
   buffer local y las pushea en batch al repo de auditoría de la entidad.
 - **Repo de auditoría — default por entidad, centralización opt-in**: por defecto cada
-  venture/startup escribe a su propio `<org>/internal-audits`
-  (`conventions/code-conventions-audit-YYYY-MM-DD.md`, append-only). La centralización en
-  `chimeranext/internal-audits` solo ocurre si se configura explícitamente (`auditsRepo`
-  opt-in, justificado por el shared services opinionated de ChimeraNext).
+  venture/startup/serial entrepreneur independiente escribe a su propio `<org>/internal-audits`
+  (`conventions/code-conventions-audit-YYYY-MM-DD.md`, append-only). La centralización en un
+  repo compartido (p.ej. `chimeranext/internal-audits`) es **opt-in**: solo aplica cuando una
+  entidad adopta explícitamente el modelo de shared services — decisión opinionated del studio,
+  no un requisito ni un destino universal.
 - **`/code-conventions-audit` (assurance-toolkit)**: comando que lee el log histórico del
   repo de auditoría de la entidad y produce un reporte de cumplimiento (sin ranking
   persistente; el log es el SSOT).
