@@ -31,6 +31,7 @@ Typically LATAM founders (Costa Rica, Mexico, Colombia, etc.).
 | `/startup-lifecycle:b-corp-certification` | B Lab Standards, certification |
 | `/startup-lifecycle:cayman-sandwich` | 3-tier structure for LATAM startups |
 | `/startup-lifecycle:subsidiary-conversion` | Convert SRL to wholly owned subsidiary |
+| `references/startup-program-comparison/` | Comparación Google/AWS/Microsoft/NVIDIA (requisitos + APA) |
 
 ## Structure
 
@@ -53,7 +54,8 @@ toolkits/startup-lifecycle-toolkit/
 │   ├── fast-agreement/
 │   ├── vc-term-sheets/
 │   ├── saas-metrics/
-│   └── us-entity-requirements/
+│   ├── us-entity-requirements/
+│   └── startup-program-comparison/
 ├── commands/
 │   ├── bootstrap-to-offshore.md
 │   ├── entity-formation.md
