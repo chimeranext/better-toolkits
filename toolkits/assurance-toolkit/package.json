@@ -9,6 +9,7 @@
       "source": "chimeranext/better-toolkits",
       "skills": [
         "assurance",
+        "assurance-testing-audit",
         "cicd-argocd",
         "cicd-github-actions",
         "flutter-accessibility",
