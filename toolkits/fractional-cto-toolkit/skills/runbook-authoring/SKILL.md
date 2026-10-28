@@ -57,24 +57,16 @@ Resolve `{runbooks-dir}` first, in this order:
 
 ### Paso 1 — Routing test (three-way ops taxonomy + docs)
 
-Confirm the thing is actually a runbook. Use the three-way ops taxonomy (playbook /
-runbook / SOP) plus the usual product-docs cases:
-
-| If the draft answers… | It is a… | Route it to… |
-|---|---|---|
-| Sequential, testable steps an engineer executes (release, deploy, incident, recover) | **Runbook** | continue here |
-| *When / why* to choose a path under uncertainty; decision tree, options, RACI | **Playbook** | `/playbook-authoring` |
-| How the **company** operates a recurring business process; no code required to understand | **SOP** | `/sop-authoring` |
-| A one-off timeline of what happened in a single incident | **Post-mortem** | write a post-mortem; extract reusable judgment with `/playbook-authoring` |
-| *What* to build, for whom, and why | **PDR** (Product Decision Record) | `openspec/changes/{date-slug}/proposal.md` |
-| *How* it's built technically (stack, schema, infra, APIs) | **ADR** (Architecture Decision Record) | `openspec/changes/{date-slug}/design.md` |
-| How an end user *uses* the finished product | **Product Documentation** | product docs |
-| How to security-test a system (authorized engagement) | **Security playbook** | `/pentest-playbook-setup` |
+Confirm the thing is actually a runbook. Use the shared three-way ops taxonomy in
+[`references/documentation-taxonomy.md`](../../references/documentation-taxonomy.md) (playbook / runbook / SOP)
+plus the usual product-docs cases.
 
 Rule of thumb: if a **software engineer must understand it to execute it**, it is a
 runbook, not an SOP. If they must **choose among branches** first, it is a playbook —
 stop and route to `/playbook-authoring`. Never treat "playbook" as a synonym for
 runbook or post-mortem.
+
+If the type is ambiguous, run `/document-this` to resolve it before continuing.
 
 ### Paso 2 — Pick the runbook shape
 

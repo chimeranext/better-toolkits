@@ -87,26 +87,45 @@ function scanText(command: string): string {
   return stripQuotedSpans(command)
 }
 
+/** If the command executes a local script (e.g. `bash foo.sh`), read its
+ *  content so the detector can also scan what runs *inside* the file. This
+ *  closes the gap where `>/dev/null` was hidden inside a script rather than
+ *  in the shell command itself. */
+function scanScriptFile(command: string): string {
+  const m = /(?:^|[\s;&|])(?:ba|z|k)?sh\s+(?:-[^\s]+\s+)?([^\s;|&]+\.sh)\b/.exec(command)
+  if (!m) return ""
+  try {
+    return readFileSync(m[1], "utf-8")
+  } catch {
+    return ""
+  }
+}
+
 function deny(command: string): string | null {
   if (process.env.MNM_DISABLE_STDERR_HOOK === "1") return null
   if (!command || !command.trim()) return null
-  const scan = scanText(command)
+  const scan = scanText(command) + "\n" + scanScriptFile(command)
   for (const pat of SILENCE) {
     if (pat.test(scan)) {
-      return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). Ejecuta el comando sin descartar stderr.";
+      return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). En vez de /dev/null, usa `> out.log 2>&1` o `2>&1 | tee run.log` para preservar los errores.";
     }
   }
   if (ORDERED_BOTH_NULL.test(scan)) {
-    return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). Ejecuta el comando sin descartar stderr.";
+    return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). En vez de /dev/null, usa `> out.log 2>&1` o `2>&1 | tee run.log` para preservar los errores.";
   }
   const remainder = scan.replace(ALLOWED_REVERSE, "")
   if (BARE_STDOUT_NULL.test(remainder)) {
-    return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). Ejecuta el comando sin descartar stderr.";
+    return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). En vez de /dev/null, usa `> out.log 2>&1` o `2>&1 | tee run.log` para preservar los errores.";
   }
   const foldScan = scan.replace(ALLOWED_REVERSE, "")
+  // stderr to a SEPARATE file is forbidden: separate error files get missed
+  // in audits. Fold stderr into the same log instead.
+  if (HAS_STDERR_FILE.test(foldScan)) {
+    return "PROHIBIDO: redirigir stderr a un archivo separado (2> archivo). Los errores en archivo aparte se omiten en auditorías. Usa `> out.log 2>&1` o `2>&1 | tee run.log`. Tampoco redirijas stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null).";
+  }
   if (BARE_FOLD.test(foldScan)) {
-    if (!(HAS_FILE_SINK.test(foldScan) || HAS_TEE_FILE.test(foldScan) || HAS_STDERR_FILE.test(foldScan))) {
-      return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). Ejecuta el comando sin descartar stderr.";
+    if (!(HAS_FILE_SINK.test(foldScan) || HAS_TEE_FILE.test(foldScan))) {
+      return "PROHIBIDO: 2>&1 desnudo pliega errores en stdout sin sink de log. Usa archivos (`> out.log 2>&1`) o `cmd 2>&1 | tee run.log`. Tampoco redirijas stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null).";
     }
   }
   return null

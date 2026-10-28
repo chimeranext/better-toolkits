@@ -19,6 +19,7 @@ lo `unsafe` vía miri; en edge, linker y HAL correctos para el target.
 | S5 | docs | Ferrocene qualified toolchain + release notes (comercial) | context | referencia + ancla de TTL safety-critical |
 | S6 | context7 | `/websites/rs_embedded-hal-bus`, `/rust-embedded/embedded-hal`, `/rust-embedded/linux-embedded-hal` | load-bearing (mecanismo bus-sharing/Linux) | hijo embedded-hal |
 | S7 | context7 | `/rust-embedded/book` | context p/ bus-sharing; load-bearing p/ concurrencia bare-metal | no citar para I2C |
+| S8 | repo | `RefactoringGuru/design-patterns-rust` | load-bearing | error handling idiomático (Result/Either) y smells |
 
 ## RULES
 
@@ -31,6 +32,9 @@ lo `unsafe` vía miri; en edge, linker y HAL correctos para el target.
   (`RefCellDevice`/`MutexDevice`), nunca Mutex\<RefCell\> bare-metal → S6.
 - R7 [linux-hal] En Raspberry (Linux) sobre `linux-embedded-hal`, no patrones bare-metal → S6.
 - R8 [qualified] Si safety-critical: toolchain calificada + release notes mandan el TTL → S5.
+- R9 [errors] Mensajes de error **prescriptivos** (sugieren alternativa), salvo `[SECRECY]`
+  en el doc comment (seguridad por secrecía). `Result`/`Either` para fallos esperados →
+  S8 + `conventions/prescriptive-error-messages.md`.
 
 ## COUNTEREXAMPLES
 
@@ -43,6 +47,23 @@ let i2c = RefCell::new(periferico_i2c);
 let dev = RefCellDevice::new(&i2c); // un device por sensor, mismo bus
 ```
 
+```rust
+// ❌ wrong: mensaje de error prohibitivo sin alternativa (R9)
+Err(Error::Config("configuración inválida"))
+
+// ✅ right: prescriptivo — dice qué hacer
+Err(Error::Config("configuración inválida; revisa `~/.config/app.toml`"))
+
+// ❌ wrong: mensaje genérico SIN marca de secrecía (R9)
+Err(Error::Auth("error de autenticación"))
+
+// ✅ right: genérico PERO marcado [SECRECY] en el doc comment
+/// [SECRECY] no revelar el motivo exacto (seguridad por secrecía).
+pub fn login(u: &str, p: &str) -> Result<(), Error> {
+    Err(Error::Auth("error de autenticación"))
+}
+```
+
 ## GATES
 
 - local: `cargo fmt --check` + `cargo clippy -- -D warnings` + `cargo test`,
@@ -53,6 +74,8 @@ let dev = RefCellDevice::new(&i2c); // un device por sensor, mismo bus
 ## LESSONS
 
 - L1 (sesión actual) El book no cubre bus-sharing I2C → R6/R7 con S6.
+- L2 (sesión actual) Mensaje prohibitivo sin alternativa confunde al agente; la cura es
+  prescriptivo o `[SECRECY]` en doc comment → R9 (ref: `conventions/prescriptive-error-messages.md`).
 
 ## RECEIPT
 

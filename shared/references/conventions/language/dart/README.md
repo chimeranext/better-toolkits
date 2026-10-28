@@ -33,6 +33,9 @@ TTL corto (30 días): los skills cambian sin versionar → pin por commit en app
 - D7 [otel] Instrumentación con el par SDK+API pineado (`dartastic_opentelemetry`
   que emite + `dartastic_opentelemetry_api` no-op); export OTLP, claves con enums
   tipados. Detalle en `platform/observability` → S3.
+- D8 [errors] Mensajes de error **prescriptivos** (sugieren alternativa), salvo `[SECRECY]`
+  en el doc comment `///` (seguridad por secrecía). No usar excepciones para flujo esperado →
+  `conventions/prescriptive-error-messages.md`.
 
 ## COUNTEREXAMPLES
 
@@ -51,6 +54,24 @@ double? parseLux(int raw) {
 }
 ```
 
+```dart
+// ❌ wrong: mensaje de error prohibitivo sin alternativa (D8)
+throw StateError("Configuración inválida");
+
+// ✅ right: prescriptivo — dice qué hacer
+throw StateError("Configuración inválida; revisa config.yaml");
+
+// ❌ wrong: mensaje genérico SIN marca de secrecía (D8)
+throw StateError("Token no válido");
+
+// ✅ right: genérico PERO marcado [SECRECY] en el doc comment
+/// Valida el token.
+/// [SECRECY] no exponer la causa interna (seguridad por secrecía).
+void checkToken(String t) {
+  throw StateError("Token no válido");
+}
+```
+
 ## GATES
 
 - local: `dart analyze` + `dart test` (SDK 3.13.4 medido en dogfood).
@@ -59,7 +80,8 @@ double? parseLux(int raw) {
 
 ## LESSONS
 
-- (vacía)
+- L1 (sesión actual) Mensaje prohibitivo sin alternativa confunde al agente; la cura es
+  prescriptivo o `[SECRECY]` en doc comment `///` → D8 (ref: `conventions/prescriptive-error-messages.md`).
 
 ## RECEIPT
 

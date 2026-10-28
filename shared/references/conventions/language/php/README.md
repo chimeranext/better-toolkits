@@ -27,6 +27,9 @@ en CI.
   context → S1.
 - P4 [static] Cuando el repo declara PHPStan/Psalm, el nivel pineado pasa en CI
   (no solo en IDE) → S3.
+- P5 [errors] Mensajes de error **prescriptivos** (sugieren alternativa), salvo `[SECRECY]`
+  en el PHPDoc (seguridad por secrecía). No usar excepciones para flujo esperado →
+  `conventions/prescriptive-error-messages.md`.
 
 ## COUNTEREXAMPLES
 
@@ -45,6 +48,26 @@ function cutPercent(float $pct): float
 }
 ```
 
+```php
+// ❌ wrong: mensaje de error prohibitivo sin alternativa (P5)
+throw new InvalidArgumentException("Configuración inválida");
+
+// ✅ right: prescriptivo — dice qué hacer
+throw new InvalidArgumentException("Configuración inválida; revisa config.php");
+
+// ❌ wrong: mensaje genérico SIN marca de secrecía (P5)
+throw new DomainException("Credenciales inválidas");
+
+// ✅ right: genérico PERO marcado [SECRECY] en el PHPDoc
+/**
+ * Autentica al usuario.
+ * [SECRECY] no revelar qué campo falló (seguridad por secrecía).
+ */
+function login(string $u, string $p): void {
+    throw new DomainException("Credenciales inválidas");
+}
+```
+
 ## GATES
 
 - local: `php -l` en archivos PHP tocados.
@@ -54,7 +77,8 @@ function cutPercent(float $pct): float
 
 ## LESSONS
 
-- (vacía)
+- L1 (sesión actual) Mensaje prohibitivo sin alternativa confunde al agente; la cura es
+  prescriptivo o `[SECRECY]` en PHPDoc → P5 (ref: `conventions/prescriptive-error-messages.md`).
 
 ## RECEIPT
 

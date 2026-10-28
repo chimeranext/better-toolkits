@@ -37,6 +37,9 @@ observaciones: cero warnings, estilo consistente, complejidad acotada.
 - R9 [types] `@spec` (`Readability.Specs`) + Dialyzer limpio → S2.
 - R10 [consistency] `Consistency.SpaceAroundOperators`, `TabsOrSpaces`,
   `LineEndings`, `MultiAliasImportRequireUse` → S2.
+- R11 [errors] Mensajes de error **prescriptivos** (sugieren alternativa), salvo `[SECRECY]`
+  en `@doc` (seguridad por secrecía). `{:error, _}` para fallos esperados, no `raise` →
+  `conventions/prescriptive-error-messages.md`.
 
 ## COUNTEREXAMPLES
 
@@ -64,6 +67,24 @@ def fetch(id) do
 end
 ```
 
+```elixir
+# ❌ wrong: mensaje de error prohibitivo sin alternativa (R11)
+{:error, "configuración inválida"}
+
+# ✅ right: prescriptivo — dice qué hacer
+{:error, "configuración inválida; revisa config.exs"}
+
+# ❌ wrong: raise con mensaje genérico SIN marca de secrecía (R11)
+raise "error de autenticación"
+
+# ✅ right: @doc con [SECRECY]; retorna {:error, _} en vez de raise
+@doc """
+Autentica al usuario.
+[SECRECY] no revelar el motivo exacto (seguridad por secrecía).
+"""
+def login(u, p), do: {:error, :invalid_credentials}
+```
+
 ## GATES
 
 - local: `mix compile --warnings-as-errors` + `mix format --check` +
@@ -75,7 +96,8 @@ end
 
 ## LESSONS
 
-- (vacía — serie continua; la #1 nacerá del dogfood o del primer PR que la use)
+- L1 (sesión actual) Mensaje prohibitivo sin alternativa confunde al agente; la cura es
+  prescriptivo o `[SECRECY]` en `@doc` → R11 (ref: `conventions/prescriptive-error-messages.md`).
 
 ## RECEIPT
 
