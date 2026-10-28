@@ -71,6 +71,7 @@ end
 - CI: lo local + Dialyzer vía `dialyxir` (`mix dialyzer`) + toolchain
   Elixir/OTP fijada en `.tool-versions` (versiones exactas se fijan en el
   dogfood 3.1 con el sandbox; sin pin no hay receipt).
+- R11 (prescriptivo): **warn no-block** — `conventions-warn-recorder.sh elixir/R11 <file> @<author>`; no bloquea, registra en `internal-audits`.
 
 ## LESSONS
 

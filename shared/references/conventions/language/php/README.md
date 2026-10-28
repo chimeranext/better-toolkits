@@ -50,6 +50,7 @@ function cutPercent(float $pct): float
 - local: `php -l` en archivos PHP tocados.
 - CI: lo local + analizador estático cuando esté declarado en el record del
   repo (nivel fijado en `phpstan.neon` o equivalente).
+- P5 (prescriptivo): **warn no-block** — `conventions-warn-recorder.sh php/P5 <file> @<author>`; no bloquea, registra en `internal-audits`.
 
 ## LESSONS
 

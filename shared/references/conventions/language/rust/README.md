@@ -48,6 +48,7 @@ let dev = RefCellDevice::new(&i2c); // un device por sensor, mismo bus
 - local: `cargo fmt --check` + `cargo clippy -- -D warnings` + `cargo test`,
   con `rust-toolchain.toml` pineado (medido en dogfood: 1.99.0).
 - CI: lo local + miri programado + (edge) build del target + flip-link.
+- R9 (prescriptivo): **warn no-block** — `conventions-warn-recorder.sh rust/R9 <file> @<author>`; no bloquea, registra en `internal-audits`.
 
 ## LESSONS
 
