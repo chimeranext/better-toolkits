@@ -39,6 +39,7 @@ export const HELP = "usa el comando `flag` real";
 
 - local: `tsc --noEmit` (tsc 5.9.3 medido en dogfood).
 - CI: lo local + eslint + prettier pineados.
+- T5 (prescriptivo): **warn no-block** — `conventions-warn-recorder.sh typescript/T5 <file> @<author>`; no bloquea, registra en `internal-audits`.
 
 ## LESSONS
 
