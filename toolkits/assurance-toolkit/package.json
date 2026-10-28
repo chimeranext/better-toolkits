@@ -1,6 +1,6 @@
 {
   "name": "assurance",
-  "version": "0.1.8",
+  "version": "0.1.12",
   "private": true,
   "description": "Release-assurance evidence toolkit — 2 pillars (testing, liveness) + security transversal with its own runner, plus governance (DORA/DER metrics, stage gates, traceable receipts). Migrated quality-evidence commands from make-no-mistakes with shims.",
   "license": "BSL-1.1",
@@ -18,6 +18,7 @@
         "flutter-performance",
         "flutter-security",
         "flutter-testing-strategy",
+        "github-app-setup",
         "sre-alerting-incident-management",
         "sre-chaos-engineering",
         "sre-container-security",

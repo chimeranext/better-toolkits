@@ -1,6 +1,6 @@
 {
   "name": "@chimeranext/heimdall",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "Heimdall — standalone LLM PR-reviewer. Bypasses the gateway and POSTs directly to OpenAI-compatible providers (NVIDIA NIM / Kimi K2.6 by default).",
   "license": "MIT",
