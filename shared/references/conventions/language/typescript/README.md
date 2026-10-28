@@ -15,6 +15,7 @@ con estilo eslint+prettier. Sin framework hijo en esta change.
 | S1 | docs | handbook `type-checking-javascript-files` | load-bearing | checkJs |
 | S2 | repo | `Mearman/typecheck-files` | load-bearing | typecheck sin build |
 | S3 | docs | MegaLinter typescript (eslint/prettier) | context | estilo en CI |
+| S4 | repo | `RefactoringGuru/design-patterns-typescript` | load-bearing | error handling idiomático (throw vs Result) |
 
 ## RULES
 
@@ -23,6 +24,9 @@ con estilo eslint+prettier. Sin framework hijo en esta change.
 - T3 [templates] Nada de backticks ambiguos en template literals: la clase
   backtick-Heimdall (LESSON L1) la frena T1 como error de parseo → S1/L1.
 - T4 [style] eslint + prettier del flavor pineado → S3.
+- T5 [errors] Mensajes de error **prescriptivos** (sugieren alternativa), salvo `[SECRECY]`
+  en el JSDoc (seguridad por secrecía). No usar `throw` para flujo de control esperado →
+  S4 + `conventions/prescriptive-error-messages.md`.
 
 ## COUNTEREXAMPLES
 
@@ -35,6 +39,26 @@ export const HELP = `usa el comando ` + "`flag`" + ` real`;
 export const HELP = "usa el comando `flag` real";
 ```
 
+```ts
+// ❌ wrong: mensaje de error prohibitivo sin alternativa (T5)
+throw new Error("Configuración inválida");
+
+// ✅ right: prescriptivo — dice qué hacer
+throw new Error("Configuración inválida; revisa ./config.json");
+
+// ❌ wrong: mensaje genérico SIN marca de secrecía (T5)
+throw new Error("Credenciales inválidas");
+
+// ✅ right: genérico PERO marcado [SECRECY] en el JSDoc
+/**
+ * Autentica al usuario.
+ * [SECRECY] no revelar qué campo falló (seguridad por secrecía).
+ */
+function login(u: string, p: string): AuthResult {
+  throw new Error("Credenciales inválidas.");
+}
+```
+
 ## GATES
 
 - local: `tsc --noEmit` (tsc 5.9.3 medido en dogfood).
@@ -45,6 +69,8 @@ export const HELP = "usa el comando `flag` real";
 
 - L1 (incidente Heimdall, sesión actual) Backtick sin escapar en el HELP de
   `review.ts` dejó la suite en 0 tests → T3: typecheck pre-push obligatorio.
+- L2 (sesión actual) Mensaje prohibitivo sin alternativa confunde al agente; la cura es
+  prescriptivo o `[SECRECY]` en JSDoc → T5 (ref: `conventions/prescriptive-error-messages.md`).
 
 ## RECEIPT
 
