@@ -29,6 +29,7 @@ import { reviewPullRequest } from "../reviewer.ts"
 import { MockPostAdapter } from "../adapters/mock-post-adapter.ts"
 import { FetchGitHubAdapter } from "../adapters/fetch-github-adapter.ts"
 import { TokenGitHubAdapter } from "../adapters/token-github-adapter.ts"
+import { getGithubAppToken } from "../lib/github-app.ts"
 import {
   GitDiffAdapter,
   NoChangesError,
@@ -36,12 +37,22 @@ import {
   runGit,
 } from "../adapters/git-diff-adapter.ts"
 import { consoleLogger } from "../lib/host.ts"
+import {
+  NIM_CATALOG_ANCHOR_DATE,
+  fetchNimPreviewCatalog,
+  isCatalogStale,
+  missingCatalogLanes,
+} from "../lib/nim-catalog.ts"
 import { runInstall } from "./install.ts"
 import { existsSync, readFileSync, statSync } from "node:fs"
 import { homedir, platform as osPlatform } from "node:os"
 import { dirname, join } from "node:path"
 
-const DEFAULT_PROVIDER = "nim-kimi"
+// El default del pass-1 (cooperativo) apunta al head de la cadena adversarial
+// (nemotron-3.5-lightning), que es un endpoint NIM preview free VERIFICADO
+// respondiendo en build.nvidia.com (observado ~0.6s el 2026-10-28).
+// `nim-kimi` (kimi-k2.6) dejó de estar en el catálogo free el 2026-10-28 → 404.
+const DEFAULT_PROVIDER = "nim-nemotron-3.5-lightning"
 
 /**
  * Entornos válidos para la key-chain. El env selecciona la **variable dentro del
@@ -137,20 +148,20 @@ function failMissingNvidiaKey(env: KeyEnv): never {
   return fail(
     "no pude resolver NVIDIA_API_KEY (bearer de NVIDIA NIM para el lane Kimi).\n" +
       "  Precedencia:\n" +
-      "  1. Variable de entorno NVIDIA_API_KEY:\n" +
-      "       NVIDIA_API_KEY=nvapi-... heimdall-review …\n" +
-      "       # o vía hygiene centralizada:  infisical run -- heimdall-review …\n" +
-      "  2. Archivo .heimdall.env en la RAÍZ DEL REPO (project scope, gitignoreado):\n" +
-      `       heimdall-review key:pull --env ${env}   # lo genera desde Infisical\n` +
-      "       # o a mano:  NVIDIA_API_KEY=nvapi-... → <repo>/.heimdall.env\n" +
-      "       # (debe estar gitignoreado; `heimdall-review install` agrega el patrón)\n" +
-      `  3. Archivo de usuario ~/.agents/.heimdall.env (user scope) con permisos solo-dueno:\n` +
+      "  1. Archivo de usuario ~/.agents/.heimdall.env (user scope) con permisos solo-dueno:\n" +
       "       Linux/macOS:  $HOME/.agents/.heimdall.env  (modo 0600)\n" +
       "       Windows:      %LOCALAPPDATA%/.agents/.heimdall.env\n" +
       "                     (fallback %USERPROFILE%/.agents/; vale el ACL del perfil)\n" +
       "       STAGING y PROD conviven en el MISMO archivo con nombres decorados:\n" +
       "         heimdall-review key:init --env staging   # pide las keys por diálogo GUI\n" +
       "         heimdall-review key:migrate --env staging  # mueve <repo>/.heimdall.env al user scope\n" +
+      "  2. Archivo .heimdall.env en la RAÍZ DEL REPO (project scope, gitignoreado):\n" +
+      `       heimdall-review key:pull --env ${env}   # lo genera desde Infisical\n` +
+      "       # o a mano:  NVIDIA_API_KEY=nvapi-... → <repo>/.heimdall.env\n" +
+      "       # (debe estar gitignoreado; `heimdall-review install` agrega el patrón)\n" +
+      "  3. Variable de entorno NVIDIA_API_KEY:\n" +
+      "       NVIDIA_API_KEY=nvapi-... heimdall-review …\n" +
+      "       # o vía hygiene centralizada:  infisical run -- heimdall-review …\n" +
       "  4. Si nada de lo anterior, este error.",
   )
 }
@@ -325,14 +336,14 @@ export function isOwnerOnly(
 
 /**
  * Resuelve la NIM key con la precedencia documentada:
- *   1. `process.env.NVIDIA_API_KEY` (o `overrideEnv` inyectado en tests) si está.
+ *   1. El archivo de usuario `~/.agents/` (ver `agentsKeyFile`), SIEMPRE que
+ *      pase el guardrail solo-dueno (`isOwnerOnly`). Si existe pero está
+ *      permisivo, REHÚSA y aborta con guía de chmod.
  *   2. El archivo `.heimdall.env` en la raíz del repo que contiene el cwd
  *      (project scope), SIEMPRE que `git check-ignore` confirme que está
  *      ignorado. Si existe pero NO está ignorado, REHÚSA y aborta (no filtramos
  *      la key por un archivo que podría terminar commiteado).
- *   3. El archivo de usuario `~/.agents/` (ver `agentsKeyFile`), SIEMPRE que
- *      pase el guardrail solo-dueno (`isOwnerOnly`). Si existe pero está
- *      permisivo, REHÚSA y aborta con guía de chmod.
+ *   3. `process.env.NVIDIA_API_KEY` (o `overrideEnv` inyectado en tests) si está.
  *   4. Si nada de lo anterior, `failMissingNvidiaKey`.
  *
  * Nunca imprime el valor. El `env` sale de `--env`, o `HEIMDALL_NVIDIA_ENV`,
@@ -357,29 +368,7 @@ export async function resolveNvidiaKey(opts: {
   const cwd = opts.cwd ?? process.cwd()
   const checkIgnored = opts.checkIgnored ?? isGitIgnored
 
-  // 1. Variable de entorno gana siempre.
-  const fromEnv = (sourceEnv.NVIDIA_API_KEY ?? "").trim()
-  if (fromEnv) return fromEnv
-
-  // 2. Archivo .heimdall.env en la raíz del repo (project scope).
-  const filePath = findProjectEnvFile(cwd)
-  if (filePath) {
-    if (!(await checkIgnored(filePath))) {
-      fail(
-        `encontré ${filePath} pero NO está gitignoreado — me niego a leerlo para no ` +
-          `filtrar la key. Agregá ".heimdall.env" al .gitignore (o corré ` +
-          `\`heimdall-review install\`, que lo hace) y reintentá.`,
-      )
-    }
-    const vars = parseEnvFile(readFileSync(filePath, "utf8"))
-    const key = pickNvidiaKeyForEnv(vars, opts.env)
-    if (key) return key
-    fail(
-      `${filePath} existe pero no contiene ${opts.env === "prod" ? "NVIDIA_API_KEY_PUBLIC_PROD ni " : "NVIDIA_API_KEY_INTERNAL_STAGING ni "}NVIDIA_API_KEY con valor.`,
-    )
-  }
-
-  // 3. Archivo de usuario ~/.agents/.heimdall.env (multiplataforma) con
+  // 1. Archivo de usuario ~/.agents/.heimdall.env (multiplataforma) con
   // guardrail solo-dueno. Selección con conciencia de env (STAGING y PROD
   // conviven en el archivo con nombres decorados).
   const agentsFile = agentsKeyFile(opts)
@@ -399,6 +388,28 @@ export async function resolveNvidiaKey(opts: {
       `${agentsFile} existe pero no contiene ${opts.env === "prod" ? "NVIDIA_API_KEY_PUBLIC_PROD ni " : "NVIDIA_API_KEY_INTERNAL_STAGING ni "}NVIDIA_API_KEY con valor.`,
     )
   }
+
+  // 2. Archivo .heimdall.env en la raíz del repo (project scope).
+  const filePath = findProjectEnvFile(cwd)
+  if (filePath) {
+    if (!(await checkIgnored(filePath))) {
+      fail(
+        `encontré ${filePath} pero NO está gitignoreado — me niego a leerlo para no ` +
+          `filtrar la key. Agregá ".heimdall.env" al .gitignore (o corré ` +
+          `\`heimdall-review install\`, que lo hace) y reintentá.`,
+      )
+    }
+    const vars = parseEnvFile(readFileSync(filePath, "utf8"))
+    const key = pickNvidiaKeyForEnv(vars, opts.env)
+    if (key) return key
+    fail(
+      `${filePath} existe pero no contiene ${opts.env === "prod" ? "NVIDIA_API_KEY_PUBLIC_PROD ni " : "NVIDIA_API_KEY_INTERNAL_STAGING ni "}NVIDIA_API_KEY con valor.`,
+    )
+  }
+
+  // 3. Variable de entorno.
+  const fromEnv = (sourceEnv.NVIDIA_API_KEY ?? "").trim()
+  if (fromEnv) return fromEnv
 
   // 4. Nada.
   failMissingNvidiaKey(opts.env)
@@ -468,9 +479,10 @@ USO:
       Revisa el git diff local de la rama actual (sin GitHub) e IMPRIME el review.
       base default = merge-base con origin/HEAD (fallback main/master). Solo NVIDIA_API_KEY.
 
-  heimdall-review pr <n> [--owner <o>] [--repo <r>] [--post] [--provider <id>]
+  heimdall-review pr <n> [--owner <o>] [--repo <r>] [--post] [--github-app] [--provider <id>]
       Revisa el PR #n. owner/repo se autodetectan del remote origin si se omiten.
-      IMPRIME por default; --post postea de verdad (requiere GITHUB_TOKEN).
+      IMPRIME por default; --post postea de verdad (requiere GITHUB_TOKEN, o
+      --github-app para postear como la GitHub App).
 
   heimdall-review install [--force] [--with-hook]
       Scaffolds los 3 wrappers (slash Claude Code, Makefile target, git alias +
@@ -519,6 +531,10 @@ FLAGS COMUNES:
   --provider <id>   Lane del reviewer (default: ${DEFAULT_PROVIDER}).
   --env <e>         Entorno de la key-chain: staging | prod (default: staging).
   --openrouter-env <e>  Entorno solo para la key de OpenRouter (default: hereda --env).
+  --github-app       Con --post: postea como la GitHub App (NO GITHUB_TOKEN).
+                    Lee HEIMDALL_GITHUB_APP_ID + HEIMDALL_GITHUB_APP_KEY
+                    (ruta al .pem) de la key-chain (user → repo → env);
+                    HEIMDALL_GITHUB_APP_INSTALLATION_ID es opcional (autodetecta).
   --help, -h        Muestra esta ayuda.
 
 EJEMPLOS:
@@ -526,6 +542,7 @@ EJEMPLOS:
   infisical run -- heimdall-review diff --base develop
   infisical run -- heimdall-review pr 42
   infisical run -- heimdall-review pr 42 --post
+  heimdall-review pr 42 --post --github-app
   heimdall-review key:migrate --env staging
   heimdall-review models:free --match kimi
 `
@@ -550,7 +567,7 @@ export function parseArgs(argv: string[]): {
       const key = arg.slice(2)
       const next = argv[i + 1]
       // Flags booleanos conocidos no consumen el siguiente token.
-      if (key === "post" || key === "force" || key === "with-hook") {
+      if (key === "post" || key === "force" || key === "with-hook" || key === "github-app") {
         flags[key] = true
         continue
       }
@@ -580,8 +597,42 @@ export function parseOriginRemote(remoteUrl: string): { owner: string; repo: str
 }
 
 /** Subcomando `diff` — review 100% local, sin GitHub. */
+/**
+ * Warn no-bloqueante de higiene del catálogo NIM: consulta build.nvidia.com
+ * (nim_type_preview) y avisa si (a) pasaron >30 días desde el ancla congelado
+ * (`NIM_CATALOG_ANCHOR_DATE`), o (b) algún lane de la cadena adversarial ya no
+ * está en el catálogo free. Nunca lanza — solo imprime `[warn]` y continúa.
+ */
+async function warnIfNimCatalogNeedsRefresh(): Promise<void> {
+  try {
+    if (isCatalogStale()) {
+      console.warn(
+        `[warn] NIM catalog anchor (${NIM_CATALOG_ANCHOR_DATE}) tiene >30 días — ` +
+          `los endpoints free de build.nvidia.com rotan; reconsiderá re-priorizar ` +
+          `la cadena adversarial (DEFAULT_ADVERSARIAL_CHAIN).`,
+      )
+    }
+    const { slugs, error } = await fetchNimPreviewCatalog()
+    if (error) {
+      console.warn(`[warn] no pude consultar el catálogo NIM free (${error}) — omito la verificación de lanes.`)
+      return
+    }
+    const missing = missingCatalogLanes(slugs)
+    if (missing.length > 0) {
+      console.warn(
+        `[warn] lanes NIM de la cadena adversarial no están en el catálogo free: ` +
+          missing.map((m) => `${m.lane} (${m.slug})`).join(", ") +
+          ` — verificá build.nvidia.com y actualizá DEFAULT_ADVERSARIAL_CHAIN.`,
+      )
+    }
+  } catch {
+    // nunca bloquear el review por un problema de verificación
+  }
+}
+
 async function cmdDiff(flags: Record<string, string | boolean>): Promise<void> {
   await ensureProviderKeys(flags)
+  await warnIfNimCatalogNeedsRefresh()
   const provider = (flags.provider as string) || DEFAULT_PROVIDER
   if (!(process.env.REVIEWER_PROVIDER ?? "").trim()) process.env.REVIEWER_PROVIDER = provider
 
@@ -634,6 +685,7 @@ async function cmdPr(
   if (!Number.isInteger(pullNumber) || pullNumber <= 0) fail(`número de PR inválido: "${num}".`)
 
   await ensureProviderKeys(flags)
+  await warnIfNimCatalogNeedsRefresh()
   const provider = (flags.provider as string) || DEFAULT_PROVIDER
   if (!(process.env.REVIEWER_PROVIDER ?? "").trim()) process.env.REVIEWER_PROVIDER = provider
 
@@ -662,12 +714,23 @@ async function cmdPr(
   const post = flags.post === true
 
   if (post) {
-    const token = (process.env.GITHUB_TOKEN ?? "").trim()
-    if (!token) fail("--post requiere GITHUB_TOKEN (permiso pull-requests:write).")
-    console.log(
-      `[heimdall-review pr] POSTEANDO review real a ${owner}/${repo}#${pullNumber} ` +
-        `lane=${process.env.REVIEWER_PROVIDER} (event=COMMENT)`,
-    )
+    const useApp = flags["github-app"] === true
+    let token: string
+    if (useApp) {
+      const { token: appToken } = await getGithubAppToken(owner, repo)
+      token = appToken
+      console.log(
+        `[heimdall-review pr] POSTEANDO review real a ${owner}/${repo}#${pullNumber} ` +
+          `lane=${process.env.REVIEWER_PROVIDER} (event=COMMENT) como GitHub App`,
+      )
+    } else {
+      token = (process.env.GITHUB_TOKEN ?? "").trim()
+      if (!token) fail("--post requiere GITHUB_TOKEN (permiso pull-requests:write) o --github-app.")
+      console.log(
+        `[heimdall-review pr] POSTEANDO review real a ${owner}/${repo}#${pullNumber} ` +
+          `lane=${process.env.REVIEWER_PROVIDER} (event=COMMENT)`,
+      )
+    }
     const port = new TokenGitHubAdapter({ token })
     const result = await reviewPullRequest({
       port,
