@@ -7,6 +7,11 @@ import type { Account, Ad, AdGroup, Audience, Campaign, CapabilityMatrix, Entity
 import { httpRequest } from "../platform/transport.js";
 import { resolveCredentials } from "../platform/credentials.js";
 import { parseDec, toDec, fromMinorUnits, toMinorUnits, currencyExponent } from "../platform/money.js";
+// NOTE: Meta execution is ToS-sanctioned via the **Ads CLI** (Meta Ads AI
+// Connectors), not raw Graph API HTTP. `platform/ads-cli.ts` provides the
+// `meta ads <resource> <action>` exec transport. Migrating each method below
+// from `graph()` to `adsCli()` is tracked as the Meta-Adapter Ads CLI task
+// (see revenue-growth-toolkit change). The helper is wired here for readiness.
 
 const API = "https://graph.facebook.com/v23.0";
 
