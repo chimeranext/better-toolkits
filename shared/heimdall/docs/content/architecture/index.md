@@ -104,9 +104,8 @@ extensión futura (contabilidad de costo, redacción de PII) sin tocar el loop.
 
 ## Resolución de la NIM key
 
-La CLI resuelve `NVIDIA_API_KEY` con una precedencia explícita: **variable de
-entorno** → `.heimdall.env` en la **raíz del repo** (project scope, gitignoreado)
-→ `~/.agents/.heimdall.env` (user scope, solo-dueño) → **error**. El nombre del
-archivo es siempre el mismo; `--env` elige la variable de adentro. El detalle
-(incluido el guardrail de `git check-ignore`) está en
-**[Uso → Resolución de la NIM key](../usage/index.md#resolucion-de-la-nim-key)**.
+La CLI resuelve `NVIDIA_API_KEY` con una precedencia explícita: **`~/.agents/.heimdall.env`**
+(user scope, solo-dueño) → `.heimdall.env` en la **raíz del repo** (project scope,
+gitignoreado) → **variable de entorno** → **error**. El nombre del archivo es siempre el mismo;
+`--env` elige la variable de adentro. El detalle (incluido el guardrail de `git check-ignore`)
+está en **[Uso → Resolución de la NIM key](../usage/index.md#resolucion-de-la-nim-key)**.

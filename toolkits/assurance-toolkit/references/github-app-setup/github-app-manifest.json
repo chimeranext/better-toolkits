@@ -1,0 +1,15 @@
+{
+  "name": "startup-review-bot",
+  "description": "AI PR review bot (Heimdall) — posts APPROVE/REQUEST_CHANGES with P1-P4 findings.",
+  "url": "https://TUS-DOMINIO.example.com",
+  "public": false,
+  "default_permissions": {
+    "contents": "read",
+    "metadata": "read",
+    "issues": "write",
+    "pull_requests": "write"
+  },
+  "default_events": [
+    "pull_request"
+  ]
+}

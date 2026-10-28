@@ -21,6 +21,11 @@
 
 ### Added
 
+- `/assurance:github-app-setup` + skill `github-app-setup`: guía interactiva para que
+  un founder cree su PROPIA GitHub App (settings de org) y la use como autora de los
+  reviews de Heimdall (estilo CodeRabbit/Greptile). Incluye manifest reutilizable
+  (`references/github-app-setup/github-app-manifest.json`), key-chain
+  (`HEIMDALL_GITHUB_APP_ID`/`_KEY`), verificación y troubleshooting.
 - Bibliography + mermaid diagrams (evidence pipeline, liveness loop,
   traceability + layered defense, release-gates sequence) in the 4 pillar
   protocols; hub routing flowchart in `references/triage/protocol.md`.
