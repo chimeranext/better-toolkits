@@ -69,6 +69,12 @@ Startups with a social mission that want to differentiate themselves and attract
 | **AduaNext Inc.** | Delaware PBC | B Corp. GovTech ESG + Impact VCs |
 | **ChimeraNext Shared Services LLC** | Wyoming LLC | Does not apply (not a venture) |
 
+> **Opinionated — caso de un studio, no el default.** Este es el caso de **ChimeraNext**:
+> sus ventures son Delaware PBC con estrategia B Corp desde el día 1, y la Shared Services LLC
+> no aplica. Es un ejemplo opinionated del studio, **no** un requisito universal. ` B Corp
+> aplica según tu venture y sus inversores (Impact VCs/ESG/grants); un serial entrepreneur con
+> ventures en otras jurisdicciones puede no necesitar PBC/B Corp.
+
 ## References
 
 - [`references/b-corp-certification/protocol.md`](../../references/b-corp-certification/protocol.md) — Detailed protocol
