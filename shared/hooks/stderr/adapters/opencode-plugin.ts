@@ -107,15 +107,15 @@ function deny(command: string): string | null {
   const scan = scanText(command) + "\n" + scanScriptFile(command)
   for (const pat of SILENCE) {
     if (pat.test(scan)) {
-      return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). Ejecuta el comando sin descartar stderr.";
+      return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). En vez de /dev/null, usa `> out.log 2>&1` o `2>&1 | tee run.log` para preservar los errores.";
     }
   }
   if (ORDERED_BOTH_NULL.test(scan)) {
-    return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). Ejecuta el comando sin descartar stderr.";
+    return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). En vez de /dev/null, usa `> out.log 2>&1` o `2>&1 | tee run.log` para preservar los errores.";
   }
   const remainder = scan.replace(ALLOWED_REVERSE, "")
   if (BARE_STDOUT_NULL.test(remainder)) {
-    return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). Ejecuta el comando sin descartar stderr.";
+    return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). En vez de /dev/null, usa `> out.log 2>&1` o `2>&1 | tee run.log` para preservar los errores.";
   }
   const foldScan = scan.replace(ALLOWED_REVERSE, "")
   // stderr to a SEPARATE file is forbidden: separate error files get missed

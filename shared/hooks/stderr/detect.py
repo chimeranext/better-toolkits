@@ -111,20 +111,23 @@ def deny_reason(command: str) -> str | None:
             return (
                 "stderr redirect to /dev/null is forbidden "
                 "(2>/dev/null, 2>>/dev/null, &>/dev/null, >&/dev/null). "
-                "Write logs to files (e.g. >out.log 2>err.log) or use tee."
+                "Instead of /dev/null, use `> out.log 2>&1` or "
+                "`2>&1 | tee run.log` to preserve errors."
             )
 
     if ORDERED_BOTH_NULL.search(scan):
         return (
             ">/dev/null 2>&1 discards stderr after stdout — forbidden. "
-            "Use out=$(cmd) or log files / tee."
+            "Instead of /dev/null, use `> out.log 2>&1` or "
+            "`2>&1 | tee run.log` to preserve errors."
         )
 
     if BARE_STDOUT_NULL.search(scan):
         return (
             "stdout redirect to /dev/null is forbidden (bare or reversed "
             "as cmd 2>&1 >/dev/null) — it throws away the answer. "
-            "Use out=$(cmd) or log files / tee."
+            "Instead of /dev/null, use `> out.log 2>&1` or "
+            "`2>&1 | tee run.log` to preserve errors."
         )
 
     # NOTE: there is intentionally NO allowance for `2>&1 >/dev/null`.
