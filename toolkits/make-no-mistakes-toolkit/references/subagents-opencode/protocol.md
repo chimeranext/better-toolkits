@@ -37,6 +37,12 @@ Detalles operativos: herdr agent-guide (https://herdr.dev/agent-guide.md) y
 - El controlador conserva su contexto para coordinar; los artefactos se pasan como
   archivos, no pegados en el prompt.
 
+## Capacidades por harness
+
+Ver [`subagents-harness-capabilities.md`](../subagents-harness-capabilities.md) — matriz
+harness-agnostic (subagents, cross-session messaging, worktrees `.agents/worktrees`,
+workflows, channels). La convención de worktrees es `.agents/worktrees`, no `.claude/worktrees`.
+
 ## Referencias
 
 - superpowers/subagent-driven-development: https://github.com/obra/superpowers/blob/main/skills/subagent-driven-development/SKILL.md
