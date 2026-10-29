@@ -19,8 +19,7 @@ set -euo pipefail
 CONFIG_DIR="${OPENCODE_CONFIG_DIR:-${HOME}/.config/opencode}"
 LOG_DIR="${CONFIG_DIR}/logs"
 TS="$(date -u +%Y%m%dT%H%M%SZ)"
-OUT_LOG="${LOG_DIR}/update-better-toolkits-marketplace-opencode-${TS}.out.log"
-ERR_LOG="${LOG_DIR}/update-better-toolkits-marketplace-opencode-${TS}.err.log"
+LOG="${LOG_DIR}/update-better-toolkits-marketplace-opencode-${TS}.log"
 mkdir -p "${LOG_DIR}"
 
 ARGS=(self-update --harness opencode)
@@ -38,12 +37,21 @@ if [[ -z "${CLONE}" || ! -f "${CLONE}/.claude-plugin/marketplace.json" ]]; then
 fi
 
 if [[ ! -f "${CLONE}/shared/bootstrap/cli/bin/better-toolkits.js" ]]; then
-  echo "no better-toolkits CLI in ${CLONE} — nothing to update" >>"${OUT_LOG}"
+  echo "no better-toolkits CLI in ${CLONE} — nothing to update" >>"${LOG}"
   exit 0
 fi
 
-if ! node "${CLONE}/shared/bootstrap/cli/bin/better-toolkits.js" "${ARGS[@]}" >>"${OUT_LOG}" 2>>"${ERR_LOG}"; then
-  echo "self-update failed (see ${ERR_LOG})" >>"${OUT_LOG}"
+if ! node "${CLONE}/shared/bootstrap/cli/bin/better-toolkits.js" "${ARGS[@]}" >>"${LOG}" 2>&1; then
+  echo "self-update failed (see ${LOG})" >>"${LOG}"
+  exit 0
+fi
+
+# Determinístico: los plugins re-sincronizados (mnm-no-stderr-redirect,
+# auto-update) quedan en disco pero solo se recargan al reiniciar el servicio.
+# Se reinicia SIEMPRE tras un self-update exitoso para garantizar la carga.
+if [ -n "$(command -v opencode)" ]; then
+  echo "restarting opencode service to load updated plugins" >>"${LOG}"
+  opencode service restart >>"${LOG}" 2>&1 || echo "opencode service restart falló (¿servicio no corriendo?)" >>"${LOG}"
 fi
 
 exit 0
