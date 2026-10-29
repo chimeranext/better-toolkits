@@ -4,7 +4,7 @@
 # Idempotente. No hace falta si ya hay core.hooksPath o pre-commit instalado.
 set -euo pipefail
 
-ROOT="$(git rev-parse --show-toplevel 2>/dev/null || echo "$(pwd)")"
+ROOT="$(git rev-parse --show-toplevel)" || ROOT="$(pwd)"
 cd "$ROOT"
 
 case "${1:-auto}" in
@@ -13,7 +13,7 @@ case "${1:-auto}" in
 esac
 
 # 1) Si hay pre-commit instalado y config, úsalo.
-if command -v pre-commit >/dev/null && [ -f .pre-commit-config.yaml ]; then
+if [ -n "$(command -v pre-commit)" ] && [ -f .pre-commit-config.yaml ]; then
   pre-commit install
   echo "assurance-local-setup: pre-commit hooks instalados"
   exit 0

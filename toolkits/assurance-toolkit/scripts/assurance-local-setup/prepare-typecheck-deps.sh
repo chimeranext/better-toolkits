@@ -5,7 +5,7 @@
 # que en el PRE_COMMAND del CI.
 set -euo pipefail
 
-ROOT="$(git rev-parse --show-toplevel 2>/dev/null || echo "$(pwd)")"
+ROOT="$(git rev-parse --show-toplevel)" || ROOT="$(pwd)"
 HOOKS_DIR="$ROOT/shared/hooks"
 
 if [ ! -d "$HOOKS_DIR" ]; then
