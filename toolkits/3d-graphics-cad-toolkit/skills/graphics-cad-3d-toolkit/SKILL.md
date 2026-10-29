@@ -1,3 +1,12 @@
+---
+name: graphics-cad-3d-toolkit
+description: >
+  Reference skill covering 3D graphics and CAD workflows across AutoCAD,
+  Rhinoceros 3D/Grasshopper, Blender, Cinema 4D, Maya, ZBrush, OpenUSD, and
+  NVIDIA Omniverse for digital twin applications. Use when you need multi-tool
+  guidance for 3D graphics, CAD, or digital twin pipelines.
+---
+
 # 3D Graphics CAD Toolkit Skill — Multi-Tool Reference
 
 ## Purpose

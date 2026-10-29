@@ -1,3 +1,11 @@
+---
+name: videojuegos
+description: >
+  Reference skill for video game development workflows,game design, programming,
+  level design, art production, QA,across Unity, Unreal, Bevy, Godot, and
+  OpenUSD. Use when building interactive entertainment or serious games.
+---
+
 # Video Game Development Skill — Multi-Tool Reference
 
 ## Purpose

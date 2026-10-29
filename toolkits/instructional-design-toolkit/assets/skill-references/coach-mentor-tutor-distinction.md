@@ -43,7 +43,7 @@ scope para mentorear.
 ## Usado por
 
 - `session-type-detector` (auto-detection + justificación + confidence).
-- `1-on-1-session-planner` skill (paso 2).
+- `session-planner-1on1` skill (paso 2).
 - `session-plan-audit` (check type consistency).
 - Profiles de session-plan (`coaching_specific`, `mentoring_specific`,
   `tutoring_specific` fields).

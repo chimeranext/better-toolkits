@@ -1,3 +1,12 @@
+---
+name: revenue-strategy
+description: >
+  Provides the AAARRR funnel + flywheel strategy layer,objective -> channel mix
+  -> budget split -> draft plan per network,and lifecycle decisions,
+  orchestrating paid-media execution via the MCP and PostHog. Use when setting
+  high-level revenue strategy.
+---
+
 # Revenue Strategy Skill — Multi-Tool Reference
 
 ## Purpose

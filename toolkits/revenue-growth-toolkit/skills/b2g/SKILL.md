@@ -1,3 +1,12 @@
+---
+name: b2g
+description: >
+  Revenue playbook for selling to national/local governments via
+  tenders/licitaciones and public-private partnerships (PPP), country-agnostic
+  across SICOP, CompraNet, Guatecompras, SECOP, and more. Use when pursuing
+  government sales opportunities.
+---
+
 # B2G Skill — Multi-Tool Reference (Sell to Government)
 
 ## Purpose

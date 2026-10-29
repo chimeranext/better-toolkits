@@ -1,3 +1,11 @@
+---
+name: five-s
+description: >
+  Reference skill for the 5S methodology,the five steps with Japanese terms,
+  English translations, and practical descriptions. Use when implementing
+  workplace organization and standardization.
+---
+
 # 5S Methodology Skill — Multi-Tool Reference
 
 ## Purpose

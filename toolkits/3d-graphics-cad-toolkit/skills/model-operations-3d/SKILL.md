@@ -1,3 +1,12 @@
+---
+name: model-operations-3d
+description: >
+  Reference skill for core 3D model operations,import, export, conversion,
+  manipulation, and validation,across formats (STL, OBJ, GLB/glTF, USD) and
+  tools (Blender, OpenUSD, Omniverse) for digital twin, CAD, and visualization
+  pipelines. Use when transforming or validating 3D models.
+---
+
 # 3D Model Operations Skill — Multi-Tool Reference
 
 ## Purpose

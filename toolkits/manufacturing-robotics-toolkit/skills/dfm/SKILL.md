@@ -1,3 +1,11 @@
+---
+name: dfm
+description: >
+  Reference skill for design-for-manufacturability (DFM) rules,wall thickness,
+  overhangs, support strategy, hole orientation, draft angles, minimum tool
+  radius, tolerance stack-up. Use when reviewing a design for manufacturability.
+---
+
 # DFM Rules Skill — Multi-Tool Reference
 
 ## Purpose

@@ -11,8 +11,8 @@
     {
       "source": "chimeranext/better-toolkits",
       "skills": [
-        "3d-graphics-cad-toolkit",
-        "3d-model-operations",
+        "graphics-cad-3d-toolkit",
+        "model-operations-3d",
         "animacion-digital",
         "bevy-iced-integration",
         "bim",

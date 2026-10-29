@@ -1,3 +1,11 @@
+---
+name: additive-manufacturing
+description: >
+  Reference skill for choosing between FDM, SLA/DLP, and SLS/MJF based on part
+  size, tolerance, surface finish, material properties, and run size. Use when
+  selecting an additive manufacturing process.
+---
+
 # Additive Manufacturing Selection Skill — Multi-Tool Reference
 
 ## Purpose

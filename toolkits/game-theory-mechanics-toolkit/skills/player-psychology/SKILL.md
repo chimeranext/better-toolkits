@@ -1,3 +1,11 @@
+---
+name: player-psychology
+description: >
+  Reference skill for player psychology,motivation, engagement, cognitive load,
+  behavioral design,for video game development across Unity, Unreal, Bevy, and
+  Godot. Use when tuning engagement, retention, and onboarding.
+---
+
 # Player Psychology Skill — Multi-Tool Reference
 
 ## Purpose

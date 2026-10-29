@@ -1,3 +1,11 @@
+---
+name: pricing-strategist
+description: >
+  Helps pick a pricing model, validate willingness-to-pay (Van Westendorp PSM),
+  and design Good/Better/Best packaging, emitting a model and range rather than
+  a single number. Use when setting or revising pricing.
+---
+
 # Pricing Strategist Skill — Multi-Tool Reference (B2B / B2C)
 
 ## Purpose

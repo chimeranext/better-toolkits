@@ -1,3 +1,11 @@
+---
+name: six-sigma
+description: >
+  Reference skill for Six Sigma including the DMAIC cycle and certification
+  paths. Use when running defect-reduction projects or planning quality
+  certifications.
+---
+
 # Six Sigma Skill — Multi-Tool Reference
 
 ## Purpose

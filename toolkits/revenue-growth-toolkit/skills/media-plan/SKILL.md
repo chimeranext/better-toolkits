@@ -1,3 +1,11 @@
+---
+name: media-plan
+description: >
+  Turns an objective into a draft media plan (campaign matrix per network) using
+  the shared social-media-ads-mcp MCP, drafts-first until human confirmation.
+  Use when planning an ad campaign across channels.
+---
+
 # Media Plan Skill — Multi-Tool Reference
 
 ## Purpose

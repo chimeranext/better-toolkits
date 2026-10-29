@@ -1,3 +1,12 @@
+---
+name: vfx
+description: >
+  Reference skill for Visual Effects (VFX) workflows,particle systems,
+  simulations, compositing, rendering,across Blender, Houdini, After Effects,
+  Nuke, and GPU node-based pipelines. Use when producing film, advertising, or
+  real-time VFX.
+---
+
 # VFX Skill — Multi-Tool Reference
 
 ## Purpose

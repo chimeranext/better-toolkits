@@ -1,3 +1,11 @@
+---
+name: kill-rules
+description: >
+  Encodes kill-rule operational thresholds (CPA 2x, ROAS < 1, LTV:CAC collapse)
+  and proposes kills/pauses,never auto-executes,using scripts and the MCP. Use
+  when deciding which campaigns to pause or kill.
+---
+
 # Kill Rules Skill — Multi-Tool Reference
 
 ## Purpose

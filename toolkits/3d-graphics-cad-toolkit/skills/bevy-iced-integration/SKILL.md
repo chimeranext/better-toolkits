@@ -1,3 +1,12 @@
+---
+name: bevy-iced-integration
+description: >
+  Reference skill for integrating Bevy Engine (3D rendering/simulation) with the
+  Iced cross-platform GUI library, both in Rust, for desktop and real-time
+  interactive applications including digital twin studios. Use when building a
+  GUI around a 3D scene.
+---
+
 # Bevy + Iced Integration Skill — Multi-Tool Reference
 
 ## Purpose

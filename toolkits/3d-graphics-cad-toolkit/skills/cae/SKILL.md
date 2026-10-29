@@ -1,3 +1,11 @@
+---
+name: cae
+description: >
+  Reference skill for computer-aided engineering (CAE) workflows,FEA, CFD,
+  multi-body dynamics, simulation-driven design,across Ansys, COMSOL, OpenFOAM,
+  and CalculiX. Use when simulating or validating products and digital twins.
+---
+
 # CAE Skill — Multi-Tool Reference
 
 ## Purpose

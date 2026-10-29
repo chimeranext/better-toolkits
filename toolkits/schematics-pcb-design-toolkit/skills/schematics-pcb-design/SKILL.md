@@ -1,3 +1,12 @@
+---
+name: schematics-pcb-design
+description: >
+  Reference skill for schematic capture and PCB layout for hardware/IoT
+  startups: KiCad project structure, schematic design rules, PCB layout
+  guidelines, ERC/DRC, manufacturing outputs, and netlist comparison. Use when
+  designing schematics and PCBs.
+---
+
 # Schematics / PCB Design Skill — Multi-Tool Reference
 
 ## Purpose

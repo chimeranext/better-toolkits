@@ -1,3 +1,11 @@
+---
+name: tolerances-fits
+description: >
+  Reference skill for tolerances, fits, and clearances,ISO 2768 general
+  tolerances, shaft/hole fit classes, printed-part clearance compensation. Use
+  when specifying or checking dimensions on mechanical parts.
+---
+
 # Tolerances & Fits Skill — Multi-Tool Reference
 
 ## Purpose

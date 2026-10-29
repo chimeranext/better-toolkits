@@ -40,7 +40,7 @@ Antes del flow, mostrar:
 ### Paso 1 — Learner Profile
 
 Despachar `${CLAUDE_PLUGIN_ROOT}/agents/learner-profile-builder.md` (si no fue
-provisto por el dispatcher 1-on-1-session-planner).
+provisto por el dispatcher session-planner-1on1).
 
 ### Paso 2 — Coaching-Specific Setup
 

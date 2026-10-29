@@ -1,3 +1,11 @@
+---
+name: creative-testing
+description: >
+  Designs and audits creative tests across networks via the shared
+  social-media-ads-mcp MCP,batch creative launch (drafts-first), per-creative
+  readout, and pause losers. Use when testing and iterating ad creatives.
+---
+
 # Creative Testing Skill — Multi-Tool Reference
 
 ## Purpose

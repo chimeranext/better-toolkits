@@ -1,3 +1,12 @@
+---
+name: production
+description: >
+  Reference skill for the game production process,project management, scope
+  control, milestones, build pipelines, shipping,for video game development
+  across Unity, Unreal, Bevy, and Godot. Use when planning or shipping a game
+  release.
+---
+
 # Game Production Process Skill — Multi-Tool Reference
 
 ## Purpose

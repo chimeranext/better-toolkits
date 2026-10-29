@@ -133,7 +133,7 @@ frontmatter, no comandos invocables.)_
 
 Los skills son el motor de cada flujo. **No hay correspondencia 1:1 comando↔skill**:
 17 skills respaldan comandos (algunos comparten skill — los 3 shortcuts de session
-plan reusan el flow del `1-on-1-session-planner` omitiendo la detección de tipo), y
+plan reusan el flow del `session-planner-1on1` omitiendo la detección de tipo), y
 4 son **reference skills** sin comando propio, que otros skills cargan como canon
 metodológico.
 
@@ -148,7 +148,7 @@ metodológico.
 | `course-retro` | Retro Kirkpatrick L1-L4 con iteration candidates (impact × ease) |
 | `course-diff` | Compara versiones vía git tags/commits, reporta impacto (read-only) |
 | `slides-preview` | Render Marp por lección desde `course.json` |
-| `1-on-1-session-planner` | Diseño de session plan con auto-detect coach/mentor/tutor |
+| `session-planner-1on1` | Diseño de session plan con auto-detect coach/mentor/tutor |
 | `coaching-session` | Session plan de coaching (salta detección; tipo ya declarado) |
 | `mentoring-session` | Session plan de mentoría (desarrollo integral, larga duración) |
 | `tutoring-session` | Session plan de tutoría (topic específico, corto plazo) |

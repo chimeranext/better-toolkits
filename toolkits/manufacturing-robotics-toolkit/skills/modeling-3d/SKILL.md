@@ -1,3 +1,11 @@
+---
+name: modeling-3d
+description: >
+  Reference skill for parametric 3D modeling,part vs assembly structure,
+  parametric sketches, constraints, feature history hygiene. Use when creating
+  or structuring parametric 3D CAD models.
+---
+
 # 3D Modeling Workflow Skill — Multi-Tool Reference
 
 ## Purpose

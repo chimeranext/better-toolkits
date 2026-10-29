@@ -1,3 +1,12 @@
+---
+name: animacion-digital
+description: >
+  Reference skill for digital animation workflows,2D/3D animation, rigging,
+  character animation, keyframing, and cinematic rendering,across Blender,
+  Cinema 4D, Maya, Toon Boom Harmony, and OpenUSD. Use when creating animation
+  for product visualization, simulation, or motion design.
+---
+
 # Digital Animation Skill — Multi-Tool Reference
 
 ## Purpose
