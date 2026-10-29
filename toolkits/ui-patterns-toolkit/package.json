@@ -1,0 +1,9 @@
+{
+  "name": "ui-patterns",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Reusable desktop UI/UX patterns (framework-agnostic).",
+  "scripts": {},
+  "skills": ["ribbon-ui"]
+}
