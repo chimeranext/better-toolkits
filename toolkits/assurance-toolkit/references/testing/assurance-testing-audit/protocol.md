@@ -31,6 +31,11 @@ sola integración cubre la matriz completa: `.mega-linter.yml` (SSOT) + GitHub A
 bloqueante. Evidencia vía reporter **SARIF** (subible a code scanning), que alimenta
 los receipts. Ver `.mega-linter.yml` en la raíz de better-toolkits como piloto.
 
+**Destino de evidencia**: los receipts se persisten en el repo interno privado
+`internal-audits` (política de governance — ver
+`references/governance/protocol.md`). Si ese repo no existe ni hay desviación
+documentada, el auditor emite **GAP** en la fila correspondiente.
+
 ## Flow
 
 ```mermaid
