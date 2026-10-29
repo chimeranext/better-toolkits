@@ -207,23 +207,47 @@ export default {
     }
 
     await ctx.tool.hook("execute.before", (event: OpenCode.ExecuteBeforeEvent) => {
-      if (event.tool !== "shell") return
-      const command = (event.input as { command?: unknown })?.command
-      if (typeof command !== "string") return
-      // git push/merge to main guard (HITL bypass) — multi-harness pre-merge gate
-      const tokens = (command || "").split(/\s+/).filter((t) => t.length > 0)
-      if (tokens.some((t) => t === "push" || t === "merge") && tokens[tokens.length - 1] === "main") {
-        const res = spawnSync("bash", [join(ADAPTER_DIR, "..", "..", "git", "pre-push.sh"), "main"], {
-          env: { ...process.env, MNM_GIT_TARGET: "main" },
-        })
-        if (res.status === 2) {
-          throw new Error("BLOCKED: push/merge to 'main' requires HITL human approval (pre-push guard). Bypass: set HITL_APPROVED=1 or create the HITL marker via human action.")
+      const isShell = event.tool === "shell"
+      const isWrite = event.tool === "write"
+      const isEdit = event.tool === "edit"
+      if (!isShell && !isWrite && !isEdit) return
+
+      // Comparte el detector de stderr sobre contenido propuesto (write/edit).
+      const scanDeny = (text: unknown): string | null =>
+        typeof text === "string" && text.trim() ? deny(text) : null
+
+      if (isShell) {
+        const command = (event.input as { command?: unknown })?.command
+        if (typeof command !== "string") return
+        // git push/merge to main guard (HITL bypass) — multi-harness pre-merge gate
+        const tokens = (command || "").split(/\s+/).filter((t) => t.length > 0)
+        if (tokens.some((t) => t === "push" || t === "merge") && tokens[tokens.length - 1] === "main") {
+          const res = spawnSync("bash", [join(ADAPTER_DIR, "..", "..", "git", "pre-push.sh"), "main"], {
+            env: { ...process.env, MNM_GIT_TARGET: "main" },
+          })
+          if (res.status === 2) {
+            throw new Error("BLOCKED: push/merge to 'main' requires HITL human approval (pre-push guard). Bypass: set HITL_APPROVED=1 or create the HITL marker via human action.")
+          }
+        }
+        const msg = deny(command)
+        if (msg) throw new Error(msg)
+        const squashMsg = denyNoSquash(command)
+        if (squashMsg) throw new Error(squashMsg)
+        return
+      }
+
+      // write / edit: escanear el contenido propuesto con el detector de stderr
+      const input = event.input as { content?: unknown; edits?: Array<{ new_string?: unknown }> }
+      if (isWrite) {
+        const m = scanDeny(input.content)
+        if (m) throw new Error(m)
+      }
+      if (isEdit) {
+        for (const e of input.edits ?? []) {
+          const m = scanDeny(e?.new_string)
+          if (m) throw new Error(m)
         }
       }
-      const msg = deny(command)
-      if (msg) throw new Error(msg)
-      const squashMsg = denyNoSquash(command)
-      if (squashMsg) throw new Error(squashMsg)
     })
   },
 }

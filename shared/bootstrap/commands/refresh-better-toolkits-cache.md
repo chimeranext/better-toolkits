@@ -31,6 +31,16 @@ node <clone>/shared/bootstrap/cli/bin/better-toolkits.js self-update --harness o
 1. Fast-forwards the clone's `main` (skips a dirty tree, never force-merges).
 2. Re-syncs the wiring idempotently: discovery-dir stderr copy, `commands/`
    symlinks, `skills` entries, auto-update plugin.
+3. **Restart (si cambió el plugin de stderr)** — el re-sync actualiza
+   `<configDir>/plugins/mnm-no-stderr-redirect/index.ts` en disco, pero OpenCode
+   no recarga el plugin hasta reiniciar el servicio:
+
+   ```bash
+   opencode service restart
+   ```
+
+   Antes del restart, `better-toolkits doctor` / el audit lo marcan como
+   *"present on disk but NOT loaded — restart service"*.
 
 ## Cursor CLI + Cursor Desktop
 
