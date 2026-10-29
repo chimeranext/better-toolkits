@@ -226,7 +226,7 @@
     {
       "name": "instructional-design-toolkit",
       "description": "Guided instructional design toolkit \u2014 design cmi5-compliant courses and 1-on-1 session plans using CONTEXT\u2192CONCEPT\u2192BUILD\u2192SHIP\u2192REFLECT formula, Builder's Bloom's progression, Ship-First Design, and Kirkpatrick L1-L4 evaluation. Produces JSON + Markdown + HTML visualization + Marp slide decks.",
-      "version": "1.4.5",
+      "version": "1.4.6",
       "source": "./toolkits/instructional-design-toolkit",
       "category": "productivity",
       "keywords": [
@@ -290,7 +290,7 @@
     {
       "name": "digital-nomad-toolkit",
       "description": "Guide for freelancers and digital nomads who want to operate as a US Single-Member LLC without jumping to a startup or shared services. Covers entity formation, tax compliance, remote banking, international billing (MSA B2B), visa options, and studying or founding abroad (Germany, Canada, Ireland, Australia, Japan, Singapore, South Korea). FREE.",
-      "version": "1.1.5",
+      "version": "1.1.6",
       "source": "./toolkits/digital-nomad-toolkit",
       "author": {
         "name": "Luis Andres Pena Castillo",
@@ -342,7 +342,7 @@
     {
       "name": "assurance",
       "description": "Release-assurance evidence toolkit \u2014 2 pillars (testing, liveness) + security transversal with its own runner, plus governance (DORA/DER metrics, stage gates, traceable receipts). Migrated quality-evidence commands from make-no-mistakes with shims.",
-      "version": "0.1.19",
+      "version": "0.1.20",
       "source": "./toolkits/assurance-toolkit",
       "author": {
         "name": "Luis Andres Pena Castillo",
@@ -375,7 +375,7 @@
     {
       "name": "3d-graphics-cad-toolkit",
       "description": "3D graphics and CAD toolkit \u2014 parametric modeling, additive manufacturing, BIM, VR/AR, digital twins, animation, VFX, and game-dev skills. Multi-tool agnostic (AutoCAD, Blender, Cinema 4D, Maya, ZBrush, OpenUSD, NVIDIA Omniverse, Bevy, Iced).",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "source": "./toolkits/3d-graphics-cad-toolkit",
       "author": {
         "name": "Luis Andres Pena Castillo",
@@ -406,7 +406,7 @@
     {
       "name": "game-theory-mechanics-toolkit",
       "description": "Game theory and game development toolkit \u2014 game design mechanics, player psychology, production process, and visual/interactive storytelling skills. Video-game focused, engine-agnostic (Unity, Unreal Engine, Bevy, Godot, OpenUSD).",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "source": "./toolkits/game-theory-mechanics-toolkit",
       "author": {
         "name": "Luis Andres Pena Castillo",
@@ -433,7 +433,7 @@
     {
       "name": "logistics-toolkit",
       "description": "Supply chain / import toolkit for LATAM \u2014 procurement (P2P, SRM, Kraljic), customs regimes, import documents, INCOTERMS 2020, free trade agreements, and inventory management. Notion-agnostic ingestion.",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "source": "./toolkits/logistics-toolkit",
       "author": {
         "name": "Luis Andres Pena Castillo",
@@ -458,7 +458,7 @@
     {
       "name": "schematics-pcb-design-toolkit",
       "description": "Schematic capture and PCB layout toolkit for hardware/IoT startups \u2014 KiCad project structure, design rules, layout guidelines, ERC/DRC, manufacturing outputs, and netlist diff.",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "source": "./toolkits/schematics-pcb-design-toolkit",
       "author": {
         "name": "Luis Andres Pena Castillo",
@@ -483,7 +483,7 @@
     {
       "name": "revenue-growth-toolkit",
       "description": "Revenue growth toolkit \u2014 AAARRR funnel/flywheel strategy over multi-network paid-media execution (shared MCP; Meta via Ads CLI), PostHog analytics, Python metrics.",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "source": "./toolkits/revenue-growth-toolkit",
       "author": {
         "name": "Luis Andres Pena Castillo",
