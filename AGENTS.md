@@ -59,7 +59,7 @@ isolated worktree — never ad-hoc sibling folders under `../chimeranext/`.
 | Harness | Path |
 | --- | --- |
 | Cursor / generic agents | `.agents/worktrees/<slug>` |
-| Claude Code / `/make-no-mistakes:implement` | `.claude/worktrees/<issue-id>` |
+| Claude Code / `/make-no-mistakes:implement` | `.agents/worktrees/<issue-id>` |
 | Manual fallback | `.worktrees/<slug>` |
 
 **Create:**

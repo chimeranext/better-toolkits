@@ -97,7 +97,7 @@ Group pending items into:
 ### Worktrees Activos
 | Worktree | Branch | Estado |
 |----------|--------|--------|
-| .claude/worktrees/xxx | branch-name | pendiente/listo |
+| .agents/worktrees/xxx | branch-name | pendiente/listo |
 
 ### Infra / DevOps
 - [ ] <migrations, CI fixes, deploy steps>

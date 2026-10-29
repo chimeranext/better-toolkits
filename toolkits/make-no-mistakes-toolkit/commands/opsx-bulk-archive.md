@@ -5,4 +5,4 @@ priority: 70
 ---
 # /opsx:bulk-archive
 
-Read and follow [`references/explain/protocol.md`](../references/explain/protocol.md) (protocol SSOT — English, anti-boilerplate, anti-hidden-redirects, no embedded secrets).
+Read and follow [`references/opsx-bulk-archive/protocol.md`](../references/opsx-bulk-archive/protocol.md) (protocol SSOT — English, anti-boilerplate, anti-hidden-redirects, no embedded secrets; adheres to OpenSpec OPSX).

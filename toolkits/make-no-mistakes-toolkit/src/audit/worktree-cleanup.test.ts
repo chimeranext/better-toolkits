@@ -214,10 +214,10 @@ describe('classify — ambiguity is its own verdict and never collapses into rem
 });
 
 describe('assertRemovableNodeModules — the guard that must be able to refuse', () => {
-  const worktrees = ['/repo', '/repo/.claude/worktrees/a'];
+  const worktrees = ['/repo', '/repo/.agents/worktrees/a'];
 
   it('accepts a node_modules inside a known worktree', () => {
-    expect(assertRemovableNodeModules('/repo/.claude/worktrees/a/node_modules', worktrees)).toBe(true);
+    expect(assertRemovableNodeModules('/repo/.agents/worktrees/a/node_modules', worktrees)).toBe(true);
   });
 
   it('refuses a path that is not named node_modules', () => {
@@ -241,12 +241,12 @@ describe('parseWorktreeList', () => {
     'HEAD aaa',
     'branch refs/heads/develop',
     '',
-    'worktree /repo/.claude/worktrees/a',
+    'worktree /repo/.agents/worktrees/a',
     'HEAD bbb',
     'branch refs/heads/feat/x',
     'locked agent holds this',
     '',
-    'worktree /repo/.claude/worktrees/b',
+    'worktree /repo/.agents/worktrees/b',
     'HEAD ccc',
     'detached',
     'prunable gitdir file points to non-existent location',

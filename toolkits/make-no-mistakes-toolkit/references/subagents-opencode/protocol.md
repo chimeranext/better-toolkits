@@ -41,7 +41,7 @@ Detalles operativos: herdr agent-guide (https://herdr.dev/agent-guide.md) y
 
 Ver [`subagents-harness-capabilities.md`](../subagents-harness-capabilities.md) — matriz
 harness-agnostic (subagents, cross-session messaging, worktrees `.agents/worktrees`,
-workflows, channels). La convención de worktrees es `.agents/worktrees`, no `.claude/worktrees`.
+workflows, channels). La convención de worktrees es `.agents/worktrees`.
 
 ## Referencias
 

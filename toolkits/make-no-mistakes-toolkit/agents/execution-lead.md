@@ -44,8 +44,8 @@ For EACH issue in the sequence:
 3. Create NEW branch + worktree (MANDATORY):
    ```bash
    git branch -D {type}/{issue-id}-{short-description} 2>/dev/null || true
-   git worktree add .claude/worktrees/{issue-id} -b {type}/{issue-id}-{short-description} {baseBranch}
-   cd .claude/worktrees/{issue-id}
+   git worktree add .agents/worktrees/{issue-id} -b {type}/{issue-id}-{short-description} {baseBranch}
+   cd .agents/worktrees/{issue-id}
    ```
 4. Assess scope — if >15 files, decompose into multiple PRs
 

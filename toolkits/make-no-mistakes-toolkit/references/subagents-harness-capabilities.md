@@ -10,7 +10,7 @@ harness (OpenCode, etc.) implementa equivalentes.
 |---|---|---|---|
 | **Subagents** | worker con contexto aislado; devuelve resumen | `.claude/agents/*.md` (name/description/tools/model) | skill/plugin de subagent; contexto aislado por tarea |
 | **Cross-session messaging** | pasar hallazgos entre sesiones | `ListAgents`/`SendMessage` | herdr: sesiones/panes coexistiendo; notificaciones |
-| **Worktrees** | aislamiento de archivos entre sesiones paralelas | `--worktree` → `.claude/worktrees/` | **`.agents/worktrees/`** (convención de este monorepo) |
+| **Worktrees** | aislamiento de archivos entre sesiones paralelas | `--worktree` (Claude Code) | **`.agents/worktrees/`** (convención de este monorepo) |
 | **Workflows** | orquestación scripteada de muchos subagents (`agent()/pipeline()/parallel()`) | `/workflows`, `agent()`, `pipeline()` | equivalente: script/orquestador que despacha workers |
 | **Channels** | push de eventos externos (CI/chat) a una sesión | channels | — |
 
@@ -22,8 +22,7 @@ La **ubicación canónica de worktrees independiente del harness** es:
 .agents/worktrees/<slug>
 ```
 
-(según AGENTS.md de `<-toolkits). `.claude/worktrees/` es específico de Claude Code;
-no lo uses como convención de repo.
+(según AGENTS.md de better-toolkits).
 
 ## Cómo usar
 

@@ -5,4 +5,4 @@ priority: 70
 ---
 # /opsx:verify
 
-Read and follow [`references/explain/protocol.md`](../references/explain/protocol.md) (protocol SSOT — English, anti-boilerplate, anti-hidden-redirects, no embedded secrets).
+Read and follow [`references/opsx-verify/protocol.md`](../references/opsx-verify/protocol.md) (protocol SSOT — English, anti-boilerplate, anti-hidden-redirects, no embedded secrets; adheres to OpenSpec OPSX).

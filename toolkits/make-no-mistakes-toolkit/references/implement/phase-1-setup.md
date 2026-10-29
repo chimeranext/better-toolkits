@@ -15,11 +15,11 @@ Claim the issue, create branch+worktree, assess scope, commit OpenSpec first if 
    git branch -D {type}/{issue-id}-{short-description} 2>/dev/null || true
 
    # Create fresh worktree with new branch
-   git worktree add .claude/worktrees/{issue-id} -b {type}/{issue-id}-{short-description} {baseBranch}
-   cd .claude/worktrees/{issue-id}
+   git worktree add .agents/worktrees/{issue-id} -b {type}/{issue-id}-{short-description} {baseBranch}
+   cd .agents/worktrees/{issue-id}
 
    # Verify you are in the worktree, NOT the main tree
-   git worktree list  # Current dir should be in .claude/worktrees/
+   git worktree list  # Current dir should be in .agents/worktrees/
    pwd                # Must NOT be the repo root
    ```
 
