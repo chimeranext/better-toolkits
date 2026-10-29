@@ -46,11 +46,11 @@ const BARE_STDOUT_NULL = /(^|[^0-9&>])1?>>?\s*\/dev\/null\b/
 const ALLOWED_REVERSE = /2>&1\s*1?>>?\s*\/dev\/null\b/g
 const BARE_FOLD = /2\s*>&\s*1/
 const HAS_FILE_SINK =
-  /(?:^|[\s;|&])(?:>>?|>\|)\s*(?!\/dev\/null)(\.\/|\.\.\/|\/|[A-Za-z0-9_./-])\S*/
+  /(?:^|[\s;|&])(?:>>?|>\|)\s*(?!['"]?\/dev\/null)['"]?(?:\.\/|\.\.\/|\/|\$|[A-Za-z0-9_./-])\S*/
 const HAS_TEE_FILE =
   /\|\s*tee(?:\s+-a)?\s+(?!\/dev\/null)(\.\/|\.\.\/|\/|[A-Za-z0-9_./-])\S*/
 const HAS_STDERR_FILE =
-  /2\s*>\s*(?!&|\/dev\/null)(\.\/|\.\.\/|\/|[A-Za-z0-9_./-])\S*/
+  /2\s*>>?\s*(?!&|\/dev\/null)(\.\/|\.\.\/|\/|[A-Za-z0-9_./-])\S*/
 const EXECUTOR = /(^|[^A-Za-z0-9_-])(eval|xargs|(ba|z|k)?sh\s+-c|\$\(|`)/
 
 function stripQuotedSpans(s: string): string {

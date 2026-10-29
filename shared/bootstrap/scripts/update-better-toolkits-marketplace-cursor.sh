@@ -20,13 +20,12 @@ THROTTLE_SECONDS="${BETTER_TOOLKITS_AUTO_UPDATE_INTERVAL_SECONDS:-1800}"
 LOG_DIR="${HOME}/.cursor/hooks/logs"
 STAMP_FILE="${LOG_DIR}/.update-better-toolkits-marketplace-cursor.last"
 TS="$(date -u +%Y%m%dT%H%M%SZ)"
-OUT_LOG="${LOG_DIR}/update-better-toolkits-marketplace-cursor-${TS}.out.log"
-ERR_LOG="${LOG_DIR}/update-better-toolkits-marketplace-cursor-${TS}.err.log"
+LOG="${LOG_DIR}/update-better-toolkits-marketplace-cursor-${TS}.log"
 
 mkdir -p "${LOG_DIR}"
 
 if [[ -f "${STAMP_FILE}" ]]; then
-  last="$(cat "${STAMP_FILE}" 2>>"${ERR_LOG}" || echo 0)"
+  if last="$(cat "${STAMP_FILE}")"; then :; else last=0; fi
   now="$(date +%s)"
   age=$((now - last))
   if [[ "${age}" -lt "${THROTTLE_SECONDS}" ]]; then
@@ -46,7 +45,7 @@ if [[ -z "${CLONE}" || ! -f "${CLONE}/.claude-plugin/marketplace.json" ]]; then
 fi
 
 if [[ -f "${CLONE}/.claude-plugin/marketplace.json" && -f "${CLONE}/shared/bootstrap/cli/bin/better-toolkits.js" ]]; then
-  if node "${CLONE}/shared/bootstrap/cli/bin/better-toolkits.js" self-update --harness cursor "${EXPERT[@]}" >>"${OUT_LOG}" 2>>"${ERR_LOG}"; then
+  if node "${CLONE}/shared/bootstrap/cli/bin/better-toolkits.js" self-update --harness cursor "${EXPERT[@]}" >>"${LOG}" 2>&1; then
     date +%s >"${STAMP_FILE}"
   fi
   exit 0
@@ -55,7 +54,7 @@ fi
 # Fallback: no clone on this machine — refresh the marketplace registration only.
 AGENT_BIN="$(command -v agent || true)"
 if [[ -n "${AGENT_BIN}" ]]; then
-  if "${AGENT_BIN}" plugin marketplace update better-toolkits >>"${OUT_LOG}" 2>>"${ERR_LOG}"; then
+  if "${AGENT_BIN}" plugin marketplace update better-toolkits >>"${LOG}" 2>&1; then
     date +%s >"${STAMP_FILE}"
   fi
 fi
