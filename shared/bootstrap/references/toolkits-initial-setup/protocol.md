@@ -14,6 +14,21 @@ and global plugin installs.
 | OpenCode stderr + optional npm CLIs via `setup-opencode.md` | `/make-no-mistakes:opencode-setup` (removed — use bootstrap) |
 | OpenCode: `npx @chimeranext/better-toolkits setup` | Per-toolkit `npx @lapc506/* install` (deprecated) |
 | Auto-update: `git pull --ff-only` the clone + per-harness wiring re-sync | Third-party `opencode-plugin-auto-update` (migrates `"plugins"`→`"plugin"`, npm-registry only) |
+| Quality gate via `/assurance-local-setup` + `/assurance-repo-setup` | Per-repo policy decisions (destino de evidencia, enforcement level) |
+
+## Frontera local vs repo
+
+| Dominio | Qué cubre | Permiteos clave |
+|---------|-----------|-----------------|
+| **LOCAL** (máquina del dev) | harness detection, marketplace/plugin installs, hooks locales, auto-update, deps typecheck | sin privilegios remotos |
+| **REPO** (remoto/protección) | gate CI (`.mega-linter.yml`, workflows), tsconfig base, ruleset `required_status_checks`, `internal-audits` | admin del repo (si se va a enforce) |
+
+La Parte L y la Parte R son independientes: un dev puede hacer la Parte L sin permisos
+remotos; la Parte R reporta `no-enforced`/`GAP` si no puede activar protección.
+
+---
+
+# Parte L — Local (máquina del dev)
 
 ## Phase 1 — Detect harness
 
@@ -64,6 +79,7 @@ Produce explicit **diffs** and command lists:
 - **Branch mode** — default **consumer**: always converge the clone on `main` and
   fast-forward. `--expert-mode` (author) never switches branch and never touches a
   dirty tree. The mode is persisted in the sidecar so background runs honor it.
+- **Assurance local** — `/assurance-local-setup` (git hooks locales + typecheck deps).
 
 Show full proposed file contents or unified diff. Link [stderr README](../../../../hooks/stderr/README.md).
 
@@ -80,7 +96,7 @@ Stop. Present numbered options:
 
 Wait for an **explicit** reply. Silence is not approval.
 
-## Phase 5 — Install
+## Phase 5 — Install (local)
 
 Only after OK:
 
@@ -96,8 +112,9 @@ npx skills add chimeranext/better-toolkits --skill merge-advisor --agent '*' -g 
 3. Merge hooks idempotently (see adapter for paths).
 4. For OpenCode, run or guide `npx @chimeranext/better-toolkits setup` (same protocol; `--yes` only when user pre-approved).
 5. Never use `2>/dev/null` or bare `2>&1` without a log file — stderr hooks doctrine applies to the agent too.
+6. **Assurance local** — invoke `/assurance-local-setup` (`scripts/assurance-local-setup/ensure-local-hooks.sh` + `prepare-typecheck-deps.sh`).
 
-## Phase 6 — Verify
+## Phase 6 — Verify (local)
 
 1. `claude plugin marketplace list` / `agent plugin marketplace list` — `better-toolkits`, N plugins indexed.
 2. Bootstrap + requested product plugins appear in `plugin list`.
@@ -106,19 +123,39 @@ npx skills add chimeranext/better-toolkits --skill merge-advisor --agent '*' -g 
 4. `npx @chimeranext/better-toolkits doctor` when CLI is available.
 5. **Auto-update** — `opencode plugin list` shows `local.better-toolkits-auto-update`; the sidecar
    records the chosen branch mode; `better-toolkits self-update --dry-run` reports the planned pull.
+6. **Assurance local** — `cd shared/hooks && npm run typecheck` passes; git hooks active.
 
 Report pass/fail per harness. If verify fails, propose rollback diffs (HITL again).
+
+---
+
+# Parte R — Repo (remoto/protección)
+
+## Phase 7 — Assurance repo gate
+
+Invoke `/assurance-repo-setup` (toolkit assurance). It:
+
+- generates `.mega-linter.yml`, `.github/workflows/megalinter.yml`, `.github/workflows/bypass-audit.yml`,
+  and `shared/hooks/tsconfig.json` (if TS) from `scripts/assurance-repo-setup/templates/`;
+- ensures the ruleset `required_status_checks` via `scripts/assurance-repo-setup/ensure-rule-set.sh`
+  (idempotente; solo si hay permisos);
+- verifies `internal-audits` via `ensure-audit-repo.sh` (emite GAP si falta).
+
+**No bloquea el bootstrap**: si la activación del ruleset no está permitida o el repo de
+evidencia no existe, reporta estado `no-enforced` / `GAP` y continúa.
 
 ## Arguments
 
 ```
-/toolkits-initial-setup [cursor|claude|opencode] [--expert-mode] [--no-auto-update] [toolkit names…]
+/toolkits-initial-setup [cursor|claude|opencode] [--expert-mode] [--no-auto-update] [--no-ruleset] [toolkit names…]
 ```
 
 - `--expert-mode` — author flow: never switch the clone's branch, never touch a dirty tree.
 - `--no-auto-update` — do not install the auto-update plugin (or `BETTER_TOOLKITS_AUTO_UPDATE=0`).
+- `--no-ruleset` — pass through to `/assurance-repo-setup`: generate files but do not touch ruleset.
 
 ## Related
 
 - [multi-harness-ssot.md](../../../../docs/multi-harness-ssot.md)
+- `/assurance-local-setup` y `/assurance-repo-setup` (`toolkits/assurance-toolkit/commands/`)
 - OpenSpec: `openspec/changes/2026-09-16-shared-bootstrap-toolkits-initial-setup/`
