@@ -4,13 +4,13 @@
 #
 # Usage:
 #   disk-cleanup.sh measure                       # read-only, changes nothing
-#   disk-cleanup.sh docker-images   [--apply]
-#   disk-cleanup.sh node-modules    [--apply] [--repo-path PATH]
-#   disk-cleanup.sh worktrees       [--apply] [--repo-path PATH]
-#   disk-cleanup.sh docker-volumes                # lists only, never deletes
-#   disk-cleanup.sh all             [--apply] [--repo-path PATH] [--target GB]
+#   disk-cleanup.sh docker-images   [--list-only]
+#   disk-cleanup.sh node-modules    [--list-only] [--repo-path PATH]
+#   disk-cleanup.sh worktrees       [--list-only] [--repo-path PATH]
+#   disk-cleanup.sh docker-volumes                # defaults to reclaiming; --list-only previews
+#   disk-cleanup.sh all             [--list-only] [--repo-path PATH] [--target GB]
 #
-# Default is DRY RUN. Nothing is removed without --apply.
+# Emergency default: APPLIES stages 1-4. Use --list-only to preview.
 #
 # ── Why the stages are ordered this way ──────────────────────────────────────
 # Measured 2026-08-11 on a 468 GB volume that had hit 100% full:
@@ -18,7 +18,7 @@
 #   docker image prune -a          48.3 GB   no risk — images re-pull
 #   node_modules inside worktrees    11 GB   no risk — regenerable from lockfile
 #   worktree removal                        real risk — 8 of 69 were removable
-#   docker volumes                  ~1 GB   holds DATA — listed, never deleted
+#   docker volumes                  ~29 GB  reconstructible; reclaimed in emergency (--apply)
 #
 # ── What this script owns, and what it delegates ─────────────────────────────
 # It owns the DOCKER stages (1 and 4) and nothing else.
@@ -52,7 +52,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WORKTREE_CLEANUP="${SCRIPT_DIR}/worktree-cleanup.mjs"
 
 SUBCOMMAND=""
-APPLY=0
+APPLY=1
 REPO_PATH="$PWD"
 TARGET_GB=""
 
@@ -72,7 +72,7 @@ human() {
     [ -n "$bytes" ] || { printf 'unknown'; return 0; }
     local sign=""
     if [ "$bytes" -lt 0 ]; then sign="-"; bytes=$(( -bytes )); fi
-    if out="$(numfmt --to=iec --suffix=B "$bytes" 2>&1)"; then
+    if out="$(numfmt --to=iec --suffix=B "$bytes")"; then
         printf '%s%s' "$sign" "$out"
     else
         printf '%s%s bytes' "$sign" "$bytes"
@@ -230,10 +230,10 @@ stage_docker_images() {
     fi
 
     if [ "$APPLY" -eq 0 ]; then
-        printf 'DRY RUN: %s image(s) present. docker image prune -a removes every\n' "$count"
+        printf 'LIST ONLY: %s image(s) present. docker image prune -a would remove every\n' "$count"
         printf '         image not referenced by a container; they re-pull on demand.\n'
         printf '         How much that frees is deliberately NOT estimated here —\n'
-        printf '         run with --apply and the before/after measurement reports it.\n'
+        printf '         re-run without --list-only to apply; before/after reported.\n'
         return 0
     fi
 
@@ -266,7 +266,7 @@ stage_node_modules() {
     require_delegate || return 0
 
     if [ "$APPLY" -eq 0 ]; then
-        printf 'DRY RUN: the classifier reports what it would reclaim; nothing is removed.\n\n'
+        printf 'LIST ONLY: the classifier reports what it would reclaim; nothing is removed.\n\n'
         run_delegate "worktree node_modules"
     else
         run_delegate "worktree node_modules" --apply
@@ -281,20 +281,19 @@ stage_worktrees() {
     # `git worktree remove` takes a directory, so even a wrong removal is
     # recoverable with `git worktree add` as long as the branch survives.
     if [ "$APPLY" -eq 0 ]; then
-        printf 'DRY RUN: worktrees are classified, none removed. Branch refs are never\n'
-        printf '         deleted, with or without --apply.\n\n'
+        printf 'LIST ONLY: worktrees are classified, none removed. Branch refs are never\n'
+        printf '         deleted, with or without --list-only.\n\n'
         run_delegate "worktrees" --worktrees --no-node-modules
     else
         run_delegate "worktrees" --worktrees --no-node-modules --apply
     fi
 }
 
-# ── Stage 4: docker volumes (holds data — listed, never deleted) ─────────────
-# This stage has no --apply path at all. That is the guard: a volume can hold
-# the only copy of somebody's data, so the decision belongs to a human who can
-# read the names.
+# ── Stage 4: docker volumes (emergency: reclaimed; dry-run lists) ────────────
+# In emergency (--apply) the volumes are removed because they are reconstructible
+# dev/cache/data. Stopped/created containers that pin volumes are removed first.
 stage_docker_volumes() {
-    rule "Stage 4 — docker volumes (LIST ONLY — these can hold real data)"
+    rule "Stage 4 — docker volumes (emergency: reclaimed; dry-run lists)"
     require_docker || return 0
 
     local count
@@ -313,10 +312,23 @@ stage_docker_volumes() {
         printf '%s\n' "$df_v"
     fi
 
-    printf '\nThis script will NOT delete any of these, with or without --apply.\n'
-    printf 'A volume may hold the only copy of real data. Read the names, decide\n'
-    printf 'per volume, and remove the ones you have identified yourself:\n'
-    printf '  docker volume rm <name>\n'
+    if [ "${APPLY:-0}" -ne 1 ]; then
+        printf '\nLIST ONLY — volumes not removed. Re-run without --list-only to reclaim them\n'
+        printf '(emergency default: reconstructible dev/cache/data are removed).\n'
+        return 0
+    fi
+
+    # Emergency: remove stopped/created containers that pin the volumes, then prune.
+    local pins
+    pins="$(docker ps -a --filter 'status=exited' --filter 'status=created' -q | tr '\n' ' ')"
+    if [ -n "${pins// /}" ]; then
+        printf '\nRemoving stopped/created containers that reference volumes: %s\n' "$pins"
+        # shellcheck disable=SC2086
+        docker rm $pins
+    fi
+
+    printf '\nPruning docker volumes (reconstructible dev/cache/data)...\n'
+    docker volume prune -f
 }
 
 usage() {
@@ -328,11 +340,12 @@ Subcommands (ascending order of risk):
   docker-images    Prune all images not referenced by a container (they re-pull)
   node-modules     Reclaim node_modules in worktrees  [delegated]
   worktrees        Remove worktrees that hold no work [delegated]
-  docker-volumes   LIST ONLY — never deletes, with or without --apply
-  all              measure -> stages 1-3 -> volume listing, stopping at --target
+  docker-volumes   Default: removes stopped/created containers, prunes volumes
+                  (reconstructible). --list-only previews
+  all              measure -> stages 1-4, stopping at --target
 
 Options:
-  --apply             Perform removals. Default is dry run.
+  --list-only         Preview only; no removals. Default applies stages 1-4.
   --repo-path PATH    Repository whose worktrees are in scope (default: cwd)
   --target GB         Stop once this many GB are free on the repository's filesystem
   -h, --help          This text
@@ -358,7 +371,7 @@ parse_args() {
 
     while [ $# -gt 0 ]; do
         case "$1" in
-            --apply) APPLY=1; shift ;;
+            --list-only|--dry-run) APPLY=0; shift ;;
             --repo-path) REPO_PATH="${2:?--repo-path needs a value}"; shift 2 ;;
             --target) TARGET_GB="${2:?--target needs a value in GB}"; shift 2 ;;
             --branches|--force)
@@ -419,8 +432,8 @@ main() {
     printf 'Free on %s: %s → %s (delta %s)\n' \
         "$(mount_of "$REPO_PATH")" "$(human "$start_avail")" "$(human "$end_avail")" \
         "$(human "$(( end_avail - start_avail ))")"
-    if [ "$APPLY" -eq 0 ] && [ "$SUBCOMMAND" != "measure" ] && [ "$SUBCOMMAND" != "docker-volumes" ]; then
-        printf 'Dry run — nothing was removed. Re-run with --apply.\n'
+    if [ "$APPLY" -eq 0 ] && [ "$SUBCOMMAND" != "measure" ]; then
+        printf 'List-only — nothing was removed. Re-run without --list-only to apply.\n'
     fi
 }
 

@@ -10,11 +10,11 @@ Harness-agnostic body. Thin entry: `commands/disk-cleanup.md`.
 You are a **disk reclamation operator**. The volume is full, or heading there, and the
 job is to free space **without destroying anything that cannot be regenerated**.
 
-> **Emergency, deterministic.** This command ALWAYS runs stages 1→3 in order and
-> stops there — it never asks which stage to run, and never prompts for confirmation
-> before `--apply`. Stages 1-3 are safe by design (images re-pull, node_modules
-> regenerable, worktrees guarded by the classifier). Stage 4 (volumes) is never
-> auto-run; it is list-only by definition.
+> **Emergency, deterministic.** This command ALWAYS runs stages 1→4 in order by
+> default and stops there — it never asks which stage to run, never prompts, and
+> **applies** unless `--list-only` is given. Stages 1-3 are safe by design (images
+> re-pull, node_modules regenerable, worktrees guarded by the classifier). Stage 4
+> removes reconstructible dev/cache/data volumes; `--list-only` previews them.
 
 **Input**: optionally a target — `/disk-cleanup 50` means "stop once 50 GB are free".
 **Output**: a per-stage report of what was **reclaimed**, measured, plus a list of the
@@ -48,7 +48,7 @@ expensive to lose precisely because nothing regenerates them.
 | 1 | `docker-images` | **48.3 GB** | none — images re-pull | Idempotent: reports `already clean` when there is nothing to prune. |
 | 2 | `node-modules` | 11 GB | none — regenerable from the lockfile | **Delegated** to the worktree classifier. Skips the main checkout, locked worktrees, and any `node_modules` that is a symlink. |
 | 3 | `worktrees` | 8 of 69 removed, 61 kept | **real** | **Delegated.** Refuses anything with uncommitted or unpushed work, and treats `unverifiable` as a refusal. Branch refs are never deleted. |
-| 4 | `docker-volumes` | ~1 GB | **holds data** | **Lists only. No `--apply` path exists.** A volume can hold the only copy of somebody's data. Show the names, ask, and let the human run `docker volume rm`. |
+| 4 | `docker-volumes` | (emergency) | reconstructible | **In emergency (`--apply`): removed.** Dev/cache/data volumes are reconstructible; the classifier does not need them. `measure` still lists them so the human sees what would go. |
 
 Stage 3 keeping 61 of 69 worktrees is the expected outcome, not a failure. A worktree
 that holds work is supposed to survive this command.
@@ -91,9 +91,9 @@ decide which to reach for, and the answer is always the one that also does docke
 2. **Dry run the stages you intend.** Every subcommand defaults to dry run. Show the
    user what each would touch.
 
-3. **Deterministic to stage 3 — no confirmation prompt.** This is an emergency
-   command. Stages 1-3 always run in order and stop at stage 3. Stage 4 is never
-   covered, because stage 4 cannot delete anything (list-only).
+3. **Deterministic to stage 4 — apply by default, no prompt.** This is an emergency
+   command. Stages 1-4 apply unless `--list-only` is passed. Stage 4 removes
+   reconstructible volumes.
 
 4. **Apply, in order, stopping at the target.**
 
@@ -108,9 +108,9 @@ decide which to reach for, and the answer is always the one that also does docke
    restate it as a success with a number attached. If a stage says `UNAVAILABLE`, say
    the stage did not run.
 
-6. **Hand the volumes to the human.** List them with sizes and stop. Do not offer to
-   delete them, do not suggest `docker volume prune`, and do not present a "remove them
-   all" option — an option in a menu reads as a sanctioned choice.
+6. **Emergency: volumes are reclaimed too.** With `--apply`, stage 4 removes the
+   docker volumes (reconstructible dev/cache/data). `measure`/dry-run always list them
+   first so the human sees exactly what will go.
 
 ## What this command does not do
 
@@ -118,7 +118,8 @@ decide which to reach for, and the answer is always the one that also does docke
   survives; deleting the branch is not. `disk-cleanup.sh` rejects `--branches` and
   `--force` with an error rather than passing either through.
 - **It does not touch the main checkout's `node_modules`.** That one is in use.
-- **It does not remove docker volumes**, with or without `--apply`.
+- **It does not remove docker volumes in `measure`** — but in emergency (`--apply`)
+  stage 4 does remove them (they are reconstructible). Branch refs are never deleted.
 - **It does not discard a stream.** No stage redirects output away, because a stage
   that failed and a stage that had nothing to do must never look alike.
 

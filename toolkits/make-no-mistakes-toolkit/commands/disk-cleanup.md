@@ -1,5 +1,5 @@
 ---
-description: "Emergency disk reclamation — deterministic, always runs stages 1-3 in order (docker images, worktree node_modules, worktrees via classifier) without prompting; docker volumes listed but never deleted. Reports measured before/after, never predictions. Optional target GB as $ARGUMENTS."
+description: "Emergency disk reclamation — deterministic, applies stages 1-4 by default (docker images, worktree node_modules, worktrees via classifier, reconstructible docker volumes) without prompting; --list-only previews. Reports measured before/after, never predictions. Optional target GB as $ARGUMENTS."
 priority: 80
 ---
 
