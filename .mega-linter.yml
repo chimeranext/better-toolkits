@@ -35,7 +35,9 @@ FILTER_REGEX_EXCLUDE: '(node_modules|vendor|dist|build|\.venv|__pycache__|\.git|
 
 # Gate estrella: typecheck de los plugins OpenCode (stderr + prds).
 # Corre ANTES de los linters y, si falla (exit != 0), aborta el job.
+# '--include=dev': la imagen de MegaLinter puede correr con NODE_ENV=production,
+# lo que omitiría devDeps (@types/node, typescript) y rompería tsc con TS2688.
 PRE_COMMANDS:
-  - command: cd shared/hooks && npm ci && npm run typecheck
+  - command: cd shared/hooks && npm ci --include=dev && npm run typecheck
     cwd: workspace
     continue_if_failed: false
