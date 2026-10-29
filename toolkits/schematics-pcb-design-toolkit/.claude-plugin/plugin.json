@@ -1,10 +1,23 @@
 {
   "name": "schematics-pcb-design-toolkit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Schematic capture and PCB layout toolkit for hardware/IoT startups: KiCad project structure, design rules, layout guidelines, DRC/ERC, manufacturing outputs, and netlist diff.",
-  "author": { "name": "Luis Andres Pena Castillo", "url": "https://github.com/lapc506" },
+  "author": {
+    "name": "Luis Andres Pena Castillo",
+    "url": "https://github.com/lapc506"
+  },
   "homepage": "https://github.com/chimeranext/better-toolkits",
   "repository": "https://github.com/chimeranext/better-toolkits",
   "license": "BSL-1.1",
-  "keywords": ["schematics", "pcb", "kicad", "hardware", "iot", "gerber", "drc", "erc", "bom"]
+  "keywords": [
+    "schematics",
+    "pcb",
+    "kicad",
+    "hardware",
+    "iot",
+    "gerber",
+    "drc",
+    "erc",
+    "bom"
+  ]
 }

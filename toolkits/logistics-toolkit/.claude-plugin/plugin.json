@@ -1,10 +1,23 @@
 {
   "name": "logistics-toolkit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Supply chain / import toolkit for LATAM: procurement (P2P, SRM, Kraljic), customs regimes, import documents, INCOTERMS 2020, free trade agreements, and inventory management.",
-  "author": { "name": "Luis Andres Pena Castillo", "url": "https://github.com/lapc506" },
+  "author": {
+    "name": "Luis Andres Pena Castillo",
+    "url": "https://github.com/lapc506"
+  },
   "homepage": "https://github.com/chimeranext/better-toolkits",
   "repository": "https://github.com/chimeranext/better-toolkits",
   "license": "BSL-1.1",
-  "keywords": ["logistics", "supply-chain", "procurement", "customs", "incoterms", "trade", "inventory", "scor", "apics"]
+  "keywords": [
+    "logistics",
+    "supply-chain",
+    "procurement",
+    "customs",
+    "incoterms",
+    "trade",
+    "inventory",
+    "scor",
+    "apics"
+  ]
 }

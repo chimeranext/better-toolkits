@@ -1,7 +1,7 @@
 {
   "name": "revenue-growth-toolkit",
-  "version": "0.1.0",
-  "description": "Revenue growth toolkit — AAARRR funnel/flywheel strategy over multi-network paid-media execution (shared MCP, Meta via Ads CLI), PostHog analytics, Python metrics.",
+  "version": "0.1.1",
+  "description": "Revenue growth toolkit \u2014 AAARRR funnel/flywheel strategy over multi-network paid-media execution (shared MCP, Meta via Ads CLI), PostHog analytics, Python metrics.",
   "author": {
     "name": "Luis Andres Pena Castillo",
     "url": "https://github.com/lapc506"

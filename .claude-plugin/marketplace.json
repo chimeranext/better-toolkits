@@ -28,7 +28,7 @@
     {
       "name": "make-no-mistakes",
       "description": "The disciplined dev lifecycle \u2014 implement issues, review PRs, sync releases, test E2E, manage sessions, stash secrets, and enforce manifest-driven tool-call hooks. Includes /evaluate-agent-skills (NVIDIA SkillSpector/SkillEvaluator wrappers). OpenCode stderr: better-toolkits-bootstrap /toolkits-initial-setup.",
-      "version": "1.39.9",
+      "version": "1.39.10",
       "source": "./toolkits/make-no-mistakes-toolkit",
       "category": "workflow",
       "keywords": [
@@ -61,7 +61,7 @@
     {
       "name": "atomic-design-toolkit",
       "description": "Atomic Design toolkit for Flutter and Vite \u2014 decompose features into atoms, molecules, organisms, templates, and pages. Audit mode scans components, Vite bundle health (10 signals: duplicates, hashless assets, mixed majors, dual lockfiles, and more), and atomic-design enforcement hooks (V7: 7 cure-presence checks for future-drift exposure) across 18+ design system lenses. Migrate mode consumes audit reports to drive phased remediation. v1.3 adds /wcag-audit (WCAG 2.2 AA conformance + design-quality anti-AI-slop, scored /20) and /tokens-consolidate (extract + reconcile divergent design tokens across repos into a shared tokens package) \u2014 both siblings of /audit feeding /migrate.",
-      "version": "1.3.3",
+      "version": "1.3.4",
       "source": "./toolkits/atomic-design-toolkit",
       "category": "frontend",
       "keywords": [
@@ -100,7 +100,7 @@
     {
       "name": "ux-research-toolkit",
       "description": "Guided UX research map creation \u2014 experience maps, customer journey maps, service blueprints, storyboards, and user story maps. Helps non-experts create professional UX artifacts through dialogue, JSON data, and interactive HTML visualization.",
-      "version": "2.1.5",
+      "version": "2.1.6",
       "source": "./toolkits/ux-research-toolkit",
       "category": "productivity",
       "keywords": [
@@ -131,7 +131,7 @@
     {
       "name": "business-model-toolkit",
       "description": "Interactive business model brainstorming \u2014 guided dialogue covering the full startup lifecycle from problem validation through execution and investor pitch. Includes a dedicated brand-identity skill (Brand Steering Wheel + Limbic Map emotional positioning + tone of voice) and an OKR + KPI-reporting operational layer.",
-      "version": "2.2.3",
+      "version": "2.2.4",
       "source": "./toolkits/business-model-toolkit",
       "category": "productivity",
       "keywords": [
@@ -158,7 +158,7 @@
     {
       "name": "app-gtm-release",
       "description": "Multi-platform app go-to-market and release toolkit \u2014 ship Flutter, Kotlin Multiplatform, .NET MAUI, Swift, and PWAs to Google Play, App Store, Microsoft Store, Snap Store, Flathub, and alternative channels. Three-tier command architecture: ship-advisor (strategy), per-framework ship-X commands (execution, including /ship-flatpak), ship-everywhere (mass publish). v2.4 adds /ship-flatpak + flatpak-build; v2.3 added gtm-fit (SLIP, MVS, organic presence).",
-      "version": "2.4.3",
+      "version": "2.4.4",
       "source": "./toolkits/app-gtm-release-toolkit",
       "category": "productivity",
       "keywords": [
@@ -201,7 +201,7 @@
     {
       "name": "fractional-cto-toolkit",
       "description": "Operational toolkit for freelance and fractional CTOs \u2014 contracts, project-takeover SOPs, process-engineering + requirements-first pipelines, ops playbook/runbook authoring, clean-code standards (DSMS/IFS/CPS/PRDS/BrS/QT4L), and multi-harness PRDS pre-push hooks.",
-      "version": "1.4.3",
+      "version": "1.4.4",
       "source": "./toolkits/fractional-cto-toolkit",
       "author": {
         "name": "Luis Andres Pena Castillo",
@@ -226,7 +226,7 @@
     {
       "name": "instructional-design-toolkit",
       "description": "Guided instructional design toolkit \u2014 design cmi5-compliant courses and 1-on-1 session plans using CONTEXT\u2192CONCEPT\u2192BUILD\u2192SHIP\u2192REFLECT formula, Builder's Bloom's progression, Ship-First Design, and Kirkpatrick L1-L4 evaluation. Produces JSON + Markdown + HTML visualization + Marp slide decks.",
-      "version": "1.4.1",
+      "version": "1.4.2",
       "source": "./toolkits/instructional-design-toolkit",
       "category": "productivity",
       "keywords": [
@@ -260,7 +260,7 @@
     {
       "name": "startup-lifecycle-toolkit",
       "description": "Complete guide to the founder journey from zero money to raising venture capital. Covers savings, offshore entity formation (Delaware PBC, Wyoming LLC), fundraising (SAFE notes, cap table, investor matching, demo prep, financial modeling), vesting (4-year + 1-year cliff, acceleration), co-founder matching, advisor matching, B Corp certification, Cayman Sandwich structure, and converting LATAM entities to wholly owned subsidiaries. For founders with no experience in the US ecosystem. FREE.",
-      "version": "1.3.3",
+      "version": "1.3.4",
       "source": "./toolkits/startup-lifecycle-toolkit",
       "author": {
         "name": "Luis Andres Pena Castillo",
@@ -290,7 +290,7 @@
     {
       "name": "digital-nomad-toolkit",
       "description": "Guide for freelancers and digital nomads who want to operate as a US Single-Member LLC without jumping to a startup or shared services. Covers entity formation, tax compliance, remote banking, international billing (MSA B2B), visa options, and studying or founding abroad (Germany, Canada, Ireland, Australia, Japan, Singapore, South Korea). FREE.",
-      "version": "1.1.1",
+      "version": "1.1.2",
       "source": "./toolkits/digital-nomad-toolkit",
       "author": {
         "name": "Luis Andres Pena Castillo",
@@ -318,7 +318,7 @@
     {
       "name": "venture-studio-toolkit",
       "description": "Macro portfolio management for venture studios and serial founders \u2014 LATAM corporate structures (Cayman Sandwich, Delaware Tostada, Skip-CR), Services Hub pattern with MSA templates, accelerator matching, govclab frameworks (studio thesis, focus, secret sauce), and Three Horizons portfolio allocation. Spanish-first; bilingual output framework documented for v1.3+.",
-      "version": "1.2.4",
+      "version": "1.2.5",
       "source": "./toolkits/venture-studio-toolkit",
       "author": {
         "name": "Luis Andres Pena Castillo",
@@ -342,7 +342,7 @@
     {
       "name": "assurance",
       "description": "Release-assurance evidence toolkit \u2014 2 pillars (testing, liveness) + security transversal with its own runner, plus governance (DORA/DER metrics, stage gates, traceable receipts). Migrated quality-evidence commands from make-no-mistakes with shims.",
-      "version": "0.1.12",
+      "version": "0.1.13",
       "source": "./toolkits/assurance-toolkit",
       "author": {
         "name": "Luis Andres Pena Castillo",
@@ -375,7 +375,7 @@
     {
       "name": "3d-graphics-cad-toolkit",
       "description": "3D graphics and CAD toolkit \u2014 parametric modeling, additive manufacturing, BIM, VR/AR, digital twins, animation, VFX, and game-dev skills. Multi-tool agnostic (AutoCAD, Blender, Cinema 4D, Maya, ZBrush, OpenUSD, NVIDIA Omniverse, Bevy, Iced).",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "source": "./toolkits/3d-graphics-cad-toolkit",
       "author": {
         "name": "Luis Andres Pena Castillo",
@@ -406,7 +406,7 @@
     {
       "name": "game-theory-mechanics-toolkit",
       "description": "Game theory and game development toolkit \u2014 game design mechanics, player psychology, production process, and visual/interactive storytelling skills. Video-game focused, engine-agnostic (Unity, Unreal Engine, Bevy, Godot, OpenUSD).",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "source": "./toolkits/game-theory-mechanics-toolkit",
       "author": {
         "name": "Luis Andres Pena Castillo",
@@ -433,7 +433,7 @@
     {
       "name": "logistics-toolkit",
       "description": "Supply chain / import toolkit for LATAM \u2014 procurement (P2P, SRM, Kraljic), customs regimes, import documents, INCOTERMS 2020, free trade agreements, and inventory management. Notion-agnostic ingestion.",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "source": "./toolkits/logistics-toolkit",
       "author": {
         "name": "Luis Andres Pena Castillo",
@@ -458,7 +458,7 @@
     {
       "name": "schematics-pcb-design-toolkit",
       "description": "Schematic capture and PCB layout toolkit for hardware/IoT startups \u2014 KiCad project structure, design rules, layout guidelines, ERC/DRC, manufacturing outputs, and netlist diff.",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "source": "./toolkits/schematics-pcb-design-toolkit",
       "author": {
         "name": "Luis Andres Pena Castillo",
@@ -483,7 +483,7 @@
     {
       "name": "revenue-growth-toolkit",
       "description": "Revenue growth toolkit \u2014 AAARRR funnel/flywheel strategy over multi-network paid-media execution (shared MCP; Meta via Ads CLI), PostHog analytics, Python metrics.",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "source": "./toolkits/revenue-growth-toolkit",
       "author": {
         "name": "Luis Andres Pena Castillo",
