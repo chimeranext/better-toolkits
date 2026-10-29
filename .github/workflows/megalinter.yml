@@ -6,20 +6,8 @@ name: megalinter
 
 on:
   pull_request:
-    paths:
-      - "shared/hooks/**"
-      - "toolkits/**"
-      - "scripts/**"
-      - ".mega-linter.yml"
-      - ".github/workflows/megalinter.yml"
   push:
     branches: [main]
-    paths:
-      - "shared/hooks/**"
-      - "toolkits/**"
-      - "scripts/**"
-      - ".mega-linter.yml"
-      - ".github/workflows/megalinter.yml"
 
 permissions:
   contents: read
