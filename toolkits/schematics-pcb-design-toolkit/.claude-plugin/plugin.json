@@ -1,6 +1,6 @@
 {
   "name": "schematics-pcb-design-toolkit",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Schematic capture and PCB layout toolkit for hardware/IoT startups: KiCad project structure, design rules, layout guidelines, DRC/ERC, manufacturing outputs, and netlist diff.",
   "author": {
     "name": "Luis Andres Pena Castillo",
