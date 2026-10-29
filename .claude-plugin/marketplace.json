@@ -11,7 +11,7 @@
     {
       "name": "better-toolkits-bootstrap",
       "description": "Install first \u2014 bootstrap marketplace and harness wiring via /toolkits-initial-setup (HITL). OpenCode: npx @chimeranext/better-toolkits setup.",
-      "version": "0.2.3",
+      "version": "0.2.4",
       "source": "./shared/bootstrap",
       "category": "workflow",
       "keywords": [
@@ -342,7 +342,7 @@
     {
       "name": "assurance",
       "description": "Release-assurance evidence toolkit \u2014 2 pillars (testing, liveness) + security transversal with its own runner, plus governance (DORA/DER metrics, stage gates, traceable receipts). Migrated quality-evidence commands from make-no-mistakes with shims.",
-      "version": "0.1.16",
+      "version": "0.1.17",
       "source": "./toolkits/assurance-toolkit",
       "author": {
         "name": "Luis Andres Pena Castillo",
