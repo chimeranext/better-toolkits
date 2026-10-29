@@ -50,6 +50,14 @@ print(cmd if isinstance(cmd,str) else "")
 
 [ -z "$CMD" ] && exit 0
 
+# Git main-push/merge guard (HITL bypass): block push/merge to main without human approval
+if printf '%s' "$CMD" | grep -qE 'git[[:space:]]+(push|merge)[[:space:]]'; then
+  GIT_T="$(printf '%s' "$CMD" | awk '{for(i=NF;i>=1;i--){if($i!="" && $i!=" "){print $i; exit}}}')"
+  if ! bash "$PLUGIN_HOOKS_DIR/git/pre-push.sh" "${GIT_T:-}"; then
+    exit 2
+  fi
+fi
+
 if ! python3 "$DETECT" --command "$CMD"; then
   exit 2
 fi

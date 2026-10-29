@@ -81,45 +81,79 @@ def scan_text(command: str) -> str:
     return strip_quoted_spans(command)
 
 
+SCRIPT_INVOKE = re.compile(
+    r"(?:^|[\s;&|])(?:ba|z|k)?sh\s+(?:-[^\s]+\s+)?([^\s;|&]+\.sh)\b"
+)
+
+
+def scan_script_file(command: str) -> str:
+    """If the command runs a local script (`bash foo.sh`), read its content so
+    the detector also scans what executes *inside* the file. Closes the gap
+    where `>/dev/null` hides inside a script rather than in the shell command.
+    Mirrors the OpenCode plugin's scanScriptFile()."""
+    m = SCRIPT_INVOKE.search(command)
+    if not m:
+        return ""
+    try:
+        with open(m.group(1), "r", encoding="utf-8") as fh:
+            return fh.read()
+    except OSError:
+        return ""
+
+
 def deny_reason(command: str) -> str | None:
     if not command or not command.strip():
         return None
-    scan = scan_text(command)
+    scan = scan_text(command) + "\n" + scan_script_file(command)
 
     for pat in SILENCE:
         if pat.search(scan):
             return (
                 "stderr redirect to /dev/null is forbidden "
                 "(2>/dev/null, 2>>/dev/null, &>/dev/null, >&/dev/null). "
-                "Write logs to files (e.g. >out.log 2>err.log) or use tee."
+                "Instead of /dev/null, use `> out.log 2>&1` or "
+                "`2>&1 | tee run.log` to preserve errors."
             )
 
     if ORDERED_BOTH_NULL.search(scan):
         return (
             ">/dev/null 2>&1 discards stderr after stdout — forbidden. "
-            "Use out=$(cmd) or log files / tee."
+            "Instead of /dev/null, use `> out.log 2>&1` or "
+            "`2>&1 | tee run.log` to preserve errors."
         )
 
     if BARE_STDOUT_NULL.search(scan):
         return (
             "stdout redirect to /dev/null is forbidden (bare or reversed "
             "as cmd 2>&1 >/dev/null) — it throws away the answer. "
-            "Use out=$(cmd) or log files / tee."
+            "Instead of /dev/null, use `> out.log 2>&1` or "
+            "`2>&1 | tee run.log` to preserve errors."
         )
 
     # NOTE: there is intentionally NO allowance for `2>&1 >/dev/null`.
     # Reversed order still sends stdout to null. Fold checks below run
     # on the raw scan.
+    # stderr to a SEPARATE file is forbidden: separate error files are the
+    # ones that get missed in an audit. Fold stderr into the same log instead.
+    if HAS_STDERR_FILE.search(scan):
+        return (
+            "stderr redirect to a separate file (2> file) is forbidden — "
+            "separate error files get missed in audits. Fold stderr into the "
+            "same log with `> out.log 2>&1` or `2>&1 | tee run.log`. "
+            "Also do not redirect stderr to /dev/null "
+            "(2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null)."
+        )
+
     if BARE_FOLD.search(scan):
         if not (
             HAS_FILE_SINK.search(scan)
             or HAS_TEE_FILE.search(scan)
-            or HAS_STDERR_FILE.search(scan)
         ):
             return (
                 "bare 2>&1 folds errors into stdout without a log sink. "
-                "Use files (cmd >out.log 2>err.log or >all.log 2>&1) or "
-                "cmd 2>&1 | tee run.log."
+                "Use files (`> out.log 2>&1`) or `cmd 2>&1 | tee run.log`. "
+                "Also do not redirect stderr to /dev/null "
+                "(2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null)."
             )
 
     return None
