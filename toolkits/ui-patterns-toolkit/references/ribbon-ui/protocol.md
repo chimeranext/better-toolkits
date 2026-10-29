@@ -50,6 +50,11 @@ anatomía y variantes; cada implementación concreta vive en su repo.
 4. Estado `collapsed` controla ocultar tool area.
 5. Conectar comandos a la app (acciones reales, no placeholders).
 
+## Criterio de calidad (HCD/usabilidad)
+
+Aplicar los principios de [`hcd-usability.md`](../hcd-usability.md). Para el Ribbon:
+evaluar *learnability* con un cognitive walkthrough (flujo nuevo para el usuario).
+
 ## Criterio
 
 El patrón está **documentado** cuando un dev puede implementarlo en otro framework solo
