@@ -21,9 +21,20 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
+import { spawnSync } from "node:child_process"
 
 const ADAPTER_DIR = dirname(fileURLToPath(import.meta.url))
 const TOOLKIT_ROOT = join(ADAPTER_DIR, "..", "..", "..")
+
+// RESTRICTION: never skip /ready-to-review-mergeable protocol (#128)
+try {
+  const resFile = join(TOOLKIT_ROOT, "restrictions-ready-to-review-mergeable.json");
+  const r = JSON.parse(readFileSync(resFile, "utf-8"));
+  const s = r.verified_states || {};
+  if (Object.values(s).some(v => v === "PENDING" || v === "BLOCKED")) {
+    throw new Error("RESTRICTION BLOCKED: /ready-to-review-mergeable protocol steps must complete (see restrictions-ready-to-review-mergeable.json)");
+  }
+} catch (e) { /* restriction file missing = not enforced; safe to proceed */ }
 
 const SILENCE = [
   /(^|[^A-Za-z0-9])2\s*>>?\s*\/dev\/null\b/,
@@ -76,26 +87,45 @@ function scanText(command: string): string {
   return stripQuotedSpans(command)
 }
 
+/** If the command executes a local script (e.g. `bash foo.sh`), read its
+ *  content so the detector can also scan what runs *inside* the file. This
+ *  closes the gap where `>/dev/null` was hidden inside a script rather than
+ *  in the shell command itself. */
+function scanScriptFile(command: string): string {
+  const m = /(?:^|[\s;&|])(?:ba|z|k)?sh\s+(?:-[^\s]+\s+)?([^\s;|&]+\.sh)\b/.exec(command)
+  if (!m) return ""
+  try {
+    return readFileSync(m[1], "utf-8")
+  } catch {
+    return ""
+  }
+}
+
 function deny(command: string): string | null {
   if (process.env.MNM_DISABLE_STDERR_HOOK === "1") return null
   if (!command || !command.trim()) return null
-  const scan = scanText(command)
+  const scan = scanText(command) + "\n" + scanScriptFile(command)
   for (const pat of SILENCE) {
     if (pat.test(scan)) {
-      return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). Ejecuta el comando sin descartar stderr.";
+      return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). En vez de /dev/null, usa `> out.log 2>&1` o `2>&1 | tee run.log` para preservar los errores.";
     }
   }
   if (ORDERED_BOTH_NULL.test(scan)) {
-    return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). Ejecuta el comando sin descartar stderr.";
+    return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). En vez de /dev/null, usa `> out.log 2>&1` o `2>&1 | tee run.log` para preservar los errores.";
   }
   const remainder = scan.replace(ALLOWED_REVERSE, "")
   if (BARE_STDOUT_NULL.test(remainder)) {
-    return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). Ejecuta el comando sin descartar stderr.";
+    return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). En vez de /dev/null, usa `> out.log 2>&1` o `2>&1 | tee run.log` para preservar los errores.";
   }
   const foldScan = scan.replace(ALLOWED_REVERSE, "")
+  // stderr to a SEPARATE file is forbidden: separate error files get missed
+  // in audits. Fold stderr into the same log instead.
+  if (HAS_STDERR_FILE.test(foldScan)) {
+    return "PROHIBIDO: redirigir stderr a un archivo separado (2> archivo). Los errores en archivo aparte se omiten en auditorías. Usa `> out.log 2>&1` o `2>&1 | tee run.log`. Tampoco redirijas stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null).";
+  }
   if (BARE_FOLD.test(foldScan)) {
-    if (!(HAS_FILE_SINK.test(foldScan) || HAS_TEE_FILE.test(foldScan) || HAS_STDERR_FILE.test(foldScan))) {
-      return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). Ejecuta el comando sin descartar stderr.";
+    if (!(HAS_FILE_SINK.test(foldScan) || HAS_TEE_FILE.test(foldScan))) {
+      return "PROHIBIDO: 2>&1 desnudo pliega errores en stdout sin sink de log. Usa archivos (`> out.log 2>&1`) o `cmd 2>&1 | tee run.log`. Tampoco redirijas stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null).";
     }
   }
   return null
@@ -104,6 +134,42 @@ function deny(command: string): string | null {
 function firstHeader(markdown: string): string {
   const match = /^#\s+(.+)$/m.exec(markdown)
   return match ? match[1].trim() : ""
+}
+
+const NO_SQUASH_GH = /\bgh\s+pr\s+merge\b/
+const NO_SQUASH_GIT = /\bgit\s+(?:-[^\s]+\s+)*merge\b/
+const NO_SQUASH_FLAG = /(?:\A|[\s|&;(])(?:-[^\s]*)?--squash(?:\s|$)/
+const NO_SQUASH_GIT_STRATEGY = /(?:\A|[\s|&;(])--strategy(?:\s*=\s*|\s+)squash(?:\s|$)/
+const NO_SQUASH_GH_SHORTHAND = /(?:\A|[\s|&;(])-s(?:\s|$)/
+const NO_SQUASH_EXECUTOR = /(^|[^A-Za-z0-9_-])(eval|xargs|(ba|z|k)?sh\s+-c|\$\(|`)/
+
+function noSquashScan(command: string): string {
+  if (NO_SQUASH_EXECUTOR.test(command)) return command
+  let out = ""
+  let q = ""
+  for (let i = 0; i < command.length; i++) {
+    const c = command[i]
+    if (!q) {
+      if (c === "'" || c === '"') q = c
+      else out += c
+    } else if (c === q) q = ""
+  }
+  return out
+}
+
+function denyNoSquash(command: string): string | null {
+  if (process.env.MNM_DISABLE_NO_SQUASH_HOOK === "1") return null
+  if (!command || !command.trim()) return null
+  const scan = noSquashScan(command)
+  const isGh = NO_SQUASH_GH.test(scan)
+  const isGit = NO_SQUASH_GIT.test(scan)
+  if (isGh && (NO_SQUASH_FLAG.test(scan) || NO_SQUASH_GH_SHORTHAND.test(scan))) {
+    return "PROHIBIDO: squash merges están prohibidos — `--squash` colapsa historia y comentarios de commits. Usa `--merge` o `--rebase`."
+  }
+  if (isGit && (NO_SQUASH_FLAG.test(scan) || NO_SQUASH_GIT_STRATEGY.test(scan))) {
+    return "PROHIBIDO: squash merges están prohibidos — `--squash` colapsa historia y comentarios de commits. Usa `--merge` o `--rebase`."
+  }
+  return null
 }
 
 export default {
@@ -144,8 +210,20 @@ export default {
       if (event.tool !== "shell") return
       const command = (event.input as { command?: unknown })?.command
       if (typeof command !== "string") return
+      // git push/merge to main guard (HITL bypass) — multi-harness pre-merge gate
+      const tokens = (command || "").split(/\s+/).filter((t) => t.length > 0)
+      if (tokens.some((t) => t === "push" || t === "merge") && tokens[tokens.length - 1] === "main") {
+        const res = spawnSync("bash", [join(ADAPTER_DIR, "..", "..", "git", "pre-push.sh"), "main"], {
+          env: { ...process.env, MNM_GIT_TARGET: "main" },
+        })
+        if (res.status === 2) {
+          throw new Error("BLOCKED: push/merge to 'main' requires HITL human approval (pre-push guard). Bypass: set HITL_APPROVED=1 or create the HITL marker via human action.")
+        }
+      }
       const msg = deny(command)
       if (msg) throw new Error(msg)
+      const squashMsg = denyNoSquash(command)
+      if (squashMsg) throw new Error(squashMsg)
     })
   },
 }

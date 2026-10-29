@@ -136,6 +136,42 @@ function firstHeader(markdown: string): string {
   return match ? match[1].trim() : ""
 }
 
+const NO_SQUASH_GH = /\bgh\s+pr\s+merge\b/
+const NO_SQUASH_GIT = /\bgit\s+(?:-[^\s]+\s+)*merge\b/
+const NO_SQUASH_FLAG = /(?:\A|[\s|&;(])(?:-[^\s]*)?--squash(?:\s|$)/
+const NO_SQUASH_GIT_STRATEGY = /(?:\A|[\s|&;(])--strategy(?:\s*=\s*|\s+)squash(?:\s|$)/
+const NO_SQUASH_GH_SHORTHAND = /(?:\A|[\s|&;(])-s(?:\s|$)/
+const NO_SQUASH_EXECUTOR = /(^|[^A-Za-z0-9_-])(eval|xargs|(ba|z|k)?sh\s+-c|\$\(|`)/
+
+function noSquashScan(command: string): string {
+  if (NO_SQUASH_EXECUTOR.test(command)) return command
+  let out = ""
+  let q = ""
+  for (let i = 0; i < command.length; i++) {
+    const c = command[i]
+    if (!q) {
+      if (c === "'" || c === '"') q = c
+      else out += c
+    } else if (c === q) q = ""
+  }
+  return out
+}
+
+function denyNoSquash(command: string): string | null {
+  if (process.env.MNM_DISABLE_NO_SQUASH_HOOK === "1") return null
+  if (!command || !command.trim()) return null
+  const scan = noSquashScan(command)
+  const isGh = NO_SQUASH_GH.test(scan)
+  const isGit = NO_SQUASH_GIT.test(scan)
+  if (isGh && (NO_SQUASH_FLAG.test(scan) || NO_SQUASH_GH_SHORTHAND.test(scan))) {
+    return "PROHIBIDO: squash merges están prohibidos — `--squash` colapsa historia y comentarios de commits. Usa `--merge` o `--rebase`."
+  }
+  if (isGit && (NO_SQUASH_FLAG.test(scan) || NO_SQUASH_GIT_STRATEGY.test(scan))) {
+    return "PROHIBIDO: squash merges están prohibidos — `--squash` colapsa historia y comentarios de commits. Usa `--merge` o `--rebase`."
+  }
+  return null
+}
+
 export default {
   id: "local.mnm-no-stderr-redirect",
   setup: async (ctx) => {
@@ -186,6 +222,8 @@ export default {
       }
       const msg = deny(command)
       if (msg) throw new Error(msg)
+      const squashMsg = denyNoSquash(command)
+      if (squashMsg) throw new Error(squashMsg)
     })
   },
 }

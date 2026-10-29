@@ -7,6 +7,10 @@
         "failClosed": true
       },
       {
+        "command": "bash .cursor/hooks/no-squash-before-shell.sh",
+        "failClosed": true
+      },
+      {
         "command": "bash .cursor/hooks/prds-before-shell.sh"
       },
       {
