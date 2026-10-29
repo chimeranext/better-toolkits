@@ -174,7 +174,7 @@ function denyNoSquash(command: string): string | null {
 
 export default {
   id: "local.mnm-no-stderr-redirect",
-  setup: async (ctx) => {
+  setup: async (ctx: OpenCode.PluginContext) => {
     if (process.env.MNM_DISABLE_HARNESS !== "1") {
       const skillsRoot = join(TOOLKIT_ROOT, "skills")
       if (existsSync(skillsRoot)) {
@@ -183,7 +183,7 @@ export default {
           const skillFile = join(skillsRoot, dirEntry.name, "SKILL.md")
           if (!existsSync(skillFile)) continue
           const content = readFileSync(skillFile, "utf8")
-          await ctx.skill.transform((editor) => {
+          await ctx.skill.transform((editor: OpenCode.SkillEditor) => {
             editor.add({
               id: dirEntry.name,
               name: dirEntry.name,
@@ -199,14 +199,14 @@ export default {
       if (existsSync(refsRoot)) {
         for (const dirEntry of readdirSync(refsRoot, { withFileTypes: true })) {
           if (!dirEntry.isDirectory()) continue
-          await ctx.reference.transform((editor) => {
+          await ctx.reference.transform((editor: OpenCode.ReferenceEditor) => {
             editor.add(dirEntry.name, { type: "local", path: join(refsRoot, dirEntry.name) })
           })
         }
       }
     }
 
-    await ctx.tool.hook("execute.before", (event) => {
+    await ctx.tool.hook("execute.before", (event: OpenCode.ExecuteBeforeEvent) => {
       if (event.tool !== "shell") return
       const command = (event.input as { command?: unknown })?.command
       if (typeof command !== "string") return
