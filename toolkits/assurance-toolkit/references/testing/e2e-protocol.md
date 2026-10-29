@@ -10,6 +10,8 @@ The TestSprite suite commands are separate protocols. This file does not replace
 | `/assurance:e2e-test-builder` | [`references/e2e-test-builder/protocol.md`](../e2e-test-builder/protocol.md) — write `test-suite.json` |
 | `/assurance:e2e-test-runner` | [`references/e2e-test-runner/protocol.md`](../e2e-test-runner/protocol.md) — execute that suite |
 | `/assurance:e2e-test-preview` | [`references/e2e-test-preview/protocol.md`](../e2e-test-preview/protocol.md) — Qt preview of that suite |
+| Preparación ISTQB | Academy `docs/certificaciones-istqb/` — exam structure, weights, strategy per certification (moved from this repo to the academy) |
+| Entrevistas QA | Academy `docs/certificaciones-istqb/qa-interview-teachings.md` — practical answers from interview transcripts |
 
 ## Principio
 
@@ -40,10 +42,55 @@ Los stacks iniciales son los primeros adapters, no una lista cerrada (ver matriz
   semantics diff; critical/serious bloquean, moderate/minor advierten.
 - **Visual/PBT**: `toHaveScreenshot` con umbral; fast-check / Hypothesis / PropEr.
 
+## Stack QA (Kiwi + Qualflare) y Storybook interaction testing
+
+El stack QA del equipo usa **Kiwi** y **Qualflare** como plataformas principales. Este
+pilar los integra de la siguiente forma:
+
+- **Kiwi** — orquestación/gestión de tests QA (casos, ejecución, reportes). Es la capa
+  de gestión QA; su salida se consume como evidencia.
+- **Qualflare** — ejecución y trazabilidad de tests (vínculo a issues, `qualflare.link`).
+  En el pipeline de evidencia, la collection se enlaza vía `qualflare.link` (ver
+  `Evidence pipeline`).
+- **Storybook interaction testing** — para componentes UI, se usan los tests de
+  interacción de Storybook (`play` functions, `userEvent`, assertions sobre el behavior
+  tras interactuar). Estos tests validan que un componente se comporta como se espera al
+  recibir interacción del usuario.
+
+### Regla: BDD ocurre ANTES
+
+Los tests de componente/Storybook (y los de integración) **nunca reemplazan** la
+especificación de comportamiento. El orden correcto es:
+
+1. **BDD primero** — el escenario (Given/When/Then) se define en el OpenSpec / `test-suite.json`
+   y expresa el comportamiento observable esperado. Es la fuente de verdad de *qué* debe pasar.
+2. **Después** los tests de Storybook/componente implementan esa afirmación de comportamiento
+   a nivel de UI (el `Then` del escenario se convierte en la assertion de la `play` function).
+   - Un test de Storybook sin un escenario BDD que lo respalde es **sospechoso**: puede
+     cubrir implementación, no comportamiento. No cuenta como evidencia de comportamiento.
+   - La `play` function debe afirmar **comportamiento observable** (el resultado visible/
+     de estado tras la interacción), no detalles de implementación interna.
+
+Esto se alinea con el gate BDD (afirmar comportamiento observable) y con los insights de
+`qa-interview-teachings` (el behavior es lo que se evalúa; los tests de componente cubren
+la capa UI de un escenario ya definido en BDD).
+
 ## Reglas de gate
 
 - Golden rules exigibles antes del merge; taxonomía de flakes dirige el fix (nunca subir timeouts).
 - Reportes de tests nunca mezclados con reportes de seguridad (veredictos separados).
+- **BDD**: afirmar comportamiento observable, no implementación interna. Un test pasa solo
+  cuando su `Then` (el criterio legible) se cumple por evidencia observable — no por "el
+  runner salió 0". Ver `references/e2e-test-runner/protocol.md` §Gates.
+- **Jidoka**: ante cualquier anomalía (output inesperado, timeout, error, respuesta vacía),
+  detener el run y registrar la anomalía + boundary + hipótesis de causa raíz. No continuar
+  "a ver si el resto pasa". Un test con anomalía es `failed`, nunca `passed`.
+- **No-Workarounds**: un test no puede marcarse `passed` si para lograrlo se silenció
+  stderr, se hicieron cast de tipo, se tragó una excepción, se añadió sleep/retry
+  arbitrario, se monkey-patcheó un boundary, o se copió-pegó sin ajustar. Eso es `failed`;
+  la solución es corregir la fuente, no el síntoma.
+- Estos gates aplican a todo runner del pilar (unit, widget, e2e, contrato, mutación, perf,
+  a11y, visual). El formato de veredicto por test incluye el veredicto de cada gate.
 
 ## Eval-driven + risk-driven (Huyen + Fowler)
 
