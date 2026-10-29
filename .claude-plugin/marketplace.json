@@ -28,7 +28,7 @@
     {
       "name": "make-no-mistakes",
       "description": "The disciplined dev lifecycle \u2014 implement issues, review PRs, sync releases, test E2E, manage sessions, stash secrets, and enforce manifest-driven tool-call hooks. Includes /evaluate-agent-skills (NVIDIA SkillSpector/SkillEvaluator wrappers). OpenCode stderr: better-toolkits-bootstrap /toolkits-initial-setup.",
-      "version": "1.39.16",
+      "version": "1.39.17",
       "source": "./toolkits/make-no-mistakes-toolkit",
       "category": "workflow",
       "keywords": [
