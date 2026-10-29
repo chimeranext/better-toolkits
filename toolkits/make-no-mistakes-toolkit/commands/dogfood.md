@@ -1,5 +1,5 @@
 ---
-description: "Dogfooding — confirm the product you are currently working on works with real credentials and active functionality (eat your own dog food). Generic; follow the SSOT protocol. Not bound to a specific framework."
+description: "Dogfooding — confirm the product you are currently working on works with real configuration values and active functionality (eat your own dog food). Generic; follow the SSOT protocol. Not bound to a specific framework."
 argument-hint: ""
 priority: 85
 ---
@@ -7,7 +7,7 @@ priority: 85
 
 Dogfood the work in progress: read and follow [`references/dogfood/protocol.md`](../references/dogfood/protocol.md) (protocol SSOT).
 
-Purpose: confirm the component you are building **responds with real credentials** — not
+Purpose: confirm the component you are building **responds with real configuration values** — not
 placeholders, not a silent `exit 0`.
 
 Steps (per protocol):
