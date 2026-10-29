@@ -50,8 +50,66 @@ Linux (`zenity` / `kdialog` native), macOS (`brew install zenity` / `osascript` 
 - Component environment file missing → no auth source.
 - Empty `exit 0` with no output → product loaded but did not respond.
 - Connection fails or needs auth → flow incomplete.
+- An assertion is written without observable evidence → not a BDD pass.
+- An anomaly is detected and the verification continued anyway → Jidoka failure.
+- An assertion passes only by silencing a signal (stderr, cast, swallowed error,
+  arbitrary delay, monkey-patch) → No-Workarounds failure.
 
 The real test: with real configuration values and correct opt-in selection, the product responds — it does not exit silently.
+
+---
+
+## Behavior-driven verification (BDD)
+
+Confirm the product **behaves** as specified, expressed as natural-language assertions —
+not raw technical asserts. Format every claim as:
+
+```
+Given <real precondition>
+When  <I exercise the real path>
+Then  <observable behavior is true>
+      <evidence: observed output, not a string>
+```
+
+Rules:
+
+- **Given** states the real configuration precondition (credential/endpoint/scope).
+- **When** exercises the real, active code path — not a mock, not a stub.
+- **Then** asserts the behavior in natural language and names the concrete observed evidence.
+- Every assertion is **falsifiable**: it states what would falsify it.
+- A "Then" that cannot be tied to observed evidence is not a pass.
+
+---
+
+## Jidoka gate — stop on anomaly
+
+If any assertion fails, or an anomaly is detected (unexpected output, error, timeout,
+empty response), the verification **STOPS**. Record:
+
+1. The exact anomaly (observed behavior vs expected).
+2. The owning boundary where the signal was lost or distorted.
+3. The root-cause hypothesis (5-Whys) before any fix.
+
+The verification is not passing until the anomaly's cause is understood and the source
+corrected — not merely suppressed.
+
+---
+
+## No-Workarounds gate — a suppressed signal is a failure
+
+Each assertion must be satisfied **without** a workaround. The verification FAILS if
+passing required:
+
+- Silencing stderr/stdout to hide an error.
+- Casting/ignoring a type error instead of fixing the type truth.
+- Swallowing an exception in a catch block.
+- Adding an arbitrary delay/retry to "wait for it to settle".
+- Monkey-patching a boundary you do not own.
+- Copy-paste "adaptation" that does not actually fit.
+
+The `Escape Valve` applies only when the root cause is genuinely external and the
+workaround is isolated, commented, tracked with a canary test and a review date — and
+even then the assertion must state the external limitation explicitly.
 
 ---
 

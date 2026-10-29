@@ -17,5 +17,25 @@ Steps (per protocol):
 3. Product loads and connects — active output, not silent success.
 4. Report what was verified: component, credential source, observed response.
 
+### Behavior-driven verification (BDD)
+
+Express each claim as a natural-language assertion:
+
+```
+Given <real precondition>
+When  <I exercise the real path>
+Then  <observable behavior is true>
+      <evidence: observed output, not a string>
+```
+
+Two lean gates apply to every assertion:
+
+- **Jidoka** — if an assertion fails or an anomaly is detected, **STOP**. Record the
+  anomaly, its owning boundary, and the root-cause hypothesis before continuing. Do not
+  "see if the rest still works".
+- **No-Workarounds** — a check that only passes by silencing stderr, casting away a type
+  error, swallowing an exception, or adding an arbitrary delay is a **failure**, not a pass.
+  Fix the source, not the symptom.
+
 This is **not** `/ready-to-review-mergeable` verification. That readiness gate has its own
 command and step-by-step evidence format; do not conflate the two.
