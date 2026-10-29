@@ -5,7 +5,8 @@ set -euo pipefail
 
 AUDIT_REPO="${1:-chimeranext/internal-audits}"
 
-if gh api "repos/${AUDIT_REPO}" >/dev/null 2>&1; then
+# Capture (no descartar, no silenciar): stdout a variable, stderr visible.
+if AUDIT_OUT="$(gh api "repos/${AUDIT_REPO}")"; then
   echo "assurance-setup: audit repo OK: ${AUDIT_REPO}"
   exit 0
 fi
