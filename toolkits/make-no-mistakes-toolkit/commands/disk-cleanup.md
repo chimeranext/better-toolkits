@@ -1,5 +1,5 @@
 ---
-description: Reclaim disk space in ascending order of risk — docker images first, then worktree node_modules and worktrees via the worktree classifier, with docker volumes listed but never deleted. Reports what was actually freed, measured before/after, never what a tool predicted. Accepts an optional target in GB as $ARGUMENTS.
+description: "Emergency disk reclamation — deterministic, always runs stages 1-3 in order (docker images, worktree node_modules, worktrees via classifier) without prompting; docker volumes listed but never deleted. Reports measured before/after, never predictions. Optional target GB as $ARGUMENTS."
 priority: 80
 ---
 
