@@ -1,3 +1,11 @@
+---
+name: tps
+description: >
+  Reference skill for the Toyota Production System (TPS),Jidoka and Just-in-Time
+  pillars, Heijunka foundation, and 5S methodology. Use when implementing lean
+  production principles.
+---
+
 # Toyota Production System Skill — Multi-Tool Reference
 
 ## Purpose

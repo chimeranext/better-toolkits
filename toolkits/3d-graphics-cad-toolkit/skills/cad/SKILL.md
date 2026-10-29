@@ -1,3 +1,12 @@
+---
+name: cad
+description: >
+  Reference skill for computer-aided design (CAD) workflows,2D drafting, 3D
+  solid modeling, parametric design, collaborative review,across AutoCAD,
+  FreeCAD, Fusion 360, SolidWorks, and Rhinoceros 3D. Use when creating
+  engineering or product CAD models.
+---
+
 # CAD Skill — Multi-Tool Reference
 
 ## Purpose

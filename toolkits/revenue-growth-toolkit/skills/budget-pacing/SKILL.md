@@ -1,3 +1,11 @@
+---
+name: budget-pacing
+description: >
+  Monitors delivery vs budget over the last N days and flags
+  underdelivery/overspend using the shared social-media-ads-mcp MCP. Use when
+  pacing ad campaigns against budget without auto-executing changes.
+---
+
 # Budget Pacing Skill — Multi-Tool Reference
 
 ## Purpose

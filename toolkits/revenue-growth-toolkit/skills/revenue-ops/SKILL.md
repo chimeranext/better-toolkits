@@ -1,3 +1,11 @@
+---
+name: revenue-ops
+description: >
+  Analyzes sales pipeline health, forecast accuracy, and go-to-market efficiency
+  for SaaS/B2B revenue teams using Python scripts. Use when reviewing pipeline
+  coverage, velocity, and forecast accuracy.
+---
+
 # Revenue Operations Skill — Multi-Tool Reference (B2B)
 
 ## Purpose

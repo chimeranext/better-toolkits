@@ -1,3 +1,12 @@
+---
+name: vr-ar
+description: >
+  Reference skill for Virtual Reality and Augmented Reality workflows,immersive
+  content creation, XR interaction design, 3D optimization, real-time
+  rendering,across Unity, Unreal, Bevy, and WebXR/Three.js. Use when building
+  VR/AR training, simulation, or product visualization.
+---
+
 # VR/AR Skill — Multi-Tool Reference
 
 ## Purpose

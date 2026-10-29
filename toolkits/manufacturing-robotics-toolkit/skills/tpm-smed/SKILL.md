@@ -1,3 +1,11 @@
+---
+name: tpm-smed
+description: >
+  Reference skill for Total Productive Maintenance (TPM) and Single-Minute
+  Exchange of Die (SMED). Use when improving equipment reliability or reducing
+  setup/changeover times.
+---
+
 # TPM & SMED Skill — Multi-Tool Reference
 
 ## Purpose

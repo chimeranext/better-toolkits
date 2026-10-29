@@ -1,3 +1,12 @@
+---
+name: logistics-supply-chain
+description: >
+  Reference skill for the supply-chain/import domain for startups importing
+  goods into Costa Rica or LATAM: procurement (P2P, SRM, Kraljic), customs
+  regimes, import documentation, INCOTERMS 2020, free trade agreements, and
+  inventory management. Use when planning imports or supply-chain operations.
+---
+
 # Logistics / Supply Chain Skill — Multi-Tool Reference
 
 ## Purpose

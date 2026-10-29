@@ -1,3 +1,12 @@
+---
+name: cam
+description: >
+  Reference skill for computer-aided manufacturing (CAM) workflows,CNC
+  programming, toolpath generation, additive manufacturing, DFM,across Fusion
+  360 CAM, Mastercam, FreeCAD Path, PrusaSlicer, and Cura. Use when preparing
+  parts for fabrication or machining.
+---
+
 # CAM Skill — Multi-Tool Reference
 
 ## Purpose

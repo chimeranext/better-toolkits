@@ -1,3 +1,11 @@
+---
+name: attribution-readout
+description: >
+  Produces the before/after attribution readout (directional, not a controlled
+  experiment) merging multi-network insights into one unified row. Use when
+  reporting lift or results across paid-media channels.
+---
+
 # Attribution Readout Skill — Multi-Tool Reference
 
 ## Purpose

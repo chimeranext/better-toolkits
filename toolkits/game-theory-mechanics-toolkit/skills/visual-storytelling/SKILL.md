@@ -1,3 +1,12 @@
+---
+name: visual-storytelling
+description: >
+  Reference skill for visual and interactive storytelling,interactive narrative,
+  environmental storytelling, ludonarrative design,for video game development
+  and digital twin visualization. Use when designing narrative through gameplay,
+  environment, and dialogue.
+---
+
 # Visual & Interactive Storytelling — Multi-Tool Reference
 
 ## Purpose

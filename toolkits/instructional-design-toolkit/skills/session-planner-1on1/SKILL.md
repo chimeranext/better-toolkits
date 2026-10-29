@@ -1,5 +1,5 @@
 ---
-name: 1-on-1-session-planner
+name: session-planner-1on1
 version: 1.0.0
 description: >
   Diálogo guiado para diseñar un plan de sesión 1-on-1 con auto-detect del tipo

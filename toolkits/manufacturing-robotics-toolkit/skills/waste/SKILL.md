@@ -1,3 +1,10 @@
+---
+name: waste
+description: >
+  Reference skill for the types of waste in Lean,muda, mura, muri and the 8
+  wastes. Use when identifying and eliminating waste in a process.
+---
+
 # Waste Elimination Skill — Multi-Tool Reference
 
 ## Purpose

@@ -1,3 +1,12 @@
+---
+name: game-design
+description: >
+  Reference skill for game design mechanics,core loop, mechanism design,
+  progression systems, reward schedules, strategic balance,for video game
+  development across Unity, Unreal, Bevy, and Godot. Use when designing gameplay
+  systems and balance.
+---
+
 # Game Design Mechanics Skill — Multi-Tool Reference
 
 ## Purpose

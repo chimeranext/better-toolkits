@@ -1,3 +1,12 @@
+---
+name: gemelos-digitales
+description: >
+  Reference skill for digital twin workflows,real-time virtual representations
+  of physical assets, systems, processes,across OpenFactory, OpenTwin, rv-ODT,
+  ThingWorx, Azure Digital Twins, and NVIDIA Omniverse. Use when building twins
+  for simulation, monitoring, or predictive operations.
+---
+
 # Digital Twins Skill — Multi-Tool Reference
 
 ## Purpose

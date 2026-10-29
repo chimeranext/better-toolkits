@@ -7,16 +7,10 @@ description: >
   remote banking, international billing (MSA B2B), visa options, and studying or founding
   abroad (Germany, Canada, Ireland, Australia, Japan, Singapore, South Korea, China,
   Taiwan). FREE.
-  Use when user asks "digital nomad", "freelancer LLC", "single member LLC", "work from anywhere",
-  "study abroad", "student visa work", "startup founder visa", "digital-nomad",
-  "/digital-nomad:entity-formation", "/digital-nomad:tax-compliance",
-  "/digital-nomad:banking", "/digital-nomad:msa-b2b", "/digital-nomad:visa-options",
-  "/digital-nomad:study-in-germany", "/digital-nomad:study-in-canada",
-  "/digital-nomad:study-in-ireland", "/digital-nomad:study-in-australia",
-  "/digital-nomad:study-in-japan", "/digital-nomad:study-in-singapore",
-  "/digital-nomad:study-in-south-korea", "/digital-nomad:study-in-china",
-  "/digital-nomad:study-in-taiwan", "/digital-nomad:maintain-llc-abroad",
-  "/digital-nomad:route-decision".
+  Use when the user asks about "digital nomad", "freelancer LLC", "single member LLC",
+  "work from anywhere", "study abroad", "student visa work", "startup founder visa",
+  or a /digital-nomad:* sub-command (entity-formation, tax-compliance, banking,
+  msa-b2b, visa-options, study-in-*, maintain-llc-abroad, route-decision).
 ---
 
 # digital-nomad

@@ -1,3 +1,11 @@
+---
+name: rv-otd-schema-management
+description: >
+  Reference skill for Open Digital Twin Format (ODT) schema management using the
+  rv-ODT standard for interoperable digital twin data representation. Use when
+  authoring, validating, mapping, or versioning twin data schemas.
+---
+
 # rv-ODT Schema Management Skill — Multi-Tool Reference
 
 ## Purpose

@@ -1,3 +1,11 @@
+---
+name: prototype-to-production
+description: >
+  Decision reference for moving from 3D printing to injection molding, CNC, or
+  casting: tooling cost, breakeven volume, and lead time. Use when deciding how
+  to scale a prototype to production.
+---
+
 # Prototype-to-Production Skill — Multi-Tool Reference
 
 ## Purpose

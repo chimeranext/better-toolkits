@@ -1,3 +1,11 @@
+---
+name: cad-cam-handoff
+description: >
+  Reference skill for exporting from CAD to CAM and to a manufacturer: STEP/IGES
+  vs native, mesh export settings (STL/3MF), drawing standards, and quote
+  packages. Use when handing a design off for machining or production.
+---
+
 # CAD/CAM Handoff Skill — Multi-Tool Reference
 
 ## Purpose

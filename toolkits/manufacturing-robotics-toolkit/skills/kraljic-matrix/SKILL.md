@@ -1,3 +1,12 @@
+---
+name: kraljic-matrix
+description: >
+  Reference skill for the Kraljic portfolio matrix for supplier
+  categorization,four quadrants on supply-risk vs profit-impact axes with a
+  recommended strategy per quadrant. Use when segmenting suppliers and
+  procurement strategy.
+---
+
 # Kraljic Matrix Skill — Multi-Tool Reference
 
 ## Purpose

@@ -1,3 +1,13 @@
+---
+name: assurance-testing-audit
+description: >
+  Audits whether a repo's testing frameworks are wired into the assurance
+  evidence pipeline,mobile (Maestro, MobileWright, Patrol, Qualflare), web
+  (Playwright, Cypress, Vitest/Jest), API/contracts (Schemathesis, Pact),via
+  static scan. Use when verifying test infrastructure against the assurance
+  evidence matrix.
+---
+
 # Assurance Testing Audit Skill — Multi-Tool Reference
 
 ## Purpose

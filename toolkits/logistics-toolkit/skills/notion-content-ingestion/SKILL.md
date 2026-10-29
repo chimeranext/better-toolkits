@@ -1,3 +1,12 @@
+---
+name: notion-content-ingestion
+description: >
+  Ingests Notion self-study guide databases into local, versioned Markdown via a
+  recursive crawler (sitemap.yaml) and an enricher
+  (yt-dlp/crw/Scrapling/webfetch -> manifest.json). Use when producing an
+  agent-searchable local content dump from a Notion library.
+---
+
 # Notion Content Ingestion Skill — Multi-Tool Reference
 
 ## Purpose

@@ -1,3 +1,11 @@
+---
+name: revenue-ops-triage
+description: >
+  Turns a messy revenue pipeline/backlog into agent-ready, prioritized work by
+  applying the triage pattern to RevOps and B2G. Use when converting analyzer
+  outputs into ordered action items.
+---
+
 # Revenue Ops Triage Skill — Multi-Tool Reference
 
 ## Purpose

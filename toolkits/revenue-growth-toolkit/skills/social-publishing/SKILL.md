@@ -1,3 +1,11 @@
+---
+name: social-publishing
+description: >
+  Covers organic/owned-media publishing across social platforms using the
+  Publora MCP,cross-platform posting and media upload. Use when scheduling or
+  publishing organic social content.
+---
+
 # Social Publishing Skill — Multi-Tool Reference (B2C / organic awareness)
 
 ## Purpose

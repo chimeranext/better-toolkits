@@ -1,3 +1,12 @@
+---
+name: bim
+description: >
+  Reference skill for Building Information Modeling (BIM) workflows,intelligent
+  3D modeling, clash detection, 4D/5D scheduling, facility management,across
+  Revit, ArchiCAD, BlenderBIM/IfcOpenShell, and IFC for AEC. Use when working on
+  building models and openBIM exchange.
+---
+
 # BIM Skill — Multi-Tool Reference
 
 ## Purpose

@@ -10,7 +10,7 @@ Dispatcher con auto-detection o pasaje a shortcut según `$ARGUMENTS`:
 - Si `$ARGUMENTS` matchea `coaching` / `coach` → invocar `instructional-design-toolkit:coaching-session`
 - Si `$ARGUMENTS` matchea `mentoring` / `mentor` → invocar `instructional-design-toolkit:mentoring-session`
 - Si `$ARGUMENTS` matchea `tutoring` / `tutor` → invocar `instructional-design-toolkit:tutoring-session`
-- Si vacío o no reconocido → invocar `instructional-design-toolkit:1-on-1-session-planner` (flow completo con `session-type-detector` agent)
+- Si vacío o no reconocido → invocar `instructional-design-toolkit:session-planner-1on1` (flow completo con `session-type-detector` agent)
 
 ## Output esperado
 
