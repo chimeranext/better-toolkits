@@ -1,0 +1,48 @@
+# MegaLinter — agregador de gates de calidad (SSOT .mega-linter.yml).
+# Incluye el typecheck (tsc --noEmit) como PRE_COMMAND bloqueante.
+# Evidencia: SARIF (se puede subir como code scanning).
+
+name: megalinter
+
+on:
+  pull_request:
+    paths:
+      - "shared/hooks/**"
+      - "toolkits/**"
+      - "scripts/**"
+      - ".mega-linter.yml"
+      - ".github/workflows/megalinter.yml"
+  push:
+    branches: [main]
+    paths:
+      - "shared/hooks/**"
+      - "toolkits/**"
+      - "scripts/**"
+      - ".mega-linter.yml"
+      - ".github/workflows/megalinter.yml"
+
+permissions:
+  contents: read
+  # Para subir SARIF como code scanning:
+  security-events: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  megalinter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: oxsecurity/megalinter@v10
+        env:
+          VALIDATE_ALL_CODEBASE: "false" # PR: solo archivos del diff; push main: todo
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload MegaLinter SARIF to code scanning
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: megalinter-reports/megalinter-report.sarif

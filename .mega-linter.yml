@@ -1,0 +1,41 @@
+---
+# MegaLinter configuration — SSOT para la capa de gates de calidad de
+# better-toolkits (toolkit /assurance). Un solo agregador cubre los linters
+# de los principales lenguajes/formatos del monorepo y produce SARIF como
+# evidencia para los receipts.
+#
+# Docs: https://megalinter.io/latest/configuration/
+# -----------------------------------------------------------------------------
+
+APPLY_FIXES: none            # determinismo: sin auto-fix en CI (se puede activar por rama luego)
+PRINT_ALPACA: true
+SHOW_ELAPSED_TIME: true
+GITHUB_STATUS_REPORTER: false
+JSON_REPORTER: true
+SARIF_REPORTER: true          # evidencia SARIF -> receipts de /assurance
+EMAIL_REPORTER: false
+FLAVOR_SUGGESTIONS: false
+
+# Set explícito: solo lo que queremos como gate.
+ENABLE:
+  - BASH        # shellcheck
+  - MARKDOWN    # markdownlint
+  - YAML        # yamllint
+  - JSON        # jsonlint
+  - ACTION      # actionlint (GitHub Actions workflows)
+  - PYTHON     # ruff (se agrega, pero no bloquea al inicio, ver abajo)
+
+# Linters que reportan pero NO bloquean (para un rollout gradual sin romper CI)
+DISABLE_ERRORS_LINTERS:
+  - PYTHON_RUFF
+  - YAML_YAMLLINT
+
+# Excluir artefactos/terceros/vendedores
+FILTER_REGEX_EXCLUDE: '(node_modules|vendor|dist|build|\.venv|__pycache__|\.git|.*\.pdf$|\.lock$|package-lock\.json|pnpm-lock\.yaml|\.mega-linter\.yml)'
+
+# Gate estrella: typecheck de los plugins OpenCode (stderr + prds).
+# Corre ANTES de los linters y, si falla (exit != 0), aborta el job.
+PRE_COMMANDS:
+  - command: cd shared/hooks && npm ci && npm run typecheck
+    cwd: workspace
+    continue_if_failed: false

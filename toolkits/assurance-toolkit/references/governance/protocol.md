@@ -12,7 +12,9 @@ cobertura como diagnóstico.
 
 ## Gates por etapa
 
-- **commit**: lint, unit, coverage del cambio.
+- **commit**: lint, unit, coverage del cambio. Lint agregado vía MegaLinter
+  (`.mega-linter.yml`, GitHub Action) + typecheck `tsc --noEmit` como `PRE_COMMAND`
+  bloqueante (ver `references/testing/assurance-testing-audit/protocol.md`).
 - **PR**: tests 100%, security críticas 0, `coverage_delta` ≥ 0.
 - **release**: e2e pass, p95, DER bajo umbral, `can-i-deploy` donde aplique.
 Barato y rápido primero. Flaky = defecto (cuarentena, fix o remove).
