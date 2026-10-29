@@ -1,0 +1,24 @@
+{
+  "name": "ui-patterns",
+  "version": "0.1.0",
+  "description": "Reusable desktop UI/UX patterns (framework-agnostic) — a catalog of UI patterns (ribbon, command bar, tabs, panels, etc.) with anatomy and per-framework variants (iced, React/MUI, Flutter, WinUI 3).",
+  "author": {
+    "name": "Luis Andres Pena Castillo",
+    "url": "https://github.com/lapc506"
+  },
+  "homepage": "https://github.com/chimeranext/better-toolkits",
+  "repository": "https://github.com/chimeranext/better-toolkits",
+  "license": "BSL-1.1",
+  "keywords": [
+    "claude-code",
+    "claude-code-plugin",
+    "ui",
+    "ux",
+    "desktop",
+    "ribbon",
+    "iced",
+    "react",
+    "flutter",
+    "design-system"
+  ]
+}
