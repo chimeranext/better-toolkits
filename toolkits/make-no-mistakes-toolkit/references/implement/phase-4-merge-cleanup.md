@@ -22,12 +22,12 @@ Merge + Linear Done + worktree cleanup HITL gates; sync for next issue.
     - _Sub-agents: emit a `pause` signal with gate `"linear-done"` instead of calling `AskUserQuestion`. See "Sub-agent exception"._
 
 15. **Clean up worktrees** (HITL gate per "Hard STOP #4" — applies regardless of mode):
-    - **In Review / Ready to Merge** → STOP and ask: "Merge done. Remove the worktree at `.claude/worktrees/{issue-id}`, or keep it for inspection?"
-    - **Draft** → STOP and ask: "Draft PR opened at `<URL>`. The worktree at `.claude/worktrees/{issue-id}` is still live so you can iterate. Remove it now, or keep it until you flip the PR to Ready?" Default expectation: keep it.
+    - **In Review / Ready to Merge** → STOP and ask: "Merge done. Remove the worktree at `.agents/worktrees/{issue-id}`, or keep it for inspection?"
+    - **Draft** → STOP and ask: "Draft PR opened at `<URL>`. The worktree at `.agents/worktrees/{issue-id}` is still live so you can iterate. Remove it now, or keep it until you flip the PR to Ready?" Default expectation: keep it.
     - Only run the removal on explicit OK.
     - _Sub-agents: emit a `pause` signal with gate `"worktree-cleanup"` instead of calling `AskUserQuestion`. See "Sub-agent exception"._
     ```bash
-    git worktree remove .claude/worktrees/{issue-id} --force
+    git worktree remove .agents/worktrees/{issue-id} --force
     # Verify ALL worktrees for this issue are removed
     git worktree list
     git worktree prune

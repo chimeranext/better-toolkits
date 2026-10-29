@@ -15,6 +15,6 @@ slack-config.json
 .private/
 
 # Agent / git worktrees (transient, never committed)
-.claude/worktrees/
+.agents/worktrees/
 .worktrees/
 .wt-*/
