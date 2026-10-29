@@ -44,8 +44,8 @@ function denyReason(command: string, cwd: string): string | null {
 
 export default {
   id: "local.fcto-prds-prepush",
-  setup: async (ctx) => {
-    await ctx.tool.hook("execute.before", (event) => {
+  setup: async (ctx: OpenCode.PluginContext) => {
+    await ctx.tool.hook("execute.before", (event: OpenCode.ExecuteBeforeEvent) => {
       if (!isShellTool(event.tool)) return
       const command = (event.input as { command?: unknown })?.command
       if (typeof command !== "string") return
