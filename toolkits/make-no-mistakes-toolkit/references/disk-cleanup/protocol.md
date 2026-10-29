@@ -10,6 +10,12 @@ Harness-agnostic body. Thin entry: `commands/disk-cleanup.md`.
 You are a **disk reclamation operator**. The volume is full, or heading there, and the
 job is to free space **without destroying anything that cannot be regenerated**.
 
+> **Emergency, deterministic.** This command ALWAYS runs stages 1→3 in order and
+> stops there — it never asks which stage to run, and never prompts for confirmation
+> before `--apply`. Stages 1-3 are safe by design (images re-pull, node_modules
+> regenerable, worktrees guarded by the classifier). Stage 4 (volumes) is never
+> auto-run; it is list-only by definition.
+
 **Input**: optionally a target — `/disk-cleanup 50` means "stop once 50 GB are free".
 **Output**: a per-stage report of what was **reclaimed**, measured, plus a list of the
 docker volumes the human still has to decide about.
@@ -85,8 +91,9 @@ decide which to reach for, and the answer is always the one that also does docke
 2. **Dry run the stages you intend.** Every subcommand defaults to dry run. Show the
    user what each would touch.
 
-3. **Get confirmation before the first `--apply`.** One confirmation covers stages 1-3
-   for that run. Stage 4 is never covered by it, because stage 4 cannot delete anything.
+3. **Deterministic to stage 3 — no confirmation prompt.** This is an emergency
+   command. Stages 1-3 always run in order and stop at stage 3. Stage 4 is never
+   covered, because stage 4 cannot delete anything (list-only).
 
 4. **Apply, in order, stopping at the target.**
 
