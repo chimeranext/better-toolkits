@@ -1,6 +1,6 @@
 {
   "name": "instructional-design-toolkit",
-  "version": "1.4.5",
+  "version": "1.4.6",
   "description": "Guided instructional design toolkit \u2014 design cmi5-compliant courses and 1-on-1 session plans using CONTEXT\u2192CONCEPT\u2192BUILD\u2192SHIP\u2192REFLECT formula, Builder's Bloom's progression, Ship-First Design, and Kirkpatrick L1-L4 evaluation. Produces JSON + Markdown + HTML visualization + Marp slide decks.",
   "author": {
     "name": "Luis Andres Pena Castillo",
