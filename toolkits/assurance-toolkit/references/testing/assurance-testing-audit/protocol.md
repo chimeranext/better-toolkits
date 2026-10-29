@@ -19,8 +19,17 @@ runners apply and whether the adapter evidence path exists.
 | Laravel/PHP | Pest/PHPUnit (`php artisan test`) | `phpunit.xml`, `tests/` |
 | Elixir | ExUnit (`mix test`) | `mix.exs`, `test/` |
 | TypeScript | Vitest/Jest + `tsgo` TS7 checklist | `vitest.config.ts`, `jest.config.ts`, `tsconfig.json` |
+| TypeScript (typecheck) | `tsc --noEmit` (MegaLinter `PRE_COMMAND`) | `tsconfig.json` + `npm run typecheck` |
 | API/contracts | Schemathesis / Pact | `openapi.*`, `pact/`, `schemathesis` config |
 | Mobile collectors | Qualflare (`qf collect`) | `qualflare` config / `qf` in CI |
+
+## Agregador transversal (MegaLinter)
+
+Para repos que adopten [MegaLinter](https://megalinter.io) como agregador de gates, una
+sola integración cubre la matriz completa: `.mega-linter.yml` (SSOT) + GitHub Action
+`oxsecurity/megalinter@v10`, y el typecheck (`tsc --noEmit`) como `PRE_COMMAND`
+bloqueante. Evidencia vía reporter **SARIF** (subible a code scanning), que alimenta
+los receipts. Ver `.mega-linter.yml` en la raíz de better-toolkits como piloto.
 
 ## Flow
 
