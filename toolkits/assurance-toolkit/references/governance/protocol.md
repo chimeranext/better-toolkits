@@ -24,6 +24,38 @@ Barato y rápido primero. Flaky = defecto (cuarentena, fix o remove).
 Un receipt por veredicto: qué corrió, dónde, contra qué baseline, con qué IDs
 (Linear, MASWE/MASTG, contrato). Formato auditable del release.
 
+### Política de evidencia: `internal-audits` (opinada)
+
+Los receipts y la evidencia de gobernanza **no viven en el repo de producto**.
+Viven en un repo interno privado dedicado (`internal-audits` o equivalente), separado
+del código distribuible.
+
+**Rationale** (por qué esta política):
+- Evita mezclar lo auditable con lo distribuible: el repo de producto se vende/comparte
+  (p.ej. BSL) y no debe cargar gobernanza interna.
+- Evita filtrar señal interna (actores, bypasses de gate, aprobaciones, fallos) a
+  clientes/público.
+- Mantiene retención y control de acceso separados de la cadena de release.
+
+**Regla**: la política es opinada para cualquier repo que adopte assurance. Un repo
+puede desviarse, pero debe **documentar la desviación** (destino alternativo y su
+rationale). En ausencia de `internal-audits`, el protocolo emite **GAP** (ver
+`references/testing/assurance-testing-audit/protocol.md`).
+
+**Ciclo de vida del receipt**:
+- Inmutable: un archivo por evento, keyed por `commit_sha` (+ timestamp). No se
+  reescribe; cada evento = archivo nuevo.
+- Escritura: workflow/script de post-merge hace **push directo** a `internal-audits`
+  (rama `main` o `evidence/` de ese repo), **sin PRs ni re-evaluación** — la
+  evidencia describe eventos ya ocurridos y no debe re-entrar al ciclo de review.
+- Lectura: las métricas (bypass rate, typecheck status, etc.) se calculan desde
+  `internal-audits`, no desde el repo de producto.
+
+**Retención**: cohortes por trimestre; no borrar receipts vinculados a releases
+publicados. Política de poda explícita, revisada en governance.
+
+**Estructura**: `evidence/receipts/<gate>/<yyyy-mm>/<sha>.json`.
+
 ## Migrated skills (flutter-boilerplate-monorepo-template, reinterpretados)
 
 - **sre-slo-sli-sla**: SLOs, error budgets, MTTD/MTTR (SRE workbook); alimenta métricas outcome-based.
