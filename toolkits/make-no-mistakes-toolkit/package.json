@@ -90,7 +90,8 @@
         "spec-recommend",
         "spike-recommend",
         "sync-advisor",
-        "worktree-cleanup"
+        "worktree-cleanup",
+        "subagents-opencode"
       ]
     }
   ]
