@@ -29,9 +29,18 @@
           "NOTION_API_KEY": "{env:NOTION_API_KEY}"
         }
       },
-      "posthog": {
-        "type": "remote",
-        "url": "https://mcp.posthog.com/mcp"
+      "posthog-chimeranext": {
+        "type": "local",
+        "command": [
+          "node",
+          "shared/mcp/posthog-chimeranext/server.js"
+        ],
+        "environment": {
+          "POSTHOG_HOST": "{env:POSTHOG_HOST}",
+          "POSTHOG_PERSONAL_API_KEY": "{env:POSTHOG_PERSONAL_API_KEY}",
+          "POSTHOG_PROJECT_ID": "{env:POSTHOG_PROJECT_ID}"
+        },
+        "protocol": "2026-07-28"
       },
       "stitch-chimeranext": {
         "type": "local",
