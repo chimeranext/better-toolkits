@@ -296,8 +296,31 @@ stage_worktrees() {
 # shared copy). Only dirs that are not the main checkout's own are considered for
 # node_modules (a main checkout's node_modules is in use); build dirs (target/dist)
 # in a worktree may be safely removed since they regenerate.
+is_windows() {
+    case "$(uname -s)" in
+        MINGW*|MSYS*|CYGWIN*) return 0 ;;
+        *) return 1 ;;
+    esac
+}
+
 stage_build_artifacts() {
     rule "Stage 5 — build/target artifacts across the whole disk (risk: none — regenerable)"
+
+    # Dispatch to the platform-native implementation.
+    if is_windows; then
+        local ps1="${SCRIPT_DIR}/disk-cleanup-build.ps1"
+        if [ ! -f "$ps1" ]; then
+            log "UNAVAILABLE: $ps1 not present (Windows PowerShell build-artifacts stage)."
+            return 0
+        fi
+        if [ "$APPLY" -eq 1 ]; then
+            powershell -NoProfile -ExecutionPolicy Bypass -File "$ps1" -Apply
+        else
+            powershell -NoProfile -ExecutionPolicy Bypass -File "$ps1" -ListOnly
+        fi
+        return $?
+    fi
+    # macOS/Linux: bash find-based scan below.
 
     # Scope derivation: we do NOT assume ~/Documentos/GitHub. We discover
     # authentic git repos on the volume (git) and also honour the GitHub CLI's
