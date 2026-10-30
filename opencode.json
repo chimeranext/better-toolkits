@@ -33,6 +33,17 @@
         "type": "remote",
         "url": "https://mcp.posthog.com/mcp",
         "oauth": true
+      },
+      "stitch-chimeranext": {
+        "type": "local",
+        "command": [
+          "node",
+          "shared/mcp/stitch-chimeranext/server.js"
+        ],
+        "environment": {
+          "STITCH_GCP_PROJECT": "{env:STITCH_GCP_PROJECT}",
+          "STITCH_PROJECT_ID": "{env:STITCH_PROJECT_ID}"
+        }
       }
     }
   }
