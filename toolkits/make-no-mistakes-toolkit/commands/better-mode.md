@@ -49,10 +49,9 @@ flowchart LR
     D --> D2[/make-no-mistakes:implement/]
     D2 --> E[código + tests]
     E --> F[/dogfood/]
-    F --> G{gate-dependent}
-    G -- Jidoka / No-Workarounds fail --> H[fix + re-run]
+    F -- pass --> K[/ready-to-review-mergeable/]
+    F -- Jidoka / No-Workarounds fail --> H[fix + re-run]
     H --> F
-    G -- pass --> K[/ready-to-review-mergeable/]
     K --> L[review humano]
     L --> M{approve?}
     M -- no --> H
