@@ -1,110 +1,110 @@
 # /subagents-claude — protocol SSOT
 
-Patrón **agnóstico** de **desarrollo dirigido por subagents** para el harness
-**Claude Code**, usando las primitivas nativas de Claude. Es el peer de
-`/subagents-opencode` (herdr) para el harness Claude.
+Agnostic **subagent-driven development** pattern for the **Claude Code** harness,
+using Claude's native primitives. It is the peer of `/subagents-opencode` (herdr)
+for the Claude harness.
 
-## Patrón (controlador)
+## Pattern (coordinator)
 
-1. **Despachar un implementer fresco por tarea** — contexto aislado; se construye solo lo
-   que necesita (no hereda la sesión).
-2. Tras cada tarea, **task review**: compliance a la spec + calidad de código (nunca
-   saltarla; la auto-review del implementer no la reemplaza).
-3. **Fix loop** si la review reporta hallazgos (cap de rondas; si no converge, **Ruling**
-   y a seguir). Usa un **fix-agent fresco** — los subagents completados no reciben
-   mensajes de seguimiento, así que el fix es un dispatch nuevo con el gap report.
-4. **Revisión final** de toda la rama al terminar todas las tareas.
-5. **Ledger** (`progress.md`) como mapa de recuperación — sobrevive a la compactación;
-   registrar cada `Ruling`.
+1. **Dispatch a fresh implementer per task** — isolated context; build only what it
+   needs (it does not inherit the session).
+2. After each task, **task review**: spec compliance + code quality (never skip it;
+   the implementer's self-review does not replace it).
+3. **Fix loop** if review finds findings (cap of rounds; if it does not converge,
+   **Ruling** and move on). Use a **fresh fix agent** — completed subagents cannot
+   receive follow-up messages, so the fix is a new dispatch with the gap report.
+4. **Final review** of the whole branch once all tasks are done.
+5. **Ledger** (`progress.md`) as a recovery map — survives compaction; record every
+   `Ruling`.
 
-## Reglas clave
+## Key rules
 
-- Un implementer por tarea; **no** despachar implementers en paralelo sobre los mismos
-  archivos (conflictos).
-- El implementer **no** despacha subagents (ni helpers, ni reviewer).
-- El controlador ejecuta todas las tareas sin pausar a preguntar; solo se detiene por:
-  operaciones irreversibles/destructivas, acciones sensibles de seguridad, o efectos
-  externos (merge/push a rama compartida/publish).
-- El controlador conserva su contexto para coordinar; los artefactos se pasan como
-  archivos, no pegados en el prompt.
+- One implementer per task; do **not** dispatch implementers in parallel over the
+  same files (conflicts).
+- The implementer does **not** dispatch subagents (neither helpers nor reviewer).
+- The coordinator runs all tasks without pausing to ask; it only stops for:
+  irreversible/destructive operations, sensitive security actions, or external
+  effects (merge/push to a shared branch/publish).
+- The coordinator keeps its context for coordination; artifacts are passed as files,
+  not pasted into prompts.
 
 ## Subagents (Claude Code)
 
-Los subagents son archivos Markdown en `.claude/agents/*.md` (proyecto) o
-`~/.claude/agents/*.md` (usuario), con frontmatter YAML:
+Subagents are Markdown files in `.claude/agents/*.md` (project) or
+`~/.claude/agents/*.md` (user), with YAML frontmatter:
 
 ```yaml
 ---
 name: implementer
-description: Implementa una tarea con contexto aislado.
+description: Implements a task with isolated context.
 tools: Read, Edit, Bash, Grep, Glob
 model: sonnet
 ---
 ```
 
-- El controlador invoca subagents con **invocaciones de alta calidad**: scope específico,
-  referencias de archivos, restricciones, y success criteria explícitas. Un subagent no
-  puede pausar a preguntar, así que la primera invocación debe llevar todo lo que necesita.
-- `CLAUDE_CODE_SUBAGENT_MODEL` permite correr subagents en un modelo más barato.
+- The coordinator invokes subagents with **high-quality invocations**: specific scope,
+  file references, constraints, and explicit success criteria. A subagent cannot
+  pause to ask questions, so the first invocation must carry everything it needs.
+- `CLAUDE_CODE_SUBAGENT_MODEL` allows running subagents on a cheaper model.
 
 ## Cross-session messaging
 
-Para coordinar hallazgos entre sesiones (por ejemplo, el reviewer pasando gaps al fix
-agent, o un worker reportando a otro):
+To coordinate findings between sessions (for example, the reviewer passing gaps to the
+fix agent, or a worker reporting to another):
 
-- `ListAgents` / `SendMessage` — pasar contexto entre sesiones/subagents.
-- En el patrón controlador+implementer, el controlador es quien orquesta; los workers
-  se reportan al controlador, no entre sí (salvo necesidad explícita).
+- `ListAgents` / `SendMessage` — pass context between sessions/subagents.
+- In the coordinator+implementer pattern, the coordinator orchestrates; workers report
+  to the coordinator, not to each other (unless explicitly needed).
 
-## Aislamiento con worktrees
+## Worktree isolation
 
-Cada tarea que edite archivos debe correr en un worktree aislado:
+Each task that edits files must run in an isolated worktree:
 
 ```bash
 git worktree add .agents/worktrees/<slug> -b <branch> <base-ref>
 ```
 
-- La convención canónica es `.agents/worktrees/<slug>` (según AGENTS.md).
-- Claude Code soporta `claude --worktree` para trabajar en un worktree nativamente.
-- Bloquear staging amplio (`git add -A` / `git add .`) vía hook.
-- Commit antes de despachar; commit entre handoffs para que el siguiente worker lea el
-  estado más reciente.
-- Preferir **archivos nuevos** sobre edits compartidos cuando sea posible.
+- The canonical convention is `.agents/worktrees/<slug>` (per AGENTS.md).
+- Claude Code supports `claude --worktree` to work in a worktree natively.
+- Block broad staging (`git add -A` / `git add .`) via hook.
+- Commit before dispatch; commit between handoffs so the next worker reads the latest
+  state.
+- Prefer **new files** over shared edits when possible.
 
-## Verificación
+## Verification
 
-- Trata el output del worker como no confiable hasta verificar (Jidoka).
-- Revisa el diff final antes de aceptar cualquier patch de worker.
-- El controlador corre checks de integración no cubiertos por el worker.
-- El **reviewer** lee spec + diff y emite un gap report; un fix-agent fresco lo aplica.
+- Treat the worker's output as untrusted until verified (Jidoka).
+- Review the final diff before accepting any worker patch.
+- The coordinator runs integration checks not covered by the worker.
+- The **reviewer** reads spec + diff and emits a gap report; a fresh fix agent applies
+  it.
 
 ## Retire workers
 
-Una delegación termina con el worker retirado. Para subagents de Claude, cierra/retira la
-sesión del worker al registrar la disposición (accepted, rejected, superseded, blocked).
-Archivos, diffs y worktrees sobreviven en disco.
+A delegation ends with the worker retired. For Claude subagents, close/retire the
+worker's session when recording the disposition (accepted, rejected, superseded,
+blocked). Files, diffs, and worktrees survive on disk.
 
-## Condiciones de parada
+## Stop conditions
 
-Detente y reporta (no improvises) cuando:
+Stop and report (do not improvise) when:
 
-- un subagent rechaza el modelo, estado de auth o directorio de trabajo.
-- la auth bloquea la sesión.
-- el status de un worker es ambiguo y no puede confirmarse.
-- los workers necesitan ediciones solapadas que el controlador no puede integrar con
-  seguridad.
-- se requiere una operación irreversible sin aprobación humana.
+- a subagent rejects the model, auth state, or working directory.
+- auth blocks the session.
+- a worker's status is ambiguous and cannot be confirmed.
+- workers need overlapping edits the coordinator cannot safely integrate.
+- an irreversible operation is required without human approval.
 
 ## Plan-first delegation (opt-in)
 
-Solo cuando el usuario la active ("plan first"/"plan mode"). El default es directo.
+Only when the user enables it ("plan first"/"plan mode"). The default is direct.
 
-## Capacidades por harness
+## Per-harness capabilities
 
-Ver [`subagents-harness-capabilities.md`](../subagents-harness-capabilities.md) — matriz
-harness-agnostic. La convención de worktrees es `.agents/worktrees`.
+See [`subagents-harness-capabilities.md`](../subagents-harness-capabilities.md) — a
+harness-agnostic matrix. The worktree convention is `.agents/worktrees`.
 
-## Referencias
+## References
 
 - Claude Code sub-agents: https://code.claude.com/docs/en/sub-agents
 - Cross-session messaging: https://code.claude.com/docs/en/cross-session-messaging
