@@ -10,8 +10,8 @@
   "notificationTitle": "{sessionTitle}",
   "messages": {
     "permission": "Needs permission: {sessionTitle}",
-    "complete": "Sesión terminada · {projectName}",
-    "subagent_complete": "Subagent terminado · {projectName}",
+    "complete": "Listo! — {projectName}",
+    "subagent_complete": "Subagent terminado — {projectName}",
     "error": "Error: {sessionTitle}",
     "question": "Question (HITL): {sessionTitle}",
     "user_cancelled": "Cancelled: {sessionTitle}"
