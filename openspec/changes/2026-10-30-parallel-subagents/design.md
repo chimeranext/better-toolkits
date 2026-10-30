@@ -75,8 +75,11 @@ messages) with the gap report. Mark the task complete only after review passes.
 
 ## Finishing
 
-When all tasks are verified, present a human integration menu (merge locally /
-push + PR / keep as-is). **Never auto-merge.**
+When all tasks are verified, present a **human integration** decision. The
+HITL criteria is surfaced via **`/resolve-open-questions`** (the skill that
+sweeps open decisions and resolves them through structured ask batches with
+options + a recommendation) — a menu of merge locally / push + PR / keep as-is.
+**Never auto-merge.** The integration decision belongs to the human.
 
 ## Rejected
 

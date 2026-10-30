@@ -87,13 +87,14 @@ Each implementation SHALL be reviewed before the task is marked complete.
 
 ### Requirement: Human integration decision
 
-Finishing SHALL present a human integration menu; the skill SHALL never auto-merge.
+Finishing SHALL present a human integration decision via `/resolve-open-questions`; the skill SHALL never auto-merge.
 
 #### Scenario: No auto-merge
 
 - **WHEN** all tasks are verified
-- **THEN** the skill MUST present a human integration menu (merge locally / push + PR / keep as-is)
+- **THEN** the skill MUST present the integration decision via `/resolve-open-questions` (structured ask batch with options — merge locally / push + PR / keep as-is — plus a recommendation)
 - **AND** MUST NOT merge automatically
+- **AND** MUST wait for the human's decision before integrating
 
 ### Requirement: /subagents-claude skill exists
 
