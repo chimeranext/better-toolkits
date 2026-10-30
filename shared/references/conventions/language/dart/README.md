@@ -36,6 +36,10 @@ TTL corto (30 días): los skills cambian sin versionar → pin por commit en app
 - D8 [errors] Mensajes de error **prescriptivos** (sugieren alternativa), salvo `[SECRECY]`
   en el doc comment `///` (seguridad por secrecía). No usar excepciones para flujo esperado →
   `conventions/prescriptive-error-messages.md`.
+- D9 [BDD] Verificar comportamiento observable, no implementación. La afirmación BDD se
+  declara en el mini-lenguaje del `conventions/matcher-contract.md` y se traduce al matcher
+  nativo (`package:test` `expect(expr, equals/contains/matches/hasLength)`). Gates Jidoka
+  + No-Workarounds según `assurance-toolkit/references/testing/e2e-protocol.md`.
 
 ## COUNTEREXAMPLES
 

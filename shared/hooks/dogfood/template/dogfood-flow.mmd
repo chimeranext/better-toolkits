@@ -1,0 +1,14 @@
+stateDiagram-v2
+    direction LR
+    [*] --> Given: real precondition
+    Given --> When: exercise real path
+    When --> Then: capture output
+    Then --> Pass: behavior holds + gates pass
+    Then --> Fail: assertion fails / anomaly
+    Fail --> [*]: stop (Jidoka)
+    Pass --> [*]
+
+    classDef breaks fill:#ffe9eb,stroke:#c92432,stroke-width:2.5px
+    classDef mayBreak fill:#fff1e0,stroke:#d9690a,stroke-width:2.5px
+
+    class Fail breaks

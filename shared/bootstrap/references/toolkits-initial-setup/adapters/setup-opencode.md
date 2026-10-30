@@ -94,6 +94,58 @@ so the copy loads standalone.
 
 Idempotent: skip the copy when the installed bytes already match the source.
 
+## Install the opinionated notifier (`opencode-notifier`)
+
+Install + configure `@mohak34/opencode-notifier@latest` so alerts show the session
+subject instead of the project folder, without the OpenCode logo, and with
+HITL labels only on events that need the human.
+
+```bash
+opencode plugin add @mohak34/opencode-notifier@latest
+cp "$BETTER_TOOLKITS_ROOT/shared/bootstrap/references/toolkits-initial-setup/adapters/opencode-notifier.json" \
+  ~/.config/opencode/opencode-notifier.json
+bash "$BETTER_TOOLKITS_ROOT/shared/bootstrap/scripts/patch-opencode-notifier-sanitize.sh"
+```
+
+The last step applies an **idempotent Markdown-sanitization patch** to the
+installed plugin so `{sessionTitle}` renders without `*emphasis*` artifacts.
+Re-run it after every `opencode plugin update` (which restores the pristine
+file). The patch helper lives at
+`shared/bootstrap/scripts/patch-opencode-notifier-sanitize.sh`.
+
+The template (`opencode-notifier.json` next to this file) is the SSOT for the
+opinionated defaults:
+
+- `showSessionTitle: true` — title/body use `{sessionTitle}` (the real subject),
+  not the folder name.
+- `showIcon: false` — no OpenCode logo.
+- `suppressWhenFocused: false` — **opt-in**; default OFF (always notify). Set to
+  `true` only if the user explicitly wants quiet-while-focused.
+- `focusOnClick: true` — clicking the notification returns to the session.
+- Messages: `complete`/`subagent_complete` = plain `{sessionTitle}`; `question`
+  and `permission` carry the HITL label (they need the human).
+
+**Avoid duplicate toasts:** when herdr is also present, set herdr
+`[ui.toast] delivery = "terminal"` (in-app) or disable its system toast so only
+the notifier posts to the desktop.
+
+**Free `ctrl+b` for opencode backgrounding:** opencode binds `ctrl+b` to
+`session.background` ("move running work to the background"). herdr's default
+prefix key is also `ctrl+b`, which intercepts the keystroke first. When herdr is
+present, set `[keys] prefix = "ctrl+a"` in `~/.config/herdr/config.toml` so
+opencode keeps `ctrl+b` for its own background action.
+
+**Policy enforcement (machine-readable):** install the org policy + consumer
+workflow into each bootstrapped monorepo:
+
+```bash
+bash "$BETTER_TOOLKITS_ROOT/shared/bootstrap/scripts/setup-policies.sh" --target <repo>
+```
+
+This copies `policies.yml` + `apply-policies.sh` + `.github/workflows/apply-policies.yml`
+so the repo honors `repository_dispatch(policies-updated)` and reports drift via
+`/audit-policies`. The OpenSpec pipeline discipline (no shortcuts) is mandatory.
+
 ## `opencode.json(c)` merge
 
 Propose one **`skills`** entry per selected toolkit (adapters only register

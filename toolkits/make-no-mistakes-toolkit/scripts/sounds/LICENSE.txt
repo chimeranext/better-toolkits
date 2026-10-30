@@ -1,0 +1,22 @@
+permission.wav — attribution
+
+This file is derived from the GNOME Default Sounds alert theme, specifically
+`/usr/share/sounds/gnome/default/alerts/hum.ogg` (GNOME, GPL/CC-licensed sound
+theme, distributed with the system). It was converted to WAV (44.1 kHz, stereo)
+and its volume was raised by +8.6 dB (max ≈ -1.0 dB) so it is clearly audible
+as an authorization prompt.
+
+Source (original, as of 2026-10-30):
+  /usr/share/sounds/gnome/default/alerts/hum.ogg
+
+SHA-256 (vendored wav): 4db53bf844f74602653d4c400ddd9d0f8f580ea8449657c4cb3816ccff36fd7d
+
+It is used by `disk-cleanup.sh` `notify_sound()` so authorization prompts play
+a soft, polite tone asking for permission — deterministic, vendored in this
+repo, independent of any npm cache or system theme at runtime.
+
+GNOME Default Sounds (source theme) license: the GNOME sound theme is licensed
+under CC BY-SA 3.0 / GPL, distributed with the GNOME desktop. This file is a
+small, derived notification asset vendored for deterministic playback; the
+original authorship and licensing of the GNOME sound theme are preserved and
+attributed.

@@ -53,7 +53,7 @@ WORKTREE_CLEANUP="${SCRIPT_DIR}/worktree-cleanup.mjs"
 
 SUBCOMMAND=""
 APPLY=1
-REPO_PATH="$PWD"
+REPO_PATH="${DISK_CLEANUP_DEFAULT_SCOPE:-$HOME/Documentos/GitHub}"
 TARGET_GB=""
 
 log() { printf '%s\n' "$*" >&2; }
@@ -65,6 +65,35 @@ rule() { printf '\n────────────────────�
 have() {
     local _resolved
     _resolved="$(command -v "$1")" && [ -n "$_resolved" ]
+}
+
+# Play an audible notification so an authorization dialog cannot pass unnoticed.
+# Replicates the opencode-notifier's own sound pipeline: it uses a bundled
+# *.wav played at FULL volume via `paplay --volume=65536` then `aplay` (both at
+# 100%). canberra-gtk-play is deliberately NOT first — it follows the desktop
+# theme volume, which is usually quiet. Prefer the vendored wav in this repo
+# (deterministic), then the notifier's npm-cache copy, then the freedesktop
+# theme sample, then a raw system beep. Streams are never discarded: each
+# player's output flows to the controlling terminal naturally.
+notify_sound() {
+    # Deterministic source: the wav vendored in this repo. Fall back to the
+    # freedesktop theme only if it is missing (never to a volatile npm cache).
+    local wav="$SCRIPT_DIR/sounds/permission.wav"
+    [ -f "$wav" ] || wav="/usr/share/sounds/freedesktop/stereo/dialog-information.oga"
+
+    if have paplay; then
+        paplay --volume=65536 "$wav"
+        return 0
+    fi
+    if have aplay; then
+        aplay "$wav"
+        return 0
+    fi
+    if have pw-play; then
+        pw-play "$wav"
+        return 0
+    fi
+    printf '\a' >&2   # terminal bell fallback
 }
 
 human() {
@@ -280,13 +309,244 @@ stage_worktrees() {
     # --force is never passed. Neither is any flag that deletes a branch ref:
     # `git worktree remove` takes a directory, so even a wrong removal is
     # recoverable with `git worktree add` as long as the branch survives.
+    local delegate_log
+    delegate_log="${TMPDIR:-/tmp}/disk-cleanup-worktrees.log"
     if [ "$APPLY" -eq 0 ]; then
         printf 'LIST ONLY: worktrees are classified, none removed. Branch refs are never\n'
         printf '         deleted, with or without --list-only.\n\n'
-        run_delegate "worktrees" --worktrees --no-node-modules
+        run_delegate "worktrees" --worktrees --no-node-modules 2>&1 | tee "$delegate_log"
     else
-        run_delegate "worktrees" --worktrees --no-node-modules --apply
+        run_delegate "worktrees" --worktrees --no-node-modules --apply 2>&1 | tee "$delegate_log"
     fi
+
+    # If EVERY worktree was REFUSED (each still holds work, none merged), the
+    # disk reclamation operator's job here is done — there is nothing safe to
+    # remove. The next logical step is ordering merges, so hand off to
+    # /merge-advisor (HITL; never auto-merge from a cleanup script).
+    if grep -q 'REFUSED' "$delegate_log" && ! grep -qE 'REMOVE[[:space:]]+merged worktrees[[:space:]]+—[[:space:]]+[1-9]' "$delegate_log"; then
+        rule "Stage 3 result — every worktree is REFUSED (none merged, all hold work)"
+        printf 'Nothing safe to reclaim from worktrees. The useful next action is to\n'
+        printf 'order merges for the open PRs: run /merge-advisor (it measures an\n'
+        printf 'order that keeps each PR green and presents it under HITL — it does\n'
+        printf 'NOT merge on its own, and this script never merges).\n'
+    fi
+}
+
+# ── Stage 5: build/target artifacts across ~/Documentos/GitHub/* (exhaustive) ─
+# Recursively finds regenerable build artifacts (node_modules, target/, dist/,
+# build/, .cache/) under a root (default ~/Documentos/GitHub). These are safe to
+# remove (regenerable). Symlinked node_modules are SKIPPED (they point at a
+# shared copy). Only dirs that are not the main checkout's own are considered for
+# node_modules (a main checkout's node_modules is in use); build dirs (target/dist)
+# in a worktree may be safely removed since they regenerate.
+is_windows() {
+    case "$(uname -s)" in
+        MINGW*|MSYS*|CYGWIN*) return 0 ;;
+        *) return 1 ;;
+    esac
+}
+
+stage_build_artifacts() {
+    rule "Stage 5 — build/target artifacts across the whole disk (risk: none — regenerable)"
+
+    # ── Privilege elevation + explicit authorization (mandatory) ────────────
+    # This stage DELETES regenerable build artifacts (node_modules, target/,
+    # dist/, build/, .cache/) across WORK repos. That is a destructive,
+    # system-wide action: it must run with elevated privileges AND only after
+    # the user explicitly authorizes it. We refuse to run --apply unprivileged
+    # or without a clear prompt.
+    if [ "$APPLY" -eq 1 ]; then
+        # Detect elevated permission. On Linux: pkexec or sudo (root).
+        local user_id
+        user_id="$(id -u)"
+        if [ "$user_id" -ne 0 ]; then
+            # Resolve the scan scope NOW (still the unprivileged user) so we can
+            # pass the real absolute paths through elevation: under pkexec/sudo
+            # $HOME becomes /root, so a "$HOME/Documentos/GitHub" default would
+            # point at a non-existent /root path.
+            local build_scan_root="${BUILD_SCAN_ROOT:-$HOME/Documentos/GitHub}"
+            local work_repo_root="${WORK_REPO_ROOT:-$HOME/Documentos/GitHub}"
+            # Not root: explain what we need and why, then re-exec with elevation.
+            printf 'Se requiere ELEVACIÓN de privilegios para esta stage.\n' >&2
+            printf 'Acción: eliminar build/target artifacts regenerables (node_modules,\n' >&2
+            printf '  target/, dist/, build/, .cache/) en los repos de trabajo bajo\n' >&2
+            printf '  %s.\n' "$work_repo_root" >&2
+            printf 'Por qué: es una limpieza destructiva de todo el disco; requiere permiso\n' >&2
+            printf '  de escritura raíz y tu autorización explícita.\n' >&2
+            printf 'Método: pkexec / sudo (Linux), osascript con autorización (macOS),\n' >&2
+            printf '  UAC (Windows).\n' >&2
+            # Interactive authorization with an EXPLICIT human-readable label.
+            # `pkexec` itself cannot show a custom label (it only renders the
+            # technical command), so we first ask via zenity/kdialog (Linux) or
+            # osascript (macOS) explaining exactly what will happen and why,
+            # then elevate. If the user declines, abort the stage cleanly.
+            # Play an audible alert so the dialog cannot pass unnoticed.
+            notify_sound
+            local authorized=1
+            if have zenity; then
+                zenity --question --title="disk-cleanup — autorización" \
+                    --text="Se requiere elevación (raíz) para eliminar build/target artifacts regenerables (node_modules, target/, dist/, build/, .cache/) bajo:\n\n  $work_repo_root\n\nEstos pesos se regeneran desde sus lockfiles/compilación. ¿Autorizas continuar?" \
+                    --width=520 --height=260 --ok-label="Autorizar" --cancel-label="Cancelar"
+                authorized=$?
+            elif have kdialog; then
+                kdialog --yesno "Se requiere elevación (raíz) para eliminar build/target artifacts regenerables bajo:\n$work_repo_root\n\n¿Autorizas continuar?"
+                authorized=$?
+            elif have osascript; then
+                osascript -e "display dialog \"Se requiere elevación (raíz) para eliminar build/target artifacts regenerables bajo $work_repo_root\" buttons {\"Cancelar\",\"Autorizar\"} default button \"Autorizar\""
+                authorized=$?
+            fi
+            if [ "$authorized" -ne 0 ]; then
+                printf 'Autorización denegada por el usuario — se omite el stage 5.\n' >&2
+                return 0
+            fi
+            # Re-exec with elevation preserving env. Always use the ABSOLUTE
+            # script path: when invoked as `bash toolkits/.../disk-cleanup.sh`,
+            # $0 is relative and pkexec/sudo execute from a different cwd, so a
+            # relative $0 cannot be found (exit 127) before the elevation dialog
+            # even shows. $SCRIPT_DIR is already absolute (see top of file).
+            # Re-pass --repo-path and the resolved scan roots via env: under
+            # pkexec/sudo $HOME becomes /root, so the defaults would point at
+            # non-existent /root paths.
+            if have pkexec; then
+                exec pkexec env BUILD_SCAN_ROOT="$build_scan_root" WORK_REPO_ROOT="$work_repo_root" \
+                    bash "$SCRIPT_DIR/disk-cleanup.sh" build-artifacts --apply --repo-path "$REPO_PATH"
+            elif have sudo; then
+                exec sudo env BUILD_SCAN_ROOT="$build_scan_root" WORK_REPO_ROOT="$work_repo_root" \
+                    bash "$SCRIPT_DIR/disk-cleanup.sh" build-artifacts --apply --repo-path "$REPO_PATH"
+            else
+                printf 'ERROR: no se encuentra pkexec/sudo para elevar privilegios.\n' >&2
+                return 1
+            fi
+        fi
+    fi
+
+    # Dispatch to the platform-native implementation.
+    if is_windows; then
+        local ps1="${SCRIPT_DIR}/disk-cleanup-build.ps1"
+        if [ ! -f "$ps1" ]; then
+            log "UNAVAILABLE: $ps1 not present (Windows PowerShell build-artifacts stage)."
+            return 0
+        fi
+        if [ "$APPLY" -eq 1 ]; then
+            powershell -NoProfile -ExecutionPolicy Bypass -File "$ps1" -Apply
+        else
+            powershell -NoProfile -ExecutionPolicy Bypass -File "$ps1" -ListOnly
+        fi
+        return $?
+    fi
+    # macOS/Linux: bash find-based scan below.
+
+    # Scope derivation: we scan only WORK repos (the user's clones under
+    # ~/Documentos/GitHub). Build artifacts are the HEAVY folders LATERAL to
+    # each repo's .git (node_modules, target/, dist/, build/, .cache/) — never
+    # the .git dir itself, never tool/cache clones (.asdf, .nvm, .linuxbrew,
+    # .pub-cache, .cache/pre-commit, flutter). Symlinks are skipped (they point
+    # at a shared copy).
+    local scan_root="${BUILD_SCAN_ROOT:-$HOME/Documentos/GitHub}"
+    [ -d "$scan_root" ] || { echo "BUILD_SCAN_ROOT no existe: $scan_root"; return 0; }
+
+    local before after
+    before="$(avail_bytes "$REPO_PATH")"
+
+    local scratch=/tmp/opencode/disk-cleanup-build
+    mkdir -p "$scratch"
+
+    # 1. Discover WORK repos only: those under ~/Documentos/GitHub (the user's
+    # working clones). We explicitly EXCLUDE tool/cache clones (.asdf, .nvm,
+    # .linuxbrew, .pub-cache, .cache/pre-commit, flutter, etc.) — they are not
+    # user work repos and deleting their artifacts could break the tooling.
+    local repo_file="$scratch/repos.txt"
+    : > "$repo_file"
+
+    WORK_ROOT="${WORK_REPO_ROOT:-$HOME/Documentos/GitHub}"
+    if [ -d "$WORK_ROOT" ]; then
+        find "$WORK_ROOT" -maxdepth 3 -type d -name .git \
+            > "$scratch/repos_find.out" 2>&1 || true
+        sed 's#/\.git$##' "$scratch/repos_find.out" | sort -u > "$repo_file"
+    fi
+    # Fallback: if WORK_ROOT does not exist, scan / but only under the user home
+    # and only dirs whose name is a plausible work repo (skip dot-dirs/caches).
+    if [ ! -s "$repo_file" ]; then
+        find "$HOME" -maxdepth 4 -type d -name .git \
+            -not -path "$HOME/.asdf/*" -not -path "$HOME/.nvm/*" \
+            -not -path "$HOME/.linuxbrew/*" -not -path "$HOME/.pub-cache/*" \
+            -not -path "$HOME/.cache/*" -not -path "$HOME/flutter/*" \
+            -not -path "$HOME/.hermes/*" \
+            > "$scratch/repos_find.out" 2>&1 || true
+        sed 's#/\.git$##' "$scratch/repos_find.out" | sort -u > "$repo_file"
+    fi
+
+    # 2. Collect build artifacts within each discovered repo.
+    local mapfile_list=()
+    while IFS= read -r repo; do
+        [ -n "$repo" ] || continue
+        while IFS= read -r d; do
+            [ -n "$d" ] && mapfile_list+=("$d")
+        done < <(find "$repo" \( \
+            -type d -name node_modules -not -path '*/node_modules/*' -o \
+            -type d -name target -not -path '*/target/*' -o \
+            -type d -name dist -not -path '*/dist/*' -o \
+            -type d -name build -not -path '*/build/*' -o \
+            -type d -name .cache -not -path '*/.cache/*' \
+        \) -not -type l -not -path '*/node_modules/*' >> "$scratch/list.txt" 2>&1 || true)
+    done < "$repo_file"
+
+    # Dedupe
+    mapfile_list=()
+    while IFS= read -r d; do mapfile_list+=("$d"); done < <(sort -u "$scratch/list.txt")
+
+    local total=0
+    local d
+    for d in "${mapfile_list[@]}"; do
+        [ -L "$d" ] && continue
+        # du is only measuring; if a dir vanished or is unreadable (a race or a
+        # permission edge), that must not abort the whole stage under pipefail.
+        # sz is initialized to 0 and guarded so it is always a defined integer
+        # even when the du pipeline fails under `set -u`.
+        local sz=0
+        sz="$(du -sk "$d" 2>&1 | awk '{print $1}')" || sz=0
+        [ -n "$sz" ] || sz=0
+        total=$(( total + sz ))
+    done
+
+    printf 'Scan root:  %s\n' "$scan_root"
+    printf 'Repos descubiertos: %s\n' "$(wc -l < "$repo_file")"
+    printf 'Artifact dirs found: %s (%s)\n' "${#mapfile_list[@]}" "$(human "$(( total * 1024 ))")"
+
+    # Surface find errors if any were captured (they are signals, not noise).
+    if [ -s "$scratch/find.err" ]; then
+        printf 'find warnings (stderr captured):\n'
+        sed 's/^/  /' "$scratch/find.err" | head -10
+    fi
+
+    if [ "${#mapfile_list[@]}" -eq 0 ]; then
+        printf 'no build/target artifacts found under %s\n' "$scan_root"
+        return 0
+    fi
+
+    if [ "$APPLY" -eq 0 ]; then
+        printf 'LIST ONLY — nothing removed. These artifact dirs are regenerable\n'
+        printf '(node_modules from lockfile; target/dist/build from compile):\n'
+        local d2
+        for d2 in "${mapfile_list[@]}"; do
+            [ -L "$d2" ] && continue
+            local sz2=0
+            sz2="$(du -sk "$d2" 2>&1 | awk '{print $1}')" || sz2=0
+            [ -n "$sz2" ] || sz2=0
+            printf '  %-10s  %s\n' "$(human "$(( sz2 * 1024 ))")" "$d2"
+        done
+        return 0
+    fi
+
+    # Apply: remove each artifact dir.
+    for d in "${mapfile_list[@]}"; do
+        [ -L "$d" ] && continue
+        printf 'removing %s\n' "$d"
+        rm -rf "$d"
+    done
+
+    after="$(avail_bytes "$REPO_PATH")"
+    report_reclaimed "build/target artifacts" "$before" "$after"
 }
 
 # ── Stage 4: docker volumes (emergency: reclaimed; dry-run lists) ────────────
@@ -342,6 +602,9 @@ Subcommands (ascending order of risk):
   worktrees        Remove worktrees that hold no work [delegated]
   docker-volumes   Default: removes stopped/created containers, prunes volumes
                   (reconstructible). --list-only previews
+  build-artifacts  Recursively remove regenerable build/target artifacts under
+                  ~/Documentos/GitHub/* (node_modules, target/, dist/, build/,
+                  .cache/). --list-only previews
   all              measure -> stages 1-4, stopping at --target
 
 Options:
@@ -363,7 +626,7 @@ parse_args() {
     [ $# -ge 1 ] || { usage; exit 1; }
 
     case "$1" in
-        measure|docker-images|node-modules|worktrees|docker-volumes|all)
+        measure|docker-images|node-modules|worktrees|docker-volumes|build-artifacts|all)
             SUBCOMMAND="$1"; shift ;;
         -h|--help|help) usage; exit 0 ;;
         *) die "Unknown subcommand: $1 (try --help)" ;;
@@ -372,6 +635,7 @@ parse_args() {
     while [ $# -gt 0 ]; do
         case "$1" in
             --list-only|--dry-run) APPLY=0; shift ;;
+            --apply) APPLY=1; shift ;;   # explicit; already the default
             --repo-path) REPO_PATH="${2:?--repo-path needs a value}"; shift 2 ;;
             --target) TARGET_GB="${2:?--target needs a value in GB}"; shift 2 ;;
             --branches|--force)
@@ -401,6 +665,7 @@ main() {
         node-modules)   stage_node_modules ;;
         worktrees)      stage_worktrees ;;
         docker-volumes) stage_docker_volumes ;;
+        build-artifacts) stage_build_artifacts ;;
         all)
             stage_measure
             if target_met; then
@@ -419,6 +684,11 @@ main() {
                             rule "Target of ${TARGET_GB} GB met after stage 3 — stopping here."
                         else
                             stage_docker_volumes
+                            if target_met; then
+                                rule "Target of ${TARGET_GB} GB met after stage 4 — stopping here."
+                            else
+                                stage_build_artifacts
+                            fi
                         fi
                     fi
                 fi
