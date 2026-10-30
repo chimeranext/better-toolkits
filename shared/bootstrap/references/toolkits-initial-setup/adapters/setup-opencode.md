@@ -104,7 +104,14 @@ HITL labels only on events that need the human.
 opencode plugin add @mohak34/opencode-notifier@latest
 cp "$BETTER_TOOLKITS_ROOT/shared/bootstrap/references/toolkits-initial-setup/adapters/opencode-notifier.json" \
   ~/.config/opencode/opencode-notifier.json
+bash "$BETTER_TOOLKITS_ROOT/shared/bootstrap/scripts/patch-opencode-notifier-sanitize.sh"
 ```
+
+The last step applies an **idempotent Markdown-sanitization patch** to the
+installed plugin so `{sessionTitle}` renders without `*emphasis*` artifacts.
+Re-run it after every `opencode plugin update` (which restores the pristine
+file). The patch helper lives at
+`shared/bootstrap/scripts/patch-opencode-notifier-sanitize.sh`.
 
 The template (`opencode-notifier.json` next to this file) is the SSOT for the
 opinionated defaults:
