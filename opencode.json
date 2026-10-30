@@ -31,8 +31,7 @@
       },
       "posthog": {
         "type": "remote",
-        "url": "https://mcp.posthog.com/mcp",
-        "oauth": true
+        "url": "https://mcp.posthog.com/mcp"
       },
       "stitch-chimeranext": {
         "type": "local",
