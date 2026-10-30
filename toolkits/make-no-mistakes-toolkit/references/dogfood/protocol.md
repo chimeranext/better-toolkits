@@ -55,6 +55,17 @@ The real test: with real configuration values and correct opt-in selection, the 
 
 ---
 
+## Jidoka stop → route to /ishikawa
+
+When a `/dogfood` verification detects an anomaly (a Jidoka stop — unexpected
+output, an error, an empty response, a suppressed signal), do NOT just patch the
+symptom and continue. Route the anomaly through **`/ishikawa`** to identify the
+root cause, and fix **both** the root cause and the symptom, in that order.
+This is a hard stop: the verification does not pass until the cause is
+understood and corrected at the source.
+
+---
+
 ## Local validation prerequisite
 
 This protocol assumes a mechanism already exists for validating credentials locally (e.g., `supabase` CLI local-development workflow for project-level auth). See `https://supabase.com/docs/guides/local-development/cli-workflows#move-an-existing-project-to-local-development` for an example of local credential validation before `/dogfood` runs.

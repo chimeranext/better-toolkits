@@ -80,6 +80,7 @@
         "evaluate-agent-skills",
         "implement",
         "implement-advisor",
+        "ishikawa",
         "merge-advisor",
         "parallelize",
         "premortem",
