@@ -280,12 +280,26 @@ stage_worktrees() {
     # --force is never passed. Neither is any flag that deletes a branch ref:
     # `git worktree remove` takes a directory, so even a wrong removal is
     # recoverable with `git worktree add` as long as the branch survives.
+    local delegate_log
+    delegate_log="${TMPDIR:-/tmp}/disk-cleanup-worktrees.log"
     if [ "$APPLY" -eq 0 ]; then
         printf 'LIST ONLY: worktrees are classified, none removed. Branch refs are never\n'
         printf '         deleted, with or without --list-only.\n\n'
-        run_delegate "worktrees" --worktrees --no-node-modules
+        run_delegate "worktrees" --worktrees --no-node-modules 2>&1 | tee "$delegate_log"
     else
-        run_delegate "worktrees" --worktrees --no-node-modules --apply
+        run_delegate "worktrees" --worktrees --no-node-modules --apply 2>&1 | tee "$delegate_log"
+    fi
+
+    # If EVERY worktree was REFUSED (each still holds work, none merged), the
+    # disk reclamation operator's job here is done — there is nothing safe to
+    # remove. The next logical step is ordering merges, so hand off to
+    # /merge-advisor (HITL; never auto-merge from a cleanup script).
+    if grep -q 'REFUSED' "$delegate_log" && ! grep -qE 'REMOVE[[:space:]]+merged worktrees[[:space:]]+—[[:space:]]+[1-9]' "$delegate_log"; then
+        rule "Stage 3 result — every worktree is REFUSED (none merged, all hold work)"
+        printf 'Nothing safe to reclaim from worktrees. The useful next action is to\n'
+        printf 'order merges for the open PRs: run /merge-advisor (it measures an\n'
+        printf 'order that keeps each PR green and presents it under HITL — it does\n'
+        printf 'NOT merge on its own, and this script never merges).\n'
     fi
 }
 
@@ -326,11 +340,15 @@ stage_build_artifacts() {
             printf '  de escritura raíz y tu autorización explícita.\n' >&2
             printf 'Método: pkexec / sudo (Linux), osascript con autorización (macOS),\n' >&2
             printf '  UAC (Windows).\n' >&2
-            # Re-exec with elevation preserving env.
+            # Re-exec with elevation preserving env. Always use the ABSOLUTE
+            # script path: when invoked as `bash toolkits/.../disk-cleanup.sh`,
+            # $0 is relative and pkexec/sudo execute from a different cwd, so a
+            # relative $0 cannot be found (exit 127) before the elevation dialog
+            # even shows. $SCRIPT_DIR is already absolute (see top of file).
             if have pkexec; then
-                exec pkexec bash "$0" build-artifacts --apply
+                exec pkexec bash "$SCRIPT_DIR/disk-cleanup.sh" build-artifacts --apply
             elif have sudo; then
-                exec sudo bash "$0" build-artifacts --apply
+                exec sudo bash "$SCRIPT_DIR/disk-cleanup.sh" build-artifacts --apply
             else
                 printf 'ERROR: no se encuentra pkexec/sudo para elevar privilegios.\n' >&2
                 return 1

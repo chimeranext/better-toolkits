@@ -53,6 +53,13 @@ expensive to lose precisely because nothing regenerates them.
 Stage 3 keeping 61 of 69 worktrees is the expected outcome, not a failure. A worktree
 that holds work is supposed to survive this command.
 
+**All REFUSED → hand off to `/merge-advisor`.** When stage 3 reports that every
+worktree is REFUSED (none merged, all hold work), there is nothing safe to reclaim
+here — the useful next action is ordering merges for the open PRs. The script
+prints a recommendation to run `/merge-advisor` (which measures an order that keeps
+each PR green and presents it under HITL). This is a handoff, never an
+auto-merge: a cleanup script never merges.
+
 ## What this command owns, and what it delegates
 
 It owns **the docker stages only**. Stages 2 and 3 are handed to
