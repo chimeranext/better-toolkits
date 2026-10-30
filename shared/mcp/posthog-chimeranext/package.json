@@ -1,0 +1,21 @@
+{
+  "name": "@chimeranext/posthog-chimeranext-mcp",
+  "version": "0.1.0",
+  "description": "Local, stateless ViteMCP server (stdio) that queries a self-hosted PostHog instance (insights/funnel/retention) over POSTHOG_HOST — no cloud MCP, no embedded secrets.",
+  "type": "module",
+  "bin": {
+    "posthog-chimeranext-mcp": "./server.js"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test test/"
+  },
+  "dependencies": {
+    "@vitemcp/server": "^1.9.7",
+    "zod": "^3.23.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "BSL-1.1"
+}
