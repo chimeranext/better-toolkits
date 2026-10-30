@@ -71,15 +71,19 @@ have() {
 # Replicates the opencode-notifier's own sound pipeline: it uses a bundled
 # *.wav played at FULL volume via `paplay --volume=65536` then `aplay` (both at
 # 100%). canberra-gtk-play is deliberately NOT first — it follows the desktop
-# theme volume, which is usually quiet. If the notifier's bundled wav is not
-# present, fall back to the freedesktop theme sample, then a raw system beep.
-# Streams are never discarded: each player's output flows to the controlling
-# terminal naturally.
+# theme volume, which is usually quiet. Prefer the vendored wav in this repo
+# (deterministic), then the notifier's npm-cache copy, then the freedesktop
+# theme sample, then a raw system beep. Streams are never discarded: each
+# player's output flows to the controlling terminal naturally.
 notify_sound() {
     local wav
-    wav="$(find "$HOME/.cache/opencode/npm/@mohak34/opencode-notifier@latest" \
-        -path "*/sounds/complete.wav" -type f 2>&1 | head -1 || true)"
-    [ -n "$wav" ] && [ -f "$wav" ] || wav="/usr/share/sounds/freedesktop/stereo/dialog-information.oga"
+    if [ -f "$SCRIPT_DIR/sounds/complete.wav" ]; then
+        wav="$SCRIPT_DIR/sounds/complete.wav"
+    else
+        wav="$(find "$HOME/.cache/opencode/npm/@mohak34/opencode-notifier@latest" \
+            -path "*/sounds/complete.wav" -type f 2>&1 | head -1 || true)"
+        [ -n "$wav" ] && [ -f "$wav" ] || wav="/usr/share/sounds/freedesktop/stereo/dialog-information.oga"
+    fi
 
     if have paplay; then
         paplay --volume=65536 "$wav"
