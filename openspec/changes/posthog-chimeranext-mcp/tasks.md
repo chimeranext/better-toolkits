@@ -14,8 +14,8 @@
 ## 3. Registration and cleanup
 
 - [x] 3.1 Update root `opencode.json`: register `posthog-chimeranext` as a local server (`command: ["node", "shared/mcp/posthog-chimeranext/server.js"]`, env passthrough) and remove the remote `posthog` SaaS entry; verify `v8r opencode.json` passes.
-- [ ] 3.2 Revert the cloud-oriented `opencode.json` state on PR #167 (branch `feat/conventions-matcher-harness`, commit `b7c176d`) — replace with the local registration; verify `v8r` + `openspec validate` pass and push to the PR branch.
-- [ ] 3.3 Revert the cloud-oriented `opencode.json` state on PR #169 (branch `feat/disk-cleanup-multiplatform`, commit `5eb1973`) — replace with the local registration; verify `v8r` passes and push to the PR branch.
+- [x] 3.2 Revert the cloud-oriented `opencode.json` state on PR #167 (branch `feat/conventions-matcher-harness`, commit `b7c176d`) — replace with the local registration; verify `v8r` + `openspec validate` pass and push to the PR branch.
+- [x] 3.3 Revert the cloud-oriented `opencode.json` state on PR #169 (branch `feat/disk-cleanup-multiplatform`, commit `5eb1973`) — replace with the local registration; verify `v8r` passes and push to the PR branch.
 
 ## 4. Verification and dogfood
 
