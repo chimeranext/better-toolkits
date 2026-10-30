@@ -26,12 +26,16 @@
 
 ## 5. Verification
 
-- [ ] 5.1 `openspec validate ishikawa-root-cause-analysis` passes (exit 0).
-- [ ] 5.2 Dogfood: run `/ishikawa` on a real anomaly (e.g. the stderr-gate regression) and confirm the output states observed vs expected, classifies into 6M, picks a root cause, and enforces "both, in order".
-- [ ] 5.3 Confirm `premortem`, `postmortem`, and `dogfood` docs route through `/ishikawa` without changing their existing formats/behavior; confirm `evidence-explicit-attribution` documents the four observation rules and invokes `/ishikawa` only on demand.
+- [x] 5.1 `openspec validate ishikawa-root-cause-analysis` passes (exit 0).
+- [x] 5.2 Dogfood: run `/ishikawa` on a real anomaly (e.g. the stderr-gate regression) and confirm the output states observed vs expected, classifies into 6M, picks a root cause, and enforces "both, in order".
+- [x] 5.3 Confirm `premortem`, `postmortem`, and `dogfood` docs route through `/ishikawa` without changing their existing formats/behavior; confirm `evidence-explicit-attribution` documents the four observation rules and invokes `/ishikawa` only on demand.
 - [ ] 5.4 Verify Graphify reports `EXTRACTED`/`INFERRED` edges on a sample repo, and Open Ontologies refuses a forged conclusion (non-zero exit, named rule).
 - [ ] 5.5 Verify Graphify portability: run `graphify .` from a repo located at a non-default path (e.g. a temp checkout outside `~/Documentos/GitHub`) and confirm the graph builds with paths relative to that repo root (no absolute-root assumption).
 - [ ] 5.6 Verify Open Ontologies path-agnosticism: run `open-ontologies` on a `.ttl` fixture passed via a path relative to a repo at a non-default location, and confirm a certificate is produced and re-verifiable with `oo-cert` independent of the working directory.
 - [ ] 5.7 Verify certificate lifecycle: confirm generated certificates are deterministic given identical input, are NOT committed into the repo (gitignored / treated as derived), and are regenerable; confirm a divergent local environment regenerates rather than merges certificate files.
 - [ ] 5.8 Verify the Git-vs-semantics split: demonstrate a one-line TTL change that is textually tiny but has semantic consequences detected by `open-ontologies` (e.g. new consequences / conservativity), proving Git alone would miss it.
 - [ ] 5.9 Verify gitignore asymmetry: confirm adding `graphify-out/` to a repo's `.gitignore` keeps Graphify outputs uncommitted, and that Open Ontologies requires no repo-specific gitignore entry (certificates archived as CI artifacts, not in-tree).
+
+> Note: 5.4–5.9 require actually installing Graphify and Open Ontologies globally
+> (running `setup-graphify.sh` / `setup-open-ontologies.sh`). This is a real
+> system mutation and is intentionally left for approval in the review/handoff.
