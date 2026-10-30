@@ -83,11 +83,9 @@ minúsculas, p. ej. `hab-123`).
 
 ### Commits (Conventional Commits)
 
-Formato: `type(scope): descripción`
-
-* `feat(auth): add login endpoint`
-* `fix(ui): resolve button padding issue`
-* `chore(deps): upgrade serverpod`
+Commit message format follows **CvC — Conventional Commits** (see
+[`conventional-commits.md`](conventional-commits.md)). That standard defines the
+format, allowed types, and examples; do not redefine them here.
 
 ## Reglas de protección de ramas
 

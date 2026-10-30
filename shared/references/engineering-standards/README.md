@@ -20,6 +20,8 @@ enforces conventions already in industry use.
 | **StS** | Stderr/Stream Standards | No stream to null; fold stderr into the same sink | [stderr-stream-standards.md](stderr-stream-standards.md) |
 | **Jidoka** | Stop-on-Anomaly | Stop on anomaly; record boundary + root-cause hypothesis | [jidoka.md](jidoka.md) |
 | **CLG** | Commit Logic Groups | Commit intermediate work in semantic groups; one logical change per commit | [commit-logic-groups.md](commit-logic-groups.md) |
+| **CvC** | Conventional Commits | Commit message format `type(scope): description`; allowed types | [conventional-commits.md](conventional-commits.md) |
+| **PCH** | Pre-Commit Hooks | Vendored canonical pre-commit config + shared Mermaid validator | [pre-commit-hooks.md](pre-commit-hooks.md) |
 | **CCC** | Code Comment Convention | Meaningful non-obvious comments; no redundant "how" comments | [code-comment-convention.md](code-comment-convention.md) |
 | **CLH** | Copyright/License Header | Headers per repo LICENSE.md (startup-agnostic); not a global rule | [copyright-license-header.md](copyright-license-header.md) |
 
