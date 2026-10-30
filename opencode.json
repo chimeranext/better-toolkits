@@ -17,8 +17,7 @@
           "-y",
           "tsx",
           "shared/mcp/social-media-ads-mcp/src/server.ts"
-        ],
-        "protocol": "2026-07-28"
+        ]
       },
       "notion-chimeranext": {
         "type": "local",
@@ -28,8 +27,7 @@
         ],
         "environment": {
           "NOTION_API_KEY": "{env:NOTION_API_KEY}"
-        },
-        "protocol": "2026-07-28"
+        }
       },
       "posthog": {
         "type": "remote",
