@@ -1,36 +1,22 @@
-complete.wav — attribution
+permission.wav — attribution
 
-This file is vendored verbatim from the `@mohak34/opencode-notifier` npm
-package (author: mohak34), which is distributed under the MIT license.
+This file is derived from the GNOME Default Sounds alert theme, specifically
+`/usr/share/sounds/gnome/default/alerts/hum.ogg` (GNOME, GPL/CC-licensed sound
+theme, distributed with the system). It was converted to WAV (44.1 kHz, stereo)
+and its volume was raised by +8.6 dB (max ≈ -1.0 dB) so it is clearly audible
+as an authorization prompt.
 
-Source (npm cache, as of 2026-10-30):
-  ~/.cache/opencode/npm/@mohak34/opencode-notifier@latest/*/node_modules/
-    @mohak34/opencode-notifier/sounds/complete.wav
+Source (original, as of 2026-10-30):
+  /usr/share/sounds/gnome/default/alerts/hum.ogg
 
-SHA-256: cdf1217f0385db5a7d54e20983952d1baec5bec2190122cdc8cac670b941850f
+SHA-256 (vendored wav): 4db53bf844f74602653d4c400ddd9d0f8f580ea8449657c4cb3816ccff36fd7d
 
 It is used by `disk-cleanup.sh` `notify_sound()` so authorization prompts play
-the same audible notification as opencode-notifier, at full volume, without
-depending on the npm cache path (which embeds a volatile timestamp).
+a soft, polite tone asking for permission — deterministic, vendored in this
+repo, independent of any npm cache or system theme at runtime.
 
-MIT License
-
-Copyright (c) mohak34
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+GNOME Default Sounds (source theme) license: the GNOME sound theme is licensed
+under CC BY-SA 3.0 / GPL, distributed with the GNOME desktop. This file is a
+small, derived notification asset vendored for deterministic playback; the
+original authorship and licensing of the GNOME sound theme are preserved and
+attributed.

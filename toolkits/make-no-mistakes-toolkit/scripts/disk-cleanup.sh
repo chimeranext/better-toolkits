@@ -76,14 +76,10 @@ have() {
 # theme sample, then a raw system beep. Streams are never discarded: each
 # player's output flows to the controlling terminal naturally.
 notify_sound() {
-    local wav
-    if [ -f "$SCRIPT_DIR/sounds/complete.wav" ]; then
-        wav="$SCRIPT_DIR/sounds/complete.wav"
-    else
-        wav="$(find "$HOME/.cache/opencode/npm/@mohak34/opencode-notifier@latest" \
-            -path "*/sounds/complete.wav" -type f 2>&1 | head -1 || true)"
-        [ -n "$wav" ] && [ -f "$wav" ] || wav="/usr/share/sounds/freedesktop/stereo/dialog-information.oga"
-    fi
+    # Deterministic source: the wav vendored in this repo. Fall back to the
+    # freedesktop theme only if it is missing (never to a volatile npm cache).
+    local wav="$SCRIPT_DIR/sounds/permission.wav"
+    [ -f "$wav" ] || wav="/usr/share/sounds/freedesktop/stereo/dialog-information.oga"
 
     if have paplay; then
         paplay --volume=65536 "$wav"
