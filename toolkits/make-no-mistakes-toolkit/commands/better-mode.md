@@ -30,12 +30,16 @@ profile inspired by poteto-mode, tuned for better-toolkits.
 - **No-Workarounds** — a suppressed signal is a failure; fix the source.
 - **Prove it works** — verify against the real artifact with real config; use `/dogfood`
   as the proof gate and render a Pele statechart (blueprint) as evidence.
+- **Sources**: `/dogfood`'s gates come from `assurance-toolkit/references/testing/e2e-protocol.md`
+  and its assertion translation comes from `conventions/matcher-contract.md`. You do not need
+  to remember those paths — `/dogfood` owns them.
 
 ## Full sequence (through /ready-to-review-mergeable)
 
 Generalized for any startup; the tracker is an opinionated best-option (Linear is the
 recommended default, but ClickUp, Jira, or GitHub Issues are acceptable substitutes —
-swap the tracker names in the steps below).
+swap the tracker names in the steps below). `/dogfood` is the single verification gate;
+apprentices run only `/dogfood` (not the e2e builder/runner chain).
 
 ```mermaid
 flowchart LR
@@ -44,13 +48,11 @@ flowchart LR
     C --> D[/opsx:apply]
     D --> D2[/make-no-mistakes:implement/]
     D2 --> E[código + tests]
-    E --> F[/dogfood]
+    E --> F[/dogfood/]
     F --> G{gate-dependent}
     G -- Jidoka / No-Workarounds fail --> H[fix + re-run]
     H --> F
-    G -- pass --> I[/e2e-test-builder/runner/]
-    I --> J[suite ejecutada + evidencia]
-    J --> K[/ready-to-review-mergeable/]
+    G -- pass --> K[/ready-to-review-mergeable/]
     K --> L[review humano]
     L --> M{approve?}
     M -- no --> H
@@ -58,10 +60,12 @@ flowchart LR
     N --> O[archive / specs sync]
 ```
 
-Steps: propose → apply (plan) → implement (disciplina) → dogfood (gate) → e2e
-evidence → ready-to-review-mergeable → human review → merge → archive. `/opsx:apply`
-reads the change artifacts and generates tasks; `/make-no-mistakes:implement` executes
-them with discipline (worktree, verification, CI) and produces the code + tests. The
+Steps: propose → apply (plan) → implement (disciplina) → dogfood (gate único) →
+ready-to-review-mergeable → human review → merge → archive. `/opsx:apply` reads the
+change artifacts and generates tasks; `/make-no-mistakes:implement` executes them with
+discipline (worktree, verification, CI) and produces the code + tests. `/dogfood`
+internally covers BDD assertions (via `matcher-contract.md`) and the Jidoka/No-Workarounds
+gates (via `e2e-protocol.md`) — no separate e2e builder/runner step is required. The
 tracker (Linear or substitute) is updated at each handoff; every mutating gate is HITL.
 
 ## Verify
