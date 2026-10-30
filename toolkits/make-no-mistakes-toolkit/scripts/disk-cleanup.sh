@@ -418,7 +418,7 @@ stage_build_artifacts() {
     for d in "${mapfile_list[@]}"; do
         [ -L "$d" ] && continue
         local sz
-        sz="$(du -sk "$d" > "$scratch/du.log" 2>&1 | awk '{print $1}')"
+        sz="$(du -sk "$d" 2>&1 | awk '{print $1}')"
         [ -n "$sz" ] || sz=0
         total=$(( total + sz ))
     done
@@ -445,7 +445,7 @@ stage_build_artifacts() {
         for d2 in "${mapfile_list[@]}"; do
             [ -L "$d2" ] && continue
             local sz2
-            sz2="$(du -sk "$d2" > "$scratch/du2.log" 2>&1 | awk '{print $1}')"
+            sz2="$(du -sk "$d2" 2>&1 | awk '{print $1}')"
             [ -n "$sz2" ] || sz2=0
             printf '  %-10s  %s\n' "$(human "$(( sz2 * 1024 ))")" "$d2"
         done
