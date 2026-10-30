@@ -20,6 +20,7 @@ enforces conventions already in industry use.
 | **StS** | Stderr/Stream Standards | No stream to null; fold stderr into the same sink | [stderr-stream-standards.md](stderr-stream-standards.md) |
 | **Jidoka** | Stop-on-Anomaly | Stop on anomaly; record boundary + root-cause hypothesis | [jidoka.md](jidoka.md) |
 | **CLG** | Commit Logic Groups | Commit intermediate work in semantic groups; one logical change per commit | [commit-logic-groups.md](commit-logic-groups.md) |
+| **CCC** | Code Comment Convention | Meaningful non-obvious comments; no redundant "how" comments | [code-comment-convention.md](code-comment-convention.md) |
 
 The **clean code quartet** is DSMS + IFS + CPS + PRDS. BrS, QT4L, and **OST**
 (when the client uses an OpenSpec store) complete branching, QA traceability, and
@@ -59,6 +60,7 @@ Protocol SSOT: `references/clean-code-standards-setup/protocol.md`, `references/
 | Silenciar stderr o descartar un stream? | StS (prohibido) |
 | ¿Detenerse ante una anomalía? | Jidoka (sí, con boundary + causa raíz) |
 | ¿Cómo agrupar los commits? | CLG (por semántica, un cambio lógico por commit) |
+| ¿Comentar el "cómo"? | CCC (no — reescribir; comentar solo el "por qué") |
 
 ## Provenance
 
