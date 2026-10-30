@@ -122,6 +122,12 @@ opinionated defaults:
 `[ui.toast] delivery = "terminal"` (in-app) or disable its system toast so only
 the notifier posts to the desktop.
 
+**Free `ctrl+b` for opencode backgrounding:** opencode binds `ctrl+b` to
+`session.background` ("move running work to the background"). herdr's default
+prefix key is also `ctrl+b`, which intercepts the keystroke first. When herdr is
+present, set `[keys] prefix = "ctrl+a"` in `~/.config/herdr/config.toml` so
+opencode keeps `ctrl+b` for its own background action.
+
 ## `opencode.json(c)` merge
 
 Propose one **`skills`** entry per selected toolkit (adapters only register
