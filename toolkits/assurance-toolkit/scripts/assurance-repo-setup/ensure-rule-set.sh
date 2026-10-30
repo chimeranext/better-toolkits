@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Asegura que el ruleset del branch main requiera el check `context`
-# (required_status_checks). Idempotente. Formato RULESET (no branch protection
-# clásica): parámetro `required_status_checks` como array de {context}.
+# Ensures the main branch ruleset requires the `context` check
+# (required_status_checks). Idempotent. RULESET format (not classic branch
+# protection): `required_status_checks` parameter as an array of {context}.
 set -euo pipefail
 
 REPO="${1:?repo (owner/name)}"
@@ -42,7 +42,7 @@ for rs in rulesets:
     except Exception:
         continue
     inc = ((full.get("conditions") or {}).get("ref_name") or {}).get("include") or []
-    # El listado de rulesets NO devuelve `conditions`; el GET individual sí.
+    # The ruleset listing does NOT return `conditions`; the individual GET does.
     if "refs/heads/main" in inc:
         target = full
         break

@@ -63,8 +63,8 @@ Deliberate actions you invoke explicitly. Findings triage is mode `security` of 
 | [`/assurance:triage [pr\|testing\|security\|liveness\|governance]`](commands/triage.md) | **PR-stage hub**. Mode `security` is the findings backlog (queue → owner → SLA → receipt). Mode `testing` output feeds `/assurance:e2e-test-builder`. |
 | [`/assurance:e2e-test-builder <source>`](commands/e2e-test-builder.md) | After `/assurance:triage` PASS, write `test-suite.json` from the testing pillar output |
 | [`/assurance:e2e-test-runner [filter]`](commands/e2e-test-runner.md) | Stage QA assignee executes that suite (Seacrets: Darío, In Review on the QA ready view) |
-| [`/assurance:e2e-test-preview [path]`](commands/e2e-test-preview.md) | Qt-based visual previewer for `test-suite.json` — interactive table, filtering, CSV export (pilar testing) |
-| [`/assurance:observability-audit <target>`](commands/observability-audit.md) | Audit whether observability actually WORKS (telemetry received, live destinations, demonstrated alerts) — runtime audit, not a static scan (pilar liveness) |
+| [`/assurance:e2e-test-preview [path]`](commands/e2e-test-preview.md) | Qt-based visual previewer for `test-suite.json` — interactive table, filtering, CSV export (testing pillar) |
+| [`/assurance:observability-audit <target>`](commands/observability-audit.md) | Audit whether observability actually WORKS (telemetry received, live destinations, demonstrated alerts) — runtime audit, not a static scan (liveness pillar) |
 | [`/assurance:pentest-runner <phase>`](commands/pentest-runner.md) | Automated pentesting following Cyber Kill Chain + OWASP methodology, plus OWASP ASI01–ASI10 agentic red-team (transversal security) |
 | [`/assurance:pentest-playbook-setup [audit\|sync\|workflows\|gaps]`](commands/pentest-playbook-setup.md) | Audit/sync pentest playbook ↔ CI ↔ tenant triage config (transversal security) |
 
@@ -104,7 +104,7 @@ Auto-activate by context — you don't need to remember the command name.
 | Protocol | Covers |
 |----------|--------|
 | [`references/testing/e2e-protocol.md`](references/testing/e2e-protocol.md) | Polyglot runners (Flutter, Laravel/Pest, Elixir, TS7, Playwright, MobileWright), stories/scenarios, mutation, contracts, perf, a11y, visual, PBT, eval-driven + risk-driven |
-| [`references/liveness/protocol.md`](references/liveness/protocol.md) | Observability escalera, chaos + resilience score, baselines, K8s pre-flight signals, playbook/runbook taxonomy |
+| [`references/liveness/protocol.md`](references/liveness/protocol.md) | Observability ladder, chaos + resilience score, baselines, K8s pre-flight signals, playbook/runbook taxonomy |
 | [`references/security/protocol.md`](references/security/protocol.md) | Pentest trilogy, MASVS→MASWE→MASTG, SAST/DAST/SCA, signed supply-chain, mobile REA, agentic red-team, K8s runtime + policy engines |
 | [`references/governance/protocol.md`](references/governance/protocol.md) | DORA/DER metrics, stage gates, GitOps pipeline, K8s layered pre-flight, receipts, SemVer universal |
 | [`references/triage/protocol.md`](references/triage/protocol.md) | `/assurance:triage` hub — routes PR-stage sub-protocols per pillar |

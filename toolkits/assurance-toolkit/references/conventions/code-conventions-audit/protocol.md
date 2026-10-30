@@ -1,50 +1,49 @@
 # /code-conventions-audit — protocol SSOT
 
-## Propósito
+## Purpose
 
-Reporte unificado de cumplimiento de convenciones de código: repo-health (6 familias) +
-clean-code standards + records de lenguaje. Lee el log de auditoría de la entidad
-(`internal-audits`) y produce compliance report. **Warn no-block** — nunca bloquea, solo
-registra.
+Unified code-convention compliance report: repo-health (6 families) +
+clean-code standards + language records. Reads the entity's audit log
+(`internal-audits`) and produces a compliance report. **Warn no-block** — never blocks, only
+records.
 
-## Invariante
+## Invariant
 
-`code-conventions-audit` **no mergea** nada. Reporta desde el log. El log es el SSOT; el
-ranking (si se pide) se deriva en la salida, no se persiste.
+`code-conventions-audit` does **not merge** anything. It reports from the log. The log is the SSOT; the
+ranking (if requested) is derived in the output, not persisted.
 
-## Log de auditoría — ubicación (per-entity, centralización opt-in)
+## Audit log — location (per-entity, opt-in centralization)
 
-| Caso | Repo de auditoría |
+| Case | Audit repo |
 |---|---|
-| Default (toda entidad) | `<org>/internal-audits` — el org del repo auditado |
-| Centralización opt-in | `auditsRepo` explícito (p.ej. `chimeranext/internal-audits`) — solo si la entidad adopta explícitamente el modelo de shared services (opinionated) |
+| Default (every entity) | `<org>/internal-audits` — the org of the audited repo |
+| Opt-in centralization | explicit `auditsRepo` (e.g. `chimeranext/internal-audits`) — only if the entity explicitly adopts the shared services model (opinionated) |
 
-Formato: `conventions/code-conventions-audit-YYYY-MM-DD.md` (append-only, filename ISO).
+Format: `conventions/code-conventions-audit-YYYY-MM-DD.md` (append-only, ISO filename).
 
-## Fuentes del reporte
+## Report sources
 
-1. **Repo-health (6 familias)**: detectores de `make-no-mistakes-toolkit/references/detectors/`
+1. **Repo-health (6 families)**: detectors from `make-no-mistakes-toolkit/references/detectors/`
    (schema-drift, contract-drift, ddd-boundaries, explicit-architecture, strangler-fig,
    enforcement-hooks).
 2. **Clean-code standards**: PRDS / DSMS / IFS / CPS / BrS / QT4L
    (`shared/references/engineering-standards/`).
 3. **Language records**: `shared/references/conventions/language/*`.
 
-## Flujo
+## Flow
 
-1. Resolver el repo de auditoría (default `<org>/internal-audits`; `auditsRepo` si se
-   configura).
-2. Leer `conventions/code-conventions-audit-*.md` del log.
-3. Agregar por convención y por autor (a partir del log fechado).
-4. Producir el reporte de cumplimiento (sin ranking persistente).
+1. Resolve the audit repo (default `<org>/internal-audits`; `auditsRepo` if configured).
+2. Read `conventions/code-conventions-audit-*.md` from the log.
+3. Aggregate by convention and by author (from the dated log).
+4. Produce the compliance report (without persistent ranking).
 
 ## Warn no-block
 
-Los checks de convención emiten `warn` y registran la violación en el log; no bloquean el
-merge. El registrador (make-no-mistakes) acumula y pushea en batch.
+Convention checks emit `warn` and record the violation in the log; they do not block the
+merge. The registrar (make-no-mistakes) accumulates and pushes in batch.
 
-## Fuera de alcance
+## Out of scope
 
-- No mergea PRs.
-- No persiste ranking (solo deriva en salida).
-- No migra los audits existentes a otro repo.
+- Does not merge PRs.
+- Does not persist ranking (only derives in output).
+- Does not migrate existing audits to another repo.

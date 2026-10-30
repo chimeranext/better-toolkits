@@ -43,12 +43,12 @@ not `skip`). Stop on first `BLOCKED` unless config sets `continueOnOptionalFailu
 
 Normative requirement:
 `openspec/changes/add-assurance-toolkit/specs/toolkit/assurance-governance/spec.md`
-→ **Gates por etapa, rápidos primero** (PR row).
+→ **Stage gates, fast first** (PR row).
 
 | PR gate criterion (spec) | Pillar / sub-protocol |
 | --- | --- |
 | tests 100% | testing → [`references/testing/triage-protocol.md`](../testing/triage-protocol.md) |
-| security críticas 0 | security → [`references/security/triage.md`](../security/triage.md) |
+| security criticals 0 | security → [`references/security/triage.md`](../security/triage.md) |
 | `coverage_delta` ≥ 0 (+ PR receipt when configured) | governance → [`references/governance/triage.md`](../governance/triage.md) |
 
 Mode **`pr`** runs the rows above (per config). Mode **`testing`** (or any single pillar)

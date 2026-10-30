@@ -1,39 +1,39 @@
 # /assurance-local-setup — protocol SSOT
 
-Configura el **lado local** del gate de `/assurance`: todo lo que vive en la
-máquina del desarrollador. **No** toca GitHub settings ni archivos commiteados
-del gate (eso es `/assurance-repo-setup`). Es **idempotente**.
+Configures the **local side** of the `/assurance` gate: everything that lives on
+the developer's machine. It does **not** touch GitHub settings or committed gate
+files (that is `/assurance-repo-setup`). It is **idempotent**.
 
-## Ámbito
+## Scope
 
 | In scope | Out of scope |
 |----------|--------------|
-| Git hooks locales (pre-push / pre-commit) | Ruleset / branch protection |
-| Adapters de hooks (stderr/prds/no-squash) en local | `.mega-linter.yml` y workflows CI |
-| Dependencias locales del typecheck (`npm ci --include=dev`) | `internal-audits` (repo remoto) |
-| Verificación de que los checks corren local | Activación de gates remotos |
+| Local git hooks (pre-push / pre-commit) | Ruleset / branch protection |
+| Hook adapters (stderr/prds/no-squash) locally | `.mega-linter.yml` and CI workflows |
+| Local typecheck dependencies (`npm ci --include=dev`) | `internal-audits` (remote repo) |
+| Verification that checks run locally | Enabling remote gates |
 
-## Qué hace
+## What it does
 
-1. **`ensure-local-hooks.sh`** — activa los hooks git locales:
-   - si hay `pre-commit` configurado, `pre-commit install`;
-   - fallback: `git config core.hooksPath` apuntando a `shared/hooks/git`.
-2. **`prepare-typecheck-deps.sh`** — `npm ci --include=dev` en `shared/hooks`
-   (obligatorio `--include=dev`: `NODE_ENV=production` omitiría devDeps →
-   `TS2688`). Deja listo `npm run typecheck` local.
+1. **`ensure-local-hooks.sh`** — enables the local git hooks:
+   - if `pre-commit` is configured, `pre-commit install`;
+   - fallback: `git config core.hooksPath` pointing to `shared/hooks/git`.
+2. **`prepare-typecheck-deps.sh`** — `npm ci --include=dev` in `shared/hooks`
+   (`--include=dev` is mandatory: `NODE_ENV=production` would omit devDeps →
+   `TS2688`). Leaves `npm run typecheck` ready locally.
 
-## Lecciones incorporadas
+## Lessons incorporated
 
-- El typecheck local comparte el mismo motivo que el CI (`--include=dev`).
-- Nunca obliga a permisos remotos; si no hay `shared/hooks` ni `pre-commit`,
-  reporta WARN y termina 0.
+- Local typecheck shares the same reason as CI (`--include=dev`).
+- Never forces remote permissions; if there is no `shared/hooks` nor `pre-commit`,
+  it reports WARN and exits 0.
 
-## Verificación
+## Verification
 
-- `git config core.hooksPath` o `pre-commit` activo.
-- `cd shared/hooks && npm run typecheck` pasa.
+- `git config core.hooksPath` or `pre-commit` active.
+- `cd shared/hooks && npm run typecheck` passes.
 
 ## Related
 
-- `references/assurance-repo-setup/protocol.md` (lado repo)
+- `references/assurance-repo-setup/protocol.md` (repo side)
 - `scripts/assurance-local-setup/` (helpers)
