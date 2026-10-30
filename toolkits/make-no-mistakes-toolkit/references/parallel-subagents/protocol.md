@@ -37,8 +37,10 @@ fi
 5. **Review gate** — tras cada implementación, un reviewer (spec + diff) chequea;
    si hay gaps, un fix-agent fresco (los completados no reciben mensajes) los aplica.
    Mark complete solo después de que review pase.
-6. **Human finishing** — al terminar todas las tareas verificadas, menú de integración
-   (merge local / push + PR / keep as-is). **Nunca auto-merge.**
+6. **Human finishing** — al terminar todas las tareas verificadas, presentar la
+   decisión de integración vía **`/resolve-open-questions`** (ask batch con opciones —
+   merge local / push + PR / keep as-is — + recomendación). **Nunca auto-merge**; la
+   decisión pertenece al humano.
 
 ## Reglas clave
 

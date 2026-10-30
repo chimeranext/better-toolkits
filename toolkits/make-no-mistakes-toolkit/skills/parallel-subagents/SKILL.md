@@ -24,4 +24,4 @@ Reglas clave:
 - **Background**: el controlador no se bloquea esperando; recibe notificación al completar.
 - **Aislamiento**: un worktree por tarea; bloquear `git add -A`; commit-before-dispatch.
 - **Review gate**: reviewer tras cada implementer; fix-agent fresco si hay gaps.
-- **Human finishing**: menú de integración; sin auto-merge.
+- **Human finishing**: decisión de integración vía `/resolve-open-questions`; sin auto-merge.
