@@ -135,6 +135,17 @@ prefix key is also `ctrl+b`, which intercepts the keystroke first. When herdr is
 present, set `[keys] prefix = "ctrl+a"` in `~/.config/herdr/config.toml` so
 opencode keeps `ctrl+b` for its own background action.
 
+**Policy enforcement (machine-readable):** install the org policy + consumer
+workflow into each bootstrapped monorepo:
+
+```bash
+bash "$BETTER_TOOLKITS_ROOT/shared/bootstrap/scripts/setup-policies.sh" --target <repo>
+```
+
+This copies `policies.yml` + `apply-policies.sh` + `.github/workflows/apply-policies.yml`
+so the repo honors `repository_dispatch(policies-updated)` and reports drift via
+`/audit-policies`. The OpenSpec pipeline discipline (no shortcuts) is mandatory.
+
 ## `opencode.json(c)` merge
 
 Propose one **`skills`** entry per selected toolkit (adapters only register

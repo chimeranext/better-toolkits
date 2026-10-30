@@ -1,0 +1,24 @@
+# ChimeraNext org policies — machine-readable SSOT
+#
+# This is the single source of truth for org-level engineering policy.
+# Prose docs (e.g. docs/git-merge-policy.md) SHALL reference this file, not
+# replace it. Validated against policies.schema.json.
+#
+# Enforcement layers:
+#   - github-ruleset  : GitHub ruleset (merge method, linear history)
+#   - no-squash-hook : local shell/harness hook blocking --squash
+#   - audit-ci        : CI / /audit-policies drift check
+
+version: 1
+
+merge:
+  method: merge            # merge commit (forbidden: squash, rebase)
+  methods_forbidden:
+    - squash
+    - rebase
+  linear_history: true
+  delete_branch_on_merge: true
+  enforced_by:
+    - github-ruleset
+    - no-squash-hook
+    - audit-ci

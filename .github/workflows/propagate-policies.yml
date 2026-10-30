@@ -1,0 +1,21 @@
+name: propagate-policies
+
+# Runs the GitHub App (github-actions) to distribute the machine-readable policy
+# to consumer repos whenever the SSOT changes.
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - "shared/references/policies/policies.yml"
+      - "shared/references/policies/propagate-policies.sh"
+
+jobs:
+  propagate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Propagate policies
+        run: bash shared/references/policies/propagate-policies.sh
+        env:
+          GH_TOKEN: ${{ secrets.GH_APP_INSTALLATION_TOKEN }}
+          CONSUMER_REPOS: ${{ vars.CONSUMER_REPOS }}
