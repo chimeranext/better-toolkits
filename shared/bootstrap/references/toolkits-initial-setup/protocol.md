@@ -162,6 +162,14 @@ Invoke `/assurance-repo-setup` (toolkit assurance). It:
 **No bloquea el bootstrap**: si la activación del ruleset no está permitida o el repo de
 evidencia no existe, reporta estado `no-enforced` / `GAP` y continúa.
 
+## Mandatory discipline — OpenSpec pipeline (no shortcuts)
+
+This bootstrap installs the agent profile (`agents/better.md`) and the hooks that
+enforce the **OpenSpec pipeline**. Any change to a repo (code, docs, policy, config)
+MUST go through `/opsx:propose` → worktree isolation → `/opsx:apply` → `/dogfood` →
+`/ready-to-review-mergeable` → approved PR. Implementing directly on a working branch
+is forbidden — including by this setup's own tooling.
+
 ## Arguments
 
 ```
