@@ -157,6 +157,30 @@ require_docker() {
     return 0
 }
 
+podman_root() {
+    local out
+    out="$(podman info --format '{{.Store.GraphRoot}}')" || return 1
+    [ -n "$out" ] || return 1
+    printf '%s' "$out"
+}
+
+# Podman native stages. These invoke `podman` directly so container storage is
+# reclaimable on rootless-Podman hosts without a `docker` CLI shim. Absence or a
+# daemon that will not answer is reported as SKIP, never as "already clean" — a
+# stage that did not run and one with nothing to do are different outcomes.
+require_podman() {
+    if ! have podman; then
+        log "SKIP: podman is not installed — nothing to do for this stage."
+        return 1
+    fi
+    local _root
+    if ! _root="$(podman_root)"; then
+        log "SKIP: podman is installed but the daemon did not answer (see the error above)."
+        return 1
+    fi
+    return 0
+}
+
 # Absence of the delegate is reported as UNAVAILABLE, never as "clean". A stage
 # that could not run and a stage with nothing to do are different outcomes, and
 # only one of them means the disk is already tidy.
@@ -204,6 +228,20 @@ stage_measure() {
         printf 'Docker:          not installed\n'
     fi
 
+    if have podman; then
+        local proot
+        if proot="$(podman_root)"; then
+            printf 'Podman root:    %s (filesystem %s, %s available)\n' \
+                "$proot" "$(mount_of "$proot")" "$(human "$(avail_bytes "$proot")")"
+            printf 'Podman images:  %s\n' "$(podman images -q | sort -u | grep -c . || true)"
+            printf 'Podman volumes: %s\n' "$(podman volume ls -q | grep -c . || true)"
+        else
+            printf 'Podman root:    daemon did not answer\n'
+        fi
+    else
+        printf 'Podman:         not installed\n'
+    fi
+
     printf '\nWorktree inventory (delegated — this script does not classify worktrees):\n'
     if require_delegate; then
         node "$WORKTREE_CLEANUP" "$REPO_PATH" --worktrees || true
@@ -241,6 +279,34 @@ stage_docker_images() {
     docker image prune -a -f
     after="$(avail_bytes "$root")"
     report_reclaimed "docker images" "$before" "$after"
+}
+
+# ── Stage 1b: podman images (no risk — images re-pull) ────────────────────────
+stage_podman_images() {
+    rule "Stage 1b — podman images (risk: none, images re-pull)"
+    require_podman || return 0
+
+    local root before after count
+    root="$(podman_root)"
+    count="$(podman images -q | sort -u | grep -c . || true)"
+
+    if [ "$count" -eq 0 ]; then
+        printf 'podman images: already clean — no images present\n'
+        return 0
+    fi
+
+    if [ "$APPLY" -eq 0 ]; then
+        printf 'LIST ONLY: %s image(s) present. podman image prune -a would remove every\n' "$count"
+        printf '         image not referenced by a container; they re-pull on demand.\n'
+        printf '         How much that frees is deliberately NOT estimated here —\n'
+        printf '         re-run without --list-only to apply; before/after reported.\n'
+        return 0
+    fi
+
+    before="$(avail_bytes "$root")"
+    podman image prune -a -f
+    after="$(avail_bytes "$root")"
+    report_reclaimed "podman images" "$before" "$after"
 }
 
 # ── Stages 2 and 3: delegated to worktree-cleanup.mjs ────────────────────────
@@ -331,6 +397,46 @@ stage_docker_volumes() {
     docker volume prune -f
 }
 
+# ── Stage 4b: podman volumes (emergency: reclaimed; dry-run lists) ─────────────
+stage_podman_volumes() {
+    rule "Stage 4b — podman volumes (emergency: reclaimed; dry-run lists)"
+    require_podman || return 0
+
+    local count
+    count="$(podman volume ls -q | grep -c . || true)"
+    if [ "$count" -eq 0 ]; then
+        printf 'podman volumes: already clean — none present\n'
+        return 0
+    fi
+
+    printf '%s volume(s). Sizes from podman system df -v:\n\n' "$count"
+    local df_v
+    df_v="$(podman system df -v)"
+    if printf '%s' "$df_v" | grep -q 'Local Volumes space usage'; then
+        printf '%s\n' "$df_v" | awk '/Local Volumes space usage/,0'
+    else
+        printf '%s\n' "$df_v"
+    fi
+
+    if [ "${APPLY:-0}" -ne 1 ]; then
+        printf '\nLIST ONLY — volumes not removed. Re-run without --list-only to reclaim them\n'
+        printf '(emergency default: reconstructible dev/cache/data are removed).\n'
+        return 0
+    fi
+
+    # Emergency: remove stopped/created containers that pin the volumes, then prune.
+    local pins
+    pins="$(podman ps -a --filter 'status=exited' --filter 'status=created' -q | tr '\n' ' ')"
+    if [ -n "${pins// /}" ]; then
+        printf '\nRemoving stopped/created containers that reference volumes: %s\n' "$pins"
+        # shellcheck disable=SC2086
+        podman rm $pins
+    fi
+
+    printf '\nPruning podman volumes (reconstructible dev/cache/data)...\n'
+    podman volume prune -f
+}
+
 usage() {
     cat <<'EOF'
 Usage: disk-cleanup.sh <subcommand> [options]
@@ -338,11 +444,15 @@ Usage: disk-cleanup.sh <subcommand> [options]
 Subcommands (ascending order of risk):
   measure          Read-only. Free space, image/volume counts, worktree inventory
   docker-images    Prune all images not referenced by a container (they re-pull)
+  podman-images    Prune all podman images not referenced by a container (native)
   node-modules     Reclaim node_modules in worktrees  [delegated]
   worktrees        Remove worktrees that hold no work [delegated]
   docker-volumes   Default: removes stopped/created containers, prunes volumes
                   (reconstructible). --list-only previews
-  all              measure -> stages 1-4, stopping at --target
+  podman-volumes   Podman volumes: removes stopped/created containers, prunes
+                  volumes (native). --list-only previews
+  podman           Both podman-images then podman-volumes
+  all              measure -> stages 1-4 (incl. podman), stopping at --target
 
 Options:
   --list-only         Preview only; no removals. Default applies stages 1-4.
@@ -363,7 +473,7 @@ parse_args() {
     [ $# -ge 1 ] || { usage; exit 1; }
 
     case "$1" in
-        measure|docker-images|node-modules|worktrees|docker-volumes|all)
+        measure|docker-images|podman-images|node-modules|worktrees|docker-volumes|podman-volumes|podman|build-artifacts|all)
             SUBCOMMAND="$1"; shift ;;
         -h|--help|help) usage; exit 0 ;;
         *) die "Unknown subcommand: $1 (try --help)" ;;
@@ -398,9 +508,12 @@ main() {
     case "$SUBCOMMAND" in
         measure)        stage_measure ;;
         docker-images)  stage_docker_images ;;
+        podman-images)  stage_podman_images ;;
         node-modules)   stage_node_modules ;;
         worktrees)      stage_worktrees ;;
         docker-volumes) stage_docker_volumes ;;
+        podman-volumes) stage_podman_volumes ;;
+        podman)        stage_podman_images; stage_podman_volumes ;;
         all)
             stage_measure
             if target_met; then
@@ -410,15 +523,25 @@ main() {
                 if target_met; then
                     rule "Target of ${TARGET_GB} GB met after stage 1 — stopping here."
                 else
-                    stage_node_modules
+                    stage_podman_images
                     if target_met; then
-                        rule "Target of ${TARGET_GB} GB met after stage 2 — stopping here."
+                        rule "Target of ${TARGET_GB} GB met after stage 1b — stopping here."
                     else
-                        stage_worktrees
+                        stage_node_modules
                         if target_met; then
-                            rule "Target of ${TARGET_GB} GB met after stage 3 — stopping here."
+                            rule "Target of ${TARGET_GB} GB met after stage 2 — stopping here."
                         else
-                            stage_docker_volumes
+                            stage_worktrees
+                            if target_met; then
+                                rule "Target of ${TARGET_GB} GB met after stage 3 — stopping here."
+                            else
+                                stage_docker_volumes
+                                if target_met; then
+                                    rule "Target of ${TARGET_GB} GB met after stage 4 — stopping here."
+                                else
+                                    stage_podman_volumes
+                                fi
+                            fi
                         fi
                     fi
                 fi
