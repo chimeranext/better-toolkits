@@ -1,5 +1,5 @@
 ---
-description: Orquestador de subagent-driven development en paralelo (harness-agnóstico) — detecta OpenCode vs Claude, despacha tareas independientes en waves con background, aísla en worktrees, gatea en tests, reviewa cada implementación, y termina con menú de integración humano (sin auto-merge).
+description: Harness-agnostic orchestrator for parallel subagent-driven development — detects OpenCode vs Claude, dispatches independent tasks in waves with background, isolates in worktrees, gates on tests, reviews each implementation, and finishes with a human integration decision (no auto-merge).
 priority: 64
 ---
 # /parallel-subagents

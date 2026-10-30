@@ -1,27 +1,28 @@
 ---
 name: parallel-subagents
-description: Orquestador harness-agnóstico para desarrollo dirigido por subagents en paralelo con ejecución en background — detecta el harness (OpenCode → subagents-opencode; Claude → subagents-claude), construye un grafo de dependencias, aísla cada tarea en su worktree, despacha independientes en paralelo con background, gatea waves en tests, reviewa cada implementación, y termina con menú de integración humano (sin auto-merge). Use when dispatching multiple independent tasks concurrently, running parallel agents with background execution, "parallel subagents", "dispatch waves", or delegating to parallel agents across harnesses.
+description: Harness-agnostic orchestrator for parallel subagent-driven development with background execution — detects the harness (OpenCode → subagents-opencode; Claude → subagents-claude), builds a dependency graph, isolates each task in its worktree, dispatches independent tasks in parallel with background, gates waves on tests, reviews each implementation, and finishes with a human integration decision (no auto-merge). Use when dispatching multiple independent tasks concurrently, running parallel agents with background execution, "parallel subagents", "dispatch waves", or delegating to parallel agents across harnesses.
 ---
 # /parallel-subagents
 
 Read and follow [`references/parallel-subagents/protocol.md`](../references/parallel-subagents/protocol.md) (protocol SSOT).
 
-Orquestador **harness-agnóstico** de subagent-driven development en paralelo, inspirado
-en superpowers `dispatching-parallel-agents`, Oakheart Lab (orchestrator pattern) y
+Harness-agnostic orchestrator for parallel subagent-driven development, inspired by
+superpowers `dispatching-parallel-agents`, Oakheart Lab (orchestrator pattern), and
 Claude Code sub-agent best practices.
 
-Invoca el skill por-harness correcto:
+Invokes the correct per-harness skill:
 - **OpenCode** → `subagents-opencode` (herdr).
 - **Claude Code** → `subagents-claude` (`.claude/agents`, `ListAgents`/`SendMessage`, `--worktree`).
 
-Flujo: detectar harness → grafo de dependencias → waves → aislamiento (worktree) →
-despacho en paralelo con **background** → gate de tests → review por implementación →
-menú de integración humano (nunca auto-merge).
+Flow: detect harness → dependency graph → waves → isolation (worktree) → parallel
+dispatch with **background** → test gate → per-implementation review → human
+integration decision (never auto-merge).
 
-Reglas clave:
-- **Paralelo solo para tareas independientes** (archivos distintos, sin estado compartido).
-- Tareas que comparten archivos/estado → **secuenciales por waves** con commit entre waves.
-- **Background**: el controlador no se bloquea esperando; recibe notificación al completar.
-- **Aislamiento**: un worktree por tarea; bloquear `git add -A`; commit-before-dispatch.
-- **Review gate**: reviewer tras cada implementer; fix-agent fresco si hay gaps.
-- **Human finishing**: decisión de integración vía `/resolve-open-questions`; sin auto-merge.
+Key rules:
+- **Parallel only for independent tasks** (distinct files, no shared state).
+- Tasks sharing files/state → **sequential waves** with a commit between waves.
+- **Background**: the coordinator does not block waiting; it receives a completion
+  notification.
+- **Isolation**: one worktree per task; block `git add -A`; commit-before-dispatch.
+- **Review gate**: reviewer after each implementer; fresh fix agent if gaps.
+- **Human finishing**: integration decision via `/resolve-open-questions`; no auto-merge.
