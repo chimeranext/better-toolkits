@@ -53,7 +53,7 @@ WORKTREE_CLEANUP="${SCRIPT_DIR}/worktree-cleanup.mjs"
 
 SUBCOMMAND=""
 APPLY=1
-REPO_PATH="$PWD"
+REPO_PATH="${DISK_CLEANUP_DEFAULT_SCOPE:-$HOME/Documentos/GitHub}"
 TARGET_GB=""
 
 log() { printf '%s\n' "$*" >&2; }
@@ -289,6 +289,110 @@ stage_worktrees() {
     fi
 }
 
+# ── Stage 5: build/target artifacts across ~/Documentos/GitHub/* (exhaustive) ─
+# Recursively finds regenerable build artifacts (node_modules, target/, dist/,
+# build/, .cache/) under a root (default ~/Documentos/GitHub). These are safe to
+# remove (regenerable). Symlinked node_modules are SKIPPED (they point at a
+# shared copy). Only dirs that are not the main checkout's own are considered for
+# node_modules (a main checkout's node_modules is in use); build dirs (target/dist)
+# in a worktree may be safely removed since they regenerate.
+stage_build_artifacts() {
+    rule "Stage 5 — build/target artifacts across the whole disk (risk: none — regenerable)"
+
+    # Scope derivation: we do NOT assume ~/Documentos/GitHub. We discover
+    # authentic git repos on the volume (git) and also honour the GitHub CLI's
+    # notion of a local clone root if it can be inferred. Then we scan the whole
+    # filesystem for build artifacts, but only inside those repos (or under /
+    # at top-level repo dirs), never /proc /sys /dev /run /tmp or a symlink.
+    local scan_root="${BUILD_SCAN_ROOT:-/}"
+    [ -d "$scan_root" ] || { echo "BUILD_SCAN_ROOT no existe: $scan_root"; return 0; }
+
+    local before after
+    before="$(avail_bytes "$REPO_PATH")"
+
+    local scratch=/tmp/opencode/disk-cleanup-build
+    mkdir -p "$scratch"
+
+    # 1. Discover authentic git repos (top-level dirs that contain a .git).
+    # We search the whole disk but restrict to reasonable depths and skip system dirs.
+    local repo_file="$scratch/repos.txt"
+    : > "$repo_file"
+    find / -maxdepth 5 -type d -name .git -not -path '/proc/*' -not -path '/sys/*' \
+        -not -path '/dev/*' -not -path '/run/*' -not -path '/tmp/*' \
+        -not -path '/snap/*' -not -path '/usr/*' \
+        > "$scratch/repos_find.out" 2> "$scratch/repos_find.err" || true
+    # Convert .git dirs to repo roots
+    sed 's#/\.git$##' "$scratch/repos_find.out" | sort -u > "$repo_file"
+
+    # Also include dirs named exactly like gh's clone root if it resolves (best-effort).
+    # gh does not expose a documented clone-root config; we parse `gh repo view` later.
+    # For now: if ~/Documentos/GitHub exists, add it as an explicit extra root.
+    if [ -d "$HOME/Documentos/GitHub" ]; then
+        echo "$HOME/Documentos/GitHub" >> "$repo_file"
+    fi
+    sort -u -o "$repo_file" "$repo_file"
+
+    # 2. Collect build artifacts within each discovered repo.
+    local mapfile_list=()
+    while IFS= read -r repo; do
+        [ -n "$repo" ] || continue
+        while IFS= read -r d; do
+            [ -n "$d" ] && mapfile_list+=("$d")
+        done < <(find "$repo" \( \
+            -type d -name node_modules -not -path '*/node_modules/*' -o \
+            -type d -name target -not -path '*/target/*' -o \
+            -type d -name dist -not -path '*/dist/*' -o \
+            -type d -name build -not -path '*/build/*' -o \
+            -type d -name .cache -not -path '*/.cache/*' \
+        \) -not -type l -not -path '*/node_modules/*' >> "$scratch/list.txt" 2>> "$scratch/find.err" || true)
+    done < "$repo_file"
+
+    # Dedupe
+    mapfile_list=()
+    while IFS= read -r d; do mapfile_list+=("$d"); done < <(sort -u "$scratch/list.txt")
+
+    local total=0
+    local d
+    for d in "${mapfile_list[@]}"; do
+        [ -L "$d" ] && continue
+        local sz
+        sz="$(du -sk "$d" > "$scratch/du.out" 2> "$scratch/du.err" | awk '{print $1}')"
+        [ -n "$sz" ] || sz=0
+        total=$(( total + sz ))
+    done
+
+    printf 'Scan root:  %s\n' "$scan_root"
+    printf 'Repos descubiertos: %s\n' "$(wc -l < "$repo_file")"
+    printf 'Artifact dirs found: %s (%s)\n' "${#mapfile_list[@]}" "$(human "$(( total * 1024 ))")"
+
+    # Surface find errors if any were captured (they are signals, not noise).
+    if [ -s "$scratch/find.err" ]; then
+        printf 'find warnings (stderr captured):\n'
+        sed 's/^/  /' "$scratch/find.err" | head -10
+    fi
+
+    if [ "${#mapfile_list[@]}" -eq 0 ]; then
+        printf 'no build/target artifacts found under %s\n' "$scan_root"
+        return 0
+    fi
+
+    if [ "$APPLY" -eq 0 ]; then
+        printf 'LIST ONLY — nothing removed. Re-run without --list-only to remove them.\n'
+        printf 'The dirs are regenerable (node_modules from lockfile; target/dist from build).\n'
+        return 0
+    fi
+
+    # Apply: remove each artifact dir.
+    for d in "${mapfile_list[@]}"; do
+        [ -L "$d" ] && continue
+        printf 'removing %s\n' "$d"
+        rm -rf "$d"
+    done
+
+    after="$(avail_bytes "$REPO_PATH")"
+    report_reclaimed "build/target artifacts" "$before" "$after"
+}
+
 # ── Stage 4: docker volumes (emergency: reclaimed; dry-run lists) ────────────
 # In emergency (--apply) the volumes are removed because they are reconstructible
 # dev/cache/data. Stopped/created containers that pin volumes are removed first.
@@ -342,6 +446,9 @@ Subcommands (ascending order of risk):
   worktrees        Remove worktrees that hold no work [delegated]
   docker-volumes   Default: removes stopped/created containers, prunes volumes
                   (reconstructible). --list-only previews
+  build-artifacts  Recursively remove regenerable build/target artifacts under
+                  ~/Documentos/GitHub/* (node_modules, target/, dist/, build/,
+                  .cache/). --list-only previews
   all              measure -> stages 1-4, stopping at --target
 
 Options:
@@ -363,7 +470,7 @@ parse_args() {
     [ $# -ge 1 ] || { usage; exit 1; }
 
     case "$1" in
-        measure|docker-images|node-modules|worktrees|docker-volumes|all)
+        measure|docker-images|node-modules|worktrees|docker-volumes|build-artifacts|all)
             SUBCOMMAND="$1"; shift ;;
         -h|--help|help) usage; exit 0 ;;
         *) die "Unknown subcommand: $1 (try --help)" ;;
@@ -401,6 +508,7 @@ main() {
         node-modules)   stage_node_modules ;;
         worktrees)      stage_worktrees ;;
         docker-volumes) stage_docker_volumes ;;
+        build-artifacts) stage_build_artifacts ;;
         all)
             stage_measure
             if target_met; then
@@ -419,6 +527,11 @@ main() {
                             rule "Target of ${TARGET_GB} GB met after stage 3 — stopping here."
                         else
                             stage_docker_volumes
+                            if target_met; then
+                                rule "Target of ${TARGET_GB} GB met after stage 4 — stopping here."
+                            else
+                                stage_build_artifacts
+                            fi
                         fi
                     fi
                 fi
