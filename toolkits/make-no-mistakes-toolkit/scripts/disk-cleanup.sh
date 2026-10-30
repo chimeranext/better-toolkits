@@ -67,22 +67,30 @@ have() {
     _resolved="$(command -v "$1")" && [ -n "$_resolved" ]
 }
 
-# Play an audible notification so an authorization dialog cannot pass unnoticed
-# (same intent as the opencode-notifier sound). Tries the freedesktop theme
-# first, then direct play of the themed sample, then a raw system beep.
+# Play an audible notification so an authorization dialog cannot pass unnoticed.
+# Replicates the opencode-notifier's own sound pipeline: it uses a bundled
+# *.wav played at FULL volume via `paplay --volume=65536` then `aplay` (both at
+# 100%). canberra-gtk-play is deliberately NOT first — it follows the desktop
+# theme volume, which is usually quiet. If the notifier's bundled wav is not
+# present, fall back to the freedesktop theme sample, then a raw system beep.
 # Streams are never discarded: each player's output flows to the controlling
 # terminal naturally.
 notify_sound() {
-    if have canberra-gtk-play; then
-        canberra-gtk-play -i dialog-information
+    local wav
+    wav="$(find "$HOME/.cache/opencode/npm/@mohak34/opencode-notifier@latest" \
+        -path "*/sounds/complete.wav" -type f 2>&1 | head -1 || true)"
+    [ -n "$wav" ] && [ -f "$wav" ] || wav="/usr/share/sounds/freedesktop/stereo/dialog-information.oga"
+
+    if have paplay; then
+        paplay --volume=65536 "$wav"
         return 0
     fi
-    if have paplay; then
-        paplay /usr/share/sounds/freedesktop/stereo/dialog-information.oga
+    if have aplay; then
+        aplay "$wav"
         return 0
     fi
     if have pw-play; then
-        pw-play /usr/share/sounds/freedesktop/stereo/dialog-information.oga
+        pw-play "$wav"
         return 0
     fi
     printf '\a' >&2   # terminal bell fallback
