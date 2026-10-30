@@ -61,6 +61,10 @@ The real test: with real configuration values and correct opt-in selection, the 
 
 ## Behavior-driven verification (BDD)
 
+**Sources** — this protocol consumes two SSOT files; you do not navigate them by hand:
+- Gates (Jidoka / No-Workarounds) — `assurance-toolkit/references/testing/e2e-protocol.md`.
+- Multi-language matcher translation (Chai/Jest/pytest/Dart/…) — `conventions/matcher-contract.md`.
+
 Confirm the product **behaves** as specified, expressed as natural-language assertions —
 not raw technical asserts. Format every claim as:
 
