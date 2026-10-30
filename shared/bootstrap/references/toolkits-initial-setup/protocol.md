@@ -76,6 +76,17 @@ Produce explicit **diffs** and command lists:
 - **Auto-update plugin (default ON)** — install the OpenCode discovery-dir plugin
   `better-toolkits-auto-update` + its mode sidecar; register the Cursor `workspaceOpen`
   hook. Opt out with `--no-auto-update` or `BETTER_TOOLKITS_AUTO_UPDATE=0`.
+- **OpenCode notifier (recommended for opencode harness)** — install + configure
+  `@mohak34/opencode-notifier@latest` (event-rich popups: `permission`/`complete`/
+  `subagent_complete`/`question`/`error`). Config at
+  `~/.config/opencode/opencode-notifier.json`:
+  - `showSessionTitle: true` (so alerts show the session subject, not just the project
+    folder name).
+  - `suppressWhenFocused: false` (**opt-in** — default OFF; the user explicitly opts in
+    if they want quiet-while-focused).
+  - `focusOnClick: true` (click-to-jump back to the session).
+  - If herdr is also present, set herdr `[ui.toast] delivery = "terminal"` (or disable its
+    system toast) to avoid duplicate alerts for the same event.
 - **Branch mode** — default **consumer**: always converge the clone on `main` and
   fast-forward. `--expert-mode` (author) never switches branch and never touches a
   dirty tree. The mode is persisted in the sidecar so background runs honor it.
