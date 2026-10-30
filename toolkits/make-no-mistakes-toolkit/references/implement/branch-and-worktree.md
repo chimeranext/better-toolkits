@@ -34,3 +34,23 @@ Each issue owns exactly one branch, one worktree, and one PR:
 - **Push to the PR's branch** (the branch that feeds the PR) — never to `main` /
   canonical. If the PR is Ready-to-Merge and a fix push is needed, run
   `/local-pr-review` before that push.
+
+## Symlink build artifacts across worktrees (disk + rebuild)
+
+Shared, regenerable build artifacts (`node_modules`, `dist/`, `build/`, `target/`,
+`.cache/`) are **symlinked** to the main checkout so worktrees do not duplicate
+them — saves disk and speeds up recompilation.
+
+```bash
+# after creating a worktree, link its node_modules to the main checkout
+ln -s "$(git rev-parse --git-common-dir)/../../node_modules" <worktree>/node_modules
+# or, concretely:
+ln -s /path/to/main-checkout/node_modules .agents/worktrees/<slug>/node_modules
+```
+
+Rules:
+- Symlink only **regenerable** artifacts (never source, never tracked files; git
+  ignores these paths anyway).
+- If the worktree needs a different dependency set (rare), break the symlink and
+  run `npm ci` locally instead.
+- The `disk-cleanup` stage 2 skips `node_modules` that are symlinks (by design).
