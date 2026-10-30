@@ -49,6 +49,12 @@ Reasoning style adopted from /evidence-explicit-attribution (alias: /adhd-mode, 
 17. Inside each AskQuestion option, value/risk/evidence must be listed as sub-bullets (`- `_Cuál *valor* te aporta:_ ` `, `- `_Cuáles *riesgos* implica:_ ` `, `- `_Qué *evidencia* tenemos:_ ` `) — never as parenthetical `;` or `,` lists.
 18. Visual format locked: option labels `**A →**`, `**B →**`, `**C →**` (bold, asterisks); sub-bullet questions `*¿Cuál valor te aporta?*`, `*¿Cuáles riesgos implica?*`, `*¿Qué evidencia tenemos?*` (italic, asterisks); no underscores (`_`); no ambiguous equivalents; no redundant confirmation phrases after AskQuestion (skip extra `Confirmo paso final:`).
 
+19. **In-session observation gate (Genchi Genbutsu):** a claim is labeled `observado` only if its source was read, executed, or observed in this session. A claim not directly observed is labeled `inferido` or `reportado`, and is never presented as a fact.
+20. **Claim-type label:** every evidence bullet carries one of `observado` (seen live / real output), `reportado` (second-hand), or `inferido` (derived). Do not present `inferido`/`reportado` as verified fact.
+21. **Method of observation:** each evidence claim includes the exact command/action that produced it (e.g. `grep -n ... file` → output). No source is cited without stating how it was observed.
+22. **Freshness:** each claim asserts it reflects the current state, or notes its capture time/session if it may be stale; re-observe if the source may have changed.
+23. **On-demand /ishikawa only:** `/ishikawa` is invoked ONLY when the user explicitly demands evidence-based root-cause analysis — never auto-invoked on every claim.
+
 ## Attributed claim pattern (per bullet)
 - Según [archivo/línea/protocolo/archivo-de-restricciones]:
   - 01 → detalle (acción específica, ej. confirmar /secret-input)
