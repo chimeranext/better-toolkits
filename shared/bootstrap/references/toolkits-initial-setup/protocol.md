@@ -78,13 +78,15 @@ Produce explicit **diffs** and command lists:
   hook. Opt out with `--no-auto-update` or `BETTER_TOOLKITS_AUTO_UPDATE=0`.
 - **OpenCode notifier (recommended for opencode harness)** — install + configure
   `@mohak34/opencode-notifier@latest` (event-rich popups: `permission`/`complete`/
-  `subagent_complete`/`question`/`error`). Config at
-  `~/.config/opencode/opencode-notifier.json`:
-  - `showSessionTitle: true` (so alerts show the session subject, not just the project
-    folder name).
+  `subagent_complete`/`question`/`error`). Opinionated config template (SSOT) at
+  `adapters/opencode-notifier.json`; copy it to
+  `~/.config/opencode/opencode-notifier.json` (see `adapters/setup-opencode.md`):
+  - `showSessionTitle: true` (alerts show the session subject, not the project folder).
+  - `showIcon: false` (no OpenCode logo).
   - `suppressWhenFocused: false` (**opt-in** — default OFF; the user explicitly opts in
     if they want quiet-while-focused).
   - `focusOnClick: true` (click-to-jump back to the session).
+  - HITL label only on `question`/`permission` (they need the human).
   - If herdr is also present, set herdr `[ui.toast] delivery = "terminal"` (or disable its
     system toast) to avoid duplicate alerts for the same event.
 - **Branch mode** — default **consumer**: always converge the clone on `main` and
