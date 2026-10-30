@@ -8,62 +8,62 @@ PR-stage hub:
 [`triage.md`](triage.md).
 Full behavior contract: `openspec/changes/add-assurance-toolkit/specs/toolkit/assurance-security/spec.md`.
 
-## Principio
+## Principle
 
-¿Es seguro? Cadencia propia (pentest por release, triage por SLA), runner propio,
-reportes nunca mezclados con tests. Cada release exige veredictos separados.
+Is it secure? Own cadence (pentest per release, triage per SLA), own runner,
+reports never mixed with tests. Each release requires separate verdicts.
 
-## Componentes
+## Components
 
-- **pentest-runner**: ejecución autorizada (Kill Chain + OWASP). Patrón triage compartido
-  con testing (cola → dueño → SLA → receipt), owners distintos.
-- **pentest-playbook-setup**: audit/sync de playbook ↔ CI ↔ tenant config (solo JSON en sync).
+- **pentest-runner**: authorized execution (Kill Chain + OWASP). Triage pattern shared
+  with testing (queue → owner → SLA → receipt), different owners.
+- **pentest-playbook-setup**: audit/sync of playbook ↔ CI ↔ tenant config (only JSON in sync).
 - **`/assurance:triage security`**: findings → owned backlog, no duplicate issues (dedupe by signature). See [`findings-protocol.md`](findings-protocol.md).
-- **Trazabilidad MASVS → MASWE → MASTG v2**: cada hallazgo móvil con IDs estables y perfil
-  (MAS-L1/L2/R/P) según threat model; fix vía MASTG-BEST. Modelo para los receipts.
-- **Capa automatizada previa**: Semgrep (SAST), ZAP (DAST), Trivy/Grype + Dependency-Track
-  (SCA sobre SBOM), dependency-review en PR. Críticas bloquean.
-- **Supply-chain**: SBOM canónico (CycloneDX/SPDX) por build + escaneo continuo, firma keyless
-  Sigstore/cosign, proveniencia SLSA (L2/L3), admission fail-closed (Kyverno).
-  Generar sin gates es dashboard, no control.
+- **MASVS → MASWE → MASTG v2 traceability**: each mobile finding with stable IDs and profile
+  (MAS-L1/L2/R/P) per threat model; fix via MASTG-BEST. Model for receipts.
+- **Automated pre-layer**: Semgrep (SAST), ZAP (DAST), Trivy/Grype + Dependency-Track
+  (SCA over SBOM), dependency-review on PR. Criticals block.
+- **Supply-chain**: canonical SBOM (CycloneDX/SPDX) per build + continuous scanning, keyless signing
+  Sigstore/cosign, SLSA provenance (L2/L3), fail-closed admission (Kyverno).
+  Generating without gates is dashboard, not control.
 
-## Migrated skills (flutter-boilerplate-monorepo-template, reinterpretados)
+## Migrated skills (flutter-boilerplate-monorepo-template, reinterpreted)
 
-- **flutter-security**: certificate pinning, secure storage, obfuscation, biometría, root/jailbreak detection → mapea a MASVS móvil.
-- **sre-security-compliance-automation**: OPA policy-as-code, CIS benchmarks, vulnerability scanning continuo.
+- **flutter-security**: certificate pinning, secure storage, obfuscation, biometrics, root/jailbreak detection → maps to mobile MASVS.
+- **sre-security-compliance-automation**: OPA policy-as-code, CIS benchmarks, continuous vulnerability scanning.
 - **sre-container-security**: image scanning + signing (notary/cosign), Falco runtime, CVE → supply-chain.
-- **sre-network-policies-security**: Calico/Cilium, egress/ingress como controles verificables en gates.
-- **static-analysis**: lint multi-lenguaje como gate SAST (dart-analyze, ruff, golangci-lint, eslint, shellcheck, clippy, super-linter).
+- **sre-network-policies-security**: Calico/Cilium, egress/ingress as verifiable controls in gates.
+- **static-analysis**: multi-language lint as an SAST gate (dart-analyze, ruff, golangci-lint, eslint, shellcheck, clippy, super-linter).
 
 ## Red-team agentic (OWASP ASI01–ASI10 + LLM02)
 
-Método en 4 fases (Build → Audit con scenario maps → Define controls → Monitor & iterate);
-prioridades Foundation (ASI01/02/PII) → Coverage → Depth → Extension.
-Defensas en capas, SoD, gateway + code layer. Training-data alignment con suites
-OWASP-aligned. PII tolerancia cero (detectores contextuales, tenant-scoped SQL).
+Method in 4 phases (Build → Audit with scenario maps → Define controls → Monitor & iterate);
+priorities Foundation (ASI01/02/PII) → Coverage → Depth → Extension.
+Layered defenses, SoD, gateway + code layer. Training-data alignment with
+OWASP-aligned suites. Zero-tolerance PII (contextual detectors, tenant-scoped SQL).
 
-## Supply-chain móvil sin fuente (modelo REA)
+## Source-less mobile supply-chain (REA model)
 
-Flutter por snapshot hash + engine provenance (parseo estático del APK); APKs por
-manifest/clases decompiladas (JADX). Todo hallazgo con evidencia + limitaciones
-explícitas, mismo formato que los receipts.
+Flutter via snapshot hash + engine provenance (static APK parsing); APKs via
+decompiled manifest/classes (JADX). Every finding with evidence + explicit limitations,
+same format as receipts.
 
-## Runtime K8s: detectar vs prevenir + policy engines
+## Runtime K8s: detect vs prevent + policy engines
 
-- **Falco** (detect/alert, graduado) cluster-wide → triage/SIEM; **KubeArmor** (LSM)
-  o **Tetragon** (eBPF, sinergia Cilium) en workloads de alto valor. Audit-first.
+- **Falco** (detect/alert, graduated) cluster-wide → triage/SIEM; **KubeArmor** (LSM)
+  or **Tetragon** (eBPF, Cilium synergy) on high-value workloads. Audit-first.
 - **Kyverno** default K8s (YAML, mutate/generate, image verification) vs **Gatekeeper**
-  (Rego, reuso cross-platform). Admission = backstop, pair con CI-stage scanning.
+  (Rego, cross-platform reuse). Admission = backstop, pair with CI-stage scanning.
 
 ## Traceability + layered defense
 
 ```mermaid
 flowchart LR
     C[MASVS control] --> W[MASWE weakness]
-    W --> T[MASTG-TEST atómico]
-    T --> V[veredicto release: tests + seguridad por separado]
+    W --> T[atomic MASTG-TEST]
+    T --> V[release verdict: tests + security separately]
     subgraph defense [4 capas agentic]
-    G[gateway heurístico] --> S[guardrails SLM en línea]
+    G[heuristic gateway] --> S[inline SLM guardrails]
     S --> O[controles de salida]
     O --> M[monitor + audit trail]
     end
@@ -72,8 +72,8 @@ flowchart LR
 ## References
 
 - MASVS/MASTG/MASWE: https://mas.owasp.org/MASVS/ · https://mas.owasp.org/MASTG/ (v2: 285 tests, 152 demos)
-- OWASP Agentic AI: Galileo `Operationalizing the OWASP Top 10 for Agentic AI` (PDF local, abr-2026) — ASI01–ASI10, control plane, SoD, 4 fases
+- OWASP Agentic AI: Galileo `Operationalizing the OWASP Top 10 for Agentic AI` (local PDF, Apr-2026) — ASI01–ASI10, control plane, SoD, 4 phases
 - Supply chain: https://slsa.dev/ · Sigstore/cosign · SBOM CycloneDX/SPDX
 - Scanners: Trivy/Grype, Semgrep, OWASP ZAP, Kubescape, Checkov
-- Runtime: Falco (graduado) + KubeArmor (LSM) / Tetragon (eBPF) — ver matrices kubernetes.qa
-- Mobile REA: https://github.com/morluto/rea (MIT) — APK/Flutter sin fuente, evidencia + limitaciones
+- Runtime: Falco (graduated) + KubeArmor (LSM) / Tetragon (eBPF) — see kubernetes.qa matrices
+- Mobile REA: https://github.com/morluto/rea (MIT) — source-less APK/Flutter, evidence + limitations
