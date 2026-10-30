@@ -67,6 +67,27 @@ have() {
     _resolved="$(command -v "$1")" && [ -n "$_resolved" ]
 }
 
+# Play an audible notification so an authorization dialog cannot pass unnoticed
+# (same intent as the opencode-notifier sound). Tries the freedesktop theme
+# first, then direct play of the themed sample, then a raw system beep.
+# Streams are never discarded: each player's output flows to the controlling
+# terminal naturally.
+notify_sound() {
+    if have canberra-gtk-play; then
+        canberra-gtk-play -i dialog-information
+        return 0
+    fi
+    if have paplay; then
+        paplay /usr/share/sounds/freedesktop/stereo/dialog-information.oga
+        return 0
+    fi
+    if have pw-play; then
+        pw-play /usr/share/sounds/freedesktop/stereo/dialog-information.oga
+        return 0
+    fi
+    printf '\a' >&2   # terminal bell fallback
+}
+
 human() {
     local bytes="${1:-}" out
     [ -n "$bytes" ] || { printf 'unknown'; return 0; }
@@ -331,24 +352,59 @@ stage_build_artifacts() {
         local user_id
         user_id="$(id -u)"
         if [ "$user_id" -ne 0 ]; then
+            # Resolve the scan scope NOW (still the unprivileged user) so we can
+            # pass the real absolute paths through elevation: under pkexec/sudo
+            # $HOME becomes /root, so a "$HOME/Documentos/GitHub" default would
+            # point at a non-existent /root path.
+            local build_scan_root="${BUILD_SCAN_ROOT:-$HOME/Documentos/GitHub}"
+            local work_repo_root="${WORK_REPO_ROOT:-$HOME/Documentos/GitHub}"
             # Not root: explain what we need and why, then re-exec with elevation.
             printf 'Se requiere ELEVACIÓN de privilegios para esta stage.\n' >&2
             printf 'Acción: eliminar build/target artifacts regenerables (node_modules,\n' >&2
             printf '  target/, dist/, build/, .cache/) en los repos de trabajo bajo\n' >&2
-            printf '  %s.\n' "${WORK_REPO_ROOT:-$HOME/Documentos/GitHub}" >&2
+            printf '  %s.\n' "$work_repo_root" >&2
             printf 'Por qué: es una limpieza destructiva de todo el disco; requiere permiso\n' >&2
             printf '  de escritura raíz y tu autorización explícita.\n' >&2
             printf 'Método: pkexec / sudo (Linux), osascript con autorización (macOS),\n' >&2
             printf '  UAC (Windows).\n' >&2
+            # Interactive authorization with an EXPLICIT human-readable label.
+            # `pkexec` itself cannot show a custom label (it only renders the
+            # technical command), so we first ask via zenity/kdialog (Linux) or
+            # osascript (macOS) explaining exactly what will happen and why,
+            # then elevate. If the user declines, abort the stage cleanly.
+            # Play an audible alert so the dialog cannot pass unnoticed.
+            notify_sound
+            local authorized=1
+            if have zenity; then
+                zenity --question --title="disk-cleanup — autorización" \
+                    --text="Se requiere elevación (raíz) para eliminar build/target artifacts regenerables (node_modules, target/, dist/, build/, .cache/) bajo:\n\n  $work_repo_root\n\nEstos pesos se regeneran desde sus lockfiles/compilación. ¿Autorizas continuar?" \
+                    --width=520 --height=260 --ok-label="Autorizar" --cancel-label="Cancelar"
+                authorized=$?
+            elif have kdialog; then
+                kdialog --yesno "Se requiere elevación (raíz) para eliminar build/target artifacts regenerables bajo:\n$work_repo_root\n\n¿Autorizas continuar?"
+                authorized=$?
+            elif have osascript; then
+                osascript -e "display dialog \"Se requiere elevación (raíz) para eliminar build/target artifacts regenerables bajo $work_repo_root\" buttons {\"Cancelar\",\"Autorizar\"} default button \"Autorizar\""
+                authorized=$?
+            fi
+            if [ "$authorized" -ne 0 ]; then
+                printf 'Autorización denegada por el usuario — se omite el stage 5.\n' >&2
+                return 0
+            fi
             # Re-exec with elevation preserving env. Always use the ABSOLUTE
             # script path: when invoked as `bash toolkits/.../disk-cleanup.sh`,
             # $0 is relative and pkexec/sudo execute from a different cwd, so a
             # relative $0 cannot be found (exit 127) before the elevation dialog
             # even shows. $SCRIPT_DIR is already absolute (see top of file).
+            # Re-pass --repo-path and the resolved scan roots via env: under
+            # pkexec/sudo $HOME becomes /root, so the defaults would point at
+            # non-existent /root paths.
             if have pkexec; then
-                exec pkexec bash "$SCRIPT_DIR/disk-cleanup.sh" build-artifacts --apply
+                exec pkexec env BUILD_SCAN_ROOT="$build_scan_root" WORK_REPO_ROOT="$work_repo_root" \
+                    bash "$SCRIPT_DIR/disk-cleanup.sh" build-artifacts --apply --repo-path "$REPO_PATH"
             elif have sudo; then
-                exec sudo bash "$SCRIPT_DIR/disk-cleanup.sh" build-artifacts --apply
+                exec sudo env BUILD_SCAN_ROOT="$build_scan_root" WORK_REPO_ROOT="$work_repo_root" \
+                    bash "$SCRIPT_DIR/disk-cleanup.sh" build-artifacts --apply --repo-path "$REPO_PATH"
             else
                 printf 'ERROR: no se encuentra pkexec/sudo para elevar privilegios.\n' >&2
                 return 1
@@ -397,7 +453,7 @@ stage_build_artifacts() {
     WORK_ROOT="${WORK_REPO_ROOT:-$HOME/Documentos/GitHub}"
     if [ -d "$WORK_ROOT" ]; then
         find "$WORK_ROOT" -maxdepth 3 -type d -name .git \
-            > "$scratch/repos_find.log" 2>&1 || true
+            > "$scratch/repos_find.out" 2>&1 || true
         sed 's#/\.git$##' "$scratch/repos_find.out" | sort -u > "$repo_file"
     fi
     # Fallback: if WORK_ROOT does not exist, scan / but only under the user home
@@ -408,7 +464,7 @@ stage_build_artifacts() {
             -not -path "$HOME/.linuxbrew/*" -not -path "$HOME/.pub-cache/*" \
             -not -path "$HOME/.cache/*" -not -path "$HOME/flutter/*" \
             -not -path "$HOME/.hermes/*" \
-            > "$scratch/repos_find.log" 2>&1 || true
+            > "$scratch/repos_find.out" 2>&1 || true
         sed 's#/\.git$##' "$scratch/repos_find.out" | sort -u > "$repo_file"
     fi
 
@@ -424,7 +480,7 @@ stage_build_artifacts() {
             -type d -name dist -not -path '*/dist/*' -o \
             -type d -name build -not -path '*/build/*' -o \
             -type d -name .cache -not -path '*/.cache/*' \
-        \) -not -type l -not -path '*/node_modules/*' >> "$scratch/list.log" 2>&1 || true)
+        \) -not -type l -not -path '*/node_modules/*' >> "$scratch/list.txt" 2>&1 || true)
     done < "$repo_file"
 
     # Dedupe
@@ -435,8 +491,12 @@ stage_build_artifacts() {
     local d
     for d in "${mapfile_list[@]}"; do
         [ -L "$d" ] && continue
-        local sz
-        sz="$(du -sk "$d" 2>&1 | awk '{print $1}')"
+        # du is only measuring; if a dir vanished or is unreadable (a race or a
+        # permission edge), that must not abort the whole stage under pipefail.
+        # sz is initialized to 0 and guarded so it is always a defined integer
+        # even when the du pipeline fails under `set -u`.
+        local sz=0
+        sz="$(du -sk "$d" 2>&1 | awk '{print $1}')" || sz=0
         [ -n "$sz" ] || sz=0
         total=$(( total + sz ))
     done
@@ -462,8 +522,8 @@ stage_build_artifacts() {
         local d2
         for d2 in "${mapfile_list[@]}"; do
             [ -L "$d2" ] && continue
-            local sz2
-            sz2="$(du -sk "$d2" 2>&1 | awk '{print $1}')"
+            local sz2=0
+            sz2="$(du -sk "$d2" 2>&1 | awk '{print $1}')" || sz2=0
             [ -n "$sz2" ] || sz2=0
             printf '  %-10s  %s\n' "$(human "$(( sz2 * 1024 ))")" "$d2"
         done
@@ -567,6 +627,7 @@ parse_args() {
     while [ $# -gt 0 ]; do
         case "$1" in
             --list-only|--dry-run) APPLY=0; shift ;;
+            --apply) APPLY=1; shift ;;   # explicit; already the default
             --repo-path) REPO_PATH="${2:?--repo-path needs a value}"; shift 2 ;;
             --target) TARGET_GB="${2:?--target needs a value in GB}"; shift 2 ;;
             --branches|--force)

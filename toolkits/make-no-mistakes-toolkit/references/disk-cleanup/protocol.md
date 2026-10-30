@@ -49,6 +49,7 @@ expensive to lose precisely because nothing regenerates them.
 | 2 | `node-modules` | 11 GB | none — regenerable from the lockfile | **Delegated** to the worktree classifier. Skips the main checkout, locked worktrees, and any `node_modules` that is a symlink. |
 | 3 | `worktrees` | 8 of 69 removed, 61 kept | **real** | **Delegated.** Refuses anything with uncommitted or unpushed work, and treats `unverifiable` as a refusal. Branch refs are never deleted. |
 | 4 | `docker-volumes` | (emergency) | reconstructible | **In emergency (`--apply`): removed.** Dev/cache/data volumes are reconstructible; the classifier does not need them. `measure` still lists them so the human sees what would go. |
+| 5 | `build-artifacts` | regenerable (node_modules/target/dist/build/.cache) | none — regenerable | **Requires elevation + explicit authorization.** Under `--apply` it runs with root (pkexec/sudo). Before elevating it plays an audible notification (like the opencode-notifier) and asks via a GUI dialog (zenity/kdialog/osascript) with an explicit human-readable label explaining exactly which dirs will be removed and why; if the user declines, the stage is skipped without removing anything. |
 
 Stage 3 keeping 61 of 69 worktrees is the expected outcome, not a failure. A worktree
 that holds work is supposed to survive this command.
