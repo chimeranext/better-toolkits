@@ -89,6 +89,11 @@ Produce explicit **diffs** and command lists:
   - HITL label only on `question`/`permission` (they need the human).
   - If herdr is also present, set herdr `[ui.toast] delivery = "terminal"` (or disable its
     system toast) to avoid duplicate alerts for the same event.
+- **herdr prefix key (avoid `ctrl+b` collision)** — opencode binds `ctrl+b` to
+  `session.background` ("move running work to the background"). herdr uses `ctrl+b`
+  as its prefix key by default, which intercepts the keystroke before opencode sees
+  it. When both are present, set herdr `[keys] prefix = "ctrl+a"` (in
+  `~/.config/herdr/config.toml`) so opencode keeps `ctrl+b` for backgrounding.
 - **Branch mode** — default **consumer**: always converge the clone on `main` and
   fast-forward. `--expert-mode` (author) never switches branch and never touches a
   dirty tree. The mode is persisted in the sidecar so background runs honor it.
