@@ -356,7 +356,7 @@ stage_build_artifacts() {
     for d in "${mapfile_list[@]}"; do
         [ -L "$d" ] && continue
         local sz
-        sz="$(du -sk "$d" > "$scratch/du.out" 2> "$scratch/du.err" | awk '{print $1}')"
+        sz="$(du -sk "$d" | awk '{print $1}')"
         [ -n "$sz" ] || sz=0
         total=$(( total + sz ))
     done
