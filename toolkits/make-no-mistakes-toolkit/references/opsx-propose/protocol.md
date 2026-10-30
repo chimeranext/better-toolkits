@@ -30,6 +30,19 @@ Adheres to the official OpenSpec OPSX workflow (`docs/opsx.md` in `Fission-AI/Op
 - `/opsx:propose` only plans. It never writes application code.
 - Transition to `/opsx:apply` when planning is complete.
 
+## Draft PR discipline (mandatory)
+
+Parity: **1 issue = 1 branch = 1 worktree = 1 PR**.
+
+- **Always start by opening a draft PR** — the first commit of the change goes to a
+  draft PR (never accumulated locally in the dark).
+- **Always push intermediate commits to the draft PR** — commits must be reflected in
+  the PR as they are made so they can be audited externally. Never hold commits only
+  locally.
+- **Push to the branch that feeds the PR** — never to `main`/canonical. If the PR is
+  already Ready-to-Merge and a fix push is needed, **run `/local-pr-review` before that
+  push**.
+
 ---
 
 ## Guardrails (mandatory HITL)
