@@ -170,6 +170,21 @@ MUST go through `/opsx:propose` → worktree isolation → `/opsx:apply` → `/d
 `/ready-to-review-mergeable` → approved PR. Implementing directly on a working branch
 is forbidden — including by this setup's own tooling.
 
+## Engineering standards (SSOT)
+
+This setup installs/refers the indexed **engineering standards** at
+`shared/references/engineering-standards/` (consumed by the agent profile). The
+agent profile (`agents/better.md`) references them; the hooks enforce the key ones:
+
+- **Jidoka** (`jidoka.md`) — stop on anomaly; record boundary + root-cause hypothesis.
+- **StS** (`stderr-stream-standards.md`) — no stream to null; fold stderr into the
+  same sink; `2> file` forbidden (enforced by the stderr hook this setup installs).
+- **CLG** (`commit-logic-groups.md`) — commit intermediate work in semantic groups.
+- **PRDS / BrS / DSMS / IFS / CPS / QT4L / OST** — the other indexed standards.
+
+The setup also installs the scripts/hooks that enforce StS (stderr adapter) and
+the OpenSpec pipeline discipline.
+
 ## Arguments
 
 ```
