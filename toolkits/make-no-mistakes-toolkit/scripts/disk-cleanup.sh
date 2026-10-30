@@ -306,6 +306,38 @@ is_windows() {
 stage_build_artifacts() {
     rule "Stage 5 — build/target artifacts across the whole disk (risk: none — regenerable)"
 
+    # ── Privilege elevation + explicit authorization (mandatory) ────────────
+    # This stage DELETES regenerable build artifacts (node_modules, target/,
+    # dist/, build/, .cache/) across WORK repos. That is a destructive,
+    # system-wide action: it must run with elevated privileges AND only after
+    # the user explicitly authorizes it. We refuse to run --apply unprivileged
+    # or without a clear prompt.
+    if [ "$APPLY" -eq 1 ]; then
+        # Detect elevated permission. On Linux: pkexec or sudo (root).
+        local user_id
+        user_id="$(id -u)"
+        if [ "$user_id" -ne 0 ]; then
+            # Not root: explain what we need and why, then re-exec with elevation.
+            printf 'Se requiere ELEVACIÓN de privilegios para esta stage.\n' >&2
+            printf 'Acción: eliminar build/target artifacts regenerables (node_modules,\n' >&2
+            printf '  target/, dist/, build/, .cache/) en los repos de trabajo bajo\n' >&2
+            printf '  %s.\n' "${WORK_REPO_ROOT:-$HOME/Documentos/GitHub}" >&2
+            printf 'Por qué: es una limpieza destructiva de todo el disco; requiere permiso\n' >&2
+            printf '  de escritura raíz y tu autorización explícita.\n' >&2
+            printf 'Método: pkexec / sudo (Linux), osascript con autorización (macOS),\n' >&2
+            printf '  UAC (Windows).\n' >&2
+            # Re-exec with elevation preserving env.
+            if have pkexec; then
+                exec pkexec bash "$0" build-artifacts --apply
+            elif have sudo; then
+                exec sudo bash "$0" build-artifacts --apply
+            else
+                printf 'ERROR: no se encuentra pkexec/sudo para elevar privilegios.\n' >&2
+                return 1
+            fi
+        fi
+    fi
+
     # Dispatch to the platform-native implementation.
     if is_windows; then
         local ps1="${SCRIPT_DIR}/disk-cleanup-build.ps1"
@@ -322,12 +354,13 @@ stage_build_artifacts() {
     fi
     # macOS/Linux: bash find-based scan below.
 
-    # Scope derivation: we do NOT assume ~/Documentos/GitHub. We discover
-    # authentic git repos on the volume (git) and also honour the GitHub CLI's
-    # notion of a local clone root if it can be inferred. Then we scan the whole
-    # filesystem for build artifacts, but only inside those repos (or under /
-    # at top-level repo dirs), never /proc /sys /dev /run /tmp or a symlink.
-    local scan_root="${BUILD_SCAN_ROOT:-/}"
+    # Scope derivation: we scan only WORK repos (the user's clones under
+    # ~/Documentos/GitHub). Build artifacts are the HEAVY folders LATERAL to
+    # each repo's .git (node_modules, target/, dist/, build/, .cache/) — never
+    # the .git dir itself, never tool/cache clones (.asdf, .nvm, .linuxbrew,
+    # .pub-cache, .cache/pre-commit, flutter). Symlinks are skipped (they point
+    # at a shared copy).
+    local scan_root="${BUILD_SCAN_ROOT:-$HOME/Documentos/GitHub}"
     [ -d "$scan_root" ] || { echo "BUILD_SCAN_ROOT no existe: $scan_root"; return 0; }
 
     local before after
@@ -336,24 +369,30 @@ stage_build_artifacts() {
     local scratch=/tmp/opencode/disk-cleanup-build
     mkdir -p "$scratch"
 
-    # 1. Discover authentic git repos (top-level dirs that contain a .git).
-    # We search the whole disk but restrict to reasonable depths and skip system dirs.
+    # 1. Discover WORK repos only: those under ~/Documentos/GitHub (the user's
+    # working clones). We explicitly EXCLUDE tool/cache clones (.asdf, .nvm,
+    # .linuxbrew, .pub-cache, .cache/pre-commit, flutter, etc.) — they are not
+    # user work repos and deleting their artifacts could break the tooling.
     local repo_file="$scratch/repos.txt"
     : > "$repo_file"
-    find / -maxdepth 5 -type d -name .git -not -path '/proc/*' -not -path '/sys/*' \
-        -not -path '/dev/*' -not -path '/run/*' -not -path '/tmp/*' \
-        -not -path '/snap/*' -not -path '/usr/*' \
-        > "$scratch/repos_find.out" 2> "$scratch/repos_find.err" || true
-    # Convert .git dirs to repo roots
-    sed 's#/\.git$##' "$scratch/repos_find.out" | sort -u > "$repo_file"
 
-    # Also include dirs named exactly like gh's clone root if it resolves (best-effort).
-    # gh does not expose a documented clone-root config; we parse `gh repo view` later.
-    # For now: if ~/Documentos/GitHub exists, add it as an explicit extra root.
-    if [ -d "$HOME/Documentos/GitHub" ]; then
-        echo "$HOME/Documentos/GitHub" >> "$repo_file"
+    WORK_ROOT="${WORK_REPO_ROOT:-$HOME/Documentos/GitHub}"
+    if [ -d "$WORK_ROOT" ]; then
+        find "$WORK_ROOT" -maxdepth 3 -type d -name .git \
+            > "$scratch/repos_find.log" 2>&1 || true
+        sed 's#/\.git$##' "$scratch/repos_find.out" | sort -u > "$repo_file"
     fi
-    sort -u -o "$repo_file" "$repo_file"
+    # Fallback: if WORK_ROOT does not exist, scan / but only under the user home
+    # and only dirs whose name is a plausible work repo (skip dot-dirs/caches).
+    if [ ! -s "$repo_file" ]; then
+        find "$HOME" -maxdepth 4 -type d -name .git \
+            -not -path "$HOME/.asdf/*" -not -path "$HOME/.nvm/*" \
+            -not -path "$HOME/.linuxbrew/*" -not -path "$HOME/.pub-cache/*" \
+            -not -path "$HOME/.cache/*" -not -path "$HOME/flutter/*" \
+            -not -path "$HOME/.hermes/*" \
+            > "$scratch/repos_find.log" 2>&1 || true
+        sed 's#/\.git$##' "$scratch/repos_find.out" | sort -u > "$repo_file"
+    fi
 
     # 2. Collect build artifacts within each discovered repo.
     local mapfile_list=()
@@ -367,7 +406,7 @@ stage_build_artifacts() {
             -type d -name dist -not -path '*/dist/*' -o \
             -type d -name build -not -path '*/build/*' -o \
             -type d -name .cache -not -path '*/.cache/*' \
-        \) -not -type l -not -path '*/node_modules/*' >> "$scratch/list.txt" 2>> "$scratch/find.err" || true)
+        \) -not -type l -not -path '*/node_modules/*' >> "$scratch/list.log" 2>&1 || true)
     done < "$repo_file"
 
     # Dedupe
@@ -379,7 +418,7 @@ stage_build_artifacts() {
     for d in "${mapfile_list[@]}"; do
         [ -L "$d" ] && continue
         local sz
-        sz="$(du -sk "$d" > "$scratch/du.out" 2> "$scratch/du.err" | awk '{print $1}')"
+        sz="$(du -sk "$d" > "$scratch/du.log" 2>&1 | awk '{print $1}')"
         [ -n "$sz" ] || sz=0
         total=$(( total + sz ))
     done
@@ -400,8 +439,16 @@ stage_build_artifacts() {
     fi
 
     if [ "$APPLY" -eq 0 ]; then
-        printf 'LIST ONLY — nothing removed. Re-run without --list-only to remove them.\n'
-        printf 'The dirs are regenerable (node_modules from lockfile; target/dist from build).\n'
+        printf 'LIST ONLY — nothing removed. These artifact dirs are regenerable\n'
+        printf '(node_modules from lockfile; target/dist/build from compile):\n'
+        local d2
+        for d2 in "${mapfile_list[@]}"; do
+            [ -L "$d2" ] && continue
+            local sz2
+            sz2="$(du -sk "$d2" > "$scratch/du2.log" 2>&1 | awk '{print $1}')"
+            [ -n "$sz2" ] || sz2=0
+            printf '  %-10s  %s\n' "$(human "$(( sz2 * 1024 ))")" "$d2"
+        done
         return 0
     fi
 
