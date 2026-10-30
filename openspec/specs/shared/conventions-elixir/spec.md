@@ -12,7 +12,7 @@ El sistema SHALL proveer `language/elixir/README.md` v0.1.0 `draft` y `language/
 
 #### Scenario: Navegación por niveles
 
-- **WHEN** un aprendiz migra un endpoint a Phoenix
+- **WHEN** un humano migra un endpoint a Phoenix
 - **THEN** carga el hijo `phoenix` y obtiene por herencia los gates Elixir
 
 ### Requirement: Record elixir-lang draft con fuentes pineadas
