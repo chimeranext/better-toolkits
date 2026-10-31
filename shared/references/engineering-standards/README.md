@@ -104,7 +104,7 @@ Protocol SSOT: `references/clean-code-standards-setup/protocol.md`, `references/
 | Which `.gitignore` patterns must I vendor? | BGI (catalog `vendored-gitignore.toml`) |
 | Is it a playbook or a runbook? | ODT (taxonomy. Never mix) |
 | How do I integrate features and releases? | GGT (feature→develop rebase. develop→main merge commit) |
-| How do I validate the order formally? | TFM (TLA+/TLC recipe) |
+| How do I verify the order formally? | TFM (TLA+/TLC recipe) |
 
 ## Provenance
 
