@@ -16,10 +16,10 @@ SPECULA_PIN="${SPECULA_PIN:-main}"   # commit/tag ref (bump deliberately)
 
 log() { printf '[setup-specula] %s\n' "$*" >&2; }
 
-# Prerequisites: python3, uv, java 21+ (for TLC), gh
-for tool in python3 uv java gh; do
+# Prerequisites: python3, uv, java 21+ (for TLC), mvn (for spec_analyzer jar), gh
+for tool in python3 uv java mvn gh; do
   if ! command -v "$tool" > /tmp/opencode/specula-prereq.log 2>&1; then
-    log "missing required command: $tool"
+    log "missing required command: $tool (specula setup needs it to build bundled tools)"
     exit 1
   fi
 done
