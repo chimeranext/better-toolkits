@@ -27,7 +27,7 @@ The **clean code quartet** is DSMS + IFS + CPS + PRDS. BrS + WTD govern branchin
 and worktree hygiene. QT4L and **OST** (when the client uses an OpenSpec store)
 complete QA traceability and spec promotion discipline.
 
-**Adoption order:** DSMS → IFS → CPS → PRDS → BrS → WTD → QT4L → **OST** (store repos only) → **CHH** (setup-script integrity) → **SemVer** (version policy) → **MPH** (main protections, HITL merge guard) → **BGI** (vendored gitignore catalog).
+**Adoption order:** DSMS → IFS → CPS → PRDS → BrS → WTD → QT4L → **OST** (store repos only) → **CHH** (setup-script integrity). Then **SemVer** (version policy), **MPH** (main protections, HITL merge guard), and **BGI** (vendored gitignore catalog).
 
 **Day-to-day priority:** IFS, PRDS, and QT4L (reading rhythm, review rhythm, req→test trace).
 
