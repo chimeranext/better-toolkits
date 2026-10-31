@@ -1,6 +1,6 @@
 {
   "name": "3d-graphics-cad-toolkit",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "3D graphics and CAD toolkit: parametric modeling, additive manufacturing, BIM, VR/AR, digital twins, animation, VFX, and game-dev skills (multi-tool: AutoCAD, Blender, Cinema 4D, Maya, ZBrush, OpenUSD, NVIDIA Omniverse, Bevy, Iced).",
   "author": {
     "name": "Luis Andres Pena Castillo",
