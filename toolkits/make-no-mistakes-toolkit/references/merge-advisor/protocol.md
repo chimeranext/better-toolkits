@@ -6,7 +6,7 @@ Harness-agnostic body. Thin entries: `commands/merge-advisor.md`, `skills/merge-
 
 # Merge Advisor
 
-A pile of PRs is open against one base. Each was measured green **against a base
+A pile of PRs is open against one base. Each PR proved green **against a base
 that no longer exists by the time its turn comes**. This skill computes the
 order that keeps them green, then **always** offers to execute that order under
 HITL. There is no `--execute` flag — the approval question *is* the product.
@@ -23,8 +23,8 @@ Three skills look at PRs and only one of them answers ordering:
 
 The distinction is not bookkeeping. **"Mergeable" is not a property of a PR. It
 is a property of the pair (PR, base-it-will-land-on).** A per-PR report reads
-every row against *today's* base, and the moment the first merge lands, every
-other row is describing a base that is gone. Ten green PRs is not ten merges.
+every row against *today's* base. The moment the first merge lands, every other
+row describes a base that is gone. Ten green PRs is not ten merges.
 
 ## Invocation
 
@@ -48,7 +48,7 @@ other row is describing a base that is gone. Ten green PRs is not ten merges.
 |------|---------|----------|
 | `<base-branch>` | detected | Bare name (`develop`, never `origin/develop`). Strip remote prefix before interpolating `origin/$BASE`. |
 | `--repo <owner/name>` | cwd `origin` | Target repository. |
-| `--only <numbers>` | all open | Comma-separated PR numbers. Excluded PRs are listed as out-of-scope, never omitted silently. |
+| `--only <numbers>` | all open | Comma-separated PR numbers. List excluded PRs as out-of-scope, never omit them silently. |
 | `--out <path>` | stdout | Also write the plan to a file. |
 
 ## HITL doctrine (mandatory — not opt-in)
@@ -60,7 +60,7 @@ Two halves, in this order. Neither is optional.
 
 ### Half A — measure (autonomous)
 
-The seven predicates run without asking. One mutation is allowed without HITL:
+The seven predicates run without asking. One mutation may proceed without HITL:
 `git fetch origin --quiet` (remote-tracking refs only). Without it every
 measurement is against a stale base.
 
@@ -77,8 +77,8 @@ Do not end with “run these `gh pr merge` yourself.” Do not invent `--execute
 | Harness | How to ask |
 |---------|------------|
 | Claude Code | `AskUserQuestion` |
-| Cursor | **`AskQuestion`** (fixed-choice); if unavailable: numbered options in the main conversation + wait for an explicit reply (never treat silence as yes) |
-| Background sub-agent | do **not** ask; emit `pause` JSON with `gate: "merge-advisor-queue"` and halt — orchestrator asks and relays |
+| Cursor | **`AskQuestion`** (fixed-choice). If unavailable: numbered options in the main conversation, then wait for an explicit reply (never treat silence as yes) |
+| Background sub-agent | do **not** ask. Emit `pause` JSON with `gate: "merge-advisor-queue"` and wait — orchestrator asks and relays |
 
 Minimum question after the plan:
 
@@ -96,7 +96,7 @@ method, freshly read `mergeable` / checks.
 commit only** (`gh pr merge <N> --merge`) — see
 [`docs/git-merge-policy.md`](../../../../docs/git-merge-policy.md). Do **not**
 offer `--squash` or `--rebase` as menu options on that repo. Consumer repos follow
-their own org/`linear-setup.json` policy; when unknown, ask once at the per-PR STOP.
+their own org/`linear-setup.json` policy. When unknown, ask once at the per-PR STOP.
 
 After each successful merge: re-run
 `force_mergeable` on the remainder, re-derive tiers if the shape changed, ask
@@ -105,7 +105,7 @@ tiers measured the wrong base.
 
 **Never offer a bypass as an option.** `--admin`, `--force`, merging past a red
 or unanswered check, disabling a required check to unblock a queue — none of
-these is a row in a menu. If the ordering is blocked, the block is the finding.
+these is a row in a menu. If something blocks the ordering, the block is the finding.
 
 Regeneration commands and any `git rebase` / `git push --force-with-lease`
 needed to unblock a PR also require HITL.
@@ -129,7 +129,7 @@ Align with `/implement`: when the consumer repo configures **Linear** in
 `gitBranchName` or `*/<issue-id>-*`, PR body `Fixes TEAM-N`). **GitHub issues**
 are the anchor when Linear is absent (e.g. planning epics in this monorepo as
 `github.com/<owner>/<repo>/issues/<N>`). Do not write this gate as if GitHub
-issues were always the default when Linear is configured.
+issues were always the default when the consumer repo configures Linear.
 
 **Vendor-neutral docs:** toolkit markdown in `better-toolkits` must not name
 customer orgs or org-specific Linear team keys — use `TEAM-N` and “consumer repo”.
@@ -141,22 +141,22 @@ Before `gh pr create` (draft or ready):
 
 1. **Resolve the anchor (in order):**
    - **Linear (default):** issue id from branch, session, or `make-no-mistakes.config.json`
-     → `get_issue` / equivalent; note `gitBranchName` and linked PRs if any.
+     → `get_issue` / equivalent. Note `gitBranchName` and linked PRs if any.
    - **GitHub issue (fallback only):** when Linear is absent or explicitly scoped
      to a GH issue → `gh issue view <N> --json number,title,url,closedByPullRequestsReferences`.
-2. **Existing PR for the same work:** `gh pr list --head <branch>`; for Linear,
-   search PR body for `Fixes TEAM-N` / magic words; for GitHub fallback, linked
-   PRs from issue JSON plus `gh pr list --state open --search "repo:<owner>/<repo> <N> in:body"`.
+2. **Existing PR for the same work:** `gh pr list --head <branch>`. For Linear,
+   search PR body for `Fixes TEAM-N` / magic words. For GitHub fallback, collect
+   linked PRs from issue JSON plus `gh pr list --state open --search "repo:<owner>/<repo> <N> in:body"`.
 3. **If a PR already exists:** **append** — commit and push to **that PR’s head
-   branch**; update body (`Fixes …`, `Depends on:`) if needed. **Forbidden:** a
+   branch**. Update body (`Fixes …`, `Depends on:`) if needed. **Forbidden:** a
    second open PR for the same Linear/GitHub work item unless the human explicitly
    OKs superseding/closing the duplicate.
 4. **If no PR yet:** create **exactly one** PR — body links the anchor (`Fixes TEAM-N`
    or `Fixes #<N>` / GitHub Development on a fallback issue). Do not hand off
    “tracker #90 + unrelated PR #91” as the default.
 5. **Handoff must name:** tracker id **and** PR **URL + number**, **base branch**,
-   and **scope vs that base** (file count or explicit “delta only”), not merely
-   “hay draft PR”.
+   and **scope vs that base** (file count or explicit “delta only”). A mere
+   “hay draft PR” is not a handoff.
 
 **GitHub numbering (PRs and fallback issues):** one repository-wide sequence — an
 issue #90 and a later PR #91 share the **same counter**, not two parallel systems.
@@ -165,21 +165,21 @@ Linear ids (`TEAM-N`) are **orthogonal** to GitHub PR numbers. The contract is
 
 ### Local integration git ≠ GitHub delivery
 
-Merging stack branches **locally** to resolve conflicts or to measure predicates
+Merging stack branches **locally** to resolve conflicts or measure predicates
 does **not** mean the deliverable is a new PR to `$BASE` containing the whole
 stack. Stack integration belongs in **merge-advisor order** (Half B) or in
-explicit stacked PR bases — not in an extra PR that duplicates PRs already in
+explicit stacked PR bases. It is not an extra PR that duplicates PRs already in
 the plan.
 
-## Subagents and halt (hard stop)
+## Subagents and stopping (hard stop)
 
 - **No background subagents**, parallel `Task` workers, or `/implement`
   fan-out while running `/merge-advisor` Half A or Half B unless the user
   **explicitly** requests parallel measurement.
 - Half B merges: **parent orchestrator only** — one `gh pr merge` per HITL OK.
 - If the user says **detener subagents**, **stop goal**, **DETENGA EL GOAL**, or
-  equivalent: **halt immediately** — no merges, no new PRs, no child agents,
-  no autonomous continuation of a prior goal.
+  an equivalent command, **stop immediately**. No merges, no new PRs, no child
+  agents, no autonomous continuation of a prior goal.
 
 ## Step 0 — Resolve the base and the PR set
 
@@ -252,13 +252,13 @@ gh api "repos/$OWNER/$REPO/pulls/4309" --jq '{mergeable, mergeable_state}'
 ```
 
 **The list endpoint never populates these fields.** Not "not yet" — never. They
-exist only in the individual-PR representation, and the two calls above were
-made seconds apart, so 4309's value was already computed when the list returned
+exist only in the individual-PR representation. The two calls above happened
+seconds apart, so GitHub had already computed 4309's value when the list returned
 `null` for it. Anything built from `gh pr list` reads `null` on every row, and a
-consumer that treats `null` as a value gets eight PRs that look identical.
+consumer that treats `null` as a value sees eight PRs that look identical.
 
 This matters more here than in a status report. `review-open-prs` reading a
-stale field produces one wrong row; **merge-advisor reading it produces a wrong
+stale field produces one wrong row. **merge-advisor reading it produces a wrong
 ORDER**, and the order is the whole output.
 
 So force it, per PR, and poll rather than guessing at a sleep:
@@ -284,8 +284,8 @@ force_mergeable() {                       # $1 = PR number
 Three properties of that loop, each load-bearing:
 
 - **Backoff, not a fixed `sleep 5`.** The job takes as long as the diff is
-  large, so a constant wait is either wasted time on small PRs or a premature
-  give-up on big ones — and big PRs are exactly the ones this skill orders first.
+  large. A constant wait is either wasted time on small PRs or a premature
+  give-up on big ones. Big PRs are exactly the ones this skill orders first.
 - **stderr goes to a log, never to `/dev/null`.** A failing `gh` call and a PR
   that is genuinely still computing both return empty, and discarding stderr
   makes them the same event. `$MNM_LOG` is `${TMPDIR:-/tmp}/merge-advisor.log`.
@@ -301,8 +301,8 @@ gh pr view "$N" --json isDraft,reviewDecision,statusCheckRollup
 **`mergeable: true` is not `CLEAN`.** In the same measurement, 4 of 8 PRs read
 `mergeable_state: "unstable"` — the branch applies, and its checks are failing
 or pending. `unstable` is a merge that *works* and *should not happen yet*. Use
-`mergeable` for the ordering constraint and `mergeable_state` for eligibility;
-collapsing them produces an order that is technically applicable and wrong.
+`mergeable` for the ordering constraint and `mergeable_state` for eligibility.
+Collapsing them produces an order that is technically applicable and wrong.
 
 A draft is not a candidate. Say so as a row rather than dropping it silently:
 a PR missing from the plan reads as "already handled".
@@ -311,15 +311,15 @@ a PR missing from the plan reads as "already handled".
 
 This is the part a per-PR tool never needs and this one cannot skip.
 
-`mergeable` is computed **against the base as it stands**. The instant Tier 1
-lands, every value measured for Tier 2 describes a base that no longer exists —
-which is the premise of this whole skill, applied to its own inputs. GitHub does
-not proactively recompute; it invalidates and waits to be asked again.
+GitHub computes `mergeable` **against the base as it stands**. The instant Tier 1
+lands, every value measured for Tier 2 describes a base that no longer exists.
+This is the premise of this whole skill, applied to its own inputs. GitHub does
+not proactively recompute. It invalidates the value and waits for the next request.
 
-So `force_mergeable` runs again for every remaining PR **after each tier**, and
-a plan printed once and followed for an hour is a plan whose later tiers were
-computed against the wrong base. If the recomputation changes the shape, the
-remaining tiers are re-derived rather than executed as printed.
+So `force_mergeable` runs again for every remaining PR **after each tier**. A
+plan printed once and followed for an hour has later tiers computed against the
+wrong base. If the recomputation changes the shape, re-derive the remaining
+tiers rather than execute them as printed.
 
 ### 2. Check freshness — the green mark's expiry date
 
@@ -332,16 +332,16 @@ gh api "repos/{owner}/{repo}/commits/$(gh pr view "$N" --json headRefOid --jq .h
 git rev-list --count "pr-$N..origin/$BASE"
 ```
 
-`gh pr checks` has no `--json`; use the check-runs API.
+`gh pr checks` has no `--json`. Use the check-runs API.
 
 A green check computed 84 commits ago tested a tree that no longer resembles the
 merge result. **This is not a reason to distrust the PR** — it is the reason
-ordering exists. Record the distance; it feeds the fragility ranking in Step 2.
+ordering exists. Record the distance. It feeds the fragility ranking in Step 2.
 
 ### 3. Conflicts with the base as it stands
 
 If the repo already has a program that answers this, **run it** rather than
-re-deriving it — a second implementation of a measurement drifts exactly like a
+re-deriving it. A second implementation of a measurement drifts exactly like a
 second implementation of code. Look for one before reaching for `merge-tree`:
 
 ```bash
@@ -367,12 +367,12 @@ git diff --name-only "$(git merge-base "origin/$BASE" "pr-$N")...pr-$N"
 ```
 
 Then intersect every pair. Two PRs sharing zero files are order-independent and
-can be batched together; two sharing a file are a sequencing decision even when
-neither currently conflicts, because a clean textual merge of two edits to the
-same file is exactly how a semantic conflict ships green.
+can be batched together. Two sharing a file are a sequencing decision even when
+neither currently conflicts. A clean textual merge of two edits to the same file
+is exactly how a semantic conflict ships green.
 
 Report the intersection **by filename**, not as a count. "PR #A and PR #B
-overlap on 3 files" is unactionable; naming `lefthook.yml` tells the reader
+overlap on 3 files" is unactionable. Naming `lefthook.yml` tells the reader
 which of the two is the cheap rebase.
 
 ### 5. Latent conflicts — the ones that do not exist yet
@@ -386,7 +386,7 @@ git merge-tree --write-tree "pr-$A" "pr-$B" 2>&1 >/dev/null; echo "exit=$?"
 ```
 
 When the exit is 1 (conflict), capture the **conflict content** for the human
-decision — the ordering metric only proves the edge; it does not resolve it.
+decision. The ordering metric only proves the edge. It does not resolve it.
 Conflict edges may be structural (no textual `<<<<<<<` markers), so materialize
 the real unmerged paths and capture a per-path diff of the two sides:
 
@@ -404,23 +404,22 @@ rm -f "$TMPIDX"
 ```
 
 The captured per-path diffs (A vs B) are the decision input for the principal (the
-human auditor). Never auto-resolve a conflict edge; always attach the conflict
+human auditor). Never auto-resolve a conflict edge. Always attach the conflict
 diffs with the edge.
 
 Run this for every pair that Step 4 flagged as overlapping. A pair that is clean
-against base and dirty against each other is a **hard ordering constraint**, and
-it is invisible to `gh pr list`, to any per-PR status report, and to the PR
-author.
+against base and dirty against each other is a **hard ordering constraint**. It
+is invisible to `gh pr list`, to any per-PR status report, and to the PR author.
 
 If the exit code is neither 0 nor 1, report `unverifiable` and name the pair.
 Do not fill the cell by inference.
 
 ### 6. Base-anchored artifacts — generalised
 
-Some checked-in files are **derived from the base** and carry the base SHA they
-were derived from. When the base moves — and especially when a **squash merge**
-rewrites it — that anchor points at a commit that no longer exists, and the
-artifact breaks on **every open PR at once**. One merge, N failures, none of them
+Some checked-in files **derive from the base** and carry the base SHA they came
+from. When the base moves — and especially when a **squash merge**
+rewrites it — that anchor points at a commit that no longer exists. The artifact
+then breaks on **every open PR at once**. One merge, N failures, none of them
 caused by the PR they appear on.
 
 This skill does not hardcode any project's artifact. **Discover them:**
@@ -440,10 +439,10 @@ order:
 
 1. **Is it touched by more than one open PR?** If one, it is that PR's problem.
 2. **Is it regenerated from the base rather than authored?** A lockfile and a
-   typecheck baseline both are; a hand-written config is not.
+   typecheck baseline both are. A hand-written config is not.
 
 Both yes means a **regeneration checkpoint** goes into the sequence: a point at
-which every remaining PR re-derives the artifact before its checks are trusted.
+which every remaining PR re-derives the artifact before you trust its checks.
 Print the regeneration command the repo already provides — find it, do not
 invent it:
 
@@ -451,8 +450,8 @@ invent it:
 grep -nE '"(baseline|typecheck|gen:|generate)' package.json
 ```
 
-If no regeneration command exists, say so: the artifact is anchored with no way
-to re-anchor it, and **that is a defect to file, not a step to improvise.**
+If no regeneration command exists, say so: the artifact carries an anchor with no
+way to re-anchor it. That is a defect to file, not a step to improvise.
 
 ### 7. Queue capacity
 
@@ -471,7 +470,7 @@ gh api "repos/{owner}/{repo}/actions/runners" --jq '.runners[] | {name, status, 
 
 Each merge into the base triggers the base's own workflows **plus** a re-run on
 every remaining open PR that auto-syncs. On a FIFO fleet with no priority lane,
-merging four at once can queue deeper than the fleet drains, and the last PR's
+merging four at once can queue deeper than the fleet drains. The last PR's
 checks then report against a base two merges further along than the one they
 started on.
 
@@ -480,36 +479,36 @@ tier)`. State both inputs.
 
 ## Step 2 — Order the set
 
-Apply in this order. Earlier rules are hard constraints; the last is the
+Apply in this order. Earlier rules are hard constraints. The last is the
 tie-breaker.
 
-1. **Latent-conflict edges (predicate 5) are directed and non-negotiable.** If B
+1. **Latent-conflict edges (predicate 5) point one way and are non-negotiable.** If B
    fails to apply over A, then A precedes B, and B carries a rebase note. If the
    pair conflicts in both directions, they are not orderable — the two authors
    reconcile before either lands, and that is the finding.
 2. **A PR that changes a base-anchored artifact's SHAPE goes at a tier boundary**,
    with a regeneration checkpoint immediately after it. Never in the middle of a
    batch.
-3. **A PR already conflicting with the base does not enter the order at all.** It
-   is rebased first, re-measured, and then placed. Placing it on the strength of
+3. **A PR already conflicting with the base does not enter the order at all.** Rebase
+   it first, re-measure it, then place it. Placing it on the strength of
    a plan to fix it is scheduling work that does not exist yet.
 4. **Tie-break by FRAGILITY, highest first — not by importance.**
 
 That fourth rule is the one that surprises people, so it carries its reason.
-Fragility is *how likely this PR is to stop applying while it waits*, and it is
-approximated by breadth of change times distance behind base (predicates 4 and
-2). The wide, old PR goes first — not because it matters more, but because its
-window is the shortest and every merge ahead of it narrows that window further.
+Fragility is *how likely this PR is to stop applying while it waits*. Approximate
+it by breadth of change times distance behind base (predicates 4 and 2). The
+wide, old PR goes first — not because it matters more, but because its window is
+the shortest. Every merge ahead of it narrows that window further.
 Merging the small clean ones first *feels* like progress and spends the exact
 resource the large one is running out of.
 
 Then group into **tiers**: within a tier, no two PRs share a file (predicate 4)
-and no latent edge connects them (predicate 5), so a tier merges in any order
+and no latent edge connects them (predicate 5). A tier then merges in any order
 and, capacity permitting, concurrently.
 
 ## Step 3 — Report shape
 
-Keep it to what was measured.
+Keep it to what you measured.
 
 ```
 ### ref: origin/develop @ 706a6676 | 11 open PRs | 4 idle runners
@@ -542,7 +541,7 @@ CAPACITY  4 idle runners, 6 runs queued. Batch of 2, not 4: each merge
 After the tiers, every plan MUST carry these sections, in this order:
 
 1. **Anomalies (6M)** — one section per conflict edge (latent or base) and per
-   anomalous PR, structured per `/ishikawa` (Jidoka): `Observed` vs `Expected`,
+   anomalous PR. Structure each per `/ishikawa` (Jidoka): `Observed` vs `Expected`,
    then a 6M classification (Man / Machine / Material / Method / Measurement /
    Environment) with evidence for each bucket. Do NOT summarize an anomaly as a
    single-table row.
@@ -578,12 +577,12 @@ the Half-B AskQuestion (choose 1–4). Never end a plan without asking.
 ```
 
 ### ★ Insight
-The structural conflict is the real signal; the content diff is small, so the
+The structural conflict is the real signal. The content diff is small, so the
 edge is cheap to reconcile once a human reads the two sections.
 
 ### Ranked Actionables
 1. Reconcile `better-mode.md` section ordering (Recommended) — author decision.
-2. Merge #167 before #166 (edge is directed).
+2. Merge #167 before #166 (the edge points one way).
 ```
 
 Every PR row carries its **full URL**. A bare `#4309` is not clickable from a
@@ -621,13 +620,13 @@ review-open-prs  →  merge-advisor (+ HITL merge)  →  sync-advisor  →  impl
   attention)          merges)                         drifted)
 ```
 
-Typical flow: `review-open-prs` reports eleven open and four red; `merge-advisor`
+Typical flow: `review-open-prs` reports eleven open and four red. `merge-advisor`
 shows two green PRs that latent-conflict with each other, asks HITL, and merges
 the tier the human authorized — re-measuring between merges.
 
 ## Requirements
 
-- `gh` authenticated for read; merge permission required for HITL Half B merges.
+- `gh` authenticated for read. Merge permission required for HITL Half B merges.
   Without read auth, run degraded mode and state what was not measured.
-- `git` with remote access; PR heads fetched as local refs (`pr-<N>`) for predicates 4–5.
+- `git` with remote access. PR heads fetched as local refs (`pr-<N>`) for predicates 4–5.
 - Does **not** require `linear-setup.json`.
