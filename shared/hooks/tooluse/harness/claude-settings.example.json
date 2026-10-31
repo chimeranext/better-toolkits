@@ -6,11 +6,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforce-prds.sh"
+            "command": "__HARNESS_HOOKS__/enforce-prds.sh"
           },
           {
             "type": "command",
-            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/approve-admin-merge.sh"
+            "command": "__HARNESS_HOOKS__/approve-admin-merge.sh"
           }
         ]
       }
@@ -20,7 +20,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/stop-prs-green.sh"
+            "command": "__HARNESS_HOOKS__/stop-prs-green.sh"
           }
         ]
       }
