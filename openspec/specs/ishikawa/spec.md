@@ -1,4 +1,4 @@
-# ishikawa Specification
+# Spec Delta
 
 ## Purpose
 
@@ -6,7 +6,7 @@ Provides a structured fishbone (Ishikawa / 6M) + Five-Whys root-cause analysis
 so anomalies are resolved by fixing both the systemic root cause and the
 visible symptom, in that order.
 
-## Requirements
+## ADDED Requirements
 
 ### Requirement: 6M classification practice
 The skill SHALL classify candidate causes of an anomaly across six categories:
@@ -139,9 +139,9 @@ claim by type, method and freshness.
 - **AND** SHALL re-observe if the source may have changed
 
 ### Requirement: Vendored evidence tools reinforce /ishikawa
-The change SHALL vendor three evidence tools — Graphify, Open Ontologies, and
-Specula — as sources of observable, verifiable evidence for `/ishikawa`
-root-cause analysis, installed globally in a pinned, idempotent way.
+The change SHALL vendor two evidence tools — Graphify and Open Ontologies — as
+sources of observable, verifiable evidence for `/ishikawa` root-cause analysis,
+installed per-repo in a pinned, idempotent way.
 
 #### Scenario: Graphify provides observed-vs-inferred edges
 - **WHEN** the knowledge graph (Graphify) is used as an evidence source
@@ -168,13 +168,13 @@ root-cause analysis, installed globally in a pinned, idempotent way.
   re-verifiable independently of location
 
 #### Scenario: Gitignore asymmetry — Graphify yes, Open Ontologies no
-- **WHEN** vendoring the tools into a consumer repo
+- **WHEN** vendoring the two tools into a consumer repo
 - **THEN** Graphify SHALL require adding `graphify-out/` to that repo's
   `.gitignore` (its generated artifacts must not be committed)
 - **AND** Open Ontologies SHALL NOT require a repo-specific gitignore entry,
   because its certificates are archived as CI artifacts rather than written into
   the repo tree
-- **AND** in all cases no generated artifact SHALL be committed/pushed
+- **AND** in both cases no generated artifact SHALL be committed/pushed
 
 #### Scenario: Specula provides TLA+ invariant model-checking
 - **WHEN** Specula is used to verify a system's behavior
@@ -215,12 +215,11 @@ root-cause analysis, installed globally in a pinned, idempotent way.
 #### Scenario: Installation is pinned, idempotent and global
 - **WHEN** the setup script runs
 - **THEN** Graphify SHALL be installed globally at a pinned version (`uv tool
-  install graphifyy==X.Y.Z`), Open Ontologies SHALL be installed globally from a
-  release with its SHA-256 verified, and Specula SHALL be installed globally via
-  `uv tool install -e .` at a pinned ref
-- **AND** re-running the scripts SHALL be idempotent (no duplicate installs)
-- **AND** neither tool SHALL be committed into a consumer repo — all live in the
-  user's global tool paths
+  install graphifyy==X.Y.Z`), and Open Ontologies SHALL be installed globally
+  from a release with its SHA-256 verified
+- **AND** re-running the script SHALL be idempotent (no duplicate installs)
+- **AND** neither tool SHALL be committed into a consumer repo — both live in
+  the user's global tool paths
 - **AND** the Open Ontologies MCP server SHALL be registered in the global
   `~/.config/opencode/opencode.json`, not in per-repo config
 
