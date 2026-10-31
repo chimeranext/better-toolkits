@@ -15,6 +15,12 @@
 #   bash scripts/ci/sweep-unstaged.sh [--json]
 set -u
 
+# Root of the repo this script lives in (scripts/ci -> repo root). Must be
+# resolved BEFORE any use of $REPO_ROOT (line 145) because set -u aborts on
+# unbound variables.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+
 JSON=0
 for arg in "$@"; do
   case "$arg" in
@@ -26,6 +32,8 @@ say() { [ "$JSON" -eq 0 ] && echo "$1"; }
 json_emit() { [ "$JSON" -eq 1 ] && echo "$1"; }
 
 DIRTY=0
+OPENSPEC_SYNC_NEEDED=0
+DRIFT_WORKTREES=""
 
 # Accumulate one worktree block from the porcelain stream, then evaluate.
 # Format: "worktree <path>" then "HEAD <sha>", "branch <ref>", optional "locked".
@@ -63,6 +71,27 @@ flush() {
       pr_mergeable="$(printf '%s' "$pr" | jq -r '.mergeable')"
     fi
   fi
+  # 4. OpenSpec drift: any active change with a delta spec not reflected in the
+  #    main specs (openspec/specs/). Detection: for each <change>/specs/**/spec.md,
+  #    the equivalent main spec must exist and be in sync (cmp), else /opsx-sync
+  #    is required.
+  local openspec_drift=0 drift_detail=""
+  if [ -d "$wt/openspec/changes" ]; then
+    while IFS= read -r delta; do
+      # delta is <change>/specs/<domain>/spec.md → main is openspec/specs/<domain>/spec.md
+      local rel="${delta#"$wt/openspec/changes/"}"   # <change>/specs/<domain>/spec.md
+      local main_spec="$wt/openspec/specs/${rel#*/specs/}"
+      if [ ! -f "$main_spec" ]; then
+        openspec_drift=1
+        drift_detail="${drift_detail} missing:$rel"
+        continue
+      fi
+      if ! cmp -s "$delta" "$main_spec"; then
+        openspec_drift=1
+        drift_detail="${drift_detail} drift:$rel"
+      fi
+    done < <(find "$wt/openspec/changes" -type f -path "*/specs/*/spec.md" 2>&1)
+  fi
   # verdict
   local verdict="CLEAN"
   if [ "$uncommitted" -eq 1 ]; then verdict="DIRTY"; DIRTY=1; fi
@@ -70,12 +99,25 @@ flush() {
   if [ "$pr_num" = "?" ] || [ "$pr_draft" = "true" ] || { [ "$pr_mergeable" != "MERGEABLE" ] && [ "$pr_mergeable" != "true" ]; }; then
     verdict="DIRTY"; DIRTY=1
   fi
+  if [ "$openspec_drift" -eq 1 ]; then
+    verdict="DIRTY"; DIRTY=1
+    OPENSPEC_SYNC_NEEDED=1
+    case " $DRIFT_WORKTREES " in
+      *" $wt "*) ;;
+      *) DRIFT_WORKTREES="$DRIFT_WORKTREES $wt" ;;
+    esac
+  fi
   say "worktree: $wt"
   say "  branch:      $branch"
   say "  origin-branch: ${origin_ref:-<none>}"
   say "  uncommitted: $uncommitted"
   say "  unpushed:    $unpushed"
   say "  PR:          ${pr_num} (draft=$pr_draft, mergeable=$pr_mergeable)"
+  if [ "$openspec_drift" -eq 1 ]; then
+    say "  openspec:    DRIFT${drift_detail}"
+  else
+    say "  openspec:    clean"
+  fi
   say "  verdict:     $verdict"
   say ""
   json_emit "{\"worktree\":\"$wt\",\"branch\":\"$branch\",\"uncommitted\":$uncommitted,\"unpushed\":$unpushed,\"pr\":\"$pr_num\",\"draft\":\"$pr_draft\",\"mergeable\":\"$pr_mergeable\",\"verdict\":\"$verdict\"}"
@@ -99,6 +141,20 @@ done < <(git worktree list --porcelain)
 
 # Flush the final block (if any).
 flush
+
+# MANDATORY OpenSpec sync: when delta-drift was detected in any worktree, apply
+# the delta specs into that worktree's main specs now (never leave drift behind).
+# This is the shared engine also used by /opsx-sync.
+if [ "$OPENSPEC_SYNC_NEEDED" -eq 1 ]; then
+  for wt in $DRIFT_WORKTREES; do
+    say "SWEEP: OpenSpec drift in $wt — applying mandatory sync (opsx-sync-apply)."
+    if ! bash "$REPO_ROOT/scripts/ci/opsx-sync-apply.sh" --root "$wt"; then
+      echo "SWEEP: OpenSpec sync FAILED for $wt — fix before continuing." >&2
+      exit 1
+    fi
+  done
+  say "SWEEP: OpenSpec sync applied."
+fi
 
 if [ "$DIRTY" -eq 1 ]; then
   say "SWEEP: DIRTY — work left uncommitted, unpushed, or uncovered by a ready PR."
