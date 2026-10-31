@@ -66,6 +66,26 @@ understood and corrected at the source.
 
 ---
 
+## Related standards (SSOT pointers)
+
+This protocol builds on the shared engineering standards. Read them before you
+write evidence or fix an anomaly:
+
+- **StS** (stderr/stream): evidence must come from a real captured log. Never
+  silence stderr to pass a check.
+  `shared/references/engineering-standards/stderr-stream-standards.md`
+- **Jidoka**: stop on anomaly and record boundary + hypothesis before continuing.
+  `shared/references/engineering-standards/jidoka.md`
+- **/explain §4.5 (ASD-STE100)**: write the dogfood report with controlled
+  language (short sentences, active voice, one meaning per word).
+- **Verification chain**: `/verify-evidence` runs the real tool and
+  `/evidence-explicit-attribution` formats the evidence (observed vs inferred).
+  A dogfood PASS is only as strong as its observable evidence.
+
+Never duplicate these texts here. Reference them by path.
+
+---
+
 ## Local validation prerequisite
 
 This protocol assumes a mechanism already exists for validating credentials locally (e.g., `supabase` CLI local-development workflow for project-level auth). See `https://supabase.com/docs/guides/local-development/cli-workflows#move-an-existing-project-to-local-development` for an example of local credential validation before `/dogfood` runs.
