@@ -78,6 +78,14 @@ reusable 6M / fishbone skill. See proposal.md for motivation.
   `graphify-out/`. Open Ontologies does not — it produces no fixed repo-tree
   artifacts; its certificates are archived as CI artifacts and never written
   into the repo, so no extra gitignore entry is needed.
+- **Specula** (`specula`, via `uv tool install -e .`): agentic formal
+  verification. It writes TLA+ specs + invariants, model-checks with TLC, and
+  reproduces violations at code level. This is the third leg of the evidence
+  stack (Graphify observes, Open Ontologies reasons over data, Specula proves
+  behavior). The `/ishikawa` recurrence guard is expressed as a verifiable TLA+
+  invariant. It requires Python 3.10+, `uv`, Java 21+ (Maven, for TLC), `gh`,
+  and an agent (OpenCode supported). Global install, absent from consumer repo
+  contents; run outputs live in `runs/<run-id>/` (outside the source checkout).
 - **Open Ontologies** (`open-ontologies`, release binary): download pinned
   release globally, verify SHA-256 before `mv` to `~/.local/bin`, register as a
   local MCP server (`command: ["open-ontologies", "serve"]`) in the **global**
