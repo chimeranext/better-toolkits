@@ -20,12 +20,14 @@ def main() -> int:
         print("no toolkits/ dir", file=sys.stderr)
         return 1
     changed: list[str] = []
+    rows: list[str] = []
     for tk in sorted(TOOLKITS.iterdir()):
         if not tk.is_dir():
             continue
         skills_dir = tk / "skills"
         pkg_path = tk / "package.json"
         if not (skills_dir.is_dir() and pkg_path.exists()):
+            rows.append(f"  skipped  {tk.name} (no skills/ or package.json)")
             continue
         names = sorted(p.name for p in skills_dir.iterdir() if p.is_dir())
         pkg = json.loads(pkg_path.read_text(encoding="utf-8"))
@@ -43,7 +45,13 @@ def main() -> int:
                 encoding="utf-8",
             )
             changed.append(tk.name)
-    print("synced catalogs:", ", ".join(changed) if changed else "(none)")
+            rows.append(f"  CHANGED  {tk.name}")
+        else:
+            rows.append(f"  in-sync  {tk.name}")
+    print(f"toolkits scanned: {len(rows)}")
+    for row in rows:
+        print(row)
+    print(f"summary: changed={len(changed)} in-sync={len(rows)-len(changed)}")
     return 0
 
 
