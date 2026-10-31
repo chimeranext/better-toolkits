@@ -75,25 +75,40 @@
     {
       "source": "chimeranext/better-toolkits",
       "skills": [
+        "apply",
+        "archive",
         "audit-engine",
+        "brainstorming-visual-companion",
+        "bulk-archive",
+        "continue",
+        "dogfood",
         "domain-driven-advisor",
         "evaluate-agent-skills",
+        "evidence-explicit-attribution",
+        "ff",
         "implement",
         "implement-advisor",
         "ishikawa",
         "merge-advisor",
+        "new",
+        "onboard",
         "parallelize",
         "premortem",
         "prioritize",
+        "propose",
         "resolve-open-questions",
         "review-active-issues",
         "review-open-prs",
         "spec-recommend",
         "spike-recommend",
-        "sync-advisor",
-        "worktree-cleanup",
         "subagents-opencode",
-        "verify-evidence"
+        "sync",
+        "sync-advisor",
+        "systematic-debugging",
+        "update",
+        "verify",
+        "verify-evidence",
+        "worktree-cleanup"
       ]
     }
   ]
