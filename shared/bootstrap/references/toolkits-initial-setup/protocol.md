@@ -158,6 +158,32 @@ Split from harness-initial-setup: this step provisions the **GGT** model on the 
    - Report PASS/FAIL per invariant. If FAIL → `GAP` (do not fake compliance).
 3. **Output**: PASS/FAIL table per invariant. `GGT audit: ALL PASS` or `GGT audit: FAILURES` with the failed invariant. If no repo permissions → document `no-enforced` (does not block bootstrap).
 
+## Engineering standards (SSOT)
+
+This setup installs/refers the indexed **engineering standards** at
+`shared/references/engineering-standards/` (consumed by the agent profile). The
+agent profile (`agents/better.md`) references them. The hooks enforce the key ones:
+
+- **Jidoka** (`jidoka.md`) — stop on anomaly. Record boundary + root-cause hypothesis.
+- **StS** (`stderr-stream-standards.md`) — no stream to null. Fold stderr into the
+  same sink. `2> file` forbidden (enforced by the stderr hook this setup installs).
+- **CLG** (`commit-logic-groups.md`) — commit intermediate work in semantic groups.
+- **GGT** (`gitflow-trunk.md`) — branch model provisioned in Phase 7b. Audited by
+  `audit-repo-gitflow.sh`.
+- **REL** (`release-cut.md`) — release cut. One `develop`→`main` PR. CTO owns QA.
+  Second human reviewer is the sole PROD gate.
+- **SemVer** (`semver.md`) — monotonic version gate enforced at the release cut
+  per monorepo.
+- **LTGT** (`local-vs-ground-truth.md`) — search ground truth from the git
+  common-dir across all worktrees with hidden paths. Never conclude absence from
+  a CWD-only scan.
+- **PRDS / BrS / WTD / QT4L / OST / MPH / NSQ / TFM** — the other indexed standards.
+
+The setup also installs the scripts/hooks that enforce StS (stderr adapter), the
+OpenSpec pipeline discipline, and the GGT audit. `sync-better-profile.sh` syncs
+the Better profile to each harness (OpenCode / Claude / Cursor) from
+`shared/bootstrap/agents/better.md` (multi-harness schema conversion).
+
 ## Arguments
 
 ```
