@@ -15,8 +15,8 @@ quality on `main`. Every repo SHALL be auditable against this setup.
 
 ## Repo invariants
 
-1. Default branch is `main`; `develop` exists when the repo follows GitFlow
-   (configurable; audit flag `--require-develop`).
+1. Default branch is `develop` (integration); `main` exists as the protected
+   trunk (configurable; audit flag `--require-develop` asserts `develop` too).
 2. `allow_squash_merge: false` (NSQ) and `allow_merge_commit: true`,
    `allow_rebase_merge: true`.
 3. Ruleset on `main` (`main-founders-only`): `allowed_merge_methods = ["merge"]`,
@@ -25,6 +25,14 @@ quality on `main`. Every repo SHALL be auditable against this setup.
    apply.
 5. Tooling: rebase is the convention for feature→`develop`; merge commit for
    `develop`→`main`.
+
+## Why `develop` is the default
+
+Feature PRs land on `develop` (rebase). Setting `develop` as the default branch
+makes the un-flagged `--base` resolve to `develop` deterministically — no
+operator must remember to pass `--base develop`. TLA+ model:
+`scripts/tla/branch-default/BranchDefault.tla` (TLC: default=`develop` PASS.
+Default=`main` yields a Safety counterexample).
 
 ## Audit
 
