@@ -10,12 +10,14 @@ profile inspired by poteto-mode, tuned for better-toolkits.
 
 ## What it does
 
-1. Ensures `.opencode/agents/better.md` exists (the agent profile). If missing, write
-   it (see the source in this repo) and tell the user to re-open the session.
-2. Instructs the user to cycle to the Better agent with the OpenCode keybinding:
+1. Ensures the canonical profile exists at `.opencode/agents/better.md` in this repo
+   (the single source of truth).
+2. Syncs that canonical file to `~/.config/opencode/agents/better.md` (the runtime
+   copy OpenCode loads), overwriting it.
+3. Instructs the user to cycle to the Better agent with the OpenCode keybinding:
    - **shift+tab** cycles the active agent (models-and-agents keybind). Tab-cycles
      again to come back.
-3. Declares MCP so the harness can talk to external servers:
+4. Declares MCP so the harness can talk to external servers:
    - better-toolkits **ViteMCP** servers = consumer side (`shared/hooks/dogfood/`,
      `shared/mcp/*`).
    - external **MCP** servers = providers (any project's own MCP server, e.g. a
@@ -72,7 +74,8 @@ Confirm Jidoka and No-Workarounds pass, and that `diagram.svg` (Pele, blueprint)
 
 ## Notes
 
-- The profile lives at `.opencode/agents/better.md` (project-scoped).
+- The canonical profile lives at `.opencode/agents/better.md` (repo SSOT); it is
+  synced to `~/.config/opencode/agents/better.md` (runtime copy).
 - The keybinding is a UI action (shift+tab); if it's not bound in your setup, bind
   "cycle agent" in OpenCode keybinds.
 - The agent uses the configured model; it does not change the selected model.
