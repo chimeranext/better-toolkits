@@ -57,7 +57,7 @@ test("posthogApi() rejects when the key is missing even at call time", async () 
   await assert.rejects(() => posthogApi("/query/"), /POSTHOG_PERSONAL_API_KEY is not set/);
 });
 
-test("runQuery() posts the query object to the local instance", async () => {
+test("runQuery() posts the query inside the { query } envelope", async () => {
   process.env.POSTHOG_HOST = "http://localhost:8000";
   process.env.POSTHOG_PERSONAL_API_KEY = "phc_secret";
   let seenBody;
@@ -67,5 +67,5 @@ test("runQuery() posts the query object to the local instance", async () => {
   };
   const out = await runQuery({ kind: "TrendsQuery", series: [] }, { fetchFn: fakeFetch });
   assert.equal(out.result, 42);
-  assert.deepEqual(seenBody, { kind: "TrendsQuery", series: [] });
+  assert.deepEqual(seenBody, { query: { kind: "TrendsQuery", series: [] } });
 });
