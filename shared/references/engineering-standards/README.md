@@ -1,4 +1,4 @@
-# Engineering standards — index (16 practices + OST)
+# Engineering standards — index (17 practices + OST)
 
 > SSOT at monorepo level: `shared/references/engineering-standards/`.
 > Do not duplicate these files inside toolkits — reference them by monorepo-relative
@@ -104,7 +104,7 @@ Protocol SSOT: `references/clean-code-standards-setup/protocol.md`, `references/
 | Which `.gitignore` patterns must I vendor? | BGI (catalog `vendored-gitignore.toml`) |
 | Is it a playbook or a runbook? | ODT (taxonomy. Never mix) |
 | How do I integrate features and releases? | GGT (feature→develop rebase. develop→main merge commit) |
-| ¿Cómo valido formalmente el order? | TFM (TLA+/TLC recipe) |
+| How do I validate the order formally? | TFM (TLA+/TLC recipe) |
 
 ## Provenance
 
