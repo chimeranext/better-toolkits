@@ -164,10 +164,10 @@ function denyNoSquash(command: string): string | null {
   const isGh = NO_SQUASH_GH.test(scan)
   const isGit = NO_SQUASH_GIT.test(scan)
   if (isGh && (NO_SQUASH_FLAG.test(scan) || NO_SQUASH_GH_SHORTHAND.test(scan))) {
-    return "PROHIBIDO: squash merges están prohibidos — `--squash` colapsa historia y comentarios de commits. Usa `--merge` o `--rebase`."
+    return "PROHIBIDO: squash merges están prohibidos — `--squash` colapsa historia y comentarios de commits. Usa el método que permita el ruleset del repo (por ejemplo `--rebase` si se exige historia lineal); no asumas que `--merge` esté permitido."
   }
   if (isGit && (NO_SQUASH_FLAG.test(scan) || NO_SQUASH_GIT_STRATEGY.test(scan))) {
-    return "PROHIBIDO: squash merges están prohibidos — `--squash` colapsa historia y comentarios de commits. Usa `--merge` o `--rebase`."
+    return "PROHIBIDO: squash merges están prohibidos — `--squash` colapsa historia y comentarios de commits. Usa el método que permita el ruleset del repo (por ejemplo `--rebase` si se exige historia lineal); no asumas que `--merge` esté permitido."
   }
   return null
 }
