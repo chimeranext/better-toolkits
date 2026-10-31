@@ -1,5 +1,5 @@
 ---
-description: "Better mode — switch OpenCode to the 'Better' agent profile (BDD · Jidoka · No-Workarounds · dogfood). Installs/verifies shared/bootstrap/agents/better.md and tells you to cycle with shift+tab. Enables MCP wiring (better-toolkits ViteMCP ↔ external MCP servers). Startup-agnostic."
+description: "Better mode — enable the 'Better' agent profile across harnesses (BDD · Jidoka · No-Workarounds · dogfood). Installs/verifies shared/bootstrap/agents/better.md → runtime copies for OpenCode, Claude, and Cursor. Tells you to cycle agents (shift+tab / @better). Enables MCP wiring (better-toolkits ViteMCP ↔ external MCP servers). Startup-agnostic."
 argument-hint: ""
 priority: 90
 ---
@@ -12,11 +12,12 @@ profile inspired by poteto-mode, tuned for better-toolkits.
 
 1. Ensures the canonical profile exists at `shared/bootstrap/agents/better.md` in this repo
    (the single source of truth).
-2. Syncs that canonical file to `~/.config/opencode/agents/better.md` (the runtime
-   copy OpenCode loads), overwriting it.
-3. Instructs the user to cycle to the Better agent with the OpenCode keybinding:
-   - **shift+tab** cycles the active agent (models-and-agents keybind). Tab-cycles
-     again to come back.
+2. Generates and syncs the per-harness runtime copies:
+   - OpenCode → `~/.config/opencode/agents/better.md`
+   - Claude → `~/.claude/agents/better.md`
+   - Cursor → `~/.cursor/agents/better.md`
+3. Instructs the user to select the Better agent in the active harness (OpenCode
+   `shift+tab`. Claude `@better`. Cursor `@better`).
 4. Declares MCP so the harness can talk to external servers:
    - better-toolkits **ViteMCP** servers = consumer side (`shared/hooks/dogfood/`,
      `shared/mcp/*`).
@@ -75,7 +76,9 @@ Confirm Jidoka and No-Workarounds pass, and that `diagram.svg` (Pele, blueprint)
 ## Notes
 
 - The canonical profile lives at `shared/bootstrap/agents/better.md` (repo SSOT); it is
-  synced to `~/.config/opencode/agents/better.md` (runtime copy).
+  generated + synced to per-harness runtime copies (`~/.config/opencode/`,
+  `~/.claude/`, `~/.cursor/`) via `scripts/ci/sync-better-profile.sh`
+  (schema conversion per harness — OpenCode/Claude/Cursor).
 - On Windows, sync the runtime copy with
   `pwsh -File scripts/ci/sync-better-profile.ps1`
   (`-check` / `-quiet` mirror the bash `--check` / `--quiet` flags).
