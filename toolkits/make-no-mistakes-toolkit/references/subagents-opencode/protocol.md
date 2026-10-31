@@ -6,6 +6,16 @@ son el **mecanismo** para ejecutar los subagents como workers TUI en procesos
 independientes. Este protocol integra las capacidades de orquestación herdr
 (`herdr-orchestration`), adaptadas al CLI real `herdr` (no `rtk herdr`).
 
+## Pipeline & parity (mandatory)
+
+- **Parity:** one issue = one OpenSpec change = one worktree = one PR. Keep this
+  invariant for every delegated task.
+- **Between intermediate commits:** if the branch carries OpenSpec changes, run
+  `/opsx-sync` before each next logical commit (CLG §5).
+- **Gate:** the controller only accepts a worker result as done after task review,
+  diff review, and `/dogfood`. Ship through `/ready-to-review-mergeable`.
+- Workers never push on their own; pushes are controller + HITL.
+
 ## Patrón (controlador)
 
 1. **Despachar un implementer fresco por tarea** — contexto aislado; se construye solo lo
