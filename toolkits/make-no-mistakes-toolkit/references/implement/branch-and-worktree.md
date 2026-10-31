@@ -38,8 +38,8 @@ Each issue owns exactly one branch, one worktree, and one PR:
 ## Symlink build artifacts across worktrees (disk + rebuild)
 
 Shared, regenerable build artifacts (`node_modules`, `dist/`, `build/`, `target/`,
-`.cache/`) are **symlinked** to the main checkout so worktrees do not duplicate
-them — saves disk and speeds up recompilation.
+`.cache/`, `venv/`, `.venv/`) are **symlinked** to the main checkout so worktrees
+do not duplicate them — saves disk and speeds up recompilation.
 
 ```bash
 # after creating a worktree, link its node_modules to the main checkout
