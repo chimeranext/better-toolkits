@@ -98,6 +98,33 @@ Reference concrete artifacts:
 
 ---
 
+## §4.5 ASD-STE100 output discipline (before emitting either layer)
+
+The explanation output SHALL follow ASD-STE100 controlled-language discipline (simplified technical English), because both layers are consumed by a human AND by downstream agents — misreading has a cost. Based on `github.com/danyuchn/asd-ste100-skill` (structural rules fully; lexical rules as a direction of travel).
+
+**Structural rules — apply (both layers):**
+- Active voice: "The agent deletes the file." not "The file is deleted."
+- No phrasal verbs: "start", not "spin up"; "remove", not "take off".
+- One instruction per sentence; no semicolons; noun clusters ≤3 words.
+- Sentence length ≤25 words (descriptions), ≤20 (instructions).
+- No ellipsis: keep subject/verb explicit.
+- **Keep modality**: never promote a hedge to a fact. "The request may have failed" stays as-is.
+
+**Lexical rules — direction of travel:**
+- One word, one meaning per document (don't rotate synonyms for the same thing).
+- Prefer the verb over the noun form ("analyze" over "perform an analysis of").
+- Define domain terms once if not common English.
+
+**Scan checklist (run before emitting):**
+1. Synonym rotation — pick one name, use it every time.
+2. Hedge stacking — state the claim or delete it; never let qualifiers pile up until nothing is asserted.
+3. Nominalization — use the verb.
+4. Marketing adjectives (seamless, robust, powerful…) — delete or replace with the measurement.
+5. Run-on sentences — one idea per sentence.
+6. Soft phrasal verbs — use the single plain verb.
+
+If a rewrite would drop necessary precision (a safety condition, a scope qualifier, a number), keep the longer phrasing and flag it — never silently simplify. Never add a fact the source did not state.
+
 ## §5 Non-obvious insight (`★ Insight` block)
 
 ```

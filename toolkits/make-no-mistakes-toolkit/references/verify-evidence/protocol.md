@@ -69,6 +69,15 @@ Emit the verdict with the evidence chain:
   single byte, the fingerprint changes and the verdict is invalidated — the
   evidence is bound to the exact content, not to a moment in time.
 
+## Step 5.5 — Human-friendly presentation (delegate to /explain)
+
+The verdict + evidence chain is machine-auditable, but for a human reader the
+raw chain is dense. When the explanation is for a person (not just an agent),
+format the verdict's story via `/explain` — two layers (plain prose + technical
+evidence), a non-obvious insight, and ranked actionables — and apply the
+ASD-STE100 output discipline (see `/explain` protocol §4.5). The evidence chain
+remains the source of truth; `/explain` is the presentation layer over it.
+
 ## Step 6 — Scope freeze + preexisting-vs-new (RDD discipline)
 
 - **Scope freeze:** verify ONLY the declared scope of the claim (the candidate).
