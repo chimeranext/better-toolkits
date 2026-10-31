@@ -550,8 +550,8 @@ After the tiers, every plan MUST carry these sections, in this order:
    allowed: a two-column side-by-side diff (ours #A vs theirs #B) with matched
    lines. All other content is prose/sections.
 3. **★ Insight** — one non-obvious takeaway from the measurement.
-4. **Actionables rankeados** — numbered actions, recommended first,
-   `(Recomendado)` when applicable.
+4. **Ranked Actionables** — numbered actions, recommended first,
+   `(Recommended)` when applicable.
 
 The plan is NOT complete without these four sections. The final step is ALWAYS
 the Half-B AskQuestion (choose 1–4). Never end a plan without asking.
@@ -577,7 +577,7 @@ the Half-B AskQuestion (choose 1–4). Never end a plan without asking.
 The structural conflict is the real signal; the content diff is small, so the
 edge is cheap to reconcile once a human reads the two sections.
 
-### Actionables rankeados
+### Ranked Actionables
 1. Reconcile `better-mode.md` section ordering (Recommended) — author decision.
 2. Merge #167 before #166 (edge is directed).
 ```
