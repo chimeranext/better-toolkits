@@ -30,3 +30,10 @@ repos:
         language: system
         pass_filenames: false
         always_run: true
+      - id: skills-catalog-check-postcommit
+        name: skills catalog post-commit advisory
+        entry: python3 scripts/ci/check-skills-catalog-advisory.py
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [post-commit]
