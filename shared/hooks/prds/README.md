@@ -74,6 +74,12 @@ plugin alongside stderr — until then, add the path manually.
 bash scripts/sync-prds-from-shared.sh
 ```
 
+Windows/PowerShell:
+
+```powershell
+pwsh -File scripts/sync-prds-from-shared.ps1
+```
+
 Copies this tree into `toolkits/*/hooks/prds/` (same pattern as stderr).
 
 ## Tests
