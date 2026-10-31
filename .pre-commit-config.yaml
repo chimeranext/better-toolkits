@@ -19,3 +19,8 @@ repos:
         entry: bash scripts/lint/check-no-stale-deprecated-shims.sh
         language: system
         files: ^(toolkits/[^/]+/(commands|scripts)/|shared/bootstrap/(commands|scripts)/|\.cursor/commands/).+\.(md|sh)$
+      - id: no-hardcoded-checksum
+        name: no hardcoded sha256 checksum in setup scripts
+        entry: python3 scripts/lint/detect_hardcoded_checksum.py
+        language: system
+        files: ^shared/bootstrap/scripts/setup-.*\.sh$
