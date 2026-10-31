@@ -17,6 +17,7 @@ enforces conventions already in industry use.
 | **BrS** | Branching Strategy | Branches, naming, protection | [branching-strategy.md](branching-strategy.md) |
 | **QT4L** | QA Traceability (four layers) | Req → automated test → manual QA → HITL | [qa-traceability-four-layers.md](qa-traceability-four-layers.md) |
 | **OST** | OpenSpec store PR traceability | Tracker → change folder → one store PR → one merge | [openspec-store-pr-traceability.md](openspec-store-pr-traceability.md) |
+| **AFIF** | Anti-Fragility via Fault Injection | Harden every layer by injecting faults (mutation, formal self-test, chaos, gate negatives); "never seen fail" is not a pass | [anti-fragility-fault-injection.md](anti-fragility-fault-injection.md) |
 
 The **clean code quartet** is DSMS + IFS + CPS + PRDS. BrS, QT4L, and **OST**
 (when the client uses an OpenSpec store) complete branching, QA traceability, and
