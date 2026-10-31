@@ -6,11 +6,21 @@
         "hooks": [
           {
             "type": "command",
-            "command": "opencode-hook __BETTER_TOOLKITS_ROOT__/shared/hooks/tooluse/enforce-prds.sh \"$ARGUMENTS\""
+            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/enforce-prds.sh"
           },
           {
             "type": "command",
-            "command": "opencode-hook __BETTER_TOOLKITS_ROOT__/shared/hooks/tooluse/approve-admin-merge.sh \"$ARGUMENTS\""
+            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/approve-admin-merge.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/stop-prs-green.sh"
           }
         ]
       }
