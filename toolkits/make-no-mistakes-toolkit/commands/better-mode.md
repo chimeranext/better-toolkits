@@ -30,6 +30,7 @@ profile inspired by poteto-mode, tuned for better-toolkits.
 - **No-Workarounds** — a suppressed signal is a failure; fix the source.
 - **Prove it works** — verify against the real artifact with real config; use `/dogfood`
   as the proof gate and render a Pele statechart (blueprint) as evidence.
+- **Verification chain** — *ishikawa analiza, verify-evidence prueba, evidence-explicit-attribution formatea.* When a root cause or countermeasure depends on a falsifiable claim, route: `/ishikawa` analyzes, `/verify-evidence` runs the real tool (Graphify / Open Ontologies / Specula) and returns a verdict, `/evidence-explicit-attribution` formats the evidence chain (Genchi Genbutsu: observed vs inferred). Never assert an unverified claim as fact.
 
 ## Full sequence (through /ready-to-review-mergeable)
 
