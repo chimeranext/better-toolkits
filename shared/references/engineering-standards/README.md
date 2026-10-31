@@ -1,4 +1,4 @@
-# Engineering standards — index (6 practices + OST)
+# Engineering standards — index (7 practices + OST)
 
 > SSOT a nivel monorepo: `shared/references/engineering-standards/`
 > (dedup desde `fractional-cto-toolkit/references/engineering-standards/`).
@@ -18,12 +18,13 @@ enforces conventions already in industry use.
 | **QT4L** | QA Traceability (four layers) | Req → automated test → manual QA → HITL | [qa-traceability-four-layers.md](qa-traceability-four-layers.md) |
 | **OST** | OpenSpec store PR traceability | Tracker → change folder → one store PR → one merge | [openspec-store-pr-traceability.md](openspec-store-pr-traceability.md) |
 | **AFIF** | Anti-Fragility via Fault Injection | Harden every layer by injecting faults (mutation, formal self-test, chaos, gate negatives); "never seen fail" is not a pass | [anti-fragility-fault-injection.md](anti-fragility-fault-injection.md) |
+| **WTD** | Worktree Discipline | Worktrees are transient and never committed; parity (1 issue = 1 worktree = 1 PR) is an association policy, not persistence | [worktree-discipline.md](worktree-discipline.md) |
 
-The **clean code quartet** is DSMS + IFS + CPS + PRDS. BrS, QT4L, and **OST**
-(when the client uses an OpenSpec store) complete branching, QA traceability, and
-spec promotion discipline.
+The **clean code quartet** is DSMS + IFS + CPS + PRDS. BrS + WTD govern branching
+and worktree hygiene; QT4L and **OST** (when the client uses an OpenSpec store)
+complete QA traceability and spec promotion discipline.
 
-**Adoption order:** DSMS → IFS → CPS → PRDS → BrS → QT4L → **OST** (store repos only).
+**Adoption order:** DSMS → IFS → CPS → PRDS → BrS → WTD → QT4L → **OST** (store repos only).
 
 **Day-to-day priority:** IFS, PRDS, and QT4L (reading rhythm, review rhythm, req→test trace).
 
@@ -52,6 +53,7 @@ Protocol SSOT: `references/clean-code-standards-setup/protocol.md`, `references/
 | Public barrel export? | CPS |
 | PR description and size? | PRDS |
 | Branch naming and protection? | BrS |
+| Worktree hygiene / parity? | WTD |
 | Scenario → verification in tasks? | QT4L |
 | One OpenSpec folder per store PR? | OST |
 
