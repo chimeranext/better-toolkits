@@ -28,7 +28,7 @@
 ## 5. Add /verify-evidence
 
 - [x] 5.1 Create `skills/verify-evidence/SKILL.md` as a thin shim (frontmatter + pointer to `references/verify-evidence/protocol.md`).
-- [x] 5.2 Create `references/verify-evidence/protocol.md` documenting claim-type → tool routing (Graphify / Open Ontologies / Specula), the real-execution requirement (never inference), and the verdict format (`PASSA`/`FALLA`/`NO-VERIFICABLE`) with the evidence chain per `evidence-explicit-attribution`.
+- [x] 5.2 Create `references/verify-evidence/protocol.md` documenting claim-type → tool routing (Graphify / Open Ontologies / Specula), the real-execution requirement (never inference), and the verdict format (`PASS`/`FAIL`/`NOT VERIFIABLE`) with the evidence chain per `evidence-explicit-attribution`.
 - [x] 5.3 Register `verify-evidence` in `package.json` `"skills"` catalog.
 
 ## 6. Verification
