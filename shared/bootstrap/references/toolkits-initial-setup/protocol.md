@@ -15,13 +15,14 @@ and global plugin installs.
 | OpenCode: `npx @chimeranext/better-toolkits setup` | Per-toolkit `npx @lapc506/* install` (deprecated) |
 | Auto-update: `git pull --ff-only` the clone + per-harness wiring re-sync | Third-party `opencode-plugin-auto-update` (migrates `"plugins"`→`"plugin"`, npm-registry only) |
 | Quality gate via `/assurance-local-setup` + `/assurance-repo-setup` | Per-repo policy decisions (destino de evidencia, enforcement level) |
+| **Repo-initial-setup (GGT):** provisions the GitFlow+trunk model (default branch `main`, NSQ, ruleset) and runs `audit-repo-gitflow.sh` | Harness-local-only concerns (never repo-scoped) |
 
 ## Frontera local vs repo
 
 | Dominio | Qué cubre | Permiteos clave |
 |---------|-----------|-----------------|
 | **LOCAL** (máquina del dev) | harness detection, marketplace/plugin installs, hooks locales, auto-update, deps typecheck | sin privilegios remotos |
-| **REPO** (remoto/protección) | gate CI (`.mega-linter.yml`, workflows), tsconfig base, ruleset `required_status_checks`, `internal-audits` | admin del repo (si se va a enforce) |
+| **REPO** (remoto/protección) | gate CI (`.mega-linter.yml`, workflows), tsconfig base, ruleset `required_status_checks`, `internal-audits`, **GGT repo-initial-setup** (default branch `main`, NSQ, auditoría `audit-repo-gitflow.sh`) | admin del repo (si se va a enforce) |
 
 La Parte L y la Parte R son independientes: un dev puede hacer la Parte L sin permisos
 remotos; la Parte R reporta `no-enforced`/`GAP` si no puede activar protección.
@@ -144,15 +145,29 @@ Invoke `/assurance-repo-setup` (toolkit assurance). It:
 **No bloquea el bootstrap**: si la activación del ruleset no está permitida o el repo de
 evidencia no existe, reporta estado `no-enforced` / `GAP` y continúa.
 
+## Phase 7b — Repo-initial-setup (GGT)
+
+Split de harness-initial-setup: este paso provisiona el modelo **GGT** en el repo y corre la auditoría.
+
+1. **Provisiona invariantes GGT** (idempotente, solo si hay permisos):
+   - default branch = `main`; `develop` existe (invariante 1).
+   - `allow_squash_merge: false`, `allow_merge_commit: true`, `allow_rebase_merge: true` (NSQ).
+   - Ruleset `main-founders-only` en `refs/heads/main`: `allowed_merge_methods=["merge"]`,
+     sin `required_linear_history` (MPH).
+2. **Audita**: `scripts/ci/audit-repo-gitflow.sh --repo <owner/repo> [--require-develop]`
+   - Reporta PASS/FAIL por invariante; si FAIL → `GAP` (no fingir cumplimiento).
+3. **Salida**: tabla PASS/FAIL por invariante; `GGT audit: ALL PASS` o `GGT audit: FAILURES` con el invariante fallido. Si no hay permisos de repo → `no-enforced` documentado (no bloquea el bootstrap).
+
 ## Arguments
 
 ```
-/toolkits-initial-setup [cursor|claude|opencode] [--expert-mode] [--no-auto-update] [--no-ruleset] [toolkit names…]
+/toolkits-initial-setup [cursor|claude|opencode] [--expert-mode] [--no-auto-update] [--no-ruleset] [--skip-ggt] [toolkit names…]
 ```
 
 - `--expert-mode` — author flow: never switch the clone's branch, never touch a dirty tree.
 - `--no-auto-update` — do not install the auto-update plugin (or `BETTER_TOOLKITS_AUTO_UPDATE=0`).
 - `--no-ruleset` — pass through to `/assurance-repo-setup`: generate files but do not touch ruleset.
+- `--skip-ggt` — skip Phase 7b repo-initial-setup (GGT provisioning + audit); report `skipped`.
 
 ## Related
 
