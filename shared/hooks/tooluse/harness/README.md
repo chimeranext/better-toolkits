@@ -16,10 +16,13 @@ Deterministic local guards, shared across harnesses:
 4. OpenCode: merge `opencode-opencode.json.example` into
    `~/.config/opencode/opencode.json` (under `hooks.beforeToolUse`).
 
-> Note on `opencode-hook` (Claude Code): it is the shared harness bridge binary
-> that reads the tool-use JSON from stdin and maps exit codes to a block. If you
-> prefer not to use it, replace the command with a wrapper that parses the stdin
-> JSON (`tool_input.command`) and invokes the same guard script.
+> **Claude Code (native):** the example uses `${CLAUDE_PROJECT_DIR}/.claude/hooks/`
+> — project-scoped hook scripts. Copy `enforce-prds.sh`, `approve-admin-merge.sh`
+> (and optionally `stop-prs-green.sh`) into each project's `.claude/hooks/`.
+> Keep `settings.json` and the hooks directory coherent: a hook wired in one but
+> not the other is inert.
+>
+> **OpenCode/Cursor** use absolute paths to the shared scripts in the clone.
 
 ## Behavior
 
