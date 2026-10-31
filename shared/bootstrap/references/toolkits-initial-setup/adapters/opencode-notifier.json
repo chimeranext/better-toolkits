@@ -1,0 +1,19 @@
+{
+  "sound": true,
+  "notification": true,
+  "bell": false,
+  "showProjectName": true,
+  "showSessionTitle": true,
+  "showIcon": false,
+  "suppressWhenFocused": false,
+  "focusOnClick": true,
+  "notificationTitle": "{sessionTitle}",
+  "messages": {
+    "permission": "Needs permission: {sessionTitle}",
+    "complete": "Listo! — {projectName}",
+    "subagent_complete": "Subagent terminado — {projectName}",
+    "error": "Error: {sessionTitle}",
+    "question": "Question (HITL): {sessionTitle}",
+    "user_cancelled": "Cancelled: {sessionTitle}"
+  }
+}

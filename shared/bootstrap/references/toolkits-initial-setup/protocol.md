@@ -76,6 +76,24 @@ Produce explicit **diffs** and command lists:
 - **Auto-update plugin (default ON)** — install the OpenCode discovery-dir plugin
   `better-toolkits-auto-update` + its mode sidecar; register the Cursor `workspaceOpen`
   hook. Opt out with `--no-auto-update` or `BETTER_TOOLKITS_AUTO_UPDATE=0`.
+- **OpenCode notifier (recommended for opencode harness)** — install + configure
+  `@mohak34/opencode-notifier@latest` (event-rich popups: `permission`/`complete`/
+  `subagent_complete`/`question`/`error`). Opinionated config template (SSOT) at
+  `adapters/opencode-notifier.json`; copy it to
+  `~/.config/opencode/opencode-notifier.json` (see `adapters/setup-opencode.md`):
+  - `showSessionTitle: true` (alerts show the session subject, not the project folder).
+  - `showIcon: false` (no OpenCode logo).
+  - `suppressWhenFocused: false` (**opt-in** — default OFF; the user explicitly opts in
+    if they want quiet-while-focused).
+  - `focusOnClick: true` (click-to-jump back to the session).
+  - HITL label only on `question`/`permission` (they need the human).
+  - If herdr is also present, set herdr `[ui.toast] delivery = "terminal"` (or disable its
+    system toast) to avoid duplicate alerts for the same event.
+- **herdr prefix key (avoid `ctrl+b` collision)** — opencode binds `ctrl+b` to
+  `session.background` ("move running work to the background"). herdr uses `ctrl+b`
+  as its prefix key by default, which intercepts the keystroke before opencode sees
+  it. When both are present, set herdr `[keys] prefix = "ctrl+a"` (in
+  `~/.config/herdr/config.toml`) so opencode keeps `ctrl+b` for backgrounding.
 - **Branch mode** — default **consumer**: always converge the clone on `main` and
   fast-forward. `--expert-mode` (author) never switches branch and never touches a
   dirty tree. The mode is persisted in the sidecar so background runs honor it.
@@ -143,6 +161,29 @@ Invoke `/assurance-repo-setup` (toolkit assurance). It:
 
 **No bloquea el bootstrap**: si la activación del ruleset no está permitida o el repo de
 evidencia no existe, reporta estado `no-enforced` / `GAP` y continúa.
+
+## Mandatory discipline — OpenSpec pipeline (no shortcuts)
+
+This bootstrap installs the agent profile (`agents/better.md`) and the hooks that
+enforce the **OpenSpec pipeline**. Any change to a repo (code, docs, policy, config)
+MUST go through `/opsx:propose` → worktree isolation → `/opsx:apply` → `/dogfood` →
+`/ready-to-review-mergeable` → approved PR. Implementing directly on a working branch
+is forbidden — including by this setup's own tooling.
+
+## Engineering standards (SSOT)
+
+This setup installs/refers the indexed **engineering standards** at
+`shared/references/engineering-standards/` (consumed by the agent profile). The
+agent profile (`agents/better.md`) references them; the hooks enforce the key ones:
+
+- **Jidoka** (`jidoka.md`) — stop on anomaly; record boundary + root-cause hypothesis.
+- **StS** (`stderr-stream-standards.md`) — no stream to null; fold stderr into the
+  same sink; `2> file` forbidden (enforced by the stderr hook this setup installs).
+- **CLG** (`commit-logic-groups.md`) — commit intermediate work in semantic groups.
+- **PRDS / BrS / DSMS / IFS / CPS / QT4L / OST** — the other indexed standards.
+
+The setup also installs the scripts/hooks that enforce StS (stderr adapter) and
+the OpenSpec pipeline discipline.
 
 ## Arguments
 
