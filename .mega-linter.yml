@@ -24,6 +24,7 @@ ENABLE:
   - JSON        # jsonlint
   - ACTION      # actionlint (GitHub Actions workflows)
   - PYTHON     # ruff (se agrega, pero no bloquea al inicio, ver abajo)
+  - POWERSHELL # PSScriptAnalyzer (scripts .ps1 del repo)
 
 # Linters que reportan pero NO bloquean (para un rollout gradual sin romper CI)
 DISABLE_ERRORS_LINTERS:
@@ -39,5 +40,20 @@ FILTER_REGEX_EXCLUDE: '(node_modules|vendor|dist|build|\.venv|__pycache__|\.git|
 # lo que omitiría devDeps (@types/node, typescript) y rompería tsc con TS2688.
 PRE_COMMANDS:
   - command: cd shared/hooks && npm ci --include=dev && npm run typecheck
+    cwd: workspace
+    continue_if_failed: false
+  # Validación de sintaxis (parser) de scripts PowerShell — previa a
+  # PSScriptAnalyzer. Aborta si algún .ps1 no parsea. Corres con pwsh.
+  - command: >
+      pwsh -NoProfile -Command '
+        $err = $null
+        $files = Get-ChildItem -Path . -Recurse -Filter *.ps1 -ErrorAction SilentlyContinue |
+          Where-Object { $_.FullName -notmatch "node_modules|vendor|\\.git" }
+        foreach ($f in $files) {
+          $null = [System.Management.Automation.Language.Parser]::ParseFile($f.FullName, [ref]$null, [ref]$e)
+          if ($e) { $e | ForEach-Object { Write-Error "$($f.FullName): $($_.Message)" }; exit 1 }
+        }
+        "PS-PARSER-OK"
+      '
     cwd: workspace
     continue_if_failed: false

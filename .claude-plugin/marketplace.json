@@ -11,7 +11,7 @@
     {
       "name": "better-toolkits-bootstrap",
       "description": "Install first \u2014 bootstrap marketplace and harness wiring via /toolkits-initial-setup (HITL). OpenCode: npx @chimeranext/better-toolkits setup.",
-      "version": "0.2.6",
+      "version": "0.2.7",
       "source": "./shared/bootstrap",
       "category": "workflow",
       "keywords": [
@@ -28,7 +28,7 @@
     {
       "name": "make-no-mistakes",
       "description": "The disciplined dev lifecycle \u2014 implement issues, review PRs, sync releases, test E2E, manage sessions, stash secrets, and enforce manifest-driven tool-call hooks. Includes /evaluate-agent-skills (NVIDIA SkillSpector/SkillEvaluator wrappers). OpenCode stderr: better-toolkits-bootstrap /toolkits-initial-setup.",
-      "version": "1.39.20",
+      "version": "1.39.21",
       "source": "./toolkits/make-no-mistakes-toolkit",
       "category": "workflow",
       "keywords": [
@@ -201,7 +201,7 @@
     {
       "name": "fractional-cto-toolkit",
       "description": "Operational toolkit for freelance and fractional CTOs \u2014 contracts, project-takeover SOPs, process-engineering + requirements-first pipelines, ops playbook/runbook authoring, clean-code standards (DSMS/IFS/CPS/PRDS/BrS/QT4L), and multi-harness PRDS pre-push hooks.",
-      "version": "1.4.7",
+      "version": "1.4.8",
       "source": "./toolkits/fractional-cto-toolkit",
       "author": {
         "name": "Luis Andres Pena Castillo",
@@ -342,7 +342,7 @@
     {
       "name": "assurance",
       "description": "Release-assurance evidence toolkit \u2014 2 pillars (testing, liveness) + security transversal with its own runner, plus governance (DORA/DER metrics, stage gates, traceable receipts). Migrated quality-evidence commands from make-no-mistakes with shims.",
-      "version": "0.1.20",
+      "version": "0.1.21",
       "source": "./toolkits/assurance-toolkit",
       "author": {
         "name": "Luis Andres Pena Castillo",

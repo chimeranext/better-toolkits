@@ -27,6 +27,10 @@ con estilo eslint+prettier. Sin framework hijo en esta change.
 - T5 [errors] Mensajes de error **prescriptivos** (sugieren alternativa), salvo `[SECRECY]`
   en el JSDoc (seguridad por secrecía). No usar `throw` para flujo de control esperado →
   S4 + `conventions/prescriptive-error-messages.md`.
+- T6 [BDD] Verificar comportamiento observable, no implementación. La afirmación BDD se
+  declara en el mini-lenguaje del `conventions/matcher-contract.md` y se traduce al
+  matcher nativo (**Chai** `expect().to.equal/contain/match` o **Jest** `expect().toEqual`).
+  Gates Jidoka + No-Workarounds según `assurance-toolkit/references/testing/e2e-protocol.md`.
 
 ## COUNTEREXAMPLES
 
