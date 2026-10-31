@@ -6,7 +6,7 @@ Verifies a claim against the real, observable evidence using the vendored
 verification tools (Graphify, Open Ontologies, Specula), returning a verdict
 with an auditable evidence chain.
 
-## ADDED Requirements
+## Requirements
 
 ### Requirement: Tool selection by claim type
 The `/verify-evidence` skill SHALL route a claim to the appropriate tool based
