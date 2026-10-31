@@ -4,6 +4,11 @@
 
 Standardize how formal models (TLA+/TLC) are written and validated in this repo.
 
+## Relation types
+
+- `ORDER` (prerrequisito): restringe posiciones relativas (valida Prop).
+- `COMPLEMENT` (ortogonalidad): sin restricción de orden; se documenta pero no se evalúa en `Prop`. Ejemplo: PRDS↔BrS, PRDS↔QT4L.
+
 ## Conventions
 
 1. Module file name SHALL equal the module name exactly (`AdoptionOrder.tla` ↔ `MODULE AdoptionOrder`).
