@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "beforeToolUse": [
+      {
+        "matcher": "gh pr merge .* --admin",
+        "command": "bash __BETTER_TOOLKITS_ROOT__/shared/hooks/tooluse/approve-admin-merge.sh \"$ARGUMENTS\""
+      },
+      {
+        "matcher": "gh pr (create|edit)",
+        "command": "bash __BETTER_TOOLKITS_ROOT__/shared/hooks/tooluse/enforce-prds.sh \"$ARGUMENTS\""
+      }
+    ]
+  }
+}
