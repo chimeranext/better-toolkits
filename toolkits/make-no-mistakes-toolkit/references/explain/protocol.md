@@ -125,6 +125,15 @@ The explanation output SHALL follow **controlled-language discipline** (the ASD-
 
 If a rewrite would drop necessary precision (a safety condition, a scope qualifier, a number), keep the longer phrasing and flag it — never silently simplify. Never add a fact the source did not state.
 
+**Mechanical gate (when available):** run `scripts/ste-lint.py` on the final
+output (semicolons, sentence length, phrasal verbs, nominalization, marketing
+adjectives, synonym rotation, passive voice, compound tenses). It never flags
+hedges/modality (confidence is content). Exit 1 only on hard violations above
+baseline; advisory findings (passive voice, compound tenses) never fail.
+Vendored reference: `references/writing-rules.md` (53-rule summary with
+sources), `examples/before-after.md`, `examples/linter-edge-cases.md` (see
+`STE100-ATTRIBUTION.txt` — MIT, vendored from `danyuchn/asd-ste100-skill`).
+
 ## §5 Non-obvious insight (`★ Insight` block)
 
 ```
