@@ -1,4 +1,4 @@
-# Engineering standards — index (9 practices + OST)
+# Engineering standards — index (10 practices + OST)
 
 > SSOT a nivel monorepo: `shared/references/engineering-standards/`
 > (dedup desde `fractional-cto-toolkit/references/engineering-standards/`).
@@ -20,12 +20,13 @@ enforces conventions already in industry use.
 | **AFIF** | Anti-Fragility via Fault Injection | Harden every layer by injecting faults (mutation, formal self-test, chaos, gate negatives); "never seen fail" is not a pass | [anti-fragility-fault-injection.md](anti-fragility-fault-injection.md) |
 | **WTD** | Worktree Discipline | Worktrees are transient and never committed; parity (1 issue = 1 worktree = 1 PR) is an association policy, not persistence | [worktree-discipline.md](worktree-discipline.md) |
 | **CHH** | Checksum Hygiene | Setup scripts pin the VERSION and verify release assets against the release's own checksum manifest — never hardcoded sha256 constants | [checksum-hygiene.md](checksum-hygiene.md) |
+| **SemVer** | Semantic Versioning policy | Version source = plugin.json; marketplace.json is generated; monotonic bump vs default branch enforced at merge queue (rebase + re-bump) | [semver.md](semver.md) |
 
 The **clean code quartet** is DSMS + IFS + CPS + PRDS. BrS + WTD govern branching
 and worktree hygiene; QT4L and **OST** (when the client uses an OpenSpec store)
 complete QA traceability and spec promotion discipline.
 
-**Adoption order:** DSMS → IFS → CPS → PRDS → BrS → WTD → QT4L → **OST** (store repos only) → **CHH** (setup-script integrity).
+**Adoption order:** DSMS → IFS → CPS → PRDS → BrS → WTD → QT4L → **OST** (store repos only) → **CHH** (setup-script integrity) → **SemVer** (version policy).
 
 **Day-to-day priority:** IFS, PRDS, and QT4L (reading rhythm, review rhythm, req→test trace).
 
@@ -58,6 +59,7 @@ Protocol SSOT: `references/clean-code-standards-setup/protocol.md`, `references/
 | Scenario → verification in tasks? | QT4L |
 | One OpenSpec folder per store PR? | OST |
 | Hardcoded sha256 in a setup script? | CHH |
+| ¿Cómo bumpear la versión de un plugin? | SemVer (monotónica vs main, merge queue) |
 
 ## Provenance
 
