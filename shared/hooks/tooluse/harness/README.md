@@ -13,8 +13,13 @@ Deterministic local guards, shared across harnesses:
    better-toolkits clone.
 2. Cursor: merge `cursor-settings.example.json` into `.cursor/settings.json`.
 3. Claude Code: merge `claude-settings.example.json` into `.claude/settings.json`.
-4. OpenCode: the same guards are already configured under
-   `hooks.beforeToolUse` in `~/.config/opencode/opencode.json`.
+4. OpenCode: merge `opencode-opencode.json.example` into
+   `~/.config/opencode/opencode.json` (under `hooks.beforeToolUse`).
+
+> Note on `opencode-hook` (Claude Code): it is the shared harness bridge binary
+> that reads the tool-use JSON from stdin and maps exit codes to a block. If you
+> prefer not to use it, replace the command with a wrapper that parses the stdin
+> JSON (`tool_input.command`) and invokes the same guard script.
 
 ## Behavior
 
