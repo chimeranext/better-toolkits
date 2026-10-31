@@ -546,9 +546,10 @@ After the tiers, every plan MUST carry these sections, in this order:
    then a 6M classification (Man / Machine / Material / Method / Measurement /
    Environment) with evidence for each bucket. Do NOT summarize an anomaly as a
    single-table row.
-2. **Conflict hunks** — one subsection per conflicted path. Only here a table is
-   allowed: a two-column side-by-side diff (ours #A vs theirs #B) with matched
-   lines. All other content is prose/sections.
+2. **Conflict hunks** — one subsection per conflicted path, showing the FULL
+   unified diff (`git diff pr-A pr-B -- <file>`) verbatim. Never summarized,
+   never truncated, never converted to a table. The raw diff is the expected
+   output.
 3. **★ Insight** — one non-obvious takeaway from the measurement.
 4. **Ranked Actionables** — numbered actions, recommended first,
    `(Recommended)` when applicable.
@@ -568,10 +569,13 @@ the Half-B AskQuestion (choose 1–4). Never end a plan without asking.
 
 ### Conflict hunks
 #### `toolkits/.../commands/better-mode.md`
-| Side #A (pr-166) | Side #B (pr-167) |
-|---|---|
-| `+ ## Parity` | `+ ## Pipeline & parity` |
-| `+ run /opsx-sync before each commit` | `+ gate: /ready-to-review-mergeable` |
+```diff
+@@ -30,7 +30,6 @@
+ - **Prove it works** — verify against the real artifact with real config; use `/dogfood`
+   as the proof gate and render a Pele statechart (blueprint) as evidence.
+-- **Verification chain** — *ishikawa analiza, verify-evidence prueba, evidence-explicit-attribution formatea.* ...
++  (the full `git diff pr-A pr-B -- <file>` goes here, verbatim)
+```
 
 ### ★ Insight
 The structural conflict is the real signal; the content diff is small, so the
