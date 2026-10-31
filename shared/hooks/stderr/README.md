@@ -73,3 +73,5 @@ bash hooks/stderr/tests/test-detect.sh
 
 Monorepo contract: [`docs/multi-harness-ssot.md`](../../../docs/multi-harness-ssot.md).
 Canonical tree for all toolkits: this directory (`shared/hooks/stderr`). Toolkit copies under `toolkits/*/hooks/stderr` must stay in sync (vendored for independent plugin publish).
+
+Vendor sync: `bash scripts/sync-stderr-from-shared.sh` · Windows: `pwsh -File scripts/sync-stderr-from-shared.ps1`.

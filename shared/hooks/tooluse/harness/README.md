@@ -23,6 +23,14 @@ Deterministic local guards, shared across harnesses:
 > not the other is inert.
 >
 > **OpenCode/Cursor** use absolute paths to the shared scripts in the clone.
+>
+> **Windows / PowerShell:** use `scripts/ci/install-tooluse-guards.ps1` to copy the
+> shared guards into the central hooks home (default `C:\Users\<user>\.agents\hooks`,
+> or `-root <dir>`):
+>
+> ```powershell
+> pwsh -File scripts/ci/install-tooluse-guards.ps1
+> ```
 
 ## Behavior
 

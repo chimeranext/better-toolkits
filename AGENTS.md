@@ -32,7 +32,8 @@ mutations), [`docs/multi-harness-ssot.md`](docs/multi-harness-ssot.md).
 
 Renames of slash commands or bootstrap scripts are **clean-cut** — update references and delete the old path. Do not add “MOVED (shim)” commands or `exec` wrapper scripts. Policy: [`shared/references/engineering-standards/no-deprecated-agent-shims.md`](shared/references/engineering-standards/no-deprecated-agent-shims.md).
 
-Vendor with `scripts/sync-stderr-from-shared.sh` and `scripts/sync-prds-from-shared.sh`.
+Vendor with `scripts/sync-stderr-from-shared.sh` and `scripts/sync-prds-from-shared.sh`
+(Windows: `scripts/sync-stderr-from-shared.ps1` / `scripts/sync-prds-from-shared.ps1`, run via `pwsh -File …`).
 See [`docs/multi-harness-ssot.md`](docs/multi-harness-ssot.md).
 
 ## Issue tracking for this monorepo

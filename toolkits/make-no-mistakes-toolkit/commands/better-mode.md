@@ -76,6 +76,9 @@ Confirm Jidoka and No-Workarounds pass, and that `diagram.svg` (Pele, blueprint)
 
 - The canonical profile lives at `.opencode/agents/better.md` (repo SSOT); it is
   synced to `~/.config/opencode/agents/better.md` (runtime copy).
+- On Windows, sync the runtime copy with
+  `pwsh -File scripts/ci/sync-better-profile.ps1`
+  (`-check` / `-quiet` mirror the bash `--check` / `--quiet` flags).
 - The keybinding is a UI action (shift+tab); if it's not bound in your setup, bind
   "cycle agent" in OpenCode keybinds.
 - The agent uses the configured model; it does not change the selected model.

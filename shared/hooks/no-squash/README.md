@@ -44,3 +44,6 @@ Monorepo contract: [`docs/multi-harness-ssot.md`](../../../docs/multi-harness-ss
 Canonical tree for all toolkits: this directory (`shared/hooks/no-squash`). Toolkit
 copies under `toolkits/*/hooks/no-squash` must stay in sync (vendored for
 independent plugin publish).
+
+Vendor sync (copy this tree into `toolkits/*/hooks/no-squash/`):
+`bash scripts/sync-no-squash-from-shared.sh` · Windows: `pwsh -File scripts/sync-no-squash-from-shared.ps1`.
