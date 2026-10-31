@@ -24,13 +24,20 @@ enforces conventions already in industry use.
 | **BGI** | Build-Artifact Gitignore | Every repo vendors the ignore patterns from `vendored-gitignore.toml` (venv, node_modules, target, build, caches). Promotes the symlink build-artifact policy | [build-artifacts-gitignore.md](build-artifacts-gitignore.md) |
 | **ODT** | Ops Documentation Taxonomy | Classify every ops doc as Playbook vs Runbook vs SOP. Never mix. Route via /document-this | [ops-documentation-taxonomy.md](ops-documentation-taxonomy.md) |
 | **NSQ** | No-Squash Merge | Every repo sets `allow_squash_merge: false`. Merge and rebase stay allowed. Rulesets exclude squash. The local guard blocks `--squash`. | [no-squash-merge.md](no-squash-merge.md) |
-| **GGT** | GitFlow + Trunk-based | Hybrid model: feature→`develop` rebase; `develop`→`main` merge commit. Auditable setup + repo-initial-setup step | [gitflow-trunk.md](gitflow-trunk.md) |
+| **GGT** | GitFlow + Trunk-based | Hybrid model: feature→`develop` rebase. `develop`→`main` merge commit. Auditable setup + repo-initial-setup step | [gitflow-trunk.md](gitflow-trunk.md) |
 
 The **clean code quartet** is DSMS + IFS + CPS + PRDS. BrS + WTD govern branching
 and worktree hygiene. QT4L and **OST** (when the client uses an OpenSpec store)
 complete QA traceability and spec promotion discipline.
 
-**Adoption order:** DSMS → IFS → CPS → PRDS → BrS → WTD → QT4L → **OST** (store repos only) → **CHH** (setup-script integrity). Then **SemVer** (version policy), **MPH** (main protections, HITL merge guard), **BGI** (vendored gitignore catalog), **ODT** (ops documentation taxonomy), **NSQ** (no-squash merge), and **GGT** (GitFlow + trunk-based).
+**Adoption order** (flowchart TD):
+
+```mermaid
+flowchart TD
+    A[DSMS] --> B[IFS] --> C[CPS] --> D[PRDS] --> E[BrS] --> F[WTD] --> G[GGT]
+    G --> H[QT4L] --> I[OST] --> J[CHH] --> K[SemVer] --> L[MPH] --> M[BGI]
+    M --> N[ODT] --> O[NSQ]
+```
 
 **Day-to-day priority:** IFS, PRDS, and QT4L (reading rhythm, review rhythm, req→test trace).
 
