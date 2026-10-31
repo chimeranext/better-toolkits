@@ -76,6 +76,16 @@ Stop and report (do not improvise) when:
 - a wave does not pass the test gate after a reasonable cap of fix rounds.
 - an irreversible operation is required without human approval.
 
+## Formal model (why, in plain language)
+
+This protocol is accompanied by a formal model of the orchestrator (TLA+,
+verified with TLC). You do **not** need to read TLA+ to use `/parallel-subagents`.
+The model exists to make explicit which risks the orchestrator guards against —
+especially the **semantic overlap** between parallel tasks, which Git and tests
+cannot see. See [`formal-model.md`](formal-model.md) for the plain-language
+explanation (textual vs semantic conflicts, what each invariant means, and when
+the model is worth it vs. overkill).
+
 ## References
 
 - superpowers/dispatching-parallel-agents: https://github.com/obra/superpowers/blob/main/skills/dispatching-parallel-agents/SKILL.md
