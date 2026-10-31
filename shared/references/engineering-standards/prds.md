@@ -197,3 +197,35 @@ When auditing with `--focus prds` or `--prs`:
 - [ ] Soft cap ~400 lines; flag mega-diffs
 - [ ] One intent — no unrelated file churn
 - [ ] Draft workflow respected (undraft only when checks green + human OK)
+
+---
+
+## GitHub enforcement (status check + rulesets)
+
+When PRDS must be enforced mechanically in GitHub:
+
+- Define a `prds-check` status check (CI) that validates the PR description
+  against the audit checks above.
+- Attach it via `required_status_checks` on the branch rulesets that should
+  enforce it.
+- Keep branch rulesets complementary: use one ruleset per protected branch, and
+  never overlap the same branch across rulesets. Example: a `PRDS gate` for
+  `develop`/`staging`, and the main guard (`main-protections-hitl.md`) for
+  `main`.
+- The main guard belongs to **MPH**; the `prds-check` context belongs here.
+
+## Deterministic enforcement (no exceptions)
+
+When a PRDS gate blocks a PR (a review requirement, a `prds-check` status, or a
+ruleset rejection), the **only** permitted corrective action is to **redraft the
+PR description** to satisfy PRDS (title/Summary/Tracker/Test plan/Scope).
+
+Forbidden (never allowed):
+
+- Modifying, softening, or temporarily disabling the ruleset or any status-check
+  requirement (e.g. "adjust the gate for now").
+- Bypassing with `--admin` / administrator privileges.
+- Marking the PR ready or merging while any PRDS condition is unmet.
+
+This is deterministic: gate fires → redraft description → re-run checks. No
+exceptions.

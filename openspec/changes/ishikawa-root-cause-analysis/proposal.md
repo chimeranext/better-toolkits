@@ -1,0 +1,91 @@
+# Proposal
+
+## Why
+
+The Jidoka (stop-on-anomaly) discipline requires a **systematic root-cause
+analysis** (RCA) method when an anomaly is found. Currently the repo relies on
+ad-hoc 5-Whys descriptions inside the agent profile, but there is no dedicated,
+reusable skill that guides a full causal analysis — the Ishikawa / fishbone
+diagram (6M: Man, Machine, Material, Method, Measurement, Environment). This
+change adds a `/ishikawa` skill and teaches `/premortem` and `/postmortem` to
+route their causal analysis through it, so that **both** the root cause and the
+symptom are fixed, in that order.
+
+## What Changes
+
+- **Add** a new skill `skills/ishikawa/SKILL.md` (+ protocol reference) that:
+  - Identifies the anomaly (observed vs expected).
+  - Practices the **6M** classification of candidate causes (Man, Machine,
+    Material, Method, Measurement, Mother Nature/Environment), recording
+    plausibility + evidence for each, and selecting the most likely root
+    cause(s). A fishbone diagram is an optional output aid, not the goal.
+  - Requires the fix to address **both** the root cause and the symptom, in
+    that order, and to verify both (Jidoka correction).
+- **Modify** `skills/premortem/SKILL.md` to route its Step 3 deep-dive causal
+  analysis through `/ishikawa` (6M lens) when identifying "why it failed".
+- **Modify** `commands/postmortem.md` to invoke `/ishikawa` in the Causa Raíz
+  step, so the post-incident report is grounded in a systematic 6M analysis.
+- **Modify** `references/dogfood/protocol.md` so the Jidoka stop (anomaly
+  detected) routes through `/ishikawa` before fixing.
+- **Modify** `skills/evidence-explicit-attribution/SKILL.md` to add four
+  Genchi Genbutsu observation rules (in-session observation gate, claim-type
+  label, method-of-observation, freshness); `/ishikawa` is invoked on demand
+  only, never automatically.
+- **Vendor** three verification tools that reinforce `/ishikawa`:
+  - **Graphify** (`graphifyy`): builds a knowledge graph with edges tagged
+    `EXTRACTED` (read directly) vs `INFERRED` (derived) — a concrete
+    implementation of the Genchi Genbutsu observation distinction.
+  - **Open Ontologies** (`open-ontologies`): produces re-verifiable certificates
+    that refuse forged conclusions — a concrete implementation of the Baka-Yoke
+    recurrence guard.
+  - **Specula** (`specula`): agentic formal verification — writes TLA+ specs of
+    the target system plus invariants, model-checks them (TLC), and reproduces
+    violations at the code level. This is the concrete implementation of the
+    recurrence guard as a verifiable invariant (the third leg: Graphify
+    observes, Open Ontologies reasons over data, Specula proves behavior).
+  All are installed globally via pinned/idempotent scripts (CLI/bin in
+  `~/.local/bin`), following the existing `setup-opencode.md` vendor pattern —
+  no consumer-repo committed content, no per-repo push.
+- **Add** a `/verify-evidence` skill that orchestrates the three vendored tools
+  to verify a claim: select Graphify (code structure), Open Ontologies
+  (reasoning/consistency), or Specula (invariant/behavior), run the real
+  verification, and emit a verdict with the evidence chain in the
+  `evidence-explicit-attribution` format. This is the "engine" that makes the
+  Genchi Genbutsu rules mechanical — it closes the loop: ishikawa analyzes,
+  verify-evidence proves, evidence-explicit-attribution formats.
+- Register `ishikawa` in the toolkit's `package.json` `"skills"` catalog.
+
+## Capabilities
+
+### New Capabilities
+- `ishikawa`: structured root-cause analysis using the fishbone/6M method,
+  with a mandatory "fix root cause AND symptom, in that order" verification gate.
+- `verify-evidence`: orchestrates the vendored verification tools to prove a
+  claim (Graphify / Open Ontologies / Specula) and returns a verdict with an
+  evidence chain in the `evidence-explicit-attribution` format.
+- `graphify` / `open-ontologies` / `specula` (vendored): evidence + formal
+  verification tools that feed `/ishikawa` and `/verify-evidence`
+  (observed-vs-inferred edges; re-verifiable certificates; TLA+ invariant
+  model-checking).
+
+### Modified Capabilities
+- `premortem`: causal deep-dives are structured via the 6M lens (instead of
+  unstructured failure stories only).
+- `postmortem`: the Causa Raíz section is produced via `/ishikawa`.
+- `dogfood`: the Jidoka stop routes anomalies through `/ishikawa`.
+
+## Impact
+
+- New: `toolkits/make-no-mistakes-toolkit/skills/ishikawa/` (SKILL.md +
+  `references/ishikawa/protocol.md`).
+- New (global vendored setup): `shared/bootstrap/scripts/setup-graphify.sh`,
+  `shared/bootstrap/scripts/setup-open-ontologies.sh`,
+  `shared/bootstrap/scripts/setup-specula.sh`; all install globally per machine
+  (CLI/bin in `~/.local/bin`, Graphify skill global, Open Ontologies MCP server
+  in global `~/.config/opencode/opencode.json`, Specula via `uv tool install`).
+  No consumer-repo committed content and no per-repo push required.
+- Modified: `skills/premortem/SKILL.md`, `commands/postmortem.md`,
+  `references/dogfood/protocol.md`, `skills/evidence-explicit-attribution/SKILL.md`,
+  `package.json` (skills catalog).
+- This is a monorepo-internal change plus global tooling installed once per
+  machine.

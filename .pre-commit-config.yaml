@@ -19,3 +19,21 @@ repos:
         entry: bash scripts/lint/check-no-stale-deprecated-shims.sh
         language: system
         files: ^(toolkits/[^/]+/(commands|scripts)/|shared/bootstrap/(commands|scripts)/|\.cursor/commands/).+\.(md|sh)$
+      - id: no-hardcoded-checksum
+        name: no hardcoded sha256 checksum in setup scripts
+        entry: python3 scripts/lint/detect_hardcoded_checksum.py
+        language: system
+        files: ^shared/bootstrap/scripts/setup-.*\.sh$
+      - id: skills-catalog-check
+        name: skills catalog matches on-disk skill folders
+        entry: python3 scripts/ci/check-skills-catalog.py
+        language: system
+        pass_filenames: false
+        always_run: true
+      - id: skills-catalog-check-postcommit
+        name: skills catalog post-commit advisory
+        entry: python3 scripts/ci/check-skills-catalog-advisory.py
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [post-commit]

@@ -14,21 +14,22 @@ and global plugin installs.
 | OpenCode stderr + optional npm CLIs via `setup-opencode.md` | `/make-no-mistakes:opencode-setup` (removed — use bootstrap) |
 | OpenCode: `npx @chimeranext/better-toolkits setup` | Per-toolkit `npx @lapc506/* install` (deprecated) |
 | Auto-update: `git pull --ff-only` the clone + per-harness wiring re-sync | Third-party `opencode-plugin-auto-update` (migrates `"plugins"`→`"plugin"`, npm-registry only) |
-| Quality gate via `/assurance-local-setup` + `/assurance-repo-setup` | Per-repo policy decisions (destino de evidencia, enforcement level) |
+| Quality gate via `/assurance-local-setup` + `/assurance-repo-setup` | Per-repo policy decisions (evidence destination, enforcement level) |
+| **Repo-initial-setup (GGT):** provisions the GitFlow+trunk model (default branch `main`, NSQ, ruleset) and runs `audit-repo-gitflow.sh` | Harness-local-only concerns (never repo-scoped) |
 
-## Frontera local vs repo
+## Local vs repo boundary
 
-| Dominio | Qué cubre | Permiteos clave |
+| Domain | Covers | Key permissions |
 |---------|-----------|-----------------|
-| **LOCAL** (máquina del dev) | harness detection, marketplace/plugin installs, hooks locales, auto-update, deps typecheck | sin privilegios remotos |
-| **REPO** (remoto/protección) | gate CI (`.mega-linter.yml`, workflows), tsconfig base, ruleset `required_status_checks`, `internal-audits` | admin del repo (si se va a enforce) |
+| **LOCAL** (dev machine) | harness detection, marketplace/plugin installs, local hooks, auto-update, deps typecheck | no remote privileges |
+| **REPO** (remote/protection) | CI gate (`.mega-linter.yml`, workflows), tsconfig base, ruleset `required_status_checks`, `internal-audits`, **GGT repo-initial-setup** (default branch `develop`, NSQ, audit `audit-repo-gitflow.sh`) | repo admin (if enforcing) |
 
-La Parte L y la Parte R son independientes: un dev puede hacer la Parte L sin permisos
-remotos; la Parte R reporta `no-enforced`/`GAP` si no puede activar protección.
+Part L and Part R are independent: a developer can run Part L without remote
+permissions; Part R reports `no-enforced`/`GAP` when it cannot activate protection.
 
 ---
 
-# Parte L — Local (máquina del dev)
+# Part L — Local (dev machine)
 
 ## Phase 1 — Detect harness
 
@@ -79,7 +80,7 @@ Produce explicit **diffs** and command lists:
 - **Branch mode** — default **consumer**: always converge the clone on `main` and
   fast-forward. `--expert-mode` (author) never switches branch and never touches a
   dirty tree. The mode is persisted in the sidecar so background runs honor it.
-- **Assurance local** — `/assurance-local-setup` (git hooks locales + typecheck deps).
+- **Assurance local** — `/assurance-local-setup` (local git hooks + typecheck deps).
 
 Show full proposed file contents or unified diff. Link [stderr README](../../../../hooks/stderr/README.md).
 
@@ -129,7 +130,7 @@ Report pass/fail per harness. If verify fails, propose rollback diffs (HITL agai
 
 ---
 
-# Parte R — Repo (remoto/protección)
+# Part R — Repo (remote/protection)
 
 ## Phase 7 — Assurance repo gate
 
@@ -138,24 +139,64 @@ Invoke `/assurance-repo-setup` (toolkit assurance). It:
 - generates `.mega-linter.yml`, `.github/workflows/megalinter.yml`, `.github/workflows/bypass-audit.yml`,
   and `shared/hooks/tsconfig.json` (if TS) from `scripts/assurance-repo-setup/templates/`;
 - ensures the ruleset `required_status_checks` via `scripts/assurance-repo-setup/ensure-rule-set.sh`
-  (idempotente; solo si hay permisos);
-- verifies `internal-audits` via `ensure-audit-repo.sh` (emite GAP si falta).
+  (idempotent; only with permissions);
+- verifies `internal-audits` via `ensure-audit-repo.sh` (emits GAP if missing).
 
-**No bloquea el bootstrap**: si la activación del ruleset no está permitida o el repo de
-evidencia no existe, reporta estado `no-enforced` / `GAP` y continúa.
+**Does not block bootstrap:** if ruleset activation is not allowed or the evidence
+repo does not exist, report `no-enforced` / `GAP` and continue.
+
+## Phase 7b — Repo-initial-setup (GGT)
+
+Split from harness-initial-setup: this step provisions the **GGT** model on the repo and runs the audit.
+
+1. **Provision GGT invariants** (idempotent, only with permissions):
+   - default branch = `develop`. `main` exists as the protected trunk (invariant 1).
+   - `allow_squash_merge: false`, `allow_merge_commit: true`, `allow_rebase_merge: true` (NSQ).
+   - Ruleset `main-founders-only` on `refs/heads/main`: `allowed_merge_methods=["merge"]`,
+     without `required_linear_history` (MPH).
+2. **Audit**: `scripts/ci/audit-repo-gitflow.sh --repo <owner/repo> [--require-develop]`
+   - Report PASS/FAIL per invariant. If FAIL → `GAP` (do not fake compliance).
+3. **Output**: PASS/FAIL table per invariant. `GGT audit: ALL PASS` or `GGT audit: FAILURES` with the failed invariant. If no repo permissions → document `no-enforced` (does not block bootstrap).
+
+## Engineering standards (SSOT)
+
+This setup installs/refers the indexed **engineering standards** at
+`shared/references/engineering-standards/` (consumed by the agent profile). The
+agent profile (`agents/better.md`) references them. The hooks enforce the key ones:
+
+- **Jidoka** (`jidoka.md`) — stop on anomaly. Record boundary + root-cause hypothesis.
+- **StS** (`stderr-stream-standards.md`) — no stream to null. Fold stderr into the
+  same sink. `2> file` forbidden (enforced by the stderr hook this setup installs).
+- **CLG** (`commit-logic-groups.md`) — commit intermediate work in semantic groups.
+- **GGT** (`gitflow-trunk.md`) — branch model provisioned in Phase 7b. Audited by
+  `audit-repo-gitflow.sh`.
+- **REL** (`release-cut.md`) — release cut. One `develop`→`main` PR. CTO owns QA.
+  Second human reviewer is the sole PROD gate.
+- **SemVer** (`semver.md`) — monotonic version gate enforced at the release cut
+  per monorepo.
+- **LTGT** (`local-vs-ground-truth.md`) — search ground truth from the git
+  common-dir across all worktrees with hidden paths. Never conclude absence from
+  a CWD-only scan.
+- **PRDS / BrS / WTD / QT4L / OST / MPH / NSQ / TFM** — the other indexed standards.
+
+The setup also installs the scripts/hooks that enforce StS (stderr adapter), the
+OpenSpec pipeline discipline, and the GGT audit. `sync-better-profile.sh` syncs
+the Better profile to each harness (OpenCode / Claude / Cursor) from
+`shared/bootstrap/agents/better.md` (multi-harness schema conversion).
 
 ## Arguments
 
 ```
-/toolkits-initial-setup [cursor|claude|opencode] [--expert-mode] [--no-auto-update] [--no-ruleset] [toolkit names…]
+/toolkits-initial-setup [cursor|claude|opencode] [--expert-mode] [--no-auto-update] [--no-ruleset] [--skip-ggt] [toolkit names…]
 ```
 
 - `--expert-mode` — author flow: never switch the clone's branch, never touch a dirty tree.
 - `--no-auto-update` — do not install the auto-update plugin (or `BETTER_TOOLKITS_AUTO_UPDATE=0`).
 - `--no-ruleset` — pass through to `/assurance-repo-setup`: generate files but do not touch ruleset.
+- `--skip-ggt` — skip Phase 7b repo-initial-setup (GGT provisioning + audit). Report `skipped`.
 
 ## Related
 
 - [multi-harness-ssot.md](../../../../docs/multi-harness-ssot.md)
-- `/assurance-local-setup` y `/assurance-repo-setup` (`toolkits/assurance-toolkit/commands/`)
+- `/assurance-local-setup` and `/assurance-repo-setup` (`toolkits/assurance-toolkit/commands/`)
 - OpenSpec: `openspec/changes/2026-09-16-shared-bootstrap-toolkits-initial-setup/`

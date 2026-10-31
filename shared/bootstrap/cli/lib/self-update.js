@@ -152,6 +152,22 @@ export function applySelfUpdate(plan, opts = {}) {
       // Expanded post-pull: bytes are compared against the freshly pulled source.
       const wiring = planWiringSteps(opts, plan.cloneRoot);
       applyInstall({ repoRoot: plan.cloneRoot, adapter: wiring.adapter, steps: wiring.steps }, opts);
+      try {
+        if (dry) {
+          log("would re-sync skills catalog (scripts/ci/sync-skills-catalog.py)");
+          results.push({ ok: true, skipped: true, detail: "would re-sync skills catalog" });
+        } else {
+          execFileSync("python3", ["scripts/ci/sync-skills-catalog.py"], {
+            cwd: plan.cloneRoot,
+            stdio: "pipe",
+            timeout: 60000,
+          });
+          results.push({ ok: true, detail: "skills catalog re-synced" });
+        }
+      } catch (err) {
+        const msg = String(err?.stderr ?? err?.message ?? err).trim().split("\n").pop();
+        results.push({ ok: false, detail: `skills catalog sync failed: ${msg}` });
+      }
       results.push({ ok: true, detail: "OpenCode wiring re-synced" });
       continue;
     }

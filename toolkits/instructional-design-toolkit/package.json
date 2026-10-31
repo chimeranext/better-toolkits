@@ -8,7 +8,6 @@
     {
       "source": "chimeranext/better-toolkits",
       "skills": [
-        "session-planner-1on1",
         "blooms-taxonomy",
         "coaching-session",
         "course-audit",
@@ -16,6 +15,7 @@
         "course-retro",
         "course-revise",
         "course-visualize",
+        "deep-research",
         "learning-evaluation",
         "mentoring-session",
         "new-course",
@@ -23,6 +23,7 @@
         "piber-narrative-architect",
         "research-methodology",
         "session-plan-audit",
+        "session-planner-1on1",
         "ship-first-design",
         "slides-generate",
         "slides-preview",

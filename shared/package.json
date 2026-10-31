@@ -1,0 +1,17 @@
+{
+  "name": "shared",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "",
+  "scripts": {},
+  "skills": [
+    {
+      "source": "chimeranext/better-toolkits",
+      "skills": [
+        "local-pr-review",
+        "requirements-authoring"
+      ]
+    }
+  ]
+}
