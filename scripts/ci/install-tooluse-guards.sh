@@ -38,8 +38,25 @@ case "$HARNESS" in
     echo "[tooluse-guards] installed: $HARNESS -> $HH/settings.json"
     ;;
   opencode)
-    echo "[tooluse-guards] opencode: merge $ROOT/shared/hooks/tooluse/harness/opencode-opencode.json.example"
-    echo "  into $HH/opencode.json (hooks.beforeToolUse). Guard scripts already copied to $HH/shared/hooks/tooluse/."
+    python3 - "$ROOT" "$HH" <<'PY'
+import json, pathlib, sys
+root, hh = pathlib.Path(sys.argv[1]), pathlib.Path(sys.argv[2])
+example = root/"shared/hooks/tooluse/harness/opencode-opencode.json.example"
+target = hh/"opencode.json"
+add = json.loads(example.read_text())["hooks"]["beforeToolUse"]
+if target.exists():
+    data = json.loads(target.read_text())
+    btu = data.setdefault("hooks", {}).setdefault("beforeToolUse", [])
+    for e in add:
+        if e not in btu:
+            btu.append(e)
+    target.write_text(json.dumps(data, ensure_ascii=False, indent=2)+"\n")
+else:
+    data = json.loads(example.read_text())
+    data["hooks"]["beforeToolUse"] = [dict(e, command=e["command"].replace("__BETTER_TOOLKITS_ROOT__", str(root))) for e in data["hooks"]["beforeToolUse"]]
+    target.write_text(json.dumps(data, ensure_ascii=False, indent=2)+"\n")
+PY
+    echo "[tooluse-guards] opencode: merged $HH/opencode.json (hooks.beforeToolUse)"
     ;;
 esac
 exit 0
