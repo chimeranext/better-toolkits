@@ -92,7 +92,8 @@
         "spike-recommend",
         "sync-advisor",
         "worktree-cleanup",
-        "subagents-opencode"
+        "subagents-opencode",
+        "verify-evidence"
       ]
     }
   ]

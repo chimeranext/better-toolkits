@@ -125,6 +125,15 @@ reusable 6M / fishbone skill. See proposal.md for motivation.
   → Mitigation: add the 6M lens to the causal step only; keep the final report
   format unchanged.
 
+### D8 — /verify-evidence orchestrates the tools (thin shim + protocol)
+- `skills/verify-evidence/SKILL.md` is a thin shim (frontmatter + pointer to
+  `references/verify-evidence/protocol.md`), consistent with SSS.
+- The protocol documents the claim-type → tool routing (Graphify / Open
+  Ontologies / Specula), requires real execution (never inference), and emits a
+  verdict with the `evidence-explicit-attribution` evidence chain.
+- `ishikawa` can invoke `/verify-evidence` to prove a countermeasure's
+  falsifiable claim; it never asserts an unverified claim as fact.
+
 ## Migration Plan
 
 1. Create `skills/ishikawa/` (SKILL.md + `references/ishikawa/protocol.md`).
