@@ -1,5 +1,5 @@
 ---
-description: "Better mode — switch OpenCode to the 'Better' agent profile (BDD · Jidoka · No-Workarounds · dogfood). Installs/verifies .opencode/agents/better.md and tells you to cycle with shift+tab. Enables MCP wiring (better-toolkits ViteMCP ↔ external MCP servers). Startup-agnostic."
+description: "Better mode — switch OpenCode to the 'Better' agent profile (BDD · Jidoka · No-Workarounds · dogfood). Installs/verifies shared/bootstrap/agents/better.md and tells you to cycle with shift+tab. Enables MCP wiring (better-toolkits ViteMCP ↔ external MCP servers). Startup-agnostic."
 argument-hint: ""
 priority: 90
 ---
@@ -10,7 +10,7 @@ profile inspired by poteto-mode, tuned for better-toolkits.
 
 ## What it does
 
-1. Ensures the canonical profile exists at `.opencode/agents/better.md` in this repo
+1. Ensures the canonical profile exists at `shared/bootstrap/agents/better.md` in this repo
    (the single source of truth).
 2. Syncs that canonical file to `~/.config/opencode/agents/better.md` (the runtime
    copy OpenCode loads), overwriting it.
@@ -74,7 +74,7 @@ Confirm Jidoka and No-Workarounds pass, and that `diagram.svg` (Pele, blueprint)
 
 ## Notes
 
-- The canonical profile lives at `.opencode/agents/better.md` (repo SSOT); it is
+- The canonical profile lives at `shared/bootstrap/agents/better.md` (repo SSOT); it is
   synced to `~/.config/opencode/agents/better.md` (runtime copy).
 - On Windows, sync the runtime copy with
   `pwsh -File scripts/ci/sync-better-profile.ps1`

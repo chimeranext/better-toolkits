@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # sync-better-profile.sh — repo-canonical → user runtime profile sync.
 #
-# Canonical source of truth: <repo>/.opencode/agents/better.md
+# Canonical source of truth: <repo>/shared/bootstrap/agents/better.md
 # Runtime destination: $HOME/.config/opencode/agents/better.md
 #
 # Modes:
@@ -17,7 +17,7 @@ set -u
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-SRC="$ROOT/.opencode/agents/better.md"
+SRC="$ROOT/shared/bootstrap/agents/better.md"
 DST="${HOME}/.config/opencode/agents/better.md"
 
 MODE="sync"

@@ -131,6 +131,11 @@ ones that shape this profile, each with its full path:
   derived catalogs are generated; monotonic bump vs default branch enforced at the
   merge queue (rebase + re-bump). Never pick a side.
   `shared/references/engineering-standards/semver.md`
+- **LTGT** (Local Truth is not Ground Truth) — a CWD shows one worktree's
+  branch; ground truth is the repo (`git rev-parse --git-common-dir`,
+  `git worktree list`, hidden paths included). Never conclude absence from a
+  CWD-only scan.
+  `shared/references/engineering-standards/local-vs-ground-truth.md`
 
 The OpenSpec pipeline is MANDATORY (no shortcuts)
 

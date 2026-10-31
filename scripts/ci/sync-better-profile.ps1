@@ -1,7 +1,7 @@
 #!/usr/bin/env pwsh
 # sync-better-profile.ps1 — repo-canonical → user runtime profile sync (Windows).
 #
-# Canonical source of truth: <repo>/.opencode/agents/better.md
+# Canonical source of truth: <repo>/shared/bootstrap/agents/better.md
 # Runtime destination: $HOME/.config/opencode/agents/better.md  ($HOME = %USERPROFILE%)
 #
 # Modes (PowerShell uses single-dash switches):
@@ -22,7 +22,7 @@ $ErrorActionPreference = 'Stop'
 
 $ScriptDir = $PSScriptRoot
 $RepoRoot = (Resolve-Path (Join-Path $ScriptDir '..\..')).Path
-$SRC = Join-Path $RepoRoot '.opencode\agents\better.md'
+$SRC = Join-Path $RepoRoot 'shared\bootstrap\agents\better.md'
 $DST = Join-Path $env:USERPROFILE '.config\opencode\agents\better.md'
 
 $MODE = if ($check) { 'check' } else { 'sync' }
