@@ -1,0 +1,19 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "opencode-hook __BETTER_TOOLKITS_ROOT__/shared/hooks/tooluse/enforce-prds.sh \"$ARGUMENTS\""
+          },
+          {
+            "type": "command",
+            "command": "opencode-hook __BETTER_TOOLKITS_ROOT__/shared/hooks/tooluse/approve-admin-merge.sh \"$ARGUMENTS\""
+          }
+        ]
+      }
+    ]
+  }
+}
