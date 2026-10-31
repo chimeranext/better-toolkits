@@ -6,9 +6,12 @@ description: >
   asks to run work in parallel, or wants multiple Task/Agent streams without
   file collisions. Multi-harness entry for the parallelize protocol SSOT.
 disable-model-invocation: true
+status: deprecated
 ---
 
 # parallelize — multi-harness entry
+
+> **DEPRECATED** — the `parallelize` skill is deprecated and superseded by [`parallel-subagents`](../parallel-subagents/SKILL.md). It remains functional for backwards compatibility; new and ongoing parallelization work should use `/parallel-subagents`.
 
 Read and follow the protocol SSOT:
 
