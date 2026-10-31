@@ -107,25 +107,25 @@ function deny(command: string): string | null {
   const scan = scanText(command) + "\n" + scanScriptFile(command)
   for (const pat of SILENCE) {
     if (pat.test(scan)) {
-      return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). En vez de /dev/null, usa `> out.log 2>&1` o `2>&1 | tee run.log` para preservar los errores.";
+      return "FORBIDDEN: redirecting stderr to /dev/null is not allowed (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). Instead of /dev/null, use `> out.log 2>&1` or `2>&1 | tee run.log` to preserve errors.";
     }
   }
   if (ORDERED_BOTH_NULL.test(scan)) {
-    return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). En vez de /dev/null, usa `> out.log 2>&1` o `2>&1 | tee run.log` para preservar los errores.";
+    return "FORBIDDEN: redirecting stderr to /dev/null is not allowed (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). Instead of /dev/null, use `> out.log 2>&1` or `2>&1 | tee run.log` to preserve errors.";
   }
   const remainder = scan.replace(ALLOWED_REVERSE, "")
   if (BARE_STDOUT_NULL.test(remainder)) {
-    return "PROHIBIDO: no se permite redirigir stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). En vez de /dev/null, usa `> out.log 2>&1` o `2>&1 | tee run.log` para preservar los errores.";
+    return "FORBIDDEN: redirecting stderr to /dev/null is not allowed (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null). Instead of /dev/null, use `> out.log 2>&1` or `2>&1 | tee run.log` to preserve errors.";
   }
   const foldScan = scan.replace(ALLOWED_REVERSE, "")
   // stderr to a SEPARATE file is forbidden: separate error files get missed
   // in audits. Fold stderr into the same log instead.
   if (HAS_STDERR_FILE.test(foldScan)) {
-    return "PROHIBIDO: redirigir stderr a un archivo separado (2> archivo). Los errores en archivo aparte se omiten en auditorías. Usa `> out.log 2>&1` o `2>&1 | tee run.log`. Tampoco redirijas stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null).";
+    return "FORBIDDEN: redirecting stderr to a separate file (2> file). Errors in a separate file get missed in audits. Use `> out.log 2>&1` or `2>&1 | tee run.log`. Also do not redirect stderr to /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null).";
   }
   if (BARE_FOLD.test(foldScan)) {
     if (!(HAS_FILE_SINK.test(foldScan) || HAS_TEE_FILE.test(foldScan))) {
-      return "PROHIBIDO: 2>&1 desnudo pliega errores en stdout sin sink de log. Usa archivos (`> out.log 2>&1`) o `cmd 2>&1 | tee run.log`. Tampoco redirijas stderr a /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null).";
+      return "FORBIDDEN: bare 2>&1 folds errors into stdout without a log sink. Use files (`> out.log 2>&1`) or `cmd 2>&1 | tee run.log`. Also do not redirect stderr to /dev/null (2>/dev/null, 2> /dev/null, 2>>/dev/null, &>/dev/null).";
     }
   }
   return null
@@ -164,10 +164,10 @@ function denyNoSquash(command: string): string | null {
   const isGh = NO_SQUASH_GH.test(scan)
   const isGit = NO_SQUASH_GIT.test(scan)
   if (isGh && (NO_SQUASH_FLAG.test(scan) || NO_SQUASH_GH_SHORTHAND.test(scan))) {
-    return "PROHIBIDO: squash merges están prohibidos — `--squash` colapsa historia y comentarios de commits. Usa `--merge` o `--rebase`."
+    return "FORBIDDEN: squash merges are forbidden — `--squash` collapses history and commit messages. Use `--merge` or `--rebase`."
   }
   if (isGit && (NO_SQUASH_FLAG.test(scan) || NO_SQUASH_GIT_STRATEGY.test(scan))) {
-    return "PROHIBIDO: squash merges están prohibidos — `--squash` colapsa historia y comentarios de commits. Usa `--merge` o `--rebase`."
+    return "FORBIDDEN: squash merges are forbidden — `--squash` collapses history and commit messages. Use `--merge` or `--rebase`."
   }
   return null
 }
@@ -212,7 +212,7 @@ export default {
       const isEdit = event.tool === "edit"
       if (!isShell && !isWrite && !isEdit) return
 
-      // Comparte el detector de stderr sobre contenido propuesto (write/edit).
+      // Share the stderr detector over proposed content (write/edit).
       const scanDeny = (text: unknown): string | null =>
         typeof text === "string" && text.trim() ? deny(text) : null
 
@@ -236,7 +236,7 @@ export default {
         return
       }
 
-      // write / edit: escanear el contenido propuesto con el detector de stderr
+      // write / edit: scan the proposed content with the stderr detector
       const input = event.input as { content?: unknown; edits?: Array<{ new_string?: unknown }> }
       if (isWrite) {
         const m = scanDeny(input.content)

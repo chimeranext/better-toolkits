@@ -1,90 +1,90 @@
-# Gobierno — protocol SSOT
+# Governance — protocol SSOT
 
-No tiene comandos de ejecución: define cómo se mide, qué bloquea y qué queda como evidencia.
+It has no execution commands: it defines how things are measured, what blocks, and what stays as evidence.
 Full behavior contract: `openspec/changes/add-assurance-toolkit/specs/toolkit/assurance-governance/spec.md`.
 
-## Métricas (outcomes, no actividad)
+## Metrics (outcomes, not activity)
 
 DORA (frequency, lead time, change fail rate, failed deployment recovery time, rework rate)
-+ DER/DRE, MTTD/MTTR, flaky rate. Join vía `found_env` + `commit_sha`; atribución 14 días;
-`unattributed` como señal. Anti-gaming: ratios, tendencias, sin targets individuales (Goodhart);
-cobertura como diagnóstico.
++ DER/DRE, MTTD/MTTR, flaky rate. Join via `found_env` + `commit_sha`; attribution 14 days;
+`unattributed` as a signal. Anti-gaming: ratios, trends, no individual targets (Goodhart);
+coverage as diagnosis.
 
-## Gates por etapa
+## Gates per stage
 
-- **commit**: lint, unit, coverage del cambio. Lint agregado vía MegaLinter
-  (`.mega-linter.yml`, GitHub Action) + typecheck `tsc --noEmit` como `PRE_COMMAND`
-  bloqueante (ver `references/testing/assurance-testing-audit/protocol.md`).
-- **PR**: tests 100%, security críticas 0, `coverage_delta` ≥ 0.
-- **release**: e2e pass, p95, DER bajo umbral, `can-i-deploy` donde aplique.
-Barato y rápido primero. Flaky = defecto (cuarentena, fix o remove).
+- **commit**: lint, unit, coverage of the change. Aggregated lint via MegaLinter
+  (`.mega-linter.yml`, GitHub Action) + typecheck `tsc --noEmit` as a blocking `PRE_COMMAND`
+  (see `references/testing/assurance-testing-audit/protocol.md`).
+- **PR**: tests 100%, security criticals 0, `coverage_delta` ≥ 0.
+- **release**: e2e pass, p95, DER below threshold, `can-i-deploy` where applicable.
+Cheap and fast first. Flaky = defect (quarantine, fix, or remove).
 
-## Receipts (fase 7)
+## Receipts (phase 7)
 
-Un receipt por veredicto: qué corrió, dónde, contra qué baseline, con qué IDs
-(Linear, MASWE/MASTG, contrato). Formato auditable del release.
+One receipt per verdict: what ran, where, against which baseline, with which IDs
+(Linear, MASWE/MASTG, contract). Auditable release format.
 
-### Política de evidencia: `internal-audits` (opinada)
+### Evidence policy: `internal-audits` (opinionated)
 
-Los receipts y la evidencia de gobernanza **no viven en el repo de producto**.
-Viven en un repo interno privado dedicado (`internal-audits` o equivalente), separado
-del código distribuible.
+Governance receipts and evidence **do not live in the product repo**.
+They live in a dedicated private internal repo (`internal-audits` or equivalent), separate
+from distributable code.
 
-**Rationale** (por qué esta política):
-- Evita mezclar lo auditable con lo distribuible: el repo de producto se vende/comparte
-  (p.ej. BSL) y no debe cargar gobernanza interna.
-- Evita filtrar señal interna (actores, bypasses de gate, aprobaciones, fallos) a
-  clientes/público.
-- Mantiene retención y control de acceso separados de la cadena de release.
+**Rationale** (why this policy):
+- Avoids mixing auditable with distributable: the product repo is sold/shared
+  (e.g. BSL) and must not carry internal governance.
+- Avoids leaking internal signal (actors, gate bypasses, approvals, failures) to
+  clients/public.
+- Keeps retention and access control separate from the release chain.
 
-**Regla**: la política es opinada para cualquier repo que adopte assurance. Un repo
-puede desviarse, pero debe **documentar la desviación** (destino alternativo y su
-rationale). En ausencia de `internal-audits`, el protocolo emite **GAP** (ver
+**Rule**: the policy is opinionated for any repo that adopts assurance. A repo
+may deviate, but must **document the deviation** (alternative destination and its
+rationale). In the absence of `internal-audits`, the protocol emits **GAP** (see
 `references/testing/assurance-testing-audit/protocol.md`).
 
-**Ciclo de vida del receipt**:
-- Inmutable: un archivo por evento, keyed por `commit_sha` (+ timestamp). No se
-  reescribe; cada evento = archivo nuevo.
-- Escritura: workflow/script de post-merge hace **push directo** a `internal-audits`
-  (rama `main` o `evidence/` de ese repo), **sin PRs ni re-evaluación** — la
-  evidencia describe eventos ya ocurridos y no debe re-entrar al ciclo de review.
-- Lectura: las métricas (bypass rate, typecheck status, etc.) se calculan desde
-  `internal-audits`, no desde el repo de producto.
+**Receipt lifecycle**:
+- Immutable: one file per event, keyed by `commit_sha` (+ timestamp). It is not
+  rewritten; each event = a new file.
+- Writing: the post-merge workflow/script does a **direct push** to `internal-audits`
+  (that repo's `main` or `evidence/` branch), **without PRs or re-evaluation** — the
+  evidence describes already-occurred events and must not re-enter the review cycle.
+- Reading: metrics (bypass rate, typecheck status, etc.) are computed from
+  `internal-audits`, not from the product repo.
 
-**Retención**: cohortes por trimestre; no borrar receipts vinculados a releases
-publicados. Política de poda explícita, revisada en governance.
+**Retention**: quarterly cohorts; do not delete receipts linked to published
+releases. Explicit pruning policy, reviewed in governance.
 
-**Estructura**: `evidence/receipts/<gate>/<yyyy-mm>/<sha>.json`.
+**Structure**: `evidence/receipts/<gate>/<yyyy-mm>/<sha>.json`.
 
-## Migrated skills (flutter-boilerplate-monorepo-template, reinterpretados)
+## Migrated skills (flutter-boilerplate-monorepo-template, reinterpreted)
 
-- **sre-slo-sli-sla**: SLOs, error budgets, MTTD/MTTR (SRE workbook); alimenta métricas outcome-based.
-- **cicd-argocd**: GitOps sync como gate (waves/hooks/health) — ver requirement GitOps.
-- **cicd-github-actions**: wiring de gates en CI (workflows de testing → deploy).
-- **sre-logging-log-aggregation**: Loki/ES/Fluentd, structured logs como evidencia adjunta a receipts.
-- **versioning-management**: SemVer + conventional commits UNIVERSALES (todo repo, no solo Flutter): commitlint en pre-push/CI, releases con release-please/semantic-release, changelog generado del historial; linkage versión↔evidencia en cada receipt. Misma disciplina que el versionado del marketplace (root `marketplace.json` + `plugin.json` juntos).
-- **sre-alerting-incident-management (gobierno)**: SLA timers y breach alerts como métricas del dashboard.
+- **sre-slo-sli-sla**: SLOs, error budgets, MTTD/MTTR (SRE workbook); feeds outcome-based metrics.
+- **cicd-argocd**: GitOps sync as a gate (waves/hooks/health) — see GitOps requirement.
+- **cicd-github-actions**: wiring gates in CI (testing workflows → deploy).
+- **sre-logging-log-aggregation**: Loki/ES/Fluentd, structured logs as evidence attached to receipts.
+- **versioning-management**: SemVer + UNIVERSAL conventional commits (every repo, not just Flutter): commitlint on pre-push/CI, releases with release-please/semantic-release, changelog generated from history; version↔evidence linkage in each receipt. Same discipline as marketplace versioning (root `marketplace.json` + `plugin.json` together).
+- **sre-alerting-incident-management (governance)**: SLA timers and breach alerts as dashboard metrics.
 
-## Pipeline GitOps + pre-flight K8s
+## GitOps pipeline + K8s pre-flight
 
-Waves (infra primero), hooks Pre/PostSync, `ignoreDifferences` como baseline, health
-assessment, App of Apps. Pre-flight: cada fallo del troubleshooting guide es un gate
-(probes, requests/limits, RBAC, quotas, HPA con métrica, smoke post-deploy).
+Waves (infra first), Pre/PostSync hooks, `ignoreDifferences` as baseline, health
+assessment, App of Apps. Pre-flight: each troubleshooting-guide failure is a gate
+(probes, requests/limits, RBAC, quotas, HPA with metric, post-deploy smoke).
 
-## Pre-flight en capas (matrices kubernetes.qa)
+## Layered pre-flight (kubernetes.qa matrices)
 
-kubeconform (schema+CRDs; kubeval prohibido) → kube-score (PR gate) → Trivy
-(imágenes+misconfig+secrets+SBOM) → Checkov (cross-IaC) + kubeaudit (security-only);
-Kubescape (posture multi-framework + RBAC); kube-bench (CIS en nodos); kube-hunter
-excluido (unmaintained). Un owner por hallazgo + una severidad; Snyk solo por su
-workflow dev (Code + fix PRs).
+kubeconform (schema+CRDs; kubeval forbidden) → kube-score (PR gate) → Trivy
+(images+misconfig+secrets+SBOM) → Checkov (cross-IaC) + kubeaudit (security-only);
+Kubescape (multi-framework posture + RBAC); kube-bench (CIS on nodes); kube-hunter
+excluded (unmaintained). One owner per finding + one severity; Snyk only for its
+dev workflow (Code + fix PRs).
 
-## Gates con contrato + health score
+## Contract gates + health score
 
-Exit codes 0/1/2, thresholds por env (dev:critical, prod:warning), audit-first,
-diff contra lo corriendo. Health score determinista 0–100 en 8 dimensiones
+Exit codes 0/1/2, per-env thresholds (dev:critical, prod:warning), audit-first,
+diff against what is running. Deterministic health score 0–100 across 8 dimensions
 (resources, security, networking, storage, availability, observability,
-configuration, cost); mínimos por dimensión, remediación exacta por hallazgo.
+configuration, cost); minimums per dimension, exact remediation per finding.
 
 ## Release gates (sequence)
 
@@ -94,20 +94,20 @@ sequenceDiagram
     participant CI as CI + assurance
     participant Lin as Linear
     participant K8s as Cluster/admission
-    Dev->>CI: commit (lint, unit, coverage cambio)
-    CI-->>Dev: fail rápido o pass
-    Dev->>CI: PR (tests 100%, sec críticas 0, coverage_delta)
+    Dev->>CI: commit (lint, unit, change coverage)
+    CI-->>Dev: fast fail or pass
+    Dev->>CI: PR (tests 100%, sec criticals 0, coverage_delta)
     CI->>Lin: link issues + qualflare.link
-    CI-->>Dev: merge solo en verde
+    CI-->>Dev: merge only when green
     Dev->>K8s: release (e2e, p95, DER, can-i-deploy)
     K8s->>K8s: waves + hooks + health + admission
-    K8s-->>Lin: receipts (qué, dónde, baseline, IDs, versión)
+    K8s-->>Lin: receipts (what, where, baseline, IDs, version)
 ```
 
 ## References
 
 - DORA: https://dora.dev/guides/dora-metrics/ · escape rate, MTTR, anti-gaming
-- Gates: https://kubernetes.qa/features/gates/ (exit codes, thresholds por env, audit-first, diff)
+- Gates: https://kubernetes.qa/features/gates/ (exit codes, per-env thresholds, audit-first, diff)
 - Contratos: `can-i-deploy` (Pact Broker) como gate de deploy
 - GitOps: `ArgoCD Up & Running` (O'Reilly 2025, local) — waves, hooks Pre/PostSync
 - AI evals: Huyen `AI Engineering` Ch4/Ch10 (local) — eval-driven development

@@ -11,8 +11,8 @@ description: >
 > Protocol SSOT: `toolkits/assurance-toolkit/references/liveness/protocol.md`.
 > Template copy retained as shim.
 
-Metrics, tracing, liveness/heartbeat/absence-detection. Alimenta la escalera
-de liveness (telemetría recibida, no solo emitida).
+Metrics, tracing, liveness/heartbeat/absence-detection. Feeds the liveness
+ladder (received telemetry, not just emitted).
 
-Convenciones Dart/Flutter OTel (par SDK+API pineado, export OTLP, LGTM):
+Dart/Flutter OTel conventions (pinned SDK+API pair, OTLP export, LGTM):
 `shared/references/conventions/platform/observability/README.md`.

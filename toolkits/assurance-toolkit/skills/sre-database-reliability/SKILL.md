@@ -12,5 +12,5 @@ description: >
 > `toolkits/assurance-toolkit/references/liveness/protocol.md` (replication/failover signals).
 > Template copy retained as shim.
 
-Restore/backup drills como tests calendarizados; replication lag y failover
-readiness como señales de liveness.
+Restore/backup drills as scheduled tests; replication lag and failover
+readiness as liveness signals.

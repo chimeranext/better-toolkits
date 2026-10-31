@@ -67,6 +67,53 @@ If "Targeted" is selected, ask:
 
 ## Execution Flow
 
+### Gates (mandatory — Jidoka · No-Workarounds · BDD)
+
+Before recording any test as `passed`, apply these three gates. A test that fails a
+gate is `failed`, never `passed`.
+
+**1. BDD — assert behavior, not implementation.** A test case passes only when its
+`Then` assertion (the `gherkin` `Then` step, or `project.coverage_type`) is
+satisfied by observable behavior. Assert what a user can observe — not internal
+setters, internals, or "it executed without error". Do not mark a test `passed`
+solely because the runner executed and exited `0`; the observable assertion must hold.
+
+**2. Jidoka — stop on anomaly.** If a test fails, an anomaly appears (unexpected
+output, timeout, error, empty response), or a runner exits abnormally, STOP that
+test's execution. Do not "continue to see if the rest still works" past an anomaly.
+Record the anomaly, its owning boundary (which step/runner), and a root-cause
+hypothesis. A `passed` status is disallowed for any test whose run hit an anomaly.
+
+**3. No-Workarounds — a suppressed signal is a failure.** A test must NOT be marked
+`passed` if reaching that status required:
+- silencing stderr/stdout to hide an error,
+- casting away a type error instead of fixing the type truth,
+- swallowing an exception in a catch block,
+- adding an arbitrary sleep/retry to "wait for it to settle",
+- monkey-patching a boundary you do not own, or
+- copy-paste "adaptation" that does not actually fit.
+
+If any of these was used to make a test appear green, the test is `failed`, and the
+workaround must be removed before it can pass. Fix the source, not the symptom.
+
+**Recording.** Add the gate verdicts to the run result per test:
+
+```jsonc
+{
+  "test_id": "TC-001",
+  "status": "failed",
+  "gates": {
+    "bdd_assertion": "pass",
+    "jidoka_stop": "fail",
+    "no_workarounds": "pass"
+  }
+}
+```
+
+A test with any gate `fail` has `status: "failed"`.
+
+---
+
 ### Step 0: Load and Filter
 
 ```bash
