@@ -51,10 +51,11 @@ flowchart TD
     S13[BGI — Build-Artifact Gitignore]
     S14[ODT — Ops Documentation Taxonomy]
     S15[NSQ — No-Squash Merge]
-    S0 --> S1
-    S1 --> S2
+    S16[TFM — Formal Model TLA+]
+    S0 --> S1 --> S2
     S2 --> S3
-    S3 --> S4
+    S2 --> S4
+    S3 --> S5
     S4 --> S5
     S5 --> S6
     S6 --> S7
@@ -66,6 +67,7 @@ flowchart TD
     S12 --> S13
     S13 --> S14
     S14 --> S15
+    S15 --> S16
 ```
 
 **Day-to-day priority:** IFS, PRDS, and QT4L (reading rhythm, review rhythm, req→test trace).
