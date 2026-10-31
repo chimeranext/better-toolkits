@@ -9,9 +9,10 @@
 # Usage: bash setup-open-ontologies.sh
 set -euo pipefail
 
-# ---- Pinned release + expected SHA-256 (bump deliberately) ----
-OO_VERSION="${OO_VERSION:-0.1.0}"
-OO_SHA256="${OO_SHA256:-}"   # set to the expected sha256 to enforce; empty = warn
+# ---- Pinned release (the version is the pin; integrity comes from the
+#      release's own SHASUMS.txt — never a hand-copied constant) ----
+OO_VERSION="${OO_VERSION:-2.1.0}"
+
 PLATFORM="$(uname -s)"
 ARCH="$(uname -m)"
 case "${PLATFORM}-${ARCH}" in
@@ -22,33 +23,62 @@ case "${PLATFORM}-${ARCH}" in
 esac
 
 BIN_DIR="${OO_BIN_DIR:-$HOME/.local/bin}"
-URL="https://github.com/fabio-rovai/open-ontologies/releases/download/v${OO_VERSION}/open-ontologies-${OO_ARCH}"
+BASE_URL="https://github.com/fabio-rovai/open-ontologies/releases/download/v${OO_VERSION}"
 TARGET="${BIN_DIR}/open-ontologies"
+CERT_TARGET="${BIN_DIR}/oo-cert"
 
 mkdir -p "$BIN_DIR"
 
-echo "[setup-open-ontologies] downloading ${URL}" >&2
-# download to a temp file, verify checksum, then atomically move
-TMP="$(mktemp)"
-trap 'rm -f "$TMP" "$TMP.sha256"' EXIT
-curl -fSL --progress-bar "$URL" -o "$TMP"
+# Fetch the release's own checksum manifest once (source of truth).
+SHASUMS="$(mktemp)"
+trap 'rm -f "$SHASUMS"' EXIT
+echo "[setup-open-ontologies] fetching ${BASE_URL}/SHASUMS.txt" >&2
+curl -fSL "$BASE_URL/SHASUMS.txt" -o "$SHASUMS"
 
-if [ -n "$OO_SHA256" ]; then
-  actual="$(sha256sum "$TMP" | awk '{print $1}')"
-  if [ "$actual" != "$OO_SHA256" ]; then
-    echo "[setup-open-ontologies] ERROR: sha256 mismatch (expected ${OO_SHA256}, got ${actual})" >&2
-    exit 1
+# Resolve the expected sha256 for an asset from the manifest (exact match).
+manifest_sha() {
+  local asset="$1"
+  awk -v a="$asset" '$2 == a { print $1; exit }' "$SHASUMS"
+}
+
+# Download a release asset, verify its sha256 against the release manifest,
+# then atomically install it. Fails hard on a mismatch (never proceeds).
+install_asset() {
+  local asset="$1" final_path="$2"
+  local url="${BASE_URL}/${asset}"
+  local expected_sha
+  expected_sha="$(manifest_sha "$asset")"
+  if [ -z "$expected_sha" ]; then
+    echo "[setup-open-ontologies] ERROR: no sha256 in release manifest for ${asset}" >&2
+    return 1
   fi
-else
-  echo "[setup-open-ontologies] WARNING: OO_SHA256 not set — integrity not enforced" >&2
-fi
+  echo "[setup-open-ontologies] downloading ${url}" >&2
+  local tmp
+  tmp="$(mktemp)"
+  curl -fSL --progress-bar "$url" -o "$tmp"
+  local actual
+  actual="$(sha256sum "$tmp" | awk '{print $1}')"
+  if [ "$actual" != "$expected_sha" ]; then
+    echo "[setup-open-ontologies] ERROR: sha256 mismatch for ${asset} (manifest ${expected_sha}, got ${actual})" >&2
+    rm -f "$tmp"
+    return 1
+  fi
+  chmod +x "$tmp"
+  mv "$tmp" "$final_path"
+  echo "[setup-open-ontologies] installed ${final_path} (sha256 verified from release manifest)" >&2
+}
 
-chmod +x "$TMP"
-mv "$TMP" "$TARGET"
-echo "[setup-open-ontologies] installed ${TARGET}" >&2
+case "${PLATFORM}-${ARCH}" in
+  Linux-x86_64)
+    install_asset "open-ontologies-${OO_ARCH}" "$TARGET"
+    install_asset "oo-cert-${OO_ARCH}" "$CERT_TARGET"
+    ;;
+  *)
+    install_asset "open-ontologies-${OO_ARCH}" "$TARGET"
+    ;;
+esac
 
 # ---- Register as a global MCP server ----
-# Global opencode config; insert the server entry idempotently.
 OC_CFG="${OPENCODE_CONFIG:-$HOME/.config/opencode/opencode.json}"
 if [ ! -f "$OC_CFG" ]; then
   mkdir -p "$(dirname "$OC_CFG")"
@@ -56,7 +86,7 @@ if [ ! -f "$OC_CFG" ]; then
 fi
 
 python3 - "$OC_CFG" "$TARGET" <<'PY'
-import json, os, sys
+import json, sys
 path, target = sys.argv[1], sys.argv[2]
 with open(path, encoding="utf-8") as fh:
     cfg = json.load(fh)
