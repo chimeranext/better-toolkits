@@ -46,6 +46,13 @@ symptom are fixed, in that order.
   All are installed globally via pinned/idempotent scripts (CLI/bin in
   `~/.local/bin`), following the existing `setup-opencode.md` vendor pattern —
   no consumer-repo committed content, no per-repo push.
+- **Add** a `/verify-evidence` skill that orchestrates the three vendored tools
+  to verify a claim: select Graphify (code structure), Open Ontologies
+  (reasoning/consistency), or Specula (invariant/behavior), run the real
+  verification, and emit a verdict with the evidence chain in the
+  `evidence-explicit-attribution` format. This is the "engine" that makes the
+  Genchi Genbutsu rules mechanical — it closes the loop: ishikawa analyzes,
+  verify-evidence proves, evidence-explicit-attribution formats.
 - Register `ishikawa` in the toolkit's `package.json` `"skills"` catalog.
 
 ## Capabilities
@@ -53,9 +60,13 @@ symptom are fixed, in that order.
 ### New Capabilities
 - `ishikawa`: structured root-cause analysis using the fishbone/6M method,
   with a mandatory "fix root cause AND symptom, in that order" verification gate.
+- `verify-evidence`: orchestrates the vendored verification tools to prove a
+  claim (Graphify / Open Ontologies / Specula) and returns a verdict with an
+  evidence chain in the `evidence-explicit-attribution` format.
 - `graphify` / `open-ontologies` / `specula` (vendored): evidence + formal
-  verification tools that feed `/ishikawa` (observed-vs-inferred edges;
-  re-verifiable certificates; TLA+ invariant model-checking).
+  verification tools that feed `/ishikawa` and `/verify-evidence`
+  (observed-vs-inferred edges; re-verifiable certificates; TLA+ invariant
+  model-checking).
 
 ### Modified Capabilities
 - `premortem`: causal deep-dives are structured via the 6M lens (instead of
