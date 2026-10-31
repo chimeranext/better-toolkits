@@ -92,11 +92,16 @@ Minimum question after the plan:
 For choices 1–2, **another hard STOP before each `gh pr merge`**: PR URL, merge
 method, freshly read `mergeable` / checks.
 
-**Merge method (repo policy):** For **chimeranext/better-toolkits**, use **merge
-commit only** (`gh pr merge <N> --merge`) — see
-[`docs/git-merge-policy.md`](../../../../docs/git-merge-policy.md). Do **not**
-offer `--squash` or `--rebase` as menu options on that repo. Consumer repos follow
-their own org/`linear-setup.json` policy. When unknown, ask once at the per-PR STOP.
+**Merge method (GGT/GitFlow+trunk):** the method is **base-dependent**:
+
+- Base `develop` → **rebase** (linear history; feature→develop). Offer `--rebase`.
+- Base `main` → **merge commit** (first-parent traceability; develop→main). Offer `--merge`.
+- Squash is **never** offered (NSQ: `allow_squash_merge=false` everywhere).
+
+For **chimeranext/better-toolkits**: PRs against `main` use `gh pr merge <N> --merge`;
+against `develop`, `--rebase`. Do **not** offer `--squash` anywhere. Consumer repos
+follow their own org/`linear-setup.json` policy. When the base-dependent intent is
+ambiguous, ask once at the per-PR STOP.
 
 After each successful merge: re-run
 `force_mergeable` on the remainder, re-derive tiers if the shape changed, ask
@@ -218,6 +223,10 @@ gh pr list --base "$BASE" --state open --json number --jq '.[].number' \
 
 Record `### ref: origin/$BASE @ <sha>` above every measurement that follows.
 An order computed against an unnamed base is an opinion.
+
+**GGT awareness:** the base selects the merge method — `develop` → rebase
+(linear), `main` → merge commit; squash is never in play (NSQ). Half B must
+offer only the method matching the base.
 
 ## Step 1 — The seven predicates
 

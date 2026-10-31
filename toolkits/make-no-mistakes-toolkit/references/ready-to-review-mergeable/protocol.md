@@ -131,6 +131,21 @@ flowchart TD
 Implement-centric flow (same split, no duplicate steps 9–10):
 `commands/implement.md` → **Pipeline overview** and **Split with `/ready-to-review-mergeable`**.
 
+### GGT awareness — merge method by target branch
+
+The merge method is **selected by the target branch** (GitFlow + trunk-based):
+
+| Target branch | Expected method | Why |
+| --- | --- | --- |
+| `develop` | **rebase** (linear) | feature→develop integration keeps linear history (GGT) |
+| `main` | **merge commit** | develop→main release lands as a merge commit (first-parent traceability) |
+| any | **never squash** | NSQ: `allow_squash_merge=false` everywhere |
+
+This command never merges (exit = human review handoff), but **§5 handoff and
+the expected merge method** must state which method the human reviewer will use
+on GitHub — rebase for `develop`, merge commit for `main`. Do not offer/expect
+squash anywhere.
+
 ---
 
 ## Pipeline (always)
