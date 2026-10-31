@@ -46,4 +46,4 @@ copies under `toolkits/*/hooks/no-squash` must stay in sync (vendored for
 independent plugin publish).
 
 Vendor sync (copy this tree into `toolkits/*/hooks/no-squash/`):
-`bash scripts/sync-no-squash-from-shared.sh` · Windows: `pwsh -File scripts/sync-no-squash-from-shared.ps1`.
+`bash scripts/sync-hooks-from-shared.sh` · Windows: `pwsh -File scripts/sync-hooks-from-shared.ps1`.

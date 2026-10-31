@@ -71,13 +71,13 @@ plugin alongside stderr — until then, add the path manually.
 ## Vendor sync
 
 ```bash
-bash scripts/sync-prds-from-shared.sh
+bash scripts/sync-hooks-from-shared.sh
 ```
 
 Windows/PowerShell:
 
 ```powershell
-pwsh -File scripts/sync-prds-from-shared.ps1
+pwsh -File scripts/sync-hooks-from-shared.ps1
 ```
 
 Copies this tree into `toolkits/*/hooks/prds/` (same pattern as stderr).
