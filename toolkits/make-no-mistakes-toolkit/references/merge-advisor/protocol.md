@@ -537,6 +537,51 @@ CAPACITY  4 idle runners, 6 runs queued. Batch of 2, not 4: each merge
           re-triggers checks on the 9 PRs still open.
 ```
 
+### Output sections (mandatory — no flat severity tables)
+
+After the tiers, every plan MUST carry these sections, in this order:
+
+1. **Anomalies (6M)** — one section per conflict edge (latent or base) and per
+   anomalous PR, structured per `/ishikawa` (Jidoka): `Observed` vs `Expected`,
+   then a 6M classification (Man / Machine / Material / Method / Measurement /
+   Environment) with evidence for each bucket. Do NOT summarize an anomaly as a
+   single-table row.
+2. **Conflict hunks** — one subsection per conflicted path. Only here a table is
+   allowed: a two-column side-by-side diff (ours #A vs theirs #B) with matched
+   lines. All other content is prose/sections.
+3. **★ Insight** — one non-obvious takeaway from the measurement.
+4. **Actionables rankeados** — numbered actions, recommended first,
+   `(Recomendado)` when applicable.
+
+The plan is NOT complete without these four sections. The final step is ALWAYS
+the Half-B AskQuestion (choose 1–4). Never end a plan without asking.
+
+```markdown
+### Anomaly — #166 ↔ #167 (latent conflict)
+**Observed:** `git merge-tree --write-tree` exit 1; 2 unmerged paths
+(`.claude-plugin/marketplace.json`, `toolkits/.../commands/better-mode.md`).
+**Expected:** pair applies cleanly (no latent edge).
+**6M:**
+- Method — both PRs edit `better-mode.md` in overlapping regions (evidence: path list).
+- Machine — merge-tree reports conflict without textual `<<<<<<<` (structural edge).
+- Material — marketplace.json touched by both but content identical (A↔B diff empty).
+
+### Conflict hunks
+#### `toolkits/.../commands/better-mode.md`
+| Side #A (pr-166) | Side #B (pr-167) |
+|---|---|
+| `+ ## Parity` | `+ ## Pipeline & parity` |
+| `+ run /opsx-sync before each commit` | `+ gate: /ready-to-review-mergeable` |
+
+### ★ Insight
+The structural conflict is the real signal; the content diff is small, so the
+edge is cheap to reconcile once a human reads the two sections.
+
+### Actionables rankeados
+1. Reconcile `better-mode.md` section ordering (Recommended) — author decision.
+2. Merge #167 before #166 (edge is directed).
+```
+
 Every PR row carries its **full URL**. A bare `#4309` is not clickable from a
 terminal and not resolvable from a pasted report.
 
