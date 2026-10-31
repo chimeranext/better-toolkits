@@ -34,9 +34,14 @@ complete QA traceability and spec promotion discipline.
 
 ```mermaid
 flowchart TD
-    A[DSMS] --> B[IFS] --> C[CPS] --> D[PRDS] --> E[BrS] --> F[WTD] --> G[GGT]
-    G --> H[QT4L] --> I[OST] --> J[CHH] --> K[SemVer] --> L[MPH] --> M[BGI]
-    M --> N[ODT] --> O[NSQ]
+    A[DSMS — Domain-Sliced Module Structure] --> B[IFS — Intra-File Structure]
+    B --> C[CPS — Categorized Public Surface] --> D[PRDS — PR Description Standards]
+    D --> E[BrS — Branching Strategy] --> F[WTD — Worktree Discipline]
+    F --> G[GGT — GitFlow + Trunk-based] --> H[QT4L — QA Traceability, four layers]
+    H --> I[OST — OpenSpec store PR traceability] --> J[CHH — Checksum Hygiene]
+    J --> K[SemVer — Semantic Versioning policy] --> L[MPH — Main Protections & HITL]
+    L --> M[BGI — Build-Artifact Gitignore] --> N[ODT — Ops Documentation Taxonomy]
+    N --> O[NSQ — No-Squash Merge]
 ```
 
 **Day-to-day priority:** IFS, PRDS, and QT4L (reading rhythm, review rhythm, req→test trace).
