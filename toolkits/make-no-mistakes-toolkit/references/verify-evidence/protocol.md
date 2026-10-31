@@ -63,10 +63,26 @@ Emit the verdict with the evidence chain:
 - Method of observation: the exact command/artifact that produced it.
 - Freshness: assertion that it reflects the current state.
 - Source: the tool + artifact + timestamp.
+- **Fingerprint binding (Receipt Driven Development):** the verdict records a
+  stable fingerprint of the artifact that was verified (e.g. the git tree hash,
+  `asserted.sha256`, or the graph manifest digest). If the artifact changes by a
+  single byte, the fingerprint changes and the verdict is invalidated — the
+  evidence is bound to the exact content, not to a moment in time.
+
+## Step 6 — Scope freeze + preexisting-vs-new (RDD discipline)
+
+- **Scope freeze:** verify ONLY the declared scope of the claim (the candidate).
+  Do not expand into unrelated files or behaviors — that is over-analysis.
+- **Preexisting vs new:** if a violation/failure existed before the claim's
+  change, report it as a separate note, not as a failure of this claim. The
+  verdict applies to what the claim introduced, not to the whole system.
 
 ## Integration with /ishikawa
 
 `/ishikawa` may request verification of a countermeasure's falsifiable claim.
 Never assert an unverified claim as fact in an ishikawa analysis — send it to
 `/verify-evidence` first. Conversely, if `verify-evidence` returns `FALLA`, the
-root cause or countermeasure should be revisited via `/ishikawa`.
+root cause or countermeasure should be revisited via `/ishikawa`. When verifying
+a countermeasure fix, `/verify-evidence` SHALL validate the fix is scoped to the
+declared files/lines (a bounded fix), flagging over-engineering (touching files
+outside the declared scope) as a finding.
