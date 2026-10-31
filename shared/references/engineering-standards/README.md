@@ -1,4 +1,4 @@
-# Engineering standards — index (11 practices + OST)
+# Engineering standards — index (12 practices + OST)
 
 > SSOT at monorepo level: `shared/references/engineering-standards/`.
 > Do not duplicate these files inside toolkits — reference them by monorepo-relative
@@ -21,12 +21,13 @@ enforces conventions already in industry use.
 | **CHH** | Checksum Hygiene | Setup scripts pin the VERSION and verify release assets against the release's own checksum manifest — never hardcoded sha256 constants | [checksum-hygiene.md](checksum-hygiene.md) |
 | **SemVer** | Semantic Versioning policy | Version source = plugin.json. The generator derives marketplace.json from it. The merge queue enforces a monotonic bump vs the default branch (rebase + re-bump). | [semver.md](semver.md) |
 | **MPH** | Main Protections & HITL Merge Guard | Default branch ruleset (only named team bypass) + org-wide 2FA + pre-tool-use guard that requires interactive human approval for any bypass/admin merge. Fail-closed. | [main-protections-hitl.md](main-protections-hitl.md) |
+| **BGI** | Build-Artifact Gitignore | Every repo vendors the ignore patterns from `vendored-gitignore.toml` (venv, node_modules, target, build, caches). Promotes the symlink build-artifact policy | [build-artifacts-gitignore.md](build-artifacts-gitignore.md) |
 
 The **clean code quartet** is DSMS + IFS + CPS + PRDS. BrS + WTD govern branching
 and worktree hygiene. QT4L and **OST** (when the client uses an OpenSpec store)
 complete QA traceability and spec promotion discipline.
 
-**Adoption order:** DSMS → IFS → CPS → PRDS → BrS → WTD → QT4L → **OST** (store repos only) → **CHH** (setup-script integrity) → **SemVer** (version policy) → **MPH** (main protections, HITL merge guard).
+**Adoption order:** DSMS → IFS → CPS → PRDS → BrS → WTD → QT4L → **OST** (store repos only) → **CHH** (setup-script integrity) → **SemVer** (version policy) → **MPH** (main protections, HITL merge guard) → **BGI** (vendored gitignore catalog).
 
 **Day-to-day priority:** IFS, PRDS, and QT4L (reading rhythm, review rhythm, req→test trace).
 
@@ -61,6 +62,7 @@ Protocol SSOT: `references/clean-code-standards-setup/protocol.md`, `references/
 | Hardcoded sha256 in a setup script? | CHH |
 | ¿Cómo bumpear la versión de un plugin? | SemVer (monotónica vs main, merge queue) |
 | ¿Cómo protejo `main` incluso de los founders? | MPH (ruleset + 2FA + guard pre-tool-use fail-closed) |
+| ¿Qué `.gitignore` debo vendorizar? | BGI (catálogo `vendored-gitignore.toml`) |
 
 ## Provenance
 
