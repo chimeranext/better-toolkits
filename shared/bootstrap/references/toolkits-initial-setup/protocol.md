@@ -150,13 +150,13 @@ evidencia no existe, reporta estado `no-enforced` / `GAP` y continúa.
 Split de harness-initial-setup: este paso provisiona el modelo **GGT** en el repo y corre la auditoría.
 
 1. **Provisiona invariantes GGT** (idempotente, solo si hay permisos):
-   - default branch = `main`; `develop` existe (invariante 1).
+   - default branch = `main`. `develop` existe (invariante 1).
    - `allow_squash_merge: false`, `allow_merge_commit: true`, `allow_rebase_merge: true` (NSQ).
    - Ruleset `main-founders-only` en `refs/heads/main`: `allowed_merge_methods=["merge"]`,
      sin `required_linear_history` (MPH).
 2. **Audita**: `scripts/ci/audit-repo-gitflow.sh --repo <owner/repo> [--require-develop]`
-   - Reporta PASS/FAIL por invariante; si FAIL → `GAP` (no fingir cumplimiento).
-3. **Salida**: tabla PASS/FAIL por invariante; `GGT audit: ALL PASS` o `GGT audit: FAILURES` con el invariante fallido. Si no hay permisos de repo → `no-enforced` documentado (no bloquea el bootstrap).
+   - Reporta PASS/FAIL por invariante. Si FAIL → `GAP` (no fingir cumplimiento).
+3. **Salida**: tabla PASS/FAIL por invariante. `GGT audit: ALL PASS` o `GGT audit: FAILURES` con el invariante fallido. Si no hay permisos de repo → `no-enforced` documentado (no bloquea el bootstrap).
 
 ## Arguments
 
@@ -167,7 +167,7 @@ Split de harness-initial-setup: este paso provisiona el modelo **GGT** en el rep
 - `--expert-mode` — author flow: never switch the clone's branch, never touch a dirty tree.
 - `--no-auto-update` — do not install the auto-update plugin (or `BETTER_TOOLKITS_AUTO_UPDATE=0`).
 - `--no-ruleset` — pass through to `/assurance-repo-setup`: generate files but do not touch ruleset.
-- `--skip-ggt` — skip Phase 7b repo-initial-setup (GGT provisioning + audit); report `skipped`.
+- `--skip-ggt` — skip Phase 7b repo-initial-setup (GGT provisioning + audit). Report `skipped`.
 
 ## Related
 
