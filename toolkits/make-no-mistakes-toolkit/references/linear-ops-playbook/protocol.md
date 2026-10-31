@@ -1,9 +1,8 @@
 # Linear / OPSX Playbook — protocol SSOT
 
 Portable, harness-agnostic workflow for **Linear + OpenSpec OPSX** on a GitFlow
-application monorepo. Corrects the sequence shown in client playbooks
-(e.g. AltruPets `docs/playbooks/linear-ops-playbook.md`), where the merge step
-incorrectly targets `main` instead of `develop`.
+application monorepo, where feature branches branch from `develop` and merge back
+to `develop` (not `main`).
 
 The OpenSpec step commands are thin entries; their detailed SSOT lives in
 [`references/opsx-*`](../opsx-*/protocol.md). This playbook only wires the
@@ -49,14 +48,6 @@ The sequence is the *order of appearance* of each artifact, not a suggestion.
 
 After step 10 the feature is mergeable to `develop` **without** asking the user
 for HITL approval. `main` still requires the manual approval gate.
-
-## Corrections vs. the AltruPets playbook
-
-| AltruPets playbook (as-is) | Corrected |
-| --- | --- |
-| Feature/PR merged to `main` (section 05 step 7) | Feature merged to `develop`; `main` only via `develop → staging → main` with manual gate |
-| Worktree not sequenced into the OpenSpec flow | Worktree is created at `/opsx-apply` (step 8), not at the start |
-| Draft PR not shown as an early step | Draft PR opened right after `/opsx-explore` (step 4), before propose |
 
 ## Related
 
