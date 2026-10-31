@@ -74,7 +74,7 @@ Protocol SSOT: `references/clean-code-standards-setup/protocol.md`, `references/
 | How do I protect `main` even from founders? | MPH (ruleset + 2FA + pre-tool-use fail-closed guard) |
 | Which `.gitignore` patterns must I vendor? | BGI (catalog `vendored-gitignore.toml`) |
 | Is it a playbook or a runbook? | ODT (taxonomy. Never mix) |
-| How do I integrate features and releases? | GGT (feature→develop rebase; develop→main merge commit) |
+| How do I integrate features and releases? | GGT (feature→develop rebase. develop→main merge commit) |
 
 ## Provenance
 
