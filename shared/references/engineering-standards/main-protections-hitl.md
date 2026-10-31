@@ -28,6 +28,11 @@ The control is layered: policy (ruleset), identity (2FA), and tool boundary
    unavailable, the merge is **blocked** — ambiguity blocks.
 5. **Audit trail:** every approval and every bypass leaves a trace (marker
    timestamp, actor, command). Revoke is explicit and immediate.
+6. **Approval concentration (release cut):** human approval concentrates at the
+   **release cut** (`develop`→`main`), not per feature PR. The CTO owns the QA
+   audit (QT4L). The CTO opens the single consolidated cut PR. A **second human
+   reviewer** (a founder) is the single approval gate to PROD (REL). Feature PRs
+   to `develop` do not require founder review. CI + audit GGT + PRDS gate them.
 
 ## Failure modes this prevents
 
