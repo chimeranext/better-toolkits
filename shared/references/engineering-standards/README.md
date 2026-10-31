@@ -1,4 +1,4 @@
-# Engineering standards — index (17 practices + OST)
+# Engineering standards — index (19 practices + OST)
 
 > SSOT at monorepo level: `shared/references/engineering-standards/`.
 > Do not duplicate these files inside toolkits — reference them by monorepo-relative
@@ -24,8 +24,10 @@ enforces conventions already in industry use.
 | **13. MPH** | Main Protections & HITL Merge Guard | Default branch ruleset (only named team bypass) + org-wide 2FA + pre-tool-use guard that requires interactive human approval for any bypass/admin merge. Fail-closed. | [main-protections-hitl.md](main-protections-hitl.md) |
 | **14. BGI** | Build-Artifact Gitignore | Every repo vendors the ignore patterns from `vendored-gitignore.toml` (venv, node_modules, target, build, caches). Promotes the symlink build-artifact policy | [build-artifacts-gitignore.md](build-artifacts-gitignore.md) |
 | **15. ODT** | Ops Documentation Taxonomy | Classify every ops doc as Playbook vs Runbook vs SOP. Never mix. Route via /document-this | [ops-documentation-taxonomy.md](ops-documentation-taxonomy.md) |
-| **16. NSQ** |
-| **17. TFM** | Formal Model TLA+ | Standardized TLA+/TLC modeling and validation recipe | [formal-model-tla.md](formal-model-tla.md) | No-Squash Merge | Every repo sets `allow_squash_merge: false`. Merge and rebase stay allowed. Rulesets exclude squash. The local guard blocks `--squash`. | [no-squash-merge.md](no-squash-merge.md) |
+| **16. NSQ** | No-Squash Merge | Every repo sets `allow_squash_merge: false`. Merge and rebase stay allowed. Rulesets exclude squash. The local guard blocks `--squash`. | [no-squash-merge.md](no-squash-merge.md) |
+| **17. TFM** | Formal Model TLA+ | Standardized TLA+/TLC modeling and validation recipe | [formal-model-tla.md](formal-model-tla.md) |
+| **18. REL** | Release Cut | One consolidated `develop`→`main` PR. CTO owns the QA audit (QT4L). A second human reviewer is the sole PROD gate. Hotfixes only via `hotfix/*`. | [release-cut.md](release-cut.md) |
+| **19. LTGT** | Local Truth is not Ground Truth | A CWD shows one worktree's branch. Ground truth is the repo: `git rev-parse --git-common-dir`, `git worktree list`, `git ls-files`, with hidden paths included. Never conclude absence from a CWD-only scan. | [local-vs-ground-truth.md](local-vs-ground-truth.md) |
 
 The **clean code quartet** is DSMS + IFS + CPS + PRDS. BrS + WTD govern branching
 and worktree hygiene. QT4L and **OST** (when the client uses an OpenSpec store)
@@ -52,6 +54,8 @@ flowchart TD
     S14[ODT — Ops Documentation Taxonomy]
     S15[NSQ — No-Squash Merge]
     S16[TFM — Formal Model TLA+]
+    S17[REL — Release Cut]
+    S18[LTGT — Local Truth is not Ground Truth]
     S0 --> S1 --> S2
     S2 --> S3
     S2 --> S4
@@ -68,6 +72,8 @@ flowchart TD
     S13 --> S14
     S14 --> S15
     S15 --> S16
+    S16 --> S17
+    S17 --> S18
 ```
 
 **Day-to-day priority:** IFS, PRDS, and QT4L (reading rhythm, review rhythm, req→test trace).
@@ -106,6 +112,8 @@ Protocol SSOT: `references/clean-code-standards-setup/protocol.md`, `references/
 | Which `.gitignore` patterns must I vendor? | BGI (catalog `vendored-gitignore.toml`) |
 | Is it a playbook or a runbook? | ODT (taxonomy. Never mix) |
 | How do I integrate features and releases? | GGT (feature→develop rebase. develop→main merge commit) |
+| How do I cut a release (PROD)? | REL (one develop→main PR. CTO QA audit. second human reviewer = sole gate) |
+| Where do I search for the truth? | LTGT (git common-dir + all worktrees + hidden paths. Never CWD-only) |
 | How do I verify the order formally? | TFM (TLA+/TLC recipe) |
 
 ## Provenance
