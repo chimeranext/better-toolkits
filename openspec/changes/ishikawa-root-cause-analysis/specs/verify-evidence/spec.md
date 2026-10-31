@@ -41,14 +41,14 @@ dressed as a result.
 - **AND** SHALL label the evidence `observado` (per the Genchi Genbutsu rules)
 
 ### Requirement: Verdict with evidence chain
-The skill SHALL produce a verdict — `PASSA` / `FALLA` / `NO-VERIFICABLE` — with
+The skill SHALL produce a verdict — `PASS` / `FAIL` / `NOT VERIFIABLE` — with
 the evidence chain formatted per `evidence-explicit-attribution` (observed vs
 expected, method of observation, freshness, claim-type labels).
 
 #### Scenario: Verdict is tied to evidence
 - **WHEN** the skill emits a verdict
 - **THEN** the verdict SHALL be accompanied by the evidence chain that supports it
-- **AND** a `NO-VERIFICABLE` verdict SHALL state exactly what could not be
+- **AND** a `NOT VERIFIABLE` verdict SHALL state exactly what could not be
   verified and why (missing tool, missing artifact, insufficient scope)
 
 ### Requirement: Integration with /ishikawa

@@ -25,7 +25,7 @@ Record the claim as an assertion about what should be observable:
 - **Observed** (filled after Step 3): what the tool actually returned.
 
 If the claim has no falsifiable/observable form, the verdict is
-`NO-VERIFICABLE` — say why.
+`NOT VERIFIABLE` — say why.
 
 ## Step 2 — Route by claim type
 
@@ -44,14 +44,14 @@ say which tool(s) were used.
   the model).
 - Capture the **real command** and its **real output**.
 - If a tool is not installed or the artifact is missing, that is a
-  `NO-VERIFICABLE` verdict — never simulate, never infer.
+  `NOT VERIFIABLE` verdict — never simulate, never infer.
 
 ## Step 4 — Verdict
 
-- `PASSA` — the observed evidence supports the claim.
-- `FALLA` — the observed evidence refutes the claim (include the counterexample /
+- `PASS` — the observed evidence supports the claim.
+- `FAIL` — the observed evidence refutes the claim (include the counterexample /
   mismatch).
-- `NO-VERIFICABLE` — state exactly what could not be verified and why (missing
+- `NOT VERIFIABLE` — state exactly what could not be verified and why (missing
   tool, missing artifact, insufficient scope, no falsifiable form).
 
 ## Step 5 — Evidence chain (per /evidence-explicit-attribution)
@@ -90,7 +90,7 @@ remains the source of truth; `/explain` is the presentation layer over it.
 
 `/ishikawa` may request verification of a countermeasure's falsifiable claim.
 Never assert an unverified claim as fact in an ishikawa analysis — send it to
-`/verify-evidence` first. Conversely, if `verify-evidence` returns `FALLA`, the
+`/verify-evidence` first. Conversely, if `verify-evidence` returns `FAIL`, the
 root cause or countermeasure should be revisited via `/ishikawa`. When verifying
 a countermeasure fix, `/verify-evidence` SHALL validate the fix is scoped to the
 declared files/lines (a bounded fix), flagging over-engineering (touching files
