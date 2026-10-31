@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Pre-tool-use guard: `gh pr merge --admin` requires explicit HUMAN approval.
 #
-# A `--admin` merge bypasses required reviews — it must never run as a silent
-# action. This hook intercepts the command BEFORE execution. If it sees
-# `gh pr merge` with `--admin`, it demands a root-owned approval marker that
-# only a human can create via pkexec/sudo (password prompt). Declining blocks
-# the tool use (exit 1). Approval is fresh (5 min).
+# Fail-closed: intercepts the command before execution. If it sees `gh pr merge`
+# with `--admin`, it demands a freshly created elevated marker that only a human
+# can mint through an interactive elevation prompt (pkexec/sudo on Linux,
+# osascript with administrator privileges on macOS, UAC on Windows). Declining
+# blocks the tool use (exit 1). Approval TTL: 5 minutes.
 #
 # Wiring example (opencode.json hooks.beforeToolUse or adapter):
 #   bash <repo>/shared/hooks/tooluse/approve-admin-merge.sh "$ARGUMENTS"
@@ -17,43 +17,81 @@ case "$CMD" in
   *) exit 0 ;; # not a guarded admin merge
 esac
 
-MARKER="${XDG_CACHE_HOME:-${HOME}/.cache}/better-toolkits/hitl-approve-main-merge"
+OS="$(uname -s)"
+case "$OS" in
+  MINGW*|MSYS*|CYGWIN*) PLATFORM="windows" ;;
+  Darwin) PLATFORM="darwin" ;;
+  *) PLATFORM="linux" ;;
+esac
 
-# Already freshly approved by a human (root-owned, <300s)?
-if [ -f "$MARKER" ]; then
-  if [ "$(stat -c %u "$MARKER")" = "0" ]; then
-    AGE=$(( $(date +%s) - $(stat -c %Y "$MARKER") ))
-    if [ "$AGE" -le 300 ]; then
-      exit 0
-    fi
+TTL=300
+
+marker_path() {
+  if [ "$PLATFORM" = "windows" ]; then
+    printf '%s' "${PROGRAMDATA:-C:\\ProgramData}/better-toolkits/hitl-approve-main-merge"
+  else
+    printf '%s' "${XDG_CACHE_HOME:-${HOME}/.cache}/better-toolkits/hitl-approve-main-merge"
   fi
-  rm -f "$MARKER"
+}
+
+marker_fresh() {
+  local m="$1" age owner
+  [ -f "$m" ] || return 1
+  if [ "$PLATFORM" = "windows" ]; then
+    age=$(powershell.exe -NoProfile -Command "([int]((Get-Date)-(Get-Item '$m').LastWriteTime).TotalSeconds)")
+    age=$(printf '%s' "$age" | tr -d '\r')
+    [ -n "$age" ] || return 1
+    [ "$age" -le "$TTL" ] || return 1
+    return 0
+  fi
+  owner="$(stat -c %u "$m")"
+  [ "$owner" = "0" ] || return 1
+  age=$(( $(date +%s) - $(stat -c %Y "$m") ))
+  [ "$age" -le "$TTL" ]
+}
+
+elevate() {
+  local m="$1" d
+  d="$(dirname "$m")"
+  if [ "$PLATFORM" = "darwin" ]; then
+    osascript -e "do shell script \"mkdir -p '$d' && touch '$m' && chown root:root '$m'\" with administrator privileges"
+    return $?
+  fi
+  if [ "$PLATFORM" = "windows" ]; then
+    powershell.exe -NoProfile -Command "Start-Process cmd -Verb RunAs -ArgumentList '/c','mkdir \"$d\" & echo ok > \"$m\"'"
+    return $?
+  fi
+  if command -v pkexec; then
+    pkexec bash -c "mkdir -p '$d' && touch '$m' && chown root:root '$m'"
+    return $?
+  fi
+  if command -v sudo; then
+    sudo bash -c "mkdir -p '$d' && touch '$m' && chown root:root '$m'"
+    return $?
+  fi
+  echo "[tooluse] ERROR: no elevation mechanism available (pkexec/sudo/osascript/UAC)." >&2
+  return 1
+}
+
+MARKER="$(marker_path)"
+
+if marker_fresh "$MARKER"; then
+  exit 0
 fi
+rm -f "$MARKER"
 
 echo "[tooluse] 'gh pr merge --admin' requires explicit HUMAN approval." >&2
-echo "[tooluse] A pkexec/sudo prompt is about to open (authorize to create the root marker)." >&2
+echo "[tooluse] An elevation prompt is about to open (pkexec/sudo, osascript, or UAC)." >&2
 
-RC=1
-if command -v pkexec; then
-  pkexec bash -c "mkdir -p \"$(dirname "$MARKER")\" && touch \"$MARKER\" && chown root:root \"$MARKER\""
-  RC=$?
-elif command -v sudo; then
-  sudo bash -c "mkdir -p \"$(dirname "$MARKER")\" && touch \"$MARKER\" && chown root:root \"$MARKER\""
-  RC=$?
-else
-  echo "[tooluse] ERROR: no pkexec/sudo available to confirm human approval." >&2
-  exit 1
-fi
-
-if [ "$RC" -ne 0 ]; then
+if ! elevate "$MARKER"; then
   echo "[tooluse] BLOCKED: admin merge not approved by human." >&2
   exit 1
 fi
 
-if [ -f "$MARKER" ] && [ "$(stat -c %u "$MARKER")" = "0" ]; then
+if marker_fresh "$MARKER"; then
   echo "[tooluse] OK: human approval recorded. Proceeding." >&2
   exit 0
 fi
 
-echo "[tooluse] BLOCKED: marker not created as root." >&2
+echo "[tooluse] BLOCKED: approval marker not verified." >&2
 exit 1
