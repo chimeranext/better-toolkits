@@ -50,7 +50,7 @@ function readBytesOrNull(path) {
 function planBetterProfileSyncStep(repoRoot) {
   return {
     kind: "better-profile-sync",
-    detail: "sync repo .opencode/agents/better.md -> ~/.config/opencode/agents/better.md",
+    detail: "sync repo shared/bootstrap/agents/better.md -> ~/.config/opencode/agents/better.md",
     repoRoot,
   };
 }
