@@ -14,11 +14,11 @@ esac
 
 # Extract body: --body <text> or --body-file <path> (crude but deterministic)
 BODY=""
-if [[ "$CMD" =~ --body-file[ =]+([^ ]+) ]]; then
-  FILE="${BASH_REMATCH[1]}"
+if printf '%s' "$CMD" | grep -qE -- '--body-file[ =]+[^ ]+'; then
+  FILE=$(printf '%s' "$CMD" | sed -nE 's/.*--body-file[ =]+([^ ]+).*/\1/p')
   [ -f "$FILE" ] && BODY="$(cat "$FILE")"
-elif [[ "$CMD" =~ --body[ =]+(.+)$ ]]; then
-  BODY="${BASH_REMATCH[1]}"
+elif printf '%s' "$CMD" | grep -qE -- '--body[ =]+.+'; then
+  BODY=$(printf '%s' "$CMD" | sed -nE 's/.*--body[ =]+(.*)$/\1/p')
 fi
 
 MISSING=0
