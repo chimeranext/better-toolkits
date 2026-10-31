@@ -32,7 +32,9 @@ Standardize how formal models (TLA+/TLC) are written and validated in this repo.
 ## Example
 
 `scripts/tla/adoption-order/` validates the Engineering-standards adoption order
-(dependency edges) — TLC PASS.
+(dependency edges) — TLC PASS. `scripts/tla/branch-default/` proves that a
+`develop` default branch makes feature-PR base selection deterministic (TLC
+PASS for default=`develop`. Default=`main` yields a Safety counterexample).
 
 ## References
 
