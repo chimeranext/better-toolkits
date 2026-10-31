@@ -197,3 +197,19 @@ When auditing with `--focus prds` or `--prs`:
 - [ ] Soft cap ~400 lines; flag mega-diffs
 - [ ] One intent — no unrelated file churn
 - [ ] Draft workflow respected (undraft only when checks green + human OK)
+
+---
+
+## GitHub enforcement (status check + rulesets)
+
+When PRDS must be enforced mechanically in GitHub:
+
+- Define a `prds-check` status check (CI) that validates the PR description
+  against the audit checks above.
+- Attach it via `required_status_checks` on the branch rulesets that should
+  enforce it.
+- Keep branch rulesets complementary: use one ruleset per protected branch, and
+  never overlap the same branch across rulesets. Example: a `PRDS gate` for
+  `develop`/`staging`, and the main guard (`main-protections-hitl.md`) for
+  `main`.
+- The main guard belongs to **MPH**; the `prds-check` context belongs here.

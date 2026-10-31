@@ -41,11 +41,6 @@ The control is layered: policy (ruleset), identity (2FA), and tool boundary
   `bypass_actors` = that team only; rules include `pull_request` (≥1 review,
   thread resolution, last-push approval), `required_status_checks` (strict),
   `deletion`, `non_fast_forward`, `required_linear_history`.
-- **Per-repo status contexts:** `required_status_checks` may include repo-specific
-  contexts (e.g. `prds-check`). Keep branch rulesets complementary: use one
-  ruleset per protected branch, and never overlap the same branch across
-  rulesets (e.g. a `PRDS gate` for `develop`/`staging`, and the main guard for
-  `main`).
 - **Tool-boundary hook:** intercept the bypass/admin command; require interactive
   root elevation to mint a fresh approval marker; check TTL; fail-closed.
 - **Org policy:** enforce 2FA for every member.
