@@ -9,6 +9,8 @@ DEPS_TO == <<"BrS","WTD","BrS","SemVer","MPH">>
 
 Pos(s) == CHOOSE i \in DOMAIN ORD : ORD[i] = s
 
+COMPS == { <<"PRDS","BrS">>, <<"PRDS","QT4L">> }
+
 Prop == \A i \in DOMAIN DEPS_FROM : Pos(DEPS_FROM[i]) > Pos(DEPS_TO[i])
 
 ASSUME Prop
