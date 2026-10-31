@@ -22,7 +22,7 @@ enforces conventions already in industry use.
 | **SemVer** | Semantic Versioning policy | Version source = plugin.json. The generator derives marketplace.json from it. The merge queue enforces a monotonic bump vs the default branch (rebase + re-bump). | [semver.md](semver.md) |
 | **MPH** | Main Protections & HITL Merge Guard | Default branch ruleset (only named team bypass) + org-wide 2FA + pre-tool-use guard that requires interactive human approval for any bypass/admin merge. Fail-closed. | [main-protections-hitl.md](main-protections-hitl.md) |
 | **BGI** | Build-Artifact Gitignore | Every repo vendors the ignore patterns from `vendored-gitignore.toml` (venv, node_modules, target, build, caches). Promotes the symlink build-artifact policy | [build-artifacts-gitignore.md](build-artifacts-gitignore.md) |
-| **ODT** | Ops Documentation Taxonomy | Classify every ops doc as Playbook vs Runbook vs SOP; never mix; route via /document-this | [ops-documentation-taxonomy.md](ops-documentation-taxonomy.md) |
+| **ODT** | Ops Documentation Taxonomy | Classify every ops doc as Playbook vs Runbook vs SOP. Never mix. Route via /document-this | [ops-documentation-taxonomy.md](ops-documentation-taxonomy.md) |
 
 The **clean code quartet** is DSMS + IFS + CPS + PRDS. BrS + WTD govern branching
 and worktree hygiene. QT4L and **OST** (when the client uses an OpenSpec store)
@@ -61,10 +61,10 @@ Protocol SSOT: `references/clean-code-standards-setup/protocol.md`, `references/
 | Scenario → verification in tasks? | QT4L |
 | One OpenSpec folder per store PR? | OST |
 | Hardcoded sha256 in a setup script? | CHH |
-| ¿Cómo bumpear la versión de un plugin? | SemVer (monotónica vs main, merge queue) |
-| ¿Cómo protejo `main` incluso de los founders? | MPH (ruleset + 2FA + guard pre-tool-use fail-closed) |
-| ¿Qué `.gitignore` debo vendorizar? | BGI (catálogo `vendored-gitignore.toml`) |
-| ¿Es playbook o runbook? | ODT (taxonomía; nunca mezclar) |
+| How do I bump a plugin version? | SemVer (monotonic vs main, merge queue) |
+| How do I protect `main` even from founders? | MPH (ruleset + 2FA + pre-tool-use fail-closed guard) |
+| Which `.gitignore` patterns must I vendor? | BGI (catalog `vendored-gitignore.toml`) |
+| Is it a playbook or a runbook? | ODT (taxonomy. Never mix) |
 
 ## Provenance
 
