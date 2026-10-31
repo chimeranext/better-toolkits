@@ -14,6 +14,12 @@ repos:
         language: system
         pass_filenames: false
         stages: [pre-push]
+      - id: better-profile-sync-check
+        name: repo better.md in sync with ~/.config/opencode/agents/better.md
+        entry: bash scripts/ci/sync-better-profile.sh --check --quiet
+        language: system
+        pass_filenames: false
+        always_run: true
       - id: no-stale-deprecated-shims
         name: no deprecated command/script shims in touched agent paths
         entry: bash scripts/lint/check-no-stale-deprecated-shims.sh
