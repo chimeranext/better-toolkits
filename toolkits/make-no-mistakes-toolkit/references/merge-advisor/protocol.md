@@ -385,6 +385,19 @@ appears **only after an earlier PR lands**, in a PR that is green right now.
 git merge-tree --write-tree "pr-$A" "pr-$B" 2>&1 >/dev/null; echo "exit=$?"
 ```
 
+When the exit is 1 (conflict), capture the **hunks** for the human decision — the
+ordering metric only proves the edge; it does not resolve it:
+
+```bash
+MB=$(git merge-base "pr-$A" "pr-$B")
+git merge-tree "$MB" "pr-$A" "pr-$B" > "/tmp/opencode/merge-conflict-$A-$B.txt"
+sed -n '/^<<<<<<</,/^>>>>>>>/p' "/tmp/opencode/merge-conflict-$A-$B.txt" | head -80
+```
+
+The extracted hunks (`<<<<<<<` … `>>>>>>>`) are the decision input for the
+principal (the human auditor). Never auto-resolve a conflict edge; always present
+the hunks with the edge.
+
 Run this for every pair that Step 4 flagged as overlapping. A pair that is clean
 against base and dirty against each other is a **hard ordering constraint**, and
 it is invisible to `gh pr list`, to any per-PR status report, and to the PR
@@ -504,6 +517,8 @@ TIER 1 — merge in any order, no shared files
 TIER 2 — sequenced, latent conflicts
   #4242  ...  MUST precede #4120 — clean vs base, conflicts with #4120 on
               .github/workflows/quality-report-allure.yml
+              Conflict hunks → /tmp/opencode/merge-conflict-4242-4120.txt
+              (decision input for the principal — never auto-resolved)
 
 NOT IN THE ORDER
   #4054  conflicts with base today. Rebase, re-measure, then place.
