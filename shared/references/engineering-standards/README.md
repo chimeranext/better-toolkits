@@ -1,4 +1,4 @@
-# Engineering standards — index (15 practices + OST)
+# Engineering standards — index (16 practices + OST)
 
 > SSOT at monorepo level: `shared/references/engineering-standards/`.
 > Do not duplicate these files inside toolkits — reference them by monorepo-relative
@@ -24,7 +24,8 @@ enforces conventions already in industry use.
 | **13. MPH** | Main Protections & HITL Merge Guard | Default branch ruleset (only named team bypass) + org-wide 2FA + pre-tool-use guard that requires interactive human approval for any bypass/admin merge. Fail-closed. | [main-protections-hitl.md](main-protections-hitl.md) |
 | **14. BGI** | Build-Artifact Gitignore | Every repo vendors the ignore patterns from `vendored-gitignore.toml` (venv, node_modules, target, build, caches). Promotes the symlink build-artifact policy | [build-artifacts-gitignore.md](build-artifacts-gitignore.md) |
 | **15. ODT** | Ops Documentation Taxonomy | Classify every ops doc as Playbook vs Runbook vs SOP. Never mix. Route via /document-this | [ops-documentation-taxonomy.md](ops-documentation-taxonomy.md) |
-| **16. NSQ** | No-Squash Merge | Every repo sets `allow_squash_merge: false`. Merge and rebase stay allowed. Rulesets exclude squash. The local guard blocks `--squash`. | [no-squash-merge.md](no-squash-merge.md) |
+| **16. NSQ** |
+| **17. TFM** | Formal Model TLA+ | Standardized TLA+/TLC modeling and validation recipe | [formal-model-tla.md](formal-model-tla.md) | No-Squash Merge | Every repo sets `allow_squash_merge: false`. Merge and rebase stay allowed. Rulesets exclude squash. The local guard blocks `--squash`. | [no-squash-merge.md](no-squash-merge.md) |
 
 The **clean code quartet** is DSMS + IFS + CPS + PRDS. BrS + WTD govern branching
 and worktree hygiene. QT4L and **OST** (when the client uses an OpenSpec store)
@@ -103,6 +104,7 @@ Protocol SSOT: `references/clean-code-standards-setup/protocol.md`, `references/
 | Which `.gitignore` patterns must I vendor? | BGI (catalog `vendored-gitignore.toml`) |
 | Is it a playbook or a runbook? | ODT (taxonomy. Never mix) |
 | How do I integrate features and releases? | GGT (feature→develop rebase. develop→main merge commit) |
+| ¿Cómo valido formalmente el order? | TFM (TLA+/TLC recipe) |
 
 ## Provenance
 
