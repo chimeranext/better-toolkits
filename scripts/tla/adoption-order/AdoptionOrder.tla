@@ -2,10 +2,11 @@
 EXTENDS Naturals, Sequences
 
 ORD == << "DSMS", "IFS", "CPS", "PRDS", "BrS", "WTD", "GGT", "QT4L",
-          "AFIF", "OST", "CHH", "SemVer", "MPH", "BGI", "ODT", "NSQ" >>
+          "AFIF", "OST", "CHH", "SemVer", "MPH", "BGI", "ODT", "NSQ",
+          "TFM", "REL" >>
 
-DEPS_FROM == <<"GGT","GGT","MPH","MPH","NSQ">>
-DEPS_TO == <<"BrS","WTD","BrS","SemVer","MPH">>
+DEPS_FROM == <<"GGT","GGT","MPH","MPH","NSQ","REL","REL","REL","REL","REL">>
+DEPS_TO == <<"BrS","WTD","BrS","SemVer","MPH","GGT","MPH","QT4L","SemVer","CHH">>
 
 Pos(s) == CHOOSE i \in DOMAIN ORD : ORD[i] = s
 

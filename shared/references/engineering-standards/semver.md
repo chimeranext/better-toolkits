@@ -50,6 +50,11 @@ PR-B (based on old main) → queue head equals or ≤ 0.1.21 → fails monotonic
 - **CI/merge queue:** `check --range origin/main..HEAD` must pass before merge.
 - **Agents:** never "resolve" a version conflict by picking a side; bump vs
   `main` (rebase + re-bump).
+- **Per-monorepo enforcement:** every consumer monorepo SHALL enforce a
+  monotonic version gate on the `develop`→`main` release-cut merge. The
+  version source is that repo's canonical manifest. The better-toolkits
+  implementation below is the reference implementation. Other repos wire their
+  equivalent at the release cut (per REL).
 
 ## Implementation note (better-toolkits, repo-internal)
 
@@ -62,4 +67,6 @@ monorepo implements it with `scripts/ci/marketplace_versioning.py`, wired
 - pre-push: `marketplace-version-check-push` (per-branch sanity vs `main`).
 - merge queue: `check --range origin/main..HEAD` on the combined head.
 
-This tool is better-toolkits-specific and not part of the generic standard.
+This tool is the **reference implementation** of the generic standard. It is
+not the only one. Consumer repos SHALL enforce the same monotonic rule at their
+release cut (see "Per-monorepo enforcement" above).
