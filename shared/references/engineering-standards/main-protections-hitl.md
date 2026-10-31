@@ -11,8 +11,11 @@ The control is layered: policy (ruleset), identity (2FA), and tool boundary
 
 1. **Default branch is protected by a ruleset**, not by convention:
    - Only a small, named team may bypass (e.g. `founders`). No other actor.
-   - Required reviews, status checks, and **linear history** are always on.
+   - Required reviews and status checks are always on.
    - Direct pushes to the default branch are forbidden; changes arrive via PR.
+   - **Merge method by flow (GitFlow):** feature branches integrate into `develop`
+     by **rebase** (linear). `develop` integrates into `main` by **merge commit**
+     (first-parent traceability). Squash is always forbidden (NSQ).
 2. **Bypass is an exception, not a right.** The bypass team exists to unblock
    genuine bottlenecks — not to skip quality. Every bypass must be possible to
    audit.
@@ -33,14 +36,16 @@ The control is layered: policy (ruleset), identity (2FA), and tool boundary
 - A hidden or hardcoded bypass (no environment-variable shortcuts; interactive
   elevation required).
 - Non-founders bypassing protections (ruleset allows only the named team).
-- Forced pushes / squash history loss (linear-history + no force-push).
+- Forced pushes (no force-push) and squash merges (NSQ).
 
 ## Application (generic)
 
 - **Ruleset:** name it after the guard team (e.g. `main-founders-only`);
   `bypass_actors` = that team only; rules include `pull_request` (≥1 review,
-  thread resolution, last-push approval), `required_status_checks` (strict),
-  `deletion`, `non_fast_forward`, `required_linear_history`.
+  thread resolution, last-push approval, `allowed_merge_methods` = `merge` on
+  `main`), `required_status_checks` (strict), `deletion`, `non_fast_forward`.
+  No `required_linear_history` on `main` (merge commits are allowed there);
+  rebase is the convention for feature→`develop`.
 - **Tool-boundary hook:** intercept the bypass/admin command; require interactive
   root elevation to mint a fresh approval marker; check TTL; fail-closed.
 - **Org policy:** enforce 2FA for every member.
