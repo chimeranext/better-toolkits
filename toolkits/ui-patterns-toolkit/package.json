@@ -5,5 +5,12 @@
   "type": "module",
   "description": "Reusable desktop UI/UX patterns (framework-agnostic).",
   "scripts": {},
-  "skills": ["ribbon-ui"]
+  "skills": [
+    {
+      "source": "ishikawa-root-cause-analysis/ui-patterns-toolkit",
+      "skills": [
+        "ribbon-ui"
+      ]
+    }
+  ]
 }

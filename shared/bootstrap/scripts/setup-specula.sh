@@ -10,9 +10,12 @@
 #
 # Usage: bash setup-specula.sh
 # Idempotent: re-running is safe.
+# Pinned default: SPECULA_PIN=v1.2.0 (release tag; commit 645daa1…). Override
+# with SPECULA_PIN=<commit|tag> for a different pin. Never default to a moving
+# ref (e.g. main) — the installation must be reproducible.
 set -euo pipefail
 
-SPECULA_PIN="${SPECULA_PIN:-main}"   # commit/tag ref (bump deliberately)
+SPECULA_PIN="${SPECULA_PIN:-v1.2.0}"   # commit/tag ref (bump deliberately)
 
 log() { printf '[setup-specula] %s\n' "$*" >&2; }
 
@@ -48,5 +51,6 @@ else
 fi
 
 log "done. Use 'specula run <sys> --artifact=<repo> --guidance=<file>'."
-log "Outputs live in runs/<run-id>/ (outside the source checkout)."
+log "Run outputs live in runs/<run-id>/ — invoke 'specula run' from a directory"
+log "OUTSIDE the source checkout so runs/ never lands inside a consumer repo."
 log "The /ishikawa recurrence guard can be expressed as a TLA+ invariant checked by Specula."
