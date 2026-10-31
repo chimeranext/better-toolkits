@@ -385,18 +385,27 @@ appears **only after an earlier PR lands**, in a PR that is green right now.
 git merge-tree --write-tree "pr-$A" "pr-$B" 2>&1 >/dev/null; echo "exit=$?"
 ```
 
-When the exit is 1 (conflict), capture the **hunks** for the human decision — the
-ordering metric only proves the edge; it does not resolve it:
+When the exit is 1 (conflict), capture the **conflict content** for the human
+decision — the ordering metric only proves the edge; it does not resolve it.
+Conflict edges may be structural (no textual `<<<<<<<` markers), so materialize
+the real unmerged paths and capture a per-path diff of the two sides:
 
 ```bash
+CONFLICTS_D="/tmp/opencode/merge-conflict-$A-$B"
+mkdir -p "$CONFLICTS_D"
 MB=$(git merge-base "pr-$A" "pr-$B")
-git merge-tree "$MB" "pr-$A" "pr-$B" > "/tmp/opencode/merge-conflict-$A-$B.txt"
-sed -n '/^<<<<<<</,/^>>>>>>>/p' "/tmp/opencode/merge-conflict-$A-$B.txt" | head -80
+TMPIDX=$(mktemp); rm -f "$TMPIDX"
+GIT_INDEX_FILE="$TMPIDX" git read-tree -m "$MB" "pr-$A" "pr-$B"
+GIT_INDEX_FILE="$TMPIDX" git ls-files --unmerged | awk '{print $4}' | sort -u \
+  | while read -r f; do
+      git diff "pr-$A" "pr-$B" -- "$f" > "$CONFLICTS_D/${f//\//_}.diff"
+    done
+rm -f "$TMPIDX"
 ```
 
-The extracted hunks (`<<<<<<<` … `>>>>>>>`) are the decision input for the
-principal (the human auditor). Never auto-resolve a conflict edge; always present
-the hunks with the edge.
+The captured per-path diffs (A vs B) are the decision input for the principal (the
+human auditor). Never auto-resolve a conflict edge; always attach the conflict
+diffs with the edge.
 
 Run this for every pair that Step 4 flagged as overlapping. A pair that is clean
 against base and dirty against each other is a **hard ordering constraint**, and
@@ -517,7 +526,7 @@ TIER 1 — merge in any order, no shared files
 TIER 2 — sequenced, latent conflicts
   #4242  ...  MUST precede #4120 — clean vs base, conflicts with #4120 on
               .github/workflows/quality-report-allure.yml
-              Conflict hunks → /tmp/opencode/merge-conflict-4242-4120.txt
+              Conflict diffs → /tmp/opencode/merge-conflict-4242-4120/
               (decision input for the principal — never auto-resolved)
 
 NOT IN THE ORDER
