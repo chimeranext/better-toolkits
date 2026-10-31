@@ -103,6 +103,16 @@ ReviewWave ==
   /\ UNCHANGED <<capability_gate_passed, dispatched_waves, touched_by_wave,
                   auto_merge, human_approved>>
 
+(* Tras revisar una wave, se puede lanzar la siguiente wave.
+   Se conservan las waves ya despachadas y los archivos tocados,
+   de modo que una wave posterior puede solaparse con una anterior
+   (eso es lo que debe detectar INV_OverlapCheck). *)
+BeginNextWave ==
+  /\ phase = "reviewed"
+  /\ phase' = "graph_built"
+  /\ UNCHANGED <<capability_gate_passed, dispatched_waves, touched_by_wave,
+                  auto_merge, human_approved>>
+
 FinishHuman ==
   /\ phase = "reviewed"
   /\ human_approved = TRUE
@@ -127,6 +137,7 @@ Next ==
   \/ Dispatch2_f20
   \/ GateWave
   \/ ReviewWave
+  \/ BeginNextWave
   \/ FinishHuman
   \/ AutoMergeBad
 
