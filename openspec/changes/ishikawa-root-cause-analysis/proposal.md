@@ -31,17 +31,21 @@ symptom are fixed, in that order.
   Genchi Genbutsu observation rules (in-session observation gate, claim-type
   label, method-of-observation, freshness); `/ishikawa` is invoked on demand
   only, never automatically.
-- **Vendor** two evidence tools that reinforce `/ishikawa`:
+- **Vendor** three verification tools that reinforce `/ishikawa`:
   - **Graphify** (`graphifyy`): builds a knowledge graph with edges tagged
     `EXTRACTED` (read directly) vs `INFERRED` (derived) — a concrete
     implementation of the Genchi Genbutsu observation distinction.
   - **Open Ontologies** (`open-ontologies`): produces re-verifiable certificates
     that refuse forged conclusions — a concrete implementation of the Baka-Yoke
     recurrence guard.
-  Both are installed globally via pinned/idempotent scripts (CLI/bin in
-  `~/.local/bin`, MCP server registered in the global opencode config),
-  following the existing `setup-opencode.md` vendor pattern — no consumer-repo
-  committed content, no per-repo push.
+  - **Specula** (`specula`): agentic formal verification — writes TLA+ specs of
+    the target system plus invariants, model-checks them (TLC), and reproduces
+    violations at the code level. This is the concrete implementation of the
+    recurrence guard as a verifiable invariant (the third leg: Graphify
+    observes, Open Ontologies reasons over data, Specula proves behavior).
+  All are installed globally via pinned/idempotent scripts (CLI/bin in
+  `~/.local/bin`), following the existing `setup-opencode.md` vendor pattern —
+  no consumer-repo committed content, no per-repo push.
 - Register `ishikawa` in the toolkit's `package.json` `"skills"` catalog.
 
 ## Capabilities
@@ -49,8 +53,9 @@ symptom are fixed, in that order.
 ### New Capabilities
 - `ishikawa`: structured root-cause analysis using the fishbone/6M method,
   with a mandatory "fix root cause AND symptom, in that order" verification gate.
-- `graphify` / `open-ontologies` (vendored): evidence tools that feed
-  `/ishikawa` (observed-vs-inferred edges; re-verifiable certificates).
+- `graphify` / `open-ontologies` / `specula` (vendored): evidence + formal
+  verification tools that feed `/ishikawa` (observed-vs-inferred edges;
+  re-verifiable certificates; TLA+ invariant model-checking).
 
 ### Modified Capabilities
 - `premortem`: causal deep-dives are structured via the 6M lens (instead of
@@ -63,10 +68,11 @@ symptom are fixed, in that order.
 - New: `toolkits/make-no-mistakes-toolkit/skills/ishikawa/` (SKILL.md +
   `references/ishikawa/protocol.md`).
 - New (global vendored setup): `shared/bootstrap/scripts/setup-graphify.sh`,
-  `shared/bootstrap/scripts/setup-open-ontologies.sh`; both install globally
-  per machine (CLI/bin in `~/.local/bin`, Graphify skill global, Open Ontologies
-  MCP server in global `~/.config/opencode/opencode.json`). No consumer-repo
-  committed content and no per-repo push required.
+  `shared/bootstrap/scripts/setup-open-ontologies.sh`,
+  `shared/bootstrap/scripts/setup-specula.sh`; all install globally per machine
+  (CLI/bin in `~/.local/bin`, Graphify skill global, Open Ontologies MCP server
+  in global `~/.config/opencode/opencode.json`, Specula via `uv tool install`).
+  No consumer-repo committed content and no per-repo push required.
 - Modified: `skills/premortem/SKILL.md`, `commands/postmortem.md`,
   `references/dogfood/protocol.md`, `skills/evidence-explicit-attribution/SKILL.md`,
   `package.json` (skills catalog).

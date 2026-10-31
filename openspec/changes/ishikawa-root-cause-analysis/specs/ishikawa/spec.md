@@ -176,6 +176,15 @@ installed per-repo in a pinned, idempotent way.
   the repo tree
 - **AND** in both cases no generated artifact SHALL be committed/pushed
 
+#### Scenario: Specula provides TLA+ invariant model-checking
+- **WHEN** Specula is used to verify a system's behavior
+- **THEN** it SHALL write TLA+ specifications of the target plus invariants
+  capturing correctness properties
+- **AND** it SHALL model-check the specs with TLC
+- **AND** it SHALL reproduce any invariant violation at the code level
+- **AND** the recurrence guard of `/ishikawa` SHALL be expressible as a TLA+
+  invariant that Specula can check
+
 #### Scenario: Certificates are derived artifacts, not committed sources
 - **WHEN** a certificate is produced
 - **THEN** the certificate SHALL be treated as a derived, regenerable artifact
