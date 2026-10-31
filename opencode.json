@@ -17,8 +17,7 @@
           "-y",
           "tsx",
           "shared/mcp/social-media-ads-mcp/src/server.ts"
-        ],
-        "protocol": "2026-07-28"
+        ]
       },
       "notion-chimeranext": {
         "type": "local",
@@ -28,13 +27,31 @@
         ],
         "environment": {
           "NOTION_API_KEY": "{env:NOTION_API_KEY}"
+        }
+      },
+      "posthog-chimeranext": {
+        "type": "local",
+        "command": [
+          "node",
+          "shared/mcp/posthog-chimeranext/server.js"
+        ],
+        "environment": {
+          "POSTHOG_HOST": "{env:POSTHOG_HOST}",
+          "POSTHOG_PERSONAL_API_KEY": "{env:POSTHOG_PERSONAL_API_KEY}",
+          "POSTHOG_PROJECT_ID": "{env:POSTHOG_PROJECT_ID}"
         },
         "protocol": "2026-07-28"
       },
-      "posthog": {
-        "type": "remote",
-        "url": "https://mcp.posthog.com/mcp",
-        "oauth": true
+      "stitch-chimeranext": {
+        "type": "local",
+        "command": [
+          "node",
+          "shared/mcp/stitch-chimeranext/server.js"
+        ],
+        "environment": {
+          "STITCH_GCP_PROJECT": "{env:STITCH_GCP_PROJECT}",
+          "STITCH_PROJECT_ID": "{env:STITCH_PROJECT_ID}"
+        }
       }
     }
   }

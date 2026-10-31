@@ -17,6 +17,13 @@ enforces conventions already in industry use.
 | **BrS** | Branching Strategy | Branches, naming, protection | [branching-strategy.md](branching-strategy.md) |
 | **QT4L** | QA Traceability (four layers) | Req → automated test → manual QA → HITL | [qa-traceability-four-layers.md](qa-traceability-four-layers.md) |
 | **OST** | OpenSpec store PR traceability | Tracker → change folder → one store PR → one merge | [openspec-store-pr-traceability.md](openspec-store-pr-traceability.md) |
+| **StS** | Stderr/Stream Standards | No stream to null; fold stderr into the same sink | [stderr-stream-standards.md](stderr-stream-standards.md) |
+| **Jidoka** | Stop-on-Anomaly | Stop on anomaly; record boundary + root-cause hypothesis | [jidoka.md](jidoka.md) |
+| **CLG** | Commit Logic Groups | Commit intermediate work in semantic groups; one logical change per commit | [commit-logic-groups.md](commit-logic-groups.md) |
+| **CvC** | Conventional Commits | Commit message format `type(scope): description`; allowed types | [conventional-commits.md](conventional-commits.md) |
+| **PCH** | Pre-Commit Hooks | Vendored canonical pre-commit config + shared Mermaid validator | [pre-commit-hooks.md](pre-commit-hooks.md) |
+| **CCC** | Code Comment Convention | Meaningful non-obvious comments; no redundant "how" comments | [code-comment-convention.md](code-comment-convention.md) |
+| **CLH** | Copyright/License Header | Headers per repo LICENSE.md (startup-agnostic); not a global rule | [copyright-license-header.md](copyright-license-header.md) |
 
 The **clean code quartet** is DSMS + IFS + CPS + PRDS. BrS, QT4L, and **OST**
 (when the client uses an OpenSpec store) complete branching, QA traceability, and
@@ -53,6 +60,10 @@ Protocol SSOT: `references/clean-code-standards-setup/protocol.md`, `references/
 | Branch naming and protection? | BrS |
 | Scenario → verification in tasks? | QT4L |
 | One OpenSpec folder per store PR? | OST |
+| Silenciar stderr o descartar un stream? | StS (prohibido) |
+| ¿Detenerse ante una anomalía? | Jidoka (sí, con boundary + causa raíz) |
+| ¿Cómo agrupar los commits? | CLG (por semántica, un cambio lógico por commit) |
+| ¿Comentar el "cómo"? | CCC (no — reescribir; comentar solo el "por qué") |
 
 ## Provenance
 

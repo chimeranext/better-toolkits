@@ -1,6 +1,6 @@
 {
   "name": "ui-patterns",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Reusable desktop UI/UX patterns (framework-agnostic) \u2014 a catalog of UI patterns (ribbon, command bar, tabs, panels, etc.) with anatomy and per-framework variants (iced, React/MUI, Flutter, WinUI 3).",
   "author": {
     "name": "Luis Andres Pena Castillo",

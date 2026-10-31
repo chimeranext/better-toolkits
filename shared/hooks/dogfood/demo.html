@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dogfood demonstration — blueprint</title>
+<style>
+  :root {
+    --bg: #eef3fb; --fg: #131a2a; --muted: #516181;
+    --line: #2f3f63; --surface: #f7fafd; --border: #9fb3d4;
+    --ok: #1b7f3b; --bad: #c92432; --warn: #d9690a;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .sheet { max-width: 960px; margin: 0 auto; padding: 32px 24px 64px; }
+  h1 { font-size: 22px; letter-spacing: .3px; margin: 0 0 4px; }
+  .subtitle { color: var(--muted); margin-bottom: 24px; }
+  .meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 8px; margin-bottom: 24px; }
+  .meta div { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 8px 10px; }
+  .meta .k { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .5px; }
+  .meta .v { font-weight: 600; }
+  .gates { display: flex; gap: 16px; margin-bottom: 24px; }
+  .gate { padding: 12px 16px; border: 1px solid var(--border); border-radius: 4px; background: var(--surface); flex: 1; }
+  .gate .name { font-weight: 700; }
+  .gate.pass { border-left: 4px solid var(--ok); }
+  .gate.stop { border-left: 4px solid var(--bad); }
+  .gate.fail { border-left: 4px solid var(--warn); }
+  section { margin-bottom: 28px; }
+  h2 { font-size: 16px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .5px; }
+  pre { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 12px; overflow-x: auto; font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .chart { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 12px; }
+  .chart svg { width: 100%; height: auto; }
+  .tag { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+  .tag.pass { background: #dff1e5; color: var(--ok); }
+  .tag.stop { background: #fbe4e6; color: var(--bad); }
+  .tag.fail { background: #fdeedd; color: var(--warn); }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <h1>Dogfood demonstration</h1>
+  <div class="subtitle">Behavior-driven verification · Jidoka · No-Workarounds</div>
+
+  <div class="meta">
+    <div><div class="k">Component</div><div class="v" id="m-name">—</div></div>
+    <div><div class="k">When</div><div class="v" id="m-when">—</div></div>
+    <div><div class="k">Given</div><div class="v" id="m-given">—</div></div>
+    <div><div class="k">Then</div><div class="v" id="m-then">—</div></div>
+    <div><div class="k">Exit</div><div class="v" id="m-exit">—</div></div>
+  </div>
+
+  <div class="gates">
+    <div class="gate" id="g-jidoka"><div class="name">Jidoka</div><div id="g-jidoka-v">—</div></div>
+    <div class="gate" id="g-nowa"><div class="name">No-Workarounds</div><div id="g-nowa-v">—</div></div>
+  </div>
+
+  <section>
+    <h2>Statechart</h2>
+    <div class="chart" id="chart"><p style="color:var(--muted)">No diagram rendered.</p></div>
+  </section>
+
+  <section>
+    <h2>Evidence (observed output)</h2>
+    <pre id="evidence">—</pre>
+  </section>
+
+  <section>
+    <h2>Afirmaciones (BDD)</h2>
+    <p style="color:var(--muted)">Comportamiento esperado descrito en lenguaje natural — no aserciones técnicas (TDD).</p>
+    <table id="assertions">
+      <thead><tr><th>#</th><th>Afirmación</th><th>Matcher</th><th>Resultado</th></tr></thead>
+      <tbody id="assertions-body"></tbody>
+    </table>
+  </section>
+</div>
+<script>
+  (async function () {
+    var data = null;
+    try {
+      var res = await fetch("demo-data.json");
+      if (res.ok) data = await res.json();
+    } catch (e) { data = null; }
+    if (!data) return;
+
+    document.getElementById("m-name").textContent = data.dogfood.name;
+    document.getElementById("m-when").textContent = data.dogfood.when;
+    document.getElementById("m-given").textContent = data.dogfood.given;
+    document.getElementById("m-then").textContent = data.dogfood.then;
+    document.getElementById("m-exit").textContent = data.dogfood.result.exit_code;
+
+    var jidoka = data.dogfood.gates.jidoka;
+    var nowa = data.dogfood.gates.no_workarounds;
+    function setGate(id, val) {
+      var el = document.getElementById(id);
+      el.className = "gate " + (val === "pass" ? "pass" : val === "stop" ? "stop" : "fail");
+      document.getElementById(id + "-v").innerHTML = '<span class="tag ' + (val === "pass" ? "pass" : "fail") + '">' + val + "</span>";
+    }
+    setGate("g-jidoka", jidoka);
+    setGate("g-nowa", nowa);
+
+    document.getElementById("evidence").textContent = data.dogfood.evidence || "";
+
+    // Afirmaciones BDD (natural-language statements + matchers + verdict).
+    var afirmaciones = data.dogfood.afirmaciones || [];
+    var tbody = document.getElementById("assertions-body");
+    afirmaciones.forEach(function (a) {
+      var tr = document.createElement("tr");
+      function mk(t) { var td = document.createElement("td"); td.textContent = t; return td; }
+      tr.appendChild(mk(a.id));
+      tr.appendChild(mk(a.statement));
+      tr.appendChild(mk(a.matcher));
+      var td = document.createElement("td");
+      var ok = a.result === "pass";
+      td.innerHTML = '<span class="tag ' + (ok ? "pass" : "fail") + '">' + a.result + "</span>";
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+    });
+
+    if (afirmaciones.length === 0) {
+      var tr = document.createElement("tr");
+      var td = document.createElement("td");
+      td.colSpan = 4;
+      td.textContent = "Sin afirmaciones.";
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+    }
+
+    fetch("diagram.svg").then(function (r) {
+      if (!r.ok) return;
+      return r.text();
+    }).then(function (svg) {
+      if (svg) document.getElementById("chart").innerHTML = svg;
+    }).catch(function () {});
+  })();
+</script>
+</body>
+</html>

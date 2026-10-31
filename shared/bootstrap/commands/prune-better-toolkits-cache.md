@@ -19,6 +19,12 @@ Read and run [`../scripts/prune-better-toolkits-cache-cursor.sh`](../scripts/pru
 bash shared/bootstrap/scripts/prune-better-toolkits-cache-cursor.sh
 ```
 
+PowerShell (Windows):
+
+```powershell
+pwsh -File shared/bootstrap/scripts/prune-better-toolkits-cache-cursor.ps1
+```
+
 1. Logs every cached `plugin.json` version (via `jq`) to `~/.cursor/hooks/logs/prune-better-toolkits-cache-cursor-*.out.log`.
 2. Removes **only** these two fixed paths (entire directories, if present):
    - `~/.cursor/plugins/cache/chimeranext-better-toolkits`

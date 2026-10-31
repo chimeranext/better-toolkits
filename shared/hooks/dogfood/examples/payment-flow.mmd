@@ -1,0 +1,13 @@
+stateDiagram-v2
+    direction LR
+    [*] --> Idle
+    Idle --> Paying: you press play
+    Paying --> Paid: payment succeeds
+    Paying --> Failed: payment fails
+    Failed --> Idle: you retry
+    Paid --> [*]
+
+    classDef breaks fill:#ffe9eb,stroke:#c92432,stroke-width:2.5px
+    classDef mayBreak fill:#fff1e0,stroke:#d9690a,stroke-width:2.5px
+
+    class Failed breaks
