@@ -75,7 +75,7 @@ export async function posthogApi(path, { method = "GET", body, fetchFn = fetch }
  */
 export const runQuery = async (query, { fetchFn = fetch } = {}) => {
   if (!query || typeof query !== "object") throw new UserError("query is required (object)");
-  return posthogApi("/query/", { method: "POST", body: query, fetchFn });
+  return posthogApi("/query/", { method: "POST", body: { query }, fetchFn });
 };
 
 const server = new ViteMCP({ name: "posthog-chimeranext", version: "0.1.0" });
