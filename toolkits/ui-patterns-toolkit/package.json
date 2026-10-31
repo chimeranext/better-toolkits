@@ -7,7 +7,7 @@
   "scripts": {},
   "skills": [
     {
-      "source": "ishikawa-root-cause-analysis/ui-patterns-toolkit",
+      "source": "chimeranext/better-toolkits",
       "skills": [
         "ribbon-ui"
       ]

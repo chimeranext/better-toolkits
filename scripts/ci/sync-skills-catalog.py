@@ -13,6 +13,20 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 TOOLKITS = ROOT / "toolkits"
+CANONICAL_SOURCE = "chimeranext/better-toolkits"
+
+
+def canonical_pkg(tk: pathlib.Path, names: list[str]) -> dict:
+    name = tk.name.removesuffix("-toolkit") or tk.name
+    return {
+        "name": name,
+        "version": "0.1.0",
+        "private": True,
+        "type": "module",
+        "description": "",
+        "scripts": {},
+        "skills": [{"source": CANONICAL_SOURCE, "skills": names}],
+    }
 
 
 def main() -> int:
@@ -26,20 +40,31 @@ def main() -> int:
             continue
         skills_dir = tk / "skills"
         pkg_path = tk / "package.json"
-        if not (skills_dir.is_dir() and pkg_path.exists()):
-            rows.append(f"  skipped  {tk.name} (no skills/ or package.json)")
+        if not skills_dir.is_dir():
+            rows.append(f"  skipped  {tk.name} (sin carpeta skills/)")
             continue
-        names = sorted(p.name for p in skills_dir.iterdir() if p.is_dir())
+        names = sorted(p.name for p in skills_dir.iterdir() if p.is_dir() and (p / "SKILL.md").exists())
+        if not pkg_path.exists():
+            pkg_path.write_text(
+                json.dumps(canonical_pkg(tk, names), ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+            changed.append(tk.name)
+            rows.append(f"  CHANGED  {tk.name} (package.json creado, {len(names)} skills)")
+            continue
         pkg = json.loads(pkg_path.read_text(encoding="utf-8"))
         catalog = pkg.get("skills") or []
-        source = (
-            catalog[0].get("source")
-            if catalog and isinstance(catalog[0], dict) and catalog[0].get("source")
-            else f"{ROOT.name}/{tk.name}"
+        current = (
+            {
+                "source": catalog[0].get("source"),
+                "skills": sorted(catalog[0].get("skills", [])),
+            }
+            if catalog and isinstance(catalog[0], dict)
+            else None
         )
-        new_catalog = [{"source": source, "skills": names}]
-        if catalog != new_catalog:
-            pkg["skills"] = new_catalog
+        expected = {"source": CANONICAL_SOURCE, "skills": names}
+        if current != expected:
+            pkg["skills"] = [expected]
             pkg_path.write_text(
                 json.dumps(pkg, ensure_ascii=False, indent=2) + "\n",
                 encoding="utf-8",
