@@ -50,3 +50,16 @@ PR-B (based on old main) → queue head equals or ≤ 0.1.21 → fails monotonic
 - **CI/merge queue:** `check --range origin/main..HEAD` must pass before merge.
 - **Agents:** never "resolve" a version conflict by picking a side; bump vs
   `main` (rebase + re-bump).
+
+## Implementation note (better-toolkits, repo-internal)
+
+The generic policy above is separate from better-toolkits' own tooling. The
+monorepo implements it with `scripts/ci/marketplace_versioning.py`, wired
+**outside** `/opsx-*`:
+
+- pre-commit: `marketplace-version-sync` (generates `marketplace.json` from
+  `plugin.json`).
+- pre-push: `marketplace-version-check-push` (per-branch sanity vs `main`).
+- merge queue: `check --range origin/main..HEAD` on the combined head.
+
+This tool is better-toolkits-specific and not part of the generic standard.
