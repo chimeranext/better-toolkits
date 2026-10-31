@@ -1,0 +1,14 @@
+{
+  "beforeShellExecution": [
+    {
+      "name": "enforce-prds-local",
+      "matchers": ["gh\\s+pr\\s+(create|edit)"],
+      "script": "module.exports = async ({ args }) => { const { execFileSync } = require('child_process'); try { execFileSync('__BETTER_TOOLKITS_ROOT__/shared/hooks/tooluse/enforce-prds.sh', [args.join(' ')], { stdio: 'pipe' }); return true; } catch (e) { throw new Error('PRDS gate fired - redraft description'); } };"
+    },
+    {
+      "name": "approve-admin-merge-local",
+      "matchers": ["gh\\s+pr\\s+merge.*--admin"],
+      "script": "module.exports = async ({ args }) => { const { execFileSync } = require('child_process'); try { execFileSync('__BETTER_TOOLKITS_ROOT__/shared/hooks/tooluse/approve-admin-merge.sh', [args.join(' ')], { stdio: 'pipe' }); return true; } catch (e) { throw new Error('--admin blocked: human approval via pkexec required'); } };"
+    }
+  ]
+}
