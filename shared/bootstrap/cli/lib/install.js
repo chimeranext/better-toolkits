@@ -47,6 +47,14 @@ function readBytesOrNull(path) {
  * entries + auto-update plugin). Shared by `setup` and by the pull-driven
  * re-sync in `lib/self-update.js` — one implementation, two callers.
  */
+function planBetterProfileSyncStep(repoRoot) {
+  return {
+    kind: "better-profile-sync",
+    detail: "sync repo .opencode/agents/better.md -> ~/.config/opencode/agents/better.md",
+    repoRoot,
+  };
+}
+
 export function planWiringSteps(opts = {}, repoRoot = resolveRepoRoot()) {
   const configDir = resolveConfigDir(opts);
   const adapter = resolveAdapterPath(repoRoot);
@@ -66,6 +74,7 @@ export function planWiringSteps(opts = {}, repoRoot = resolveRepoRoot()) {
   steps.push({ kind: "commands", detail: "run setup-opencode-commands.sh (link all)" });
   const skillsStep = planSkillsStep(opts, repoRoot);
   if (skillsStep) steps.push(skillsStep);
+  steps.push(planBetterProfileSyncStep(repoRoot));
   steps.push(planAutoUpdateStep(opts, repoRoot, configDir));
   return { adapter, steps };
 }
@@ -220,6 +229,13 @@ export function applyInstall(plan, opts = {}) {
       execFileSync("bash", [script], { stdio: "inherit", timeout: 120000 });
     } else if (s.kind === "skills") {
       applySkillsStep(s);
+    } else if (s.kind === "better-profile-sync") {
+      const script = path.join(s.repoRoot, "scripts", "ci", "sync-better-profile.sh");
+      if (existsSync(script)) {
+        execFileSync("bash", [script, "--quiet"], { stdio: "inherit", timeout: 60000 });
+      } else {
+        console.log("  warn: sync-better-profile.sh missing, skipping");
+      }
     } else if (s.kind === "auto-update") {
       applyAutoUpdateStep(s);
     } else if (s.kind === "mcp") {
