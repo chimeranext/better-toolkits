@@ -17,6 +17,11 @@
 4. **La rama/PR refleja los grupos.** El draft PR muestra los commits agrupados
    por semántica — nunca un único commit gigante con todo, ni múltiples commits
    revueltos.
+5. **Entre commits intermedios: `/opsx-sync` obligatorio.** Si la rama contiene
+   cambios OpenSpec (`openspec/changes/<change>/specs/**`), entre cada commit
+   lógico se DEBE ejecutar `/opsx-sync` para propagar los delta specs a las main
+   specs antes del siguiente commit. No se acumulan varios commits sin
+   sincronizar; el sync es parte del grupo.
 
 ## Racional (por qué)
 
@@ -28,7 +33,8 @@
 ## Aplicación
 
 - **Agentes** (Claude/OpenCode/Cursor): al implementar, crear commit por grupo
-  semántico y push al draft PR.
+  semántico, ejecutar `/opsx-sync` entre cada commit cuando haya OpenSpecs
+  involucrados, y push al draft PR.
 - **`/disk-cleanup` / scripts**: los fixes se separan por estándar.
 - **CI/auditorías**: el diff del PR debe mostrar grupos lógicos.
 
