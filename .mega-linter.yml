@@ -46,10 +46,10 @@ PRE_COMMANDS:
   # PSScriptAnalyzer. Aborta si algún .ps1 no parsea. Corres con pwsh.
   - command: >
       pwsh -NoProfile -Command '
-        $err = $null
         $files = Get-ChildItem -Path . -Recurse -Filter *.ps1 -ErrorAction SilentlyContinue |
           Where-Object { $_.FullName -notmatch "node_modules|vendor|\\.git" }
         foreach ($f in $files) {
+          $e = $null
           $null = [System.Management.Automation.Language.Parser]::ParseFile($f.FullName, [ref]$null, [ref]$e)
           if ($e) { $e | ForEach-Object { Write-Error "$($f.FullName): $($_.Message)" }; exit 1 }
         }

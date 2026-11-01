@@ -141,7 +141,7 @@ case "$LANG" in
   dart)       NATIVE_MATCHER="expect(expr, equals(x)) / contains(y) / matches(re)" ;;
   python)     NATIVE_MATCHER="assert expr == x / x in expr / re.search(re, expr)" ;;
   rust)       NATIVE_MATCHER="behave expect!(expr).to_equal(x) / to_contain(y)" ;;
-  php)        NATIVE_MATCHER="Pest expect($expr)->toBe($x) / ->toContain($y)" ;;
+  php)        NATIVE_MATCHER="Pest expect(\$expr)->toBe(\$x) / ->toContain(\$y)" ;;
   elixir)    NATIVE_MATCHER="ExUnit assert expr == x / x in expr / Regex.match?(re, expr)" ;;
 esac
 
