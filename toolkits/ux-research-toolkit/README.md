@@ -1,5 +1,7 @@
 # ux-research-toolkit
 
+[![Version](https://img.shields.io/badge/version-2.1.9-blue)](.claude-plugin/plugin.json) [![License: BSL-1.1](https://img.shields.io/badge/license-BSL--1.1-important)](LICENSE)
+
 Plugin de Claude Code para crear artefactos de UX research profesionales a traves de dialogo guiado.
 
 ## Que hace

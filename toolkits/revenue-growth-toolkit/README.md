@@ -1,5 +1,7 @@
 # AAARRR Flywheel · Revenue Growth Toolkit
 
+[![Version](https://img.shields.io/badge/version-0.1.5-blue)](.claude-plugin/plugin.json) [![License: BSL-1.1](https://img.shields.io/badge/license-BSL--1.1-important)](LICENSE)
+
 > **Mantra:** fail fast, fail often, fail cheap, fail forward.
 
 Sistema de agentes, comandos y workflows que ejecuta el framework **AAARRR** (Awareness, Acquisition, Activation, Revenue, Retention, Referral) sobre paid media multi-red. Fusiona la estrategia de funnel+flywheel (antes `aaarrr-flywheel-toolkit`) con la ejecución de campañas (antes `media-buyer-toolkit`) vía el MCP compartido `social-media-ads-mcp` (Meta ejecutado por **Ads CLI**, canal oficial sancionado). Analytics/dashboard vía **PostHog self-hosted** (Podman); métricas derivadas en Python.

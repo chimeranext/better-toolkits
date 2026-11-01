@@ -1,5 +1,7 @@
 # digital-nomad-toolkit
 
+[![Version](https://img.shields.io/badge/version-1.1.6-blue)](.claude-plugin/plugin.json) [![License: BSL-1.1](https://img.shields.io/badge/license-BSL--1.1-important)](LICENSE)
+
 > Guide for freelancers and digital nomads who want to operate as a US Single-Member LLC.
 > **FREE** — No entrance fee.
 
