@@ -2,17 +2,18 @@
 
 Implements MPH point 8: the `CODEOWNERS` policy is a canonical SSOT in the
 governance repo and is replicated to every target repository by an organization
-GitHub App. Startup-agnostic; the concrete App slug and repo names are examples.
+GitHub App. Startup-agnostic; the concrete App slug and repo names below are
+illustrative placeholders (`acme-studio`), not a real org.
 
 ## Architecture
 
 ```
-chimeranext/meta
+acme-studio/org-gate
   └─ .github/CODEOWNERS          ← SSOT canónico (template: `* @{{ORG}}/founders`)
         │
-        ▼  chimeranext-org-admin-tool (App: contents:write, administration:write)
-        ├─ chimeranext/better-toolkits/.github/CODEOWNERS   (mirror)
-        ├─ chimeranext/<client-monorepo>/.github/CODEOWNERS  (mirror)
+        ▼  acme-studio-org-admin-tool (App: contents:write, administration:write)
+        ├─ acme-studio/better-toolkits/.github/CODEOWNERS   (mirror)
+        ├─ acme-studio/<client-monorepo>/.github/CODEOWNERS  (mirror)
         └─ ... (all org repos)
 ```
 
@@ -20,7 +21,7 @@ chimeranext/meta
 
 Read `.github/CODEOWNERS` from the governance repo. It uses `{{ORG}}` as a
 template token for the organization name, so one canonical file resolves for
-every target org (chimeranext and each client org).
+every target org (the studio org and each client org).
 
 ```
 * @{{ORG}}/founders
