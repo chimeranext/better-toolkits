@@ -2,10 +2,15 @@
 
 **On by default. Opt-out** when you need to.
 
-Blocks agent shell commands that discard stderr (`2>/dev/null`, `&>/dev/null`,
-`>/dev/null 2>&1`) or stdout (`>/dev/null` bare or reversed as `2>&1 >/dev/null`),
-or fold stderr with bare `2>&1` without a file/`tee` sink. No stream goes to null, ever:
-capture with `out=$(cmd)` or sink to log files.
+This hook enforces **StS — Stderr/Stream Standards**
+(see `shared/references/engineering-standards/stderr-stream-standards.md`), the
+policy SSOT. This README is the technical implementation; the policy is StS.
+
+Blocks agent shell commands that discard stderr or stdout to a null device, or
+fold stderr with bare `2>&1` without a file/`tee` sink. No stream goes to null,
+ever: capture with `out=$(cmd)` or sink to log files (fold stderr into the SAME
+sink with `> out.log 2>&1` or `2>&1 | tee run.log`). `2> file` (separate error
+file) is forbidden.
 
 Shared detector: [`detect.py`](detect.py).
 
@@ -52,8 +57,12 @@ python3 hooks/stderr/detect.py --command 'cmd 2>&1 | tee run.log' # exit 0
 ## Allowed patterns
 
 - `out=$(cmd)` — capture instead of discarding
-- `cmd >out.log 2>err.log` / `cmd >all.log 2>&1` / `cmd 2>&1 | tee run.log`
+- `cmd >all.log 2>&1` / `cmd 2>&1 | tee run.log` — fold stderr into the SAME sink
 - `out=$(cmd)` when you only need the exit code
+
+**Forbidden:** `2> file` (separate error file) — it is missed in audits. Only the
+combined `> out.log 2>&1` or `2>&1 | tee run.log` forms are allowed (matches the
+detector).
 
 ## Tests
 
@@ -64,3 +73,5 @@ bash hooks/stderr/tests/test-detect.sh
 
 Monorepo contract: [`docs/multi-harness-ssot.md`](../../../docs/multi-harness-ssot.md).
 Canonical tree for all toolkits: this directory (`shared/hooks/stderr`). Toolkit copies under `toolkits/*/hooks/stderr` must stay in sync (vendored for independent plugin publish).
+
+Vendor sync: `bash scripts/sync-hooks-from-shared.sh` · Windows: `pwsh -File scripts/sync-hooks-from-shared.ps1`.

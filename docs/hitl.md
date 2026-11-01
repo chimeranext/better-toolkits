@@ -32,3 +32,6 @@ Same pattern as make-no-mistakes [`references/implement/hitl-boundaries.md`](../
 
 - `/implement` hard STOP gates — `toolkits/make-no-mistakes-toolkit/references/implement/hitl-boundaries.md`
 - `/merge-advisor` — measure, then always HITL before each `gh pr merge` (re-measure between merges) — `references/merge-advisor/protocol.md`
+- Windows/PowerShell main-push marker helpers — `scripts/git-hooks/hitl-approve-main-push.ps1` / `hitl-revoke-main-push.ps1`
+  (elevated `%ProgramData%\better-toolkits\hitl-approve-main-push` marker; run with
+  `powershell -ExecutionPolicy Bypass -File scripts/git-hooks/hitl-approve-main-push.ps1`).

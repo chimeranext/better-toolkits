@@ -35,6 +35,14 @@ lo `unsafe` vía miri; en edge, linker y HAL correctos para el target.
 - R9 [errors] Mensajes de error **prescriptivos** (sugieren alternativa), salvo `[SECRECY]`
   en el doc comment (seguridad por secrecía). `Result`/`Either` para fallos esperados →
   S8 + `conventions/prescriptive-error-messages.md`.
+- R10 [BDD] Verificación de comportamiento en lenguaje natural **sin archivos `.feature`**:
+  el escenario es el OpenSpec del proyecto (proposal/design/spec), no Gherkin por archivo.
+  Usar **`behave`** (matchers `expect!` + DSL `behave!` → `#[test]` estándar) o
+  `rstest-bdd` en modo procedural. Assert comportamiento observable, no implementación.
+  Los matchers se declaran en el mini-lenguaje del
+  `conventions/matcher-contract.md` y se traducen a `behave!`/`expect!`.
+  Gates Jidoka (stop on anomaly) + No-Workarounds (no silenciar señales) según
+  `assurance-toolkit/references/testing/e2e-protocol.md`.
 
 ## COUNTEREXAMPLES
 
@@ -61,6 +69,22 @@ Err(Error::Auth("error de autenticación"))
 /// [SECRECY] no revelar el motivo exacto (seguridad por secrecía).
 pub fn login(u: &str, p: &str) -> Result<(), Error> {
     Err(Error::Auth("error de autenticación"))
+}
+```
+
+```
+// ❌ wrong: BDD con archivo .feature + aserción interna (R10) — el escenario
+// ya vive en el OpenSpec; no duplicarlo en Gherkin, y no assertear implementación.
+
+// ✅ right: behave! + expect! sobre el OpenSpec, comportamiento observable (R10)
+use behave::{behave, expect};
+
+#[behave]
+fn registro_de_feature() {
+    // El escenario viene del OpenSpec del proyecto, no de un .feature.
+    let def = feature::generate("sprocket", "feature sprocket ...");
+    expect!(def.name).to_equal("sprocket");
+    // Gates: sobre anomalía, stop (Jidoka); ninguna señal silenciada (No-Workarounds).
 }
 ```
 

@@ -1,0 +1,87 @@
+# Vendored .gitignore patterns — machine-readable SSOT.
+#
+# Every repo SHALL include the patterns below (by language/tool group). This
+# file is the canonical list; generators/CI may read it. See
+# `shared/references/engineering-standards/build-artifacts-gitignore.md`.
+
+[meta]
+version = "1.0.0"
+note = "Add a group per language/tool; never delete a group used by a client repo."
+
+[[group]]
+id = "python"
+label = "Python"
+globs = [
+  "venv/",
+  ".venv/",
+  "__pycache__/",
+  "*.pyc",
+  "*.pyo",
+  ".pytest_cache/",
+  ".mypy_cache/",
+  ".ruff_cache/",
+  ".tox/",
+  "htmlcov/",
+]
+
+[[group]]
+id = "node"
+label = "Node.js"
+globs = [
+  "node_modules/",
+  "dist/",
+  "build/",
+  ".next/",
+  "coverage/",
+  "*.log",
+]
+
+[[group]]
+id = "rust"
+label = "Rust"
+globs = [
+  "target/",
+  "Cargo.lock.orig",
+]
+
+[[group]]
+id = "dart"
+label = "Dart/Flutter"
+globs = [
+  ".dart_tool/",
+  "build/",
+  ".flutter-plugins*",
+  ".packages",
+]
+
+[[group]]
+id = "elixir"
+label = "Elixir"
+globs = [
+  "_build/",
+  "deps/",
+  "cover/",
+]
+
+[[group]]
+id = "infra"
+label = "Infrastructure/ops"
+globs = [
+  ".terraform/",
+  "*.tfstate*",
+  ".env.local",
+  ".env.*.local",
+  "pids/",
+  "*.pid",
+]
+
+[[group]]
+id = "vcs"
+label = "Version control / tooling"
+globs = [
+  ".git/",
+  ".gitignore.bak",
+  ".DS_Store",
+  ".idea/",
+  ".vscode/",
+]

@@ -126,6 +126,12 @@ find "${HOME}/.cursor/plugins/cache/chimeranext-better-toolkits" \
 bash shared/bootstrap/scripts/prune-better-toolkits-cache-cursor.sh
 ```
 
+PowerShell (Windows):
+
+```powershell
+pwsh -File shared/bootstrap/scripts/prune-better-toolkits-cache-cursor.ps1
+```
+
 Slash commands SSOT: `shared/bootstrap/commands/` — e.g. `/toolkits-initial-setup`,
 `/prune-better-toolkits-cache`, `/refresh-better-toolkits-cache` (update-only; never purges),
 `/local-pr-review` (default **Heimdall / Kimi / NVIDIA NIM**; skill SSOT `shared/skills/local-pr-review/`).
