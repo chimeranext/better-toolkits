@@ -18,6 +18,9 @@ canonical templates.
    - **SAST** — CodeQL (`codeql-action/init|autobuild|analyze@v3`), security-
      extended queries. `analyze@v3` already uploads SARIF; there is **no**
      `upload-results@v3` action (that ref is invalid and fails the job).
+     `languages` must use CodeQL's vocabulary: **`javascript`** for TS/JS
+     (there is no `typescript` language; passing `typescript` fails with "Did
+     not recognize the following languages").
    - **Container / IaC** — Trivy (`trivy-action`), config + fs/secret scans,
      failing on `CRITICAL,HIGH`.
 2. **Severity is fail-closed.** CI gate failures block the merge. Bypasses are
