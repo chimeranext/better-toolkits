@@ -42,6 +42,16 @@
         },
         "protocol": "2026-07-28"
       },
+      "linear-chimeranext": {
+        "type": "local",
+        "command": [
+          "node",
+          "shared/mcp/linear-chimeranext/server.js"
+        ],
+        "environment": {
+          "LINEAR_API_KEY": "{env:LINEAR_API_KEY}"
+        }
+      },
       "stitch-chimeranext": {
         "type": "local",
         "command": [
