@@ -21,7 +21,11 @@ check() {
 }
 
 DEFAULT=$(gh api "repos/$REPO" --jq .default_branch)
-[ "$DEFAULT" = "main" ] && check "default branch main" PASS || check "default branch main" FAIL "default=$DEFAULT"
+if [ "$DEFAULT" = "main" ]; then
+  check "default branch main" PASS
+else
+  check "default branch main" FAIL "default=$DEFAULT"
+fi
 if [ "$REQUIRE_DEVELOP" -eq 1 ]; then
   if gh api "repos/$REPO/branches/develop" --jq '.' > /tmp/opencode/ggt-develop.json 2>&1; then
     check "develop exists" PASS
@@ -32,9 +36,21 @@ fi
 
 SETTINGS=$(gh api "repos/$REPO" --jq '{sq:.allow_squash_merge, mc:.allow_merge_commit, rb:.allow_rebase_merge}')
 SQ=$(printf '%s' "$SETTINGS" | jq -r .sq); MC=$(printf '%s' "$SETTINGS" | jq -r .mc); RB=$(printf '%s' "$SETTINGS" | jq -r .rb)
-[ "$SQ" = "false" ] && check "allow_squash_merge=false" PASS || check "allow_squash_merge=false" FAIL "sq=$SQ"
-[ "$MC" = "true" ] && check "allow_merge_commit=true" PASS || check "allow_merge_commit=true" FAIL "mc=$MC"
-[ "$RB" = "true" ] && check "allow_rebase_merge=true" PASS || check "allow_rebase_merge=true" FAIL "rb=$RB"
+if [ "$SQ" = "false" ]; then
+  check "allow_squash_merge=false" PASS
+else
+  check "allow_squash_merge=false" FAIL "sq=$SQ"
+fi
+if [ "$MC" = "true" ]; then
+  check "allow_merge_commit=true" PASS
+else
+  check "allow_merge_commit=true" FAIL "mc=$MC"
+fi
+if [ "$RB" = "true" ]; then
+  check "allow_rebase_merge=true" PASS
+else
+  check "allow_rebase_merge=true" FAIL "rb=$RB"
+fi
 
 RSID=$(gh api "repos/$REPO/rulesets" --jq '.[] | select(.name=="main-founders-only") | .id' | head -1)
 if [ -z "$RSID" ]; then
@@ -42,9 +58,17 @@ if [ -z "$RSID" ]; then
 else
   check "main-founders-only ruleset" PASS
   METHODS=$(gh api "repos/$REPO/rulesets/$RSID" --jq '[.rules[] | select(.type=="pull_request") | .parameters.allowed_merge_methods[]]' | jq -r '.[]' | tr '\n' ' ')
-  echo "$METHODS" | grep -q "merge" && check "ruleset allows merge" PASS || check "ruleset allows merge" FAIL "methods=$METHODS"
+  if echo "$METHODS" | grep -q "merge"; then
+    check "ruleset allows merge" PASS
+  else
+    check "ruleset allows merge" FAIL "methods=$METHODS"
+  fi
   LIN=$(gh api "repos/$REPO/rulesets/$RSID" --jq '[.rules[] | select(.type=="required_linear_history")] | length')
-  [ "$LIN" = "0" ] && check "no required_linear_history" PASS || check "no required_linear_history" FAIL "linear=$LIN"
+  if [ "$LIN" = "0" ]; then
+    check "no required_linear_history" PASS
+  else
+    check "no required_linear_history" FAIL "linear=$LIN"
+  fi
 fi
 
 echo "---"
