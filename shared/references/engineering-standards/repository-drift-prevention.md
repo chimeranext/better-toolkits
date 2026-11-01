@@ -4,7 +4,8 @@
 
 Standardize the detection and prevention of **structural drift** across a
 repository: the tendency of a codebase to silently diverge from its intended
-single-source-of-truth ownership. This standard is the doctrine behind the six
+single-source-of-truth ownership. This standard is the doctrine behind the
+seven
 `audit-engine` detector families. It does not define the detectors' mechanics
 (those live in `references/detectors/`); it justifies WHY each canonical source
 is cited, so a reader understands the conceptual chain rather than treating the
@@ -12,7 +13,7 @@ citations as citation lists.
 
 ---
 
-## The six detector families
+## The seven detector families
 
 Each family is a detector profile of the `audit-engine`. It is validated with
 Specula (TLA+ model checking) and vendored with its full name (no abbreviated
@@ -51,24 +52,35 @@ family tokens).
 ### 3. Bounded-context boundary leakage
 
 - **Detector:** `bounded-context-boundaries` (verifier `bounded-context-boundaries.ts`; command `audit-bounded-context`).
-- **Rationale:** A module owned by one bounded context imports the internals of
-  another context directly, instead of going through that context's
-  shared/published interface. The import graph no longer matches the intended
+- **Rationale:** A module owned by one declared context imports the internals of
+  another declared context directly, instead of going through that context's
+  shared/published interface. The import graph no longer matches the declared
   ownership map.
-- **Justification:** This is Conway's-Law drift: the system's structure has
-  drifted away from the ownership boundaries the organization actually
-  maintains. The **conceptual home of this family is the Domain-Driven Design
-  standard** (`domain-driven-design.md`): bounded contexts own their model and
-  expose a deliberate published interface, and reaching past it couples two
-  models meant to evolve independently. Conway's Law supplies the root-cause
-  frame (systems mirror communication structure); Evans supplies the bounded-
-  context concept itself. This detector is the *mechanical enforcement* of that
-  DDD seam; the DDD standard is the parent.
+- **Justification (provenance — separation of concerns).** This detector
+  enforces the **declared ownership map** (CODEOWNERS / Linear project / top-
+  level pillar), which is an *organizational* boundary. It is NOT, by itself,
+  a DDD semantic boundary. The DDD standard defines the *ideal* (a bounded
+  context drawn where the domain's meaning changes); this detector only checks
+  that imports respect whatever map is declared. To avoid overclaiming:
+  - **What the detector enforces:** the declared map — imports must not cross
+    it except through a published interface.
+  - **What it does NOT certify:** that the declared map is a valid DDD
+    bounded-context map. That is a separate, upstream question (provenance):
+    "is this boundary domain-derived or org-derived?"
+  - **The context-map substrate (§5):** to distinguish a *legitimate published
+    relationship* from an *illegitimate crossing*, the detector consumes a
+    machine-readable context-map artifact (contexts, published interfaces,
+    relationships). Without that artifact, the detector can only flag crossings
+    against the raw ownership map and cannot apply §5 relationship semantics.
+  - **Provenance check:** the audit MUST report whether the ownership map is
+    domain-derived (from a context map) or org-derived (CODEOWNERS/Linear), so
+    the result is not mistaken for a DDD validation.
 - **Reference:** DDD standard (parent) —
   `shared/references/engineering-standards/domain-driven-design.md` (esp. §4
-  "Bounded contexts — published interface" and §5 "Context maps &
-  relationships"). Conway, M. E. (1968). How do committees invent? *Datamation*,
-  14(4), 28–31. Evans, E. (2003). *Domain-driven design*. Addison-Wesley.
+  "Bounded contexts — published interface", §5 "Context maps & relationships",
+  and the context-map artifact). Conway, M. E. (1968). How do committees invent?
+  *Datamation*, 14(4), 28–31. Evans, E. (2003). *Domain-driven design*.
+  Addison-Wesley.
 
 ### 4. Explicit architecture
 
@@ -109,6 +121,25 @@ family tokens).
 - **Reference:** The 4-cure defense-in-depth model (see the Atomic Design Drift
   Thesis; hooks pattern in better-toolkits' `enforcement-hooks` detector).
 
+### 7. Ownership / placement drift
+
+- **Detector:** `ownership-placement-drift` (verifier `ownership-placement-drift.ts`; command `audit-ownership-placement`).
+- **Rationale:** A module is **not assigned to the boundary it should belong
+  to** — files/components placed in a junk drawer, a misnamed/misplaced folder,
+  a dead unintegrated duplicate, or a module whose declared owner is wrong. This
+  is distinct from family 3: family 3 detects imports *crossing* a boundary;
+  this family detects that a module is *assigned to the wrong boundary in the
+  first place*.
+- **Justification:** This is the most-documented drift failure in real client
+  ecosystems (e.g. `src/components/dashboard/` as a junk drawer, `courses/`
+  misnamed vs `pathways/`, dead duplicated components). It validates the
+  ownership map itself, not just the import graph. It also supports ownership
+  personas (decision-owner vs code-owner vs reviewer) and the "multiple
+  writers, one canonical owner with a publish step" model.
+- **Reference:** Domain-Driven Design standard (ownership / bounded-context
+  assignment); Atomic Design (component placement); observed patterns in
+  pillar-ownership ecosystems.
+
 ---
 
 ## 1. The unifying frame: Conway's Law as the root cause
@@ -116,7 +147,7 @@ family tokens).
 **Source**: Conway (1968), *How Do Committees Invent?* (see family 3).
 
 **Why it is cited.** Conway's Law is the structural induction that ties the
-three drift layers and the six detector families together: a system's structure
+three drift layers and the seven detector families together: a system's structure
 mirrors the communication structure of the organization that builds it. When the
 code's structure stops matching the intended ownership map, the system has
 drifted. Every detector family therefore carries an ownership dimension; without
@@ -171,7 +202,7 @@ the other five because it consumes their confirmed findings.
 
 ## 5. How this standard is vendored
 
-- The six detector families live in
+- The seven detector families live in
   `toolkits/make-no-mistakes-toolkit/references/detectors/` (+ verifiers in
   `src/audit/verifiers/`, commands in `commands/audit-*.md`).
 - The meta-dispatcher is `commands/audit.md`.

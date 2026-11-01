@@ -196,6 +196,24 @@ especially relevant because microservices communicate through well-defined APIs
 express that language with an OpenAPI/OpenAPI-style contract for REST (Microsoft
 Azure Architecture Center, n.d.-a).
 
+### Context map as a machine-readable artifact
+
+A context map SHALL be maintainable as a **machine-readable artifact** (contexts,
+published interfaces, relationships, and the type of each relationship), not only
+as prose. This artifact is what downstream enforcement consumes:
+- **The `repository-drift-prevention` family 3 (bounded-context boundary
+  leakage) consumes it** to distinguish a legitimate published relationship from
+  an illegitimate crossing. Without the artifact, enforcement can only flag
+  crossings against the raw ownership map.
+- **Graphify** (the evidence/verification standard) can generate the context-map
+  structure from the codebase import graph; the declared relationships layer is
+  authored on top of it. The artifact is the machine-readable basis for both the
+  context map and RDP family 3.
+- Suggested artifact shape: a `context-map.json` (or YAML) listing each context,
+  its published interface, and its relationships (with type: partnership / shared
+  kernel / customer-supplier / conformist / anticorruption-layer / open-host /
+  published-language / separate-ways).
+
 ---
 
 ## 6. Tactical patterns
@@ -301,6 +319,15 @@ a list of files. This is a direct application of the Inverse Conway Maneuver: th
 task structure is set to the target architecture *before* the code is written, so
 the architecture follows (Scrum Manager BoK, 2026; Microsoft Azure Architecture
 Center, n.d.-a).
+
+**Scope — this applies to architecture-shaped changes, not to every change.**
+The Inverse Conway partition rule is a *structuring* principle, not a universal
+work-splitting rule. It applies when the change affects boundary placement,
+module ownership, or cross-context coupling. For well-bounded, intra-context
+work (a bug inside one context, a feature confined to one context), partitioning
+by issue or change unit is correct and the domain-first rule is not required.
+Partitioning *every* task by bounded context would be over-application; the rule
+applies where the architecture is what is being shaped.
 
 > **Note.** The precise mechanics of `/parallel-subagents` (how a task slice is
 > named and dispatched) are defined by the agent harness, not by this standard.
