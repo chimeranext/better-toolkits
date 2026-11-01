@@ -98,6 +98,42 @@ Reference concrete artifacts:
 
 ---
 
+## §4.5 ASD-STE100 output discipline (before emitting either layer)
+
+The explanation output SHALL follow **controlled-language discipline** (the ASD-STE100 principle), applied to the **output language resolved in §2** — English, Spanish, or any other language. Both layers are consumed by a human AND by downstream agents, so misreading has a cost in every language. ASD-STE100 is the canonical source (English); its *principles* (one word, one meaning; active voice; short sentences; no ambiguity; preserve modality) apply to any language — the mechanics are per-language, the discipline is universal.
+
+**Structural rules — apply (both layers, in the resolved output language):**
+- Active voice: "The agent deletes the file." not "The file is deleted." (or the equivalent active construction in the output language).
+- No phrasal verbs: "start", not "spin up"; "remove", not "take off".
+- One instruction per sentence; no semicolons; noun clusters ≤3 words.
+- Sentence length ≤25 words (descriptions), ≤20 (instructions).
+- No ellipsis: keep subject/verb explicit.
+- **Keep modality**: never promote a hedge to a fact. "The request may have failed" stays as-is.
+
+**Lexical rules — direction of travel:**
+- One word, one meaning per document (don't rotate synonyms for the same thing).
+- Prefer the verb over the noun form ("analyze" over "perform an analysis of").
+- Define domain terms once if not common in the output language.
+
+**Scan checklist (run before emitting):**
+1. Synonym rotation — pick one name, use it every time.
+2. Hedge stacking — state the claim or delete it; never let qualifiers pile up until nothing is asserted.
+3. Nominalization — use the verb.
+4. Marketing adjectives (seamless, robust, powerful…) — delete or replace with the measurement.
+5. Run-on sentences — one idea per sentence.
+6. Soft phrasal verbs — use the single plain verb.
+
+If a rewrite would drop necessary precision (a safety condition, a scope qualifier, a number), keep the longer phrasing and flag it — never silently simplify. Never add a fact the source did not state.
+
+**Mechanical gate (when available):** run `scripts/ste-lint.py` on the final
+output (semicolons, sentence length, phrasal verbs, nominalization, marketing
+adjectives, synonym rotation, passive voice, compound tenses). It never flags
+hedges/modality (confidence is content). Exit 1 only on hard violations above
+baseline; advisory findings (passive voice, compound tenses) never fail.
+Vendored reference: `references/writing-rules.md` (53-rule summary with
+sources), `examples/before-after.md`, `examples/linter-edge-cases.md` (see
+`STE100-ATTRIBUTION.txt` — MIT, vendored from `danyuchn/asd-ste100-skill`).
+
 ## §5 Non-obvious insight (`★ Insight` block)
 
 ```

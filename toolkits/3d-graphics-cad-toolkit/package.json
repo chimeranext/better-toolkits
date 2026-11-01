@@ -11,8 +11,6 @@
     {
       "source": "chimeranext/better-toolkits",
       "skills": [
-        "graphics-cad-3d-toolkit",
-        "model-operations-3d",
         "animacion-digital",
         "bevy-iced-integration",
         "bim",
@@ -20,6 +18,8 @@
         "cae",
         "cam",
         "gemelos-digitales",
+        "graphics-cad-3d-toolkit",
+        "model-operations-3d",
         "rv-otd-schema-management",
         "vfx",
         "videojuegos",
