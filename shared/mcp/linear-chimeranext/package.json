@@ -1,0 +1,21 @@
+{
+  "name": "@chimeranext/linear-chimeranext-mcp",
+  "version": "0.1.0",
+  "description": "Local stateless ViteMCP server (stdio) for Linear's public GraphQL API (endpoint https://api.linear.app/graphql, auth via LINEAR_API_KEY env). Core tools: issue_search, issue_get, issue_create, team_list.",
+  "type": "module",
+  "bin": {
+    "linear-chimeranext-mcp": "./server.js"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test test/"
+  },
+  "dependencies": {
+    "@vitemcp/server": "^1.9.7",
+    "zod": "^3.23.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "BSL-1.1"
+}
