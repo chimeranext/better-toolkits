@@ -1,44 +1,44 @@
-# Pilar liveness — protocol SSOT
+# Liveness pillar — protocol SSOT
 
 Harness-agnostic body. Thin entry: `commands/observability-audit.md`.
 Full behavior contract: `openspec/changes/add-assurance-toolkit/specs/toolkit/assurance-liveness/spec.md`.
 
-## Principio
+## Principle
 
-¿Sigue vivo? Corre siempre (schedule/daemon), no por PR. Distingue "pasa" de "dejó de pasar".
+Is it still alive? Runs always (schedule/daemon), not per PR. Distinguishes "passing" from "stopped passing".
 
-## Escalera
+## Ladder
 
-probe → heartbeat → absence → synthetic, en ese orden. `observability-audit` verifica
-telemetría recibida (no solo emitida), credencial contra destino vivo, init paths que no
-apagan monitoreo en silencio, canales de alerta con tráfico real y dueños, y que cada
-alerta demostró poder disparar.
+probe → heartbeat → absence → synthetic, in that order. `observability-audit` verifies
+received telemetry (not just emitted), credential against a live destination, init paths that
+do not silently disable monitoring, alert channels with real traffic and owners, and that each
+alert proved it can fire.
 
 ## Chaos (a PoC)
 
-Experimentos como CRDs versionados: hipótesis SLO medible, probes, blast radius acotado,
-abort criteria con auto-stop. Matriz Litmus (hub, GitOps, ChaosCenter, MCP) vs Chaos Mesh
-(faults granulares, dashboard). Staging primero; prod solo con guardrails. Antithesis
-(simulación determinista, properties, replay) en evaluación para sistemas con estado.
+Experiments as versioned CRDs: measurable SLO hypothesis, probes, bounded blast radius,
+abort criteria with auto-stop. Litmus matrix (hub, GitOps, ChaosCenter, MCP) vs Chaos Mesh
+(granular faults, dashboard). Staging first; prod only with guardrails. Antithesis
+(deterministic simulation, properties, replay) under evaluation for stateful systems.
 
 ## Baselines
 
-p95/p99 de perf → baselines versionadas que liveness vigila. Al cambiar de herramienta,
-re-baselinear (métricas no comparables entre herramientas).
+perf p95/p99 → versioned baselines that liveness watches. When changing tools,
+re-baseline (metrics are not comparable across tools).
 
-## Migrated skills (flutter-boilerplate-monorepo-template, reinterpretados)
+## Migrated skills (flutter-boilerplate-monorepo-template, reinterpreted)
 
-- **flutter-error-tracking**: Sentry/Crashlytics + breadcrumbs + source maps; errores como señal MTTD.
+- **flutter-error-tracking**: Sentry/Crashlytics + breadcrumbs + source maps; errors as an MTTD signal.
 - **sre-observability-stack**: Prometheus/Grafana/Jaeger/OTel; liveness, heartbeat, absence-detection.
-- **sre-alerting-incident-management**: PagerDuty/Opsgenie, on-call, monitoring-as-code; cada alerta con dueño y runbook linkeado.
-- **sre-chaos-engineering**: Litmus, failure injection, game days (principlesofchaos); alimenta la PoC Litmus vs Chaos Mesh.
-- **sre-database-reliability (liveness)**: replication lag y failover readiness como señales; drills en testing.
+- **sre-alerting-incident-management**: PagerDuty/Opsgenie, on-call, monitoring-as-code; each alert with an owner and linked runbook.
+- **sre-chaos-engineering**: Litmus, failure injection, game days (principlesofchaos); feeds the Litmus vs Chaos Mesh PoC.
+- **sre-database-reliability (liveness)**: replication lag and failover readiness as signals; drills in testing.
 
-## Playbook + runbooks (taxonomía fractional-cto 08/09)
+## Playbook + runbooks (fractional-cto taxonomy 08/09)
 
-El **playbook** decide (árbol diagnose/recover/escalate, pattern-IDs MDAA/MASWE);
-los **runbooks** ejecutan (diagnose read-only con Events → stern → k9s, recover/restore).
-Prosa sin árbol ni trigger = post-mortem, no playbook/runbook.
+The **playbook** decides (diagnose/recover/escalate tree, pattern-IDs MDAA/MASWE);
+the **runbooks** execute (diagnose read-only with Events → stern → k9s, recover/restore).
+Prose without a tree or trigger = post-mortem, not a playbook/runbook.
 
 ## Liveness loop
 
@@ -48,8 +48,8 @@ flowchart TD
     H --> A[absence detection]
     A --> S[synthetic]
     S --> C{chaos: steady-state?}
-    C -->|sí| I[inject con blast-radius]
-    C -->|no| W[abort: no experimentar sobre incidente]
+    C -->|yes| I[inject with blast-radius]
+    C -->|no| W[abort: do not experiment on an incident]
     I --> O[observe: error rate, p99, cascading]
     O --> R[verify recovery]
     R --> SC[resilience score + baseline SLO]
@@ -58,9 +58,9 @@ flowchart TD
 
 ## References
 
-- K8s troubleshooting: `FINAL_The Ultimate Kubernetes Throubleshooting Guide_26.03.2026.pdf` (Documentos, local) — señales Events → stern → k9s
+- K8s troubleshooting: `FINAL_The Ultimate Kubernetes Throubleshooting Guide_26.03.2026.pdf` (Documentos, local) — signals Events → stern → k9s
 - K8s Book (Poulton 2024, local): Deployments, RBAC (ch14), threat modeling (ch16)
-- Chaos: https://litmuschaos.io/ · https://chaos-mesh.org/ · https://kubernetes.qa/features/chaos/ · Antithesis https://antithesis.com/ (deterministic simulation, en evaluación)
-- Health: https://kubernetes.qa/features/health/ (8 dimensiones, score determinista)
-- Sysinternals: https://learn.microsoft.com/en-us/sysinternals/resources/troubleshooting-book (ProcDump por criterios, casos "Unexplained")
-- MDAA Diagnomicon (Vostokov, local): pattern-IDs estables para diagnósticos
+- Chaos: https://litmuschaos.io/ · https://chaos-mesh.org/ · https://kubernetes.qa/features/chaos/ · Antithesis https://antithesis.com/ (deterministic simulation, under evaluation)
+- Health: https://kubernetes.qa/features/health/ (8 dimensions, deterministic score)
+- Sysinternals: https://learn.microsoft.com/en-us/sysinternals/resources/troubleshooting-book (ProcDump by criteria, "Unexplained" cases)
+- MDAA Diagnomicon (Vostokov, local): stable pattern-IDs for diagnostics

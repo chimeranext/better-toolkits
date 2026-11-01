@@ -1,4 +1,4 @@
-# Pilar testing — protocol SSOT
+# Testing pillar — protocol SSOT
 
 Harness-agnostic body for the testing pillar (evidence, stack runners, gates).
 Full behavior contract: `openspec/changes/add-assurance-toolkit/specs/toolkit/assurance-testing/spec.md`.
@@ -10,100 +10,99 @@ The TestSprite suite commands are separate protocols. This file does not replace
 | `/assurance:e2e-test-builder` | [`references/e2e-test-builder/protocol.md`](../e2e-test-builder/protocol.md) — write `test-suite.json` |
 | `/assurance:e2e-test-runner` | [`references/e2e-test-runner/protocol.md`](../e2e-test-runner/protocol.md) — execute that suite |
 | `/assurance:e2e-test-preview` | [`references/e2e-test-preview/protocol.md`](../e2e-test-preview/protocol.md) — Qt preview of that suite |
-| Preparación ISTQB | Academy `docs/certificaciones-istqb/` — exam structure, weights, strategy per certification (moved from this repo to the academy) |
-| Entrevistas QA | Academy `docs/certificaciones-istqb/qa-interview-teachings.md` — practical answers from interview transcripts |
+| ISTQB preparation | Academy `docs/certificaciones-istqb/` — exam structure, weights, strategy per certification (moved from this repo to the academy) |
+| QA interviews | Academy `docs/certificaciones-istqb/qa-interview-teachings.md` — practical answers from interview transcripts |
 
-## Principio
+## Principle
 
-Un protocolo de evidencia (run → collect → link a Linear → cluster), runners por stack.
-Los stacks iniciales son los primeros adapters, no una lista cerrada (ver matriz + PoC en spec).
+An evidence protocol (run → collect → link to Linear → cluster), runners per stack.
+The initial stacks are the first adapters, not a closed list (see matrix + PoC in spec).
 
 ## Runners
 
-- **Flutter/Dart por niveles**: unit `flutter test` + mockito, widget `WidgetTester`,
-  integración `integration_test` en device + Maestro YAML (`Semantics.identifier`, Flutter 3.19+).
-  `flutter_driver` = legacy. Patrol gris (regresión dev-owned) + Maestro humo (QA-owned).
-- **Component testing**: stories CSF / scenarios Widgetbook como unidades portables
-  (render + play + a11y + visual + coverage + unit + E2E vía iframe). Vitest addon en Vite;
-  test-runner sin Vite. Tags gobiernan la suite.
-- **Laravel/Pest**: `php artisan test`, `--parallel` (paratest + DBs por token),
+- **Flutter/Dart by levels**: unit `flutter test` + mockito, widget `WidgetTester`,
+  integration `integration_test` on device + Maestro YAML (`Semantics.identifier`, Flutter 3.19+).
+  `flutter_driver` = legacy. Patrol gray (dev-owned regression) + Maestro smoke (QA-owned).
+- **Component testing**: stories CSF / Widgetbook scenarios as portable units
+  (render + play + a11y + visual + coverage + unit + E2E via iframe). Vitest addon in Vite;
+  test-runner without Vite. Tags govern the suite.
+- **Laravel/Pest**: `php artisan test`, `--parallel` (paratest + DBs per token),
   `--coverage --min`, `--profile`, suite `tests/Architecture` (arch-testing).
-- **Elixir/ExUnit**: `mix test`, Phoenix/Ecto, PropEr/StreamData, Mox con contratos explícitos.
-- **TypeScript 7**: checklist `tsgo` (versión única, sin `baseUrl`, plan compiler API, CI dual, sharp edges).
-- **Playwright web**: golden rules (getByRole, sin `waitForTimeout`, web-first assertions,
-  aislamiento, baseURL, retries 2/0, traces `on-first-retry`), cuarentena con salida
-  (`fail` > `skip`, `@critical` exento), trust boundary. UI mode + `trace.zip` como evidencia.
-- **MobileWright** (PoC): API Playwright-style móvil, fixtures `screen`/`device`,
-  metadata `testResult` → evidencia. Maestro sigue default mobile-first hasta la PoC.
-- **Mutación**: Infection / Stryker / muex; MSI como gate, scope incremental.
-- **Contratos**: Schemathesis primero (sin infra), Pact + `can-i-deploy` después; Microcks/Prism mocks.
-- **Perf**: k6 / Locust / Gatling / JMeter por lenguaje; thresholds → exit code; p95/p99 a SLOs.
-- **A11y**: axe-core (web), Axe DevTools Mobile + Maestro, guidelines Flutter por celda +
-  semantics diff; critical/serious bloquean, moderate/minor advierten.
-- **Visual/PBT**: `toHaveScreenshot` con umbral; fast-check / Hypothesis / PropEr.
+- **Elixir/ExUnit**: `mix test`, Phoenix/Ecto, PropEr/StreamData, Mox with explicit contracts.
+- **TypeScript 7**: checklist `tsgo` (single version, no `baseUrl`, compiler API plan, dual CI, sharp edges).
+- **Playwright web**: golden rules (getByRole, no `waitForTimeout`, web-first assertions,
+  isolation, baseURL, retries 2/0, traces `on-first-retry`), quarantine with exit
+  (`fail` > `skip`, `@critical` exempt), trust boundary. UI mode + `trace.zip` as evidence.
+- **MobileWright** (PoC): mobile Playwright-style API, fixtures `screen`/`device`,
+  metadata `testResult` → evidence. Maestro stays default mobile-first until the PoC.
+- **Mutation**: Infection / Stryker / muex; MSI as gate, incremental scope.
+- **Contracts**: Schemathesis first (no infra), Pact + `can-i-deploy` after; Microcks/Prism mocks.
+- **Perf**: k6 / Locust / Gatling / JMeter per language; thresholds → exit code; p95/p99 to SLOs.
+- **A11y**: axe-core (web), Axe DevTools Mobile + Maestro, per-cell Flutter guidelines +
+  semantics diff; critical/serious block, moderate/minor warn.
+- **Visual/PBT**: `toHaveScreenshot` with threshold; fast-check / Hypothesis / PropEr.
 
-## Stack QA (Kiwi + Qualflare) y Storybook interaction testing
+## QA Stack (Kiwi + Qualflare) and Storybook interaction testing
 
-El stack QA del equipo usa **Kiwi** y **Qualflare** como plataformas principales. Este
-pilar los integra de la siguiente forma:
+The team's QA stack uses **Kiwi** and **Qualflare** as primary platforms. This
+pillar integrates them as follows:
 
-- **Kiwi** — orquestación/gestión de tests QA (casos, ejecución, reportes). Es la capa
-  de gestión QA; su salida se consume como evidencia.
-- **Qualflare** — ejecución y trazabilidad de tests (vínculo a issues, `qualflare.link`).
-  En el pipeline de evidencia, la collection se enlaza vía `qualflare.link` (ver
+- **Kiwi** — orchestration/management of QA tests (cases, execution, reports). It is the
+  QA management layer; its output is consumed as evidence.
+- **Qualflare** — test execution and traceability (link to issues, `qualflare.link`).
+  In the evidence pipeline, the collection is linked via `qualflare.link` (see
   `Evidence pipeline`).
-- **Storybook interaction testing** — para componentes UI, se usan los tests de
-  interacción de Storybook (`play` functions, `userEvent`, assertions sobre el behavior
-  tras interactuar). Estos tests validan que un componente se comporta como se espera al
-  recibir interacción del usuario.
+- **Storybook interaction testing** — for UI components, Storybook's interaction tests are
+  used (`play` functions, `userEvent`, assertions about behavior after interacting). These
+  tests validate that a component behaves as expected when receiving user interaction.
 
-### Regla: BDD ocurre ANTES
+### Rule: BDD happens FIRST
 
-Los tests de componente/Storybook (y los de integración) **nunca reemplazan** la
-especificación de comportamiento. El orden correcto es:
+Component/Storybook tests (and integration tests) **never replace** the
+behavior specification. The correct order is:
 
-1. **BDD primero** — el escenario (Given/When/Then) se define en el OpenSpec / `test-suite.json`
-   y expresa el comportamiento observable esperado. Es la fuente de verdad de *qué* debe pasar.
-2. **Después** los tests de Storybook/componente implementan esa afirmación de comportamiento
-   a nivel de UI (el `Then` del escenario se convierte en la assertion de la `play` function).
-   - Un test de Storybook sin un escenario BDD que lo respalde es **sospechoso**: puede
-     cubrir implementación, no comportamiento. No cuenta como evidencia de comportamiento.
-   - La `play` function debe afirmar **comportamiento observable** (el resultado visible/
-     de estado tras la interacción), no detalles de implementación interna.
+1. **BDD first** — the scenario (Given/When/Then) is defined in the OpenSpec / `test-suite.json`
+   and expresses the expected observable behavior. It is the source of truth for *what* must happen.
+2. **Afterwards** the Storybook/component tests implement that behavior assertion at the UI
+   level (the scenario's `Then` becomes the assertion of the `play` function).
+   - A Storybook test without a supporting BDD scenario is **suspicious**: it may cover
+     implementation, not behavior. It does not count as behavior evidence.
+   - The `play` function must assert **observable behavior** (the visible/state result after
+     interaction), not internal implementation details.
 
-Esto se alinea con el gate BDD (afirmar comportamiento observable) y con los insights de
-`qa-interview-teachings` (el behavior es lo que se evalúa; los tests de componente cubren
-la capa UI de un escenario ya definido en BDD).
+This aligns with the BDD gate (assert observable behavior) and with the insights from
+`qa-interview-teachings` (behavior is what is evaluated; component tests cover the UI layer
+of a scenario already defined in BDD).
 
-## Reglas de gate
+## Gate rules
 
-- Golden rules exigibles antes del merge; taxonomía de flakes dirige el fix (nunca subir timeouts).
-- Reportes de tests nunca mezclados con reportes de seguridad (veredictos separados).
-- **BDD**: afirmar comportamiento observable, no implementación interna. Un test pasa solo
-  cuando su `Then` (el criterio legible) se cumple por evidencia observable — no por "el
-  runner salió 0". Ver `references/e2e-test-runner/protocol.md` §Gates.
-- **Jidoka**: ante cualquier anomalía (output inesperado, timeout, error, respuesta vacía),
-  detener el run y registrar la anomalía + boundary + hipótesis de causa raíz. No continuar
-  "a ver si el resto pasa". Un test con anomalía es `failed`, nunca `passed`.
-- **No-Workarounds**: un test no puede marcarse `passed` si para lograrlo se silenció
-  stderr, se hicieron cast de tipo, se tragó una excepción, se añadió sleep/retry
-  arbitrario, se monkey-patcheó un boundary, o se copió-pegó sin ajustar. Eso es `failed`;
-  la solución es corregir la fuente, no el síntoma.
-- Estos gates aplican a todo runner del pilar (unit, widget, e2e, contrato, mutación, perf,
-  a11y, visual). El formato de veredicto por test incluye el veredicto de cada gate.
+- Golden rules enforceable before merge; flake taxonomy drives the fix (never bump timeouts).
+- Test reports never mixed with security reports (separate verdicts).
+- **BDD**: assert observable behavior, not internal implementation. A test passes only
+  when its `Then` (the readable criterion) is satisfied by observable evidence — not because
+  "the runner exited 0". See `references/e2e-test-runner/protocol.md` §Gates.
+- **Jidoka**: on any anomaly (unexpected output, timeout, error, empty response),
+  stop the run and record the anomaly + boundary + root-cause hypothesis. Do not continue
+  "to see if the rest passes". A test with an anomaly is `failed`, never `passed`.
+- **No-Workarounds**: a test cannot be marked `passed` if achieving it required silencing
+  stderr, type casts, swallowing an exception, adding arbitrary sleep/retry,
+  monkey-patching a boundary, or copy-pasting without adjusting. That is `failed`;
+  the fix is to correct the source, not the symptom.
+- These gates apply to every runner of the pillar (unit, widget, e2e, contract, mutation, perf,
+  a11y, visual). The per-test verdict format includes each gate's verdict.
 
 ## Eval-driven + risk-driven (Huyen + Fowler)
 
-- **Eval-driven development**: criterios medibles primero (factual consistency local/global, safety, capabilities); benchmarks con desconfianza; judges especializados y calibrados; feedback conversacional como dato.
-- **Risk-driven**: testear lo que más preocupa; incompletos que corren > completos inexistentes; auto-verificantes, frecuentes, aislados; characterization tests antes de refactorizar legacy.
+- **Eval-driven development**: measurable criteria first (factual consistency local/global, safety, capabilities); benchmarks treated with distrust; specialized and calibrated judges; conversational feedback as data.
+- **Risk-driven**: test what worries you most; incomplete tests that run > complete ones that don't exist; self-verifying, frequent, isolated; characterization tests before refactoring legacy.
 
-## Migrated skills (flutter-boilerplate-monorepo-template, reinterpretados)
+## Migrated skills (flutter-boilerplate-monorepo-template, reinterpreted)
 
-- **flutter-testing-strategy**: pirámide unit/widget/integration + TDD; correr desde la raíz del proyecto.
-- **flutter-mobile-testing**: device testing vía Dart/Flutter MCP + Mobile Next MCP; inspección del widget tree en vivo (RenderFlex overflow), sims + devices reales.
-- **flutter-accessibility**: Semantics, TalkBack/VoiceOver, focus management, contraste; mapea al gate a11y escalonado.
-- **flutter-performance**: rebuilds, listas, memoria, lazy loading, profiling; resultados → baselines de SLOs.
-- **sre-load-testing-performance**: recetas k6/JMeter, stress, capacity planning, benchmarking.
+- **flutter-testing-strategy**: unit/widget/integration pyramid + TDD; run from the project root.
+- **flutter-mobile-testing**: device testing via Dart/Flutter MCP + Mobile Next MCP; live widget tree inspection (RenderFlex overflow), sims + real devices.
+- **flutter-accessibility**: Semantics, TalkBack/VoiceOver, focus management, contrast; maps to the staggered a11y gate.
+- **flutter-performance**: rebuilds, lists, memory, lazy loading, profiling; results → SLO baselines.
+- **sre-load-testing-performance**: k6/JMeter recipes, stress, capacity planning, benchmarking.
 
 ## Evidence pipeline
 

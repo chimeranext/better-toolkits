@@ -11,5 +11,5 @@ description: >
 > Protocol SSOT: `toolkits/assurance-toolkit/references/testing/e2e-protocol.md`.
 > Template copy retained as shim.
 
-Estrategia completa unit/widget/integration + TDD. Corre desde la raíz del proyecto.
-Aporta al runner Flutter/Dart: tipos de test por nivel y mejores prácticas.
+Complete unit/widget/integration strategy + TDD. Runs from the project root.
+Contributes to the Flutter/Dart runner: test types per level and best practices.

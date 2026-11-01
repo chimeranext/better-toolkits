@@ -1,8 +1,8 @@
 ---
 name: flutter-security
 description: >
-  Flutter security — pinning, secure storage, obfuscation, biometría. Migrated;
-  protocol SSOT in assurance security (MASVS móvil).
+  Flutter security — pinning, secure storage, obfuscation, biometrics. Migrated;
+  protocol SSOT in assurance security (mobile MASVS).
 ---
 
 # flutter-security — multi-harness entry (migrated)
@@ -12,4 +12,4 @@ description: >
 > Template copy retained as shim.
 
 Certificate pinning, secure storage, encryption, biometric auth, obfuscation,
-root/jailbreak detection. Mapea a trazabilidad MASVS móvil.
+root/jailbreak detection. Maps to mobile MASVS traceability.

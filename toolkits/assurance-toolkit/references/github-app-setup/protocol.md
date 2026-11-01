@@ -1,64 +1,64 @@
 # /assurance:github-app-setup — protocol SSOT
 
-Guía paso-a-paso para que un startup founder cree su **propia GitHub App** y la
-use como autor de los reviews de Heimdall (estilo CodeRabbit / Greptile). No
-depende de la App de ChimeraNext: cada repo/org puede tener la suya.
+Step-by-step guide for a startup founder to create their **own GitHub App** and
+use it as the author of Heimdall's reviews (CodeRabbit / Greptile style). It does
+not depend on the ChimeraNext App: each repo/org can have its own.
 
-## Propósito
+## Purpose
 
-El `--post` de `/local-pr-review` postea reviews con `GITHUB_TOKEN` (firma como
-`github-actions[bot]` o el usuario). Con una GitHub App propia, el review lo
-firma **tu App** (`<app-name>[bot]`), con su nombre e ícono — igual que
-CodeRabbit o Greptile.
+The `--post` of `/local-pr-review` posts reviews with `GITHUB_TOKEN` (signed as
+`github-actions[bot]` or the user). With your own GitHub App, the review is
+signed by **your App** (`<app-name>[bot]`), with its name and icon — just like
+CodeRabbit or Greptile.
 
-No se comparte ninguna private key: cada founder crea la suya y la guarda en su
-máquina (`~/.agents/.heimdall.env`).
+No private key is shared: each founder creates their own and stores it on their
+machine (`~/.agents/.heimdall.env`).
 
-## Prerrequisitos
+## Prerequisites
 
-- Una org de GitHub (para el settings de org, recomendado) o una cuenta personal.
-- El CLI `heimdall-review` instalado (`shared/heimdall/`).
-- Permisos de administrador en la org para crear Apps (o en la cuenta).
+- A GitHub org (for the org settings, recommended) or a personal account.
+- The `heimdall-review` CLI installed (`shared/heimdall/`).
+- Admin permissions in the org to create Apps (or on the account).
 
-## Paso 1 — Crear la GitHub App en el settings de ORG (no el personal)
+## Step 1 — Create the GitHub App in the ORG settings (not the personal one)
 
-El settings correcto es el de **organización** (no "Settings → Developer
-settings" de la cuenta):
+The correct settings are the **organization** ones (not the account's "Settings → Developer
+settings"):
 
 ```
 https://github.com/organizations/{organization-id}/settings/apps/new
 ```
 
-Si no tenés org, el equivalente personal es:
+If you don't have an org, the personal equivalent is:
 
 ```
 https://github.com/settings/apps/new
 ```
 
-Datos del formulario:
+Form fields:
 
-| Campo | Qué poner |
+| Field | What to put |
 |---|---|
-| **GitHub App name** | único, p.ej. `startup-review-bot` |
-| **Homepage URL** | la de tu startup (o el repo) |
-| **Webhook URL** | **vacío por ahora** (solo si querés trigger automático) |
-| **Webhook secret** | vacío (igual que arriba) |
-| **Permissions** | `Pull requests: Read & write` (imprescindible) + `Issues: Write` (para comentar en el hilo del PR, que es un issue) + `Contents: Read-only` + `Metadata: Read-only` |
-| **Where can this App be installed?** | *Any account* (para usarla en todos tus repos) o *Only on this account* |
+| **GitHub App name** | unique, e.g. `startup-review-bot` |
+| **Homepage URL** | your startup's (or the repo) |
+| **Webhook URL** | **empty for now** (only if you want automatic triggers) |
+| **Webhook secret** | empty (same as above) |
+| **Permissions** | `Pull requests: Read & write` (essential) + `Issues: Write` (to comment on the PR thread, which is an issue) + `Contents: Read-only` + `Metadata: Read-only` |
+| **Where can this App be installed?** | *Any account* (to use it across all your repos) or *Only on this account* |
 
-### Qué NO marcar
+### What NOT to check
 
-Estas opciones son de OAuth de **usuarios** y **no** se necesitan para Heimdall:
+These options are for **user** OAuth and are **not** needed for Heimdall:
 
-- ❌ **Expire user authorization tokens** — es para tokens de usuario + refresh; Heimdall usa installation tokens (machine-to-machine).
-- ❌ **Request user authorization (OAuth) during installation** — hace que la instalación pida identidad del usuario; innecesario.
-- ❌ **Enable Device Flow** — flujo OAuth para dispositivos sin navegador; irrelevante.
+- ❌ **Expire user authorization tokens** — it is for user tokens + refresh; Heimdall uses installation tokens (machine-to-machine).
+- ❌ **Request user authorization (OAuth) during installation** — makes installation ask for the user's identity; unnecessary.
+- ❌ **Enable Device Flow** — OAuth flow for devices without a browser; irrelevant.
 
-## Paso 2 — Guardar la private key
+## Step 2 — Save the private key
 
-1. Tras crear la App, GitHub te da una **Private key** (botón *Generate a private key*).
-   Descargá el `*.pem`.
-2. Movela a `~/.agents/` y fijá permisos solo-dueno:
+1. After creating the App, GitHub gives you a **Private key** (the *Generate a private key* button).
+   Download the `*.pem`.
+2. Move it to `~/.agents/` and set owner-only permissions:
 
    ```bash
    mkdir -p ~/.agents
@@ -66,75 +66,75 @@ Estas opciones son de OAuth de **usuarios** y **no** se necesitan para Heimdall:
    chmod 600 ~/.agents/heimdall-review.pem
    ```
 
-## Paso 3 — Registrar la App en la key-chain
+## Step 3 — Register the App in the key-chain
 
-Agregá al archivo `~/.agents/.heimdall.env` (mismo archivo que la NIM key):
+Add to the `~/.agents/.heimdall.env` file (same file as the NIM key):
 
 ```
 HEIMDALL_GITHUB_APP_ID=<your_app_id>
 HEIMDALL_GITHUB_APP_KEY=~/.agents/heimdall-review.pem
 ```
 
-- `<your_app_id>`: está en la página de la App (Settings → General → **App ID**).
-- `HEIMDALL_GITHUB_APP_INSTALLATION_ID` es **opcional**: si falta, Heimdall lo
-  autodetecta por `owner/repo`.
+- `<your_app_id>`: it is on the App's page (Settings → General → **App ID**).
+- `HEIMDALL_GITHUB_APP_INSTALLATION_ID` is **optional**: if missing, Heimdall
+  auto-detects it by `owner/repo`.
 
-Precedencia (igual que la NIM key): `~/.agents` → repo `.heimdall.env` → env.
+Precedence (same as the NIM key): `~/.agents` → repo `.heimdall.env` → env.
 
-## Paso 4 — Instalar la App en tus repos
+## Step 4 — Install the App on your repos
 
-1. En la página de la App, **Install App** → elegí la org/cuenta.
-2. Seleccioná **All repositories** o una lista explícita.
-3. Confirmá la instalación.
+1. On the App's page, **Install App** → choose the org/account.
+2. Select **All repositories** or an explicit list.
+3. Confirm the installation.
 
-### Verificar la instalación en varias orgs
+### Verify the installation across multiple orgs
 
-Para auditar en qué orgs ya está instalada la App (y cuáles faltan), existé un
-script standalone (ejemplo en `internal-org-gate`, pero aplica a cualquier repo):
+To audit which orgs already have the App installed (and which are missing), there
+is a standalone script (example in `internal-org-gate`, but applies to any repo):
 
 ```bash
 node scripts/check-heimdall-app-installs.mjs
-# (opcional) para comparar contra tus orgs:
+# (optional) to compare against your orgs:
 GH_TOKEN=... node scripts/check-heimdall-app-installs.mjs
 ```
 
-El script lee las mismas credenciales de la key-chain, lista las instalaciones
-(`GET /app/installations`) y, con `GH_TOKEN`, marca las orgs que faltan con el
-link directo `https://github.com/apps/<app-name>`.
+The script reads the same key-chain credentials, lists the installations
+(`GET /app/installations`) and, with `GH_TOKEN`, flags the missing orgs with the
+direct link `https://github.com/apps/<app-name>`.
 
-> Nota: GitHub **no** permite que una GitHub App instale otra automáticamente.
-> La instalación requiere el flujo de UI del admin (un clic por org). Este script
-> solo te dice **dónde** falta ese clic.
+> Note: GitHub does **not** allow a GitHub App to install another automatically.
+> Installation requires the admin UI flow (one click per org). This script only
+> tells you **where** that click is missing.
 
-## Paso 5 — Verificar
+## Step 5 — Verify
 
-Dry-run primero (imprime, no postea):
+Dry-run first (prints, does not post):
 
 ```bash
 heimdall-review pr <n> --github-app
 ```
 
-Si la App está bien configurada, el `--post` real postea como la App:
+If the App is well configured, the actual `--post` posts as the App:
 
 ```bash
 heimdall-review pr <n> --post --github-app
 ```
 
-El review aparecerá en el PR firmado por `<app-name>[bot]`.
+The review will appear on the PR signed by `<app-name>[bot]`.
 
-## Solución de problemas
+## Troubleshooting
 
-| Síntoma | Causa probable | Fix |
+| Symptom | Probable cause | Fix |
 |---|---|---|
-| `no pude resolver NVIDIA_API_KEY` | Falta la NIM key (no relacionado con la App) | `heimdall-review key:init` |
-| `GitHub App no configurada` | Faltan `HEIMDALL_GITHUB_APP_ID`/`KEY` en la key-chain | Paso 3 |
-| `403` al postear | La App no está instalada en ese repo, o falta permiso `pull_requests: write` | Paso 4 + revisar Permissions |
-| `404` en `/installation` | La App no está instalada en `owner/repo` | Paso 4 |
-| `401` al generar el JWT | Private key incorrecta o App ID mal | Revisar el `.pem` y el App ID |
-| La App no aparece como autora | Se usó `--post` sin `--github-app` (usó `GITHUB_TOKEN`) | Agregar `--github-app` |
+| `could not resolve NVIDIA_API_KEY` | The NIM key is missing (unrelated to the App) | `heimdall-review key:init` |
+| `GitHub App not configured` | `HEIMDALL_GITHUB_APP_ID`/`KEY` missing from the key-chain | Step 3 |
+| `403` when posting | The App is not installed on that repo, or `pull_requests: write` permission is missing | Step 4 + review Permissions |
+| `404` on `/installation` | The App is not installed on `owner/repo` | Step 4 |
+| `401` when generating the JWT | Incorrect private key or wrong App ID | Check the `.pem` and the App ID |
+| The App does not appear as author | `--post` was used without `--github-app` (used `GITHUB_TOKEN`) | Add `--github-app` |
 
-## Seguridad
+## Security
 
-- La private key (`*.pem`) **nunca** se commitea, imprime ni comparte. Vive solo en `~/.agents/`.
-- `~/.agents/.heimdall.env` debe tener modo `0600`.
-- La App se crea con el menor privilegio posible (`pull_requests: write` + `issues: write`, mínimo para postear el review y comentar en el hilo).
+- The private key (`*.pem`) is **never** committed, printed, or shared. It lives only in `~/.agents/`.
+- `~/.agents/.heimdall.env` must have mode `0600`.
+- The App is created with the least privilege possible (`pull_requests: write` + `issues: write`, minimum to post the review and comment on the thread).
