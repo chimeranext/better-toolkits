@@ -10,6 +10,10 @@ SARIF_REPORTER: true          # evidencia SARIF -> receipts
 EMAIL_REPORTER: false
 FLAVOR_SUGGESTIONS: false
 
+# Gate por PR: lintear SOLO los archivos que la PR cambia (no todo el codebase).
+# Evita que deuda de formato de archivos no relacionados bloquee PRs ajenas.
+VALIDATE_ALL_CODEBASE: false
+
 ENABLE:
 __ENABLE_ITEMS__
 
