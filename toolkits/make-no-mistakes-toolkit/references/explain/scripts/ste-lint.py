@@ -516,6 +516,9 @@ def _dangling_conjunction_findings(text, filename):
                     lambda match: " " * len(match.group(0)), raw_end_line
                 )
                 raw_conjunction = CONJUNCTION_END.search(masked_end_line)
+                # end_line_index is set from meaningful[-1] above (never None here,
+                # since conjunction is truthy only in the meaningful branch).
+                assert end_line_index is not None
                 finding_line = end_line_index + 1
                 finding_col = raw_conjunction.start() + 1 if raw_conjunction else 1
             findings.append({
@@ -617,7 +620,7 @@ def lint(text, filename="<stdin>"):
         # continuation line can hold the quote, and GitHub shows the marker as
         # text. Markers inside HTML containers are also plain text.
         alert = (not html_containers and raw_line.startswith(">") and after_boundary
-                 and quote.group().count(">") == 1
+                 and is_quote and quote is not None and quote.group().count(">") == 1
                  and GITHUB_ALERT.fullmatch(content.strip()))
         standalone = STANDALONE_LINE.match(content) or alert
         if (is_table or not content.strip() or standalone
