@@ -1,5 +1,7 @@
 # startup-lifecycle-toolkit
 
+[![Version](https://img.shields.io/badge/version-1.3.7-blue)](.claude-plugin/plugin.json) [![License: BSL-1.1](https://img.shields.io/badge/license-BSL--1.1-important)](LICENSE)
+
 > Complete guide to the founder journey from zero money to raising venture capital.
 > For founders with no experience in the US ecosystem.
 > **FREE** — No entrance fee.

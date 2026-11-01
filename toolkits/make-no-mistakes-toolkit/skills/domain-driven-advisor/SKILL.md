@@ -62,7 +62,7 @@ Apply `recommendAudits()` semantics to the resolved signals to produce the
 signals → full sweep).
 
 **All six audits are now LIVE** — every family has a runnable command:
-`/audit-schema-drift` (`SCH`), `/audit-contract-drift` (`CDC`), `/audit-ddd`
+`/audit-schema-drift` (`SCH`), `/audit-contract-drift` (`CDC`), `/audit-bounded-context`
 (`DDD`), `/audit-explicit-architecture` (`ARC`), `/audit-strangler` (`STR`), and
 `/audit-enforcement-hooks` (`ENF`). Offer any of them in the recommended order;
 none are unavailable. `ENF` always runs **last** — it checks whether the Cure-4
