@@ -7,7 +7,9 @@ can run the sync and amend before pushing.
 
 from __future__ import annotations
 
-import subprocess  # nosec B404  # stdlib; used to run the sibling check (fixed path)
+# stdlib; used to run the sibling check (a fixed repo path, not user input),
+# so no shell and no untrusted input reach subprocess.
+import subprocess  # nosec B404
 import sys
 from pathlib import Path
 
@@ -16,7 +18,10 @@ CHECK = ROOT / "scripts" / "ci" / "check-skills-catalog.py"
 
 
 def main() -> int:
-    r = subprocess.run([sys.executable, str(CHECK)], capture_output=True, text=True)  # nosec B603 - fixed repo path, no shell, no user input
+    # Runs the sibling check (fixed repo path); no shell, no user input.
+    r = subprocess.run(  # nosec B603
+        [sys.executable, str(CHECK)], capture_output=True, text=True
+    )
     sys.stdout.write(r.stdout)
     sys.stderr.write(r.stderr)
     if r.returncode != 0:
