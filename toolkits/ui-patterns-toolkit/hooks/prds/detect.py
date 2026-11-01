@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Shared detector: enforce PRDS (Pull Request Description Standards) on push / PR writes.
+"""Shared detector: enforce PRDS (Pull Request Description Standards) on push /
+PR writes.
 
 Protocol SSOT:
   shared/references/engineering-standards/prds.md
@@ -35,7 +36,7 @@ import json
 import os
 import re
 import shlex
-import subprocess
+import subprocess  # nosec - gh CLI for PR inspection: fixed args, no shell
 import sys
 from pathlib import Path
 
@@ -73,7 +74,7 @@ def section_body(markdown: str, heading_re: re.Pattern[str]) -> str | None:
     m = heading_re.search(markdown)
     if not m:
         return None
-    rest = markdown[m.end() :]
+    rest = markdown[m.end():]
     next_h = re.search(r"(?m)^\s*##\s+", rest)
     if next_h:
         rest = rest[: next_h.start()]
@@ -183,7 +184,7 @@ def extract_body_from_gh_command(command: str) -> str | None:
 def run_gh_pr_view(cwd: str | None) -> dict | None:
     env = os.environ.copy()
     try:
-        proc = subprocess.run(
+        proc = subprocess.run(  # nosec - gh CLI, fixed args, no shell
             [
                 "gh",
                 "pr",
@@ -234,7 +235,8 @@ def evaluate(command: str, cwd: str | None = None) -> str | None:
             return (
                 "PRDS: `gh pr create|edit` without --body / --body-file. "
                 "Pass a PRDS-complete body (Summary, Tracker, Test plan, "
-                "Scope boundaries). See shared/references/engineering-standards/prds.md."
+                "Scope boundaries). See shared/references/engineering-"
+                "standards/prds.md."
             )
         if body.startswith("__READ_ERROR__:"):
             return f"PRDS: cannot read --body-file ({body})."
@@ -266,7 +268,8 @@ def evaluate(command: str, cwd: str | None = None) -> str | None:
             size = int(pr.get("additions") or 0) + int(pr.get("deletions") or 0)
             if size > 400:
                 print(
-                    f"PRDS WARN: PR diff ~{size} lines (>~400 soft cap) — consider splitting.",
+                    f"PRDS WARN: PR diff ~{size} lines (>~400 soft cap) — "
+                    "consider splitting.",
                     file=sys.stderr,
                 )
         except (TypeError, ValueError):

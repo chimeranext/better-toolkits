@@ -1,9 +1,9 @@
 #!/usr/bin/env pwsh
-# HITL approval helper for main pushes — better-toolkits (Windows/PowerShell).
+# HITL approval helper for main pushes - better-toolkits (Windows/PowerShell).
 # Creates the elevated marker that the pre-push guard requires.
 #
 # On Windows the marker lives under %ProgramData% (only writable by an elevated
-# process), so creating it requires a UAC elevation prompt — the analog of the
+# process), so creating it requires a UAC elevation prompt - the analog of the
 # Unix root-owned marker created via sudo/pkexec. A non-elevated agent cannot
 # create it, which preserves the deterministic HITL gate.
 #
