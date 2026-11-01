@@ -1,0 +1,59 @@
+name: PR Governance
+
+# PR governance (gap 2). Normalizes PR-discipline checks that are neither lint
+# nor security: PR size, stale PRs, and basic guards. Configurable per repo.
+# Thresholds are template tokens.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited, labeled, unlabeled]
+  schedule:
+    - cron: '0 7 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  pr-size:
+    name: PR size
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Measure PR diff size (files)
+        id: size
+        shell: bash
+        run: |
+          set -eo pipefail
+          BASE="${{ github.event.pull_request.base.sha }}"
+          HEAD="${{ github.event.pull_request.head.sha }}"
+          # Count CHANGED FILES, not lines. Threshold is in files (default 25).
+          FILES=$(git diff --name-only "$BASE" "$HEAD" | grep -v '^$' | wc -l)
+          ADD=$(git diff --numstat "$BASE" "$HEAD" | awk '{s+=$1} END {print s+0}')
+          DEL=$(git diff --numstat "$BASE" "$HEAD" | awk '{s+=$2} END {print s+0}')
+          echo "files=$FILES" >> "$GITHUB_OUTPUT"
+          echo "additions=$ADD" >> "$GITHUB_OUTPUT"
+          echo "deletions=$DEL" >> "$GITHUB_OUTPUT"
+          echo "PR size: ${FILES} files (${ADD} add / ${DEL} del)"
+      - name: Enforce size threshold (files)
+        if: steps.size.outputs.files > {{ size_threshold }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const files = Number("${{ steps.size.outputs.files }}");
+            const threshold = Number("{{ size_threshold }}");
+            core.setFailed(`PR touches ${files} files (> ${threshold}). Split it or declare a mechanical-move exception.`);
+
+  stale-prs:
+    name: Stale PRs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v9
+        with:
+          stale-pr-message: 'This PR is stale. Please rebase or update it.'
+          days-before-stale: {{ stale_days }}
+          days-before-close: -1
+          operations-per-run: 50
