@@ -43,8 +43,11 @@ log "installing specula CLI (uv tool install -e .)"
 ( cd "$SPECULA_DIR" && uv tool install -e . )
 
 log "running specula setup (agent skills + MCP tools + bundled tools)"
+# `specula setup` is interactive (prompts "y or n" for agent config). Pipe
+# `yes` to make it non-interactive (accepts all defaults). This is required in
+# headless/CI/background runs.
 if command -v specula > /tmp/opencode/specula-path.log 2>&1; then
-  specula setup || log "specula setup returned non-zero (may already be configured; continuing)"
+  yes | specula setup || log "specula setup returned non-zero (may already be configured; continuing)"
 else
   log "specula CLI not on PATH after install — check your tool PATH"
   exit 1

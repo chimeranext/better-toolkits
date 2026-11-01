@@ -62,10 +62,14 @@ The control is layered: policy (ruleset), identity (2FA), and tool boundary
 
 - **Ruleset:** name it after the guard team (e.g. `main-founders-only`);
   `bypass_actors` = that team only; rules include `pull_request` (≥1 review,
-  thread resolution, last-push approval, `allowed_merge_methods` = `merge` on
-  `main`), `required_status_checks` (strict), `deletion`, `non_fast_forward`.
-  No `required_linear_history` on `main` (merge commits are allowed there);
-  rebase is the convention for feature→`develop`.
+  **`require_code_owner_review: true`**, thread resolution, last-push approval,
+  `allowed_merge_methods` = `merge` on `main`), `required_status_checks`
+  (strict), `deletion`, `non_fast_forward`. `require_code_owner_review: true`
+  makes the ruleset consume the `CODEOWNERS` team so reviewers (e.g. the
+  founders team) are auto-assigned — no manual per-PR reviewer assignment, and
+  **no empty `required_reviewers`** that leaves review unassigned. No
+  `required_linear_history` on `main` (merge commits are allowed there); rebase
+  is the convention for feature→`develop`.
 - **Tool-boundary hook:** intercept the bypass/admin command; require interactive
   root elevation to mint a fresh approval marker; check TTL; fail-closed.
 - **Org policy:** enforce 2FA for every member.
