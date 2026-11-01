@@ -12,6 +12,7 @@ vive en `/assurance-local-setup` — este protocolo no lo toca.
 | `.mega-linter.yml` | Linters según el stack detectado + `PRE_COMMANDS` de typecheck |
 | `.github/workflows/megalinter.yml` | Gate CI (corre **siempre**: sin filtros `paths`) + artifacts SARIF/JSON |
 | `.github/workflows/bypass-audit.yml` | Detección de bypass y persistencia de receipt en `internal-audits` |
+| `.github/workflows/security.yml` | Gate de seguridad estandarizado: CodeQL (SAST) + Trivy (config/fs/secret). Template: `templates/workflow-security.yml.tpl` |
 | `shared/hooks/tsconfig.json` (si hay TS) | Base ESM para `tsc --noEmit` (typecheck) |
 | Ruleset `required_status_checks` | Asegurado por `ensure-rule-set.sh` (si hay permisos) |
 
@@ -47,6 +48,11 @@ Las siguientes reglas **son** el protocolo; vienen de errores observados:
     poder activar el ruleset.
 11. **Stack auto-detectado.** Reusa la matriz de
     `references/testing/assurance-testing-audit/protocol.md` para construir `ENABLE`.
+12. **CodeQL + Trivy estandarizados.** El template `workflow-security.yml.tpl`
+    se instala ideal `security.yml` en todo monorepo (pares con `internal-audits`).
+    CodeQL = SAST; Trivy = config/fs/secret con fail-on `CRITICAL,HIGH`. Sintoniza
+    los `scan-ref` por layout del repo (no asumas rutas). El `npm audit` de deps
+    es opcional y `continue-on-error` (advisory).
 
 ## Flujo
 
