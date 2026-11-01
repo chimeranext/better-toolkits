@@ -26,6 +26,22 @@ Adheres to the official OpenSpec OPSX workflow (`docs/opsx.md` in `Fission-AI/Op
 
 ---
 
+## §3 Version policy (SemVer)
+
+When the change touches any versioned artifact, follow the **SemVer** policy
+(`shared/references/engineering-standards/semver.md`). This is generic — it
+applies to any repo/project:
+
+- The version lives in **one canonical manifest** (e.g. `package.json`, `plugin.json`).
+  Derived catalogs/indexes are generated, never hand-edited.
+- The version must be **strictly greater** than the version on the default branch
+  (`main`) at the moment the change lands — evaluated on the **combined head of the
+  merge queue** (O(1) per attempt).
+- If two changes claim the same version, the second one rebases onto the new
+  `main` and re-bumps (patch+1). Never "pick a side".
+- Enforcement uses the project's own version check (not a better-toolkits-specific
+  script) over `origin/main..HEAD` at merge time.
+
 ## Guardrails (mandatory HITL)
 
 - **Never merges.** Exit = human review handoff; `READY FOR HUMAN REVIEW — NOT MERGE AUTHORIZED`.

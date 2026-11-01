@@ -74,6 +74,20 @@ multiple installed copies or stale `"plugins"` file entries, warn; install
 collapses to the single discovery-dir copy (ask HITL before deleting user
 files outside the managed dir).
 
+## Vendor rule — checksums come from the release, never hardcoded
+
+For any script that downloads a release asset (`shared/bootstrap/scripts/setup-*.sh`):
+
+- Pin the **VERSION** (the tag/revision). That is the pin.
+- Fetch the release's own checksum manifest (e.g. `SHASUMS.txt`) and verify the
+  downloaded asset against it at install time.
+- **Never** hand-copy a sha256 into the script as a default/expected constant. A
+  hardcoded hash is a fragile pin: it goes stale when a release is rebuilt, and
+  it creates a second source of truth that drifts.
+
+Enforced by `scripts/lint/detect_hardcoded_checksum.py` (pre-commit hook
+`no-hardcoded-checksum`).
+
 ## Install the stderr baseline (discovery dir, no config entry)
 
 Copy (never symlink — the loader follows realpath for resolution) the

@@ -1,47 +1,67 @@
-# BGI — Build-Artifact Gitignore (doctrine)
+# BGI — Build-Artifact Gitignore (doctrina)
 
 ## Purpose
 
-Define the canonical set of `.gitignore` patterns every repo should vendor, and
-norm how generated build artifacts relate to version control (never tracked;
-symlinked across worktrees where applicable).
-
-**Machine-readable source of truth:** `shared/references/conventions/vendored-gitignore.toml`.
+Standardize the **`.gitignore` hygiene** that every repository must carry so
+build artifacts, dependency caches, and local-only files never leak into the
+tracked tree. Every repo vendors the ignore patterns from the canonical catalog
+`vendored-gitignore.toml`.
 
 ## Doctrine
 
-1. **Every repo SHALL vendor the ignore patterns** from
-   `vendored-gitignore.toml` for the languages/tools it uses. Never hand-write
-   a divergent set; copy from the catalog.
-2. **Build artifacts are regenerable and never tracked.** Virtualenvs
-   (`venv/`, `.venv/`), `node_modules/`, `target/`, `build/`, `dist/`,
-   `__pycache__/`, and tool caches are generated outputs — they belong on disk,
-   not in git.
-3. **Across worktrees symlink regenerable artifacts** to the main checkout
-   (see `implement/branch-and-worktree.md`): symlink only regenerable
-   artifacts, never source, never tracked files.
-4. **User/runtime-specific files are ignored too** (`.env.local`, local
-   credentials) never committed.
+1. **Every repository SHALL vendor the canonical ignore patterns** from
+   `vendored-gitignore.toml` (venv, node_modules, target, build, caches). The
+   catalog is the single source of truth; repos do not hand-author divergent
+   ignore lists.
+2. **The symlink build-artifact policy.** Build artifacts (dist, target, build,
+   out) are either gitignored or symlinked out of the tracked tree. They are
+   never committed as first-class content.
+3. **Local/per-project files are not committed.** `.env`, `.env.*`, slack
+   config, and local-only design-history directories (`.private/`) are ignore
+   patterns; every contributor keeps their own copy.
+4. **Agent / git worktrees are transient.** `.agents/worktrees/`,
+   `.worktrees/`, `.wt-*` are never committed.
+5. **CI and reviewers enforce the catalog.** A PR that adds a tracked build
+   artifact or a missing ignore pattern is flagged.
 
-## Catalog (summary)
+## The catalog (`vendored-gitignore.toml`)
 
-- Python: `venv/`, `.venv/`, `__pycache__/`, `*.pyc`, tool caches.
-- Node: `node_modules/`, `dist/`, `build/`, `.next/`, `coverage/`, `*.log`.
-- Rust: `target/`.
-- Dart/Flutter: `.dart_tool/`, `build/`, `.flutter-plugins*`.
-- Elixir: `_build/`, `deps/`, `cover/`.
-- Infra: `.terraform/`, `*.tfstate*`, `.env.local`.
-- VCS/tooling: `.DS_Store`, `.idea/`, `.vscode/`, `.git/`.
+The canonical catalog is a TOML file; every repo derives its `.gitignore` from
+it. The core patterns (from the observed toolkits):
 
-## Enforcement
+```toml
+# Language/build runtimes
+node_modules/
+dist/
+target/
+build/
+out/
+*.log
 
-- Pre-commit/pre-push check: compare the repo's `.gitignore` against the catalog
-  groups it claims; fail on missing mandatory patterns (where implemented).
-- Generators may consume `vendored-gitignore.toml` directly (machine-readable).
+# Environments & secrets (local-only)
+.env
+.env.*
+.DS_Store
+slack-config.json
+
+# Agent / worktrees
+.agents/worktrees/
+.worktrees/
+.wt-*/
+```
+
+## Application (generic)
+
+- Vendor: `assurance-repo-setup` writes the repo's `.gitignore` by rendering the
+  catalog (`vendored-gitignore.toml`).
+- Symlink policy: build-artifact directories are symlinked to a gitignored
+  location rather than committed.
+- Audit: a repo-health check (RDP family or CI) verifies no tracked build
+  artifact exists and the `.gitignore` covers the catalog.
 
 ## References
 
-- `shared/references/conventions/vendored-gitignore.toml` — canonical catalog.
-- `toolkits/make-no-mistakes-toolkit/references/implement/branch-and-worktree.md`
-  — symlink policy for regenerable artifacts.
-- `shared/references/conventions/language/*` — per-language conventions.
+- The catalog `vendored-gitignore.toml` (referenced by the standards index).
+- Related: `worktree-discipline.md` (worktrees transient), `checksum-hygiene.md`
+  (release artifacts verified, not committed).
+- Learner summary: internal-handbook `docs/how-to/engineering-standards/BGI.md`.

@@ -1,10 +1,10 @@
-# shared/conventions-record Specification
+# Spec Delta — shared/conventions-record
 
 ## Purpose
 
 Schema y método genérico para convenciones de cualquier lenguaje: fuentes pineadas con peso, reglas por mecanismo, contraejemplos, gates dual-lane pineados, lecciones numeradas, TTL con re-extracción y receipts con huella de candidato.
 
-## Requirements
+## ADDED Requirements
 
 ### Requirement: Árbol parametrizado, no plano
 

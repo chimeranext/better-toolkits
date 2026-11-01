@@ -1,10 +1,10 @@
-# shared/conventions-elixir Specification
+# Spec Delta — shared/conventions-elixir
 
 ## Purpose
 
 Primera instancia ejemplar para dogfooding del método y prueba del árbol: record `language/elixir` + hijo `frameworks/phoenix`. Cubre "¿está bien escrito?" (lenguaje) y "¿bien organizado según el framework?" (Phoenix). Excluye arquitectura MQTT/mMTC (va a OpenSpec en el monorepo vertivo) y Ash (siguiente framework).
 
-## Requirements
+## ADDED Requirements
 
 ### Requirement: Records language/elixir + frameworks/phoenix
 

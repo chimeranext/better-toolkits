@@ -52,9 +52,10 @@ sections — the middle three are MANDATORY:
    (no guiones), con el **evento gatillo en negrita** (`*Domingo 10:41pm:*`).
 4. **Qué NO fue** — bullets `-`. Descarta las hipótesis que la gente ya está
    rumiando (evita que el thread siga especulando). Omit only if none.
-5. **Causa Raíz** *(obligatoria)* — cadena causal **numerada**, cada eslabón
-   con su evidencia. Precisión técnica en los nombres ("re-despliegue desde
-   GitHub Actions", no "un proceso").
+5. **Causa Raíz** *(obligatoria)* — producir la causa raíz mediante **`/ishikawa`**
+   (6M + Five-Whys), y resumir el análisis en una **cadena causal numerada**, cada
+   eslabón con su evidencia. Precisión técnica en los nombres ("re-despliegue
+   desde GitHub Actions", no "un proceso").
 6. **La Buena Noticia (todo verificado, no esperanzas)** *(obligatoria)* —
    header con un **emoji celebratorio del workspace** (p. ej. `:partyclaude:`);
    bullets `-` con qué sobrevivió / se recuperó / ya protege al usuario.

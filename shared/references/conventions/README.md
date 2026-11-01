@@ -19,6 +19,9 @@ enforceables. Lo transversal vive acá; los toolkits (incl. assurance) las
 | [`language/php/frameworks/laravel`](./language/php/frameworks/laravel.md) | framework | draft | hereda PHP + Pest + arch |
 | [`platform/markdown`](./platform/markdown/README.md) | platform | draft | docs SSOT en toolkits |
 | [`platform/diagrams/mermaid-github`](./platform/diagrams/mermaid-github.md) | platform | draft | Mermaid en vista GitHub |
+| [`platform/codeowners-rotation`](./platform/codeowners-rotation/README.md) | platform | draft | `node scripts/check-codeowners-rotation.mjs` |
+| [`platform/ci-workflows`](./platform/ci-workflows/README.md) | platform | draft | validación YAML + vocabulario CodeQL |
+| [`platform/architecture-patterns`](./platform/architecture-patterns/README.md) | platform | draft | patrones/antipatrones Azure Architecture Center |
 | [`prescriptive-error-messages`](./prescriptive-error-messages.md) | language (transversal) | draft | integrada como RULE en cada record de lenguaje |
 | [`matcher-contract`](./matcher-contract.md) | language (transversal) | draft | BDD multi-lenguaje; traduce afirmaciones a matchers nativos |
 | [`language/powershell`](./language/powershell/README.md) | language | draft | PSScriptAnalyzer + parser (`Parser::ParseFile`) |
