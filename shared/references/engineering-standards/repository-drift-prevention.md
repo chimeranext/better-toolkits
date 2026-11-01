@@ -5,7 +5,7 @@
 Standardize the detection and prevention of **structural drift** across a
 repository: the tendency of a codebase to silently diverge from its intended
 single-source-of-truth ownership. This standard is the doctrine behind the
-seven
+nine
 `audit-engine` detector families. It does not define the detectors' mechanics
 (those live in `references/detectors/`); it justifies WHY each canonical source
 is cited, so a reader understands the conceptual chain rather than treating the
@@ -13,7 +13,7 @@ citations as citation lists.
 
 ---
 
-## The seven detector families
+## The nine detector families
 
 Each family is a detector profile of the `audit-engine`. It is validated with
 Specula (TLA+ model checking) and vendored with its full name (no abbreviated
@@ -164,6 +164,34 @@ family tokens).
 - **Reference:** Domain-Driven Design standard (ownership / bounded-context
   assignment); Atomic Design (component placement); observed patterns in
   pillar-ownership ecosystems.
+
+### 8. Context-map integrity
+
+- **Detector:** `context-map-integrity` (verifier `context-map-integrity.ts`; command `audit-context-map-integrity`).
+- **Rationale:** The relationships declared in the DDD context map must hold in
+  the code. If the map declares an **anti-corruption layer** between A and B,
+  that ACL must exist; if it declares **separate ways**, there must be no direct
+  communication; if it declares a **shared kernel**, the shared subset must be
+  small and stable; if it declares **open-host service / published language**,
+  the published protocol must exist.
+- **Justification:** This is a distinct, detectable deviation that family 3
+  does not cover. Family 3 only checks that imports respect the *ownership* map;
+  family 8 checks that the *relationships* declared in the context map are
+  realized (or intentionally absent where declared separate).
+- **Reference:** DDD standard §5 (Context maps & relationships); Evans (2015)
+  relationship patterns.
+
+### 9. Ubiquitous-language consistency
+
+- **Detector:** `ubiquitous-language-consistency` (verifier `ubiquitous-language-consistency.ts`; command `audit-ubiquitous-language`).
+- **Rationale:** Within a bounded context, a single domain concept should have a
+  single name (the ubiquitous language). Inconsistency appears when the same
+  concept is named differently across contexts (`Enrollment` vs `Registration`)
+  or when a term has two meanings inside one context.
+- **Justification:** This is an intra-context semantic coherence check, distinct
+  from both family 3 (crossings) and family 8 (relationships). It validates the
+  ubiquitous-language contract of DDD §3.
+- **Reference:** DDD standard §3 (Ubiquitous Language); Evans (2015).
 
 ---
 
