@@ -517,14 +517,22 @@ stage_build_artifacts() {
     local scratch=/tmp/opencode/disk-cleanup-build
     mkdir -p "$scratch"
 
-    # 1. Discover authentic git repos (top-level dirs that contain a .git).
-    # We search the whole disk but restrict to reasonable depths and skip system dirs.
+    # 1. Discover authentic git repos. Honour an explicit WORK_REPO_ROOT override
+    # first (default: $HOME/Documentos/GitHub); if the designated root exists,
+    # scan it. Otherwise scan the whole disk, restricting to reasonable depths
+    # and skipping system dirs.
     local repo_file="$scratch/repos.txt"
     : > "$repo_file"
-    find / -maxdepth 5 -type d -name .git -not -path '/proc/*' -not -path '/sys/*' \
-        -not -path '/dev/*' -not -path '/run/*' -not -path '/tmp/*' \
-        -not -path '/snap/*' -not -path '/usr/*' \
-        > "$scratch/repos_find.out" 2> "$scratch/repos_find.err" || true
+    local WORK_ROOT="${WORK_REPO_ROOT:-$HOME/Documentos/GitHub}"
+    if [ -d "$WORK_ROOT" ]; then
+        find "$WORK_ROOT" -maxdepth 3 -type d -name .git \
+            > "$scratch/repos_find.out" 2>&1 || true
+    else
+        find / -maxdepth 5 -type d -name .git -not -path '/proc/*' -not -path '/sys/*' \
+            -not -path '/dev/*' -not -path '/run/*' -not -path '/tmp/*' \
+            -not -path '/snap/*' -not -path '/usr/*' \
+            > "$scratch/repos_find.out" 2> "$scratch/repos_find.err" || true
+    fi
     # Convert .git dirs to repo roots
     sed 's#/\.git$##' "$scratch/repos_find.out" | sort -u > "$repo_file"
 
