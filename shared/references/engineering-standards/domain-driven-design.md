@@ -1,8 +1,8 @@
 # DDD — Domain-Driven Design (doctrina)
 
-**Status:** draft — esqueleto. Será enriquecido por deep-research con las
-fuentes canónicas (Evans Reference, Microsoft Architecture, bounded-context
-canvas, etc.) y posteriormente referenciado por `repository-drift-prevention.md`.
+**Status:** draft — skeleton. Will be enriched by deep-research with the
+canonical sources (Evans Reference, Microsoft Architecture, bounded-context
+canvas, etc.) and subsequently referenced by `repository-drift-prevention.md`.
 
 ## Purpose
 
@@ -50,23 +50,23 @@ deliberately.
   boundaries**, not the existing code layout. Each subagent should own a
   bounded context (or a slice of one), so its output matches the desired
   architecture instead of reinforcing drift.
-- **Vínculo con /parallel-subagents:** si se particionan las tareas alineadas
-  con los bounded-contexts del dominio, el resultado de los subagents respeta las
-  fronteras deseadas. Si se particionan por módulos de código existentes, se
-  replica la organización actual (y su drift). El principio Inverse Conway dice:
-  define primero la estructura de equipos/tareas deseada; la arquitectura la
-  sigue.
+- **Connection to `/parallel-subagents`:** if tasks are partitioned aligned with
+  the domain's bounded contexts, the subagents' output respects the desired
+  boundaries. If partitioned by existing code modules, it replicates the current
+  organization (and its drift). The Inverse Conway principle: define the desired
+  team/task structure first; the architecture follows.
 
 ### D5 — DDD is the parent standard; RDP is the enforcement
-- `repository-drift-prevention.md` **referencias** este estándar para la familia
-  "bounded-context boundary leakage" y para la partición DDD/ARC. Este estándar
-  es la fuente conceptual; RDP es la aplicación mecánica (detectores).
+- `repository-drift-prevention.md` **references** this standard for the
+  "bounded-context boundary leakage" family and for the DDD/ARC partition. This
+  standard is the conceptual source; RDP is the mechanical application
+  (detectors).
 
-## Gates (esqueleto)
+## Gates (skeleton)
 
-- [ ] Validación Specula (TLA+) del invariante de bounded-context (prove: no
-      import cruza un contexto sin pasar por la interface publicada).
-- [ ] Todo detector `bounded-context-*` traza a una regla de este estándar.
+- [ ] Specula (TLA+) validation of the bounded-context invariant (prove: no
+      import crosses a context without going through the published interface).
+- [ ] Every `bounded-context-*` detector traces to a rule of this standard.
 
 ## References (esqueleto — se completará)
 
