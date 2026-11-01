@@ -1,5 +1,7 @@
 # Logistics Toolkit
 
+[![Version](https://img.shields.io/badge/version-0.1.5-blue)](.claude-plugin/plugin.json) [![License: BSL-1.1](https://img.shields.io/badge/license-BSL--1.1-important)](LICENSE)
+
 Supply chain management domain for startups importing goods into Costa Rica (or any LATAM
 market): procurement (P2P, SRM, Kraljic), customs regimes, import documentation, INCOTERMS
 2020, free trade agreements, and inventory management. Notion-agnostic: point the crawler at

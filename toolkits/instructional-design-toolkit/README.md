@@ -1,5 +1,7 @@
 # instructional-design-toolkit
 
+[![Version](https://img.shields.io/badge/version-1.4.6-blue)](.claude-plugin/plugin.json) [![License: BSL-1.1](https://img.shields.io/badge/license-BSL--1.1-important)](LICENSE)
+
 Plugin de Claude Code para diseño instructional guiado — **cursos completos
 xAPI + cmi5-compliant**, **contenido de curso end-to-end** (módulos, text
 classes, quizzes, challenges, video scripts, workbooks interactivos, storyboards
