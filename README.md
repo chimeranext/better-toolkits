@@ -1,5 +1,11 @@
 # better-toolkits
 
+[![Stars](https://img.shields.io/github/stars/chimeranext/better-toolkits)](https://github.com/chimeranext/better-toolkits)
+[![Issues](https://img.shields.io/github/issues/chimeranext/better-toolkits)](https://github.com/chimeranext/better-toolkits/issues)
+[![Website](https://img.shields.io/website?url=https%3A%2F%2Ftoolkits.chimeranext.dev&label=toolkits.chimeranext.dev)](https://toolkits.chimeranext.dev)
+[![License: BSL-1.1](https://img.shields.io/badge/license-BSL--1.1-important)](LICENSE)
+[![Version](https://img.shields.io/badge/version-0.2.7-blue)](.claude-plugin/marketplace.json)
+
 > Source-available **harness-agnostic** toolkits monorepo — **pick the toolkits your startup needs.**
 
 A curated set of battle-tested agent toolkits — each independently installable —
