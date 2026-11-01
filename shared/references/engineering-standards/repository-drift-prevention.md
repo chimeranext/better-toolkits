@@ -5,182 +5,179 @@
 Standardize the detection and prevention of **structural drift** across a
 repository: the tendency of a codebase to silently diverge from its intended
 single-source-of-truth ownership. This standard is the doctrine behind the six
-`audit-engine` detector families (SCH/CDC/DDD/ARC/STR/ENF). It does not define
-the detectors' mechanics (those live in `references/detectors/`); it justifies
-WHY each canonical source is cited, so a reader understands the conceptual chain
-rather than treating the citations as citation lists.
+`audit-engine` detector families. It does not define the detectors' mechanics
+(those live in `references/detectors/`); it justifies WHY each canonical source
+is cited, so a reader understands the conceptual chain rather than treating the
+citations as citation lists.
 
-## The thesis
+---
 
-Drift is not a quality defect you fix once. It is the **default trajectory** of
-any codebase that does not actively resist it. The six detector families are a
-defense-in-depth response to that trajectory. Each family is anchored to a
-canonical source, and each source is cited for a specific, non-arbitrary reason.
+## The six detector families
+
+Each family is a detector profile of the `audit-engine`. It is validated with
+Specula (TLA+ model checking) and vendored with its full name (no abbreviated
+family tokens).
+
+### 1. Schema drift
+
+- **Detector:** `schema-drift` (verifier `schema-drift.ts`; command `audit-schema-drift`).
+- **Rationale:** The same logical attribute (a `bio`, an `email`, an
+  `avatar_url`) realized inconsistently across a data model, with no single
+  source of truth. A column duplicated across tables means the fact exists in N
+  places that can disagree.
+- **Justification:** First Normal Form (Codd) establishes that a logical
+  attribute has one canonical home; DRY converts that into an engineering cost
+  (each copy is a sync point). The "multiple writers, no owner" leg explains the
+  mechanism: a table with no owner is a boundary the organization never drew.
+- **Reference:** Codd, E. F. (1970). A relational model of data for large
+  shared data banks. *Communications of the ACM*, 13(6), 377–387. Hunt, A.,
+  & Thomas, D. (1999). *The pragmatic programmer*. Addison-Wesley.
+
+### 2. Contract drift
+
+- **Detector:** `contract-drift` (verifier `contract-drift.ts`; command `audit-contract-drift`).
+- **Rationale:** A producer and a consumer each validate the same payload with
+  separate schemas that have silently diverged (a Zod schema on the frontend vs.
+  a JSON-schema/Dart model on the producer). Nothing fails until the divergent
+  value hits the wire.
+- **Justification:** Consumer-Driven Contracts (CDC) define the correct state: a
+  shared, verifiable contract. When each side owns a private copy there is no
+  contract — only two guesses. DRY qualifies the two schemas as one logical
+  artifact that has been duplicated, not two independent things.
+- **Reference:** Consumer-driven contracts (pattern). In *ThoughtWorks
+  Technology Radar*. (CDC is cited as the pattern; see also Hunt & Thomas,
+  1999, for the DRY principle.)
+
+### 3. Bounded-context boundary leakage
+
+- **Detector:** `bounded-context-boundaries` (verifier `bounded-context-boundaries.ts`; command `audit-bounded-context`).
+- **Rationale:** A module owned by one bounded context imports the internals of
+  another context directly, instead of going through that context's
+  shared/published interface. The import graph no longer matches the intended
+  ownership map.
+- **Justification:** This is Conway's-Law drift: the system's structure has
+  drifted away from the ownership boundaries the organization actually
+  maintains. Bounded contexts (Evans) own their model and expose a deliberate
+  interface; reaching past it couples two models meant to evolve independently.
+- **Reference:** Conway, M. E. (1968). How do committees invent? *Datamation*,
+  14(4), 28–31. Evans, E. (2003). *Domain-driven design: Tackling complexity in
+  the heart of software*. Addison-Wesley.
+
+### 4. Explicit architecture
+
+- **Detector:** `explicit-architecture` (verifier `explicit-architecture.ts`; command `audit-explicit-architecture`).
+- **Rationale:** Source dependencies must point inward, toward the most stable,
+  most abstract code. A file at rank R may import a target at rank ≤ R;
+  importing a higher-rank target points outward and is a violation (e.g.
+  `domain` importing `infrastructure`).
+- **Justification:** Herberto Graça's Explicit Architecture synthesizes
+  Hexagonal (ports & adapters), Onion, and Clean architecture plus CQRS. Its
+  deterministic core is the dependency rule, which is directly verifiable.
+- **Reference:** Graça, H. (2017). Explicit architecture. Retrieved from
+  https://herbertograca.com/2017/11/16/explicit-architecture/ (Hexagonal:
+  Ports & Adapters, Cockburn, 2005; Onion: Palermo, 2008; Clean: Martin,
+  2012).
+
+### 5. Strangler fig migration health
+
+- **Detector:** `strangler-fig` (verifier `strangler-fig.ts`; command `audit-strangler`).
+- **Rationale:** A legacy system should be replaced incrementally behind a
+  façade (strangler fig), not in a big-bang rewrite. The detector flags
+  big-bang indicators: no façade/seam, no coexistence, a single giant cutover.
+- **Justification:** The Strangler Fig pattern (Fowler) defines the correct,
+  reversible migration path; the anti-pattern is the all-or-nothing rewrite.
+- **Reference:** Fowler, M. (2004). Strangler fig application. Retrieved from
+  https://martinfowler.com/bliki/StranglerFigApplication.html
+
+### 6. Enforcement hooks
+
+- **Detector:** `enforcement-hooks` (verifier `enforcement-hooks.ts` + `enforcement-hooks-efficacy.ts`; command `audit-enforcement-hooks`).
+- **Rationale:** Detection-without-enforcement: the cures the other five
+  families recommend are documented but no hook is installed to enforce them, so
+  the drift returns. This family runs LAST, cross-referencing the other five's
+  confirmed findings.
+- **Justification:** The drift thesis holds that structural drift is never cured
+  by a one-time fix; the load-bearing cure is `hPreToolUse/PostToolUse hooks.
+  ENF verifies the cure is installed, not re-detects the drift.
+- **Reference:** The 4-cure defense-in-depth model (see the Atomic Design Drift
+  Thesis; hooks pattern in better-toolkits' `enforcement-hooks` detector).
 
 ---
 
 ## 1. The unifying frame: Conway's Law as the root cause
 
-**Source**: Conway (1968), *How Do Committees Invent?*
+**Source**: Conway (1968), *How Do Committees Invent?* (see family 3).
 
-**Why it is cited.** Conway's Law is not a metaphor here; it is the structural
-induction that ties the three drift layers (schema, primitive, component) and
-the six detector families together. It states that a system's structure mirrors
-the communication structure of the organization that builds it. The actionable
-corollary for drift prevention is: when the structure of the code stops matching
-the ownership map the organization means to maintain, the system has drifted. A
-schema column duplicated across tables, a payload validated twice with divergent
-schemas, a module reaching into another team's internals — each is a point where
-the code's embedded structure has outrun the org's intended boundaries.
-
-**What it justifies.** It makes drift an *organizational* failure mode, not a
-purely technical one. That is why every detector family carries an ownership
-dimension (multi-writer-no-owner, missing canonical owner, cross-context
-import). Without this frame, the detectors would be a grab-bag of style rules;
-with it, they are a single, coherent anti-pattern with three faces.
+**Why it is cited.** Conway's Law is the structural induction that ties the
+three drift layers and the six detector families together: a system's structure
+mirrors the communication structure of the organization that builds it. When the
+code's structure stops matching the intended ownership map, the system has
+drifted. Every detector family therefore carries an ownership dimension; without
+this frame they would be a grab-bag of style rules.
 
 ---
 
 ## 2. The three drift layers
 
-### Layer 1 — Schema drift (SCH)
+### Layer 1 — Schema drift (family 1)
+A database attribute's home. Anchored to Codd (1NF) and DRY.
 
-**Sources**: Codd (1970), *A Relational Model of Data for Large Shared Data
-Banks*; Hunt & Thomas (1999), *The Pragmatic Programmer* (DRY).
-
-**Why Codd is cited.** First Normal Form (1NF) is not a database nicety; it is
-a claim about identity. A logical attribute (a person's bio, an email, an
-avatar URL) has one canonical home. Scattering it across tables means the same
-fact exists in N places that can disagree. Codd's citation justifies the
-detector's core primitive: a duplicated logical column is a normalization
-failure, and the detector's job is to surface it.
-
-**Why DRY is cited.** DRY converts Codd's formal claim into an engineering cost
-argument: each copy is a place that must be kept in sync, and each sync point is
-a drift opportunity. The detector combines both: it looks for the *same logical
-attribute* (Codd) realized in *multiple places* (DRY), and flags the absence of
-a single owner.
-
-**Why "multiple writers, no owner" is added.** Codd and DRY explain *why* the
-duplication is bad; they do not explain *how* it arises. The third leg — a
-table written by several teams with no canonical owner — explains the mechanism.
-It is the bridge to Conway's Law: a table with no owner is a boundary the org
-never drew, so duplication accumulates where convenient.
-
-### Layer 2 — Primitive drift (CDC)
-
-**Sources**: Consumer-Driven Contracts (CDC); DRY.
-
-**Why CDC is cited.** The contract between a producer and its consumer is a
-shared, verifiable artifact. When each side owns a private, hand-maintained copy
-of the schema, there is no contract — only two guesses. CDC names the *correct*
-state (a single, shared contract) and thereby defines what the detector is
-looking for: the absence of that shared artifact.
-
-**Why DRY is cited again.** The same payload shape defined in two places (a Zod
-schema on the frontend, a JSON-schema/Dart model on the producer) is DRY
-violated at the boundary. DRY here justifies treating the two schemas as *one*
-logical artifact that has been duplicated — not as two independent things.
-
-**What makes CDC distinct from SCH.** SCH is about a database attribute's home;
-CDC is about a *wire contract* between two runtime surfaces. They are different
-layers (data model vs. data-in-transit), which is why they are separate
-families.
+### Layer 2 — Primitive drift (family 2)
+A wire contract between two runtime surfaces. Distinct from schema drift: data
+model vs. data-in-transit.
 
 ### Layer 3 — Component drift (delegated)
-
-**Source**: Brad Frost (2013), Atomic Design; Conway's Law.
-
-**Why it is delegated.** The component layer (atoms/molecules/organisms/
-templates) is owned by the `atomic-design-toolkit`, not by the audit-engine. The
-six families are the architecture/process layers; the component layer is a
-separate concern with its own taxonomy. RDP records this delegation so it is
-explicit: `audit` composes the component sweep from the toolkit, it does not
-absorb it.
-
-**Why Conway is cited again.** The component layer is where Conway's Law shows
-up most visibly: components are organized by team structure, not by domain. A
-`src/components/` junk-drawer with 57 root folders is the component-layer
-expression of the same anti-pattern that produced schema and primitive drift.
+The component layer (atoms/molecules/organisms/templates) is owned by the
+`atomic-design-toolkit`, not by the audit-engine. RDP records this delegation so
+it is explicit: `audit` composes the component sweep from the toolkit.
 
 ---
 
-## 3. The six detector families
+## 3. The partition: bounded-context vs. explicit architecture
 
-### SCH — Schema Drift
-Detects duplicated logical columns + multi-writer-no-owner tables. Verify:
-`findDuplicatedColumns(sql, { minTables: 2 })`.
+The two architecture families are deliberately complementary:
 
-### CDC — Contract Drift
-Detects producer/consumer payload schemas that diverged. Verify: paired-schema
-comparison.
-
-### DDD — Bounded-Context Boundaries
-Detects imports that cross a bounded-context seam (a module reaching into
-another context's internals instead of its published interface). This is the
-**Conway's-Law drift** detector: the import graph no longer matches the
-ownership map. Verify: `findCrossContextImports(files, ownership)`.
-
-### ARC — Explicit Architecture
-Detects layer-direction violations: source dependencies must point inward
-(domain → application → infrastructure → ui). Anchored to Herberto Graça's
-Explicit Architecture (2017): Hexagonal (ports & adapters) + Onion + Clean +
-CQRS. **This is DDD's complement**: DDD audits *which context*, ARC audits
-*which layer direction*.
-
-### STR — Strangler Fig
-Detects migration health: whether a legacy system is being strangler
-incrementally (Fowler, 2004) or big-bang rewritten. Anchored to the Strangler
-Fig pattern.
-
-### ENF — Enforcement Hooks
-Detects detection-without-enforcement: whether the cures the other five families
-recommend are actually installed as hooks. Runs LAST, cross-referencing the
-other five's confirmed findings.
-
----
-
-## 4. The partition: why DDD and ARC are separate
-
-The two architecture families are deliberately complementary, not overlapping:
-
-| | DDD | ARC |
+| | Bounded-context | Explicit architecture |
 |---|---|---|
 | Question | Which bounded context owns this module? | In which layer does this file live? |
 | Violation | Import crosses a context seam | Dependency points outward (inner imports outer) |
-| The smell | `pathways` imports `hackathons/internal` | `domain` imports `infrastructure` |
-| Verify | `findCrossContextImports` | layer-rank check |
+| The smell | a module imports another context's internals | `domain` imports `infrastructure` |
 
-Each detector's header explicitly states it does NOT audit the other's concern.
-RDP records this so the partition is a documented contract, not an accident.
+Each detector explicitly states it does NOT audit the other's concern.
 
 ---
 
-## 5. Why ENF runs last
+## 4. Why enforcement hooks runs last
 
-ENF is not a detector of drift; it is a detector of the *cure*. Its job is to
-verify the hooks the other five recommend actually exist. It runs after the
-other five because it consumes their confirmed findings. This is the
-defense-in-depth closing step: the other five say "here is drift"; ENF says
-"and here is whether you installed the enforcement to stop it returning."
+It is not a detector of drift; it is a detector of the *cure*. It runs after
+the other five because it consumes their confirmed findings.
 
 ---
 
-## 6. How this standard is vendored
+## 5. How this standard is vendored
 
 - The six detector families live in
   `toolkits/make-no-mistakes-toolkit/references/detectors/` (+ verifiers in
   `src/audit/verifiers/`, commands in `commands/audit-*.md`).
-- The meta-dispatcher is `commands/audit.md` (runs SCH→CDC→DDD→ARC→STR→ENF).
+- The meta-dispatcher is `commands/audit.md`.
 - The component layer is delegated to `atomic-design-toolkit`.
-- The report contract is `references/audit-report-schema.md` (findings
-  namespaced `SCH-###`…`ENF-###`).
+- Each family SHALL be backed by a Specula (TLA+) model that proves its
+  detector invariant (e.g. "no duplicated logical column", "no outward
+  dependency", "every pattern owns ≥1 tracked file"). The TLA+ models live under
+  `scripts/tla/` (existing precedent: `BranchDefault.tla`,
+  `AdoptionOrder.tla`), installed via `shared/bootstrap/scripts/setup-specula.sh`
+  (see `formal-model-tla.md`). A family without a passing TLA+ model is
+  **draft**, not validated.
+- The report contract is `references/audit-report-schema.md`.
 
-## References
+## References (full list)
 
-- The thesis that motivated the audit engine: Atomic Design Drift Thesis
-  (Conway's Law as the bankruptcy chain).
-- Sources cited per family: Conway (1968), Codd (1970), Hunt & Thomas (1999),
-  Evans (Domain-Driven Design), Fowler (Strangler Fig, 2004), Herberto Graça
-  (Explicit Architecture, 2017), Brad Frost (Atomic Design, 2013).
+- Conway, M. E. (1968). How do committees invent? *Datamation*, 14(4), 28–31.
+- Codd, E. F. (1970). A relational model of data for large shared data banks.
+  *Communications of the ACM*, 13(6), 377–387.
+- Hunt, A., & Thomas, D. (1999). *The pragmatic programmer*. Addison-Wesley.
+- Evans, E. (2003). *Domain-driven design*. Addison-Wesley.
+- Fowler, M. (2004). Strangler fig application.
+- Graça, H. (2017). Explicit architecture.
+- Frost, B. (2013). *Atomic design*.
 - Learner summary: internal-handbook `docs/how-to/engineering-standards/RDP.md`.
