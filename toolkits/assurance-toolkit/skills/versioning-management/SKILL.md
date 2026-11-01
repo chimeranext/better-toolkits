@@ -1,7 +1,7 @@
 ---
 name: versioning-management
 description: >
-  SemVer + conventional commits UNIVERSALES (todo repo). Migrated;
+  SemVer + UNIVERSAL conventional commits (every repo). Migrated;
   protocol SSOT in assurance governance.
 ---
 
@@ -11,6 +11,6 @@ description: >
 > Protocol SSOT: `toolkits/assurance-toolkit/references/governance/protocol.md`.
 > Template copy retained as shim.
 
-SemVer + conventional commits en todo repo (no solo Flutter): commitlint en
-pre-push/CI, releases automatizados, changelog del historial. Linkage
-versión↔evidencia en cada receipt.
+SemVer + conventional commits in every repo (not just Flutter): commitlint on
+pre-push/CI, automated releases, changelog from history. version↔evidence linkage
+in each receipt.

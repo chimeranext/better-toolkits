@@ -3,7 +3,7 @@
 Parent hub: [`references/triage/protocol.md`](../triage/protocol.md).
 
 OpenSpec contract (PR stage slice): `openspec/changes/add-assurance-toolkit/specs/toolkit/assurance-governance/spec.md`
-→ requirement **Gates por etapa, rápidos primero** — PR row **`tests 100%`** only.
+→ requirement **Stage gates, fast first** — PR row **`tests 100%`** only.
 Security criticals and `coverage_delta` are **other pillars** (security + governance), not this file.
 
 ## Question

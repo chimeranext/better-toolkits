@@ -11,4 +11,4 @@ description: >
 > Protocol SSOT: `toolkits/assurance-toolkit/references/governance/protocol.md`.
 > Template copy retained as shim.
 
-SLOs, error budgets, MTTD/MTTR (SRE workbook). Alimenta métricas outcome-based.
+SLOs, error budgets, MTTD/MTTR (SRE workbook). Feeds outcome-based metrics.

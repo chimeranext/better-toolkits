@@ -11,8 +11,8 @@ description: >
 > Protocol SSOT: `toolkits/assurance-toolkit/references/liveness/protocol.md`.
 > Template copy retained as shim.
 
-Captura automática, contexto enriquecido, integración CI (source maps).
-Los errores son señal MTTD, no solo logs.
+Automatic capture, enriched context, CI integration (source maps).
+Errors are an MTTD signal, not just logs.
 
-Dev-time: `artdima/peek` (MIT) inspecciona red in-app solo en debug y exporta
-cURL/HAR para adjuntar a reportes — ver `language/dart/frameworks/flutter`.
+Dev-time: `artdima/peek` (MIT) inspects in-app network only in debug and exports
+cURL/HAR to attach to reports — see `language/dart/frameworks/flutter`.

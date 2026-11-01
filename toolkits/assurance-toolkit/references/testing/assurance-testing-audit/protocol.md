@@ -23,18 +23,18 @@ runners apply and whether the adapter evidence path exists.
 | API/contracts | Schemathesis / Pact | `openapi.*`, `pact/`, `schemathesis` config |
 | Mobile collectors | Qualflare (`qf collect`) | `qualflare` config / `qf` in CI |
 
-## Agregador transversal (MegaLinter)
+## Cross-cutting aggregator (MegaLinter)
 
-Para repos que adopten [MegaLinter](https://megalinter.io) como agregador de gates, una
-sola integración cubre la matriz completa: `.mega-linter.yml` (SSOT) + GitHub Action
-`oxsecurity/megalinter@v10`, y el typecheck (`tsc --noEmit`) como `PRE_COMMAND`
-bloqueante. Evidencia vía reporter **SARIF** (subible a code scanning), que alimenta
-los receipts. Ver `.mega-linter.yml` en la raíz de better-toolkits como piloto.
+For repos that adopt [MegaLinter](https://megalinter.io) as a gate aggregator, a single
+integration covers the whole matrix: `.mega-linter.yml` (SSOT) + GitHub Action
+`oxsecurity/megalinter@v10`, and the typecheck (`tsc --noEmit`) as a blocking `PRE_COMMAND`.
+Evidence via the **SARIF** reporter (uploadable to code scanning), which feeds the
+receipts. See `.mega-linter.yml` at the root of better-toolkits as a pilot.
 
-**Destino de evidencia**: los receipts se persisten en el repo interno privado
-`internal-audits` (política de governance — ver
-`references/governance/protocol.md`). Si ese repo no existe ni hay desviación
-documentada, el auditor emite **GAP** en la fila correspondiente.
+**Evidence destination**: receipts are persisted in the private internal repo
+`internal-audits` (governance policy — see
+`references/governance/protocol.md`). If that repo does not exist and there is no documented
+deviation, the auditor emits **GAP** in the corresponding row.
 
 ## Flow
 

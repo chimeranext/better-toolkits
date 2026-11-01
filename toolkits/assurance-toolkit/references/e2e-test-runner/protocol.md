@@ -73,7 +73,7 @@ Before recording any test as `passed`, apply these three gates. A test that fail
 gate is `failed`, never `passed`.
 
 **1. BDD — assert behavior, not implementation.** A test case passes only when its
-`Then` afirmación (the `gherkin` `Then` step, or `project.coverage_type`) is
+`Then` assertion (the `gherkin` `Then` step, or `project.coverage_type`) is
 satisfied by observable behavior. Assert what a user can observe — not internal
 setters, internals, or "it executed without error". Do not mark a test `passed`
 solely because the runner executed and exited `0`; the observable assertion must hold.

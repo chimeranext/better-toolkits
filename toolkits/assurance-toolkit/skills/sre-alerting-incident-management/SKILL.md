@@ -8,8 +8,8 @@ description: >
 # sre-alerting-incident-management — multi-harness entry (migrated)
 
 > Source: `flutter-boilerplate-monorepo-template/skills/system-reliability-engineering/alerting-incident-management`.
-> Protocol SSOT: `toolkits/assurance-toolkit/references/liveness/protocol.md` (señales),
+> Protocol SSOT: `toolkits/assurance-toolkit/references/liveness/protocol.md` (signals),
 > `toolkits/assurance-toolkit/references/governance/protocol.md` (SLA timers).
 > Template copy retained as shim.
 
-Cada alerta con dueño y runbook linkeado; breach alerts como métricas del dashboard.
+Each alert with an owner and linked runbook; breach alerts as dashboard metrics.

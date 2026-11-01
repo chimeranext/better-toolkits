@@ -1,7 +1,7 @@
 ---
 name: flutter-performance
 description: >
-  Flutter performance — rebuilds, listas, memoria, lazy loading, profiling. Migrated;
+  Flutter performance — rebuilds, lists, memory, lazy loading, profiling. Migrated;
   protocol SSOT in assurance testing.
 ---
 
@@ -11,5 +11,5 @@ description: >
 > Protocol SSOT: `toolkits/assurance-toolkit/references/testing/e2e-protocol.md`.
 > Template copy retained as shim.
 
-Velocidad, fluidez y eficiencia (rebuilds, listas, memoria, imágenes).
-Resultados → baselines de SLOs en liveness.
+Speed, smoothness and efficiency (rebuilds, lists, memory, images).
+Results → SLO baselines in liveness.

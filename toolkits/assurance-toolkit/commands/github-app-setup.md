@@ -1,46 +1,46 @@
 ---
 description: >
-  Guía interactiva para que el founder cree su PROPIA GitHub App (settings de org)
-  y la use como autora de los reviews de Heimdall (estilo CodeRabbit/Greptile).
-  No depende de la App de ChimeraNext. Guía + manifest + key-chain + verificación.
+  Interactive guide for the founder to create their OWN GitHub App (org settings)
+  and use it as the author of Heimdall's reviews (CodeRabbit/Greptile style).
+  Does not depend on the ChimeraNext App. Guide + manifest + key-chain + verification.
 priority: 40
 ---
 # /assurance:github-app-setup
 
 Read and follow [`references/github-app-setup/protocol.md`](../references/github-app-setup/protocol.md) (protocol SSOT).
 
-## Qué produce
+## What it produces
 
-1. **Crear la GitHub App** en el settings de org:
+1. **Create the GitHub App** in the org settings:
    `https://github.com/organizations/{organization-id}/settings/apps/new`
-   - Permissions: `pull_requests: write` + `issues: write` (comentar en el hilo del PR) + `contents: read` + `metadata: read`.
-   - Omitir las opciones de OAuth de usuarios (device flow, user authorization, expire tokens).
-2. **Guardar la private key** en `~/.agents/heimdall-review.pem` (modo 0600).
-3. **Registrar** en `~/.agents/.heimdall.env`:
+   - Permissions: `pull_requests: write` + `issues: write` (to comment on the PR thread) + `contents: read` + `metadata: read`.
+   - Omit the user OAuth options (device flow, user authorization, expire tokens).
+2. **Save the private key** in `~/.agents/heimdall-review.pem` (mode 0600).
+3. **Register** in `~/.agents/.heimdall.env`:
    ```
    HEIMDALL_GITHUB_APP_ID=<app_id>
    HEIMDALL_GITHUB_APP_KEY=~/.agents/heimdall-review.pem
    ```
-4. **Instalar** la App en la org y seleccionar los repos.
-5. **Verificar** con dry-run y luego `--post --github-app`.
+4. **Install** the App in the org and select the repos.
+5. **Verify** with dry-run then `--post --github-app`.
 
-Para auditar varias orgs, usá el script standalone de verificación
+To audit multiple orgs, use the standalone verification script
 (`chimeranext/internal-org-gate` → `scripts/check-heimdall-app-installs.mjs`):
 
 ```bash
 GH_TOKEN=... node scripts/check-heimdall-app-installs.mjs
 ```
 
-## Plantilla de manifest
+## Manifest template
 
-`references/github-app-setup/github-app-manifest.json` — reutilizable.
+`references/github-app-setup/github-app-manifest.json` — reusable.
 
-## Cómo se ve al funcionar
+## How it looks when working
 
 ```bash
 heimdall-review pr <n> --post --github-app
 ```
-El review aparece en el PR firmado por `<app-name>[bot]`.
+The review appears on the PR signed by `<app-name>[bot]`.
 
-> Este comando SOLO guía y verifica. No crea la App por vos (requiere UI de GitHub
-> y la private key). Resuelve dudas (qué marcar/omitir, permisos, troubleshooting) paso a paso.
+> This command ONLY guides and verifies. It does not create the App for you (requires GitHub UI
+> and the private key). It resolves doubts (what to check/omit, permissions, troubleshooting) step by step.
