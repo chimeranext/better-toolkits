@@ -57,11 +57,12 @@ family tokens).
   ownership map.
 - **Justification:** This is Conway's-Law drift: the system's structure has
   drifted away from the ownership boundaries the organization actually
-  maintains. Bounded contexts (Evans) own their model and expose a deliberate
-  interface; reaching past it couples two models meant to evolve independently.
-- **Reference:** Conway, M. E. (1968). How do committees invent? *Datamation*,
-  14(4), 28–31. Evans, E. (2003). *Domain-driven design: Tackling complexity in
-  the heart of software*. Addison-Wesley.
+  maintains. The conceptual basis is the Domain-Driven Design standard
+  (`domain-driven-design.md`): bounded contexts own their model and expose a
+  deliberate published interface; reaching past it couples two models meant to
+  evolve independently.
+- **Reference:** DDD standard (`shared/references/engineering-standards/domain-driven-design.md`).
+  Conway, M. E. (1968). How do committees invent? *Datamation*, 14(4), 28–31.
 
 ### 4. Explicit architecture
 
@@ -143,7 +144,10 @@ The two architecture families are deliberately complementary:
 | Violation | Import crosses a context seam | Dependency points outward (inner imports outer) |
 | The smell | a module imports another context's internals | `domain` imports `infrastructure` |
 
-Each detector explicitly states it does NOT audit the other's concern.
+Each detector explicitly states it does NOT audit the other's concern. The
+conceptual basis for bounded-context (and for the Inverse Conway Maneuver when
+partitioning work across `/parallel-subagents`) lives in the dedicated DDD
+standard (`domain-driven-design.md`); RDP only enforces it.
 
 ---
 
