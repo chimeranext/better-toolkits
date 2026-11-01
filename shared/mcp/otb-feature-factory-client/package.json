@@ -1,0 +1,27 @@
+{
+  "name": "@chimeranext/otb-feature-factory-client",
+  "version": "0.1.0",
+  "description": "Stateless MCP client (ViteMCP / 2026-07-28) that connects to the OpenTwinBuilder MCP server (rmcp/Rust) and dogfoods the Feature Factory inbound surface (feature.generate/test/register).",
+  "type": "module",
+  "bin": {
+    "otb-feature-factory-client": "./src/server.ts"
+  },
+  "scripts": {
+    "start": "tsx src/server.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test test/"
+  },
+  "dependencies": {
+    "@vitemcp/server": "^1.9.7",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "BSL-1.1"
+}
