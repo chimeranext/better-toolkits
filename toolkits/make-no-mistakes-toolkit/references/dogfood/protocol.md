@@ -70,6 +70,16 @@ understood and fixed at the source.
 
 ---
 
+## When a CI check fails
+
+A failing CI check is an anomaly too — start with `/explain <failing-check>` (e.g.
+`/explain megalinter` or `/explain check`). It explains the failure in two layers
+(prose, then technical detail) and closes with ranked actionables. Follow those;
+if the fix is at the source (never a suppression), route the root cause through
+`/ishikawa` as above.
+
+---
+
 ## Related standards (SSOT pointers)
 
 This protocol builds on the shared engineering standards. Read them before you

@@ -73,6 +73,14 @@ tracker (Linear or substitute) is updated at each handoff; every mutating gate i
 Run `/dogfood` with a real command, real config, and `--check` for the Then-assertion.
 Confirm Jidoka and No-Workarounds pass, and that `diagram.svg` (Pele, blueprint) is produced.
 
+## When a CI check fails
+
+Don't guess at the cause. Run `/explain <failing-check>` (e.g. `/explain megalinter` or
+`/explain check`) — it explains in two layers (prose, then technical detail) and closes with
+ranked actionables. Follow those, then re-run `/dogfood` and the failing check until green.
+If the failure is a suppressed signal you cannot explain, treat it as a Jidoka stop: record
+the anomaly and investigate before proceeding — do not paper over it.
+
 ## Notes
 
 - The profile lives at `.opencode/agents/better.md` (project-scoped).
