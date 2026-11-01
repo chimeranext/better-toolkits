@@ -16,8 +16,7 @@ CHECK = ROOT / "scripts" / "ci" / "check-skills-catalog.py"
 
 
 def main() -> int:
-    # nosec B603  # subprocess runs a fixed repo path (not user input); no shell
-    r = subprocess.run([sys.executable, str(CHECK)], capture_output=True, text=True)
+    r = subprocess.run([sys.executable, str(CHECK)], capture_output=True, text=True)  # nosec B603 - fixed repo path, no shell, no user input
     sys.stdout.write(r.stdout)
     sys.stderr.write(r.stderr)
     if r.returncode != 0:
