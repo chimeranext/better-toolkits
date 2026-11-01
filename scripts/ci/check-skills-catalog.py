@@ -19,7 +19,12 @@ SHARED_PKG = ROOT / "shared" / "package.json"
 CANONICAL_SOURCE = "chimeranext/better-toolkits"
 
 
-def check_unit(label: str, skills_dir: pathlib.Path, pkg_path: pathlib.Path, problems: list[str]) -> None:
+def check_unit(
+    label: str,
+    skills_dir: pathlib.Path,
+    pkg_path: pathlib.Path,
+    problems: list[str],
+) -> None:
     if not skills_dir.is_dir():
         return
     names = sorted(
@@ -28,7 +33,9 @@ def check_unit(label: str, skills_dir: pathlib.Path, pkg_path: pathlib.Path, pro
     if not pkg_path.exists():
         problems.append(f"{label}: NO package.json ({len(names)} skills sin listar)")
         return
-    catalog: list[dict] = json.loads(pkg_path.read_text(encoding="utf-8")).get("skills", [])
+    catalog: list[dict] = json.loads(
+        pkg_path.read_text(encoding="utf-8")
+    ).get("skills", [])
     ok_source = bool(catalog) and catalog[0].get("source") == CANONICAL_SOURCE
     listed = catalog[0].get("skills", []) if catalog else []
     missing = sorted(set(names) - set(listed))
