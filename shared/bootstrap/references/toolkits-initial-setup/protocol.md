@@ -190,12 +190,12 @@ agent profile (`agents/better.md`) references them. The hooks enforce the key on
 - **CIS** (`ci-security-standards.md`) — CI security & standards. CodeQL +
   Trivy + MegaLinter gates, vendored from assurance-toolkit templates and the
   `security-scan` composite action (Phase 7).
+- **DDD** (`domain-driven-design.md`) — Domain-Driven Design. The structural
+  basis for bounded contexts; the parent standard for the RDP "bounded-context
+  boundary leakage" family and the Inverse Conway Maneuver.
 - **RDP** (`repository-drift-prevention.md`) — Repository Drift Prevention. The
   six `audit-engine` detector families (SCH/CDC/DDD/ARC/STR/ENF) and their
   canonical-source rationale.
-- **DDD** (`domain-driven-design.md`) — Domain-Driven Design. The structural
-  basis for bounded contexts; parent standard for the RDP "bounded-context
-  boundary leakage" family and the Inverse Conway Maneuver.
 - **PRDS / BrS / WTD / QT4L / OST / NSQ / TFM** — the other indexed standards.
 
 The setup also installs the scripts/hooks that enforce StS (stderr adapter), the
