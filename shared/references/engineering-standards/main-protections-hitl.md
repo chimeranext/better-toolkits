@@ -40,6 +40,14 @@ The control is layered: policy (ruleset), identity (2FA), and tool boundary
    owning team does not exist, create it under the owning organization with the
    maintainers as members, then assign it as the `*` owner. This closes the gap
    where a ruleset requires a review but no reviewer is ever assigned.
+8. **CODEOWNERS has a canonical SSOT and is replicated, not authored per-repo.**
+   The policy source of truth is a single `CODEOWNERS` file in an organization
+   governance repository (e.g. `chimeranext/meta`). Every repository with a
+   review-gated branch SHALL carry a `CODEOWNERS` **derived** from that SSOT.
+   No repository's `CODEOWNERS` is hand-authored independently; it is a mirror.
+   An organization-level automation (e.g. a GitHub App with `contents: write`
+   and org admin scope) replicates the SSOT to every target repository, so the
+   policy is defined once and enforced everywhere.
 
 ## Failure modes this prevents
 
@@ -61,6 +69,28 @@ The control is layered: policy (ruleset), identity (2FA), and tool boundary
 - **Tool-boundary hook:** intercept the bypass/admin command; require interactive
   root elevation to mint a fresh approval marker; check TTL; fail-closed.
 - **Org policy:** enforce 2FA for every member.
+- **CODEOWNERS replication (org admin App):** the canonical source lives in the
+  governance repo (`meta`). The App (e.g. `chimeranext-org-admin-tool`, scopes
+  `contents: write`, `administration: write`, `organization_administration:
+  write`) replicates it:
+  1. **Source step** — read `.github/CODEOWNERS` from the governance repo
+     (the SSOT). The file uses a template token for the org, e.g.
+     `* @{{ORG}}/founders`, so its content resolves per target organization.
+  2. **Validation step** — before writing anywhere, resolve the token and verify
+     the referenced team exists in the target org (`gh api
+     /orgs/{org}/teams/{team}`); abort on a missing team instead of writing a
+     broken file.
+  3. **Push step** — for each target repo, write `. github/CODEOWNERS`:
+     - if the default branch is unprotected → direct commit via the App
+       (`contents: write`);
+     - if the default branch is review-gated → open a **PR** (same contents
+       scope) so the change passes the repo's own review gate; never bypass the
+       ruleset with admin write.
+  4. **Drift step** — compare the target's current file to the derived content;
+     write only when they differ (no churn, no empty commits).
+- **Additive, never overriding:** the replicated `CODEOWNERS` is the baseline
+  for all paths. A repository MAY append per-repo owner lines below the `*`
+  baseline, but the `*` team owner comes from the SSOT and is never removed.
 
 ## Example (implementation-agnostic pseudocode)
 
