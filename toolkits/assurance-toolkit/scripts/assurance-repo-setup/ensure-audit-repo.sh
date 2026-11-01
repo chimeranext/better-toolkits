@@ -7,7 +7,8 @@ AUDIT_REPO="${1:-chimeranext/internal-audits}"
 
 # Capture (do not discard, do not silence): stdout to variable, stderr visible.
 if AUDIT_OUT="$(gh api "repos/${AUDIT_REPO}")"; then
-  echo "assurance-setup: audit repo OK: ${AUDIT_REPO}"
+  AUDIT_RESOLVED="$(printf '%s' "$AUDIT_OUT" | jq -r '.full_name // empty')"
+  echo "assurance-setup: audit repo OK: ${AUDIT_RESOLVED:-$AUDIT_REPO}"
   exit 0
 fi
 
