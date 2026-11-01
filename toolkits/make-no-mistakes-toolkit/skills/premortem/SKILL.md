@@ -147,10 +147,15 @@ Your output should include:
    played out. Use details from the plan. Name specific moments where things
    went wrong and why.
 
-2. THE UNDERLYING ASSUMPTION: The one thing the user was taking for granted
+2. 6M CLASSIFICATION (per /ishikawa): Assign this failure to one of the six
+   Ishikawa categories (Man / Machine / Material / Method / Measurement /
+   Environment) and label its deviation type (Muda=waste, Mura=inconsistency,
+   Muri=unreasonableness). State why and what evidence supports it.
+
+3. THE UNDERLYING ASSUMPTION: The one thing the user was taking for granted
    that made this failure possible. State it in one sentence.
 
-3. EARLY WARNING SIGNS: 1-2 concrete, observable signals the user could
+4. EARLY WARNING SIGNS: 1-2 concrete, observable signals the user could
    watch for that would indicate this failure mode is starting to play out.
    These should be things you can actually see or measure, not vague
    feelings.

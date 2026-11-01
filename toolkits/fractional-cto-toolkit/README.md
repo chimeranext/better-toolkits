@@ -1,5 +1,7 @@
 # fractional-cto-toolkit
 
+[![Version](https://img.shields.io/badge/version-1.4.7-blue)](.claude-plugin/plugin.json) [![License: BSL-1.1](https://img.shields.io/badge/license-BSL--1.1-important)](LICENSE)
+
 Claude Code plugin with SOPs, contracts, and guided workflows for freelance and fractional CTOs.
 
 ## Engagement Lifecycle
