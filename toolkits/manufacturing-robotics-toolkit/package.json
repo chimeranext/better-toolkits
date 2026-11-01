@@ -1,0 +1,27 @@
+{
+  "name": "manufacturing-robotics",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "",
+  "scripts": {},
+  "skills": [
+    {
+      "source": "chimeranext/better-toolkits",
+      "skills": [
+        "additive-manufacturing",
+        "cad-cam-handoff",
+        "dfm",
+        "five-s",
+        "kraljic-matrix",
+        "modeling-3d",
+        "prototype-to-production",
+        "six-sigma",
+        "tolerances-fits",
+        "tpm-smed",
+        "tps",
+        "waste"
+      ]
+    }
+  ]
+}

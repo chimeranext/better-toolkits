@@ -11,7 +11,7 @@
     {
       "name": "better-toolkits-bootstrap",
       "description": "Install first \u2014 bootstrap marketplace and harness wiring via /toolkits-initial-setup (HITL). OpenCode: npx @chimeranext/better-toolkits setup.",
-      "version": "0.2.6",
+      "version": "0.2.7",
       "source": "./shared/bootstrap",
       "category": "workflow",
       "keywords": [
@@ -28,7 +28,7 @@
     {
       "name": "make-no-mistakes",
       "description": "The disciplined dev lifecycle \u2014 implement issues, review PRs, sync releases, test E2E, manage sessions, stash secrets, and enforce manifest-driven tool-call hooks. Includes /evaluate-agent-skills (NVIDIA SkillSpector/SkillEvaluator wrappers). OpenCode stderr: better-toolkits-bootstrap /toolkits-initial-setup.",
-      "version": "1.39.20",
+      "version": "1.39.21",
       "source": "./toolkits/make-no-mistakes-toolkit",
       "category": "workflow",
       "keywords": [

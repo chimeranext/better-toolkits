@@ -35,3 +35,6 @@ Thumbs.db
 # Python
 __pycache__/
 *.py[cod]
+
+# Graphify (generated analysis artifacts — never committed)
+graphify-out/
