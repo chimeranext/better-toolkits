@@ -4,6 +4,8 @@ name: Security Scanning
 # assurance-toolkit. Reuses the `security-scan` composite action from
 # chimeranext/github-actions-templates. Tune the inputs per repo layout.
 # CIS standard: ci-security-standards.md.
+# NOTA: CodeQL NO tiene lenguaje "typescript" — usar "javascript" para TS/JS.
+# Pasar "typescript" rompe el job con "Did not recognize the following languages".
 
 on:
   push:
