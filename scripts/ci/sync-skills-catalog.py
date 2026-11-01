@@ -31,7 +31,11 @@ def canonical_pkg(name: str, names: list[str]) -> dict:
     }
 
 
-def sync_unit(label: str, skills_dir: pathlib.Path, pkg_path: pathlib.Path) -> tuple[bool, str]:
+def sync_unit(
+    label: str,
+    skills_dir: pathlib.Path,
+    pkg_path: pathlib.Path,
+) -> tuple[bool, str]:
     if not skills_dir.is_dir():
         return False, f"  skipped  {label} (sin carpeta skills/)"
     names = sorted(
@@ -39,7 +43,10 @@ def sync_unit(label: str, skills_dir: pathlib.Path, pkg_path: pathlib.Path) -> t
     )
     if not pkg_path.exists():
         pkg_path.write_text(
-            json.dumps(canonical_pkg(label, names), ensure_ascii=False, indent=2) + "\n",
+            json.dumps(
+                canonical_pkg(label, names), ensure_ascii=False, indent=2
+            )
+            + "\n",
             encoding="utf-8",
         )
         return True, f"  CHANGED  {label} (package.json creado, {len(names)} skills)"

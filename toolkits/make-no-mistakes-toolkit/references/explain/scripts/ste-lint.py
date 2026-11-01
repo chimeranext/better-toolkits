@@ -30,10 +30,20 @@ import tempfile
 # tagging to avoid constant false positives; add spaCy-backed rule if ever needed.
 # No ellipsis rule by owner's choice: technical writing sometimes earns one.
 # Irregular past participles used by the present-perfect heuristic.
-IRREGULAR_PARTICIPLES = "given|taken|made|done|found|seen|known|shown|written|built|sent|set|run|read|kept|held|left|put|cut|hit|let|shut|split|spread|begun|become|come|gone|got|gotten|lost|met|paid|said|sold|told|thought|brought|bought|caught|taught|won|worn|torn|born|drawn|grown|thrown|flown|driven|risen|chosen|broken|spoken|frozen|hidden|ridden|forgotten|fallen|eaten|beaten|understood|stood|struck|stuck|swung|hung|led|fed|bled|fled|sped|bound|wound|dug|spun|slid|bit|lit|quit"
+IRREGULAR_PARTICIPLES = (
+    "given|taken|made|done|found|seen|known|shown|written|built|sent|set|run|read|"
+    "kept|held|left|put|cut|hit|let|shut|split|spread|begun|become|come|gone|got|"
+    "gotten|lost|met|paid|said|sold|told|thought|brought|bought|caught|taught|won|"
+    "worn|torn|born|drawn|grown|thrown|flown|driven|risen|chosen|broken|spoken|"
+    "frozen|hidden|ridden|forgotten|fallen|eaten|beaten|understood|stood|struck|"
+    "stuck|swung|hung|led|fed|bled|fled|sped|bound|wound|dug|spun|slid|bit|lit|quit"
+)
 
 # Preserve the original passive heuristic; perfects also include intransitive verbs.
-PASSIVE_PARTICIPLES = "given|taken|made|done|found|seen|known|shown|written|built|sent|set|run|read|kept|held|left|put"
+PASSIVE_PARTICIPLES = (
+    "given|taken|made|done|found|seen|known|shown|written|built|sent|set|run|"
+    "read|kept|held|left|put"
+)
 # Up to two words may stand between the modal and "have": "may not",
 # "might already", "could not possibly".
 MODAL_PERFECT_PREFIX = re.compile(
@@ -46,21 +56,50 @@ RULES = [
      re.compile(r";"),
      "STE bans the semicolon (Rule 8.1). Split into separate sentences."),
     ("phrasal-verb", "advisory-free",
-     re.compile(r"\b(spin(?:ning|s)? up|spun up|reach(?:ing|es|ed)? out|div(?:e|es|ing|ed) into|dove into|kick(?:ing|s|ed)? off|circl(?:e|es|ing|ed) back|touch(?:ing|es|ed)? base)\b", re.I),
+     re.compile(
+         r"\b(spin(?:ning|s)? up|spun up|reach(?:ing|es|ed)? out|"
+         r"div(?:e|es|ing|ed) into|dove into|kick(?:ing|s|ed)? off|"
+         r"circl(?:e|es|ing|ed) back|touch(?:ing|es|ed)? base)\b",
+         re.I,
+     ),
      "Soft phrasal verb. Use the single plain verb (start, contact, read, begin)."),
     ("marketing-adjective", "advisory-free",
-     re.compile(r"\b(seamless(?:ly)?|robust(?:ly)?|cutting-edge|effortless(?:ly)?|blazing[- ]fast|world-class|state-of-the-art|game-chang(?:ing|er))\b", re.I),
-     "Marketing adjective. Delete, or replace with the measurement that earns the claim."),
+     re.compile(
+         r"\b(seamless(?:ly)?|robust(?:ly)?|cutting-edge|effortless(?:ly)?|"
+         r"blazing[- ]fast|world-class|state-of-the-art|game-chang(?:ing|er))\b",
+         re.I,
+     ),
+     "Marketing adjective. Delete, or replace with the measurement that earns "
+     "the claim."),
     ("nominalization", "advisory-free",
-     re.compile(r"\b(perform|performs|performed|conduct|conducts|conducted|carry out|carries out|carried out)\s+(?:a|an|the)\s+\w+(?:tion|sion|ment|ance|ence|ysis)\b", re.I),
+     re.compile(
+         r"\b(perform|performs|performed|conduct|conducts|conducted|carry out|"
+         r"carries out|carried out)\s+(?:a|an|the)\s+\w+(?:tion|sion|ment|"
+         r"ance|ence|ysis)\b",
+         re.I,
+     ),
      "Action frozen into a noun. Use the verb (analyze, not perform an analysis of)."),
     ("passive-voice", "advisory",
-     re.compile(r"\b(is|are|was|were|been|being)\s+(\w+ed|" + PASSIVE_PARTICIPLES + r")\b(?!\s+(?:to|for|by)\s+\w+ing)", re.I),
-     "Possible passive voice. Name the actor and use an active verb, unless the actor is unknown or irrelevant."),
+     re.compile(
+         r"\b(is|are|was|were|been|being)\s+(\w+ed|"
+         + PASSIVE_PARTICIPLES
+         + r")\b(?!\s+(?:to|for|by)\s+\w+ing)",
+         re.I,
+     ),
+     "Possible passive voice. Name the actor and use an active verb, unless the "
+     "actor is unknown or irrelevant."),
     ("present-perfect", "advisory",
-     # modal + perfect infinitive ("may have failed") is a protected hedge, not present perfect
-     re.compile(r"(?<!\bmay )(?<!\bmight )(?<!\bcould )(?<!\bshould )(?<!\bwould )(?<!\bmust )\b(has|have|had)\s+(?:been\s+)?(?:\w+(?:ed|en)|" + IRREGULAR_PARTICIPLES + r")\b", re.I),
-     "Compound tense. Use simple past/present unless current relevance is the point (then keep and flag)."),
+     # modal + perfect infinitive ("may have failed") is a protected hedge, not
+     # present perfect
+     re.compile(
+         r"(?<!\bmay )(?<!\bmight )(?<!\bcould )(?<!\bshould )(?<!\bwould )"
+         r"(?<!\bmust )\b(has|have|had)\s+(?:been\s+)?(?:\w+(?:ed|en)|"
+         + IRREGULAR_PARTICIPLES
+         + r")\b",
+         re.I,
+     ),
+     "Compound tense. Use simple past/present unless current relevance is the "
+     "point (then keep and flag)."),
 ]
 
 # One word, one meaning: groups of verbs commonly rotated for the same action.
@@ -79,7 +118,8 @@ SYNONYM_GROUPS = [
     ("change", "modify", "alter"),
 ]
 
-MAX_WORDS = 25  # descriptions cap; instructions cap is 20 but undetectable without context
+MAX_WORDS = 25  # descriptions cap; instructions cap is 20 but undetectable
+# without context
 
 CODE_FENCE = re.compile(r"^(`{3,}|~{3,})")
 INLINE_CODE = re.compile(r"`[^`]*`")
@@ -197,11 +237,17 @@ def _long_sentence_findings(pieces, filename):
         index = bisect.bisect_right(offsets, start) - 1
         offset = offsets[index]
         lineno, source_column, _ = pieces[index]
-        findings.append({"file": filename, "line": lineno,
-                         "col": source_column + start - offset + 1,
-                         "rule": "long-sentence", "level": "advisory-free",
-                         "match": f"{n} words",
-                         "message": f"Sentence has {n} words (cap {MAX_WORDS}). Split it."})
+        findings.append({
+            "file": filename,
+            "line": lineno,
+            "col": source_column + start - offset + 1,
+            "rule": "long-sentence",
+            "level": "advisory-free",
+            "match": f"{n} words",
+            "message": (
+                f"Sentence has {n} words (cap {MAX_WORDS}). Split it."
+            ),
+        })
     return findings
 
 
@@ -210,7 +256,8 @@ QUOTE_LEVEL = re.compile(r" {0,3}> ?")
 
 
 def _strip_quotes(line, depth=None):
-    """Return (levels, rest): the blockquote levels that start LINE and the text after them.
+    """Return (levels, rest): the blockquote levels that start LINE and the text
+    after them.
 
     With DEPTH, remove at most DEPTH levels: a deeper ">" is content.
     """
@@ -230,7 +277,10 @@ def _indent_width(text):
 
 def _fence_ends_with_quote(fence, line):
     """True when LINE has fewer blockquote levels than the open FENCE."""
-    return fence is not None and _strip_quotes(line.expandtabs(4), fence[1])[0] < fence[1]
+    return (
+        fence is not None
+        and _strip_quotes(line.expandtabs(4), fence[1])[0] < fence[1]
+    )
 
 
 def _fence_step(fence, line):
@@ -273,10 +323,14 @@ def _fence_step(fence, line):
 # CommonMark 4.6: how each kind of HTML block starts, and the text that ends it.
 # None: the block ends at a blank line (types 6 and 7).
 _BLOCK_TAGS = (
-    "address|article|aside|base|basefont|blockquote|body|caption|center|col|colgroup|dd|"
-    "details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|frame|frameset|"
-    "h[1-6]|head|header|hr|html|iframe|legend|li|link|main|menu|menuitem|nav|noframes|ol|"
-    "optgroup|option|p|param|search|section|summary|table|tbody|td|tfoot|th|thead|title|"
+    "address|article|aside|base|basefont|blockquote|body|caption|center|col|"
+    "colgroup|dd|"
+    "details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|"
+    "frame|frameset|"
+    "h[1-6]|head|header|hr|html|iframe|legend|li|link|main|menu|menuitem|"
+    "nav|noframes|ol|"
+    "optgroup|option|p|param|search|section|summary|table|tbody|td|tfoot|"
+    "th|thead|title|"
     "tr|track|ul"
 )
 HTML_BLOCK_KINDS = [
@@ -293,7 +347,8 @@ HTML_BLOCK_KINDS = [
 _ATTRIBUTE = (r"\s+[A-Za-z_:][A-Za-z0-9_.:-]*"
               r"(?:\s*=\s*(?:[^\s\"'=<>`]+|'[^']*'|\"[^\"]*\"))?")
 HTML_TYPE7 = re.compile(
-    rf"^ {{0,3}}(?:<[A-Za-z][A-Za-z0-9-]*(?:{_ATTRIBUTE})*\s*/?>|</[A-Za-z][A-Za-z0-9-]*\s*>)\s*$")
+    rf"^ {{0,3}}(?:<[A-Za-z][A-Za-z0-9-]*(?:{_ATTRIBUTE})*\s*/?>|"
+    rf"</[A-Za-z][A-Za-z0-9-]*\s*>)\s*$")
 # A heading or a thematic break ends a paragraph and is no paragraph line.
 NO_PARAGRAPH = re.compile(r"^ {0,3}(?:#{1,6}(?:\s|$)|(?:[-*_][ \t]*){3,}$)")
 
@@ -324,7 +379,10 @@ def _is_list_continuation(line, content_indent):
         return True
     if LIST_ITEM_START.match(line):
         return False
-    return len(line[:len(line) - len(line.lstrip(" \t"))].expandtabs(4)) >= content_indent
+    return (
+        len(line[:len(line) - len(line.lstrip(" \t"))].expandtabs(4))
+        >= content_indent
+    )
 
 
 def _split_table_row(line):
@@ -421,7 +479,10 @@ def _dangling_conjunction_findings(text, filename):
                 # The quote of the fence ended: judge this line as any other line.
                 item_fence = None
             # A line outside the item ends it, also when it opens a fence.
-            if item_fence is None and not _is_list_continuation(candidate, content_indent):
+            if (
+                item_fence is None
+                and not _is_list_continuation(candidate, content_indent)
+            ):
                 break
             # Fence delimiters are state markers, not meaningful item lines.
             is_fence, item_fence = _fence_step(item_fence, candidate)
@@ -464,7 +525,10 @@ def _dangling_conjunction_findings(text, filename):
                 "rule": "dangling-conjunction",
                 "level": "advisory-free",
                 "match": end_line,
-                "message": "List item ends with a coordinating conjunction. Complete the item or join it with the next item.",
+                "message": (
+                    "List item ends with a coordinating conjunction. Complete the "
+                    "item or join it with the next item."
+                ),
             })
         index = next_index
     return findings
@@ -494,7 +558,8 @@ def lint(text, filename="<stdin>"):
     html_containers = []
     lines = text.splitlines()
     table_cells = _markdown_table_cells(lines)
-    # first occurrence of each synonym-group member: (group_idx, base) -> (line, col, match)
+    # first occurrence of each synonym-group member: (group_idx, base) ->
+    # (line, col, match)
     seen_synonyms = {}
     # consecutive prose lines form one block, so wrapped sentences count once
     block = []
@@ -515,11 +580,17 @@ def lint(text, filename="<stdin>"):
         else:
             is_fence, fence = _fence_step(fence, raw_line)
         # A paragraph is open after a line of text that no other block takes.
-        in_paragraph = bool(raw_line.strip() and not in_html and not is_fence and not fence
-                            and not NO_PARAGRAPH.match(raw_line))
+        in_paragraph = bool(
+            raw_line.strip()
+            and not in_html
+            and not is_fence
+            and not fence
+            and not NO_PARAGRAPH.match(raw_line)
+        )
         if is_fence:
             flush()
-            # A fence inside a quote does not start the quote: an alert marker after it is text.
+            # A fence inside a quote does not start the quote: an alert marker
+            # after it is text.
             after_boundary = _strip_quotes(raw_line)[0] == 0
             continue
         if fence:
@@ -576,7 +647,8 @@ def lint(text, filename="<stdin>"):
                         seen_synonyms[(gi, base)] = (
                             lineno, source_column + m.start() + 1, m.group(0)
                         )
-            # the blockquote prefix and the list marker are markup, not words in the sentence
+            # the blockquote prefix and the list marker are markup, not words
+            # in the sentence
             skip = quote.end() if quote and not is_table else 0
             marker = None if is_table else ANY_LIST_ITEM.match(segment[skip:])
             if marker:
@@ -590,15 +662,27 @@ def lint(text, filename="<stdin>"):
     flush()
     # synonym rotation: flag each member after the first, at its first occurrence
     for gi, group in enumerate(SYNONYM_GROUPS):
-        present = [(seen_synonyms[(gi, b)], b) for b in group if (gi, b) in seen_synonyms]
+        present = [
+            (seen_synonyms[(gi, b)], b)
+            for b in group
+            if (gi, b) in seen_synonyms
+        ]
         if len(present) > 1:
             present.sort()  # document order
             first_base = present[0][1]
             for (lineno, col, match), base in present[1:]:
-                findings.append({"file": filename, "line": lineno, "col": col,
-                                 "rule": "synonym-rotation", "level": "advisory-free",
-                                 "match": match,
-                                 "message": f"'{base}' and '{first_base}' name the same action. Pick one and use it every time."})
+                findings.append({
+                    "file": filename,
+                    "line": lineno,
+                    "col": col,
+                    "rule": "synonym-rotation",
+                    "level": "advisory-free",
+                    "match": match,
+                    "message": (
+                        f"'{base}' and '{first_base}' name the same action. "
+                        f"Pick one and use it every time."
+                    ),
+                })
     findings.extend(_dangling_conjunction_findings(text, filename))
     findings.sort(key=lambda f: (f["line"], f["col"]))
     return findings, words_total
@@ -612,10 +696,16 @@ def report(findings, words_total, as_json, hard_count, baseline):
                           "words": words_total, "per_100_words": rate}, indent=2))
         return
     for f in findings:
-        print(f"{f['file']}:{f['line']}:{f['col']} {f['rule']}: {f['message']} [{f['match']}]")
+        print(
+            f"{f['file']}:{f['line']}:{f['col']} {f['rule']}: "
+            f"{f['message']} [{f['match']}]"
+        )
     print(f"\n{len(findings)} violations ({hard_count} hard, baseline {baseline}), "
           f"{words_total} words, {rate} per 100 words")
-    print("Hedges/modality (may, might, could) are never flagged: confidence is content.")
+    print(
+        "Hedges/modality (may, might, could) are never flagged: confidence is "
+        "content."
+    )
 
 
 def selftest():
@@ -643,8 +733,10 @@ def selftest():
             assert not any(f["rule"] == "present-perfect" for f in findings), findings
     findings, _ = lint("The task couldn't have run. The task MAY NOT HAVE RUN.")
     assert not any(f["rule"] == "present-perfect" for f in findings), findings
-    findings, _ = lint("It might already have finished. It could not possibly have run. "
-                       "It may never have started. It should probably have stopped.")
+    findings, _ = lint(
+        "It might already have finished. It could not possibly have run. "
+        "It may never have started. It should probably have stopped."
+    )
     assert not any(f["rule"] == "present-perfect" for f in findings), findings
     # an adverb without a modal is not a hedge
     findings, _ = lint("The task already has run. They probably have finished.")
@@ -681,7 +773,10 @@ def selftest():
                         ("```foo`bar\nProse; here.", [2]),
                         ("```\nx; y\n```` \t\n\nProse; here.", [5])):
         findings, _ = lint(text)
-        assert [f["line"] for f in findings if f["rule"] == "semicolon"] == lines, (text, findings)
+        assert [f["line"] for f in findings if f["rule"] == "semicolon"] == lines, (
+            text,
+            findings,
+        )
     # the end of a quoted fence in a list item does not join the next line to the item
     findings, _ = lint("- Item\n  > ```\n  > code\nProse and")
     assert findings == [], findings
@@ -693,7 +788,9 @@ def selftest():
                        (">\t> ```\n>\t> x; y\n>\t> ```\n\nProse; here.", 5),
                        ("- Item\n  ```\n\t```\n\nProse; here.", 5)):
         findings, _ = lint(text)
-        assert [(f["rule"], f["line"]) for f in findings] == [("semicolon", line)], (text, findings)
+        assert [(f["rule"], f["line"]) for f in findings] == [
+            ("semicolon", line)
+        ], (text, findings)
     # a tab-indented fence stays in its list item
     findings, _ = lint("- Run the build and\n\t```\n\tmake\n\t```\n  check the log.")
     assert findings == [], findings
@@ -703,30 +800,42 @@ def selftest():
                         ("<custom>\n> ```\n> Prose; here.\n> ```\n</custom>", [3]),
                         ("<!--\n> ```\n> Prose; here.\n> ```\n-->", [3]),
                         ("<div>\n\n> ```\n> x; y\n> ```\n\nProse; here.", [7]),
-                        ("<details>\n\n> ```\n> a; b\n> ```\n\n</details>\n\nProse; here.", [9]),
+                        ("<details>\n\n> ```\n> a; b\n> ```\n\n</details>\n\n"
+                         "Prose; here.", [9]),
                         ("<pre>\n> ```\n> Prose; here.\n> ```\n</pre>", [3]),
                         ("<?php\n> ```\n> Prose; here.\n> ```\n?>", [3]),
                         ("<![CDATA[\n> ```\n> Prose; here.\n> ```\n]]>", [3]),
-                        # inline HTML is no HTML block: the quoted fence after it is a fence
+                        # inline HTML is no HTML block: the quoted fence after
+                        # it is a fence
                         ("<span>Label</span>\n> ```\n> a; b\n> ```", []),
                         ("<kbd>Enter</kbd> starts the job.\n> ```\n> a; b\n> ```", []),
                         ("Text.\n<custom>\n> ```\n> a; b\n> ```", []),
                         # a type 7 tag after a heading or a fence starts a block
-                        ("# Title\n<custom>\n> ```\n> Prose; here.\n> ```\n</custom>", [4]),
-                        ("```\nx\n```\n<img src=\"a.png\">\n> ```\n> Prose; here.\n> ```", [6]),
-                        # attribute values may hold "<" and ">", an invalid attribute is no tag
+                        ("# Title\n<custom>\n> ```\n> Prose; here.\n> ```\n"
+                         "</custom>", [4]),
+                        ("```\nx\n```\n<img src=\"a.png\">\n> ```\n> Prose; "
+                         "here.\n> ```", [6]),
+                        # attribute values may hold "<" and ">", an invalid
+                        # attribute is no tag
                         ('<span title="a > b">\n> ```\n> Prose; here.\n> ```', [3]),
                         ("<custom a=>\n> ```\n> a; b\n> ```", []),
                         ("<DIV class=x>text\n> ```\n> Prose; here.\n> ```", [3])):
         findings, _ = lint(text)
-        assert [f["line"] for f in findings if f["rule"] == "semicolon"] == lines, (text, findings)
+        assert [f["line"] for f in findings if f["rule"] == "semicolon"] == lines, (
+            text,
+            findings,
+        )
     # a fence at column 0 ends a list item
     findings, _ = lint("- Do this and\n```\nx\n```\n  done")
-    assert [(f["rule"], f["line"]) for f in findings] == [("dangling-conjunction", 1)], findings
+    assert [(f["rule"], f["line"]) for f in findings] == [
+        ("dangling-conjunction", 1)
+    ], findings
     # a quoted fence also ends on a line with fewer quote levels that is not blank
     for text, line in (("> ```\n> x\nProse; here.", 3), ("> > ```\n> x; y", 2)):
         findings, _ = lint(text)
-        assert [(f["rule"], f["line"]) for f in findings] == [("semicolon", line)], (text, findings)
+        assert [(f["rule"], f["line"]) for f in findings] == [
+            ("semicolon", line)
+        ], (text, findings)
     # a closing fence up to three columns deeper than the opening fence closes it
     findings, _ = lint("```\nx; y\n   ```\n\nProse; here.")
     assert [(f["rule"], f["line"]) for f in findings] == [("semicolon", 5)], findings
@@ -828,7 +937,10 @@ def selftest():
             "| Label | Detail |\n| --- | --- |\n| x |\n"
             + f"| {short_row} | {short_row} | extra |\n" * 2):
         findings, _ = lint(table)
-        assert not any(f["rule"] == "long-sentence" for f in findings), (table, findings)
+        assert not any(f["rule"] == "long-sentence" for f in findings), (
+            table,
+            findings,
+        )
     long_cell = " ".join(f"term{number}" for number in range(1, 27)) + "."
     findings, _ = lint(
         "| Label | Detail |\n"
@@ -850,7 +962,10 @@ def selftest():
                        "See [the docs](https://x.io/a;b) or <https://x.io/a;b>.")
     assert not any(f["rule"] == "semicolon" for f in findings), findings
     findings, _ = lint("Press [stop](https://x.io); then wait. Use & ; here.")
-    assert [f["col"] for f in findings if f["rule"] == "semicolon"] == [27, 46], findings
+    assert [f["col"] for f in findings if f["rule"] == "semicolon"] == [
+        27,
+        46,
+    ], findings
     # per-file labels
     findings, _ = lint("a; b", filename="x.md")
     assert findings[0]["file"] == "x.md"
@@ -860,7 +975,9 @@ def selftest():
     assert len(phrasal) == 1 and phrasal[0]["col"] == 21, phrasal
     # a sentence ends after closing quotes and brackets
     twenty = " ".join(["word"] * 20)
-    findings, _ = lint(f'He asked "{twenty}?" Then {twenty} ended. (It {twenty}.) Next.')
+    findings, _ = lint(
+        f'He asked "{twenty}?" Then {twenty} ended. (It {twenty}.) Next.'
+    )
     assert not any(f["rule"] == "long-sentence" for f in findings), findings
     # abbreviations do not end a sentence
     findings, _ = lint(f"Use a tool, e.g. the {twenty} linter here now.")
@@ -871,13 +988,17 @@ def selftest():
     findings, _ = lint(f"Intro text here.\nThe {twenty}\nwrapped tail words go here.")
     long_sentences = [f for f in findings if f["rule"] == "long-sentence"]
     assert len(long_sentences) == 1, long_sentences
-    assert (long_sentences[0]["line"], long_sentences[0]["col"]) == (2, 1), long_sentences
+    assert (long_sentences[0]["line"], long_sentences[0]["col"]) == (2, 1), (
+        long_sentences,
+    )
     findings, _ = lint(f"- Item {twenty}\n  continued in the same item.")
     assert any(f["rule"] == "long-sentence" for f in findings), findings
     # leading front matter is skipped; line numbers after it stay true
     findings, words_total = lint(f"---\nname: x\ndescription: {twenty} {twenty}.\n"
                                  "tags:\n  - a and\n---\nThe job is robust.")
-    assert [(f["line"], f["rule"]) for f in findings] == [(7, "marketing-adjective")], findings
+    assert [(f["line"], f["rule"]) for f in findings] == [
+        (7, "marketing-adjective")
+    ], findings
     assert words_total == 4, words_total
     # a later --- pair is a thematic break, not front matter
     findings, _ = lint(f"Intro.\n\n---\n{twenty} {twenty}.\n---")
@@ -890,8 +1011,14 @@ def selftest():
     body = " ".join(["word"] * 25) + "."
     for alert in ("> [!NOTE]", "> [!tip]", ">[!Warning]", ">  [!CAUTION]  "):
         findings, _ = lint(f"{alert}\n> {body}")
-        assert not any(f["rule"] == "long-sentence" for f in findings), (alert, findings)
-    for text in (f"Text.\n\n> [!NOTE]\n> {body}", f"> Text.\n~~~\ncode\n~~~\n> [!NOTE]\n> {body}"):
+        assert not any(f["rule"] == "long-sentence" for f in findings), (
+            alert,
+            findings,
+        )
+    for text in (
+        f"Text.\n\n> [!NOTE]\n> {body}",
+        f"> Text.\n~~~\ncode\n~~~\n> [!NOTE]\n> {body}",
+    ):
         findings, _ = lint(text)
         assert not any(f["rule"] == "long-sentence" for f in findings), (text, findings)
     # Inside HTML containers the marker is text: marker plus body is 26 words.
@@ -902,7 +1029,10 @@ def selftest():
         long_sentences = [f for f in findings if f["rule"] == "long-sentence"]
         assert [f["match"] for f in long_sentences] == ["26 words"], (opening, findings)
         findings, _ = lint(f"{opening}\n{closing}\n\n> [!NOTE]\n> {body}")
-        assert not any(f["rule"] == "long-sentence" for f in findings), (opening, findings)
+        assert not any(f["rule"] == "long-sentence" for f in findings), (
+            opening,
+            findings,
+        )
     findings, _ = lint(f"> [!NOTE]\n> {body}")
     assert not any(f["rule"] == "long-sentence" for f in findings), findings
     # An inner close or a fenced closing tag must not close the outer container.
@@ -916,16 +1046,28 @@ def selftest():
                     "<span>Text.</span>", "<hr>", "<div />",
                     "<details></details>", "</details>"):
         findings, _ = lint(f"{content}\n\n> [!NOTE]\n> {body}")
-        assert not any(f["rule"] == "long-sentence" for f in findings), (content, findings)
+        assert not any(f["rule"] == "long-sentence" for f in findings), (
+            content,
+            findings,
+        )
     # GitHub shows these markers as text, so they stay words. GitHub shows the
     # last two as alerts, but no blank line or fence proves that a quote starts.
-    for text in (f"> [!FOO]\n> {body}", f"> [!NOTE] {body}", f"> Intro.\n> [!NOTE]\n> {body}",
-                 f"> > [!NOTE]\n> > {body}", f"> Intro.\ncontinuation.\n> [!NOTE]\n> {body}",
-                 f"- Item.\n\n  > [!NOTE]\n  > {body}",
-                 f"Text.\n> [!NOTE]\n> {body}", f"   > [!NOTE]\n   > {body}"):
+    for text in (
+        f"> [!FOO]\n> {body}",
+        f"> [!NOTE] {body}",
+        f"> Intro.\n> [!NOTE]\n> {body}",
+        f"> > [!NOTE]\n> > {body}",
+        f"> Intro.\ncontinuation.\n> [!NOTE]\n> {body}",
+        f"- Item.\n\n  > [!NOTE]\n  > {body}",
+        f"Text.\n> [!NOTE]\n> {body}",
+        f"   > [!NOTE]\n   > {body}",
+    ):
         findings, _ = lint(text)
         long_sentences = [f for f in findings if f["rule"] == "long-sentence"]
-        assert [f["match"] for f in long_sentences] == ["26 words"], (text, long_sentences)
+        assert [f["match"] for f in long_sentences] == ["26 words"], (
+            text,
+            long_sentences,
+        )
     # a bold or italic lead sentence ends at its closing emphasis marker
     findings, _ = lint(f"**Lead.** The {twenty} more words here now.")
     assert not any(f["rule"] == "long-sentence" for f in findings), findings
@@ -937,10 +1079,12 @@ def selftest():
     findings, _ = lint(f"The team shipped it in the U.S. Then {twenty} today.")
     assert not any(f["rule"] == "long-sentence" for f in findings), findings
     # nested list items, quoted list items, and HTML lines end a prose block
-    for text in (f"- First item\n    - First {twenty} line\n      - Second {twenty} line",
-                 f"> - First {twenty} line\n> - Second {twenty} line",
-                 f"<!-- First {twenty} line -->\nSecond {twenty} line.",
-                 f"> First {twenty} line.\n>\n> Second {twenty} line."):
+    for text in (
+        f"- First item\n    - First {twenty} line\n      - Second {twenty} line",
+        f"> - First {twenty} line\n> - Second {twenty} line",
+        f"<!-- First {twenty} line -->\nSecond {twenty} line.",
+        f"> First {twenty} line.\n>\n> Second {twenty} line.",
+    ):
         findings, _ = lint(text)
         assert not any(f["rule"] == "long-sentence" for f in findings), (text, findings)
     # a blockquote prefix is not a word in a wrapped quoted sentence
@@ -950,10 +1094,15 @@ def selftest():
     twenty_five = " ".join(f"term{number}" for number in range(1, 26)) + "."
     for marker in ("-", "*", "+", "1.", "1)", "  -", "> -"):
         findings, _ = lint(f"{marker} {twenty_five}")
-        assert not any(f["rule"] == "long-sentence" for f in findings), (marker, findings)
+        assert not any(f["rule"] == "long-sentence" for f in findings), (
+            marker,
+            findings,
+        )
     findings, _ = lint(f"- term0 {twenty_five}")
     long_sentences = [f for f in findings if f["rule"] == "long-sentence"]
-    assert [(f["match"], f["col"]) for f in long_sentences] == [("26 words", 3)], long_sentences
+    assert [(f["match"], f["col"]) for f in long_sentences] == [
+        ("26 words", 3)
+    ], long_sentences
     # a code span at the line start does not turn the next token into a list marker
     findings, _ = lint(f"`label` 1) {twenty_five}")
     long_sentences = [f for f in findings if f["rule"] == "long-sentence"]
@@ -962,8 +1111,13 @@ def selftest():
     for separator in (", ", " ", " / "):
         names = separator.join(f"`a{number}`" for number in range(30))
         findings, _ = lint(f"The adapters are {names}.")
-        assert not any(f["rule"] == "long-sentence" for f in findings), (separator, findings)
-    findings, _ = lint(" ".join(f"term{number}" for number in range(1, 25)) + " — term25.")
+        assert not any(f["rule"] == "long-sentence" for f in findings), (
+            separator,
+            findings,
+        )
+    findings, _ = lint(
+        " ".join(f"term{number}" for number in range(1, 25)) + " — term25."
+    )
     assert not any(f["rule"] == "long-sentence" for f in findings), findings
     findings, _ = lint(f"Use `make` — {twenty_five}")
     long_sentences = [f for f in findings if f["rule"] == "long-sentence"]
@@ -999,7 +1153,10 @@ def selftest():
             assert e.code == 2, (bad, e.code)
         else:
             raise AssertionError(bad)
-    assert _rule_list("passive-voice,present-perfect") == {"passive-voice", "present-perfect"}
+    assert _rule_list("passive-voice,present-perfect") == {
+        "passive-voice",
+        "present-perfect",
+    }
     print("selftest OK")
 
 
@@ -1023,7 +1180,9 @@ def _non_negative_int(value):
     except ValueError:
         n = -1
     if n < 0:
-        raise argparse.ArgumentTypeError(f"expected a non-negative integer, got {value!r}")
+        raise argparse.ArgumentTypeError(
+            f"expected a non-negative integer, got {value!r}"
+        )
     return n
 
 
@@ -1039,7 +1198,11 @@ def main(argv):
     parser.add_argument("--disable", type=_rule_list, action="append", default=[],
                         metavar="RULES",
                         help="comma-separated rule IDs to silence; may be repeated")
-    parser.add_argument("--selftest", action="store_true", help="run the built-in tests")
+    parser.add_argument(
+        "--selftest",
+        action="store_true",
+        help="run the built-in tests",
+    )
     # intermixed parsing keeps flags valid between file paths
     args = parser.parse_intermixed_args(argv)
     if args.selftest:
