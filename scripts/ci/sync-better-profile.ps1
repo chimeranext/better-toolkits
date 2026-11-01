@@ -1,5 +1,5 @@
 #!/usr/bin/env pwsh
-# sync-better-profile.ps1 — repo-canonical → user runtime profile sync (Windows, multi-harness).
+# sync-better-profile.ps1 - repo-canonical -> user runtime profile sync (Windows, multi-harness).
 #
 # Canonical source of truth: <repo>/shared/bootstrap/agents/better.md
 # Runtime destinations:
@@ -11,10 +11,10 @@
 # frontmatter conversion (scripts/ci/sync-better-profile-generate.py).
 #
 # Modes (PowerShell uses single-dash switches):
-#   (default)  sync  — sync all destinations (idempotent)
-#   -check    check — exit 1 if any destination differs from canonical (drift)
-#   -quiet           — suppress output
-#   -harness <h>    — restrict to opencode|claude|cursor (default: all)
+#   (default)  sync  - sync all destinations (idempotent)
+#   -check    check - exit 1 if any destination differs from canonical (drift)
+#   -quiet           - suppress output
+#   -harness <h>    - restrict to opencode|claude|cursor (default: all)
 #
 # The check is machine-local: if a destination path does not exist, that harness
 # is skipped (nothing to compare) so CI/other machines never fail on a missing
@@ -74,10 +74,10 @@ foreach ($h in $HARNESSES) {
         continue
     }
     $dst = $DST[$h]
-    # No destination → nothing to compare/sync (skip, never fail).
+    # No destination -> nothing to compare/sync (skip, never fail).
     if (-not (Test-Path -LiteralPath $dst -PathType Leaf)) {
         if ($MODE -eq 'check') {
-            Say "[better-profile] check: $h destination absent ($dst) — skip"
+            Say "[better-profile] check: $h destination absent ($dst) - skip"
             continue
         }
         New-Item -ItemType Directory -Path (Split-Path -Parent $dst) -Force | Out-Null

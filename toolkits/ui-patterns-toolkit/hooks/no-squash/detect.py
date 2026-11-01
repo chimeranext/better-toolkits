@@ -31,7 +31,9 @@ GIT_MERGE = re.compile(r"\bgit\s+(?:-[^\s]+\s+)*merge\b")
 
 # Explicit squash flags.
 SQUASH_FLAG = re.compile(r"(?:\A|[\s|&;(])(?:-[^\s]*)?--squash(?:\s|$)")
-GIT_SQUASH_STRATEGY = re.compile(r"(?:\A|[\s|&;(])--strategy(?:\s*=\s*|\s+)squash(?:\s|$)")
+GIT_SQUASH_STRATEGY = re.compile(
+    r"(?:\A|[\s|&;(])--strategy(?:\s*=\s*|\s+)squash(?:\s|$)"
+)
 GH_SQUASH_SHORTHAND = re.compile(r"(?:\A|[\s|&;(])-s(?:\s|$)")
 
 # Executors: when a command delegates to a shell (eval / xargs / sh -c), we do
@@ -109,6 +111,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = p.parse_args(argv)
 
+    cmd: str = ""
     if args.command is not None:
         cmd = args.command
     elif args.stdin_command:

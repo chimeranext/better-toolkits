@@ -6,11 +6,11 @@ param(
 $srcBase = Join-Path $PSScriptRoot '../shared/hooks'
 foreach ($mod in $Mods) {
   $src = Join-Path $srcBase $mod
-  if (-not (Test-Path $src)) { Write-Host "skip: no shared/hooks/$mod"; continue }
+  if (-not (Test-Path $src)) { Write-Output "skip: no shared/hooks/$mod"; continue }
   Get-ChildItem (Join-Path $PSScriptRoot '../toolkits') -Directory | ForEach-Object {
     $dest = Join-Path $_.FullName "hooks/$mod"
     Remove-Item -Recurse -Force $dest -ErrorAction SilentlyContinue
     Copy-Item -Recurse $src $dest
   }
-  Write-Host "synced hooks/$mod"
+  Write-Output "synced hooks/$mod"
 }

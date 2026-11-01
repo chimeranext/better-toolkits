@@ -1,5 +1,5 @@
 #!/usr/bin/env pwsh
-# HITL revocation helper (Windows/PowerShell) — removes the main-push approval marker.
+# HITL revocation helper (Windows/PowerShell) - removes the main-push approval marker.
 # Usage: powershell -ExecutionPolicy Bypass -File scripts/git-hooks/hitl-revoke-main-push.ps1
 
 [CmdletBinding()]

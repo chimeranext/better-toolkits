@@ -34,7 +34,8 @@ BARE_STDOUT_NULL = re.compile(r"(^|[^0-9&>])1?>>?\s*/dev/null\b")
 
 BARE_FOLD = re.compile(r"2\s*>&\s*1")
 HAS_FILE_SINK = re.compile(
-    r"""(?:^|[\s;|&])(?:>>?|>\|)\s*(?!['"]?/dev/null)['"]?(?:\./|\.\./|/|\$|[A-Za-z0-9_./-])\S*"""
+    r"""(?:^|[\s;|&])(?:>>?|>\|)\s*(?!['"]?/dev/null)['"]?"""
+    r"""(?:\./|\.\./|/|\$|[A-Za-z0-9_./-])\S*"""
 )
 HAS_TEE_FILE = re.compile(
     r"\|\s*tee(?:\s+-a)?\s+(?!/dev/null)(\./|\.\./|/|[A-Za-z0-9_./-])\S*"
@@ -169,6 +170,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = p.parse_args(argv)
 
+    cmd: str = ""
     if args.command is not None:
         cmd = args.command
     elif args.stdin_command:

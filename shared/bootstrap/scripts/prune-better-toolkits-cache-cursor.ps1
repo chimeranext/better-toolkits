@@ -1,5 +1,5 @@
 #!/usr/bin/env pwsh
-# prune-better-toolkits-cache-cursor.ps1 — Clear ALL Cursor plugin cache for the
+# prune-better-toolkits-cache-cursor.ps1 - Clear ALL Cursor plugin cache for the
 # better-toolkits marketplace, then re-sync (Windows/PowerShell variant).
 # Use after any marketplace version bump so Cursor does not keep stale copies of any toolkit.
 # The OpenCode equivalent is prune-better-toolkits-cache-opencode.sh.
@@ -17,7 +17,7 @@
 $ErrorActionPreference = 'Stop'
 
 if ($args.Count -gt 0) {
-    Write-Error "This script takes no arguments — it always purges the full better-toolkits cache."
+    Write-Error "This script takes no arguments - it always purges the full better-toolkits cache."
     Write-Error "Do not pass a single toolkit slug after a version bump; stale siblings would remain."
     exit 2
 }
@@ -29,7 +29,7 @@ $ERR_LOG = Join-Path $LOG_DIR ("prune-better-toolkits-cache-{0}.err.log" -f $TS)
 
 $CURSOR_PLUGIN_CACHE = Join-Path $env:USERPROFILE '.cursor\plugins\cache'
 
-# Literal allowlist — never remove a path outside $CURSOR_PLUGIN_CACHE.
+# Literal allowlist - never remove a path outside $CURSOR_PLUGIN_CACHE.
 $MARKETPLACE_CACHE_DIRNAMES = @('chimeranext-better-toolkits', 'better-toolkits')
 
 New-Item -ItemType Directory -Path $LOG_DIR -Force | Out-Null
@@ -62,7 +62,7 @@ function Invoke-Capture {
     }
 }
 
-function Get-MarketplaceCachePaths {
+function Get-MarketplaceCachePath {
     foreach ($name in $MARKETPLACE_CACHE_DIRNAMES) {
         Join-Path $CURSOR_PLUGIN_CACHE $name
     }
@@ -84,7 +84,7 @@ function Assert-SafeMarketplaceCachePath([string]$target) {
     return $true
 }
 
-function Write-LogCachedVersions([string]$root) {
+function Write-LogCachedVersion([string]$root) {
     Add-Content -LiteralPath $OUT_LOG -Value "== plugin.json versions under $root (before purge) =="
 
     $jqCmd = Get-Command jq -ErrorAction SilentlyContinue
@@ -122,22 +122,26 @@ function Write-LogCachedVersions([string]$root) {
     }
 }
 
-function Remove-MarketplaceCacheRoot([string]$target) {
+function Remove-MarketplaceCacheRoot {
+    [CmdletBinding(SupportsShouldProcess = $true)]
+    param([string]$target)
     if (-not (Assert-SafeMarketplaceCachePath $target)) { return }
     if (-not (Test-Path -LiteralPath $target)) {
         Add-Content -LiteralPath $OUT_LOG -Value "skip purge (not present): $target"
         return
     }
-    Add-Content -LiteralPath $OUT_LOG -Value "rm -rf $target"
-    Remove-Item -LiteralPath $target -Recurse -Force
+    if ($PSCmdlet.ShouldProcess($target, 'Remove marketplace cache root')) {
+        Add-Content -LiteralPath $OUT_LOG -Value "rm -rf $target"
+        Remove-Item -LiteralPath $target -Recurse -Force
+    }
 }
 
 Add-Content -LiteralPath $OUT_LOG -Value 'scope=full-marketplace-cache-roots'
 Add-Content -LiteralPath $OUT_LOG -Value "started_at=$TS"
 Add-Content -LiteralPath $OUT_LOG -Value "cursor_plugin_cache=$CURSOR_PLUGIN_CACHE"
 
-foreach ($cacheRoot in Get-MarketplaceCachePaths) {
-    Write-LogCachedVersions $cacheRoot
+foreach ($cacheRoot in Get-MarketplaceCachePath) {
+    Write-LogCachedVersion $cacheRoot
     Remove-MarketplaceCacheRoot $cacheRoot
 }
 
@@ -163,6 +167,6 @@ else {
 $wiped = "Wiped $CURSOR_PLUGIN_CACHE\chimeranext-better-toolkits $CURSOR_PLUGIN_CACHE\better-toolkits"
 Add-Content -LiteralPath $OUT_LOG -Value $wiped
 Write-Output $wiped
-Add-Content -LiteralPath $OUT_LOG -Value 'done — re-enable or reinstall toolkits in Cursor if skills/commands are missing'
+Add-Content -LiteralPath $OUT_LOG -Value 'done - re-enable or reinstall toolkits in Cursor if skills/commands are missing'
 
 exit 0

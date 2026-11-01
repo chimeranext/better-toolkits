@@ -1,5 +1,5 @@
 #!/usr/bin/env pwsh
-# install-tooluse-guards.ps1 — install tool-use guards into central hooks home (Windows).
+# install-tooluse-guards.ps1 - install tool-use guards into central hooks home (Windows).
 #
 # Convention:
 #   $HARNESS_HOME    = C:\Users\<user>\.agents   (central agent home)
