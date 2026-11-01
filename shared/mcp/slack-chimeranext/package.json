@@ -1,0 +1,21 @@
+{
+  "name": "@chimeranext/slack-chimeranext-mcp",
+  "version": "0.1.0",
+  "description": "Custom local stateless MCP server (stdio) exposing a small stable set of Slack Web API tools via https://slack.com/api/ with Bearer auth (SLACK_BOT_TOKEN).",
+  "type": "module",
+  "bin": {
+    "slack-chimeranext-mcp": "./server.js"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test test/"
+  },
+  "dependencies": {
+    "@vitemcp/server": "^1.9.7",
+    "zod": "^3.23.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "BSL-1.1"
+}

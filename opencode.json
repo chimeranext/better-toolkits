@@ -62,6 +62,16 @@
           "STITCH_GCP_PROJECT": "{env:STITCH_GCP_PROJECT}",
           "STITCH_PROJECT_ID": "{env:STITCH_PROJECT_ID}"
         }
+      },
+      "slack-chimeranext": {
+        "type": "local",
+        "command": [
+          "node",
+          "shared/mcp/slack-chimeranext/server.js"
+        ],
+        "environment": {
+          "SLACK_BOT_TOKEN": "{env:SLACK_BOT_TOKEN}"
+        }
       }
     }
   }
