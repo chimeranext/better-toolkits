@@ -1,0 +1,9 @@
+# SSOT bandit (gate /assurance). 
+# 
+# B101 (assert_used) se excluye del gate de forma deliberada: los asserts de
+# este monorepo son intencionales y forman el harness de self-test de scripts de
+# lint (p.ej. ste-lint.py). No son guardas de seguridad de runtime que se
+# pierdan por optimización (-O); marcarlos como vulnerabilidad es un falso
+# positivo que bloquearía CI sin riesgo real. Se conservan a nivel de nota.
+skips:
+  - B101

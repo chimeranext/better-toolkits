@@ -1,5 +1,7 @@
 # make-no-mistakes
 
+[![Version](https://img.shields.io/badge/version-1.39.21-blue)](.claude-plugin/plugin.json) [![License: BSL-1.1](https://img.shields.io/badge/license-BSL--1.1-important)](LICENSE)
+
 **Version: 1.38.0** · [CHANGELOG](./CHANGELOG.md) · [Marketplace](https://github.com/chimeranext/make-no-mistakes-toolkit)
 
 The disciplined dev lifecycle — implement issues, review PRs, sync releases, test E2E, and manage sessions. One plugin to make no mistakes.
@@ -82,7 +84,7 @@ It routes you across the **six audit families** (all live as of 1.29.0):
 |--------|---------|---------|
 | `SCH` | [`/audit-schema-drift`](commands/audit-schema-drift.md) | 1NF violations + same column duplicated across tables |
 | `CDC` | [`/audit-contract-drift`](commands/audit-contract-drift.md) | Producer↔consumer validation schemas that silently diverged |
-| `DDD` | [`/audit-ddd`](commands/audit-ddd.md) | Cross-context imports, domain purity, ubiquitous-language drift |
+| `DDD` | [`/audit-bounded-context`](commands/audit-bounded-context.md) | Cross-context imports, domain purity, ubiquitous-language drift |
 | `ARC` | [`/audit-explicit-architecture`](commands/audit-explicit-architecture.md) | Hexagonal/Onion/Clean dependency-rule violations, CQRS separation |
 | `STR` | [`/audit-strangler`](commands/audit-strangler.md) | Strangler-Fig migration health (façade, cutover, legacy retirement) |
 | `ENF` | [`/audit-enforcement-hooks`](commands/audit-enforcement-hooks.md) | Cure-4 PreToolUse/PostToolUse coverage gaps that allow the other audits' drift |
@@ -135,7 +137,7 @@ Deliberate actions you invoke explicitly.
 | [`/make-no-mistakes:domain-driven-advisor`](commands/domain-driven-advisor.md) | **Guided entry point** — inspects the repo, recommends which audit(s) to run (or the full sequence), runs them, and finishes with a premortem. Start here for repo health. |
 | [`/make-no-mistakes:audit-schema-drift`](commands/audit-schema-drift.md) | Audit for schema drift — 1NF violations + the same logical column duplicated across tables without a single source of truth |
 | [`/make-no-mistakes:audit-contract-drift`](commands/audit-contract-drift.md) | Audit consumer-driven contract drift — producer↔consumer validation schemas that have silently diverged |
-| [`/make-no-mistakes:audit-ddd`](commands/audit-ddd.md) | Audit DDD bounded-context boundaries — cross-context imports, domain purity, ubiquitous-language drift |
+| [`/make-no-mistakes:audit-bounded-context`](commands/audit-bounded-context.md) | Audit DDD bounded-context boundaries — cross-context imports, domain purity, ubiquitous-language drift |
 | [`/make-no-mistakes:audit-explicit-architecture`](commands/audit-explicit-architecture.md) | Audit Explicit Architecture (Graça) — Hexagonal/Onion/Clean dependency rule, ports & adapters, CQRS separation |
 | [`/make-no-mistakes:audit-strangler`](commands/audit-strangler.md) | Audit Strangler-Fig migration health — façade, incremental cutover vs big-bang, coexistence, legacy retirement |
 | [`/make-no-mistakes:audit-enforcement-hooks`](commands/audit-enforcement-hooks.md) | Audit Cure-4 enforcement-hook coverage — are the PreToolUse/PostToolUse hooks that prevent the other audits' drift actually installed? |
