@@ -187,6 +187,9 @@ agent profile (`agents/better.md`) references them. The hooks enforce the key on
   `main-founders-only` ruleset is provisioned in Phase 7b, with CODEOWNERS
   pointing to the `founders` team (Phase 7b step 3; replication workflow in
   `codeowners-replication-workflow.md`).
+- **CIS** (`ci-security-standards.md`) — CI security & standards. CodeQL +
+  Trivy + MegaLinter gates, vendored from assurance-toolkit templates and the
+  `security-scan` composite action (Phase 7).
 - **PRDS / BrS / WTD / QT4L / OST / NSQ / TFM** — the other indexed standards.
 
 The setup also installs the scripts/hooks that enforce StS (stderr adapter), the
