@@ -33,6 +33,13 @@ The control is layered: policy (ruleset), identity (2FA), and tool boundary
    audit (QT4L). The CTO opens the single consolidated cut PR. A **second human
    reviewer** (a founder) is the single approval gate to PROD (REL). Feature PRs
    to `develop` do not require founder review. CI + audit GGT + PRDS gate them.
+7. **CODEOWNERS is mandatory for any reviewed branch.** A branch protected by a
+   review gate SHALL have a `CODEOWNERS` file (repository root or `.github/`)
+   that references at least one **team** (not only individual logins) as the
+   `*` owner, so the required review has a concrete team to auto-assign. If the
+   owning team does not exist, create it under the owning organization with the
+   maintainers as members, then assign it as the `*` owner. This closes the gap
+   where a ruleset requires a review but no reviewer is ever assigned.
 
 ## Failure modes this prevents
 
