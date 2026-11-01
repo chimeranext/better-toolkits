@@ -57,12 +57,18 @@ family tokens).
   ownership map.
 - **Justification:** This is Conway's-Law drift: the system's structure has
   drifted away from the ownership boundaries the organization actually
-  maintains. The conceptual basis is the Domain-Driven Design standard
-  (`domain-driven-design.md`): bounded contexts own their model and expose a
-  deliberate published interface; reaching past it couples two models meant to
-  evolve independently.
-- **Reference:** DDD standard (`shared/references/engineering-standards/domain-driven-design.md`).
-  Conway, M. E. (1968). How do committees invent? *Datamation*, 14(4), 28–31.
+  maintains. The **conceptual home of this family is the Domain-Driven Design
+  standard** (`domain-driven-design.md`): bounded contexts own their model and
+  expose a deliberate published interface, and reaching past it couples two
+  models meant to evolve independently. Conway's Law supplies the root-cause
+  frame (systems mirror communication structure); Evans supplies the bounded-
+  context concept itself. This detector is the *mechanical enforcement* of that
+  DDD seam; the DDD standard is the parent.
+- **Reference:** DDD standard (parent) —
+  `shared/references/engineering-standards/domain-driven-design.md` (esp. §4
+  "Bounded contexts — published interface" and §5 "Context maps &
+  relationships"). Conway, M. E. (1968). How do committees invent? *Datamation*,
+  14(4), 28–31. Evans, E. (2003). *Domain-driven design*. Addison-Wesley.
 
 ### 4. Explicit architecture
 
@@ -144,10 +150,15 @@ The two architecture families are deliberately complementary:
 | Violation | Import crosses a context seam | Dependency points outward (inner imports outer) |
 | The smell | a module imports another context's internals | `domain` imports `infrastructure` |
 
-Each detector explicitly states it does NOT audit the other's concern. The
-conceptual basis for bounded-context (and for the Inverse Conway Maneuver when
-partitioning work across `/parallel-subagents`) lives in the dedicated DDD
-standard (`domain-driven-design.md`); RDP only enforces it.
+Each detector explicitly states it does NOT audit the other's concern.
+
+The **bounded-context column's conceptual home is the DDD standard**
+(`domain-driven-design.md`): it defines *which bounded context owns this module*,
+the published interface, and the Inverse Conway Maneuver for partitioning work
+across `/parallel-subagents` (DDD standard §7). RDP only enforces that standard —
+it does not redefine it. The **explicit-architecture column** (dependency rule,
+layers) is documented in RDP itself via Graça and is not a DDD claim; the two
+axes are complementary, and each detector audits only its own question.
 
 ---
 
