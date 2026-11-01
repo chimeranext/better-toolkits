@@ -42,7 +42,7 @@ The control is layered: policy (ruleset), identity (2FA), and tool boundary
    where a ruleset requires a review but no reviewer is ever assigned.
 8. **CODEOWNERS has a canonical SSOT and is replicated, not authored per-repo.**
    The policy source of truth is a single `CODEOWNERS` file in an organization
-   governance repository (e.g. `chimeranext/meta`). Every repository with a
+   governance repository (e.g. `acme-studio/org-gate`). Every repository with a
    review-gated branch SHALL carry a `CODEOWNERS` **derived** from that SSOT.
    No repository's `CODEOWNERS` is hand-authored independently; it is a mirror.
    An organization-level automation (e.g. a GitHub App with `contents: write`
@@ -70,7 +70,8 @@ The control is layered: policy (ruleset), identity (2FA), and tool boundary
   root elevation to mint a fresh approval marker; check TTL; fail-closed.
 - **Org policy:** enforce 2FA for every member.
 - **CODEOWNERS replication (org admin App):** the canonical source lives in the
-  governance repo (`meta`). The App (e.g. `chimeranext-org-admin-tool`, scopes
+  governance repo (`org-gate`, e.g. `acme-studio/org-gate`). The App (e.g.
+  `acme-studio-org-admin-tool`, scopes
   `contents: write`, `administration: write`, `organization_administration:
   write`) replicates it:
   1. **Source step** — read `.github/CODEOWNERS` from the governance repo
