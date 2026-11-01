@@ -1,5 +1,7 @@
 # make-no-mistakes
 
+[![Version](https://img.shields.io/badge/version-1.39.21-blue)](.claude-plugin/plugin.json) [![License: BSL-1.1](https://img.shields.io/badge/license-BSL--1.1-important)](LICENSE)
+
 **Version: 1.38.0** · [CHANGELOG](./CHANGELOG.md) · [Marketplace](https://github.com/chimeranext/make-no-mistakes-toolkit)
 
 The disciplined dev lifecycle — implement issues, review PRs, sync releases, test E2E, and manage sessions. One plugin to make no mistakes.
