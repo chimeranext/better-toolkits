@@ -5,42 +5,42 @@ parent: none
 
 ## GOAL
 
-Un `.github/workflows/*` (y sus composite actions de respaldo) que esté "bien
-escrito" bajo este record usa el vocabulario correcto de las herramientas que
-invoca, no el nombre intuitivo — de modo que los gates de CI sean verdes y no
-fallen por configuración.
+A `.github/workflows/*` file (and its backing composite actions) that is "well
+written" under this record uses the correct vocabulary of the tools it invokes,
+not the intuitive name — so CI gates stay green and do not fail on
+configuration.
 
 ## SOURCES
 
-| # | kind | ref (ID + versión/fecha) | weight | para qué |
+| # | kind | ref (ID + versión/fecha) | weight | purpose |
 |---|------|--------------------------|--------|----------|
-| S1 | repo | incidente: CodeQL rechazó `typescript` ("Did not recognize the following languages: typescript") en 6 repos; job murió en `init` | load-bearing | RULE R1 |
-| S2 | repo | `github/codeql-action/init@v3` — vocabulario de lenguajes (go, javascript, python, java, cpp, csharp, ruby, swift) | load-bearing | RULE R1 |
-| S3 | repo | acción `upload-results@v3` inexistente; `analyze@v3` ya sube SARIF (fallo en elrupets) | load-bearing | RULE R2 |
-| S4 | repo | error en template vendorizado se propagó a todos los clientes | load-bearing | RULE R3 |
+| S1 | repo | incident: CodeQL rejected `typescript` ("Did not recognize the following languages: typescript") across 6 repos; job died at `init` | load-bearing | RULE R1 |
+| S2 | repo | `github/codeql-action/init@v3` — language vocabulary (go, javascript, python, java, cpp, csharp, ruby, swift) | load-bearing | RULE R1 |
+| S3 | repo | nonexistent `upload-results@v3` action; `analyze@v3` already uploads SARIF | load-bearing | RULE R2 |
+| S4 | repo | a defect in a vendored template propagated to every client | load-bearing | RULE R3 |
 
 ## RULES
 
-- R1 [pipe-discipline] Los inputs de herramientas de CI deben usar el
-  **vocabulario de la herramienta**, no el nombre popular. `typescript` NO es
-  un lenguaje de CodeQL; usar `javascript` (cubre TS/JS) → S1, S2
-- R2 [pipe-discipline] No invocar pasos que no existen en la versión de la
-  acción (p.ej. `codeql-action/upload-results@v3`). El `analyze@v3` ya sube
-  SARIF → S3
-- R3 [pipe-discipline] Un template/composite vendorizado es la fuente de verdad;
-  un defecto ahí se corrige una vez y se re-deriva a todos los repos, no seis
-  veces a mano → S4
+- R1 [pipe-discipline] CI tool inputs MUST use the tool's vocabulary, not the
+  popular name. `typescript` is NOT a CodeQL language; use `javascript` (covers
+  TS/JS) → S1, S2
+- R2 [pipe-discipline] Do not invoke steps that do not exist in the action's
+  version (e.g. `codeql-action/upload-results@v3`). `analyze@v3` already
+  uploads SARIF → S3
+- R3 [pipe-discipline] A vendored template/composite is the source of truth; a
+  defect there is fixed once and re-derived to every repo, not fixed by hand in
+  each one → S4
 
 ## COUNTEREXAMPLES
 
 ```yaml
-# ❌ wrong: CodeQL rechaza "typescript" y el job muere en init
+# ❌ wrong: CodeQL rejects "typescript" and the job dies at init
 with:
   languages: |
     typescript
     javascript
 
-# ✅ right: vocabulario válido de CodeQL
+# ✅ right: valid CodeQL vocabulary
 with:
   languages: |
     javascript
@@ -49,18 +49,18 @@ with:
 ## GATES
 
 - local: `python3 -c "import yaml; yaml.safe_load(open('workflow.yml'))"` +
-  revisión manual del vocabulario de `languages`/inputs
-- CI: el propio gate de seguridad (`Security Scan`) — si CodeQL se inicializa,
-  el vocabulario es válido
+  manual review of the `languages`/inputs vocabulary
+- CI: the security gate itself (`Security Scan`) — if CodeQL initializes, the
+  vocabulary is valid
 
 ## LESSONS
 
-- L1: Un nombre intuitivo puede ser inválido (typescript). Validar contra la
-  doc de la herramienta, no contra la intuición. → RULE R1
-- L2: Un defecto en un template vendorizado se amplifica a todos los repos;
-  la corrección va en la fuente, no en cada cliente. → RULE R3
+- L1: An intuitive name can be invalid (typescript). Validate against the tool's
+  docs, not intuition. → RULE R1
+- L2: A defect in a vendored template amplifies to every repo; the fix goes in
+  the source, not in each client. → RULE R3
 
 ## RECEIPT
 
-<!-- candidate_sha + risk tier + lenses + verdict — emitido en el dogfood del
+<!-- candidate_sha + risk tier + lenses + verdict — emitted in the dogfood of
      template workflow-security.yml.tpl -->

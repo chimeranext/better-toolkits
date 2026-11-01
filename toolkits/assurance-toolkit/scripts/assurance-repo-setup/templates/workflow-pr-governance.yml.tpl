@@ -1,8 +1,8 @@
 name: PR Governance
 
-# Gobernanza de PR (gap 2). Normaliza checks de disciplina de PR que no son
-# lint ni security: tamaño de PR, PRs stale, y guards básicos. Configurable por
-# repo. Los umbrales son tokens del template.
+# PR governance (gap 2). Normalizes PR-discipline checks that are neither lint
+# nor security: PR size, stale PRs, and basic guards. Configurable per repo.
+# Thresholds are template tokens.
 
 on:
   pull_request:
