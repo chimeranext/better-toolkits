@@ -118,6 +118,21 @@ family tokens).
 - **Reference:** Fowler, M. (2004). Strangler fig application. Retrieved from
   https://martinfowler.com/bliki/StranglerFigApplication.html
 
+**Plain-language terminology (grandfather list vs. ratchet).**
+
+- **Grandfather list** — a list of the legacy pieces that still exist and have
+  not yet been migrated. It only ever gets shorter, and only shrinks when a
+  piece is actually migrated and deleted. It imposes no per-PR bookkeeping:
+  you work normally, and the list simply reflects what remains to migrate.
+- **Ratchet / monotonic-shrink allowlist** — an automated, stricter version: it
+  *blocks* the merge unless the list shrank, forcing you to update it on every
+  PR. It turns technical debt into a standing maintenance tax that stalls each
+  merge until you touch the list.
+- **Why grandfather-list wins here.** The grandfather list informs (and shrinks
+  on genuine progress); the ratchet blocks and demands maintenance. A process
+  anti-pattern is when the automated penalty costs more than the debt it
+  prevents. The ratchet is therefore NOT used; the grandfather list is.
+
 ### 6. Enforcement hooks
 
 - **Detector:** `enforcement-hooks` (verifier `enforcement-hooks.ts` + `enforcement-hooks-efficacy.ts`; command `audit-enforcement-hooks`).
