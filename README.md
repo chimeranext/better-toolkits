@@ -1,13 +1,15 @@
 # better-toolkits
 
-> Source-available Claude Code toolkits monorepo — **pick the toolkits your startup needs.**
+> Source-available **harness-agnostic** toolkits monorepo — **pick the toolkits your startup needs.**
 
-A curated set of [Claude Code](https://docs.claude.com/en/docs/claude-code) plugins —
-each independently installable — consolidated into one marketplace. Instead of chasing
-ten standalone repositories, you add **one** marketplace and install exactly the toolkits
-your startup needs, from problem validation through go-to-market. Inspired by the
-"pick-your-stack" experience of [create-better-t-stack](https://www.better-t-stack.dev/)
-and a sibling to [better-microservices](https://github.com/chimeranext/better-microservices).
+A curated set of battle-tested agent toolkits — each independently installable —
+consolidated into one marketplace. They run across **OpenCode, Claude Code, and
+Cursor** (one protocol contract, N harness wire-ups). Instead of chasing ten
+standalone repositories, you add **one** marketplace and install exactly the
+toolkits your startup needs, from problem validation through go-to-market.
+Inspired by the "pick-your-stack" experience of
+[create-better-t-stack](https://www.better-t-stack.dev/) and a sibling to
+[better-microservices](https://github.com/chimeranext/better-microservices).
 
 ## Engineering Standards
 
