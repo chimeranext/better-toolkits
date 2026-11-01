@@ -8,7 +8,7 @@ description: >
   Accepts a target path as $ARGUMENTS.
 ---
 
-# /audit-ddd
+# /audit-bounded-context
 
 Trigger the **`audit-engine`** skill with the `ddd-boundaries` (`DDD`) detector
 profile (`references/detectors/ddd-boundaries.md`) against $ARGUMENTS (default:
@@ -29,5 +29,5 @@ to and whether an import crosses that seam* — not layered dependency direction
 ## Usage
 
 ```
-/audit-ddd [path]
+/audit-bounded-context [path]
 ```
