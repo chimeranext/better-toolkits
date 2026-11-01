@@ -8,7 +8,7 @@ if [ -f "$RESTRICTIONS_FILE" ]; then
   python3 -c '
 import json, sys
 try:
-  r=json.load(open("'$RESTRICTIONS_FILE'"))
+  r=json.load(open(sys.argv[1]))
   states=r.get("verified_states",{})
   pending=any(v=="PENDING" for v in states.values())
   blocked=any(v=="BLOCKED" for v in states.values())
@@ -16,7 +16,7 @@ try:
     sys.exit(1)
 except Exception:
   pass
-' 2>/dev/null || echo "[STDERR HOOK] RESTRICTION CHECK: /ready-to-review-mergeable steps must complete before next phase." >&2
+' "$RESTRICTIONS_FILE" 2>/dev/null || echo "[STDERR HOOK] RESTRICTION CHECK: /ready-to-review-mergeable steps must complete before next phase." >&2
 fi
 
 HOOKS_STDERR_DIR="$(cd "$(dirname "$0")/.." && pwd)"
