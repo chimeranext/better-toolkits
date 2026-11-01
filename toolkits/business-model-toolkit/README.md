@@ -1,5 +1,7 @@
 # business-model-toolkit
 
+[![Version](https://img.shields.io/badge/version-2.2.7-blue)](.claude-plugin/plugin.json) [![License: BSL-1.1](https://img.shields.io/badge/license-BSL--1.1-important)](LICENSE)
+
 Interactive business model brainstorming — guided dialogue covering the full startup lifecycle from problem validation through execution and investor pitch.
 
 A Claude Code plugin by [Luis Andres Pena Castillo](https://github.com/lapc506).

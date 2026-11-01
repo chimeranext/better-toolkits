@@ -1,5 +1,7 @@
 # venture-studio-toolkit
 
+[![Version](https://img.shields.io/badge/version-1.2.8-blue)](.claude-plugin/plugin.json) [![License: BSL-1.1](https://img.shields.io/badge/license-BSL--1.1-important)](LICENSE)
+
 > **Macro portfolio management** para venture studios y serial founders — estructuras legales LATAM, matching de aceleradoras, frameworks govclab, y gestión de portafolio multi-venture.
 
 Plugin de Claude Code complementario a [`business-model-toolkit`](https://github.com/chimeranext/business-model-toolkit) (single-venture) y [`ux-research-toolkit`](https://github.com/chimeranext/ux-research-toolkit) (user research). Mientras esos operan a nivel de **un** venture individual, `venture-studio-toolkit` opera a nivel **portafolio**: decisiones de estructura legal macro, asignación de recursos entre ventures, y matching a programas de aceleración externos.

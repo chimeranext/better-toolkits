@@ -1,5 +1,7 @@
 # assurance
 
+[![Version](https://img.shields.io/badge/version-0.1.21-blue)](.claude-plugin/plugin.json) [![License: BSL-1.1](https://img.shields.io/badge/license-BSL--1.1-important)](LICENSE)
+
 **Version: 0.1.0** · [CHANGELOG](./CHANGELOG.md) · [Marketplace](https://github.com/chimeranext/better-toolkits)
 
 Release-assurance evidence — 2 pillars (testing, liveness) + security transversal with its own runner, plus governance (metrics, gates, receipts). One plugin to prove you can ship.

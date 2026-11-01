@@ -2,75 +2,103 @@
 # audit-repo-gitflow.sh — audit a repo against GGT (GitFlow + Trunk-based).
 #
 # Usage: bash scripts/ci/audit-repo-gitflow.sh --repo <owner/repo> [--require-develop]
+# Option B: default branch is `develop` (integration); `main` exists as the
+# protected trunk. Runs `--require-develop` to also assert `develop` exists.
 set -u
 
 REPO=""
 REQUIRE_DEVELOP=0
 while [ $# -gt 0 ]; do
-  case "$1" in
-    --repo) REPO="${2:-}"; shift 2 ;;
-    --require-develop) REQUIRE_DEVELOP=1; shift ;;
-    *) echo "unknown arg: $1"; exit 2 ;;
-  esac
+	case "$1" in
+	--repo)
+		REPO="${2:-}"
+		shift 2
+		;;
+	--require-develop)
+		REQUIRE_DEVELOP=1
+		shift
+		;;
+	*)
+		echo "unknown arg: $1"
+		exit 2
+		;;
+	esac
 done
-[ -n "$REPO" ] || { echo "usage: $0 --repo <owner/repo> [--require-develop]"; exit 2; }
+[ -n "$REPO" ] || {
+	echo "usage: $0 --repo <owner/repo> [--require-develop]"
+	exit 2
+}
 
 FAIL=0
 check() {
-  if [ "$2" = "PASS" ]; then echo "PASS  $1"; else echo "FAIL  $1 — $3"; FAIL=1; fi
+	if [ "$2" = "PASS" ]; then echo "PASS  $1"; else
+		echo "FAIL  $1 — $3"
+		FAIL=1
+	fi
 }
 
 DEFAULT=$(gh api "repos/$REPO" --jq .default_branch)
-if [ "$DEFAULT" = "main" ]; then
-  check "default branch main" PASS
+if [ "$DEFAULT" = "develop" ]; then
+	check "default branch develop" PASS
 else
-  check "default branch main" FAIL "default=$DEFAULT"
+	check "default branch develop" FAIL "default=$DEFAULT"
+fi
+if gh api "repos/$REPO/branches/main" --jq '.' >/tmp/opencode/ggt-main.json 2>&1; then
+	check "main exists (trunk)" PASS
+else
+	check "main exists (trunk)" FAIL "missing"
 fi
 if [ "$REQUIRE_DEVELOP" -eq 1 ]; then
-  if gh api "repos/$REPO/branches/develop" --jq '.' > /tmp/opencode/ggt-develop.json 2>&1; then
-    check "develop exists" PASS
-  else
-    check "develop exists" FAIL "missing"
-  fi
+	if gh api "repos/$REPO/branches/develop" --jq '.' >/tmp/opencode/ggt-develop.json 2>&1; then
+		check "develop exists" PASS
+	else
+		check "develop exists" FAIL "missing"
+	fi
 fi
 
 SETTINGS=$(gh api "repos/$REPO" --jq '{sq:.allow_squash_merge, mc:.allow_merge_commit, rb:.allow_rebase_merge}')
-SQ=$(printf '%s' "$SETTINGS" | jq -r .sq); MC=$(printf '%s' "$SETTINGS" | jq -r .mc); RB=$(printf '%s' "$SETTINGS" | jq -r .rb)
+SQ=$(printf '%s' "$SETTINGS" | jq -r .sq)
+MC=$(printf '%s' "$SETTINGS" | jq -r .mc)
+RB=$(printf '%s' "$SETTINGS" | jq -r .rb)
 if [ "$SQ" = "false" ]; then
-  check "allow_squash_merge=false" PASS
+	check "allow_squash_merge=false" PASS
 else
-  check "allow_squash_merge=false" FAIL "sq=$SQ"
+	check "allow_squash_merge=false" FAIL "sq=$SQ"
 fi
 if [ "$MC" = "true" ]; then
-  check "allow_merge_commit=true" PASS
+	check "allow_merge_commit=true" PASS
 else
-  check "allow_merge_commit=true" FAIL "mc=$MC"
+	check "allow_merge_commit=true" FAIL "mc=$MC"
 fi
 if [ "$RB" = "true" ]; then
-  check "allow_rebase_merge=true" PASS
+	check "allow_rebase_merge=true" PASS
 else
-  check "allow_rebase_merge=true" FAIL "rb=$RB"
+	check "allow_rebase_merge=true" FAIL "rb=$RB"
 fi
 
 RSID=$(gh api "repos/$REPO/rulesets" --jq '.[] | select(.name=="main-founders-only") | .id' | head -1)
 if [ -z "$RSID" ]; then
-  check "main-founders-only ruleset" FAIL "missing"
+	check "main-founders-only ruleset" FAIL "missing"
 else
-  check "main-founders-only ruleset" PASS
-  METHODS=$(gh api "repos/$REPO/rulesets/$RSID" --jq '[.rules[] | select(.type=="pull_request") | .parameters.allowed_merge_methods[]]' | jq -r '.[]' | tr '\n' ' ')
-  if echo "$METHODS" | grep -q "merge"; then
-    check "ruleset allows merge" PASS
-  else
-    check "ruleset allows merge" FAIL "methods=$METHODS"
-  fi
-  LIN=$(gh api "repos/$REPO/rulesets/$RSID" --jq '[.rules[] | select(.type=="required_linear_history")] | length')
-  if [ "$LIN" = "0" ]; then
-    check "no required_linear_history" PASS
-  else
-    check "no required_linear_history" FAIL "linear=$LIN"
-  fi
+	check "main-founders-only ruleset" PASS
+	METHODS=$(gh api "repos/$REPO/rulesets/$RSID" --jq '[.rules[] | select(.type=="pull_request") | .parameters.allowed_merge_methods[]]' | jq -r '.[]' | tr '\n' ' ')
+	if echo "$METHODS" | grep -q "merge"; then
+		check "ruleset allows merge" PASS
+	else
+		check "ruleset allows merge" FAIL "methods=$METHODS"
+	fi
+	LIN=$(gh api "repos/$REPO/rulesets/$RSID" --jq '[.rules[] | select(.type=="required_linear_history")] | length')
+	if [ "$LIN" = "0" ]; then
+		check "no required_linear_history" PASS
+	else
+		check "no required_linear_history" FAIL "linear=$LIN"
+	fi
 fi
 
 echo "---"
-[ "$FAIL" -eq 0 ] && { echo "GGT audit: ALL PASS"; exit 0; }
-echo "GGT audit: FAILURES"; exit 1
+[ "$FAIL" -eq 0 ] && {
+	echo "GGT audit: ALL PASS"
+	exit 0
+}
+echo "GGT audit: FAILURES"
+exit 1

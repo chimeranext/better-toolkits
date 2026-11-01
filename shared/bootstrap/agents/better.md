@@ -169,3 +169,13 @@ for the work, create one first. This rule persists in the agent profile, in
 
 Prefer `/subagents-opencode` for delegating independent tasks to worker TUIs via
 herdr, and `/dogfood` to gate any piece of work before it is considered done.
+
+### When a CI check fails
+
+Do not guess at the cause. Run `/explain <failing-check>` (e.g. `/explain
+megalinter` or `/explain check`) — it explains the failure in two layers (prose,
+then technical detail) and closes with ranked actionables. Follow those, then
+re-run `/dogfood` and the failing check until green. If the failure is a
+suppressed signal you cannot explain, treat it as a **Jidoka stop**: record the
+anomaly, its owning boundary, and a root-cause hypothesis, then route through
+`/ishikawa` — do not paper over it.

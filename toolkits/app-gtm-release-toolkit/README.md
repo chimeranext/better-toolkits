@@ -1,5 +1,7 @@
 # app-gtm-release-toolkit
 
+[![Version](https://img.shields.io/badge/version-2.4.7-blue)](.claude-plugin/plugin.json) [![License: BSL-1.1](https://img.shields.io/badge/license-BSL--1.1-important)](LICENSE)
+
 Multi-platform app go-to-market and release toolkit. Ship Flutter, Kotlin Multiplatform, Swift native, .NET MAUI, and Progressive Web Apps to Google Play, App Store, Microsoft Store, Snap Store, and alternative channels — through a guided lifecycle with validation gates and persistent checkpoints.
 
 A Claude Code plugin by [Luis Andres Pena Castillo](https://github.com/lapc506).
