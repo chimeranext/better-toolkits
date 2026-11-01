@@ -44,7 +44,7 @@ jobs:
         with:
           script: |
             const files = Number("${{ steps.size.outputs.files }}");
-            const threshold = Number("${{ size_threshold }}");
+            const threshold = Number("{{ size_threshold }}");
             core.setFailed(`PR touches ${files} files (> ${threshold}). Split it or declare a mechanical-move exception.`);
 
   stale-prs:
