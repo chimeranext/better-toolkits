@@ -14,8 +14,8 @@ on:
     paths:
       - '.github/CODEOWNERS'
       - 'CODEOWNERS'
-      - 'scripts/check-codeowners-rot.mjs'
-      - '.github/workflows/codeowners-rot.yml'
+      - 'scripts/check-codeowners-rotation.mjs'
+      - '.github/workflows/codeowners-rotation.yml'
   schedule:
     - cron: '30 6 * * *'
   workflow_dispatch:
@@ -28,7 +28,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  codeowners-rot:
+  codeowners-rotation:
     name: Every CODEOWNERS rule owns at least one tracked file
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -36,4 +36,4 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Audit CODEOWNERS for dead patterns
-        run: node scripts/check-codeowners-rot.mjs
+        run: node scripts/check-codeowners-rotation.mjs

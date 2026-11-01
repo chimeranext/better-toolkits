@@ -22,6 +22,14 @@ canonical templates.
      failing on `CRITICAL,HIGH`.
 2. **Severity is fail-closed.** CI gate failures block the merge. Bypasses are
    evidence, not switches — they go through the `internal-audits` trail (MPH).
+   Advisory scans (SBOM, DAST) are the exception: they `continue-on-error` and
+   report, but never block.
+3. **The core security gate is `security-scan`** (CodeQL + Trivy +
+   dependency-scan), and it is **extensible**: SBOM (CycloneDX) and DAST
+   (OWASP ZAP baseline) are opt-in advisory steps of the same composite action.
+4. **PR governance is a distinct gate family** (`pr-governance.yml`): PR size,
+   stale PRs, and guards. It is not part of security nor lint; it covers
+   engineering discipline.
 3. **The gates are vendored, not hand-authored per repo.** Canonical templates
    live in `toolkits/assurance-toolkit/scripts/assurance-repo-setup/templates/`
    (`workflow-security.yml.tpl`, `workflow-megalinter.yml.tpl`, `workflow-
