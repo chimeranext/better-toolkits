@@ -5,53 +5,53 @@ parent: none
 
 ## GOAL
 
-Un `.github/CODEOWNERS` (o `CODEOWNERS`) que esté "bien escrito" bajo este record
-no tiene reglas muertas: cada patrón matchea al menos un archivo trackeado.
+A `.github/CODEOWNERS` (or `CODEOWNERS`) file that is "well written" under this
+record has no dead rules: every pattern matches at least one tracked file.
 
 ## SOURCES
 
-| # | kind | ref (ID + versión/fecha) | weight | para qué |
+| # | kind | ref (ID + versión/fecha) | weight | purpose |
 |---|------|--------------------------|--------|----------|
-| S1 | repo | incidente de rotación de CODEOWNERS (patrón con typo quedó inerte e invisible) | load-bearing | motivación del check |
-| S2 | repo | `git ls-files` como corpus de archivos trackeados | load-bearing | base del matcheo |
-| S3 | repo | semántica wildmatch de git (referencia para matcheo profundo) | context | plata real del check |
+| S1 | repo | CODEOWNERS rotation incident (a typo'd pattern stayed inert and invisible) | load-bearing | motivation for the check |
+| S2 | repo | `git ls-files` as the corpus of tracked files | load-bearing | basis for matching |
+| S3 | repo | git wildmatch semantics (reference for deep matching) | context | real basis for the check |
 
 ## RULES
 
-- R1 [pipe-discipline] Todo patrón en CODEOWNERS debe matchear ≥1 archivo
-  trackeado → S2
-- R2 [pipe-discipline] Un patrón muerto (0 matches) es un defecto y debe
-  reportarse como error, no como warning → S1
-- R3 [pipe-discipline] Patrones con typo (path renombrado o mal escrito) se
-  detectan como muertos, no como "cobertura" → S1, S2
-- R4 [pipe-discipline] Si el matcheo es superficial (glob), el repo debe
-  decidir explícitamente si necesita matcheo de sandbox (`git check-ignore`
-  en repo vacío) para repos grandes con `.gitignore` complejos → S3
+- R1 [pipe-discipline] Every pattern in CODEOWNERS MUST match ≥1 tracked file
+  → S2
+- R2 [pipe-discipline] A dead pattern (0 matches) is a defect and MUST be
+  reported as an error, not a warning → S1
+- R3 [pipe-discipline] Typo'd patterns (renamed or misspelled path) are detected
+  as dead, not as "coverage" → S1, S2
+- R4 [pipe-discipline] If matching is shallow (glob), the repo MUST explicitly
+  decide whether it needs sandbox matching (`git check-ignore` in an empty repo)
+  for large repos with complex `.gitignore` files → S3
 
 ## COUNTEREXAMPLES
 
 ```text
-# ❌ wrong: patrón que no matchea nada (resto del archivo intacto)
+# ❌ wrong: pattern that matches nothing (rest of file intact)
 infrastructure/terraform/**/removed-path/ @org/founders
 
-# ✅ right: patrón que sí matchea archivos existentes
+# ✅ right: pattern that matches existing files
 infrastructure/terraform/** @org/founders
 ```
 
 ## GATES
 
-- local: `node scripts/check-codeowners-rot.mjs` (exit 0) + git ls-files
-- CI: trigger `pull_request` (path-filtered a CODEOWNERS) + `schedule` diario
-  (para detectar rot que ocurre al moverse otros archivos)
+- local: `node scripts/check-codeowners-rotation.mjs` (exit 0) + `git ls-files`
+- CI: `pull_request` trigger (path-filtered to CODEOWNERS) + daily `schedule`
+  (to catch rot that happens when other files move)
 
 ## LESSONS
 
-- L1: Una regla muerta es peor que una ausente: hace que el archivo PAREZCA
-  cubierto, así que nadie la nota. → RULE R2
-- L2: El rot ocurre cuando OTROS archivos se mueven, no cuando se edita
-  CODEOWNERS — por eso el trigger `schedule` es necesario. → RULE R2
+- L1: A dead rule is worse than a missing one: it makes the file APPEAR
+  covered, so nobody notices it. → RULE R2
+- L2: Rot happens when OTHER files move, not when CODEOWNERS is edited — so the
+  `schedule` trigger is necessary. → RULE R2
 
 ## RECEIPT
 
-<!-- candidate_sha + risk tier + lenses + verdict — emitido en el dogfood del
-     check-codeowners-rot.mjs.tpl -->
+<!-- candidate_sha + risk tier + lenses + verdict — emitted in the dogfood of
+     check-codeowners-rotation.mjs.tpl -->
