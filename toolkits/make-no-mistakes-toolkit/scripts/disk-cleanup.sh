@@ -534,6 +534,19 @@ stage_build_artifacts() {
     if [ -d "$HOME/Documentos/GitHub" ]; then
         echo "$HOME/Documentos/GitHub" >> "$repo_file"
     fi
+
+    # Fallback: if no repos were discovered on the whole disk (e.g. a very
+    # restricted environment), fall back to scanning the user home, but only
+    # dirs whose name is a plausible work repo (skip dot-dirs/caches).
+    if [ ! -s "$repo_file" ]; then
+        find "$HOME" -maxdepth 4 -type d -name .git \
+            -not -path "$HOME/.asdf/*" -not -path "$HOME/.nvm/*" \
+            -not -path "$HOME/.linuxbrew/*" -not -path "$HOME/.pub-cache/*" \
+            -not -path "$HOME/.cache/*" -not -path "$HOME/flutter/*" \
+            -not -path "$HOME/.hermes/*" \
+            > "$scratch/repos_find.out" 2>&1 || true
+        sed 's#/\.git$##' "$scratch/repos_find.out" | sort -u > "$repo_file"
+    fi
     sort -u -o "$repo_file" "$repo_file"
 
     # 2. Collect build artifacts within each discovered repo.
