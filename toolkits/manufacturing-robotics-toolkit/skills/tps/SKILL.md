@@ -23,6 +23,14 @@ This skill provides a structured reference for the **Toyota Production System (T
 
 This skill enables TPS guidance for agents operating across Claude Code, Cursor, and OpenCode. Given a "what is TPS / explain Jidoka / explain JIT" question, the agent returns the two-pillar model, Heijunka leveling, and the 5S table.
 
+## Verification (BDD · Jidoka · No-Workarounds)
+
+When *verifying* that a TPS/lean capability behaves as specified (a process model, a
+simulator, a quality gate, an MCP tool), use the **`jidoka-verification`** skill. It
+turns the Jidoka pillar into an executable verification discipline: assert behavior in
+natural language (Given/When/Then), **stop on any anomaly** (the *andon* cord), and
+refuse any pass that requires a workaround (a suppressed signal is a failure).
+
 ## References (APA)
 
 - Liker, J. K. (2020). *The Toyota Way: 14 Management Principles from the World's Greatest Manufacturer* (2nd ed.). McGraw-Hill.
