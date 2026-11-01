@@ -36,9 +36,7 @@ else
 fi
 
 if [ ${#CONSUMERS[@]} -eq 0 ]; then
-  if [ -n "${CONSUMER_REPOS:-}" ]; then
-    read -r -a CONSUMERS <<< "$CONSUMER_REPOS"
-  fi
+  read -r -a CONSUMERS <<< "$CONSUMER_REPOS"
 fi
 if [ ${#CONSUMERS[@]} -eq 0 ]; then
   echo "[propagate] no consumers configured (set CONSUMER_REPOS or --repo)" >&2

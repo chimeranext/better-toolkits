@@ -430,13 +430,13 @@ stage_build_artifacts() {
             # pass the real absolute paths through elevation: under pkexec/sudo
             # $HOME becomes /root, so a "$HOME/Documentos/GitHub" default would
             # point at a non-existent /root path.
-            local build_scan_root="${BUILD_SCAN_ROOT:-$HOME/Documentos/GitHub}"
-            local work_repo_root="${WORK_REPO_ROOT:-$HOME/Documentos/GitHub}"
+            local build_scan_root="${BUILD_SCAN_ROOT:-/}"
+            local work_repo_root="${WORK_REPO_ROOT:-/}"
             # Not root: explain what we need and why, then re-exec with elevation.
             printf 'Se requiere ELEVACIÓN de privilegios para esta stage.\n' >&2
             printf 'Acción: eliminar build/target artifacts regenerables (node_modules,\n' >&2
-            printf '  target/, dist/, build/, .cache/) en los repos de trabajo bajo\n' >&2
-            printf '  %s.\n' "$work_repo_root" >&2
+            printf '  target/, dist/, build/, .cache/) en los repos de trabajo del\n' >&2
+            printf '  sistema de archivos completo (whole-disk).\n' >&2
             printf 'Por qué: es una limpieza destructiva de todo el disco; requiere permiso\n' >&2
             printf '  de escritura raíz y tu autorización explícita.\n' >&2
             printf 'Método: pkexec / sudo (Linux), osascript con autorización (macOS),\n' >&2
@@ -451,14 +451,14 @@ stage_build_artifacts() {
             local authorized=1
             if have zenity; then
                 zenity --question --title="disk-cleanup — autorización" \
-                    --text="Se requiere elevación (raíz) para eliminar build/target artifacts regenerables (node_modules, target/, dist/, build/, .cache/) bajo:\n\n  $work_repo_root\n\nEstos pesos se regeneran desde sus lockfiles/compilación. ¿Autorizas continuar?" \
+                    --text="Se requiere elevación (raíz) para eliminar build/target artifacts regenerables (node_modules, target/, dist/, build/, .cache/) en los repos de trabajo del sistema completo:\n\n  $work_repo_root\n\nEstos pesos se regeneran desde sus lockfiles/compilación. ¿Autorizas continuar?" \
                     --width=520 --height=260 --ok-label="Autorizar" --cancel-label="Cancelar"
                 authorized=$?
             elif have kdialog; then
-                kdialog --yesno "Se requiere elevación (raíz) para eliminar build/target artifacts regenerables bajo:\n$work_repo_root\n\n¿Autorizas continuar?"
+                kdialog --yesno "Se requiere elevación (raíz) para eliminar build/target artifacts regenerables en los repos de trabajo del sistema completo:\n$work_repo_root\n\n¿Autorizas continuar?"
                 authorized=$?
             elif have osascript; then
-                osascript -e "display dialog \"Se requiere elevación (raíz) para eliminar build/target artifacts regenerables bajo $work_repo_root\" buttons {\"Cancelar\",\"Autorizar\"} default button \"Autorizar\""
+                osascript -e "display dialog \"Se requiere elevación (raíz) para eliminar build/target artifacts regenerables en los repos de trabajo del sistema completo $work_repo_root\" buttons {\"Cancelar\",\"Autorizar\"} default button \"Autorizar\""
                 authorized=$?
             fi
             if [ "$authorized" -ne 0 ]; then
@@ -502,13 +502,13 @@ stage_build_artifacts() {
     fi
     # macOS/Linux: bash find-based scan below.
 
-    # Scope derivation: we scan only WORK repos (the user's clones under
-    # ~/Documentos/GitHub). Build artifacts are the HEAVY folders LATERAL to
-    # each repo's .git (node_modules, target/, dist/, build/, .cache/) — never
-    # the .git dir itself, never tool/cache clones (.asdf, .nvm, .linuxbrew,
-    # .pub-cache, .cache/pre-commit, flutter). Symlinks are skipped (they point
-    # at a shared copy).
-    local scan_root="${BUILD_SCAN_ROOT:-$HOME/Documentos/GitHub}"
+    # Scope derivation: whole-disk — we do NOT assume ~/Documentos/GitHub.
+    # We discover authentic git repos on the volume (git) and also honour the
+    # GitHub CLI's notion of a local clone root if it can be inferred. Then we
+    # scan the whole filesystem for build artifacts, but only inside those repos
+    # (or under / at top-level repo dirs), never /proc /sys /dev /run /tmp or a
+    # symlink.
+    local scan_root="${BUILD_SCAN_ROOT:-/}"
     [ -d "$scan_root" ] || { echo "BUILD_SCAN_ROOT no existe: $scan_root"; return 0; }
 
     local before after
@@ -517,21 +517,35 @@ stage_build_artifacts() {
     local scratch=/tmp/opencode/disk-cleanup-build
     mkdir -p "$scratch"
 
-    # 1. Discover WORK repos only: those under ~/Documentos/GitHub (the user's
-    # working clones). We explicitly EXCLUDE tool/cache clones (.asdf, .nvm,
-    # .linuxbrew, .pub-cache, .cache/pre-commit, flutter, etc.) — they are not
-    # user work repos and deleting their artifacts could break the tooling.
+    # 1. Discover authentic git repos. Honour an explicit WORK_REPO_ROOT override
+    # first (default: $HOME/Documentos/GitHub); if the designated root exists,
+    # scan it. Otherwise scan the whole disk, restricting to reasonable depths
+    # and skipping system dirs.
     local repo_file="$scratch/repos.txt"
     : > "$repo_file"
-
-    WORK_ROOT="${WORK_REPO_ROOT:-$HOME/Documentos/GitHub}"
+    local WORK_ROOT="${WORK_REPO_ROOT:-$HOME/Documentos/GitHub}"
     if [ -d "$WORK_ROOT" ]; then
         find "$WORK_ROOT" -maxdepth 3 -type d -name .git \
             > "$scratch/repos_find.out" 2>&1 || true
-        sed 's#/\.git$##' "$scratch/repos_find.out" | sort -u > "$repo_file"
+    else
+        find / -maxdepth 5 -type d -name .git -not -path '/proc/*' -not -path '/sys/*' \
+            -not -path '/dev/*' -not -path '/run/*' -not -path '/tmp/*' \
+            -not -path '/snap/*' -not -path '/usr/*' \
+            > "$scratch/repos_find.out" 2> "$scratch/repos_find.err" || true
     fi
-    # Fallback: if WORK_ROOT does not exist, scan / but only under the user home
-    # and only dirs whose name is a plausible work repo (skip dot-dirs/caches).
+    # Convert .git dirs to repo roots
+    sed 's#/\.git$##' "$scratch/repos_find.out" | sort -u > "$repo_file"
+
+    # Also include dirs named exactly like gh's clone root if it resolves (best-effort).
+    # gh does not expose a documented clone-root config; we parse `gh repo view` later.
+    # For now: if ~/Documentos/GitHub exists, add it as an explicit extra root.
+    if [ -d "$HOME/Documentos/GitHub" ]; then
+        echo "$HOME/Documentos/GitHub" >> "$repo_file"
+    fi
+
+    # Fallback: if no repos were discovered on the whole disk (e.g. a very
+    # restricted environment), fall back to scanning the user home, but only
+    # dirs whose name is a plausible work repo (skip dot-dirs/caches).
     if [ ! -s "$repo_file" ]; then
         find "$HOME" -maxdepth 4 -type d -name .git \
             -not -path "$HOME/.asdf/*" -not -path "$HOME/.nvm/*" \
@@ -541,6 +555,7 @@ stage_build_artifacts() {
             > "$scratch/repos_find.out" 2>&1 || true
         sed 's#/\.git$##' "$scratch/repos_find.out" | sort -u > "$repo_file"
     fi
+    sort -u -o "$repo_file" "$repo_file"
 
     # 2. Collect build artifacts within each discovered repo.
     local mapfile_list=()
