@@ -9,6 +9,36 @@ your startup needs, from problem validation through go-to-market. Inspired by th
 "pick-your-stack" experience of [create-better-t-stack](https://www.better-t-stack.dev/)
 and a sibling to [better-microservices](https://github.com/chimeranext/better-microservices).
 
+## Engineering Standards
+
+The monorepo vendors **24 engineering standards** (SSOT at
+`shared/references/engineering-standards/`), adopted in order:
+
+1. [Domain-Sliced Module Structure (DSMS)](shared/references/engineering-standards/dsms-ifs-cps.md#dsms—domain-sliced-module-structure)
+2. [Intra-File Structure (IFS)](shared/references/engineering-standards/dsms-ifs-cps.md#ifs—intra-file-structure)
+3. [Categorized Public Surface (CPS)](shared/references/engineering-standards/dsms-ifs-cps.md#cps—categorized-public-surface)
+4. [Pull Request Description Standards (PRDS)](shared/references/engineering-standards/prds.md)
+5. [Branching Strategy (BrS)](shared/references/engineering-standards/branching-strategy.md)
+6. [Worktree Discipline (WTD)](shared/references/engineering-standards/worktree-discipline.md)
+7. [GitFlow + Trunk-based (GGT)](shared/references/engineering-standards/gitflow-trunk.md)
+8. [QA Traceability, four layers (QT4L)](shared/references/engineering-standards/qa-traceability-four-layers.md)
+9. [Anti-Fragility via Fault Injection (AFIF)](shared/references/engineering-standards/anti-fragility-fault-injection.md)
+10. [OpenSpec store PR traceability (OST)](shared/references/engineering-standards/openspec-store-pr-traceability.md)
+11. [Checksum Hygiene (CHH)](shared/references/engineering-standards/checksum-hygiene.md)
+12. [Semantic Versioning policy (SemVer)](shared/references/engineering-standards/semver.md)
+13. [Main Protections & HITL Merge Guard (MPH)](shared/references/engineering-standards/main-protections-hitl.md)
+14. [Build-Artifact Gitignore (BGI)](shared/references/engineering-standards/build-artifacts-gitignore.md)
+15. [Ops Documentation Taxonomy (ODT)](shared/references/engineering-standards/ops-documentation-taxonomy.md)
+16. [No-Squash Merge (NSQ)](shared/references/engineering-standards/no-squash-merge.md)
+17. [Formal Model TLA+ (TFM)](shared/references/engineering-standards/formal-model-tla.md)
+18. [Release Cut (REL)](shared/references/engineering-standards/release-cut.md)
+19. [Local Truth is not Ground Truth (LTGT)](shared/references/engineering-standards/local-vs-ground-truth.md)
+20. [CI Security & Standards (CIS)](shared/references/engineering-standards/ci-security-standards.md)
+21. [Domain-Driven Design (DDD)](shared/references/engineering-standards/domain-driven-design.md)
+22. [Repository Drift Prevention (RDP)](shared/references/engineering-standards/repository-drift-prevention.md)
+23. [CODEOWNERS Replication Workflow](shared/references/engineering-standards/codeowners-replication-workflow.md)
+24. [No Deprecated Agent Shims](shared/references/engineering-standards/no-deprecated-agent-shims.md)
+
 ## Table of Contents
 
 - [Engineering Standards](#engineering-standards)
@@ -429,36 +459,6 @@ toolkits/<name>/
 apps/web/             # Landing + /doctrine (toolkits.chimeranext.dev via GitHub Pages)
 docs/                 # Monorepo contracts (multi-harness-ssot.md, buildwithclaude-marketplace.md, …)
 ```
-
-## Engineering Standards
-
-The monorepo vendors **24 engineering standards** (SSOT at
-`shared/references/engineering-standards/`), adopted in order:
-
-1. [Domain-Sliced Module Structure (DSMS)](shared/references/engineering-standards/dsms-ifs-cps.md#dsms—domain-sliced-module-structure)
-2. [Intra-File Structure (IFS)](shared/references/engineering-standards/dsms-ifs-cps.md#ifs—intra-file-structure)
-3. [Categorized Public Surface (CPS)](shared/references/engineering-standards/dsms-ifs-cps.md#cps—categorized-public-surface)
-4. [Pull Request Description Standards (PRDS)](shared/references/engineering-standards/prds.md)
-5. [Branching Strategy (BrS)](shared/references/engineering-standards/branching-strategy.md)
-6. [Worktree Discipline (WTD)](shared/references/engineering-standards/worktree-discipline.md)
-7. [GitFlow + Trunk-based (GGT)](shared/references/engineering-standards/gitflow-trunk.md)
-8. [QA Traceability, four layers (QT4L)](shared/references/engineering-standards/qa-traceability-four-layers.md)
-9. [Anti-Fragility via Fault Injection (AFIF)](shared/references/engineering-standards/anti-fragility-fault-injection.md)
-10. [OpenSpec store PR traceability (OST)](shared/references/engineering-standards/openspec-store-pr-traceability.md)
-11. [Checksum Hygiene (CHH)](shared/references/engineering-standards/checksum-hygiene.md)
-12. [Semantic Versioning policy (SemVer)](shared/references/engineering-standards/semver.md)
-13. [Main Protections & HITL Merge Guard (MPH)](shared/references/engineering-standards/main-protections-hitl.md)
-14. [Build-Artifact Gitignore (BGI)](shared/references/engineering-standards/README.md#14-bgi--build-artifact-gitignore)
-15. [Ops Documentation Taxonomy (ODT)](shared/references/engineering-standards/ops-documentation-taxonomy.md)
-16. [No-Squash Merge (NSQ)](shared/references/engineering-standards/no-squash-merge.md)
-17. [Formal Model TLA+ (TFM)](shared/references/engineering-standards/formal-model-tla.md)
-18. [Release Cut (REL)](shared/references/engineering-standards/release-cut.md)
-19. [Local Truth is not Ground Truth (LTGT)](shared/references/engineering-standards/local-vs-ground-truth.md)
-20. [CI Security & Standards (CIS)](shared/references/engineering-standards/ci-security-standards.md)
-21. [Domain-Driven Design (DDD)](shared/references/engineering-standards/domain-driven-design.md)
-22. [Repository Drift Prevention (RDP)](shared/references/engineering-standards/repository-drift-prevention.md)
-23. [CODEOWNERS Replication Workflow](shared/references/engineering-standards/codeowners-replication-workflow.md)
-24. [No Deprecated Agent Shims](shared/references/engineering-standards/no-deprecated-agent-shims.md)
 
 ## Why one monorepo?
 
