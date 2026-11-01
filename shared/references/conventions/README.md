@@ -21,6 +21,7 @@ enforceables. Lo transversal vive acá; los toolkits (incl. assurance) las
 | [`platform/diagrams/mermaid-github`](./platform/diagrams/mermaid-github.md) | platform | draft | Mermaid en vista GitHub |
 | [`platform/codeowners-rotation`](./platform/codeowners-rotation/README.md) | platform | draft | `node scripts/check-codeowners-rotation.mjs` |
 | [`platform/ci-workflows`](./platform/ci-workflows/README.md) | platform | draft | validación YAML + vocabulario CodeQL |
+| [`platform/architecture-patterns`](./platform/architecture-patterns/README.md) | platform | draft | patrones/antipatrones Azure Architecture Center |
 | [`prescriptive-error-messages`](./prescriptive-error-messages.md) | language (transversal) | draft | integrada como RULE en cada record de lenguaje |
 
 ## Ejemplares 2-4 (change `add-conventions-exemplars`)
