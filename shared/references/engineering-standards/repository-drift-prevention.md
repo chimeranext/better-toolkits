@@ -105,6 +105,16 @@ family tokens).
   big-bang indicators: no façade/seam, no coexistence, a single giant cutover.
 - **Justification:** The Strangler Fig pattern (Fowler) defines the correct,
   reversible migration path; the anti-pattern is the all-or-nothing rewrite.
+- **Extension — intra-repo subtree migration (no ratchet):** This family also
+  covers migrating one logical domain/pillar at a time between trees (e.g.
+  `app/Domain/*` vs legacy `app/Services/*`; `courses/` → `pathways/`). The
+  detector measures migration progress (what % of a domain lives in the
+  canonical tree) and flags residue. It does **NOT** use a ratchet /
+  monotonic-shrink allowlist as the enforcement mechanism: maintaining such an
+  allowlist on every PR is a process anti-pattern (observed to block merges and
+  burn team velocity). Progress is tracked by the grandfather list shrinking
+  only when a module is genuinely migrated and deleted; there is no
+  bookkeeping burden per PR.
 - **Reference:** Fowler, M. (2004). Strangler fig application. Retrieved from
   https://martinfowler.com/bliki/StranglerFigApplication.html
 
