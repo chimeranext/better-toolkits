@@ -107,7 +107,9 @@
         "update",
         "verify",
         "verify-evidence",
-        "worktree-cleanup"
+        "worktree-cleanup",
+        "subagents-claude",
+        "parallel-subagents"
       ]
     }
   ]
