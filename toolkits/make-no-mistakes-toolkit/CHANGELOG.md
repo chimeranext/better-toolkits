@@ -140,7 +140,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.26.0] - 2026-06-02
 
 ### Added
-- `/audit-ddd` (`DDD`) — bounded-context boundary audit (cross-context imports, domain purity, ubiquitous-language drift). Adds the `findCrossContextImports` verifier.
+- `/audit-bounded-context` (`DDD`) — bounded-context boundary audit (cross-context imports, domain purity, ubiquitous-language drift). Adds the `findCrossContextImports` verifier.
 
 ## [1.25.0] - 2026-06-02
 
