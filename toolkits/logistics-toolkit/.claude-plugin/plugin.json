@@ -1,6 +1,6 @@
 {
   "name": "logistics-toolkit",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Supply chain / import toolkit for LATAM: procurement (P2P, SRM, Kraljic), customs regimes, import documents, INCOTERMS 2020, free trade agreements, and inventory management.",
   "author": {
     "name": "Luis Andres Pena Castillo",

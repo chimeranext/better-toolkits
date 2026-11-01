@@ -1,0 +1,29 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "__HARNESS_HOOKS__/enforce-prds.sh"
+          },
+          {
+            "type": "command",
+            "command": "__HARNESS_HOOKS__/approve-admin-merge.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "__HARNESS_HOOKS__/stop-prs-green.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

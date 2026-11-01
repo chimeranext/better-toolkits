@@ -89,7 +89,7 @@ Follow [`docs/multi-harness-ssot.md`](docs/multi-harness-ssot.md):
 - Merge upstream PRs on DojoCodingLabs remotes — you **port into better-toolkits**,
   you do not close their upstream review process unless the user says so.
 - Clone stderr detectors per toolkit by hand-editing logic; sync from
-  `shared/hooks/stderr` via `scripts/sync-stderr-from-shared.sh` when needed.
+  `shared/hooks/stderr` via `scripts/sync-hooks-from-shared.sh` when needed.
 
 ## Default backlog hints (refresh with gh each run)
 

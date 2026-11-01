@@ -1,0 +1,11 @@
+{
+  "name": "@chimeranext/dogfood-harness",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Local /dogfood demonstration harness (BDD · Jidoka · No-Workarounds) with mandatory Pele statechart rendering (blueprint default).",
+  "dependencies": {
+    "pele": "^1.9.0"
+  },
+  "license": "BSL-1.1"
+}
