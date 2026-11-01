@@ -12,7 +12,9 @@ vive en `/assurance-local-setup` — este protocolo no lo toca.
 | `.mega-linter.yml` | Linters según el stack detectado + `PRE_COMMANDS` de typecheck |
 | `.github/workflows/megalinter.yml` | Gate CI (corre **siempre**: sin filtros `paths`) + artifacts SARIF/JSON |
 | `.github/workflows/bypass-audit.yml` | Detección de bypass y persistencia de receipt en `internal-audits` |
-| `.github/workflows/security.yml` | Gate de seguridad estandarizado: CodeQL (SAST) + Trivy (config/fs/secret). Template: `templates/workflow-security.yml.tpl` |
+| `.github/workflows/security.yml` | Gate de seguridad estandarizado: CodeQL (SAST) + Trivy (config/fs/secret) + dependency-scan; SBOM/DAST advisory opt-in. Template: `templates/workflow-security.yml.tpl` |
+| `.github/workflows/codeowners-rotation.yml` | Gate de la convention `codeowners-rotation` (reglas CODEOWNERS muertas). Templates: `templates/workflow-codeowners-rotation.yml.tpl` + `templates/check-codeowners-rotation.mjs.tpl` |
+| `.github/workflows/pr-governance.yml` | Gobernanza de PR (size + stale). Template: `templates/workflow-pr-governance.yml.tpl` |
 | `shared/hooks/tsconfig.json` (si hay TS) | Base ESM para `tsc --noEmit` (typecheck) |
 | Ruleset `required_status_checks` | Asegurado por `ensure-rule-set.sh` (si hay permisos) |
 
