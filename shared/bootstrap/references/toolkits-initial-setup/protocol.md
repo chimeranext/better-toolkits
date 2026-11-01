@@ -190,6 +190,9 @@ agent profile (`agents/better.md`) references them. The hooks enforce the key on
 - **CIS** (`ci-security-standards.md`) — CI security & standards. CodeQL +
   Trivy + MegaLinter gates, vendored from assurance-toolkit templates and the
   `security-scan` composite action (Phase 7).
+- **RDP** (`repository-drift-prevention.md`) — Repository Drift Prevention. The
+  six `audit-engine` detector families (SCH/CDC/DDD/ARC/STR/ENF) and their
+  canonical-source rationale.
 - **PRDS / BrS / WTD / QT4L / OST / NSQ / TFM** — the other indexed standards.
 
 The setup also installs the scripts/hooks that enforce StS (stderr adapter), the
