@@ -156,7 +156,13 @@ Split from harness-initial-setup: this step provisions the **GGT** model on the 
      without `required_linear_history` (MPH).
 2. **Audit**: `scripts/ci/audit-repo-gitflow.sh --repo <owner/repo> [--require-develop]`
    - Report PASS/FAIL per invariant. If FAIL → `GAP` (do not fake compliance).
-3. **Output**: PASS/FAIL table per invariant. `GGT audit: ALL PASS` or `GGT audit: FAILURES` with the failed invariant. If no repo permissions → document `no-enforced` (does not block bootstrap).
+3. **Provision CODEOWNERS** (idempotent, only with permissions):
+   - If `.github/CODEOWNERS` is missing or references only individual logins,
+     write `* @<org>/founders` (create the team if it does not exist).
+   - Verify the team exists (fail-closed); report `GAP` if it cannot be created.
+   - This guarantees the `main-founders-only` ruleset has a concrete team to
+     auto-assign as reviewer (MPH points 7-8).
+4. **Output**: PASS/FAIL table per invariant. `GGT audit: ALL PASS` or `GGT audit: FAILURES` with the failed invariant. If no repo permissions → document `no-enforced` (does not block bootstrap).
 
 ## Engineering standards (SSOT)
 
@@ -177,7 +183,11 @@ agent profile (`agents/better.md`) references them. The hooks enforce the key on
 - **LTGT** (`local-vs-ground-truth.md`) — search ground truth from the git
   common-dir across all worktrees with hidden paths. Never conclude absence from
   a CWD-only scan.
-- **PRDS / BrS / WTD / QT4L / OST / MPH / NSQ / TFM** — the other indexed standards.
+- **MPH** (`main-protections-hitl.md`) — protected branch + HITL gate. The
+  `main-founders-only` ruleset is provisioned in Phase 7b, with CODEOWNERS
+  pointing to the `founders` team (Phase 7b step 3; replication workflow in
+  `codeowners-replication-workflow.md`).
+- **PRDS / BrS / WTD / QT4L / OST / NSQ / TFM** — the other indexed standards.
 
 The setup also installs the scripts/hooks that enforce StS (stderr adapter), the
 OpenSpec pipeline discipline, and the GGT audit. `sync-better-profile.sh` syncs
