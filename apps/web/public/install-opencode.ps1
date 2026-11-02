@@ -7,19 +7,19 @@ $config = Join-Path $configDir "opencode.json"
 $catalog = "https://toolkits.chimeranext.dev/opencode/skills/"
 
 New-Item -ItemType Directory -Force -Path $configDir | Out-Null
-Write-Host "[opencode] config: $config"
+Write-Output "[opencode] config: $config"
 
 if (-not (Test-Path $config)) {
   $doc = @{ '$schema' = "https://opencode.ai/config.json"; skills = @($catalog) }
   $doc | ConvertTo-Json -Depth 4 | Set-Content -Path $config -Encoding UTF8
-  Write-Host "[opencode] created config with skills catalog"
+  Write-Output "[opencode] created config with skills catalog"
 } else {
   $doc = Get-Content $config -Raw | ConvertFrom-Json
   if ($doc.skills -notcontains $catalog) {
     $doc.skills += $catalog
     ($doc | ConvertTo-Json -Depth 6) | Set-Content -Path $config -Encoding UTF8
   }
-  Write-Host "[opencode] skills catalog ensured"
+  Write-Output "[opencode] skills catalog ensured"
 }
 
-Write-Host "[opencode] done. Restart OpenCode to load the catalog."
+Write-Output "[opencode] done. Restart OpenCode to load the catalog."

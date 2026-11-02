@@ -2,13 +2,13 @@
 # One-liner (PowerShell): irm https://toolkits.chimeranext.dev/install-claude.ps1 | iex
 $ErrorActionPreference = "Stop"
 
-Write-Host "[claude] add marketplace"
+Write-Output "[claude] add marketplace"
 claude plugin marketplace add chimeranext/better-toolkits
 
-Write-Host "[claude] install bootstrap plugin"
+Write-Output "[claude] install bootstrap plugin"
 claude plugin install better-toolkits-bootstrap@better-toolkits
 
-Write-Host "[claude] install agent-agnostic skills (global)"
+Write-Output "[claude] install agent-agnostic skills (global)"
 npx skills add chimeranext/better-toolkits --all -g -y
 
-Write-Host "[claude] done. Run /toolkits-initial-setup to finish wiring."
+Write-Output "[claude] done. Run /toolkits-initial-setup to finish wiring."
