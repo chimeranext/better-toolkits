@@ -5,7 +5,7 @@ Engine: `scripts/ci/sweep-pending-opsx.sh` (single source; scripts must not be d
 
 ---
 
-# /sweep-pending-opsx: $ARGUMENTS
+## /sweep-pending-opsx: $ARGUMENTS
 
 Roams **outside** `/opsx-apply`. `/opsx-apply` executes one change's tasks one
 by one; this sweep answers **which OpenSpec changes are pending work**
@@ -66,7 +66,7 @@ Behavior:
 - Standard Error list: preserve any actionable stderr; never drop stdout/stderr
   through /dev/null (see StS standard).
 
-## Contexts to not maintain (forbid):
+## Contexts to not maintain (forbid)
 
 - Don't attempt to parse `weights`, `assign`, `owners` markdown labels —
   OpenSpec uses no metadata fields; only checkbox state is authoritative.
@@ -76,6 +76,7 @@ Behavior:
 ## OpenSpec delta expectations
 
 After merging, `/sweep-pending-opsx` becomes the shared gate for:
+
 - `/opsx-apply` chooses the next change to work on;
 - `/opsx-sync` / `/opsx-living` chain gets a constant view of "what's pending"
   before it runs (living spec data can be computed before sync).
