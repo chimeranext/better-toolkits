@@ -64,6 +64,7 @@ flowchart TD
 
 | Stage (in RTR) | Standard |
 | --- | --- |
+| Issue opening / redaction (Human + Agent, antes de abrir) | **BIB** |
 | Tracker issue → change folder | **OST** |
 | PR description + scope | **PRDS** |
 | QA traceability (req → test) | **QT4L** |

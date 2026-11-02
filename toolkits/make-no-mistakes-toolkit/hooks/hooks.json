@@ -57,6 +57,11 @@
         "hooks": [
           {
             "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/bilingual/pre-linear-save-issue-bilingual.sh",
+            "timeout": 5
+          },
+          {
+            "type": "command",
             "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/hygiene/pre-linear-save-issue-hygiene.sh",
             "timeout": 5
           }
