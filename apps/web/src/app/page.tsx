@@ -508,8 +508,8 @@ export default function Page() {
             {METHOD_GROUPS.map((g, gi) => {
               // Brand accents re-tuned for contrast on the light surface (same
               // treatment as the canonical light theme: darker, same hues).
-              const accents = ["#6D4AF5", "#2563EB", "#0E93B5", "#DB2777", "#0F9D6B", "#D97706"];
-              const spans = ["lg:col-span-3 lg:row-span-2", "lg:col-span-3", "lg:col-span-3", "lg:col-span-2", "lg:col-span-2", "lg:col-span-2"];
+              const accents = ["#6D4AF5", "#2563EB", "#0E93B5", "#DB2777", "#0F9D6B", "#D97706", "#EA580C", "#C026D3"];
+              const spans = ["lg:col-span-3 lg:row-span-2", "lg:col-span-3", "lg:col-span-3", "lg:col-span-2", "lg:col-span-2", "lg:col-span-2", "lg:col-span-2", "lg:col-span-2"];
               const accent = accents[gi % accents.length];
               return (
                 <div

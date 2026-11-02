@@ -10,6 +10,10 @@ export const MARKETPLACE = "better-toolkits";
 type Generated = { plugin: string; dir: string; version: string; category: string | null };
 
 const ONE_LINERS: Record<string, { en: string; es: string }> = {
+  "./shared/bootstrap": {
+    en: "Marketplace bootstrap layer — install first, then wire harnesses and product toolkits with HITL consent.",
+    es: "Capa de bootstrap del marketplace — instala primero, luego conecta harnesses y toolkits con consentimiento HITL.",
+  },
   "make-no-mistakes-toolkit": {
     en: "Disciplined dev lifecycle — repo-health audit engine, issue execution, PR review, releases, E2E, secrets.",
     es: "Ciclo de desarrollo disciplinado — motor de auditoría de repo, ejecución de issues, review de PRs, releases, E2E, secretos.",
@@ -30,10 +34,6 @@ const ONE_LINERS: Record<string, { en: string; es: string }> = {
     en: "Multi-platform app go-to-market and release across Flutter, KMP, MAUI, Swift, PWA.",
     es: "Go-to-market y release multiplataforma: Flutter, KMP, MAUI, Swift, PWA.",
   },
-  "aaarrr-flywheel-toolkit": {
-    en: "Growth-engineering funnel + flywheel: pricing → landing → instrumentation → AAARRR.",
-    es: "Growth-engineering funnel + flywheel: pricing → landing → instrumentación → AAARRR.",
-  },
   "fractional-cto-toolkit": {
     en: "Operational SOPs and workflows for freelance and fractional CTOs.",
     es: "SOPs y flujos operativos para CTOs freelance y fraccionales.",
@@ -42,13 +42,45 @@ const ONE_LINERS: Record<string, { en: string; es: string }> = {
     en: "Design cmi5-compliant courses and 1-on-1 session plans.",
     es: "Diseña cursos cmi5 y planes de sesión 1-on-1.",
   },
-  "launchpad-toolkit": {
-    en: "Founder-operations lab — intake, cap table, matching, demo-day, stage tracking.",
-    es: "Lab de operaciones para founders — intake, cap table, matching, demo-day, stage tracking.",
+  "startup-lifecycle-toolkit": {
+    en: "Founder journey guide — savings, entity formation, fundraising, vesting, matching, B Corp, Cayman Sandwich.",
+    es: "Guía del viaje del founder — ahorro, formación de entidad, fundraising, vesting, matching, B Corp, Cayman Sandwich.",
+  },
+  "digital-nomad-toolkit": {
+    en: "Freelancer/digital-nomad guide to operating a US Single-Member LLC — tax, banking, billing, visas, study abroad.",
+    es: "Guía para freelancers/nómadas digitales con LLC US — impuestos, banca, facturación, visas, estudiar en el exterior.",
   },
   "venture-studio-toolkit": {
     en: "Macro portfolio management for venture studios and serial founders.",
     es: "Gestión macro de portafolio para venture studios y serial founders.",
+  },
+  "assurance-toolkit": {
+    en: "Release-assurance evidence — testing, liveness, security transversal, and governance; prove you can ship.",
+    es: "Evidencia de assurance de release — testing, liveness, seguridad transversal y governance; prueba que puedes publicar.",
+  },
+  "3d-graphics-cad-toolkit": {
+    en: "3D graphics and CAD reference skills — animation, BIM, CAE/CAM, VFX, VR/AR, digital twins.",
+    es: "Skills de referencia 3D y CAD — animación, BIM, CAE/CAM, VFX, VR/AR, gemelos digitales.",
+  },
+  "game-theory-mechanics-toolkit": {
+    en: "Video-game development skills — design mechanics, player psychology, production, visual storytelling; engine-agnostic.",
+    es: "Skills de desarrollo de videojuegos — mecánicas, psicología del jugador, producción, storytelling visual; engine-agnostic.",
+  },
+  "logistics-toolkit": {
+    en: "Supply-chain domain for LATAM imports — procurement, customs, INCOTERMS 2020, trade agreements, inventory.",
+    es: "Dominio de cadena de suministro para importaciones LATAM — procurement, aduanas, INCOTERMS 2020, acuerdos, inventario.",
+  },
+  "schematics-pcb-design-toolkit": {
+    en: "Schematic capture and PCB layout for hardware/IoT — KiCad structure, DRC, manufacturing outputs, netlist diff.",
+    es: "Captura de esquemáticos y layout de PCB para hardware/IoT — estructura KiCad, DRC, salidas de fabricación, netlist diff.",
+  },
+  "revenue-growth-toolkit": {
+    en: "Growth-engineering funnel + flywheel — pricing → landing → instrumentation → AAARRR paid media execution.",
+    es: "Growth-engineering funnel + flywheel — pricing → landing → instrumentación → ejecución AAARRR en paid media.",
+  },
+  "ui-patterns-toolkit": {
+    en: "Reusable desktop UI/UX patterns, framework-agnostic — each pattern ships as skill + reference + command.",
+    es: "Patrones UI/UX de escritorio reutilizables, framework-agnostic — cada patrón incluye skill + referencia + command.",
   },
 };
 

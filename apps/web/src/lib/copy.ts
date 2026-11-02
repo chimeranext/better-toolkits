@@ -42,6 +42,7 @@ export const METHOD_GROUPS: { label: { en: string; es: string }; items: string[]
     items: [
       "Strangler Fig (Fowler)", "DDD (Evans)", "Explicit Architecture (Graça)", "Hexagonal (Cockburn)",
       "Onion (Palermo)", "Clean (Martin)", "CQRS (Young)", "Conway's Law", "1NF (Codd)", "Premortem (Klein, HBR)",
+      "ADR (Architecture Decision Records)", "BDD (Given/When/Then)",
     ],
   },
   {
@@ -49,6 +50,7 @@ export const METHOD_GROUPS: { label: { en: string; es: string }; items: string[]
     items: [
       "Atomic Design (Frost)", "NN/g Zone Model", "Service Blueprint (Shostack)", "User Story Mapping (Patton)",
       "Jobs-to-be-Done", "16+ design systems (Material 3, HIG, Carbon, Polaris…)",
+      "Brand Steering Wheel", "Limbic Map (Haeusel)",
     ],
   },
   {
@@ -56,6 +58,7 @@ export const METHOD_GROUPS: { label: { en: string; es: string }; items: string[]
     items: [
       "Lean Canvas (Maurya)", "Business Model Canvas (Osterwalder)", "Lean Startup (Ries)",
       "4 Customer Forces (Moesta & Spiek)", "Beyond Budgeting (Bogsnes)", "MoSCoW", "RICE (Intercom)",
+      "OKR", "North Star Metric",
     ],
   },
   {
@@ -71,6 +74,7 @@ export const METHOD_GROUPS: { label: { en: string; es: string }; items: string[]
     items: [
       "SAM (Allen Interactions)", "Bloom's Taxonomy (Anderson & Krathwohl)", "Backward Design (Wiggins & McTighe)",
       "Kirkpatrick L1-L4", "cmi5 / xAPI (ADL)", "Atomic Habits (Clear)",
+      "ADDIE", "Irby coach/mentor/tutor framework",
     ],
   },
   {
@@ -79,6 +83,21 @@ export const METHOD_GROUPS: { label: { en: string; es: string }; items: string[]
       "Three Horizons (McKinsey)", "Explore/Exploit (March)", "Cost of Delay / CD3 (Reinertsen)",
       "Improvement Kata (Rother)", "VC Lab studio thesis + Mensarius Oath", "SAFE (YC)",
       "Skip-CR / Delaware Tostada / Cayman Sandwich (LATAM venture structuring)",
+    ],
+  },
+  {
+    label: { en: "Manufacturing & Operations", es: "Manufactura y operaciones" },
+    items: [
+      "Toyota Production System — Jidoka · JIT · Heijunka", "5S (Hirano)", "SMED",
+      "Total Productive Maintenance (TPM)", "Six Sigma / DMAIC", "Ishikawa (fishbone)",
+      "Kraljic Matrix", "INCOTERMS 2020", "Muda · Mura · Muri",
+    ],
+  },
+  {
+    label: { en: "Game Theory & Mechanics", es: "Teoría de juegos y mecánicas" },
+    items: [
+      "Nash Equilibrium", "Zero-Sum vs Cooperative Design", "Mechanism Design",
+      "Progression & Reward Schedules",
     ],
   },
 ];
@@ -92,7 +111,7 @@ type Content = {
   s4: { title: string; fixLead: string; pairs: { problem: string; solution: string; toolkit: string }[] };
   s5: { title: string; jumpProcess: string; jumpPricing: string; cols: { n: string; toolkit: string; what: string; license: string; status: string } };
   s6: { a: string; b: string };
-  s7: { title: string; steps: { title: string; cmd: string; note?: string }[]; demo: string };
+  s7: { title: string; steps: { title: string; cmd: string; cmdPs: string }[]; demo: string };
   s8: { title: string; col1: { name: string; price: string; body: string }; col2: { name: string; body: string; whatsapp: string; calendar: string } };
   s9: { title: string; dogfooding: string; sibling: string; dogfoodingTail: string; venturesLabel: string; methodTitle: string; methodTagline: string };
   s10: { title: string; faqs: { q: string; a: string }[] };
