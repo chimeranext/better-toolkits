@@ -5,7 +5,8 @@ priority: 74
 ---
 # /opsx:sweep-pending-opsx
 
-Read and follow [`references/sweep-pending-opsx/protocol.md`](../references/sweep-pending-opsx/protocol.md) (protocol SSOT — English, anti-boilerplate, anti-hidden-redirects, no embedded secrets; adheres to OpenSpec OPSX).
+Read and follow [`references/sweep-pending-opsx/protocol.md`](../references/sweep-pending-opsx/protocol.md)
+(protocol SSOT — English, anti-boilerplate, anti-hidden-redirects, no embedded secrets; adheres to OpenSpec OPSX).
 
 Engine: `scripts/ci/sweep-pending-opsx.sh`.
 
