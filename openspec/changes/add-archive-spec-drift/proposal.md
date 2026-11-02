@@ -17,11 +17,14 @@ en el store principal; `sweep-unstaged` reporta DRIFT repo-wide.
 ## Capabilities
 
 ### New Capabilities
+
 - (ninguna — archival de 2 ya merged)
 
 ### Modified Capabilities
+
 - `disk-cleanup-podman` (ADD requirements desde delta #170)
 - `shared-mcp/posthog-chimeranext` (ADD requirements desde delta #172)
 
 ## Impact
+
 - Solo `openspec/specs/**`; el sweep debe perder los 2 & "missing" tras merge.
