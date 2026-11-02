@@ -234,6 +234,18 @@ is forbidden — including by this setup's own tooling.
 - `--no-ruleset` — pass through to `/assurance-repo-setup`: generate files but do not touch ruleset.
 - `--skip-ggt` — skip Phase 7b repo-initial-setup (GGT provisioning + audit). Report `skipped`.
 
+## Thin Makefile wrapper (alias ergonómico)
+
+`Makefile` (raíz) expone los targets por fase del protocol — `phase-detect`,
+`phase-audit`, `phase-propose`, `phase-install`, `phase-verify` — como alias
+finos sobre el CLI (`better-toolkits.js setup --phases …`) y `make setup` los
+encadena con **prompt de UI entre fases** (`shared/bootstrap/scripts/make-prompt.sh`).
+No reemplaza las fases: la detección de harness y el HITL siguen siendo runtime
+(cli). Es un atajo ergonómico, no orquestación. Nota de plataforma: es
+Unix/POSIX; Windows usa los `.ps1` del protocol.
+
+---
+
 ## Related
 
 - [multi-harness-ssot.md](../../../../docs/multi-harness-ssot.md)
