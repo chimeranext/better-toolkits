@@ -1,0 +1,56 @@
+---
+title: App GTM Release
+description: Multi-platform app go-to-market and release — readiness, security, monetization, CI/CD, stores, and launch. When/why to use each skill.
+sidebarTitle: App GTM Release
+---
+
+# App GTM Release
+
+The app go-to-market and release toolkit ships apps to stores across frameworks:
+Flutter, Kotlin Multiplatform, Swift, .NET MAUI, and Progressive Web Apps. It
+guides you through readiness, pipeline, store preparation, and launch with
+validation gates.
+
+This is a **playbook**: it explains *when and why* to use each skill. For the
+executable steps, open the skill itself (the runbook).
+
+## When to use this toolkit
+
+Use the app GTM release toolkit when the work is shipping an app:
+
+- You must go to market with a mobile, desktop, or web app.
+- You must prepare the code for production release.
+- You must set up stores, listings, and testing tracks.
+- You must plan and execute the launch.
+
+It is the default toolkit for taking an app from code to live in stores.
+
+## Core skills — when and why
+
+| Skill | When to use it | Why |
+| --- | --- | --- |
+| **gtm-fit** | you ask how to get users or make the app sell itself | it designs a go-to-market fit strategy with minimum viable segment |
+| **pre-launch-checklist** | you ask if the app is release-ready | it runs the production readiness checklist |
+| **app-security** | you must protect the app and its API | it configures App Check and attestation providers |
+| **monetization** | you must charge users | it sets up in-app purchases, subscriptions, and paywalls |
+| **cicd-setup** | you need automated builds | it sets up CI/CD with signing and release pipelines |
+| **code-push** | you must update without a store release | it configures over-the-air updates |
+| **store-setup** | you must create store accounts and records | it configures store metadata, ratings, and pricing |
+| **store-listing** | you must prepare listing assets | it produces screenshots, descriptions, and ASO |
+| **testing-tracks** | you must test with real users | it sets up internal, closed, and open testing tracks |
+| **launch-plan** | you plan the release timeline | it builds a launch plan and release strategy |
+| **alt-distribution** | you distribute outside mainstream stores | it covers F-Droid, GitHub Releases, and other channels |
+| **desktop-signing** | you must sign desktop binaries | it handles Windows signing and macOS notarization |
+| **pwa-quality** | you ship a Progressive Web App | it validates the manifest, service worker, and Lighthouse checks |
+| **msstore-submission** | you submit to Microsoft Store | it covers Partner Center, MSIX, and certification |
+| **snap-build** | you publish to Snap Store | it packages and submits Linux snaps |
+| **flatpak-build** | you publish to Flathub | it builds Flatpak manifests and submits to Flathub |
+| **kmp-build** | you ship Kotlin Multiplatform | it builds, tests, and prepares KMP for both stores |
+| **maui-publishing** | you ship .NET MAUI | it multi-targets and signs for all platforms |
+
+## When NOT to use this toolkit
+
+- For defining the business model or pitch — use the business model toolkit.
+- For running paid acquisition — use the revenue growth toolkit.
+- For user research on the app — use the UX research toolkit.
+- For non-app products without a store release — use the domain toolkit.

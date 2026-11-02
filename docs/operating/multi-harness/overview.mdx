@@ -1,0 +1,23 @@
+---
+title: Overview
+description: Mission and vision for the multi-harness SSOT contract and its relationships.
+---
+
+# Overview
+
+The multi-harness SSOT is one of two durable doctrine pillars for this monorepo. The other pillar is [HITL](https://github.com/chimeranext/better-toolkits/blob/main/docs/hitl.md). Public doctrine lives at [toolkits.chimeranext.dev/doctrine](https://toolkits.chimeranext.dev/doctrine/). The decision record is at [`openspec/changes/2026-08-20-multi-harness-ssot/`](https://github.com/chimeranext/better-toolkits/tree/main/openspec/changes/2026-08-20-multi-harness-ssot).
+
+Install stderr hooks on Claude Code, Cursor, and OpenCode. See the **Multi-harness SSOT** section in the [root README](https://github.com/chimeranext/better-toolkits#readme).
+
+## Two SSOTs (orthogonal)
+
+| SSOT | Location | Purpose |
+|------|----------|---------|
+| **Catalog** | `package.json` `"skills"` field on each toolkit (antfu/skills-npm: `{ source, skills }`) | Skill folder names for `npx skills add`. Claude `marketplace.json` remains the plugin adapter. |
+| **Protocol** | `toolkits/<name>/references/<cmd-or-domain>/` (+ `templates/` or `assets/templates/`) | HOW for commands/skills. Harness-agnostic markdown. |
+| **Runtime stderr** | [`shared/hooks/stderr/`](https://github.com/chimeranext/better-toolkits/tree/main/shared/hooks/stderr) | Block shell stderr discards. One `detect.py`, N wire-ups. |
+| **Runtime PRDS** | [`shared/hooks/prds/`](https://github.com/chimeranext/better-toolkits/tree/main/shared/hooks/prds) | Gate `git push` / `gh pr create|edit` to PRDS body sections. One `detect.py`, N wire-ups. |
+
+## Pilot
+
+make-no-mistakes `/implement` → `references/implement/*` + `templates/bilingual-issue-brief.md`.

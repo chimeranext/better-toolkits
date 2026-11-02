@@ -1,0 +1,27 @@
+---
+title: Rules
+description: How the multi-harness SSOT works. Catalog and protocol rules.
+---
+
+# Rules
+
+This page defines how the SSOT works. It covers catalog rules and protocol rules.
+
+## Catalog rules
+
+1. Skill directories stay at `skills/<name>/SKILL.md`. The `package.json` `"skills"` field lists those folder names for source `chimeranext/better-toolkits`. Add or remove a name in that field when the folder changes.
+2. Install with the skills CLI. `--all` installs every skill for every agent. `--agent '*'` with `--skill` installs a subset for every agent:
+
+```bash
+npx skills add chimeranext/better-toolkits --all -g
+npx skills add chimeranext/better-toolkits --skill merge-advisor --agent '*' -g -y
+```
+
+`npx @chimeranext/better-toolkits skills-install` runs those same commands. `--toolkit` reads the package.json filter.
+3. Slash command files stay hand-written. They carry `argument-hint` and dispatch text that the skill entry does not. A skill and a command may share a name. Both still point at `references/`.
+
+## Protocol rules
+
+1. Keep the entry thin at ≤ ~120 lines. Claude `commands/*.md` and Cursor `skills/*/SKILL.md` are entries when `/` must surface the command.
+2. The body lives in `references/`. One protocol body per harness.
+3. Harness notes go to `references/.../adapters/` or entry footnotes.

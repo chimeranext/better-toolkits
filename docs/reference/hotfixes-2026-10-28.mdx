@@ -1,26 +1,24 @@
-# Hotfixes directos a `main` — sesión 2026-10-28/29
+---
+title: Hotfixes 2026-10-28
+description: Record of direct hotfix pushes to main and the corrective applied.
+---
 
-**Contexto.** Durante la sesión de trabajo del 2026-10-28 → 2026-10-29, una serie
-de commits fue pusheada **directamente a `main`** (no vía pull request). Esto
-ocurrió por un patrón incorrecto: el agente seteaba `HITL_APPROVED=1` por su
-cuenta y empujaba a `main`, eludiendo el hook `pre-push` de HITL (que no estaba
-instalado en ese momento) y el branch protection remoto (bypass de "Changes must
-be made through a pull request" y del check `megalinter`).
+# Hotfixes direct to `main` — session 2026-10-28/29
 
-**Decisión del mantenedor.** Estos cambios se **aceptan como hotfixes** (no se
-revierte nada). Este documento registra la trazabilidad: rango de commits, qué
-cambiaron, y el correctivo aplicado para que no se repita.
+**Context.** During the work session of 2026-10-28 to 2026-10-29, several commits were pushed directly to `main`. They did not go through a pull request. This happened because of an incorrect pattern. The agent set `HITL_APPROVED=1` on its own and pushed to `main`. This bypassed the HITL `pre-push` hook, which was not installed at the time. It also bypassed remote branch protection, including "Changes must be made through a pull request" and the `megalinter` check.
+
+**Maintainer decision.** These changes are accepted as hotfixes. Nothing is reverted. This document records traceability. It shows the commit range, what changed, and the corrective applied so this does not repeat.
 
 ---
 
-## Rango
+## Range
 
-- **Inicio:** `7e0456e` (2026-10-28 19:48)
-- **Fin:** `0546854` (2026-10-29 00:11)
+- **Start:** `7e0456e` (2026-10-28 19:48)
+- **End:** `0546854` (2026-10-29 00:11)
 - **Total:** 38 commits
 - **Diff:** 180 files, +3026 / −507
 
-## Hotfixes por área
+## Hotfixes by area
 
 ### Hooks / bootstrap — stderr + squash + typecheck
 - `7e0456e` feat(hooks): forbid squash merges across git + Claude/Cursor/OpenCode
@@ -53,7 +51,7 @@ cambiaron, y el correctivo aplicado para que no se repita.
 - `cd6daab` feat(make-no-mistakes): real-config-values dogfood semantics + skill validation
 - `8c54b3c` chore(marketplace): bump make-no-mistakes after dogfood + validate-skills
 
-### Toolkits — conformidad de skills (agentskills spec)
+### Toolkits — skill conformity (agentskills spec)
 - `4c5eb38` fix(toolkits): conform skills to agentskills spec (frontmatter + renames)
 - `84bc899` chore(marketplace): bump toolkits after skill conformity
 
@@ -63,7 +61,7 @@ cambiaron, y el correctivo aplicado para que no se repita.
 - `9c38648` fix(make-no-mistakes): disk-cleanup default applies; --list-only optional
 - `e7a0afc` chore(marketplace): bump make-no-mistakes after disk-cleanup inversion
 
-### ui-patterns — nuevo toolkit Ribbon + HCD/usabilidad
+### ui-patterns — new Ribbon toolkit + HCD/usability
 - `b7b858e` feat(ui-patterns): new toolkit — Ribbon pattern (collapsible, framework-agnostic)
 - `8512cbf` feat(ui-patterns): HCD/usability principles + quality criteria
 - `c2809d1` chore(marketplace): bump ui-patterns after hcd-usability
@@ -74,27 +72,19 @@ cambiaron, y el correctivo aplicado para que no se repita.
 - `f47631f` feat(make-no-mistakes): subagents harness-capabilities matrix (Claude Code refs)
 - `9c6e669` chore(marketplace): bump make-no-mistakes after subagents capabilities
 
-### make-no-mistakes — opsx protocol (último hotfix)
+### make-no-mistakes — opsx protocol (last hotfix)
 - `eb48605` fix(make-no-mistakes): opsx commands reference own protocol, adhere to OpenSpec OPSX
 - `0546854` chore(marketplace): bump make-no-mistakes after opsx protocol fix
 
 ---
 
-## Correctivo aplicado
+## Corrective applied
 
-1. **Hook `pre-push` activado** — `.git/hooks/pre-push` ahora ejecuta **ambos**
-   guardrails:
-   - `shared/hooks/git/pre-push.sh` → **HITL**: bloquea push/merge a `main`
-     (exit 2) sin aprobación humana (`HITL_APPROVED=1` o marker creado por
-     acción humana, estilo `pkexec`/`GetCredentials`).
-   - `scripts/git-hooks/pre-push-marketplace-versions.sh` → versiones del
-     marketplace (bump semver en cambios de surface de agentes).
-2. **Política interna del agente:** no usar más `HITL_APPROVED=1` por cuenta
-   propia; pedir aprobación explícita (AskUserQuestion / AskQuestion) antes de
-   cualquier mutación de estado compartido (push a `main`, `gh pr merge`, tracker
-   → Done, borrar worktrees).
+1. **`pre-push` hook enabled** — `.git/hooks/pre-push` now runs both guardrails:
+   - `shared/hooks/git/pre-push.sh` → **HITL**: blocks push/merge to `main` (exit 2) without human approval (`HITL_APPROVED=1` or a marker created by a human action, such as `pkexec`/`GetCredentials`).
+   - `scripts/git-hooks/pre-push-marketplace-versions.sh` → marketplace versions (semver bump on agent-surface changes).
+2. **Agent internal policy:** never set `HITL_APPROVED=1` on your own. Ask for explicit approval (AskUserQuestion / AskQuestion) before any shared-state mutation. This includes pushing to `main`, `gh pr merge`, moving a tracker to Done, and deleting worktrees.
 
-## Estado posterior
+## Post state
 
-- A partir de este punto, el flujo para cambios a `main` es: branch → PR →
-  revisión → merge (solo con HITL). Ver `docs/hitl.md` y `CONTRIBUTING.md`.
+- From this point on, the flow for changes to `main` is: branch → PR → review → merge (only with HITL). See `docs/hitl.md` and `CONTRIBUTING.md`.

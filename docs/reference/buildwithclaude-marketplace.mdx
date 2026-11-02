@@ -41,8 +41,8 @@ without a clear dual-path agreement.
 ## Contribution checklist (our side)
 
 - [x] Root [`.claude-plugin/marketplace.json`](../.claude-plugin/marketplace.json) validates (`claude plugin validate` / `--strict`).
-- [x] Each toolkit has [`.claude-plugin/plugin.json`](../toolkits/make-no-mistakes-toolkit/.claude-plugin/plugin.json) (identity + version). **Forbidden:** per-toolkit `marketplace.json` (see [`AGENTS.md`](../AGENTS.md)).
-- [x] Root [README](../README.md) documents `claude plugin marketplace add chimeranext/better-toolkits`.
+- [x] Each toolkit has [`.claude-plugin/plugin.json`](https://github.com/chimeranext/better-toolkits/tree/main/toolkits/make-no-mistakes-toolkit/.claude-plugin/plugin.json) (identity + version). **Forbidden:** per-toolkit `marketplace.json` (see [`AGENTS.md`](https://github.com/chimeranext/better-toolkits/blob/main/AGENTS.md)).
+- [x] Root [README](https://github.com/chimeranext/better-toolkits#readme) documents `claude plugin marketplace add chimeranext/better-toolkits`.
 - [x] License honesty: toolkits are **BSL-1.1** (source-available; converts to Non-Profit OSL 3.0 after the Change Date) — not MIT. State this in any listing PR.
 - [x] Categories / keywords on marketplace plugin entries (discovery quality).
 - [x] `owner.url` on the marketplace manifest; plugin entries may carry `homepage` / `repository` / `license` / `author` (schema-supported; keep top-level marketplace `homepage`/`repository` off — Claude Code warns on those).
@@ -121,5 +121,5 @@ Branch name suggestion (on *their* repo, when authorized): `add-better-toolkits-
 ## Related
 
 - Anthropic marketplaces: https://code.claude.com/docs/en/plugin-marketplaces  
-- Monorepo agent rules: [`AGENTS.md`](../AGENTS.md)  
+- Monorepo agent rules: [`AGENTS.md`](https://github.com/chimeranext/better-toolkits/blob/main/AGENTS.md)  
 - HITL doctrine: [`docs/hitl.md`](hitl.md)

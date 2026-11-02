@@ -1,0 +1,53 @@
+---
+title: Standards
+description: Ground-truth sweep operation. Verifies worktree cleanliness and OpenSpec drift.
+---
+
+# SWEEP — `/sweep-unstaged`
+
+This is the operating note for ground-truth sweep operators. The canonical protocol (SSOT) lives in English at `toolkits/make-no-mistakes-toolkit/references/sweep-unstaged/protocol.md`.
+
+## What it does
+
+The sweep audits every worktree in the repository. This includes the main checkout, `.agents/worktrees/*`, and `.worktrees/*`. It marks each tree as `CLEAN` or `DIRTY` using three predicates:
+
+1. **Uncommitted** — work exists without a commit. This includes untracked files.
+2. **Unpushed** — commits exist that are not on `origin/<branch>`.
+3. **PR coverage** — the branch has no open, non-draft, mergeable pull request.
+
+The sweep also detects OpenSpec drift. Active changes have delta specs at `openspec/changes/<change>/specs/**/spec.md`. The sweep checks whether main specs reflect these deltas. If not, the sweep applies a mandatory sync. It never leaves drift behind. The shared engine `scripts/ci/opsx-sync-apply.sh` (bash) or `opsx-sync-apply.ps1` (PowerShell) runs the sync.
+
+## What it does not do
+
+- It does not commit, push, open PRs, merge, or rebase.
+- It does not count a draft PR as coverage.
+- Pushing and opening a PR is the next human step. The sweep does not do it.
+
+## Output
+
+The sweep prints one block per worktree. Each block shows branch, origin-branch, uncommitted, unpushed, PR, drift, and verdict. It then prints a final verdict:
+
+- `SWEEP: CLEAN` → exit 0.
+- `SWEEP: DIRTY` → exit 1. Work remains to resolve.
+- Mandatory sync applied → `SWEEP: OpenSpec sync applied.`
+
+## Usage
+
+```bash
+bash scripts/ci/sweep-unstaged.sh            # text mode
+bash scripts/ci/sweep-unstaged.sh --json     # one JSON object per worktree
+# Windows / PowerShell:
+pwsh -File scripts/ci/sweep-unstaged.ps1
+```
+
+Stderr is never discarded. Capture both streams in one log file, combined into a single sink.
+
+## Relation to standards
+
+- **LTGT (#19)** — search and measurement start from the git common-dir, not the CWD.
+- **StS** — the error stream is preserved. Never send it to `/dev/null`.
+
+## Notes
+
+- After a sweep with drift, new or updated main specs remain in `openspec/specs/`. They belong to the change and are committed with it.
+- If the sweep reports `unpushed` or missing coverage: push the branch, open or update the PR, then run the sweep again.
