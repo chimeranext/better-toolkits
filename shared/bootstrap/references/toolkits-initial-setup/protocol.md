@@ -25,7 +25,7 @@ and global plugin installs.
 | **REPO** (remote/protection) | CI gate (`.mega-linter.yml`, workflows), tsconfig base, ruleset `required_status_checks`, `internal-audits`, **GGT repo-initial-setup** (default branch `develop`, NSQ, audit `audit-repo-gitflow.sh`) | repo admin (if enforcing) |
 
 Part L and Part R are independent: a developer can run Part L without remote
-permissions; Part R reports `no-enforced`/`GAP` when it cannot activate protection.
+permissions. Part R reports `no-enforced`/`GAP` when it cannot activate protection.
 
 ---
 
@@ -56,7 +56,7 @@ For each harness, collect **read-only** state:
    - Registered? Canonical name `better-toolkits` (not duplicate slugs for same `gitUrl`).
    - `gitRef` present? Plugin count indexed?
 2. **Bootstrap plugin** — `better-toolkits-bootstrap` installed?
-3. **Product plugins** — which of the 10 toolkits are installed?
+3. **Product plugins** — name the installed ones among the 10 toolkits.
 4. **Stderr hooks** — `beforeShellExecution` (Cursor), PreToolUse Bash (Claude), OpenCode `plugins` array.
 5. **Auto-update** — Cursor: `workspaceOpen` hook for `update-better-toolkits-marketplace-cursor.sh`?
    OpenCode: `better-toolkits-auto-update` discovery plugin + mode sidecar present?
@@ -78,20 +78,20 @@ Produce explicit **diffs** and command lists:
   Claude PreToolUse `shared/hooks/bilingual/pre-linear-save-issue-bilingual.sh` (registered in the
   `hooks.json` matcher `mcp__.*linear.*__save_issue`), Cursor `adapters/cursor-before-shell.sh`,
   OpenCode plugin `adapters/opencode-bilingual.ts`, and CLI fallback `tooluse/enforce-bilingual.sh`.
-  (MANDATORY: not opt-in; does not read `.claude/config/hygiene-hooks.json`.)
+  (MANDATORY: not opt-in. It does not read `.claude/config/hygiene-hooks.json`.)
 - **Code-smells detector** — add the `code-smells` pre-commit hook (`scripts/lint/detect_code_smells.py`,
   `pass_filenames: true`) to the consumer repo's `.pre-commit-config.yaml`.
 - **Auto-update plugin (default ON)** — install the OpenCode discovery-dir plugin
-  `better-toolkits-auto-update` + its mode sidecar; register the Cursor `workspaceOpen`
+  `better-toolkits-auto-update` + its mode sidecar. Register the Cursor `workspaceOpen`
   hook. Opt out with `--no-auto-update` or `BETTER_TOOLKITS_AUTO_UPDATE=0`.
 - **OpenCode notifier (recommended for opencode harness)** — install + configure
   `@mohak34/opencode-notifier@latest` (event-rich popups: `permission`/`complete`/
   `subagent_complete`/`question`/`error`). Opinionated config template (SSOT) at
-  `adapters/opencode-notifier.json`; copy it to
+  `adapters/opencode-notifier.json`. Copy it to
   `~/.config/opencode/opencode-notifier.json` (see `adapters/setup-opencode.md`):
   - `showSessionTitle: true` (alerts show the session subject, not the project folder).
   - `showIcon: false` (no OpenCode logo).
-  - `suppressWhenFocused: false` (**opt-in** — default OFF; the user explicitly opts in
+  - `suppressWhenFocused: false` (**opt-in** — default OFF. The user explicitly opts in
     if they want quiet-while-focused).
   - `focusOnClick: true` (click-to-jump back to the session).
   - HITL label only on `question`/`permission` (they need the human).
@@ -104,7 +104,7 @@ Produce explicit **diffs** and command lists:
   `~/.config/herdr/config.toml`) so opencode keeps `ctrl+b` for backgrounding.
 - **Branch mode** — default **consumer**: always converge the clone on `main` and
   fast-forward. `--expert-mode` (author) never switches branch and never touches a
-  dirty tree. The mode is persisted in the sidecar so background runs honor it.
+  dirty tree. The sidecar persists the mode so background runs honor it.
 - **Assurance local** — `/assurance-local-setup` (local git hooks + typecheck deps).
 
 Show full proposed file contents or unified diff. Link [stderr README](../../../../hooks/stderr/README.md).
@@ -127,7 +127,7 @@ Wait for an **explicit** reply. Silence is not approval.
 Only after OK:
 
 1. Run marketplace / plugin install commands.
-2. Agent-agnostic skill install (skills CLI). Plugin install does not publish the skill set to other agents. `--all` installs every skill for every agent; `--agent '*'` with `--skill` installs the names from that toolkit's `package.json` `"skills"` field:
+2. Agent-agnostic skill install (skills CLI). Plugin install does not publish the skill set to other agents. `--all` installs every skill for every agent. `--agent '*'` with `--skill` installs the names from that toolkit's `package.json` `"skills"` field:
 
 ```bash
 npx skills add chimeranext/better-toolkits --all -g
@@ -136,14 +136,14 @@ npx skills add chimeranext/better-toolkits --skill merge-advisor --agent '*' -g 
 
 `setup --skills --toolkit <name>` plans the same `npx skills add` from the package.json filter.
 3. Merge hooks idempotently (see adapter for paths).
-3a. **Bilingual gate** — copy `shared/hooks/bilingual/` into each harness: register the
-    pre-hook in Claude's `hooks.json` (matcher `mcp__.*linear.*__save_issue`), the adapter
-    `cursor-before-shell.sh` under `.cursor/hooks/`, the plugin `opencode-bilingual.ts` in the
-    OpenCode plugins folder, and `enforce-bilingual.sh` as a tooluse guard (via
+3a. **Bilingual gate** — copy `shared/hooks/bilingual/` into each harness. Register the
+    pre-hook in Claude's `hooks.json` (matcher `mcp__.*linear.*__save_issue`). Register the adapter
+    `cursor-before-shell.sh` under `.cursor/hooks/`. Register the plugin `opencode-bilingual.ts` in the
+    OpenCode plugins folder. Register `enforce-bilingual.sh` as a tooluse guard (via
     `scripts/ci/install-tooluse-guards.sh`).
 3b. **Code-smells** — add the `code-smells` pre-commit hook (`detect_code_smells.py`,
     `pass_filenames: true`) to the consumer repo's `.pre-commit-config.yaml`.
-4. For OpenCode, run or guide `npx @chimeranext/better-toolkits setup` (same protocol; `--yes` only when user pre-approved).
+4. For OpenCode, run or guide `npx @chimeranext/better-toolkits setup` (same protocol. Use `--yes` only when user pre-approved).
 5. Never use `2>/dev/null` or bare `2>&1` without a log file — stderr hooks doctrine applies to the agent too.
 6. **Assurance local** — invoke `/assurance-local-setup` (`scripts/assurance-local-setup/ensure-local-hooks.sh` + `prepare-typecheck-deps.sh`).
 
@@ -154,11 +154,11 @@ npx skills add chimeranext/better-toolkits --skill merge-advisor --agent '*' -g 
 3. **Stderr probe** — attempt a forbidden pattern in a dry explanation or run toolkit's stderr test if present:
    `shared/hooks/stderr/tests/test-detect.sh`
 4. `npx @chimeranext/better-toolkits doctor` when CLI is available.
-5. **Auto-update** — `opencode plugin list` shows `local.better-toolkits-auto-update`; the sidecar
-   records the chosen branch mode; `better-toolkits self-update --dry-run` reports the planned pull.
-6. **Assurance local** — `cd shared/hooks && npm run typecheck` passes; git hooks active.
+5. **Auto-update** — `opencode plugin list` shows `local.better-toolkits-auto-update`. The sidecar
+   records the chosen branch mode. `better-toolkits self-update --dry-run` reports the planned pull.
+6. **Assurance local** — `cd shared/hooks && npm run typecheck` passes. Git hooks active.
 
-7. **Bilingual probe** — run `python3 shared/hooks/bilingual/detect.py --body "x"` → exit 2; verify the matcher/plugin is registered in each harness (Claude hooks.json, Cursor, OpenCode).
+7. **Bilingual probe** — run `python3 shared/hooks/bilingual/detect.py --body "x"` → exit 2. Verify each harness registers the matcher/plugin (Claude hooks.json, Cursor, OpenCode).
 8. **Code-smells probe** — `python3 scripts/lint/detect_code_smells.py` on changed files → exit 0 with no HARD.
 
 Report pass/fail per harness. If verify fails, propose rollback diffs (HITL again).
@@ -172,9 +172,9 @@ Report pass/fail per harness. If verify fails, propose rollback diffs (HITL agai
 Invoke `/assurance-repo-setup` (toolkit assurance). It:
 
 - generates `.mega-linter.yml`, `.github/workflows/megalinter.yml`, `.github/workflows/bypass-audit.yml`,
-  and `shared/hooks/tsconfig.json` (if TS) from `scripts/assurance-repo-setup/templates/`;
+  and `shared/hooks/tsconfig.json` (if TS) from `scripts/assurance-repo-setup/templates/`.
 - ensures the ruleset `required_status_checks` via `scripts/assurance-repo-setup/ensure-rule-set.sh`
-  (idempotent; only with permissions);
+  (idempotent, only with permissions).
 - verifies `internal-audits` via `ensure-audit-repo.sh` (emits GAP if missing).
 
 **Does not block bootstrap:** if ruleset activation is not allowed or the evidence
@@ -194,7 +194,7 @@ Split from harness-initial-setup: this step provisions the **GGT** model on the 
 3. **Provision CODEOWNERS** (idempotent, only with permissions):
    - If `.github/CODEOWNERS` is missing or references only individual logins,
      write `* @<org>/founders` (create the team if it does not exist).
-   - Verify the team exists (fail-closed); report `GAP` if it cannot be created.
+   - Verify the team exists (fail-closed). Report `GAP` if it cannot be created.
    - This guarantees the `main-founders-only` ruleset has a concrete team to
      auto-assign as reviewer (MPH points 7-8).
 4. **Output**: PASS/FAIL table per invariant. `GGT audit: ALL PASS` or `GGT audit: FAILURES` with the failed invariant. If no repo permissions → document `no-enforced` (does not block bootstrap).
@@ -206,8 +206,8 @@ This setup installs/refers the indexed **engineering standards** at
 agent profile (`agents/better.md`) references them. The hooks enforce the key ones:
 
 **SSOT:** [`shared/references/engineering-standards/index.md`](../../../../shared/references/engineering-standards/index.md).
-This setup does NOT duplicate standards — it references them by monorepo-relative path. The hooks
-it installs (stderr, bilingual, GGT, MPH, …) are detailed in Phase 5; their mapping to each
+This setup does NOT duplicate standards — it references them by monorepo-relative path. Phase 5 details the hooks
+it installs (stderr, bilingual, GGT, MPH, …). Their mapping to each
 standard lives in `index.md`.
 
 The setup also installs the scripts/hooks that enforce StS (stderr adapter), the
@@ -234,33 +234,33 @@ is forbidden — including by this setup's own tooling.
 - `--no-ruleset` — pass through to `/assurance-repo-setup`: generate files but do not touch ruleset.
 - `--skip-ggt` — skip Phase 7b repo-initial-setup (GGT provisioning + audit). Report `skipped`.
 
-## Thin Makefile wrapper (alias ergonómico)
+## Thin Makefile wrapper (ergonomic alias)
 
-`Makefile` (raíz) expone targets por fase del protocol — `local-detect`,
-`local-audit`, `local-propose`, `local-install`, `local-verify` (Part L) y
-`repo-audit`, `repo-setup` (Part R) — como alias finos sobre el CLI
-(`better-toolkits.js setup --phases …`) y los scripts de `assurance-repo-setup`.
-`make setup` encadena **solo Part L** con **prompt de UI entre fases**
-(`shared/bootstrap/scripts/make-prompt.sh`). Los targets `repo-*` son explícitos,
-separados y gateados por HITL; nunca forman parte de `setup` (garantiza el split
-local vs remote). Twin Windows: `Makefile.windows` (recetas PowerShell, prompt con
-`Read-Host`; los `repo-*` requieren Git Bash). No reemplaza las fases: detección
-de harness y HITL siguen siendo runtime.
+The root `Makefile` exposes targets per protocol phase — `local-detect`,
+`local-audit`, `local-propose`, `local-install`, `local-verify` (Part L) and
+`repo-audit`, `repo-setup` (Part R). These act as thin aliases over the CLI
+(`better-toolkits.js setup --phases …`) and the scripts of `assurance-repo-setup`.
+`make setup` chains **only Part L** with a **UI prompt between phases**
+(`shared/bootstrap/scripts/make-prompt.sh`). The `repo-*` targets are explicit,
+separate, and gate-controlled by HITL. They never form part of `setup`. This guarantees
+the local vs remote split. Windows twin: `Makefile.windows` (PowerShell recipes, prompt
+with `Read-Host`). The `repo-*` targets require Git Bash. It does not replace the phases.
+Harness detection and HITL remain runtime.
 
 ---
 
-## Selector de toolkits por harness (determinístico)
+## Per-harness toolkit selector (deterministic)
 
-`--plugins <lista>` es un knob explícito, pero su efecto depende del harness
-(verificado contra los docs oficiales):
+`--plugins <lista>` is an explicit knob, but its effect depends on the harness
+(verified against the official docs):
 
-| Harness | ¿Selector? | Mecánica determinística |
+| Harness | Selector? | Deterministic mechanism |
 | --- | --- | --- |
-| **OpenCode** | No — instala TODOS los toolkits | El harness no expone selector. Si se pasa `--plugins` distinto de `all` → **fallo explícito (fail-closed)**, no silencio. |
-| **Cursor** | Sí | Marketplace `.cursor-plugin/marketplace.json`; instalar solo los `plugins[]` elegidos (instalar el dir del plugin / `agent plugin install <name>`). |
-| **Claude Code** | Sí | `claude plugin install <toolkit>@better-toolkits --scope user\|project\|local` por toolkit elegido (instalación nominal, no se adivina). |
+| **OpenCode** | No — installs ALL toolkits | The harness exposes no selector. If `--plugins` differs from `all` → **explicit failure (fail-closed)**, not silence. |
+| **Cursor** | Yes | Marketplace `.cursor-plugin/marketplace.json`. Install only the chosen `plugins[]`. Install the plugin dir / `agent plugin install <name>`. |
+| **Claude Code** | Yes | `claude plugin install <toolkit>@better-toolkits --scope user\|project\|local` per chosen toolkit (nominal installation, do not guess). |
 
-Regla determinística: mismos inputs (`--harness` + `--plugins`) ⇒ mismo conjunto instalado. Si `--plugins` pide algo que el harness no puede honrar → error, jamás ignore silencioso.
+Deterministic rule: same inputs (`--harness` + `--plugins`) ⇒ same installed set. If `--plugins` asks for something the harness cannot honor → error, never silent ignore.
 
 ---
 
