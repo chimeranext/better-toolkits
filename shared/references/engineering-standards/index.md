@@ -41,6 +41,7 @@
 | **31. no-deprecated-agent-shims** | No deprecated agent shims | Renames are clean-cut: update references and delete the old path; no "MOVED (shim)" or exec wrappers. | [no-deprecated-agent-shims.md](no-deprecated-agent-shims.md) |
 | **32. codeowners-replication** | CODEOWNERS replication | Org admin App workflow replicates CODEOWNERS; single source, no drift. | [codeowners-replication-workflow.md](codeowners-replication-workflow.md) |
 | **33. BIB** | Bilingual Issue Brief | Every issue (GitHub o Linear) redactado en formato Bilingual ANTES de abrirlo — Human Layer + Agent Layer (HUMAN LAYER / AGENT LAYER / Acceptance Criteria / Context Files). Gate determinístico `shared/hooks/bilingual/detect.py`. | [bilingual-issue-brief.md](bilingual-issue-brief.md) |
+| **34. TAS** | Test Assertion Standards | Aserciones de contrato e invariantes, no snapshots: nunca conteos literales de registros que crecen; derivar del source of truth (p.ej. `NPM_PACKAGES.length`). | [test-assertion-standards.md](test-assertion-standards.md) |
 
 The **clean code quartet** is DSMS + IFS + CPS + PRDS. BrS + WTD govern branching
 and worktree hygiene. QT4L and **OST** (when the client uses an OpenSpec store)
@@ -83,11 +84,12 @@ flowchart TD
     S30[no-deprecated-agent-shims]
     S31[codeowners-replication]
     S32[BIB — Bilingual Issue Brief]
+    S33[TAS — Test Assertion Standards]
     S0 --> S1 --> S2 --> S3 --> S4 --> S5 --> S6 --> S7 --> S8 --> S9
     S9 --> S10 --> S11 --> S12 --> S13 --> S14 --> S15
     S15 --> S16 --> S17 --> S18 --> S19 --> S20 --> S21 --> S22
     S22 --> S23 --> S24 --> S25 --> S26 --> S27 --> S28 --> S29
-    S29 --> S30 --> S31 --> S32
+    S29 --> S30 --> S31 --> S32 --> S33
 ```
 
 **Day-to-day priority:** IFS, PRDS, QT4L (reading rhythm, review rhythm, req→test trace), Jidoka, StS.

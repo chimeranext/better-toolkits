@@ -171,35 +171,59 @@ def scan_php(path: Path) -> list[tuple[str, str]]:
     return out
 
 
+TEST_ASSERT_LENGTH = re.compile(
+    r"assert\.(?:equal|strictEqual)\(\s*\w+\.length\s*,\s*(\d+)|"
+    r"expect\(\s*\w+\.length\s*\)\.toBe\((\d+)\)|"
+    r"expect\([^)]*\)\.toHaveLength\((\d+)\)"
+)
+
+
+def scan_test_assertions(path: Path) -> list[tuple[str, str]]:
+    """TAS: flag conteos literales en aserción de longitud (snapshot de registro)."""
+    text = path.read_text(encoding="utf-8", errors="replace")
+    out: list[tuple[str, str]] = []
+    for m in TEST_ASSERT_LENGTH.finditer(text):
+        num = next((g for g in m.groups() if g is not None), "?")
+        out.append((
+            "WARN",
+            f"{path}:{_line(text, m.start())} conteo literal ({num}) en aserción de longitud — "
+            "TAS: derivar del source of truth (p.ej. NPM_PACKAGES.length); no snapshot",
+        ))
+    return out
+
+
 def scan_one(path: Path) -> list[tuple[str, str]]:
     name = path.name.lower()
+    out: list[tuple[str, str]] = []
     if path.suffix == ".sh":
-        return scan_shell(path)
-    if path.suffix == ".py":
-        return scan_python(path)
-    if path.suffix in (".ts", ".tsx", ".js", ".jsx"):
-        return scan_ts(path)
-    if path.suffix in (".yml", ".yaml"):
-        return scan_yaml(path)
-    if path.suffix == ".json":
-        return scan_json(path)
-    if path.suffix == ".md":
-        return scan_markdown(path)
-    if path.suffix == ".ps1":
-        return scan_powershell(path)
-    if path.suffix == ".go":
-        return scan_go(path)
-    if name == "dockerfile":
-        return scan_dockerfile(path)
-    if path.suffix == ".rs":
-        return scan_rust(path)
-    if path.suffix == ".dart":
-        return scan_dart(path)
-    if path.suffix in (".ex", ".exs"):
-        return scan_elixir(path)
-    if path.suffix == ".php":
-        return scan_php(path)
-    return []
+        out.extend(scan_shell(path))
+    elif path.suffix == ".py":
+        out.extend(scan_python(path))
+    elif path.suffix in (".ts", ".tsx", ".js", ".jsx"):
+        out.extend(scan_ts(path))
+    elif path.suffix in (".yml", ".yaml"):
+        out.extend(scan_yaml(path))
+    elif path.suffix == ".json":
+        out.extend(scan_json(path))
+    elif path.suffix == ".md":
+        out.extend(scan_markdown(path))
+    elif path.suffix == ".ps1":
+        out.extend(scan_powershell(path))
+    elif path.suffix == ".go":
+        out.extend(scan_go(path))
+    elif name == "dockerfile":
+        out.extend(scan_dockerfile(path))
+    elif path.suffix == ".rs":
+        out.extend(scan_rust(path))
+    elif path.suffix == ".dart":
+        out.extend(scan_dart(path))
+    elif path.suffix in (".ex", ".exs"):
+        out.extend(scan_elixir(path))
+    elif path.suffix == ".php":
+        out.extend(scan_php(path))
+    if ("test" in name or "spec" in name) and path.suffix in (".js", ".ts", ".mjs", ".jsx", ".tsx", ".py"):
+        out.extend(scan_test_assertions(path))
+    return out
 
 
 def collect(paths: list[Path]) -> list[Path]:
