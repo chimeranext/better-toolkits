@@ -2,33 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Tokens inherited from better-microservices/apps/web (Chimera brand). */
+/* Tokens migrated from the Chimera design-system (tokens.json) — OR/gold
+   palette, dark + light semantics. All color tokens are stored as `H S L`
+   triplets so `hsl(var(--x))` keeps working across components. */
 @layer base {
   :root {
-    --background: 257 38% 5%;        /* #08060F */
-    --foreground: 260 30% 92%;       /* #ECE8F2 */
-    --card: 252 30% 14%;             /* #1C1830 */
-    --card-foreground: 260 30% 92%;
-    --muted: 250 24% 12%;
-    --muted-foreground: 252 11% 55%; /* #837C99 */
-    --border: 252 26% 20%;           /* #2A2640 */
-    --input: 252 26% 20%;
-    --primary: 252 100% 68%;         /* #7C5CFF violet */
-    --primary-foreground: 0 0% 100%;
-    --secondary: 217 91% 60%;        /* #3B82F6 blue */
+    /* Dark semantic (design-system). */
+    --background: 218 55% 10%;        /* #0B1526 */
+    --foreground: 42 50% 90%;         /* #F2EAD8 parchment */
+    --card: 214 56% 18%;              /* #142A46 */
+    --card-foreground: 42 50% 90%;
+    --muted: 222 43% 19%;             /* #1C2947 */
+    --muted-foreground: 217 13% 65%;  /* #9AA3B2 */
+    --border: 217 45% 30%;            /* #2A4570 */
+    --input: 217 45% 30%;
+    --primary: 40 51% 47%;            /* #B78E3B gold */
+    --primary-foreground: 214 56% 18%; /* #142A46 navy on gold */
+    --secondary: 252 100% 68%;        /* #7C5CFF violet */
     --secondary-foreground: 0 0% 100%;
-    --accent: 330 81% 60%;           /* #EC4899 magenta */
+    --accent: 330 81% 60%;            /* #EC4899 */
     --accent-foreground: 0 0% 100%;
-    --destructive: 351 95% 71%;      /* #FB7185 */
+    --destructive: 0 47% 44%;         /* #A33B3B */
     --destructive-foreground: 0 0% 100%;
-    --success: 160 84% 52%;          /* #34D399 */
-    --success-foreground: 257 38% 5%; /* near-black on bright mint (dark theme) */
-    --warning: 43 96% 56%;           /* #FBBF24 */
-    --ring: 252 100% 68%;
+    --success: 158 64% 52%;           /* #34D399 */
+    --success-foreground: 218 55% 10%; /* navy on mint (dark theme) */
+    --warning: 43 96% 56%;            /* #FBBF24 */
+    --warning-foreground: 218 55% 10%;
+    --ring: 40 51% 47%;               /* #B78E3B */
+
+    /* Chimera brand accents (gold / parchment / violet). Stored as triplets
+       so `hsl(var(--brand-*))` resolves — `brand.primary` etc. in Tailwind
+       point at these, and light surfaces re-tune them via selector override. */
+    --brand-primary: 40 51% 47%;       /* gold #B78E3B */
+    --brand-accent: 252 100% 68%;      /* violet #7C5CFF */
+    --brand-tertiary: 42 62% 60%;      /* goldLight #D9B45B */
+    --brand-gradient: linear-gradient(90deg, #A67E34, #B78E3B, #D9B45B);
   }
-  /* Buttons need a slightly darker violet than the dark-mode primary to hit
-     WCAG AA with white text (4.34:1 → 5.5:1). Same hue, both themes. */
-  :root { --primary-strong: 252 90% 60%; }
+
+  /* Buttons need a deeper gold than `--primary` so white text passes WCAG AA
+     (4.5:1). #906A2D → HSL(37 52% 37%) ≈ 4.86:1 vs white, both themes. */
+  :root { --primary-strong: 37 52% 37%; }
 
   * { @apply border-border; }
   body { @apply bg-background text-foreground font-body antialiased; }
@@ -51,20 +64,17 @@
   }
 }
 
-/* Terminal surfaces stay dark and legible regardless of the section surface
-   (surface-light redefines --foreground, so terminals must not inherit it). */
+/* Terminal surfaces stay dark and legible regardless of the section surface.
+   Navy = design-system dark card tone (#142A46); text = parchment foreground. */
 .terminal-dark {
-  background-color: #0b0912;
-  color: #ece8f2;
+  background-color: #142a46;
+  color: #f2ead8;
 }
-.terminal-dark code { color: #ece8f2; }
+.terminal-dark code { color: #f2ead8; }
 
-/* Hero: staggered install lines + blinking caret. */
-@keyframes fade-up {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: none; }
-}
-.hero-line { opacity: 0; animation: fade-up 0.45s ease-out forwards; }
+/* Hero terminal: lines start visible; GSAP staggers them (no-op under reduced
+   motion). Blinking caret kept (class blink, not a layout animation). */
+.hero-line { opacity: 1; }
 @keyframes caret-blink { 50% { opacity: 0; } }
 .caret::after {
   content: "▋";
@@ -73,35 +83,81 @@
   animation: caret-blink 1.1s steps(1) infinite;
 }
 @media (prefers-reduced-motion: reduce) {
-  .hero-line { animation: none; opacity: 1; }
   .caret::after { animation: none; }
 }
 
-/* Light-surface sections (S4 problems, S7 process, S10 FAQ per design §7).
-   Canonical Chimera LIGHT theme — same values as lapc506 portfolio global.css:
-   brand-derived tints (hue 250-257 family) AND accents re-tuned for contrast
-   on white, so light and dark read as one system. */
+/* Light-surface sections (S4, S7, S9, S10). Design-system LIGHT semantic tokens:
+   parchment background, navy foreground, gold primary — tuned for AA contrast
+   on white so light and dark read as one system. */
 .surface-light {
-  --background: 0 0% 100%;
-  --foreground: 257 30% 12%;
-  --card: 250 40% 98%;
-  --card-foreground: 257 30% 12%;
-  --muted: 250 30% 94%;
-  --muted-foreground: 252 10% 40%;
-  --border: 252 20% 86%;
-  --input: 252 20% 86%;
-  --primary: 252 90% 60%;          /* #7C5CFF tuned for light */
+  --background: 43 58% 95%;          /* #FAF6EC */
+  --foreground: 214 56% 18%;         /* #142A46 */
+  --card: 0 0% 100%;
+  --card-foreground: 214 56% 18%;
+  --muted: 42 49% 81%;               /* #E7D9B8 */
+  --muted-foreground: 218 17% 35%;   /* #4A5568 */
+  --border: 39 44% 71%;              /* #D6C096 */
+  --input: 39 44% 71%;
+  --primary: 39 52% 43%;             /* #A67E34 goldDeep */
   --primary-foreground: 0 0% 100%;
-  --secondary: 217 91% 52%;
+  --secondary: 217 91% 60%;          /* #3B82F6 */
   --secondary-foreground: 0 0% 100%;
-  --accent: 330 75% 52%;
+  --accent: 0 54% 36%;               /* #8E2A2A */
   --accent-foreground: 0 0% 100%;
-  --destructive: 347 77% 41%;     /* rose-700 — 5.9:1 on white (dark token was 2.72:1) */
+  --destructive: 0 47% 44%;          /* #A33B3B — 6.4:1 on white */
   --destructive-foreground: 0 0% 100%;
-  --success: 160 90% 27%;         /* darkened: ≥4.5:1 even over the success/15 tint */
-  --success-foreground: 0 0% 100%; /* white on dark green (light theme) */
-  --warning: 38 92% 40%;
-  --ring: 252 90% 60%;
+  --success: 159 83% 34%;            /* #0F9D6B — navy text passes AA */
+  --success-foreground: 214 56% 18%;
+  --warning: 32 95% 44%;             /* #D97706 */
+  --warning-foreground: 214 56% 18%;
+  --ring: 39 52% 43%;
+
+  /* Re-tune brand gold for contrast on the light surface. */
+  --brand-primary: 39 52% 43%;
+
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
+}
+
+/* Architectural-blueprint overlay: faint gold grid lines that fade toward the
+   centre (mask) plus registration "+" ticks at each corner. Applied to the
+   hero and final-CTA sections via <div class="blueprint-overlay bp-grid">. */
+.blueprint-overlay {
+  background-image:
+    linear-gradient(to right, rgba(183, 142, 59, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(183, 142, 59, 0.08) 1px, transparent 1px),
+    linear-gradient(to right, rgba(183, 142, 59, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(183, 142, 59, 0.05) 1px, transparent 1px);
+  background-size: 80px 80px, 80px 80px, 16px 16px, 16px 16px;
+  -webkit-mask-image: radial-gradient(ellipse at center, black 35%, transparent 75%);
+  mask-image: radial-gradient(ellipse at center, black 35%, transparent 75%);
+}
+.blueprint-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-repeat: no-repeat;
+  background-image:
+    linear-gradient(hsl(var(--primary) / 0.55), hsl(var(--primary) / 0.55)),
+    linear-gradient(hsl(var(--primary) / 0.55), hsl(var(--primary) / 0.55)),
+    linear-gradient(hsl(var(--primary) / 0.55), hsl(var(--primary) / 0.55)),
+    linear-gradient(hsl(var(--primary) / 0.55), hsl(var(--primary) / 0.55)),
+    linear-gradient(hsl(var(--primary) / 0.55), hsl(var(--primary) / 0.55)),
+    linear-gradient(hsl(var(--primary) / 0.55), hsl(var(--primary) / 0.55)),
+    linear-gradient(hsl(var(--primary) / 0.55), hsl(var(--primary) / 0.55)),
+    linear-gradient(hsl(var(--primary) / 0.55), hsl(var(--primary) / 0.55));
+  background-position:
+    14px 14px,
+    14px 14px,
+    right 14px top 14px,
+    right 14px top 14px,
+    left 14px bottom 14px,
+    left 14px bottom 14px,
+    right 14px bottom 14px,
+    right 14px bottom 14px;
+  background-size:
+    14px 1px, 1px 14px,
+    14px 1px, 1px 14px,
+    14px 1px, 1px 14px,
+    14px 1px, 1px 14px;
 }
