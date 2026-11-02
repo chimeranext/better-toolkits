@@ -10,9 +10,10 @@
  * (which the plugin spawns at startup and `/refresh-better-toolkits-cache`
  * runs by hand) and `scripts/prune-better-toolkits-cache-opencode.sh`.
  */
-import { closeSync, existsSync, mkdirSync, openSync, statSync, unlinkSync } from "node:fs";
+import { closeSync, copyFileSync, existsSync, mkdirSync, openSync, statSync, unlinkSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { dirname, join } from "node:path";
+import { homedir } from "node:os";
 import { planWiringSteps, applyInstall } from "./install.js";
 import { applyPull, findClone, planPull, DEFAULT_BRANCH } from "./clone.js";
 
@@ -125,6 +126,11 @@ export function planSelfUpdate(opts = {}) {
         ? { kind: "cursor-marketplace", detail: "agent plugin marketplace update better-toolkits" }
         : { kind: "skip", detail: "Cursor CLI ('agent') not on PATH — nothing to update" },
     );
+    const src = join(cloneRoot, "shared", "hooks", "bilingual", "adapters", "cursor-before-shell.sh");
+    if (existsSync(src)) {
+      const tgt = join(homedir(), ".cursor", "hooks", "cursor-before-shell.sh");
+      steps.push({ kind: "cursor-bilingual", detail: `copy bilingual cursor adapter -> ${tgt}`, source: src, target: tgt });
+    }
   }
 
   return { cloneRoot, harnesses, steps, warnings };
@@ -192,6 +198,23 @@ export function applySelfUpdate(plan, opts = {}) {
       } catch (err) {
         const msg = String(err?.stderr ?? err?.message ?? err).trim().split("\n").pop();
         results.push({ ok: false, detail: `marketplace update failed: ${msg}` });
+      }
+      continue;
+    }
+
+    if (step.kind === "cursor-bilingual") {
+      if (dry) {
+        log(`would ${step.detail}`);
+        results.push({ ok: true, skipped: true, detail: "dry-run" });
+        continue;
+      }
+      try {
+        mkdirSync(dirname(step.target), { recursive: true });
+        copyFileSync(step.source, step.target);
+        results.push({ ok: true, detail: step.detail });
+      } catch (err) {
+        const msg = String(err?.stderr ?? err?.message ?? err).trim().split("\n").pop();
+        results.push({ ok: false, detail: `cursor-bilingual copy failed: ${msg}` });
       }
       continue;
     }
