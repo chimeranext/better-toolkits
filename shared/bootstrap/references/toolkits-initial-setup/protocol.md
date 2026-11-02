@@ -29,7 +29,7 @@ permissions. Part R reports `no-enforced`/`GAP` when it cannot activate protecti
 
 ---
 
-# Part L — Local (dev machine)
+## Part L — Local (dev machine)
 
 ## Phase 1 — Detect harness
 
@@ -165,7 +165,7 @@ Report pass/fail per harness. If verify fails, propose rollback diffs (HITL agai
 
 ---
 
-# Part R — Repo (remote/protection)
+## Part R — Repo (remote/protection)
 
 ## Phase 7 — Assurance repo gate
 
@@ -225,7 +225,7 @@ is forbidden — including by this setup's own tooling.
 
 ## Arguments
 
-```
+```text
 /toolkits-initial-setup [cursor|claude|opencode] [--expert-mode] [--no-auto-update] [--no-ruleset] [--skip-ggt] [toolkit names…]
 ```
 

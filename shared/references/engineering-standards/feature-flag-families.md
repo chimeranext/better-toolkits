@@ -14,7 +14,7 @@ guessing from one global type.
 
 ## Model
 
-```
+```text
 Family (overarching purpose)
 └── Internal taxonomy (concrete subtypes)
       ├── subtype A — lifespan — pattern

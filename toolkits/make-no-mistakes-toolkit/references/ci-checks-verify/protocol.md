@@ -46,7 +46,7 @@ Determine the **source of truth** for the check:
 | Source | How to find it |
 | --- | --- |
 | Workflow job | `grep -rn "<check-name>" .github/workflows/` — the job that runs it |
-| Local runner script | a `scripts/ci/*.py|sh` referenced by that job |
+| Local runner script | a `scripts/ci/*.py\|sh` referenced by that job |
 | PR status checks | `gh pr checks <PR>` / `gh run view --job <id>` (when diagnosing a PR) |
 
 ## Step 3 — Run/query the real check (evidence, never assertion)

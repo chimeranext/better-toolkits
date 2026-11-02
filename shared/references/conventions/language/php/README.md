@@ -1,4 +1,5 @@
 # convention: php
+
 id: php · version: 0.1.0 · status: draft · level: language
 extracted_at: 2026-10-13 · ttl_expires: 2027-01-11
 parent: none

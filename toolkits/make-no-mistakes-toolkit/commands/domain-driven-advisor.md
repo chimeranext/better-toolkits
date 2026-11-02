@@ -15,6 +15,6 @@ tree.
 
 ## Usage
 
-```
+```text
 /domain-driven-advisor [path]
 ```
