@@ -99,6 +99,7 @@ Four constants across every row:
   panels, acquired applications.
 
 Sources (examples of the class, not an exhaustive stack list):
+
 - Pattern/evidence: https://firecompass.com/php2shell-not-first-next-one-already-someones-queue/ (series table + day-zero programme)
 - Rust secure-coding (ANSSI): https://github.com/anssi-fr/rust-guide/ · https://messervices.cyber.gouv.fr/documents-guides/anssi-guide-programming_rules_to_develop_secure_applications_with_rust-v1.0.pdf
 - PHP2Shell (most recent instance): https://www.php.net/archive/2026.php#2026-10-23-1 · https://www.php2shell.com/#upgrade-php · https://www.wiz.io/blog/php2shell-php-rce · https://www.akamai.com/blog/security-research/understanding-php2shell-everything-you-need-to-know · https://medium.com/@seiferboado101/hunting-php2shell-a-practical-guide-for-soc-and-dfir-teams-e092c540afa1 · https://docs.rapid7.com/nexpose/php2shell/ · https://www.focusedhunts.com/blog/hunting/php2shell-Critical-PHP-RCE-Hunting-Guide · https://www.legacyleap.ai/blog/php2shell-php-8-1-end-of-life/

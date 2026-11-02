@@ -121,7 +121,7 @@ When the user is unsure, or answers "all", **no signal is set**. Per
 `recommendAudits()` semantics, an empty signal set returns the **full ordered
 sweep**:
 
-```
+```text
 SCH → CDC → DDD → ARC → STR → ENF
 ```
 

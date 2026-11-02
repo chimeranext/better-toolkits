@@ -4,7 +4,7 @@ Harness-agnostic body. Thin entry: `commands/ready-to-review-mergeable.md`.
 
 ---
 
-# /ready-to-review-mergeable: $ARGUMENTS
+## /ready-to-review-mergeable: $ARGUMENTS
 
 **One pipeline, one invariant: never merge.**
 

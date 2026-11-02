@@ -1,4 +1,5 @@
 # convention: dart
+
 id: dart · version: 0.1.0 · status: draft · level: language
 extracted_at: 2026-10-13 · ttl_expires: 2026-11-12
 parent: none
@@ -39,7 +40,7 @@ Short TTL (30 days): skills change unversioned → pin by commit in apply.
 - D9 [BDD] Check observable behavior, not implementation. The BDD assertion is
   declared in the mini-language of `conventions/matcher-contract.md` and translates to the native
   matcher (`package:test` `expect(expr, equals/contains/matches/hasLength)`). Jidoka
-  + No-Workarounds gates per `assurance-toolkit/references/testing/e2e-protocol.md`.
+  - No-Workarounds gates per `assurance-toolkit/references/testing/e2e-protocol.md`.
 
 The native matcher follows **TAS** (`../../../../references/engineering-standards/test-assertion-standards.md`): assert contracts, not snapshots.
 

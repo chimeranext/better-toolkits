@@ -21,7 +21,7 @@
 | **11. BrS** | Branching Strategy | Branches, naming, protection | [branching-strategy.md](branching-strategy.md) |
 | **12. WTD** | Worktree Discipline | Worktrees are transient and never committed. Parity (1 issue = 1 worktree = 1 PR) is an association policy, not persistence. | [worktree-discipline.md](worktree-discipline.md) |
 | **13. Jidoka** | Stop-on-Anomaly | Stop on any anomaly; record the owning boundary and a root-cause hypothesis before continuing. Never "see if the rest works" after a failure. | [jidoka.md](jidoka.md) |
-| **14. StS** | Stderr/Stream Standards | Never send a stream to null; fold stderr into the same sink (`> out.log 2>&1` or `2>&1 | tee run.log`); separate-file redirects are forbidden. | [stderr-stream-standards.md](stderr-stream-standards.md) |
+| **14. StS** | Stderr/Stream Standards | Never send a stream to null; fold stderr into the same sink (`> out.log 2>&1` or `2>&1 \| tee run.log`); separate-file redirects are forbidden. | [stderr-stream-standards.md](stderr-stream-standards.md) |
 | **15. GGT** | GitFlow + Trunk-based | Hybrid model: feature→`develop` rebase. `develop`→`main` merge commit. Auditable setup + repo-initial-setup step | [gitflow-trunk.md](gitflow-trunk.md) |
 | **16. QT4L** | QA Traceability (four layers) | Req → automated test → manual QA → HITL | [qa-traceability-four-layers.md](qa-traceability-four-layers.md) |
 | **17. AFIF** | Anti-Fragility via Fault Injection | Harden every layer by injecting faults (mutation, formal self-test, chaos, gate negatives). "Never seen fail" is not a pass. | [anti-fragility-fault-injection.md](anti-fragility-fault-injection.md) |

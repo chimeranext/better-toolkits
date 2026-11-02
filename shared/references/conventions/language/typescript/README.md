@@ -1,4 +1,5 @@
 # convention: typescript
+
 id: typescript · version: 0.1.0 · status: draft · level: language
 extracted_at: 2026-10-13 · ttl_expires: 2026-11-12
 parent: none

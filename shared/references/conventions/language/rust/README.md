@@ -1,4 +1,5 @@
 # convention: rust
+
 id: rust · version: 0.1.0 · status: draft · level: language
 extracted_at: 2026-10-13 · ttl_expires: 2027-01-11
 parent: none
@@ -74,7 +75,7 @@ pub fn login(u: &str, p: &str) -> Result<(), Error> {
 }
 ```
 
-```
+```rust
 // ❌ wrong: BDD con archivo .feature + aserción interna (R10) — el escenario
 // ya vive en el OpenSpec; no duplicarlo en Gherkin, y no assertear implementación.
 

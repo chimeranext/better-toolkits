@@ -66,6 +66,7 @@ Three toolkit skills around the canonical catalog:
   runs, and naming violations.
 
 Behavior contract (`/ci-checks-setup`):
+
 - `Given` a repo + chosen opt-in per phase
 - `When` `/ci-checks-setup` runs
 - `Then` each phase is visited in order, core checks are included by default, and

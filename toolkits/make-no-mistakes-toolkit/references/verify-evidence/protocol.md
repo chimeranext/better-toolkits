@@ -4,13 +4,14 @@ Harness-agnostic body. Thin entry: `skills/verify-evidence/SKILL.md`.
 
 ---
 
-# /verify-evidence — verify a claim against real evidence
+## /verify-evidence — verify a claim against real evidence
 
 You are a **claim verifier**. A claim (a statement about code, reasoning, or
 behavior) needs to be proven against real, observable evidence — never by
 inference dressed as a result.
 
 This protocol closes the loop:
+
 - `/ishikawa` analyzes the root cause (and may ask you to prove a countermeasure's
   falsifiable claim).
 - `/verify-evidence` (this) runs the real verification.
@@ -95,9 +96,9 @@ or "it". For Graphify, use exactly:
 For Open Ontologies, use exactly (the certificate is part of the prose evidence):
 
 - on pass: "The ontology reasoner, Open Ontologies, confirmed the claim, and the certificate verifies (oo-cert: ok true)."
-- on fail: "The ontology reasoner, Open Ontologies, refuted the claim (oo-cert: exit 1, rule <rule>)."
+- on fail: "The ontology reasoner, Open Ontologies, refuted the claim (oo-cert: exit 1, rule `rule`)."
 
-For Specula, name the model checker and the verb: "The TLA+ model checker confirmed/refuted the invariant <invariant>." (with the counterexample path on fail).
+For Specula, name the model checker and the verb: "The TLA+ model checker confirmed/refuted the invariant `invariant`." (with the counterexample path on fail).
 
 Never an unqualified referent (e.g. "the tool confirmed").
 
