@@ -58,8 +58,36 @@ function planBetterProfileSyncStep(repoRoot) {
 function planTooluseGuardsStep(repoRoot) {
   return {
     kind: "tooluse-guards",
-    detail: "install tool-use guards (PRDS / admin-merge)",
+    detail: "install tool-use guards (PRDS / admin-merge / bilingual fallback)",
     repoRoot,
+  };
+}
+
+function planBilingualPluginStep(repoRoot, configDir) {
+  const dir = join(configDir, "plugins", "local.mnm-bilingual");
+  const indexSource = join(repoRoot, "shared", "hooks", "bilingual", "adapters", "opencode-bilingual.ts");
+  const detectSource = join(repoRoot, "shared", "hooks", "bilingual", "detect.py");
+  if (!existsSync(indexSource) || !existsSync(detectSource)) {
+    return { kind: "skip", detail: "bilingual plugin source missing (no shared/hooks/bilingual)" };
+  }
+  const indexTarget = join(dir, "index.ts");
+  const detectTarget = join(dir, "detect.py");
+  const indexInstalled = readBytesOrNull(indexTarget);
+  const detectInstalled = readBytesOrNull(detectTarget);
+  const stale =
+    indexInstalled === null ||
+    Buffer.compare(indexInstalled, readFileSync(indexSource)) !== 0 ||
+    detectInstalled === null ||
+    Buffer.compare(detectInstalled, readFileSync(detectSource)) !== 0;
+  return {
+    kind: "bilingual-plugin",
+    detail: stale ? `install bilingual plugin -> ${dir}` : `bilingual plugin up to date (${dir})`,
+    dir,
+    indexSource,
+    detectSource,
+    indexTarget,
+    detectTarget,
+    stale,
   };
 }
 
@@ -84,6 +112,7 @@ export function planWiringSteps(opts = {}, repoRoot = resolveRepoRoot()) {
   if (skillsStep) steps.push(skillsStep);
   steps.push(planBetterProfileSyncStep(repoRoot));
   steps.push(planTooluseGuardsStep(repoRoot));
+  steps.push(planBilingualPluginStep(repoRoot, configDir));
   steps.push(planAutoUpdateStep(opts, repoRoot, configDir));
   return { adapter, steps };
 }
@@ -250,6 +279,13 @@ export function applyInstall(plan, opts = {}) {
       } else {
         console.log("  warn: sync-better-profile.sh missing, skipping");
       }
+    } else if (s.kind === "bilingual-plugin") {
+      mkdirSync(s.dir, { recursive: true });
+      if (s.stale) {
+        copyFileSync(s.indexSource, s.indexTarget);
+        copyFileSync(s.detectSource, s.detectTarget);
+      }
+      console.log(`  done: ${s.detail}`);
     } else if (s.kind === "auto-update") {
       applyAutoUpdateStep(s);
     } else if (s.kind === "mcp") {
