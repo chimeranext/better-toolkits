@@ -208,9 +208,8 @@ agent profile (`agents/better.md`) references them. The hooks enforce the key on
 - **Jidoka** (`jidoka.md`) — stop on anomaly. Record boundary + root-cause hypothesis.
 - **StS** (`stderr-stream-standards.md`) — no stream to null. Fold stderr into the
   same sink. `2> file` forbidden (enforced by the stderr hook this setup installs).
-- **BIB** (`bilingual-issue-brief.md`) — redacción Bilingual ANTES de abrir todo issue
-  (GitHub o Linear), con gate determinístico `shared/hooks/bilingual/detect.py` instalado
-  por este setup (MANDATORY, no opt-in).
+- **BIB** — ver `index.md` (#33) y `bilingual-issue-brief.md` (SSOT). Su gate determinístico
+  `shared/hooks/bilingual/detect.py` queda instalado por este setup.
 - **CLG** (`commit-logic-groups.md`) — commit intermediate work in semantic groups.
 - **GGT** (`gitflow-trunk.md`) — branch model provisioned in Phase 7b. Audited by
   `audit-repo-gitflow.sh`.
