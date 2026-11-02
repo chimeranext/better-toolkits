@@ -236,13 +236,31 @@ is forbidden — including by this setup's own tooling.
 
 ## Thin Makefile wrapper (alias ergonómico)
 
-`Makefile` (raíz) expone los targets por fase del protocol — `phase-detect`,
-`phase-audit`, `phase-propose`, `phase-install`, `phase-verify` — como alias
-finos sobre el CLI (`better-toolkits.js setup --phases …`) y `make setup` los
-encadena con **prompt de UI entre fases** (`shared/bootstrap/scripts/make-prompt.sh`).
-No reemplaza las fases: la detección de harness y el HITL siguen siendo runtime
-(cli). Es un atajo ergonómico, no orquestación. Nota de plataforma: es
-Unix/POSIX; Windows usa los `.ps1` del protocol.
+`Makefile` (raíz) expone targets por fase del protocol — `local-detect`,
+`local-audit`, `local-propose`, `local-install`, `local-verify` (Part L) y
+`repo-audit`, `repo-setup` (Part R) — como alias finos sobre el CLI
+(`better-toolkits.js setup --phases …`) y los scripts de `assurance-repo-setup`.
+`make setup` encadena **solo Part L** con **prompt de UI entre fases**
+(`shared/bootstrap/scripts/make-prompt.sh`). Los targets `repo-*` son explícitos,
+separados y gateados por HITL; nunca forman parte de `setup` (garantiza el split
+local vs remote). Twin Windows: `Makefile.windows` (recetas PowerShell, prompt con
+`Read-Host`; los `repo-*` requieren Git Bash). No reemplaza las fases: detección
+de harness y HITL siguen siendo runtime.
+
+---
+
+## Selector de toolkits por harness (determinístico)
+
+`--plugins <lista>` es un knob explícito, pero su efecto depende del harness
+(verificado contra los docs oficiales):
+
+| Harness | ¿Selector? | Mecánica determinística |
+| --- | --- | --- |
+| **OpenCode** | No — instala TODOS los toolkits | El harness no expone selector. Si se pasa `--plugins` distinto de `all` → **fallo explícito (fail-closed)**, no silencio. |
+| **Cursor** | Sí | Marketplace `.cursor-plugin/marketplace.json`; instalar solo los `plugins[]` elegidos (instalar el dir del plugin / `agent plugin install <name>`). |
+| **Claude Code** | Sí | `claude plugin install <toolkit>@better-toolkits --scope user\|project\|local` por toolkit elegido (instalación nominal, no se adivina). |
+
+Regla determinística: mismos inputs (`--harness` + `--plugins`) ⇒ mismo conjunto instalado. Si `--plugins` pide algo que el harness no puede honrar → error, jamás ignore silencioso.
 
 ---
 
