@@ -1,0 +1,37 @@
+# better-toolkits Docs
+
+The **better-toolkits** monorepo ships reusable agent toolkits for Claude Code,
+Cursor, and OpenCode. This docs site is the published, human-readable surface for
+the repository's doctrine and reference material.
+
+The content here is ported from the canonical markdown SSOT in the repository.
+The source of truth remains the files in `docs/`, `shared/references/`, and
+`shared/bootstrap/references/` — this site is a faithful rendering of those, not a
+second source.
+
+## Sections
+
+- **Multi-harness SSOT** — the durable contract for how one protocol, one stderr
+  detector, and one PRDS gate are wired across harnesses (Claude Code, Cursor,
+  OpenCode, Antigravity/Codex).
+- **Conventions** — the shared "well-written code" reference records by
+  language/framework, versioned and enforceable.
+- **Engineering Standards** — the portable baseline of engineering standards and
+  the end-to-end change pipeline (32+ indexed practices).
+- **Setup** — the `/toolkits-initial-setup` bootstrap protocol (marketplace,
+  harness wiring, hooks, GGT repo-initial-setup).
+
+## Why a separate docs app
+
+The repo previously served this content as a `/doctrine/` subpage of the Next.js
+`apps/web` site. The docs app (`apps/docs`) is a Mintlify project that replaces
+that subpage as the home for this reference content, while `apps/web` and its
+`/doctrine/` subpage are left in place.
+
+## Run locally
+
+```bash
+npm i -g mint
+cd apps/docs
+mint dev
+```
