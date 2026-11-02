@@ -6,12 +6,17 @@ Exit 0 = pass; exit 1 = any failure (no pytest dependency).
 """
 from __future__ import annotations
 
-import sys
 import tempfile
+from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-import detect_code_smells as dcs  # noqa: E402
+# Load the module by explicit path so pyright can resolve it without relying on
+# a runtime sys.path mutation (which static analysis cannot see).
+_dcs_path = Path(__file__).resolve().parents[1] / "detect_code_smells.py"
+_dcs_spec = spec_from_file_location("detect_code_smells", _dcs_path)
+assert _dcs_spec is not None and _dcs_spec.loader is not None
+dcs = module_from_spec(_dcs_spec)
+_dcs_spec.loader.exec_module(dcs)
 
 # (suffix, filename, content, expect_flag)
 POSITIVE = [
