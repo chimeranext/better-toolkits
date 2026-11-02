@@ -3,8 +3,8 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
-    "prebuild": "node scripts/gen-toolkits.mjs",
-    "predev": "node scripts/gen-toolkits.mjs",
+    "prebuild": "node scripts/gen-toolkits.mjs && node scripts/gen-skills-catalog.mjs",
+    "predev": "node scripts/gen-toolkits.mjs && node scripts/gen-skills-catalog.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

@@ -1,0 +1,14 @@
+{
+  "id": "02-transposition-invisible",
+  "prompt": "Write me a cold email to the head of sponsorship at a large exchange, inviting them to sponsor our summit in November. Use PIBER.",
+  "expected_behavior": "Transposed mode at L2 on the compression ladder. The five nodes run underneath a 90-word email with no visible labels. Status is peer-level throughout.",
+  "assertions": [
+    "The email contains no headings or labels named Problem, Insight, Big Idea, Execution or Results",
+    "Total body length is roughly 90 words, not a five-section document",
+    "P and I are compressed, with the turn arriving by the second sentence",
+    "Written from equal standing, not as a request for a favor",
+    "Ends with one number and one specific ask",
+    "If the skill states which mode and resolution it chose, it does so in one line outside the email itself",
+    "Contains no em dashes"
+  ]
+}

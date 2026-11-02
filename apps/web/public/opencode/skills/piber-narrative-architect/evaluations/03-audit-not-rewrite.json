@@ -1,0 +1,15 @@
+{
+  "id": "03-audit-not-rewrite",
+  "prompt": "Attached is our seed deck narrative. Tell me what is wrong with it. [Deck: 14 slides, company name on slide 1, problem framed as 'agencies are slow and expensive', no single underlinable insight sentence, big idea is 'the AI-native software factory', 9 slides of features, results slide lists 4M impressions and 20k newsletter subscribers.]",
+  "expected_behavior": "Audit mode. A scored memo with the single highest-value repair named, not a rewritten deck.",
+  "assertions": [
+    "Delivers a memo, not a rewritten deck or a replacement narrative",
+    "Gives a score against the 100-point rubric and states the band",
+    "Applies the insight cap: with no identifiable insight the total is capped at 74",
+    "Names one leak as the highest-value repair rather than listing twelve equally",
+    "Quotes the deck's own lines when naming each failure",
+    "Identifies at least the missing insight, the untraced feature slides, and the activity metrics in results",
+    "Offers the rebuild as a separate mode rather than performing it unasked",
+    "Contains no em dashes"
+  ]
+}
