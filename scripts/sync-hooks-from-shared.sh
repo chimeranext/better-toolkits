@@ -4,7 +4,7 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SRC_BASE="$ROOT/shared/hooks"
-MODS="stderr prds no-squash"
+MODS="stderr prds no-squash bilingual"
 if [ "$#" -gt 0 ] && [ "$1" != "--all" ]; then
   MODS="$*"
 fi
