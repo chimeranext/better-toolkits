@@ -12,7 +12,7 @@ Coverage (per language), tiered by measured impact:
   WARN — printed, never fail the gate (legacy-heavy, e.g. 45 TS / 139 shell).
 
 Languages (measured in-repo; MegaLinter handles standard lint):
-  Python       HARD `except:` desnudo
+  Python       HARD bare `except:`
   TS/JS       WARN `null` sentinel return
   Shell       HARD dev-null redirect; WARN missing `set -u`
   YAML        WARN duplicate keys
@@ -68,7 +68,7 @@ def scan_shell(path: Path) -> list[tuple[str, str]]:
     text = path.read_text(encoding="utf-8", errors="replace")
     out: list[tuple[str, str]] = []
     for m in DEVNULL.finditer(text):
-        out.append(("HARD", f"{path}:{_line(text, m.start())} redirección a dev-null (viola stderr-stream-standards)"))
+        out.append(("HARD", f"{path}:{_line(text, m.start())} dev-null redirect (violates stderr-stream-standards)"))
     if not SETU.search(text):
         out.append(("WARN", f"{path}: script shell sin `set -u` / `set -euo pipefail`"))
     return out
@@ -78,7 +78,7 @@ def scan_python(path: Path) -> list[tuple[str, str]]:
     text = path.read_text(encoding="utf-8", errors="replace")
     out: list[tuple[str, str]] = []
     for m in BARE_EXCEPT.finditer(text):
-        out.append(("HARD", f"{path}:{_line(text, m.start())} `except:` desnudo — especifica el tipo de excepción"))
+        out.append(("HARD", f"{path}:{_line(text, m.start())} bare `except:` — specify the exception type"))
     return out
 
 
@@ -86,7 +86,11 @@ def scan_ts(path: Path) -> list[tuple[str, str]]:
     text = path.read_text(encoding="utf-8", errors="replace")
     out: list[tuple[str, str]] = []
     if TS_NULL_SENTINEL.search(text) and RETURN_NULL.search(text):
-        out.append(("WARN", f"{path}: uso de `null` como centinela allow en firma `… | null` con `return null` — devolver \"\" (null-safety)"))
+        msg = (
+            f"{path}: using `null` as an allow sentinel in signature `… | null` "
+            f"with `return null` — return \"\" (null-safety)"
+        )
+        out.append(("WARN", msg))
     return out
 
 
@@ -98,7 +102,7 @@ def scan_yaml(path: Path) -> list[tuple[str, str]]:
         key = (len(m.group("indent")), m.group("key"))
         seen.setdefault(key, m.start())
         if seen[key] != m.start() and m.group("val").strip() == "":
-            out.append(("WARN", f"{path}:{_line(text, m.start())} clave YAML duplicada: {m.group('key')}"))
+            out.append(("WARN", f"{path}:{_line(text, m.start())} duplicate YAML key: {m.group('key')}"))
             break
     return out
 
@@ -108,7 +112,7 @@ def scan_json(path: Path) -> list[tuple[str, str]]:
         json.loads(path.read_text(encoding="utf-8"))
         return []
     except Exception as e:  # noqa: BLE001
-        return [("HARD", f"{path}: JSON inválido ({e})")]
+        return [("HARD", f"{path}: invalid JSON ({e})")]
 
 
 def scan_markdown(path: Path) -> list[tuple[str, str]]:
@@ -125,7 +129,7 @@ def scan_markdown(path: Path) -> list[tuple[str, str]]:
 def scan_powershell(path: Path) -> list[tuple[str, str]]:
     text = path.read_text(encoding="utf-8", errors="replace")
     if "$ErrorActionPreference" not in text:
-        return [("WARN", f"{path}: falta `$ErrorActionPreference = 'Stop'`")]
+        return [("WARN", f"{path}: missing `$ErrorActionPreference = 'Stop'`")]
     return []
 
 
@@ -220,7 +224,7 @@ def _lang_patterns(suffix: str):
 
 
 def scan_test_assertions(path: Path) -> list[tuple[str, str]]:
-    """TAS multi-lenguaje: flag conteos literales en aserción de longitud (snapshot de registro)."""
+    """TAS multi-language: flag literal length-assertion counts (registry snapshot)."""
     pats = _lang_patterns(path.suffix)
     if not pats:
         return []
@@ -231,7 +235,7 @@ def scan_test_assertions(path: Path) -> list[tuple[str, str]]:
             num = next((g for g in m.groups() if g is not None), "?")
             out.append((
                 "WARN",
-                f"{path}:{_line(text, m.start())} conteo literal ({num}) en aserción de longitud — "
+                f"{path}:{_line(text, m.start())} literal count ({num}) in length assertion — "
                 "TAS: derivar del source of truth; no snapshot",
             ))
     return out

@@ -1,0 +1,16 @@
+[flake8]
+# better-toolkits flake8 config.
+# This repo's Python scripts carry long URLs, CLI commands and catalog lines
+# that legitimately exceed the upstream default of 79. Align with the repo's
+# markdownlint line_length (120) for a single, declared standard.
+max-line-length = 120
+# The skills catalog under apps/web/public/opencode is generated output
+# (produced by scripts/gen-skills-catalog.mjs), not hand-written repo code —
+# exclude it from linting, consistent with markdownlint's exclusion.
+exclude =
+    apps/web/public/opencode,
+    .git,
+    node_modules,
+    vendor,
+    dist,
+    build,
