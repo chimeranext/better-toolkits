@@ -37,7 +37,7 @@ export default function BlueprintMotion() {
       gsap.utils.toArray<HTMLElement>(".bp-heading").forEach((el) => {
         const line = el.querySelector<HTMLElement>(".bp-heading-line");
         const tl = gsap.timeline({
-          scrollTrigger: { trigger: el, start: "top 82%" },
+          scrollTrigger: { trigger: el, start: "top 82%", toggleActions: "play none none none" },
         });
         tl.fromTo(el, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" });
         if (line) {
@@ -55,7 +55,7 @@ export default function BlueprintMotion() {
           duration: 0.5,
           stagger: 0.08,
           ease: "power2.out",
-          scrollTrigger: { trigger: "[data-bp-stats]", start: "top 82%" },
+          scrollTrigger: { trigger: "[data-bp-stats]", start: "top 82%", toggleActions: "play none none none" },
         },
       );
 
@@ -70,7 +70,7 @@ export default function BlueprintMotion() {
           duration: 0.5,
           stagger: 0.07,
           ease: "power2.out",
-          scrollTrigger: { trigger: "[data-bp-bento]", start: "top 80%" },
+          scrollTrigger: { trigger: "[data-bp-bento]", start: "top 80%", toggleActions: "play none none none" },
         },
       );
 
@@ -84,7 +84,7 @@ export default function BlueprintMotion() {
           duration: 0.5,
           stagger: 0.1,
           ease: "power2.out",
-          scrollTrigger: { trigger: "[data-bp-steps]", start: "top 82%" },
+          scrollTrigger: { trigger: "[data-bp-steps]", start: "top 82%", toggleActions: "play none none none" },
         },
       );
 
@@ -98,7 +98,7 @@ export default function BlueprintMotion() {
           duration: 0.45,
           stagger: 0.05,
           ease: "power2.out",
-          scrollTrigger: { trigger: "[data-bp-faq]", start: "top 85%" },
+          scrollTrigger: { trigger: "[data-bp-faq]", start: "top 85%", toggleActions: "play none none none" },
         },
       );
     });

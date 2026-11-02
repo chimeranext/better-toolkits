@@ -60,7 +60,7 @@ function Terminal({ cmd, label, copied }: { cmd: string; label: string; copied: 
 /** Signature element: the hero terminal "installs" the ten real toolkits. */
 function HeroTerminal({ label, copied, readyLine }: { label: string; copied: string; readyLine: string }) {
   return (
-    <div className="terminal-dark w-full overflow-hidden rounded-xl border border-primary/25 text-left shadow-[0_0_80px_-12px_rgba(124,92,255,0.45)]">
+    <div className="terminal-dark w-full overflow-hidden rounded-xl border border-primary/25 text-left shadow-[0_0_80px_-12px_rgba(245,158,11,0.30)]">
       <div className="flex items-center justify-between gap-3 border-b border-white/10 px-5 py-3">
         <div className="flex items-center gap-1.5">
           <span className="h-3 w-3 rounded-full bg-destructive/80" />
@@ -301,9 +301,9 @@ export default function Page() {
       <Section id="top" className="relative overflow-hidden pb-[clamp(3rem,6vh,5rem)] pt-[clamp(1.5rem,4vh,3.5rem)] text-center">
         {/* brand glow field */}
         <div aria-hidden className="pointer-events-none absolute inset-0">
-          <div className="absolute left-1/2 top-[6%] h-[55vh] w-[85vw] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(124,92,255,0.30),transparent_62%)] blur-2xl" />
-          <div className="absolute right-[-12%] top-[28%] h-[45vh] w-[45vw] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(34,211,238,0.16),transparent_60%)] blur-3xl" />
-          <div className="absolute bottom-[-18%] left-[-12%] h-[45vh] w-[45vw] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(236,72,153,0.14),transparent_60%)] blur-3xl" />
+          <div className="absolute left-1/2 top-[6%] h-[55vh] w-[85vw] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(245,158,11,0.16),transparent_62%)] blur-2xl" />
+          <div className="absolute right-[-12%] top-[28%] h-[45vh] w-[45vw] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(251,191,36,0.10),transparent_60%)] blur-3xl" />
+          <div className="absolute bottom-[-18%] left-[-12%] h-[45vh] w-[45vw] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(180,83,9,0.12),transparent_60%)] blur-3xl" />
         </div>
 
         {/* architectural-blueprint grid + registration ticks (fades in via GSAP) */}
@@ -322,9 +322,20 @@ export default function Page() {
                 ),
               )}
             </span>
-            <span className="block bg-brand-gradient bg-clip-text text-transparent [filter:drop-shadow(0_0_22px_rgba(217,180,91,0.40))]">{t.s2.h1b}</span>
+            <span className="block bg-brand-gradient bg-clip-text text-transparent [filter:drop-shadow(0_0_22px_rgba(245,158,11,0.35))]">{t.s2.h1b}</span>
           </h1>
-          <p className="mt-3 text-xs uppercase tracking-[0.2em] text-muted-foreground sm:text-sm">{t.s2.source}</p>
+          <p className="mt-3 text-xs uppercase tracking-[0.2em] text-muted-foreground sm:text-sm">
+            <a
+              href={t.s2.sourceUrl}
+              target="_blank"
+              rel="noreferrer"
+              data-event="cta_source"
+              onClick={() => track("cta_source", { url: t.s2.sourceUrl })}
+              className="underline decoration-muted-foreground/40 underline-offset-4 transition-colors hover:text-foreground hover:decoration-foreground/60"
+            >
+              {t.s2.source}
+            </a>
+          </p>
           <p className="mx-auto mt-5 max-w-[58ch] text-[clamp(1rem,0.92rem+0.4vw,1.3rem)] leading-relaxed text-foreground/90">{t.s2.sub}</p>
           <div className="mx-auto mt-7 w-full max-w-[min(56rem,94vw)]">
             <HeroTerminal label={t.s2.copy} copied={t.s2.copied} readyLine={readyLine} />
@@ -334,7 +345,7 @@ export default function Page() {
               href="#stack"
               data-event="cta_learn_more"
               onClick={() => track("cta_learn_more")}
-              className="inline-flex items-center justify-center rounded-lg bg-[hsl(var(--primary-strong))] px-9 py-4 text-base font-bold text-white shadow-[0_10px_40px_-8px_rgba(124,92,255,0.65)] transition-transform hover:-translate-y-0.5 hover:bg-primary/90 sm:text-lg"
+              className="inline-flex items-center justify-center rounded-lg bg-[hsl(var(--primary-strong))] px-9 py-4 text-base font-bold text-white shadow-[0_10px_40px_-8px_rgba(245,158,11,0.45)] transition-transform hover:-translate-y-0.5 hover:bg-primary/90 sm:text-lg"
             >
               {t.s2.learnMore}
             </a>
@@ -578,7 +589,7 @@ export default function Page() {
       {/* S11 — final CTA */}
       <Section className="relative overflow-hidden text-center">
         <div aria-hidden className="pointer-events-none absolute inset-0">
-          <div className="absolute left-1/2 top-1/2 h-[60vh] w-[70vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(124,92,255,0.18),transparent_62%)] blur-2xl" />
+          <div className="absolute left-1/2 top-1/2 h-[60vh] w-[70vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(245,158,11,0.12),transparent_62%)] blur-2xl" />
         </div>
         {/* architectural-blueprint grid + registration ticks */}
         <div aria-hidden className="blueprint-overlay bp-grid pointer-events-none absolute inset-0 opacity-0" />
