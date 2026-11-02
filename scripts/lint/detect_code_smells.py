@@ -171,24 +171,69 @@ def scan_php(path: Path) -> list[tuple[str, str]]:
     return out
 
 
-TEST_ASSERT_LENGTH = re.compile(
-    r"assert\.(?:equal|strictEqual)\(\s*\w+\.length\s*,\s*(\d+)|"
-    r"expect\(\s*\w+\.length\s*\)\.toBe\((\d+)\)|"
-    r"expect\([^)]*\)\.toHaveLength\((\d+)\)"
-)
+LANG_ASSERT_LENGTH = {
+    # TS/JS
+    ".ts": [
+        re.compile(r"toHaveLength\(\s*(\d+)\s*\)"),
+        re.compile(r"assert\.(?:equal|strictEqual)\(\s*\w+\.length\s*,\s*(\d+)"),
+        re.compile(r"expect\(\s*\w+\.length\s*\)\.toBe\((\d+)\)"),
+    ],
+    ".tsx": None,
+    ".js": None,
+    ".jsx": None,
+    ".mjs": None,
+    # Python
+    ".py": [re.compile(r"\bassert\s+len\(\s*\w+\s*\)\s*==\s*(\d+)")],
+    # Shell
+    ".sh": [re.compile(r"\$\{#[\w]+\[@\]\}\s+(?:-eq|-ne|-lt|-le|-gt|-ge)\s+(\d+)")],
+    # PHP (PHPUnit)
+    ".php": [re.compile(r"\bassertCount\(\s*(\d+)\s*,\s*\$?\w+\)")],
+    # PowerShell (Pester)
+    ".ps1": [re.compile(r"\$[\w]+\.Count\s+-(?:eq|ne|gt|ge|lt|le)\s+(\d+)")],
+    # Dart
+    ".dart": [
+        re.compile(r"expect\(\s*\w+\.length\s*,\s*(\d+)\s*\)"),
+        re.compile(r"expect\(\s*\w+\s*,\s*hasLength\(\s*(\d+)\s*\)"),
+    ],
+    # Elixir
+    ".ex": [re.compile(r"\bassert\s+length\(\s*\w+\s*\)\s*==\s*(\d+)")],
+    ".exs": None,
+    # Rust
+    ".rs": [re.compile(r"assert_eq!\(\s*\w+\.len\(\)\s*,\s*(\d+)\s*\)")],
+    # Go
+    ".go": [
+        re.compile(r"len\(\s*\w+\s*\)\s*!=\s*(\d+)"),
+        re.compile(r"(?:require|assert)\.Len\(\s*t\s*,\s*\w+\s*,\s*(\d+)\s*\)"),
+    ],
+}
+
+
+def _lang_patterns(suffix: str):
+    base = LANG_ASSERT_LENGTH.get(suffix)
+    if base is not None:
+        return base
+    if suffix in (".tsx", ".js", ".jsx", ".mjs"):
+        return LANG_ASSERT_LENGTH[".ts"]
+    if suffix == ".exs":
+        return LANG_ASSERT_LENGTH[".ex"]
+    return []
 
 
 def scan_test_assertions(path: Path) -> list[tuple[str, str]]:
-    """TAS: flag conteos literales en aserción de longitud (snapshot de registro)."""
+    """TAS multi-lenguaje: flag conteos literales en aserción de longitud (snapshot de registro)."""
+    pats = _lang_patterns(path.suffix)
+    if not pats:
+        return []
     text = path.read_text(encoding="utf-8", errors="replace")
     out: list[tuple[str, str]] = []
-    for m in TEST_ASSERT_LENGTH.finditer(text):
-        num = next((g for g in m.groups() if g is not None), "?")
-        out.append((
-            "WARN",
-            f"{path}:{_line(text, m.start())} conteo literal ({num}) en aserción de longitud — "
-            "TAS: derivar del source of truth (p.ej. NPM_PACKAGES.length); no snapshot",
-        ))
+    for pat in pats:
+        for m in pat.finditer(text):
+            num = next((g for g in m.groups() if g is not None), "?")
+            out.append((
+                "WARN",
+                f"{path}:{_line(text, m.start())} conteo literal ({num}) en aserción de longitud — "
+                "TAS: derivar del source of truth; no snapshot",
+            ))
     return out
 
 
@@ -221,7 +266,7 @@ def scan_one(path: Path) -> list[tuple[str, str]]:
         out.extend(scan_elixir(path))
     elif path.suffix == ".php":
         out.extend(scan_php(path))
-    if ("test" in name or "spec" in name) and path.suffix in (".js", ".ts", ".mjs", ".jsx", ".tsx", ".py"):
+    if ("test" in name or "spec" in name) and _lang_patterns(path.suffix):
         out.extend(scan_test_assertions(path))
     return out
 

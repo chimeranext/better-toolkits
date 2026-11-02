@@ -52,14 +52,29 @@ hand-edited. The fix replaced literals with the relationship
 
 ---
 
-## Enforcement (determinístico)
+## Multi-language coverage
 
-La regla se chequea por máquina: `scripts/lint/detect_code_smells.py` (cableado en
-`.pre-commit-config.yaml` como hook `code-smells`) marca como WARN los conteos
-literales en aserción de longitud (`assert.equal(x.length, N)`,
-`expect(x).toHaveLength(N)`). Prioridad: WARN (advisory) — evita romper CI de
-legacy; puede subirse a HARD cuando el barrido limpie los existentes (ver issue
-de sweep).
+The rule applies to every language in the code conventions that writes test
+assertions. The deterministic checker (`scripts/lint/detect_code_smells.py`,
+hook `code-smells`) recognizes the assertion syntax of each:
+
+| Language | Assertion form flagged |
+| --- | --- |
+| TypeScript / JavaScript | `expect(x).toHaveLength(N)`, `assert.equal(x.length, N)`, `expect(x.length).toBe(N)` |
+| Python | `assert len(x) == N` |
+| Shell | `${#arr[@]} -eq N` (and -ne/-lt/-le/-gt/-ge) |
+| PHP (PHPUnit) | `assertCount(N, $x)` |
+| PowerShell (Pester) | `$x.Count -eq N` |
+| Dart | `expect(x.length, N)`, `expect(x, hasLength(N))` |
+| Elixir | `assert length(x) == N` |
+| Rust | `assert_eq!(x.len(), N)` |
+| Go | `require.Len(t, x, N)`, `len(x) != N` |
+| Markdown / JSON / YAML / HTML / Dockerfile | no test assertions — n/a |
+
+Enforcement: WARN (advisory) so legacy does not block CI; flip to HARD only
+after the documented sweep clears existing hits. A literal count tied to a local
+fixture or a validated transformation may be exempted via the explicit token
+`# tas: fixture`.
 
 ---
 
