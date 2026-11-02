@@ -5,41 +5,43 @@ parent: none
 
 ## GOAL
 
-Dart que `dart analyze` acepta sin issues, testeado con `package:test`,
-documentado con `///` según Effective Dart.
+Dart that `dart analyze` accepts without issues, tested with `package:test`,
+documented with `///` per Effective Dart.
 
 ## SOURCES
 
-| # | kind | ref | weight | para qué |
+| # | kind | ref | weight | purpose |
 |---|------|-----|--------|----------|
-| S1 | repo | `dart-lang/skills` BSD-3 @ `0b8dc54` (2026-10-13) | load-bearing | skills como reglas |
-| S2 | docs | Effective Dart (vía `dart-write-documentation`) | context | estilo doc |
-| S3 | repo | `dartastic_opentelemetry` + `dartastic_opentelemetry_api` 0.12.0, Apache-2.0 (2026-10-14) | load-bearing | instrumentación OTel (ver `platform/observability`) |
+| S1 | repo | `dart-lang/skills` BSD-3 @ `0b8dc54` (2026-10-13) | load-bearing | skills as rules |
+| S2 | docs | Effective Dart (via `dart-write-documentation`) | context | doc style |
+| S3 | repo | `dartastic_opentelemetry` + `dartastic_opentelemetry_api` 0.12.0, Apache-2.0 (2026-10-14) | load-bearing | OTel instrumentation (see `platform/observability`) |
 
-TTL corto (30 días): los skills cambian sin versionar → pin por commit en apply.
+Short TTL (30 days): skills change unversioned → pin by commit in apply.
 
 ## RULES
 
-- D1 [analyze] `dart analyze` cero issues; `dart fix --apply` solo para
-  mecánicos (`dart-run-static-analysis`) → S1.
-- D2 [tests] Lógica nueva con `package:test` (`dart-add-unit-test`) → S1.
-- D3 [mocks] Dependencias externas con `package:mockito` + build_runner
+- D1 [analyze] `dart analyze` must report zero issues. Use `dart fix --apply` only for
+  mechanical fixes (`dart-run-static-analysis`) → S1.
+- D2 [tests] New logic with `package:test` (`dart-add-unit-test`) → S1.
+- D3 [mocks] External dependencies with `package:mockito` + build_runner
   (`dart-generate-test-mocks`) → S1.
-- D4 [coverage] Cobertura LCOV vía coverage package
+- D4 [coverage] LCOV coverage via the coverage package
   (`dart-collect-coverage`) → S1.
-- D5 [docs] `///` en declaraciones públicas (Effective Dart) → S1/S2.
-- D6 [patterns] switch expressions + pattern matching donde apliquen
+- D5 [docs] `///` on public declarations (Effective Dart) → S1/S2.
+- D6 [patterns] switch expressions + pattern matching where they apply
   (`dart-use-pattern-matching`) → S1.
-- D7 [otel] Instrumentación con el par SDK+API pineado (`dartastic_opentelemetry`
-  que emite + `dartastic_opentelemetry_api` no-op); export OTLP, claves con enums
-  tipados. Detalle en `platform/observability` → S3.
-- D8 [errors] Mensajes de error **prescriptivos** (sugieren alternativa), salvo `[SECRECY]`
-  en el doc comment `///` (seguridad por secrecía). No usar excepciones para flujo esperado →
+- D7 [otel] Instrumentation with the pinned SDK+API pair (`dartastic_opentelemetry`
+  emitting + `dartastic_opentelemetry_api` no-op). Export OTLP with keys as typed
+  enums. Detail in `platform/observability` → S3.
+- D8 [errors] Error messages **prescriptive** (suggest an alternative), except `[SECRECY]`
+  in the `///` doc comment (security by secrecy). Do not use exceptions for expected flow →
   `conventions/prescriptive-error-messages.md`.
-- D9 [BDD] Verificar comportamiento observable, no implementación. La afirmación BDD se
-  declara en el mini-lenguaje del `conventions/matcher-contract.md` y se traduce al matcher
-  nativo (`package:test` `expect(expr, equals/contains/matches/hasLength)`). Gates Jidoka
-  + No-Workarounds según `assurance-toolkit/references/testing/e2e-protocol.md`.
+- D9 [BDD] Check observable behavior, not implementation. The BDD assertion is
+  declared in the mini-language of `conventions/matcher-contract.md` and translates to the native
+  matcher (`package:test` `expect(expr, equals/contains/matches/hasLength)`). Jidoka
+  + No-Workarounds gates per `assurance-toolkit/references/testing/e2e-protocol.md`.
+
+The native matcher follows **TAS** (`../../../../references/engineering-standards/test-assertion-standards.md`): assert contracts, not snapshots.
 
 ## COUNTEREXAMPLES
 
@@ -78,15 +80,15 @@ void checkToken(String t) {
 
 ## GATES
 
-- local: `dart analyze` + `dart test` (SDK 3.13.4 medido en dogfood).
-- CI: lo local + cobertura LCOV con umbral.
-- D8 (prescriptivo): **warn no-block** — `conventions-warn-recorder.sh dart/D8 <file> @<author>`; no bloquea, registra en `internal-audits`.
+- local: `dart analyze` + `dart test` (SDK 3.13.4 measured in dogfood).
+- CI: the local + LCOV coverage with threshold.
+- D8 (prescriptive): **warn no-block** — `conventions-warn-recorder.sh dart/D8 <file> @<author>`. It does not block. It logs in `internal-audits`.
 
 ## LESSONS
 
-- L1 (sesión actual) Mensaje prohibitivo sin alternativa confunde al agente; la cura es
-  prescriptivo o `[SECRECY]` en doc comment `///` → D8 (ref: `conventions/prescriptive-error-messages.md`).
+- L1 (current session) A prohibitive message without an alternative confuses the agent. The cure
+  is prescriptive or `[SECRECY]` in the `///` doc comment → D8 (ref: `conventions/prescriptive-error-messages.md`).
 
 ## RECEIPT
 
-`candidate_sha` + verdict + tree-check (ver `_exemplars/dart/`).
+`candidate_sha` + verdict + tree-check (see `_exemplars/dart/`).

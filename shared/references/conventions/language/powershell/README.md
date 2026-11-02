@@ -1,32 +1,32 @@
 # PowerShell — language convention record
 
-Convención para scripts `.ps1` en el monorepo (build tools, MCP servers,
-emergency scripts de limpieza, etc.).
+Convention for `.ps1` scripts in the monorepo (build tools, MCP servers,
+emergency cleanup scripts, etc.).
 
 ## Gate stack
 
-| Herramienta | Qué verifica | Cómo se corre |
+| Tool | What it verifies | How to run it |
 |---|---|---|
-| **Parser** | Sintaxis (parsea correctamente) | `[System.Management.Automation.Language.Parser]::ParseFile` — `PRE_COMMANDS` en MegaLinter |
-| **PSScriptAnalyzer** | Reglas de estilo, práctica recomendada, bugs potenciales | descriptor `POWERSHELL` de MegaLinter |
+| **Parser** | Syntax (parses correctly) | `[System.Management.Automation.Language.Parser]::ParseFile` — `PRE_COMMANDS` in MegaLinter |
+| **PSScriptAnalyzer** | Style rules, best practice, potential bugs | `POWERSHELL` descriptor of MegaLinter |
 
-Ambos generan SARIF; se integran al gate de `/assurance`.
+Both generate SARIF. They integrate into the `/assurance` gate.
 
-## Reglas
+## Rules
 
-- **R-PS1 [parser]**: todo `.ps1` debe parsear sin errores; un script que no
-  parsea es un fallo de lint, no algo que se "arregla" omitiéndolo.
-- **R-PS2 [PSScriptAnalyzer]**: pasar `Invoke-ScriptAnalyzer` sin errores de
-  severidad `Error`/`Warning` (los de `Information` pueden ser aspiracionales).
-- **R-PS3 [unix-style]**: en scripts cross-platform, mantener el protocolo de
-  streams: nunca descartar stderr; usar `-ErrorAction SilentlyContinue` solo donde
-  el error es esperado y se maneja.
-- **R-PS4 [no secrets]**: no incrustar secrets; usar variables de entorno o
-  `{env:...}` (igual que bash).
+- **R-PS1 [parser]**: every `.ps1` must parse without errors. A script that does
+  not parse is a lint failure, not something that is "fixed" by omitting it.
+- **R-PS2 [PSScriptAnalyzer]**: pass `Invoke-ScriptAnalyzer` with no errors of
+  severity `Error`/`Warning` (`Information` ones may be aspirational).
+- **R-PS3 [unix-style]**: in cross-platform scripts, keep the stream protocol:
+  never discard stderr. Use `-ErrorAction SilentlyContinue` only where you expect
+  the error and handle it.
+- **R-PS4 [no secrets]**: do not embed secrets. Use environment variables or
+  `{env:...}` (same as bash).
 
-## Relación
+## Relationship
 
-- Hermano de `language/bash` (no existe aún como record formal; las reglas de
-  stderr son las mismas).
-- Consumido por `.mega-linter.yml` (`POWERSHELL`) y por el `PRE_COMMANDS` de
-  parser en CI.
+- Sibling of `language/bash` (not yet a formal record. The stderr rules are the
+  same).
+- `.mega-linter.yml` (`POWERSHELL`) and the parser `PRE_COMMANDS` consume it in
+  CI.
