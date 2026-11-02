@@ -75,12 +75,12 @@ Produce explicit **diffs** and command lists:
 - Product toolkit installs the user selected (or recommend defaults: `make-no-mistakes`, etc.)
 - Merged `hooks.json` / `opencode.jsonc` snippets (idempotent append, never clobber unrelated hooks)
 - **Bilingual gate (BIB)** — install the deterministic issue-redaction gate across harnesses:
-  Claude PreToolUse `shared/hooks/bilingual/pre-linear-save-issue-bilingual.sh` (registrado en
+  Claude PreToolUse `shared/hooks/bilingual/pre-linear-save-issue-bilingual.sh` (registered in the
   `hooks.json` matcher `mcp__.*linear.*__save_issue`), Cursor `adapters/cursor-before-shell.sh`,
-  OpenCode plugin `adapters/opencode-bilingual.ts`, y CLI fallback `tooluse/enforce-bilingual.sh`.
-  (MANDATORY: no opt-in; no lee `.claude/config/hygiene-hooks.json`.)
-- **Code-smells detector** — añadir el pre-commit `code-smells` (`scripts/lint/detect_code_smells.py`,
-  `pass_filenames: true`) al `.pre-commit-config.yaml` del repo consumidor.
+  OpenCode plugin `adapters/opencode-bilingual.ts`, and CLI fallback `tooluse/enforce-bilingual.sh`.
+  (MANDATORY: not opt-in; does not read `.claude/config/hygiene-hooks.json`.)
+- **Code-smells detector** — add the `code-smells` pre-commit hook (`scripts/lint/detect_code_smells.py`,
+  `pass_filenames: true`) to the consumer repo's `.pre-commit-config.yaml`.
 - **Auto-update plugin (default ON)** — install the OpenCode discovery-dir plugin
   `better-toolkits-auto-update` + its mode sidecar; register the Cursor `workspaceOpen`
   hook. Opt out with `--no-auto-update` or `BETTER_TOOLKITS_AUTO_UPDATE=0`.
@@ -136,13 +136,13 @@ npx skills add chimeranext/better-toolkits --skill merge-advisor --agent '*' -g 
 
 `setup --skills --toolkit <name>` plans the same `npx skills add` from the package.json filter.
 3. Merge hooks idempotently (see adapter for paths).
-3a. **Bilingual gate** — copia `shared/hooks/bilingual/` a cada harness: registra el
-    pre-hook en el `hooks.json` de Claude (matcher `mcp__.*linear.*__save_issue`), el adapter
-    `cursor-before-shell.sh` en `.cursor/hooks/`, el plugin `opencode-bilingual.ts` en la
-    carpeta de plugins de OpenCode, y `enforce-bilingual.sh` como tooluse guard (vía
+3a. **Bilingual gate** — copy `shared/hooks/bilingual/` into each harness: register the
+    pre-hook in Claude's `hooks.json` (matcher `mcp__.*linear.*__save_issue`), the adapter
+    `cursor-before-shell.sh` under `.cursor/hooks/`, the plugin `opencode-bilingual.ts` in the
+    OpenCode plugins folder, and `enforce-bilingual.sh` as a tooluse guard (via
     `scripts/ci/install-tooluse-guards.sh`).
-3b. **Code-smells** — añade el hook pre-commit `code-smells` (`detect_code_smells.py`,
-    `pass_filenames: true`) al `.pre-commit-config.yaml` del repo consumidor.
+3b. **Code-smells** — add the `code-smells` pre-commit hook (`detect_code_smells.py`,
+    `pass_filenames: true`) to the consumer repo's `.pre-commit-config.yaml`.
 4. For OpenCode, run or guide `npx @chimeranext/better-toolkits setup` (same protocol; `--yes` only when user pre-approved).
 5. Never use `2>/dev/null` or bare `2>&1` without a log file — stderr hooks doctrine applies to the agent too.
 6. **Assurance local** — invoke `/assurance-local-setup` (`scripts/assurance-local-setup/ensure-local-hooks.sh` + `prepare-typecheck-deps.sh`).
@@ -158,8 +158,8 @@ npx skills add chimeranext/better-toolkits --skill merge-advisor --agent '*' -g 
    records the chosen branch mode; `better-toolkits self-update --dry-run` reports the planned pull.
 6. **Assurance local** — `cd shared/hooks && npm run typecheck` passes; git hooks active.
 
-7. **Bilingual probe** — ejecuta `python3 shared/hooks/bilingual/detect.py --body "x"` → exit 2; verifica que el matcher/plugin esté registrado en cada harness (Claude hooks.json, Cursor, OpenCode).
-8. **Code-smells probe** — `python3 scripts/lint/detect_code_smells.py` sobre archivos cambiados → exit 0 sin HARD.
+7. **Bilingual probe** — run `python3 shared/hooks/bilingual/detect.py --body "x"` → exit 2; verify the matcher/plugin is registered in each harness (Claude hooks.json, Cursor, OpenCode).
+8. **Code-smells probe** — `python3 scripts/lint/detect_code_smells.py` on changed files → exit 0 with no HARD.
 
 Report pass/fail per harness. If verify fails, propose rollback diffs (HITL again).
 
@@ -205,35 +205,10 @@ This setup installs/refers the indexed **engineering standards** at
 `shared/references/engineering-standards/` (consumed by the agent profile). The
 agent profile (`agents/better.md`) references them. The hooks enforce the key ones:
 
-- **Jidoka** (`jidoka.md`) — stop on anomaly. Record boundary + root-cause hypothesis.
-- **StS** (`stderr-stream-standards.md`) — no stream to null. Fold stderr into the
-  same sink. `2> file` forbidden (enforced by the stderr hook this setup installs).
-- **BIB** — ver `index.md` (#33) y `bilingual-issue-brief.md` (SSOT). Su gate determinístico
-  `shared/hooks/bilingual/detect.py` queda instalado por este setup.
-- **CLG** (`commit-logic-groups.md`) — commit intermediate work in semantic groups.
-- **GGT** (`gitflow-trunk.md`) — branch model provisioned in Phase 7b. Audited by
-  `audit-repo-gitflow.sh`.
-- **REL** (`release-cut.md`) — release cut. One `develop`→`main` PR. CTO owns QA.
-  Second human reviewer is the sole PROD gate.
-- **SemVer** (`semver.md`) — monotonic version gate enforced at the release cut
-  per monorepo.
-- **LTGT** (`local-vs-ground-truth.md`) — search ground truth from the git
-  common-dir across all worktrees with hidden paths. Never conclude absence from
-  a CWD-only scan.
-- **MPH** (`main-protections-hitl.md`) — protected branch + HITL gate. The
-  `main-founders-only` ruleset is provisioned in Phase 7b, with CODEOWNERS
-  pointing to the `founders` team (Phase 7b step 3; replication workflow in
-  `codeowners-replication-workflow.md`).
-- **CIS** (`ci-security-standards.md`) — CI security & standards. CodeQL +
-  Trivy + MegaLinter gates, vendored from assurance-toolkit templates and the
-  `security-scan` composite action (Phase 7).
-- **DDD** (`domain-driven-design.md`) — Domain-Driven Design. The structural
-  basis for bounded contexts; the parent standard for the RDP "bounded-context
-  boundary leakage" family and the Inverse Conway Maneuver.
-- **RDP** (`repository-drift-prevention.md`) — Repository Drift Prevention. The
-  seven `audit-engine` detector families (SCH/CDC/DDD/ARC/STR/ENF/OWN) and
-  their canonical-source rationale.
-- **PRDS / BrS / WTD / QT4L / OST / NSQ / TFM** — the other indexed standards.
+**SSOT:** [`shared/references/engineering-standards/index.md`](../../../../shared/references/engineering-standards/index.md).
+This setup does NOT duplicate standards — it references them by monorepo-relative path. The hooks
+it installs (stderr, bilingual, GGT, MPH, …) are detailed in Phase 5; their mapping to each
+standard lives in `index.md`.
 
 The setup also installs the scripts/hooks that enforce StS (stderr adapter), the
 OpenSpec pipeline discipline, and the GGT audit. `sync-better-profile.sh` syncs
@@ -247,21 +222,6 @@ enforce the **OpenSpec pipeline**. Any change to a repo (code, docs, policy, con
 MUST go through `/opsx:propose` → worktree isolation → `/opsx:apply` → `/dogfood` →
 `/ready-to-review-mergeable` → approved PR. Implementing directly on a working branch
 is forbidden — including by this setup's own tooling.
-
-## Engineering standards (SSOT)
-
-This setup installs/refers the indexed **engineering standards** at
-`shared/references/engineering-standards/` (consumed by the agent profile). The
-agent profile (`agents/better.md`) references them; the hooks enforce the key ones:
-
-- **Jidoka** (`jidoka.md`) — stop on anomaly; record boundary + root-cause hypothesis.
-- **StS** (`stderr-stream-standards.md`) — no stream to null; fold stderr into the
-  same sink; `2> file` forbidden (enforced by the stderr hook this setup installs).
-- **CLG** (`commit-logic-groups.md`) — commit intermediate work in semantic groups.
-- **PRDS / BrS / DSMS / IFS / CPS / QT4L / OST** — the other indexed standards.
-
-The setup also installs the scripts/hooks that enforce StS (stderr adapter) and
-the OpenSpec pipeline discipline.
 
 ## Arguments
 
