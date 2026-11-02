@@ -50,6 +50,23 @@ Documentation should be organized around these structures:
 | **Post-mortem** | **Explanation** (dated narrative) | understanding why an incident happened; extract reusable judgment into a playbook |
 | **PDR / ADR** | **Explanation** / **Reference** | decision records — why/how something was decided |
 
+### Complementary frameworks (fill Diátaxis gaps)
+
+Diátaxis sorts by purpose. It does not say how to structure inside a page, nor
+how to handle arrival. Four frameworks extend it (SSOT: `shared/references/
+engineering-standards/ops-documentation-taxonomy.md`):
+
+| Framework | What it adds | Where it applies |
+| --- | --- | --- |
+| **DITA** (OASIS) | topic-based authoring: concept/task/reference, maps, reuse | large multi-output doc sets; content reuse |
+| **Information Mapping** (Horn) | types each *block* inside a page (procedure/process/principle/concept/structure/fact), labeled and separate | page internal structure; don't mix a fact and a procedure in one paragraph |
+| **Minimalism** (Carroll) | how to write steps: act immediately, drop preamble, support error recovery | how-to and tutorial quadrants |
+| **Every Page Is Page One** (Baker) | each page stands alone (arrival via search), states its own context and scope | arrangement; orient the reader on every page |
+
+**Navigation vs content:** Diátaxis guides content type per page, not the sidebar
+shape. Order navigation by user journey/task; keep a top-level limit of ~7
+sections; group by domain, not by product folders.
+
 ---
 
 ## 2. The three-way ops taxonomy

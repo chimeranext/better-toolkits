@@ -70,8 +70,22 @@ instead of the ops tree:
 | **Reference** | look-up | SOPs, API refs, config schema, glossary |
 | **Explanation** | understanding | why shared-services LLC, decision records, post-mortems |
 
-Assign each page to exactly one quadrant; split pages that mix quadrants. Recommend
-**Docusaurus** as the platform (recommended, not enforced).
+Assign each page to exactly one quadrant; split pages that mix quadrants.
+The site generator is **Holocron** (self-hosted, drop-in Mintlify replacement),
+with a declarative `docs.json` sidebar. Page content follows Diátaxis; the
+sidebar groups pages by journey/task, not by content type.
+
+### Paso 3c — Complementary frameworks for Diátaxis
+
+Diátaxis says *what type* a page is. When you need more structure, layer one of
+these on top (full guidance: `ops-documentation-taxonomy.md`):
+
+| Framework | What it adds | Apply when |
+|---|---|---|
+| **DITA** | topic-based authoring: concept/task/reference, reuse | publishing same content across many outputs |
+| **Information Mapping** | types each block inside a page (procedure/process/principle/concept/structure/fact) | writing dense reference/ops blocks; keep a fact and a procedure in separate paragraphs |
+| **Minimalism** | act immediately, drop preamble, support error recovery | how-to and tutorial steps (quickstart) |
+| **Every Page Is Page One** | each page stands alone (arrival via search) | any docs found by search; orient the reader on every page |
 
 ### Paso 4 — Name the type, home, and handoff
 
