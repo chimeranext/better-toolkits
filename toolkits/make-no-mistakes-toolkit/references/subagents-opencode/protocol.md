@@ -41,7 +41,7 @@ CLI `herdr` (not `rtk herdr`).
 
 ---
 
-# herdr orchestration (operational reference)
+## herdr orchestration (operational reference)
 
 > Real CLI: **`herdr <sub> …`**. The compozy/kb CLI uses `rtk herdr …`. Here you
 > use only `herdr`. All capabilities are verified against `herdr 0.9.5`.
@@ -174,7 +174,7 @@ Write every **subordinate** (delegation contract) and its resulting evidence
 **inside the work tree of the work**, never in the repo root or the main
 checkout:
 
-```
+```text
 .agents/worktrees/<slug>/subordinate-<task>.md
 .agents/worktrees/<slug>/evidence-<task>.md
 ```
