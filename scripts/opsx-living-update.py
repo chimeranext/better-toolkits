@@ -5,17 +5,20 @@ from __future__ import annotations
 
 import hashlib
 import re
-import subprocess
+import shutil
+import subprocess  # nosec B404 — intentional git invocation (see GIT const)
 import sys
 from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+# Absolute git path (B607: avoid partial executable path dependent on $PATH).
+GIT = shutil.which("git") or "git"
 SCRIPTS_DIR = Path(__file__).resolve().parent
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
-from opsx_living_standards import (  # noqa: E402  # pylint: disable=import-error  # pyright: ignore[reportMissingImports]
+from opsx_living_standards import (  # noqa: E402 # pylint: disable=import-error # pyright: ignore[reportMissingImports]
     ChangeAssessment,
     apply_verdicts_to_audit_row,
     assess_change,
@@ -37,7 +40,9 @@ CHANGELOG_HEADING = re.compile(
     r"^### `(?P<change>[^`]+)` · `(?P<capability>[^`]+)`(?: · revisión (?P<revision>\d{4}-\d{2}-\d{2}))?\s*$",
     re.MULTILINE,
 )
-AUDIT_CHANGE_ID = re.compile(r"^\| `(?P<id>20\d{2}-\d{2}-\d{2}-[^`]+)` \|", re.MULTILINE)
+AUDIT_CHANGE_ID = re.compile(
+    r"^\| `(?P<id>20\d{2}-\d{2}-\d{2}-[^`]+)` \|", re.MULTILINE
+)
 AUDIT_SPEC_CAP = re.compile(r"\[([^\]]+)\]\([^)]*/specs/([^/)]+)/spec\.md\)")
 EXIT_HITL_REQUIRED = 2
 EXIT_CONFIG_ERROR = 1
@@ -68,7 +73,9 @@ class OpsxLivingHitlRequired(OpsxLivingError):
         assert_conflicts_shape(conflicts)
         self.feature = feature
         self.conflicts = conflicts
-        super().__init__(f"HITL required for feature={feature} ({len(conflicts)} conflict(s))")
+        super().__init__(
+            f"HITL required for feature={feature} ({len(conflicts)} conflict(s))"
+        )
 
 
 class OpsxLivingInvariantError(OpsxLivingError):
@@ -114,18 +121,29 @@ def assert_living_document(doc: str) -> None:
     changelog_start = doc.index(MARKER_CHANGELOG_BEGIN)
     changelog_end = doc.index(MARKER_CHANGELOG_END)
 
-    assert audit_start < audit_end < vista_start < vista_end < changelog_start < changelog_end, (
-        "las Partes 1, 2 y 3 del living no quedaron en el orden esperado"
-    )
+    assert (
+        audit_start
+        < audit_end
+        < vista_start
+        < vista_end
+        < changelog_start
+        < changelog_end
+    ), "las Partes 1, 2 y 3 del living no quedaron en el orden esperado"
 
     audit_body = doc[audit_start:audit_end]
-    assert "## Parte 1" in audit_body, "falta el encabezado «Parte 1 — Registro de auditoría»"
+    assert (
+        "## Parte 1" in audit_body
+    ), "falta el encabezado «Parte 1 — Registro de auditoría»"
 
     vista_body = doc[vista_start:vista_end]
-    assert "## Parte 2" in vista_body, "falta el encabezado «Parte 2 — Requisitos aplicados»"
+    assert (
+        "## Parte 2" in vista_body
+    ), "falta el encabezado «Parte 2 — Requisitos aplicados»"
 
     changelog_body = doc[changelog_start:changelog_end]
-    assert "## Parte 3" in changelog_body, "falta el encabezado «Parte 3 — Changelog de deltas»"
+    assert (
+        "## Parte 3" in changelog_body
+    ), "falta el encabezado «Parte 3 — Changelog de deltas»"
 
     dupes = duplicate_requirement_titles_in_vista(vista_body)
     assert not dupes, (
@@ -151,8 +169,12 @@ SECTION_HEADER = re.compile(
     re.MULTILINE,
 )
 # Official OpenSpec format is `- FROM: `### Requirement: Title``; the bare title is also accepted.
-RENAME_FROM = re.compile(r"^-\s+FROM:\s+`(?:###\s*Requirement:\s*)?([^`]+)`\s*$", re.MULTILINE)
-RENAME_TO = re.compile(r"^-\s+TO:\s+`(?:###\s*Requirement:\s*)?([^`]+)`\s*$", re.MULTILINE)
+RENAME_FROM = re.compile(
+    r"^-\s+FROM:\s+`(?:###\s*Requirement:\s*)?([^`]+)`\s*$", re.MULTILINE
+)
+RENAME_TO = re.compile(
+    r"^-\s+TO:\s+`(?:###\s*Requirement:\s*)?([^`]+)`\s*$", re.MULTILINE
+)
 
 
 def load_capabilities(feature: str) -> list[str]:
@@ -275,9 +297,9 @@ def git_intro_commit(change_id: str) -> str:
         f"openspec/changes/{change_id}",
         f"openspec/changes/archive/{change_id}",
     ):
-        proc = subprocess.run(
+        proc = subprocess.run(  # nosec B603 — input from repo fs via iter_change_dirs, post `--`; no shell
             [
-                "git",
+                GIT,
                 "log",
                 "origin/main",
                 "--diff-filter=A",
@@ -495,7 +517,9 @@ def attach_procedencia(block: str, line: str) -> str:
     return f"{heading}\n\n{line}\n"
 
 
-def group_records_by_change(records: list[dict[str, str]]) -> list[tuple[str, list[dict[str, str]]]]:
+def group_records_by_change(
+    records: list[dict[str, str]],
+) -> list[tuple[str, list[dict[str, str]]]]:
     """One audit row per change; each row may reference several capability deltas."""
     by_id: dict[str, list[dict[str, str]]] = {}
     for rec in records:
@@ -512,8 +536,10 @@ def audit_table_rows(records: list[dict[str, str]]) -> list[str]:
         if not (CHANGES_DIR / change_id).is_dir():
             base = f"../../changes/archive/{change_id}"
         proposal = f"[proposal]({base}/proposal.md)"
-        design_path = (CHANGES_DIR / change_id / "design.md") if (CHANGES_DIR / change_id).exists() else (
-            ARCHIVE_DIR / change_id / "design.md"
+        design_path = (
+            (CHANGES_DIR / change_id / "design.md")
+            if (CHANGES_DIR / change_id).exists()
+            else (ARCHIVE_DIR / change_id / "design.md")
         )
         design = f"[design]({base}/design.md)" if design_path.is_file() else "—"
         spec_parts = [
@@ -553,7 +579,10 @@ def parse_audit_ids(text: str) -> set[str]:
 
 def parse_changelog_keys(text: str) -> set[tuple[str, str]]:
     """Primary (change, capability) pairs — revision headings count as the same pair."""
-    return {(m.group("change"), m.group("capability")) for m in CHANGELOG_HEADING.finditer(text)}
+    return {
+        (m.group("change"), m.group("capability"))
+        for m in CHANGELOG_HEADING.finditer(text)
+    }
 
 
 def normalize_for_hash(text: str) -> str:
@@ -590,7 +619,9 @@ def strip_changelog_metadata(body: str) -> str:
     return "\n".join(lines).strip()
 
 
-def latest_recorded_delta_hash(changelog_text: str, change_id: str, capability: str) -> str | None:
+def latest_recorded_delta_hash(
+    changelog_text: str, change_id: str, capability: str
+) -> str | None:
     blocks = [
         (rev, body)
         for cid, cap, rev, body in changelog_block_sections(changelog_text)
@@ -614,7 +645,9 @@ def capabilities_linked_in_audit_row(row: str) -> set[str]:
     return {m.group(2) for m in AUDIT_SPEC_CAP.finditer(row)}
 
 
-def discover_capabilities_by_change(records: list[dict[str, str]]) -> dict[str, set[str]]:
+def discover_capabilities_by_change(
+    records: list[dict[str, str]],
+) -> dict[str, set[str]]:
     out: dict[str, set[str]] = {}
     for rec in records:
         out.setdefault(rec["id"], set()).add(rec["capability"])
@@ -662,7 +695,9 @@ def detect_hitl_conflicts(
                 }
             )
             continue
-        recorded_hash = latest_recorded_delta_hash(existing_changelog, change_id, capability)
+        recorded_hash = latest_recorded_delta_hash(
+            existing_changelog, change_id, capability
+        )
         if recorded_hash is None:
             continue
         disk_hash = content_hash(on_disk)
@@ -689,12 +724,18 @@ def print_hitl_report(feature: str, conflicts: list[dict[str, str]]) -> None:
     print(f"OPSX_LIVING_HITL_REQUIRED feature={feature}", file=sys.stderr)
     print("", file=sys.stderr)
     print("La corrida se detuvo antes de escribir living.md.", file=sys.stderr)
-    print("Resuelve con criterio humano y vuelve a correr con un flag de resolución.", file=sys.stderr)
+    print(
+        "Resuelve con criterio humano y vuelve a correr con un flag de resolución.",
+        file=sys.stderr,
+    )
     print("", file=sys.stderr)
     for idx, c in enumerate(conflicts, 1):
         print(f"{idx}. [{c['kind']}] {c['message']}", file=sys.stderr)
     print("", file=sys.stderr)
-    print("Opciones (elige en chat; el agente pasa el flag correspondiente):", file=sys.stderr)
+    print(
+        "Opciones (elige en chat; el agente pasa el flag correspondiente):",
+        file=sys.stderr,
+    )
     print(
         "  --resolution append-revision   Añade bloques `· revisión YYYY-MM-DD` en Parte 3 "
         "(histórico conservado) y actualiza Parte 2.",
@@ -781,7 +822,9 @@ def build_vista_section(
                 block = drop_scenarios_from_block(block, drop_scenarios[title])
             kind, cid, commit = prov.get(title, ("added", "?", "?"))
             when = change_date(cid) if cid != "?" else "?"
-            lines.append(attach_procedencia(block, procedencia_line(kind, cid, when, commit)))
+            lines.append(
+                attach_procedencia(block, procedencia_line(kind, cid, when, commit))
+            )
             lines.append("")
     return "\n".join(lines)
 
@@ -975,7 +1018,9 @@ def update_living(feature: str, resolution: str | None = None) -> Path:
 
     existing = out.read_text(encoding="utf-8") if out.is_file() else ""
     existing_audit = extract_between(existing, MARKER_AUDIT_BEGIN, MARKER_AUDIT_END)
-    existing_changelog = extract_between(existing, MARKER_CHANGELOG_BEGIN, MARKER_CHANGELOG_END)
+    existing_changelog = extract_between(
+        existing, MARKER_CHANGELOG_BEGIN, MARKER_CHANGELOG_END
+    )
 
     if not existing_audit and "## Parte 1" in existing:
         existing_audit = existing.split("## Parte 1", 1)[1]
@@ -1003,7 +1048,9 @@ def update_living(feature: str, resolution: str | None = None) -> Path:
 
     audit_source = existing_audit
     if resolution and "patch-audit-links" in resolution:
-        patch_ids = {c["change_id"] for c in conflicts if c["kind"] == "audit_spec_links_gap"}
+        patch_ids = {
+            c["change_id"] for c in conflicts if c["kind"] == "audit_spec_links_gap"
+        }
         audit_source = refresh_audit_spec_links(audit_source, records, patch_ids)
 
     vista = build_vista_section(
@@ -1015,7 +1062,9 @@ def update_living(feature: str, resolution: str | None = None) -> Path:
 
     if resolution == "vista-only" and conflicts:
         audit = extract_between(existing, MARKER_AUDIT_BEGIN, MARKER_AUDIT_END).strip()
-        changelog = extract_between(existing, MARKER_CHANGELOG_BEGIN, MARKER_CHANGELOG_END).strip()
+        changelog = extract_between(
+            existing, MARKER_CHANGELOG_BEGIN, MARKER_CHANGELOG_END
+        ).strip()
         if not audit:
             audit = build_audit_section(audit_source, records)
         if not changelog:

@@ -50,7 +50,9 @@ RISK_RE = re.compile(
     r"preguntas abiertas|open questions?)\b",
     re.IGNORECASE,
 )
-IMPACT_RE = re.compile(r"^#{2,3}\s+.*(impact|impacto)\b|\b(impact|impacto)\b", re.IGNORECASE | re.MULTILINE)
+IMPACT_RE = re.compile(
+    r"^#{2,3}\s+.*(impact|impacto)\b|\b(impact|impacto)\b", re.IGNORECASE | re.MULTILINE
+)
 
 VERDICTS = ("pass", "partial", "fail", "not-assessed")
 
@@ -153,24 +155,38 @@ def assess_iso_29148(change_id: str, proposal: str, spec_text: str) -> StandardR
         Check(
             "delta-has-requirements",
             bool(reqs),
-            f"{len(reqs)} requirement(s)" if reqs else "no ### Requirement: in spec delta",
+            (
+                f"{len(reqs)} requirement(s)"
+                if reqs
+                else "no ### Requirement: in spec delta"
+            ),
         ),
         Check(
             "shall-in-every-requirement",
             bool(reqs) and all(bool(SHALL_RE.search(body)) for _, body in reqs),
-            "every requirement uses SHALL/MUST"
-            if reqs and all(SHALL_RE.search(b) for _, b in reqs)
-            else "one or more requirements lack SHALL/MUST",
+            (
+                "every requirement uses SHALL/MUST"
+                if reqs and all(SHALL_RE.search(b) for _, b in reqs)
+                else "one or more requirements lack SHALL/MUST"
+            ),
         ),
         Check(
             "unique-requirement-titles",
             bool(titles) and len(titles) == len(set(titles)),
-            "titles unique" if titles and len(titles) == len(set(titles)) else "duplicate or empty titles",
+            (
+                "titles unique"
+                if titles and len(titles) == len(set(titles))
+                else "duplicate or empty titles"
+            ),
         ),
         Check(
             "has-scenarios",
             bool(SCENARIO_HEAD.search(spec_text)),
-            "#### Scenario: present" if SCENARIO_HEAD.search(spec_text) else "no #### Scenario:",
+            (
+                "#### Scenario: present"
+                if SCENARIO_HEAD.search(spec_text)
+                else "no #### Scenario:"
+            ),
         ),
         Check(
             "proposal-exists",
@@ -180,7 +196,11 @@ def assess_iso_29148(change_id: str, proposal: str, spec_text: str) -> StandardR
         Check(
             "proposal-change-id",
             change_id in proposal,
-            "proposal cites this Change ID" if change_id in proposal else "proposal does not cite Change ID",
+            (
+                "proposal cites this Change ID"
+                if change_id in proposal
+                else "proposal does not cite Change ID"
+            ),
         ),
     ]
     return StandardResult("ISO 29148", verdict_from_checks(checks), checks)
@@ -188,7 +208,9 @@ def assess_iso_29148(change_id: str, proposal: str, spec_text: str) -> StandardR
 
 def assess_ieee_29119_3(spec_text: str, tasks: str) -> StandardResult:
     reqs = _split_requirements(spec_text)
-    every_has_scenario = bool(reqs) and all(bool(SCENARIO_HEAD.search(body)) for _, body in reqs)
+    every_has_scenario = bool(reqs) and all(
+        bool(SCENARIO_HEAD.search(body)) for _, body in reqs
+    )
     when_then_ok = bool(reqs) and all(
         bool(WHEN_RE.search(body) and THEN_RE.search(body)) for _, body in reqs
     )
@@ -196,14 +218,20 @@ def assess_ieee_29119_3(spec_text: str, tasks: str) -> StandardResult:
         Check(
             "every-requirement-has-scenario",
             every_has_scenario,
-            "each requirement has #### Scenario:"
-            if every_has_scenario
-            else "a requirement has no scenario",
+            (
+                "each requirement has #### Scenario:"
+                if every_has_scenario
+                else "a requirement has no scenario"
+            ),
         ),
         Check(
             "when-then-in-requirements",
             when_then_ok,
-            "WHEN/THEN present per requirement" if when_then_ok else "WHEN/THEN missing in a requirement",
+            (
+                "WHEN/THEN present per requirement"
+                if when_then_ok
+                else "WHEN/THEN missing in a requirement"
+            ),
         ),
         Check(
             "tasks-exists",
@@ -213,14 +241,20 @@ def assess_ieee_29119_3(spec_text: str, tasks: str) -> StandardResult:
         Check(
             "tasks-qa-heading",
             bool(QA_HEADING_RE.search(tasks)),
-            "QA heading in tasks.md" if QA_HEADING_RE.search(tasks) else "no QA heading in tasks.md",
+            (
+                "QA heading in tasks.md"
+                if QA_HEADING_RE.search(tasks)
+                else "no QA heading in tasks.md"
+            ),
         ),
         Check(
             "tasks-test-pointer",
             bool(TEST_POINTER_RE.search(tasks)),
-            "tasks.md points at tests/SOP/four-layer QA"
-            if TEST_POINTER_RE.search(tasks)
-            else "no test/SOP/traceability pointer in tasks.md",
+            (
+                "tasks.md points at tests/SOP/four-layer QA"
+                if TEST_POINTER_RE.search(tasks)
+                else "no test/SOP/traceability pointer in tasks.md"
+            ),
         ),
     ]
     return StandardResult("IEEE 29119-3", verdict_from_checks(checks), checks)
@@ -234,21 +268,29 @@ def assess_iso_31000(proposal: str, design: str) -> StandardResult:
         Check(
             "impact-recorded",
             has_impact,
-            "Impact/Impacto present" if has_impact else "no Impact/Impacto in proposal or design",
+            (
+                "Impact/Impacto present"
+                if has_impact
+                else "no Impact/Impacto in proposal or design"
+            ),
         ),
         Check(
             "risk-or-open-questions",
             has_risk,
-            "risk / avisos / open questions present"
-            if has_risk
-            else "no risk, avisos, non-goals, or open questions",
+            (
+                "risk / avisos / open questions present"
+                if has_risk
+                else "no risk, avisos, non-goals, or open questions"
+            ),
         ),
         Check(
             "proposal-or-design-present",
             bool(proposal.strip() or design.strip()),
-            "proposal or design present"
-            if (proposal.strip() or design.strip())
-            else "missing both proposal.md and design.md",
+            (
+                "proposal or design present"
+                if (proposal.strip() or design.strip())
+                else "missing both proposal.md and design.md"
+            ),
         ),
     ]
     return StandardResult("ISO 31000", verdict_from_checks(checks), checks)
@@ -310,7 +352,11 @@ def format_checker_details(assessments: list[ChangeAssessment]) -> str:
     ]
     failed_rows: list[str] = []
     for assessment in assessments:
-        for result in (assessment.iso_29148, assessment.ieee_29119_3, assessment.iso_31000):
+        for result in (
+            assessment.iso_29148,
+            assessment.ieee_29119_3,
+            assessment.iso_31000,
+        ):
             if result.verdict == "pass":
                 continue
             misses = "; ".join(f"`{c.check_id}`" for c in result.failed) or "—"
@@ -327,14 +373,20 @@ def format_checker_details(assessments: list[ChangeAssessment]) -> str:
             ]
         )
     else:
-        lines.append("Todos los changes de esta corrida dan **pass** en las tres normas.")
+        lines.append(
+            "Todos los changes de esta corrida dan **pass** en las tres normas."
+        )
         lines.append("")
     return "\n".join(lines)
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Assess OpenSpec changes for living.md ISO columns.")
-    parser.add_argument("change_id", nargs="?", help="Folder name, or omit to print usage")
+    parser = argparse.ArgumentParser(
+        description="Assess OpenSpec changes for living.md ISO columns."
+    )
+    parser.add_argument(
+        "change_id", nargs="?", help="Folder name, or omit to print usage"
+    )
     parser.add_argument(
         "--capabilities",
         default="",
@@ -342,7 +394,10 @@ def main() -> None:
     )
     args = parser.parse_args()
     if not args.change_id:
-        print("usage: opsx_living_standards.py <change-id> [--capabilities cap1,cap2]", file=sys.stderr)
+        print(
+            "usage: opsx_living_standards.py <change-id> [--capabilities cap1,cap2]",
+            file=sys.stderr,
+        )
         raise SystemExit(2)
     caps = [c.strip() for c in args.capabilities.split(",") if c.strip()]
     if not caps:
@@ -355,7 +410,9 @@ def main() -> None:
             caps = sorted(p.name for p in specs.iterdir() if p.is_dir())
     assessment = assess_change(args.change_id, caps)
     iso, ieee, risk = assessment.cells()
-    print(f"{assessment.change_id}\tISO29148={iso}\tIEEE29119-3={ieee}\tISO31000={risk}")
+    print(
+        f"{assessment.change_id}\tISO29148={iso}\tIEEE29119-3={ieee}\tISO31000={risk}"
+    )
     for result in (assessment.iso_29148, assessment.ieee_29119_3, assessment.iso_31000):
         for check in result.checks:
             mark = "ok" if check.ok else "FAIL"
