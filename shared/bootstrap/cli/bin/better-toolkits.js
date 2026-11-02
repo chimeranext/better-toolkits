@@ -64,6 +64,14 @@ export function parseArgs(argv) {
     else if (a.startsWith("--clone=")) opts.clone = a.slice("--clone=".length);
     else if (a === "--toolkit") opts.toolkits.push(rest[++i] ?? "");
     else if (a.startsWith("--toolkit=")) opts.toolkits.push(a.slice("--toolkit=".length));
+    else if (a === "--plugins") {
+      const list = String(rest[++i] ?? "").split(",").map((s) => s.trim()).filter(Boolean);
+      opts.toolkits.push(...list);
+    }
+    else if (a.startsWith("--plugins=")) {
+      const list = a.slice("--plugins=".length).split(",").map((s) => s.trim()).filter(Boolean);
+      opts.toolkits.push(...list);
+    }
     else if (a === "--agent") opts.agent = rest[++i] ?? null;
     else if (a.startsWith("--agent=")) opts.agent = a.slice("--agent=".length);
     else if (a === "--skills") opts.skills = true;
@@ -115,6 +123,9 @@ Flags:
   --skills         setup: also run npx skills add for the selected toolkit
   --all            npx skills add <source> --all (every skill, every agent)
   --toolkit <name> marketplace plugin name (repeatable). Bare words after the command count too
+  --plugins <list> alias of --toolkit (comma-separated). OpenCode only accepts "all"
+                  (installs all); any other selection fails explicitly (fail-closed).
+                  Cursor/Claude: selection is handled in /toolkits-initial-setup.
   --agent <name>   skills CLI --agent (cursor, claude-code, opencode, or *). Default *
 
 Auto-update plugin (#110):
@@ -165,6 +176,15 @@ async function cmdSetup(opts) {
     process.exit(2);
   }
   const phases = opts.phases.length ? opts.phases : ["audit", "install", "verify"];
+
+  // Toolkit selection: deterministic and fail-closed. The OpenCode harness installs
+  // all toolkits; asking for a selection other than `all` is an explicit error.
+  const selected = opts.toolkits;
+  if (selected.length && !(selected.length === 1 && selected[0] === "all")) {
+    console.error("ERROR: the OpenCode harness installs all toolkits (no selector).");
+    console.error(`  --plugins/--toolkit=${selected.join(",")} is not accepted; use --plugins all or none.`);
+    process.exit(2);
+  }
 
   if (phases.includes("audit")) {
     console.log("== audit ==");
