@@ -127,13 +127,13 @@ describe("mcp phase", () => {
 describe("skills wiring", () => {
   it("finds toolkit skills dirs in the real repo", () => {
     const dirs = toolkitSkillsDirs(REAL_ROOT);
-    assert.equal(dirs.length, 12);
+    assert.equal(dirs.length, 18);
     assert.ok(dirs.some((d) => d.endsWith("venture-studio-toolkit/skills")));
   });
 
   it("installSkillsDirs includes shared/skills (transversal)", () => {
     const dirs = installSkillsDirs(REAL_ROOT);
-    assert.equal(dirs.length, 13);
+    assert.equal(dirs.length, 19);
     assert.ok(dirs.some((d) => d.endsWith("shared/skills")));
   });
 
