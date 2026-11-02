@@ -78,6 +78,29 @@ fixture or a validated transformation may be exempted via the explicit token
 
 ---
 
+## Deterministic propagation
+
+The rule is enforced as a **versioned, gated deterministic** process, not as
+prose:
+
+1. **Detector (source of truth):** `scripts/lint/detect_code_smells.py`
+   (hook `code-smells`, `pass_filenames`). It flags literal count assertions.
+2. **Refinement (semantic):** a literal is flagged only when it has no local
+   source — i.e. it is not derived from a fixture constant
+   (`toHaveLength(FIXTURE.comments.length)`), is not a key-set equality
+   (`new Set(Object.keys(X))` vs `new Set([...])`), and carries no explicit
+   `# tas: fixture` token.
+3. **Sweep:** existing hits are removed (each literal becomes derived/named/set
+   equality). After the sweep, the repo reports 0 TAS findings.
+4. **Gate flip:** the rule moves from WARN to **HARD** and CI asserts **0
+   findings** — any new unsourced literal blocks the commit/PR.
+
+Order invariant: never flip to HARD before the sweep is at 0.
+
+**Learner summary:** internal-handbook `docs/how-to/engineering-standards/TAS.md`.
+
+---
+
 ## Related
 
 - [QT4L](qa-traceability-four-layers.md) — traceability layers (req → test → QA → HITL).
