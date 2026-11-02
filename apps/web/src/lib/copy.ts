@@ -1,6 +1,7 @@
 // Bilingual copy (EN default + ES toggle) — mirrors
 // business/04-landing-pages/b2b-better-toolkits-landing-copy.md
 import { REPO_URL } from "@/lib/toolkits";
+import stats from "@/data/stats.json";
 
 // --- Contact / external links -----------------------------------------------
 // PLACEHOLDERS — real values wired at launch (task #12) / instrumentation change.
@@ -15,13 +16,15 @@ export const LINKS = {
 export type Lang = "en" | "es";
 
 // --- Shared (language-neutral) data -----------------------------------------
+// Stats are computed at build time from the monorepo by scripts/gen-stats.mjs
+// (source of truth = the repo). No hardcoded numbers.
 export const STATS = [
-  { value: "10", label: { en: "toolkits", es: "toolkits" } },
-  { value: "75", label: { en: "commands", es: "comandos" } },
-  { value: "96", label: { en: "skills", es: "skills" } },
-  { value: "22", label: { en: "agents", es: "agentes" } },
-  { value: "131", label: { en: "templates", es: "plantillas" } },
-  { value: "65,000", label: { en: "lines of methodology", es: "líneas de metodología" } },
+  { value: String(stats.toolkits), label: { en: "toolkits", es: "toolkits" } },
+  { value: String(stats.commands), label: { en: "commands", es: "comandos" } },
+  { value: String(stats.skills), label: { en: "skills", es: "skills" } },
+  { value: String(stats.agents), label: { en: "agents", es: "agentes" } },
+  { value: String(stats.templates), label: { en: "templates", es: "plantillas" } },
+  { value: Number(stats.linesOfMethodology).toLocaleString("en-US"), label: { en: "lines of methodology", es: "líneas de metodología" } },
 ];
 
 export const VENTURES: { name: string; industry: string }[] = [
@@ -100,7 +103,7 @@ type Content = {
 export const COPY: Record<Lang, Content> = {
   en: {
     nav: { install: "GitHub", langOther: "ES", doctrine: "Multi-harness SSOT" },
-    s1: "10 battle-tested toolkits · One command · Source-available",
+    s1: `${stats.toolkits} battle-tested toolkits · One command · Source-available`,
     s2: {
       h1a: "62% of startups now ship AI-written code.",
       h1b: "The winning ones operate with a system.",
@@ -108,7 +111,7 @@ export const COPY: Record<Lang, Content> = {
       sub: "Every week without an operating system is runway spent reinventing one. Install yours in 60 seconds ↓",
       copy: "Copy", copied: "Copied ✓",
       github: "View on GitHub →", audit: "Audit before you install", learnMore: "Learn more ↓",
-      trust: "Source-available · BSL-1.1 · 75 commands · 96 skills · 22 agents · 0 lock-in",
+      trust: `Source-available · BSL-1.1 · ${stats.commands} commands · ${stats.skills} skills · ${stats.agents} agents · 0 lock-in`,
     },
     s3: { a: "You wouldn't build your product without a framework.", b: "Why build your company without one?" },
     s4: {
@@ -155,7 +158,7 @@ export const COPY: Record<Lang, Content> = {
       faqs: [
         { q: "Is it really free?", a: "Yes. BSL-1.1 lets you read, audit, modify and use everything freely. The only restriction: don't resell it as a competing SaaS. Each version converts to full open source after five years — the date is fixed in the license text." },
         { q: "Is this like what HashiCorp did?", a: "No. better-toolkits was born BSL on day one — there's no license rug-pull, and the terms can only relax over time (a fixed date in the legal text)." },
-        { q: "Do I need all 10 toolkits?", a: "No. Each is an independent plugin in the same marketplace. Install one, install all — your call." },
+        { q: `Do I need all ${stats.toolkits} toolkits?`, a: "No. Each is an independent plugin in the same marketplace. Install one, install all — your call." },
         { q: "How is this different from awesome-lists and plugin collections?", a: "Those are fragments. This is an integrated system: the toolkits share conventions and hand work to each other — audit → implement → release → grow." },
         { q: "What is Multi-harness SSOT?", a: "One protocol contract in markdown (references/ + thin entries) and one stderr baseline across Claude Code, Cursor, OpenCode2, and Antigravity — not a Cursor-vs-Claude split. See /doctrine or docs/multi-harness-ssot.md." },
         { q: "Does it work with my stack?", a: "Releases cover Flutter, KMP, .NET MAUI, Swift and PWA. Strategy and process toolkits are framework-agnostic. Built for Claude Code first — and four of the ten (make-no-mistakes, atomic-design, business-model, app-gtm-release) also install into OpenCode via their npm CLIs. Stderr baseline wires into Claude, Cursor, and OpenCode2." },
@@ -174,7 +177,7 @@ export const COPY: Record<Lang, Content> = {
   },
   es: {
     nav: { install: "GitHub", langOther: "EN", doctrine: "Multi-harness SSOT" },
-    s1: "10 toolkits probados en batalla · Un comando · Source-available",
+    s1: `${stats.toolkits} toolkits probados en batalla · Un comando · Source-available`,
     s2: {
       h1a: "El 62% de las startups ya shippea código escrito por IA.",
       h1b: "Las que ganan operan con un sistema.",
@@ -182,7 +185,7 @@ export const COPY: Record<Lang, Content> = {
       sub: "Cada semana sin un sistema operativo de empresa es runway quemado reinventando uno. Instala el tuyo en 60 segundos ↓",
       copy: "Copiar", copied: "Copiado ✓",
       github: "Ver en GitHub →", audit: "Audita antes de instalar", learnMore: "Conoce más ↓",
-      trust: "Source-available · BSL-1.1 · 75 comandos · 96 skills · 22 agentes · 0 lock-in",
+      trust: `Source-available · BSL-1.1 · ${stats.commands} comandos · ${stats.skills} skills · ${stats.agents} agentes · 0 lock-in`,
     },
     s3: { a: "No construirías tu producto sin un framework.", b: "¿Por qué construyes tu empresa sin uno?" },
     s4: {
@@ -229,7 +232,7 @@ export const COPY: Record<Lang, Content> = {
       faqs: [
         { q: "¿De verdad es gratis?", a: "Sí. BSL-1.1 te deja leer, auditar, modificar y usar todo libremente. Única restricción: no revenderlo como SaaS competidor. Cada versión convierte a open source pleno a los cinco años — la fecha está fija en el texto legal." },
         { q: "¿Es como lo que hizo HashiCorp?", a: "No. better-toolkits nació BSL desde el día uno — no hay rug-pull de licencia, y los términos solo pueden relajarse con el tiempo (fecha fija en el texto legal)." },
-        { q: "¿Necesito los 10 toolkits?", a: "No. Cada uno es un plugin independiente del mismo marketplace. Instala uno o instala todos." },
+        { q: `¿Necesito los ${stats.toolkits} toolkits?`, a: "No. Cada uno es un plugin independiente del mismo marketplace. Instala uno o instala todos." },
         { q: "¿En qué se diferencia de las awesome-lists?", a: "Esas son fragmentos. Esto es un sistema integrado: los toolkits comparten convenciones y se pasan el trabajo — audita → implementa → lanza → crece." },
         { q: "¿Qué es Multi-harness SSOT?", a: "Un contrato de protocolo en markdown (references/ + entries finos) y un stderr baseline en Claude Code, Cursor, OpenCode2 y Antigravity — no una dicotomía Cursor vs Claude. Ver /doctrine o docs/multi-harness-ssot.md." },
         { q: "¿Funciona con mi stack?", a: "Releases: Flutter, KMP, .NET MAUI, Swift y PWA. Estrategia y proceso: agnósticos. Construido primero para Claude Code — y cuatro de los diez (make-no-mistakes, atomic-design, business-model, app-gtm-release) también se instalan en OpenCode vía sus CLIs de npm. El stderr baseline se cablea en Claude, Cursor y OpenCode2." },
