@@ -121,6 +121,7 @@ Protocol SSOT: `references/engineering-standards-setup/protocol.md`, `references
 | How do I gate release risk post-cut? | FFF (flags: kill switch, rollout, entitlement) |
 | Where do I search for the truth? | LTGT (git common-dir + all worktrees + hidden paths. Never CWD-only) |
 | How do I verify the order formally? | TFM (TLA+/TLC recipe) |
+| How do I write tests that don't drift? | TAS (contrato/invariantes; nunca conteos literales de registros) |
 
 ## Provenance
 
