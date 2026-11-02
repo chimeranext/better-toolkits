@@ -1,0 +1,41 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "better-toolkits Docs",
+  "colors": {
+    "primary": "#1E8E7E",
+    "light": "#E6F4F2",
+    "dark": "#0B3B36",
+    "anchors": {
+      "from": "#1E8E7E",
+      "to": "#155E54"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "GitHub",
+      "url": "https://github.com/chimeranext/better-toolkits"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Overview",
+      "pages": ["index"]
+    },
+    {
+      "group": "Multi-harness SSOT",
+      "pages": ["multi-harness-ssot"]
+    },
+    {
+      "group": "Conventions",
+      "pages": ["conventions"]
+    },
+    {
+      "group": "Engineering Standards",
+      "pages": ["engineering-standards"]
+    },
+    {
+      "group": "Setup",
+      "pages": ["setup"]
+    }
+  ]
+}
