@@ -35,8 +35,9 @@ DISABLE_ERRORS_LINTERS:
   - PYTHON_RUFF
   - YAML_YAMLLINT
 
-# Excluir artefactos/terceros/vendedores
-FILTER_REGEX_EXCLUDE: '(node_modules|vendor|dist|build|\.venv|__pycache__|\.git|.*\.pdf$|\.lock$|package-lock\.json|pnpm-lock\.yaml|\.mega-linter\.yml)'
+# Excluir artefactos/terceros/vendedores + el catálogo de skills generado
+# (apps/web/public/opencode/ es output del generador, no código fuente del monorepo).
+FILTER_REGEX_EXCLUDE: '(node_modules|vendor|dist|build|\.venv|__pycache__|\.git|.*\.pdf$|\.lock$|package-lock\.json|pnpm-lock\.yaml|\.mega-linter\.yml|apps/web/public/opencode/)'
 
 # Gate estrella: typecheck de los plugins OpenCode (stderr + prds).
 # Corre ANTES de los linters y, si falla (exit != 0), aborta el job.
