@@ -1,6 +1,7 @@
 /** Install phase: copy adapter (idempotent) + wire commands + skills + optional npm. */
 import { existsSync, mkdirSync, readFileSync, copyFileSync, writeFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
+import * as path from "node:path";
 import { join, dirname } from "node:path";
 import {
   resolveRepoRoot,
@@ -17,6 +18,7 @@ import {
   installSkillsDirs,
   readSkills,
   missingSkills,
+  canonicalCloneRoot,
 } from "./skills.js";
 import { planMcpStep, applyMcpStep, planShellEnvStep, applyShellEnvStep } from "./mcp.js";
 import { applyAgentSkillsInstall, planAgentSkillsInstall } from "./agent-skills.js";
@@ -199,7 +201,8 @@ function applyAutoUpdateStep(step) {
  */
 export function planSkillsStep(opts, repoRoot) {
   const configDir = resolveConfigDir(opts);
-  const wanted = installSkillsDirs(repoRoot);
+  const canonical = canonicalCloneRoot(repoRoot);
+  const wanted = installSkillsDirs(canonical);
   if (!wanted.length) return null;
   const current = readSkills(configDir);
   if (current.unparseable) {
@@ -208,16 +211,19 @@ export function planSkillsStep(opts, repoRoot) {
       detail: `${current.file} has comments (jsonc) — add "skills" entries by hand: ${wanted.join(", ")}`,
     };
   }
-  const missing = missingSkills(current.skills, wanted);
-  if (!missing.length) {
+  const have = Array.isArray(current.skills) ? [...current.skills].sort() : [];
+  const sortedWanted = [...wanted].sort();
+  const same = have.length === sortedWanted.length && have.every((v, i) => v === sortedWanted[i]);
+  if (same) {
     return { kind: "skip", detail: `skills entries up to date in ${current.file}` };
   }
   const target = current.file ?? join(configDir, "opencode.json");
+  const removed = have.filter((v) => !sortedWanted.includes(v));
   return {
     kind: "skills",
-    detail: `${current.file ? "merge" : "create"} ${missing.length} skills entries in ${target}`,
+    detail: `${current.file ? "consolidate" : "create"} skills entries in ${target} (${wanted.length} canonical; ${removed.length} stale removed)`,
     target,
-    missing,
+    wanted: sortedWanted,
   };
 }
 
@@ -230,9 +236,7 @@ function applySkillsStep(step) {
     doc = {};
   }
   if (!doc.$schema) doc.$schema = "https://opencode.ai/config.json";
-  const have = new Set(Array.isArray(doc.skills) ? doc.skills : []);
-  for (const m of step.missing) have.add(m);
-  doc.skills = [...have].sort();
+  doc.skills = step.wanted; // consolidate: full canonical list, no stale entries
   writeFileSync(step.target, `${JSON.stringify(doc, null, 2)}\n`);
   console.log(`  done: ${step.detail}`);
 }
