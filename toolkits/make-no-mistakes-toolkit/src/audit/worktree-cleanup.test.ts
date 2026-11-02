@@ -605,7 +605,8 @@ describe('integration — against real git repositories', () => {
 
     const found = findNodeModules(merged, all);
     expect(found).toEqual([path.join(merged, 'node_modules')]); // NOT the nested copy
-    expect(findNodeModules(dirty, all)).toHaveLength(1);
+    const expectedDirty = [path.join(dirty, 'node_modules')];
+    expect(findNodeModules(dirty, all)).toEqual(expectedDirty);
   });
 
   it('does not attribute a linked worktree\'s node_modules to the main checkout', () => {
