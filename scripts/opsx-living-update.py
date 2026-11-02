@@ -15,7 +15,7 @@ SCRIPTS_DIR = Path(__file__).resolve().parent
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
-from opsx_living_standards import (  # noqa: E402  # pylint: disable=import-error
+from opsx_living_standards import (  # noqa: E402  # pylint: disable=import-error  # pyright: ignore[reportMissingImports]
     ChangeAssessment,
     apply_verdicts_to_audit_row,
     assess_change,
