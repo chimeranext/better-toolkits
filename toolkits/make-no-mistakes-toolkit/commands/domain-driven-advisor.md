@@ -10,7 +10,7 @@ description: >
 
 Trigger the **`domain-driven-advisor`** skill. It routes you to the right
 audit(s) from the audit-engine family and stress-tests the result with a
-premortem. See `references/domain-driven-advisor-triage.md` for the decision
+premortem. See `references/domain-driven-advisor/protocol.md` for the decision
 tree.
 
 ## Usage

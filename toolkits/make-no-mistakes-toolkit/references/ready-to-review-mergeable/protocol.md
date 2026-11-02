@@ -48,6 +48,10 @@ below apply when the block is absent.
 
 **Invariant:** exit = **human review handoff** on GitHub — never merge, never Linear **Done**.
 
+Canonical pipeline view (stages → standards) lives in
+`shared/references/engineering-standards/README.md` (§ Pipeline). The diagram below
+is the operational command flow; the standards view is the normative map.
+
 ```mermaid
 flowchart TD
   start(["/make-no-mistakes:ready-to-review-mergeable ISSUE-ID"])
@@ -218,9 +222,27 @@ Applies when `readyToReview.remoteReview.required` is `true` (default). This
 section is **three substeps** — match the diagram: **§3a → §3b → §3c**, then
 **§3 gate green** on success.
 
+### CI-check awareness (/ci-checks family)
+
+Before tagging remote bots, reconcile the PR's CI state against the canonical
+check catalog (`shared/references/ci/ci-checks.yml`):
+
+- **Failing required check → route through `/ci-checks-verify <failing-check>`**
+  (cause + ranked actionables) and fix it before §3b. Do **not** tag remote
+  bots while a required check is red (they cannot review a red head), and do
+  **not** paper over the failure.
+- **Optional preflight:** `/ci-checks-audit` may be run first to confirm the
+  workflow set matches the canonical catalog (missing core checks, extra jobs,
+  naming violations, duplicate runs).
+- **Red required check blocks §5.** The handoff §5 requires all required PR
+  checks green; a failing required check keeps you in §3a/§3b until resolved.
+
 #### 3a. Preconditions (before tagging bots)
 
 - §2b assurance **PASS** (do not tag bots on BLOCKED assurance).
+- **CI checks green.** If any required check is failing, do not tag bots: run
+  `/ci-checks-verify <failing-check>` (see CI-check awareness above), fix, push,
+  and re-run until green.
 - PR is **Ready for review** (not Draft). If the user chose Draft at implement
   step 8a, flip to ready-for-review or **STOP** — do not skip §3 by jumping to §5.
 - `.claude/.implement-prs` lists this PR (line 1: advisory `--confidence` if
@@ -344,7 +366,7 @@ Output must list every step (§1 → §5) with PASS/FAIL/PROGRESS/BLOCKED per pi
 §2 IMPLEMENT → PASS/FAIL (Phase 3 step 12; PR exists; CI green; mergeable; steps 9–10 deferred to §3b)
 §2b ASSURANCE → PASS/FAIL paso a paso (normative order testing → security → governance → liveness; STOP first BLOCKED; no silent skips)
 §2c E2E BUILDER → PASS/FAIL (suite from testing; /assurance:e2e-test-builder; NOT runner — QA stage)
-§3a PRECOND → PASS/FAIL (Ready for review; .claude/.implement-prs; clean base)
+§3a PRECOND → PASS/FAIL (Ready for review; .claude/.implement-prs; clean base; CI checks green — failing required checks routed via /ci-checks-verify)
 §3b EXECUTE → PASS/FAIL (execute remote; tag bots; wait verdict; fix/push/re-tag; never skip when available; BLOCKED if not executed; restrictions-check-ready-to-review-mergeable.sh exits 1)
 §3c GATE → PASS/FAIL (APPROVED + 0 blockers + 0 P1 + 0 P2; BLOCKED if contract not met; NEVER §4a/§4b bypass when remote available)
 §4a FALLBACK → DOCUMENTED (only when remote unavailable; never claim §5 without §3 green or documented §4a)

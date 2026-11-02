@@ -1,0 +1,227 @@
+# ci-checks.yml — canonical CI check catalog (SSOT)
+#
+# Source: openspec/changes/ci-checks-setup-vendored/design.md (10-phase table).
+# This YAML is the machine-readable reference of the catalog. The phase order
+# in the list IS the invocation order: phases run 1 → 10, and within a phase
+# core checks run before opt-in checks.
+#
+# Naming convention: every check name is `verb-type-subject` — three lowercase
+# segments — and SHALL match `naming.regex`. Names that predate the convention
+# and could not be renamed (already merged/approved workflows) are recorded under
+# `naming.legacy_allowlist`; they are the ONLY accepted non-conforming check
+# names (see `scripts/ci/check-ci-naming.py --allow-legacy`).
+#
+# Recorded normalization (Jidoka): several illustrative names in design.md were
+# 2-segment (`deploy-migrations`, `check-lint`) or used a verb outside the set
+# (`run-dogfood`, `stage-promotion-ops`). The catalog carries the canonical
+# 3-segment form; the design.md original is kept in a `was:` comment. The two
+# merged workflow jobs (`scan-security`, `scan-static`) are NOT normalized — see
+# `naming.legacy_allowlist`.
+#
+# Vendor-neutrality: the catalog is startup-agnostic. No opt-in check is bound
+# to a specific vendor, client organization, or product. Opt-in checks are
+# parameterized conventions, enabled only on explicit confirmation.
+schema_version: 1.0.0
+vendor_neutral: true
+
+naming:
+  convention: verb-type-subject
+  # A check name is <verb>-<type>-<subject> with a verb from `verbs`, then two
+  # lowercase alphanumeric segments. This is the normative rule for all check
+  # names (see `scripts/ci/check-ci-naming.py`).
+  regex: "^(check|test|scan|audit|build|verify|validate|enforce|deploy|publish|sync|guard|maintain|review|notify)-[a-z0-9]+-[a-z0-9]+$"
+  verbs:
+    - check
+    - test
+    - scan
+    - audit
+    - build
+    - verify
+    - validate
+    - enforce
+    - deploy
+    - publish
+    - sync
+    - guard
+    - maintain
+    - review
+    - notify
+  # Recorded decision (Jidoka): the phase-2 security split shipped two named
+  # jobs with 2-segment names (`scan-security`, `scan-static`) before the
+  # 3-segment convention was fixed. The workflows are already merged and
+  # approved, so the jobs are NOT renamed. They are explicitly allowed here and
+  # reported by the validator only when `--allow-legacy` is not passed.
+  legacy_allowlist:
+    - scan-security
+    - scan-static
+  legacy_note: >
+    scan-security and scan-static (skillspector.yml) predate the 3-segment
+    convention and were merged as 2-segment names. They are the documented
+    exception; all NEW check names must match `naming.regex`.
+
+# Workflow jobs that are infrastructure (deploy, review bots, policy
+# propagation, aggregator linters) rather than catalog checks. They are not
+# subject to the check-naming convention and are excluded from audit gap
+# reporting; they are documented here so `/ci-checks-audit` does not flag them
+# as extra/unnamed checks.
+infra_jobs:
+  - audit               # bypass-audit.yml
+  - build               # deploy-pages.yml
+  - deploy              # deploy-pages.yml
+  - review              # heimdall-review.yml
+  - sync-and-check      # marketplace-versions.yml
+  - megalinter          # megalinter.yml
+  - propagate           # propagate-policies.yml
+  - debrand             # vendor-invariants.yml
+  - toolkit-lint        # vendor-invariants.yml
+
+phases:
+  - number: 1
+    name: static/lint
+    core:
+      - verify-static-types         # was: verify-types
+      - check-static-lint           # was: check-lint
+      - check-lint-mega
+      - check-skills-catalog
+    opt_in:
+      - check-deno-runtime          # was: deno-check
+      - check-vendored-debrand      # was: debrand
+
+  - number: 2
+    name: security
+    core:
+      - scan-security               # legacy 2-segment (recorded, NOT renamed)
+      - verify-sbom-manifest        # was: verify-sbom → recommended tool: Trivy/Grype
+      - audit-supply-dependencies   # was: audit-dependencies → recommended tool: Trivy/Grype
+      - scan-static                 # legacy 2-segment (recorded, NOT renamed)
+      - guard-secrets-repo          # was: guard-secrets → recommended tool: Gitleaks/Trivy secrets
+    opt_in:
+      - scan-web-dast               # was: scan-dast → recommended tool: ZAP (OSS) / Snyk API-Web
+      - scan-iac-config             # was: scan-iac → recommended tool: Checkov
+      - scan-container-images        # was: scan-containers → recommended tool: Trivy
+    decision_record: shared/references/ci/security-tooling-gap.md
+
+  - number: 3
+    name: compile/graph
+    core:
+      - build-app-bundle            # was: build-app
+      - build-ds-tokens             # was: compile-ds
+      - check-import-graph
+    opt_in:
+      - sync-database-types         # was: database-types-sync
+
+  - number: 4
+    name: test/behavior
+    core:
+      - test-code-coverage          # was: test-coverage
+      - test-rls-gate              # was: test-rls
+      - test-dogfood-run            # was: run-dogfood
+      - test-testops-smoke          # was: qa-testops-smoke
+    opt_in:
+      - test-k6-auth
+      - test-k6-guest
+      - test-k6-suite
+
+  - number: 5
+    name: ui/regression
+    core:
+      - test-ui-storybook           # was: test-storybook
+      - test-visual-regression
+      - check-react-doctor
+    opt_in:
+      - test-vrt-baseline           # was: test-vrt
+      - publish-ui-chromatic        # was: publish-chromatic
+
+  - number: 6
+    name: docs/i18n
+    core:
+      - check-docs-links
+      - check-i18n-keys            # was: check-i18n
+      - validate-spec-openspec     # was: validate-openspec
+    opt_in: []
+
+  - number: 7
+    name: pr/governance
+    core:
+      - enforce-pr-size
+      - guard-pr-branch             # was: guard-pr
+      - check-stale-prs
+      - check-govern-qa             # was: govern-qa
+      - guard-openspec-draft        # was: gate-openspec-draft
+      - maintain-codeowners-rotation  # was: codeowners-rotation
+      - enforce-reviewer-assignment   # was: assign-reviewer
+    opt_in: []
+
+  - number: 8
+    name: build artifact
+    core:
+      - build-ci-artifacts          # was: build-artifacts
+    opt_in:
+      - sync-docker-images          # was: mirror-docker-base-images
+
+  - number: 9
+    name: deploy/promotion
+    core:
+      - deploy-db-migrations        # was: deploy-migrations
+      - deploy-edge-runtime         # was: deploy-edge-functions
+      - deploy-release-pipeline     # was: deployment-pipeline
+      - deploy-promotion-ops        # was: stage-promotion-ops
+    opt_in: []
+
+  - number: 10
+    name: housekeeping
+    core:
+      - maintain-monthly-housekeeping  # was: maintain-monthly
+      - review-quarterly-portfolio     # was: review-quarterly
+      - notify-deps-slack              # was: notify-dependabot-slack
+      - maintain-stale-prs             # was: stale-prs
+    opt_in: []
+
+# References that enrich specific checks. Kept as a separate map so the phase
+# lists above stay plain name arrays; tools consuming the catalog can join by
+# check name.
+check_references:
+  scan-security:
+    description: >
+      Full SkillSpector gate — static + optional LLM semantic security analysis
+      of agent skills (score > 50 blocks; SARIF uploaded).
+    pattern_class: >
+      Runtime/component day-zero RCE — a recurring class since 2021 where an
+      unauthenticated RCE lands in a runtime, library, or appliance, and the
+      exposure is in which binary serves this, not in the application inventory.
+      Not scoped to any single language; the series (Log4Shell, Spring4Shell,
+      MOVEit, Citrix Bleed, Ivanti, regreSSHion, PHP2Shell) frames the pattern.
+    sources:
+      - title: "FireCompass — PHP2Shell was not the first; the next one is already in someone's queue"
+        url: "https://firecompass.com/php2shell-not-first-next-one-already-someones-queue/"
+        note: "Canonical framing of the recurring day-zero runtime RCE pattern (2021-2026 series), lesson table, and seven-part programme."
+      - title: "ANSSI — Rust Guide (secure coding rules) [example of the class]"
+        url: "https://github.com/anssi-fr/rust-guide/"
+        note: "Secure programming rules for Rust; example of a runtime secure-coding source."
+      - title: "ANSSI — Programming rules to develop secure applications with Rust v1.0 (PDF)"
+        url: "https://messervices.cyber.gouv.fr/documents-guides/anssi-guide-programming_rules_to_develop_secure_applications_with_rust-v1.0.pdf"
+        note: "Canonical ANSSI guidance for secure Rust development (runtime secure-coding)."
+      - title: "PHP — php2shell RCE campaign (PHP 8.1 EOL), most recent instance of the class"
+        url: "https://www.php.net/archive/2026.php#2026-10-23-1"
+        note: "PHP release/EOL archive entry framing the php2shell instance."
+      - title: "PHP — php2shell up/- advisory"
+        url: "https://www.php2shell.com/#upgrade-php"
+        note: "Vendor-style advisory page for upgrading PHP to mitigate php2shell."
+      - title: "Wiz — php2shell: PHP RCE analysis"
+        url: "https://www.wiz.io/blog/php2shell-php-rce"
+        note: "Technical analysis of the php2shell PHP RCE vector."
+      - title: "Akamai — Understanding php2shell"
+        url: "https://www.akamai.com/blog/security-research/understanding-php2shell-everything-you-need-to-know"
+        note: "Threat-research overview of php2shell exploitation."
+      - title: "Hunting php2shell — practical guide for SOC/DFIR"
+        url: "https://medium.com/@seiferboado101/hunting-php2shell-a-practical-guide-for-soc-and-dfir-teams-e092c540afa1"
+        note: "Detection/hunting patterns for SOC and DFIR teams."
+      - title: "Rapid7 InsightVM — php2shell coverage"
+        url: "https://docs.rapid7.com/nexpose/php2shell/"
+        note: "Scanner coverage note for php2shell."
+      - title: "Focused Hunts — php2shell critical PHP RCE hunting guide"
+        url: "https://www.focusedhunts.com/blog/hunting/php2shell-Critical-PHP-RCE-Hunting-Guide"
+        note: "Hunting guide for the critical PHP RCE."
+      - title: "LegacyLeap — php2shell and PHP 8.1 end-of-life"
+        url: "https://www.legacyleap.ai/blog/php2shell-php-8-1-end-of-life/"
+        note: "Why PHP 8.1 EOL enables this campaign; upgrade guidance."
