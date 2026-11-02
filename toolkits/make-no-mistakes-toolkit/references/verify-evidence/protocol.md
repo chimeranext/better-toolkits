@@ -33,7 +33,7 @@ If the claim has no falsifiable/observable form, the verdict is
 | --- | --- | --- |
 | Code structure / existence / relationships / architecture | Graphify (`graphify query/explain/path`) | edges tagged `EXTRACTED` (observed) vs `INFERRED` (derived) |
 | Logical consistency / entailment / semantic consequence | Open Ontologies (`open-ontologies`) | re-verifiable certificate (`oo-cert`) |
-| Behavioral invariant / concurrency / property across states | Specula (`specula`, TLA+ model checking) | model-check result + counterexample path |
+| Behavioral invariant / concurrency / property across states | Specula-based pipeline: analyze → specgen → validate (TLA+ model checking) — local TLC core (external agent CLI optional) | model-check result + counterexample path |
 
 If the claim fits more than one type, prefer the strongest available evidence and
 say which tool(s) were used.

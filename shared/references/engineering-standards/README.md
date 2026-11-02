@@ -1,82 +1,78 @@
-# Engineering standards — index (19 practices + OST)
+# Engineering standards — SSOT & pipeline
 
 > SSOT at monorepo level: `shared/references/engineering-standards/`.
-> Do not duplicate these files inside toolkits — reference them by monorepo-relative
-> path `shared/references/engineering-standards/<file>`.
+> Are you an agent? Reference these standards by monorepo-relative path
+> (`shared/references/engineering-standards/<file>`) — never copy their text.
+> The canonical index of the 32 practices lives in [`index.md`](index.md).
 
 Portable baseline for any client startup. **Not a greenfield framework** — names and
 enforces conventions already in industry use.
 
-| Sigla | Name | Scope | SSOT |
-| --- | --- | --- | --- |
-| **1. DSMS** | Domain-Sliced Module Structure | Where files live | [dsms-ifs-cps.md](dsms-ifs-cps.md) §1 |
-| **2. IFS** | Intra-File Structure | How one file reads top-to-bottom | [dsms-ifs-cps.md](dsms-ifs-cps.md) §2 |
-| **3. CPS** | Categorized Public Surface | How public barrels export | [dsms-ifs-cps.md](dsms-ifs-cps.md) §3 |
-| **4. PRDS** | Pull Request Description Standards | PR body + reviewable size | [prds.md](prds.md) |
-| **5. BrS** | Branching Strategy | Branches, naming, protection | [branching-strategy.md](branching-strategy.md) |
-| **6. WTD** | Worktree Discipline | Worktrees are transient and never committed. Parity (1 issue = 1 worktree = 1 PR) is an association policy, not persistence. | [worktree-discipline.md](worktree-discipline.md) |
-| **7. GGT** | GitFlow + Trunk-based | Hybrid model: feature→`develop` rebase. `develop`→`main` merge commit. Auditable setup + repo-initial-setup step | [gitflow-trunk.md](gitflow-trunk.md) |
-| **8. QT4L** | QA Traceability (four layers) | Req → automated test → manual QA → HITL | [qa-traceability-four-layers.md](qa-traceability-four-layers.md) |
-| **9. AFIF** | Anti-Fragility via Fault Injection | Harden every layer by injecting faults (mutation, formal self-test, chaos, gate negatives). "Never seen fail" is not a pass. | [anti-fragility-fault-injection.md](anti-fragility-fault-injection.md) |
-| **10. OST** | OpenSpec store PR traceability | Tracker → change folder → one store PR → one merge | [openspec-store-pr-traceability.md](openspec-store-pr-traceability.md) |
-| **11. CHH** | Checksum Hygiene | Setup scripts pin the VERSION and verify release assets against the release's own checksum manifest — never hardcoded sha256 constants | [checksum-hygiene.md](checksum-hygiene.md) |
-| **12. SemVer** | Semantic Versioning policy | Version source = plugin.json. The generator derives marketplace.json from it. The merge queue enforces a monotonic bump vs the default branch (rebase + re-bump). | [semver.md](semver.md) |
-| **13. MPH** | Main Protections & HITL Merge Guard | Default branch ruleset (only named team bypass) + org-wide 2FA + pre-tool-use guard that requires interactive human approval for any bypass/admin merge. Fail-closed. | [main-protections-hitl.md](main-protections-hitl.md) |
-| **14. BGI** | Build-Artifact Gitignore | Every repo vendors the ignore patterns from `vendored-gitignore.toml` (venv, node_modules, target, build, caches). Promotes the symlink build-artifact policy | [build-artifacts-gitignore.md](build-artifacts-gitignore.md) |
-| **15. ODT** | Ops Documentation Taxonomy | Classify every ops doc as Playbook vs Runbook vs SOP. Never mix. Route via /document-this | [ops-documentation-taxonomy.md](ops-documentation-taxonomy.md) |
-| **16. NSQ** | No-Squash Merge | Every repo sets `allow_squash_merge: false`. Merge and rebase stay allowed. Rulesets exclude squash. The local guard blocks `--squash`. | [no-squash-merge.md](no-squash-merge.md) |
-| **17. TFM** | Formal Model TLA+ | Standardized TLA+/TLC modeling and validation recipe | [formal-model-tla.md](formal-model-tla.md) |
-| **18. REL** | Release Cut | One consolidated `develop`→`main` PR. CTO owns the QA audit (QT4L). A second human reviewer is the sole PROD gate. Hotfixes only via `hotfix/*`. | [release-cut.md](release-cut.md) |
-| **19. LTGT** | Local Truth is not Ground Truth | A CWD shows one worktree's branch. Ground truth is the repo: `git rev-parse --git-common-dir`, `git worktree list`, `git ls-files`, with hidden paths included. Never conclude absence from a CWD-only scan. | [local-vs-ground-truth.md](local-vs-ground-truth.md) |
+## Pipeline (end-to-end)
 
-The **clean code quartet** is DSMS + IFS + CPS + PRDS. BrS + WTD govern branching
-and worktree hygiene. QT4L and **OST** (when the client uses an OpenSpec store)
-complete QA traceability and spec promotion discipline.
-
-**Adoption order** (flowchart TD):
+The full change pipeline — from tracker issue to human review handoff — is
+orchestrated by `/ready-to-review-mergeable` (protocol:
+`toolkits/make-no-mistakes-toolkit/references/ready-to-review-mergeable/protocol.md`).
+**Invariant: never merge.** The merge itself happens after the handoff, executed
+by a human, and is governed by MPH/NSQ/REL.
 
 ```mermaid
 flowchart TD
-    S0[DSMS — Domain-Sliced Module Structure]
-    S1[IFS — Intra-File Structure]
-    S2[CPS — Categorized Public Surface]
-    S3[PRDS — PR Description Standards]
-    S4[BrS — Branching Strategy]
-    S5[WTD — Worktree Discipline]
-    S6[GGT — GitFlow + Trunk-based]
-    S7[QT4L — QA Traceability, four layers]
-    S8[AFIF — Anti-Fragility via Fault Injection]
-    S9[OST — OpenSpec store PR traceability]
-    S10[CHH — Checksum Hygiene]
-    S11[SemVer — Semantic Versioning policy]
-    S12[MPH — Main Protections & HITL]
-    S13[BGI — Build-Artifact Gitignore]
-    S14[ODT — Ops Documentation Taxonomy]
-    S15[NSQ — No-Squash Merge]
-    S16[TFM — Formal Model TLA+]
-    S17[REL — Release Cut]
-    S18[LTGT — Local Truth is not Ground Truth]
-    S0 --> S1 --> S2
-    S2 --> S3
-    S2 --> S4
-    S3 --> S5
-    S4 --> S5
-    S5 --> S6
-    S6 --> S7
-    S7 --> S8
-    S8 --> S9
-    S9 --> S10
-    S10 --> S11
-    S11 --> S12
-    S12 --> S13
-    S13 --> S14
-    S14 --> S15
-    S15 --> S16
-    S16 --> S17
-    S17 --> S18
+  start(["/make-no-mistakes:ready-to-review-mergeable ISSUE-ID"])
+  s1["§1 Parse issue IDs — STOP if missing"]
+  s2["§2 /make-no-mistakes:implement → Phase 3 step 12<br/>Phase 2 Build: convention GATES + CI evidence<br/>skip implement Phase 3 steps 9–10"]
+  t["§2b.1 /assurance:triage testing"]
+  vt{"PASS?"}
+  sec["§2b.2 /assurance:triage security"]
+  vs{"PASS?"}
+  gov["§2b.3 /assurance:triage governance"]
+  vg{"PASS?"}
+  lreq{"liveness required<br/>per config?"}
+  liv["§2b.4 /assurance:triage liveness"]
+  vl{"PASS?"}
+  s2c["§2c /assurance:e2e-test-builder mandatory<br/>input = testing pillar output"]
+  s3["§3 Remote review §3a–§3c<br/>PR Ready · tag bots · iterate fix/push"]
+  rem{"Remote gate pass?"}
+  s3ok["§3 Remote gate green"]
+  s4["§4a Local gate fallback"]
+  s4b["§4b Adversarial local review HITL"]
+  s5["§5 Human handoff — tracker In Review<br/>never merge · never Done"]
+  df["§5b Dogfood verify — /dogfood<br/>restrictions script exit 0 · Evidence format<br/>0 PENDING · no stale hardcodes"]
+  qa["Out of RTR RACI — QA analyst<br/>/assurance:e2e-test-runner · /assurance:e2e-test-preview"]
+  blocked["BLOCKED — fix, push, re-run from failed step"]
+
+  start --> s1 --> s2 --> t --> vt
+  vt -->|no| blocked
+  vt -->|yes| sec --> vs
+  vs -->|no| blocked
+  vs -->|yes| gov --> vg
+  vg -->|no| blocked
+  vg -->|yes| lreq
+  lreq -->|no| s2c
+  lreq -->|yes| liv --> vl
+  vl -->|no| blocked
+  vl -->|yes| s2c
+  s2c --> s3 --> rem
+  rem -->|yes| s3ok --> s5
+  rem -->|no, remote available| blocked
+  rem -->|no, remote unavailable per §4a| s4 --> s5
+  s3ok -.->|optional HITL| s4b
+  s4b -.-> s5
+  s5 --> df
+  df --> qa
 ```
 
-**Day-to-day priority:** IFS, PRDS, and QT4L (reading rhythm, review rhythm, req→test trace).
+| Stage (in RTR) | Standard |
+| --- | --- |
+| Tracker issue → change folder | **OST** |
+| PR description + scope | **PRDS** |
+| QA traceability (req → test) | **QT4L** |
+| CI/security gates | **CIS** |
+| Remote review gate | CI checks (green) |
+| Exit = human handoff; never merge | RTR protocol (invariant) |
+| **After** handoff — merge (human) | **MPH** · **NSQ** · **REL** · **GGT** |
+
+The **32 practices** (scope, SSOT, adoption order) are listed in [`index.md`](index.md).
 
 ## Adoption policy
 
@@ -88,24 +84,32 @@ flowchart TD
 
 | Command | Purpose |
 | --- | --- |
-| `/clean-code-standards-setup` | Scaffold pointers + PR template + QT4L stub in a client repo |
-| `/clean-code-standards-audit` | Measure adoption. Audit open PRs when `--prs`. |
+| `/engineering-standards-setup` | Scaffold pointers + PR template + QT4L stub in a client repo (index of 32) |
+| `/engineering-standards-audit` | Measure adoption (all 32, parallelizable per family). Audit open PRs when `--prs`. |
 
-Protocol SSOT: `references/clean-code-standards-setup/protocol.md`, `references/clean-code-standards-audit/protocol.md`.
+Protocol SSOT: `references/engineering-standards-setup/protocol.md`, `references/engineering-standards-audit/protocol.md`.
 
 ## Quick reference
 
 | Question | Practice |
 | --- | --- |
 | Feature folder or `shared/`? | DSMS |
+| Domain boundaries and ubiquitous language? | DDD |
 | imports → types → main → helpers? | IFS |
 | Banner on sections? | IFS (file) / CPS (barrel) |
 | Public barrel export? | CPS |
+| Comment intent, not "how"? | CCC |
+| Conventional commit format? | CvC |
+| Group commits semantically? | CLG |
 | PR description and size? | PRDS |
+| Pre-commit enforcement? | PCH |
 | Branch naming and protection? | BrS |
 | Worktree hygiene / parity? | WTD |
+| Stop on anomaly? | Jidoka |
+| stderr/stream discipline? | StS |
 | Scenario → verification in tasks? | QT4L |
 | One OpenSpec folder per store PR? | OST |
+| Prevent drift across repos? | RDP |
 | Hardcoded sha256 in a setup script? | CHH |
 | How do I bump a plugin version? | SemVer (monotonic vs main, merge queue) |
 | How do I protect `main` even from founders? | MPH (ruleset + 2FA + pre-tool-use fail-closed guard) |
@@ -113,6 +117,7 @@ Protocol SSOT: `references/clean-code-standards-setup/protocol.md`, `references/
 | Is it a playbook or a runbook? | ODT (taxonomy. Never mix) |
 | How do I integrate features and releases? | GGT (feature→develop rebase. develop→main merge commit) |
 | How do I cut a release (PROD)? | REL (one develop→main PR. CTO QA audit. second human reviewer = sole gate) |
+| How do I gate release risk post-cut? | FFF (flags: kill switch, rollout, entitlement) |
 | Where do I search for the truth? | LTGT (git common-dir + all worktrees + hidden paths. Never CWD-only) |
 | How do I verify the order formally? | TFM (TLA+/TLC recipe) |
 

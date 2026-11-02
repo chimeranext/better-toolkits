@@ -1,10 +1,11 @@
 # SkillSpector — security gate for agent skills (blocks HIGH+).
 #
-# Static analysis always runs (deterministic, no secrets). If the repo secret
-# SKILLSPECTOR_COMPAT_API_KEY is present (OpenRouter free tier), the same run
-# adds LLM semantic analysis on top. Exit != 0 blocks the PR when any skill
-# scores > 50 (HIGH/CRITICAL) with findings not covered by that skill's
-# committed `.skillspector-baseline.yaml`.
+# Split into two named phase-2 checks:
+#   - scan-security: the full gate (static + optional LLM semantic analysis if a
+#     provider key is present). Exit != 0 blocks the PR when any skill scores
+#     > 50 (HIGH/CRITICAL) with findings not covered by that skill's committed
+#     `.skillspector-baseline.yaml`. Uploads SARIF (always).
+#   - scan-static: the deterministic static pass (--no-llm), no secrets needed.
 
 name: skillspector
 
@@ -25,7 +26,7 @@ permissions:
   security-events: write
 
 jobs:
-  scan:
+  scan-security:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -39,7 +40,7 @@ jobs:
       - name: Install SkillSpector
         run: uv tool install git+https://github.com/NVIDIA/skillspector.git
 
-      - name: Scan all skills (static + optional LLM)
+      - name: Scan all skills (static + optional LLM) — security gate
         env:
           SKILLSPECTOR_PROVIDER: openai_compatible
           ZEN_KEY: ${{ secrets.SKILLSPECTOR_ZEN_API_KEY }}
@@ -71,3 +72,20 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: skillspector-report.sarif
+
+  scan-static:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python + uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install SkillSpector
+        run: uv tool install git+https://github.com/NVIDIA/skillspector.git
+
+      - name: Static scan of all skills (deterministic, no LLM)
+        run: python3 scripts/skillspector-gate.py --no-llm

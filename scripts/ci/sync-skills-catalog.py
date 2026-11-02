@@ -31,6 +31,21 @@ def canonical_pkg(name: str, names: list[str]) -> dict:
     }
 
 
+def _collect_skills(skills_dir: pathlib.Path) -> list[str]:
+    """Collect skill names recursively (one level of family nesting supported)."""
+    out: list[str] = []
+    for p in sorted(skills_dir.iterdir()):
+        if not p.is_dir():
+            continue
+        if (p / "SKILL.md").exists():
+            out.append(p.name)
+            continue
+        for child in sorted(p.iterdir()):
+            if child.is_dir() and (child / "SKILL.md").exists():
+                out.append(f"{p.name}/{child.name}")
+    return out
+
+
 def sync_unit(
     label: str,
     skills_dir: pathlib.Path,
@@ -38,9 +53,7 @@ def sync_unit(
 ) -> tuple[bool, str]:
     if not skills_dir.is_dir():
         return False, f"  skipped  {label} (sin carpeta skills/)"
-    names = sorted(
-        p.name for p in skills_dir.iterdir() if p.is_dir() and (p / "SKILL.md").exists()
-    )
+    names = sorted(_collect_skills(skills_dir))
     if not pkg_path.exists():
         pkg_path.write_text(
             json.dumps(

@@ -27,7 +27,9 @@ on what the claim asserts.
 #### Scenario: Invariant/behavior claim → Specula
 - **WHEN** the claim is about a behavioral invariant, concurrency, or a property
   that must hold across states
-- **THEN** the skill SHALL use Specula (TLA+ model checking)
+- **THEN** the skill SHALL use the **Specula-based pipeline** (analyze →
+  specgen → validate; TLA+ model checking), with local TLC as the
+  model-checking core — an external coding-agent CLI is optional, not required
 - **AND** SHALL report the model-check result and any counterexample path
 
 ### Requirement: Real verification, never inference

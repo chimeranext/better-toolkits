@@ -1,11 +1,21 @@
 name: skills-catalog-check
 
+# Single trigger set that never double-runs the same head: `pull_request`
+# covers PR heads (the unit of review), `push` is scoped to main so a merged
+# PR is re-checked exactly once. `concurrency` + `cancel-in-progress` cancels
+# superseded runs of the same workflow/ref (see design: no duplicate check-runs
+# per head).
 on:
-  push:
   pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  check:
+  check-skills-catalog:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

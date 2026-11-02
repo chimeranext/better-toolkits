@@ -19,33 +19,43 @@ Inspired by the "pick-your-stack" experience of
 
 ## Engineering Standards
 
-The monorepo vendors **24 engineering standards** (SSOT at
-`shared/references/engineering-standards/`), adopted in order:
+The monorepo vendors engineering standards; the **canonical index** (adoption
+order, scope, SSOT links) lives at
+[`shared/references/engineering-standards/README.md`](shared/references/engineering-standards/README.md).
+Adopted in order:
 
 1. [Domain-Sliced Module Structure (DSMS)](shared/references/engineering-standards/dsms-ifs-cps.md#dsms—domain-sliced-module-structure)
-2. [Intra-File Structure (IFS)](shared/references/engineering-standards/dsms-ifs-cps.md#ifs—intra-file-structure)
-3. [Categorized Public Surface (CPS)](shared/references/engineering-standards/dsms-ifs-cps.md#cps—categorized-public-surface)
-4. [Pull Request Description Standards (PRDS)](shared/references/engineering-standards/prds.md)
-5. [Branching Strategy (BrS)](shared/references/engineering-standards/branching-strategy.md)
-6. [Worktree Discipline (WTD)](shared/references/engineering-standards/worktree-discipline.md)
-7. [GitFlow + Trunk-based (GGT)](shared/references/engineering-standards/gitflow-trunk.md)
-8. [QA Traceability, four layers (QT4L)](shared/references/engineering-standards/qa-traceability-four-layers.md)
-9. [Anti-Fragility via Fault Injection (AFIF)](shared/references/engineering-standards/anti-fragility-fault-injection.md)
-10. [OpenSpec store PR traceability (OST)](shared/references/engineering-standards/openspec-store-pr-traceability.md)
-11. [Checksum Hygiene (CHH)](shared/references/engineering-standards/checksum-hygiene.md)
-12. [Semantic Versioning policy (SemVer)](shared/references/engineering-standards/semver.md)
-13. [Main Protections & HITL Merge Guard (MPH)](shared/references/engineering-standards/main-protections-hitl.md)
-14. [Build-Artifact Gitignore (BGI)](shared/references/engineering-standards/build-artifacts-gitignore.md)
-15. [Ops Documentation Taxonomy (ODT)](shared/references/engineering-standards/ops-documentation-taxonomy.md)
-16. [No-Squash Merge (NSQ)](shared/references/engineering-standards/no-squash-merge.md)
-17. [Formal Model TLA+ (TFM)](shared/references/engineering-standards/formal-model-tla.md)
-18. [Release Cut (REL)](shared/references/engineering-standards/release-cut.md)
-19. [Local Truth is not Ground Truth (LTGT)](shared/references/engineering-standards/local-vs-ground-truth.md)
-20. [CI Security & Standards (CIS)](shared/references/engineering-standards/ci-security-standards.md)
-21. [Domain-Driven Design (DDD)](shared/references/engineering-standards/domain-driven-design.md)
-22. [Repository Drift Prevention (RDP)](shared/references/engineering-standards/repository-drift-prevention.md)
-23. [CODEOWNERS Replication Workflow](shared/references/engineering-standards/codeowners-replication-workflow.md)
-24. [No Deprecated Agent Shims](shared/references/engineering-standards/no-deprecated-agent-shims.md)
+2. [Domain-Driven Design (DDD)](shared/references/engineering-standards/domain-driven-design.md)
+3. [Intra-File Structure (IFS)](shared/references/engineering-standards/dsms-ifs-cps.md#ifs—intra-file-structure)
+4. [Categorized Public Surface (CPS)](shared/references/engineering-standards/dsms-ifs-cps.md#cps—categorized-public-surface)
+5. [Code Comment Convention (CCC)](shared/references/engineering-standards/code-comment-convention.md)
+6. [Copyright/License Header (CLH)](shared/references/engineering-standards/copyright-license-header.md)
+7. [Conventional Commits (CvC)](shared/references/engineering-standards/conventional-commits.md)
+8. [Commit Logic Groups (CLG)](shared/references/engineering-standards/commit-logic-groups.md)
+9. [Pre-Commit Hooks (PCH)](shared/references/engineering-standards/pre-commit-hooks.md)
+10. [Pull Request Description Standards (PRDS)](shared/references/engineering-standards/prds.md)
+11. [Branching Strategy (BrS)](shared/references/engineering-standards/branching-strategy.md)
+12. [Worktree Discipline (WTD)](shared/references/engineering-standards/worktree-discipline.md)
+13. [Stop-on-Anomaly (Jidoka)](shared/references/engineering-standards/jidoka.md)
+14. [Stderr/Stream Standards (StS)](shared/references/engineering-standards/stderr-stream-standards.md)
+15. [GitFlow + Trunk-based (GGT)](shared/references/engineering-standards/gitflow-trunk.md)
+16. [QA Traceability, four layers (QT4L)](shared/references/engineering-standards/qa-traceability-four-layers.md)
+17. [Anti-Fragility via Fault Injection (AFIF)](shared/references/engineering-standards/anti-fragility-fault-injection.md)
+18. [OpenSpec store PR traceability (OST)](shared/references/engineering-standards/openspec-store-pr-traceability.md)
+19. [Repository Drift Prevention (RDP)](shared/references/engineering-standards/repository-drift-prevention.md)
+20. [Checksum Hygiene (CHH)](shared/references/engineering-standards/checksum-hygiene.md)
+21. [Semantic Versioning policy (SemVer)](shared/references/engineering-standards/semver.md)
+22. [Main Protections & HITL Merge Guard (MPH)](shared/references/engineering-standards/main-protections-hitl.md)
+23. [Build-Artifact Gitignore (BGI)](shared/references/engineering-standards/build-artifacts-gitignore.md)
+24. [Ops Documentation Taxonomy (ODT)](shared/references/engineering-standards/ops-documentation-taxonomy.md)
+25. [No-Squash Merge (NSQ)](shared/references/engineering-standards/no-squash-merge.md)
+26. [Formal Model TLA+ (TFM)](shared/references/engineering-standards/formal-model-tla.md)
+27. [CI Security & Standards (CIS)](shared/references/engineering-standards/ci-security-standards.md)
+28. [Release Cut (REL)](shared/references/engineering-standards/release-cut.md)
+29. [Feature Flag Families (FFF)](shared/references/engineering-standards/feature-flag-families.md)
+30. [Local Truth is not Ground Truth (LTGT)](shared/references/engineering-standards/local-vs-ground-truth.md)
+31. [No Deprecated Agent Shims](shared/references/engineering-standards/no-deprecated-agent-shims.md)
+32. [CODEOWNERS Replication Workflow](shared/references/engineering-standards/codeowners-replication-workflow.md)
 
 ## Table of Contents
 
