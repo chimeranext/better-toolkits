@@ -74,6 +74,13 @@ Produce explicit **diffs** and command lists:
 - `agent plugin install better-toolkits-bootstrap@better-toolkits` (Cursor, if applicable)
 - Product toolkit installs the user selected (or recommend defaults: `make-no-mistakes`, etc.)
 - Merged `hooks.json` / `opencode.jsonc` snippets (idempotent append, never clobber unrelated hooks)
+- **Bilingual gate (BIB)** — install the deterministic issue-redaction gate across harnesses:
+  Claude PreToolUse `shared/hooks/bilingual/pre-linear-save-issue-bilingual.sh` (registrado en
+  `hooks.json` matcher `mcp__.*linear.*__save_issue`), Cursor `adapters/cursor-before-shell.sh`,
+  OpenCode plugin `adapters/opencode-bilingual.ts`, y CLI fallback `tooluse/enforce-bilingual.sh`.
+  (MANDATORY: no opt-in; no lee `.claude/config/hygiene-hooks.json`.)
+- **Code-smells detector** — añadir el pre-commit `code-smells` (`scripts/lint/detect_code_smells.py`,
+  `pass_filenames: true`) al `.pre-commit-config.yaml` del repo consumidor.
 - **Auto-update plugin (default ON)** — install the OpenCode discovery-dir plugin
   `better-toolkits-auto-update` + its mode sidecar; register the Cursor `workspaceOpen`
   hook. Opt out with `--no-auto-update` or `BETTER_TOOLKITS_AUTO_UPDATE=0`.
@@ -129,6 +136,13 @@ npx skills add chimeranext/better-toolkits --skill merge-advisor --agent '*' -g 
 
 `setup --skills --toolkit <name>` plans the same `npx skills add` from the package.json filter.
 3. Merge hooks idempotently (see adapter for paths).
+3a. **Bilingual gate** — copia `shared/hooks/bilingual/` a cada harness: registra el
+    pre-hook en el `hooks.json` de Claude (matcher `mcp__.*linear.*__save_issue`), el adapter
+    `cursor-before-shell.sh` en `.cursor/hooks/`, el plugin `opencode-bilingual.ts` en la
+    carpeta de plugins de OpenCode, y `enforce-bilingual.sh` como tooluse guard (vía
+    `scripts/ci/install-tooluse-guards.sh`).
+3b. **Code-smells** — añade el hook pre-commit `code-smells` (`detect_code_smells.py`,
+    `pass_filenames: true`) al `.pre-commit-config.yaml` del repo consumidor.
 4. For OpenCode, run or guide `npx @chimeranext/better-toolkits setup` (same protocol; `--yes` only when user pre-approved).
 5. Never use `2>/dev/null` or bare `2>&1` without a log file — stderr hooks doctrine applies to the agent too.
 6. **Assurance local** — invoke `/assurance-local-setup` (`scripts/assurance-local-setup/ensure-local-hooks.sh` + `prepare-typecheck-deps.sh`).
@@ -143,6 +157,9 @@ npx skills add chimeranext/better-toolkits --skill merge-advisor --agent '*' -g 
 5. **Auto-update** — `opencode plugin list` shows `local.better-toolkits-auto-update`; the sidecar
    records the chosen branch mode; `better-toolkits self-update --dry-run` reports the planned pull.
 6. **Assurance local** — `cd shared/hooks && npm run typecheck` passes; git hooks active.
+
+7. **Bilingual probe** — ejecuta `python3 shared/hooks/bilingual/detect.py --body "x"` → exit 2; verifica que el matcher/plugin esté registrado en cada harness (Claude hooks.json, Cursor, OpenCode).
+8. **Code-smells probe** — `python3 scripts/lint/detect_code_smells.py` sobre archivos cambiados → exit 0 sin HARD.
 
 Report pass/fail per harness. If verify fails, propose rollback diffs (HITL again).
 
@@ -191,6 +208,9 @@ agent profile (`agents/better.md`) references them. The hooks enforce the key on
 - **Jidoka** (`jidoka.md`) — stop on anomaly. Record boundary + root-cause hypothesis.
 - **StS** (`stderr-stream-standards.md`) — no stream to null. Fold stderr into the
   same sink. `2> file` forbidden (enforced by the stderr hook this setup installs).
+- **BIB** (`bilingual-issue-brief.md`) — redacción Bilingual ANTES de abrir todo issue
+  (GitHub o Linear), con gate determinístico `shared/hooks/bilingual/detect.py` instalado
+  por este setup (MANDATORY, no opt-in).
 - **CLG** (`commit-logic-groups.md`) — commit intermediate work in semantic groups.
 - **GGT** (`gitflow-trunk.md`) — branch model provisioned in Phase 7b. Audited by
   `audit-repo-gitflow.sh`.
