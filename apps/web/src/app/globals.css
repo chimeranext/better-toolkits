@@ -16,7 +16,7 @@
     --muted-foreground: 217 13% 65%;  /* #9AA3B2 */
     --border: 217 45% 30%;            /* #2A4570 */
     --input: 217 45% 30%;
-    --primary: 40 51% 47%;            /* #B78E3B gold */
+    --primary: 38 92% 50%;            /* #F59E0B amber-500 */
     --primary-foreground: 214 56% 18%; /* #142A46 navy on gold */
     --secondary: 252 100% 68%;        /* #7C5CFF violet */
     --secondary-foreground: 0 0% 100%;
@@ -28,20 +28,20 @@
     --success-foreground: 218 55% 10%; /* navy on mint (dark theme) */
     --warning: 43 96% 56%;            /* #FBBF24 */
     --warning-foreground: 218 55% 10%;
-    --ring: 40 51% 47%;               /* #B78E3B */
+    --ring: 38 92% 50%;               /* #F59E0B amber-500 */
 
     /* Chimera brand accents (gold / parchment / violet). Stored as triplets
        so `hsl(var(--brand-*))` resolves — `brand.primary` etc. in Tailwind
        point at these, and light surfaces re-tune them via selector override. */
-    --brand-primary: 40 51% 47%;       /* gold #B78E3B */
+    --brand-primary: 38 92% 50%;       /* amber-500 #F59E0B */
     --brand-accent: 252 100% 68%;      /* violet #7C5CFF */
-    --brand-tertiary: 42 62% 60%;      /* goldLight #D9B45B */
-    --brand-gradient: linear-gradient(90deg, #A67E34, #B78E3B, #D9B45B);
+    --brand-tertiary: 42 96% 56%;      /* amber-400 #FBBF24 */
+    --brand-gradient: linear-gradient(90deg, #B45309, #F59E0B, #FBBF24);
   }
 
   /* Buttons need a deeper gold than `--primary` so white text passes WCAG AA
      (4.5:1). #906A2D → HSL(37 52% 37%) ≈ 4.86:1 vs white, both themes. */
-  :root { --primary-strong: 37 52% 37%; }
+  :root { --primary-strong: 27 90% 37%; } /* amber-700 #B45309 (white AA ~4.9:1) */
 
   * { @apply border-border; }
   body { @apply bg-background text-foreground font-body antialiased; }
@@ -98,7 +98,7 @@
   --muted-foreground: 218 17% 35%;   /* #4A5568 */
   --border: 39 44% 71%;              /* #D6C096 */
   --input: 39 44% 71%;
-  --primary: 39 52% 43%;             /* #A67E34 goldDeep */
+  --primary: 32 95% 44%;             /* #D97706 amber-600 */
   --primary-foreground: 0 0% 100%;
   --secondary: 217 91% 60%;          /* #3B82F6 */
   --secondary-foreground: 0 0% 100%;
@@ -124,10 +124,10 @@
    hero and final-CTA sections via <div class="blueprint-overlay bp-grid">. */
 .blueprint-overlay {
   background-image:
-    linear-gradient(to right, rgba(183, 142, 59, 0.08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(183, 142, 59, 0.08) 1px, transparent 1px),
-    linear-gradient(to right, rgba(183, 142, 59, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(183, 142, 59, 0.05) 1px, transparent 1px);
+    linear-gradient(to right, rgba(245, 158, 11, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(245, 158, 11, 0.08) 1px, transparent 1px),
+    linear-gradient(to right, rgba(245, 158, 11, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(245, 158, 11, 0.05) 1px, transparent 1px);
   background-size: 80px 80px, 80px 80px, 16px 16px, 16px 16px;
   -webkit-mask-image: radial-gradient(ellipse at center, black 35%, transparent 75%);
   mask-image: radial-gradient(ellipse at center, black 35%, transparent 75%);
