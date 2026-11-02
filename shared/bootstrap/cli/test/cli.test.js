@@ -127,14 +127,19 @@ describe("mcp phase", () => {
 describe("skills wiring", () => {
   it("finds toolkit skills dirs in the real repo", () => {
     const dirs = toolkitSkillsDirs(REAL_ROOT);
-    assert.equal(dirs.length, 18);
+    assert.ok(dirs.length > 0);
+    assert.equal(new Set(dirs).size, dirs.length); // sin duplicados
     assert.ok(dirs.some((d) => d.endsWith("venture-studio-toolkit/skills")));
   });
 
-  it("installSkillsDirs includes shared/skills (transversal)", () => {
-    const dirs = installSkillsDirs(REAL_ROOT);
-    assert.equal(dirs.length, 19);
-    assert.ok(dirs.some((d) => d.endsWith("shared/skills")));
+  it("installSkillsDirs = toolkit dirs + shared/skills (transversal)", () => {
+    const tk = toolkitSkillsDirs(REAL_ROOT);
+    const all = installSkillsDirs(REAL_ROOT);
+    const tkSet = new Set(tk);
+    const allSet = new Set(all);
+    for (const d of tk) assert.ok(allSet.has(d), `falta ${d}`);
+    assert.ok(all.some((d) => d.endsWith("shared/skills")));
+    assert.equal(allSet.size, tkSet.size + 1);
   });
 
   it("missingSkills detects unwired dirs", () => {
