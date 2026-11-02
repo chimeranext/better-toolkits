@@ -13,11 +13,12 @@ echo "[opencode] config: ${CONFIG}"
 mkdir -p "${CONFIG_DIR}"
 
 # 1. Ensure the catalog URL is in the "skills" array (idempotent JSON edit).
+# shellcheck disable=SC2016  # $schema must stay literal (not expanded) in the JSON
 if [ ! -f "${CONFIG}" ]; then
-  printf '{\n  "$schema": "https://opencode.ai/config.json",\n  "skills": ["%s"]\n}\n' "${CATALOG}" > "${CONFIG}"
-  echo "[opencode] created config with skills catalog"
+	printf '{\n  "$schema": "https://opencode.ai/config.json",\n  "skills": ["%s"]\n}\n' "${CATALOG}" >"${CONFIG}"
+	echo "[opencode] created config with skills catalog"
 else
-  python3 - "${CONFIG}" "${CATALOG}" <<'PY'
+	python3 - "${CONFIG}" "${CATALOG}" <<'PY'
 import json, sys
 path, url = sys.argv[1], sys.argv[2]
 with open(path, encoding="utf-8") as fh:
@@ -30,15 +31,15 @@ with open(path, "w", encoding="utf-8") as fh:
     json.dump(doc, fh, indent=2)
     fh.write("\n")
 PY
-  echo "[opencode] skills catalog added to config"
+	echo "[opencode] skills catalog added to config"
 fi
 
 # 2. Hooks: install tool-use guards (stderr/bilingual fallback) via the shared script.
 if [ -f "scripts/ci/install-tooluse-guards.sh" ]; then
-  bash scripts/ci/install-tooluse-guards.sh
-  echo "[opencode] tool-use guards installed"
+	bash scripts/ci/install-tooluse-guards.sh
+	echo "[opencode] tool-use guards installed"
 else
-  echo "[opencode] WARN: install-tooluse-guards.sh not found in cwd (run from repo root)"
+	echo "[opencode] WARN: install-tooluse-guards.sh not found in cwd (run from repo root)"
 fi
 
 echo "[opencode] done. Restart OpenCode to load the catalog."

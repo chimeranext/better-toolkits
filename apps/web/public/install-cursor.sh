@@ -15,10 +15,10 @@ npx skills add chimeranext/better-toolkits --all -g -y
 echo "[cursor] copy bilingual stderr hook"
 mkdir -p "${HOME}/.cursor/hooks"
 if [ -f "shared/hooks/bilingual/adapters/cursor-before-shell.sh" ]; then
-  cp "shared/hooks/bilingual/adapters/cursor-before-shell.sh" "${HOME}/.cursor/hooks/cursor-before-shell.sh"
-  echo "[cursor] bilingual hook copied"
+	cp "shared/hooks/bilingual/adapters/cursor-before-shell.sh" "${HOME}/.cursor/hooks/cursor-before-shell.sh"
+	echo "[cursor] bilingual hook copied"
 else
-  echo "[cursor] WARN: cursor-before-shell.sh not found in cwd (run from repo root)"
+	echo "[cursor] WARN: cursor-before-shell.sh not found in cwd (run from repo root)"
 fi
 
 echo "[cursor] done. Run /toolkits-initial-setup to finish wiring."
