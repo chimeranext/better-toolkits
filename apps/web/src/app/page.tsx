@@ -313,7 +313,15 @@ export default function Page() {
         <div className="relative flex min-h-[calc(100svh-8.5rem)] flex-col justify-center">
           {/* Full-bleed: the display headline escapes the content container so each sentence fits one line at display size. */}
           <h1 className="relative left-1/2 w-[94vw] -translate-x-1/2 font-heading font-extrabold leading-[1.08] tracking-tight text-[clamp(2.1rem,0.8rem+3.1vw,4.5rem)]">
-            <span className="block text-foreground/85">{t.s2.h1a}</span>
+            <span className="block text-foreground/85">
+              {t.s2.h1a.split(/(\s+)/).map((part, i) =>
+                /^startups$/i.test(part.trim()) ? (
+                  <span key={i} className="bg-brand-gradient bg-clip-text text-transparent">{part}</span>
+                ) : (
+                  <span key={i}>{part}</span>
+                ),
+              )}
+            </span>
             <span className="block bg-brand-gradient bg-clip-text text-transparent [filter:drop-shadow(0_0_22px_rgba(217,180,91,0.40))]">{t.s2.h1b}</span>
           </h1>
           <p className="mt-3 text-xs uppercase tracking-[0.2em] text-muted-foreground sm:text-sm">{t.s2.source}</p>
