@@ -40,7 +40,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 
 DEFAULT_ROOTS = [
-    ROOT / "shared" / "hooks",
+    ROOT / "shared",
     ROOT / "toolkits",
     ROOT / "scripts",
 ]
