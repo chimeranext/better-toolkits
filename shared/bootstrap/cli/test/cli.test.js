@@ -11,7 +11,7 @@ import {
   resolveAdapterPath,
   resolveConfigDir,
 } from "../lib/paths.js";
-import { planInstall } from "../lib/install.js";
+import { planInstall, NPM_PACKAGES } from "../lib/install.js";
 import {
   toolkitSkillsDirs,
   installSkillsDirs,
@@ -94,7 +94,10 @@ describe("install plan", () => {
     try {
       const plan = planInstall({ alsoNpm: true });
       const npm = plan.steps.filter((s) => s.kind === "npm");
-      assert.equal(npm.length, 4);
+      assert.equal(npm.length, NPM_PACKAGES.length); // relación con la fuente, no literal
+      for (const step of npm) {
+        assert.match(step.detail, /@chimeranext\//);
+      }
     } finally {
       process.chdir(cwd);
     }
