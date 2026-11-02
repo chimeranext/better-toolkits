@@ -9,6 +9,7 @@
   "diacritics": true,
   "_diacritics": "Keep full orthographic correctness for the chosen language — accents, tildes, cedillas. Never substitute ASCII lookalikes ('nao' for 'não', 'anos' for 'años'). Default: true.",
 
+
   "explain": {
     "insight": true,
     "actionables": true,

@@ -40,6 +40,7 @@
 | **30. LTGT** | Local Truth is not Ground Truth | A CWD shows one worktree's branch. Ground truth is the repo: `git rev-parse --git-common-dir`, `git worktree list`, `git ls-files`, with hidden paths included. Never conclude absence from a CWD-only scan. | [local-vs-ground-truth.md](local-vs-ground-truth.md) |
 | **31. no-deprecated-agent-shims** | No deprecated agent shims | Renames are clean-cut: update references and delete the old path; no "MOVED (shim)" or exec wrappers. | [no-deprecated-agent-shims.md](no-deprecated-agent-shims.md) |
 | **32. codeowners-replication** | CODEOWNERS replication | Org admin App workflow replicates CODEOWNERS; single source, no drift. | [codeowners-replication-workflow.md](codeowners-replication-workflow.md) |
+| **33. BIB** | Bilingual Issue Brief | Every issue (GitHub o Linear) redactado en formato Bilingual ANTES de abrirlo — Human Layer + Agent Layer (HUMAN LAYER / AGENT LAYER / Acceptance Criteria / Context Files). Gate determinístico `shared/hooks/bilingual/detect.py`. | [bilingual-issue-brief.md](bilingual-issue-brief.md) |
 
 The **clean code quartet** is DSMS + IFS + CPS + PRDS. BrS + WTD govern branching
 and worktree hygiene. QT4L and **OST** (when the client uses an OpenSpec store)
@@ -81,11 +82,12 @@ flowchart TD
     S29[LTGT — Local Truth is not Ground Truth]
     S30[no-deprecated-agent-shims]
     S31[codeowners-replication]
+    S32[BIB — Bilingual Issue Brief]
     S0 --> S1 --> S2 --> S3 --> S4 --> S5 --> S6 --> S7 --> S8 --> S9
     S9 --> S10 --> S11 --> S12 --> S13 --> S14 --> S15
     S15 --> S16 --> S17 --> S18 --> S19 --> S20 --> S21 --> S22
     S22 --> S23 --> S24 --> S25 --> S26 --> S27 --> S28 --> S29
-    S29 --> S30 --> S31
+    S29 --> S30 --> S31 --> S32
 ```
 
 **Day-to-day priority:** IFS, PRDS, QT4L (reading rhythm, review rhythm, req→test trace), Jidoka, StS.
