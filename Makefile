@@ -1,60 +1,78 @@
 # Makefile — thin ergonomic wrapper for /toolkits-initial-setup (per-phase).
 #
-# NOT an orchestrator replacement: the phases require runtime harness detection
-# and HITL confirmation. This file only aliases the existing CLI/scripts so you
-# can drive them phase-by-phase, with a UI prompt between phases (`make setup`).
+# NOT an orchestrator replacement: phases need runtime harness detection + HITL.
+# This aliases the existing CLI/scripts. It does NOT fuse the two protocol parts:
+#   - Part L (LOCAL, dev machine): harness detect/audit/propose/install/verify.
+#   - Part R (REPO, remote/protection): GGT audit + policy provisioning (admin).
+# REPO targets are never part of `setup`; they are explicit and permission-gated.
 #
 # Usage:
-#   make phase-audit            # run one phase
-#   make setup                  # run all phases, prompting between each
-#   make doctor                  # health check
+#   make setup            # Part L only, prompting between phases
+#   make local-audit      # one Part L phase
+#   make repo-audit       # Part R: read-only GGT audit
+#   make repo-setup       # Part R: provision protection (requires admin + gh)
+#   make doctor
 #
-# Requires: bash + node (the happy-toolkits CLI). Platform note: Unix/POSIX
-# shell (the protocol also ships PowerShell `.ps1` scripts for Windows).
+# Platform: POSIX (bash + node). Windows twin: Makefile.windows (PowerShell).
 
 SHELL := bash
 BETTER := node shared/bootstrap/cli/bin/better-toolkits.js
 PROMPT := bash shared/bootstrap/scripts/make-prompt.sh
 HARNESS ?=
+REPO ?= $(shell gh repo view --json nameWithOwner -q .nameWithOwner)
 
-.PHONY: help setup doctor verify phase-detect phase-audit phase-propose phase-install phase-verify
+.PHONY: help setup doctor verify \
+        local-detect local-audit local-propose local-install local-verify \
+        repo-audit repo-setup
 
 help:
-	@echo "targets: setup, doctor, verify, phase-detect, phase-audit, phase-propose, phase-install, phase-verify"
+	@echo "LOCAL (Part L): setup, local-detect, local-audit, local-propose, local-install, local-verify, doctor"
+	@echo "REPO (Part R): repo-audit (read-only), repo-setup (requiere admin y gh)"
 
-# --- Phase targets (thin wrappers over the CLI/scripts) ---
+# ============================ Part L — LOCAL (dev machine) ============================
 
-phase-detect:
-	@echo "[phase 1] detectar harnesses (HARNESS='$(HARNESS)')"
-	@test -n "$(HARNESS)" && echo "  harness fijado: $(HARNESS)" || echo "  auto-detección la hace el CLI en audit/install"
+local-detect:
+	@echo "[Part L][phase 1] detectar harnesses (HARNESS='$(HARNESS)')"
+	@test -n "$(HARNESS)" && echo "  harness fijado: $(HARNESS)" || echo "  auto-detección: la hace el CLI en audit/install"
 
-phase-audit:
-	@echo "[phase 2] audit (read-only)"
+local-audit:
+	@echo "[Part L][phase 2] audit (read-only)"
 	$(BETTER) setup --phases audit --harness $(HARNESS)
 
-phase-propose:
-	@echo "[phase 3] propose — revisa los diffs propuestos (HITL)"
-	@echo "  (el pat actual es el CLI `setup`; la propuesta la revisa el humano)"
+local-propose:
+	@echo "[Part L][phase 3] propose — revisa los diffs propuestos (HITL)"
 
-phase-install:
-	@echo "[phase 5] install"
+local-install:
+	@echo "[Part L][phase 5] install"
 	$(BETTER) setup --phases install --harness $(HARNESS)
 
-phase-verify:
-	@echo "[phase 6] verify"
+local-verify:
+	@echo "[Part L][phase 6] verify"
 	$(BETTER) setup --phases verify --harness $(HARNESS)
 
 doctor:
 	$(BETTER) doctor
 
-verify: phase-verify
+verify: local-verify
 
-# --- Full run: phases in order with a UI prompt between each ---
-
+# Chain Part L phases in order, prompting the user between each phase.
 setup:
-	@h=""; \
-	for ph in detect audit propose install verify; do \
-	  $(MAKE) phase-$$ph || exit 1; \
+	@for ph in detect audit propose install verify; do \
+	  $(MAKE) local-$$ph || exit 1; \
 	  [ "$$ph" = "verify" ] || $(PROMPT) "tras fase $$ph" || exit 1; \
 	done; \
-	echo "bootstrap completo"
+	echo "bootstrap LOCAL completo"
+
+# ============================ Part R — REPO (remote/protection) ============================
+# Explicit, separate, and HITL-gated. Never pulled in by `setup`.
+
+repo-audit:
+	@test -n "$(REPO)" || { echo "define REPO=owner/repo (o necesitas gh)"; exit 1; }
+	@echo "[Part R] audit GGT (read-only) — repo $(REPO)"
+	bash scripts/ci/audit-repo-gitflow.sh --repo $(REPO)
+
+repo-setup: repo-audit
+	@echo "[Part R] provisioning de protección (ruleset/GGT/CODEOWNERS) — requiere admin"
+	$(PROMPT) "aplicar políticas REPO (admin)"
+	bash toolkits/assurance-toolkit/scripts/assurance-repo-setup/ensure-rule-set.sh
+	bash toolkits/assurance-toolkit/scripts/assurance-repo-setup/ensure-audit-repo.sh
