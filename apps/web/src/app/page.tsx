@@ -421,13 +421,11 @@ export default function Page() {
             <li key={i} className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6 lg:flex-row lg:items-center">
               <div className="flex shrink-0 items-center gap-3 lg:w-[24rem]">
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[hsl(var(--primary-strong))] text-base font-bold text-white">{i + 1}</span>
-                <div>
-                  <span className="font-heading text-lg font-semibold text-card-foreground">{s.title}</span>
-                  {s.note && <p className="text-sm text-muted-foreground">{s.note}</p>}
-                </div>
+                <span className="font-heading text-lg font-semibold text-card-foreground">{s.title}</span>
               </div>
-              <div className="terminal-dark min-w-0 flex-1 rounded-md p-3.5">
+              <div className="terminal-dark min-w-0 flex-1 rounded-md p-3.5 space-y-1">
                 <code className="block whitespace-pre-wrap font-mono text-sm leading-relaxed [overflow-wrap:anywhere]"><span className="select-none text-brand-tertiary">$ </span>{s.cmd}</code>
+                <code className="block whitespace-pre-wrap font-mono text-sm leading-relaxed [overflow-wrap:anywhere]"><span className="select-none text-brand-accent">PS&gt; </span>{s.cmdPs}</code>
               </div>
             </li>
           ))}

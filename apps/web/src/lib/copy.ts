@@ -130,9 +130,9 @@ export const COPY: Record<Lang, Content> = {
     s7: {
       title: "One command per harness — your stack in seconds",
       steps: [
-        { title: "OpenCode", cmd: "curl -fsSL https://toolkits.chimeranext.dev/install-opencode.sh | bash", note: "skills + hooks (PowerShell: irm https://toolkits.chimeranext.dev/install-opencode.ps1 | iex)" },
-        { title: "Claude Code", cmd: "curl -fsSL https://toolkits.chimeranext.dev/install-claude.sh | bash", note: "marketplace + bootstrap + skills (PowerShell: irm https://toolkits.chimeranext.dev/install-claude.ps1 | iex)" },
-        { title: "Cursor", cmd: "curl -fsSL https://toolkits.chimeranext.dev/install-cursor.sh | bash", note: "marketplace + bootstrap + skills + hooks (PowerShell: irm https://toolkits.chimeranext.dev/install-cursor.ps1 | iex)" },
+        { title: "OpenCode", cmd: "curl -fsSL https://toolkits.chimeranext.dev/install-opencode.sh | bash", cmdPs: "irm https://toolkits.chimeranext.dev/install-opencode.ps1 | iex" },
+        { title: "Claude Code", cmd: "curl -fsSL https://toolkits.chimeranext.dev/install-claude.sh | bash", cmdPs: "irm https://toolkits.chimeranext.dev/install-claude.ps1 | iex" },
+        { title: "Cursor", cmd: "curl -fsSL https://toolkits.chimeranext.dev/install-cursor.sh | bash", cmdPs: "irm https://toolkits.chimeranext.dev/install-cursor.ps1 | iex" },
       ],
       demo: "Animated terminal demo coming here",
     },
@@ -204,10 +204,9 @@ export const COPY: Record<Lang, Content> = {
     s7: {
       title: "Un comando por harness — tu stack en segundos",
       steps: [
-        { title: "OpenCode", cmd: "curl -fsSL https://toolkits.chimeranext.dev/install-opencode.sh | bash", note: "skills + hooks (PowerShell: irm https://toolkits.chimeranext.dev/install-opencode.ps1 | iex)" },
-        { title: "Claude Code", cmd: "curl -fsSL https://toolkits.chimeranext.dev/install-claude.sh | bash", note: "marketplace + bootstrap + skills (PowerShell: irm https://toolkits.chimeranext.dev/install-claude.ps1 | iex)" },
-        { title: "Cursor", cmd: "curl -fsSL https://toolkits.chimeranext.dev/install-cursor.sh | bash", note: "marketplace + bootstrap + skills + hooks (PowerShell: irm https://toolkits.chimeranext.dev/install-cursor.ps1 | iex)" },
-        { title: "Corre tu primer audit", cmd: "/make-no-mistakes:audit", note: "reporte de salud del repo en minutos" },
+        { title: "OpenCode", cmd: "curl -fsSL https://toolkits.chimeranext.dev/install-opencode.sh | bash", cmdPs: "irm https://toolkits.chimeranext.dev/install-opencode.ps1 | iex" },
+        { title: "Claude Code", cmd: "curl -fsSL https://toolkits.chimeranext.dev/install-claude.sh | bash", cmdPs: "irm https://toolkits.chimeranext.dev/install-claude.ps1 | iex" },
+        { title: "Cursor", cmd: "curl -fsSL https://toolkits.chimeranext.dev/install-cursor.sh | bash", cmdPs: "irm https://toolkits.chimeranext.dev/install-cursor.ps1 | iex" },
       ],
       demo: "Demo de terminal animada aquí",
     },
