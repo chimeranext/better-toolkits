@@ -71,8 +71,9 @@ instead of the ops tree:
 | **Explanation** | understanding | why shared-services LLC, decision records, post-mortems |
 
 Assign each page to exactly one quadrant; split pages that mix quadrants.
-The site generator is **Holocron** (self-hosted, drop-in Mintlify replacement),
-with a declarative `docs.json` sidebar. Page content follows Diátaxis; the
+The site generator is **Docusaurus** (proven, self-hosted) — the recommended
+choice. **Holocron** (self-hosted, drop-in Mintlify replacement, declarative
+`docs.json` sidebar) is the alternative. Page content follows Diátaxis; the
 sidebar groups pages by journey/task, not by content type.
 
 ### Paso 3c — Complementary frameworks for Diátaxis
