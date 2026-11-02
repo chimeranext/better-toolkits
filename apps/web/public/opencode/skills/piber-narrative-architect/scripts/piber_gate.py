@@ -221,7 +221,10 @@ def check(text, args):
 
     # House style. Checked raw: no quoting exemption.
     for m in re.finditer(re.escape(EM_DASH), text):
-        rep.fail("Em dash. House style bans it. Use a comma, colon, semicolon or parentheses.", line_of(text, m.start()))
+        rep.fail(
+            "Em dash. House style bans it. Use a comma, colon, semicolon or parentheses.",
+            line_of(text, m.start()),
+        )
     for m in re.finditer(re.escape(EN_DASH) + r"(?![0-9])", text):
         rep.warning("En dash used as punctuation. Prefer a comma or parentheses.", line_of(text, m.start()))
     for m in re.finditer(r"!(?!=)", masked):
@@ -331,7 +334,11 @@ def check(text, args):
                 "and no money or behavior tier. Find what people did differently.",
                 r_line,
             )
-        if has_digits and not re.search(r"(vs\.?|versus|against|baseline|from\s+\d|up from|contra|frente a|de\s+\d+\s+a\s+\d+|%)", r_masked, re.I):
+        if has_digits and not re.search(
+            r"(vs\.?|versus|against|baseline|from\s+\d|up from|contra|frente a|de\s+\d+\s+a\s+\d+|%)",
+            r_masked,
+            re.I,
+        ):
             rep.warning("Numbers appear without a denominator or a baseline. A number needs a before.", r_line)
 
     # ---- Lexicon sweep over the whole document
