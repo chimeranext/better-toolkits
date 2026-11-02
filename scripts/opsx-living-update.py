@@ -15,7 +15,7 @@ SCRIPTS_DIR = Path(__file__).resolve().parent
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
-from opsx_living_standards import (  # noqa: E402
+from opsx_living_standards import (  # noqa: E402  # pylint: disable=import-error
     ChangeAssessment,
     apply_verdicts_to_audit_row,
     assess_change,
@@ -723,7 +723,6 @@ def extract_between(text: str, begin: str, end: str) -> str:
 
 
 def build_audit_section(existing_audit: str, all_records: list[dict[str, str]]) -> str:
-    known = parse_audit_ids(existing_audit)
     lines = [
         "## Parte 1 — Registro de auditoría",
         "",
