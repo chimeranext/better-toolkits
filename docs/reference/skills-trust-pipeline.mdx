@@ -1,0 +1,32 @@
+---
+title: Skills Trust Pipeline
+description: How scanning, evaluation, signatures, and skill cards coexist in this monorepo.
+---
+
+# Skills trust pipeline (SkillSpector + evals + cards)
+
+This page explains how scanning, evaluation, signatures, and skill cards coexist. It is based on [A Trust Pipeline for Agent Skills](https://docs.nvidia.com/skills/agent-skill-trust-pipeline).
+
+## Layers
+
+| Question | Evidence | Status here |
+|---|---|---|
+| Is it safe to install? | SkillSpector report | ✅ CI `skillspector.yml` (blocks HIGH+) |
+| Does it improve the agent? | `BENCHMARK.md` + `evals/evals.json` | ⬜ Only skills that include it (see Tier 3) |
+| What does it do and who owns it? | Skill card | ⬜ Template below; required for new skills with tools/network |
+| Is this what was reviewed? | `skill.oms.sig` signature | ⬜ Not implemented |
+
+## Scan (Tier 1, active)
+
+- `scripts/skillspector-gate.py [--no-llm]` scans all 121+ skills. It fails if any skill exceeds score 50. See [Scan Agent Skills](https://docs.nvidia.com/skills/scanning-agent-skills).
+- Human-accepted findings go to each skill's `.skillspector-baseline.yaml`. Never use a global silent baseline. Regenerating a baseline means re-reviewing.
+- LLM (on-demand, not a gate): provider `openai_compatible` against OpenRouter free or OpenCode Zen (see `scripts/free-models.json`, with `lastFetched`). CI priority: Zen (`SKILLSPECTOR_ZEN_API_KEY`) > OpenRouter (`SKILLSPECTOR_COMPAT_API_KEY`) > static. Keys come via secrets. Never store them on disk.
+- Third option (not verified end-to-end): OpenCode Zen as provider `openai_compatible` with `SKILLSPECTOR_COMPAT_BASE_URL=https://opencode.ai/zen/v1`. This requires your own API key from `opencode.ai/auth`. The local `auth.json` credential returns 403 on direct calls (verified 2026-09-16). It also needs a free model with endpoint `chat/completions` (Big Pickle, MiMo-V2.5, Ling Flash Fin, Nemotron 3 Ultra/Lightning — all time-limited; Muse Spark Contributor Free serves only `responses`, incompatible with skillspector). Privacy caution: the Contributor Free tier trains on your prompts. Nemotron free is a logged trial. Do not send secrets or sensitive IP.
+
+## Evaluation (Tier 2+3, on demand)
+
+Tier 3 requires a task set in `evals/evals.json` beside the `SKILL.md` ([Evaluate Agent Skills](https://docs.nvidia.com/skills/evaluating-agent-skills)). It is not gated in CI yet. If your skill ships evals, the reviewer runs them by hand.
+
+## Skill cards
+
+New skills with network/shell/MCP access: add `skill-card.md` beside the `SKILL.md`. Use the [Skill Cards](https://docs.nvidia.com/skills/skill-cards) template (see `docs/skill-card-template.md`). The card points to evidence: a SkillSpector report or CI link, the release tag, and accepted risks.

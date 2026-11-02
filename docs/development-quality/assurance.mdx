@@ -1,0 +1,61 @@
+---
+title: Assurance
+description: Release-assurance evidence — testing, liveness, security, and governance. When/why to use each skill.
+sidebarTitle: Assurance
+---
+
+# Assurance
+
+The release-assurance evidence toolkit. Use it when you must prove a product is
+safe to ship. It covers four pillars: testing, liveness, security, and
+governance.
+
+This is a **playbook**: it explains *when and why* to use each skill. For the
+executable steps, open the skill itself (the runbook).
+
+## When to use this toolkit
+
+Use Assurance when the work is release readiness and evidence:
+
+- You must verify a change actually works before release.
+- You must prove the system stays alive in production.
+- You must confirm the product is secure.
+- You need metrics, gates, and receipts to prove you can ship.
+
+It pairs with a disciplined dev lifecycle. Assurance writes evidence. The dev
+workflow consumes that evidence in gates.
+
+## Core skills — when and why
+
+| Skill | When to use it | Why |
+| --- | --- | --- |
+| **assurance** | you ask about quality evidence or release readiness | it routes you to the right assurance area |
+| **assurance-testing-audit** | you must verify test infrastructure is wired in | it audits frameworks against the evidence matrix |
+| **flutter-testing-strategy** | you need a Flutter test plan | it sets unit, widget, and integration strategy with TDD |
+| **flutter-mobile-testing** | you must test on devices or simulators | it inspects the widget tree via Flutter MCP |
+| **flutter-accessibility** | you check a11y conformance | it covers Semantics, TalkBack/VoiceOver, and WCAG |
+| **flutter-performance** | you investigate performance issues | it covers rebuilds, lists, memory, and profiling |
+| **flutter-error-tracking** | you need crash visibility | it wires Sentry or Crashlytics with breadcrumbs |
+| **flutter-security** | you must harden a Flutter app | it covers pinning, secure storage, and obfuscation |
+| **sre-load-testing-performance** | you must prove capacity | it runs load and stress tests with k6 or JMeter |
+| **sre-observability-stack** | you must confirm the app is alive | it sets up metrics, traces, and absence detection |
+| **sre-alerting-incident-management** | you need on-call alerting | it wires PagerDuty or Opsgenie with alert SLAs |
+| **sre-logging-log-aggregation** | you need structured logs as evidence | it aggregates logs in Loki or Elasticsearch |
+| **sre-chaos-engineering** | you must test failure tolerance | it injects failures with Litmus or Chaos Mesh |
+| **sre-database-reliability** | you must trust the data layer | it covers replication, backup, and failover |
+| **sre-disaster-recovery-business-continuity** | you must survive an outage | it sets RPO/RTO as SLOs and runs drills |
+| **sre-security-compliance-automation** | you must enforce policy | it uses OPA and CIS benchmarks as code |
+| **sre-container-security** | you must secure container images | it scans and signs images and watches runtime |
+| **sre-network-policies-security** | you must control traffic flow | it enforces egress and ingress policies |
+| **static-analysis** | you want fast, static defect detection | it runs multi-language linters automatically |
+| **sre-slo-sli-sla** | you must define and track reliability | it sets SLOs, error budgets, and MTTD/MTTR |
+| **cicd-argocd** | you use GitOps as a release gate | it syncs deployment state as a verifiable gate |
+| **cicd-github-actions** | you must gate releases in CI | it wires stage gates into the workflow |
+| **versioning-management** | you must version every change | it applies SemVer and conventional commits everywhere |
+| **github-app-setup** | you want reviews posted by your own bot | it creates a GitHub App for local PR review |
+
+## When NOT to use this toolkit
+
+- For writing a delivery process itself, use the Make No Mistakes toolkit.
+- For business, growth, or strategy decisions, use the business toolkits.
+- For a single quick question, do not start a full evidence flow.
