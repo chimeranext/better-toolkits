@@ -19,28 +19,32 @@ set -u
 
 DRY=0
 for arg in "$@"; do
-  case "$arg" in
-    --dry-run) DRY=1 ;;
-    --no-frozen|--frozen) : ;;  # accepted for compatibility; frozen is the default per manager
-    -h|--help)
-      cat <<'EOF'
+	case "$arg" in
+	--dry-run) DRY=1 ;;
+	--no-frozen | --frozen) : ;; # accepted for compatibility; frozen is the default per manager
+	-h | --help)
+		cat <<'EOF'
 Usage: bash scripts/setup-worktree.sh [--dry-run] [--frozen|--no-frozen]
 
 Bootstrap dependencies for the current checkout. Auto-detects the package manager
 from the committed lockfile; installs with the frozen-lockfile variant.
 EOF
-      exit 0 ;;
-    *) echo "unknown arg: $arg" >&2; exit 2 ;;
-  esac
+		exit 0
+		;;
+	*)
+		echo "unknown arg: $arg" >&2
+		exit 2
+		;;
+	esac
 done
 
 run() {
-  if [ "$DRY" -eq 1 ]; then
-    echo "[dry-run] $*"
-  else
-    echo "[run] $*"
-    "$@"
-  fi
+	if [ "$DRY" -eq 1 ]; then
+		echo "[dry-run] $*"
+	else
+		echo "[run] $*"
+		"$@"
+	fi
 }
 
 # --- Detect package manager + frozen flag --------------------------------
@@ -48,49 +52,49 @@ run() {
 # frozen/CI install variant.
 INSTALL=()
 if [ -f pnpm-lock.yaml ]; then
-  INSTALL=(pnpm install --frozen-lockfile)
+	INSTALL=(pnpm install --frozen-lockfile)
 elif [ -f yarn.lock ]; then
-  INSTALL=(yarn install --frozen-lockfile)
+	INSTALL=(yarn install --frozen-lockfile)
 elif [ -f bun.lock ] || [ -f bun.lockb ]; then
-  INSTALL=(bun install --frozen-lockfile)
+	INSTALL=(bun install --frozen-lockfile)
 elif [ -f package-lock.json ]; then
-  INSTALL=(npm ci)
+	INSTALL=(npm ci)
 elif [ -f uv.lock ]; then
-  INSTALL=(uv sync --frozen)
+	INSTALL=(uv sync --frozen)
 elif [ -f poetry.lock ]; then
-  INSTALL=(poetry install --sync)
+	INSTALL=(poetry install --sync)
 elif [ -f Cargo.lock ]; then
-  INSTALL=(cargo build --locked)
+	INSTALL=(cargo build --locked)
 elif [ -f pubspec.lock ]; then
-  INSTALL=(dart pub get --enforce-lockfile)
+	INSTALL=(dart pub get --enforce-lockfile)
 elif [ -f mix.lock ]; then
-  INSTALL=(mix deps.get --only prod)
+	INSTALL=(mix deps.get --only prod)
 elif [ -f go.sum ]; then
-  INSTALL=(go mod download)
+	INSTALL=(go mod download)
 elif [ -f Gemfile.lock ]; then
-  INSTALL=(bundle install --deployment)
+	INSTALL=(bundle install --deployment)
 elif [ -f composer.lock ]; then
-  INSTALL=(composer install --no-dev --prefer-dist)
+	INSTALL=(composer install --no-dev --prefer-dist)
 elif [ -f renv.lock ]; then
-  INSTALL=(Rscript -e "renv::restore()")
+	INSTALL=(Rscript -e "renv::restore()")
 elif [ -f Manifest.toml ]; then
-  INSTALL=(julia --project=. -e "using Pkg; Pkg.instantiate()")
+	INSTALL=(julia --project=. -e "using Pkg; Pkg.instantiate()")
 elif [ -f build.zig.zon ]; then
-  INSTALL=(zig build)
+	INSTALL=(zig build)
 elif [ -f shard.lock ]; then
-  INSTALL=(shards install --production)
-elif ls *.nimble.lock 2>&1 | grep -q nimble; then
-  INSTALL=(nimble install -y)
+	INSTALL=(shards install --production)
+elif compgen -G "*.nimble.lock" >/dev/null; then
+	INSTALL=(nimble install -y)
 else
-  echo "setup-worktree: no known lockfile found — no install step (language may not use a package manager)"
-  INSTALL=()
+	echo "setup-worktree: no known lockfile found — no install step (language may not use a package manager)"
+	INSTALL=()
 fi
 
 # --- pnpm store env (DPC) ------------------------------------------------
 # Local: pnpm's global content-addressable store (default). CI: honor
 # PNPM_STORE_DIR if the workflow set it (cache path).
 if [ "${INSTALL[0]}" = "pnpm" ] && [ -n "${PNPM_STORE_DIR:-}" ]; then
-  echo "setup-worktree: PNPM_STORE_DIR=$PNPM_STORE_DIR (CI cache)"
+	echo "setup-worktree: PNPM_STORE_DIR=$PNPM_STORE_DIR (CI cache)"
 fi
 
 echo "setup-worktree: installing with: ${INSTALL[*]}"
