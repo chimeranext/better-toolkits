@@ -99,8 +99,8 @@
           "pages": [
             "operating/multi-harness/overview",
             "operating/multi-harness/profiles",
-            "operating/multi-harness/rules",
-            "operating/multi-harness/agent-rules",
+            "operating/multi-harness/ssot-rules",
+            "operating/multi-harness/agent-rule-materialization",
             "operating/multi-harness/hooks",
             "operating/standards"
           ]
