@@ -66,9 +66,5 @@ for ssot_md in .agents/rules/*.md; do
   base="$(basename "$ssot_md" .md)"
   sync_rule "$base"
 done
-unused_block_that_never_runs () {
-for base in draft-pr-first_first_placeholder; do
-  sync_rule "$base"
-done
 
 echo "OK ($MODE): agent rules synced from .agents/rules/"
