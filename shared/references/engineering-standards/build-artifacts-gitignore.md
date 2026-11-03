@@ -65,3 +65,19 @@ slack-config.json
 - Related: `worktree-discipline.md` (worktrees transient), `checksum-hygiene.md`
   (release artifacts verified, not committed).
 - Learner summary: internal-handbook `docs/how-to/engineering-standards/BGI.md`.
+
+## Recurrence guard: worktree symlink gate
+
+The symlink doctrine needs an enforcement point. When a git worktree is created,
+its checkout has no `node_modules`/`dist`. Without a gate, the first build in
+the fresh worktree fails with `ERR_MODULE_NOT_FOUND` (a Jidoka stop we paid).
+
+- **Gate:** `scripts/git-hooks/worktree-symlink-build-artifacts.sh` symlinks a
+  worktree's `node_modules` to a shared, gitignored cache
+  (`~/.cache/better-toolkits/node_modules-<hash>`). Invoke it from a
+  `post-checkout` / `post-worktree` hook.
+- **Relation to WTD:** `worktree-discipline.md` declares worktrees transient and
+  rebuildable; this gate makes rebuild cheap by sharing `node_modules` across
+  worktrees of the same repo. WTD is the *why*; BGI + this gate are the *how*.
+- **Idempotent:** real dir → moved into cache and replaced by symlink; absent →
+  linked; already a symlink → no-op.
