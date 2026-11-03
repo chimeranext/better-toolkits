@@ -55,11 +55,10 @@ publish_mcp() {
       echo "[publish] (dry-run) would create ${tarball} from ${src}"
       continue
     fi
-    # Exclude node_modules; install runs `npm ci` at the destination.
-    tar -czf "$tarball" -C "$ROOT" \
-      --exclude='node_modules' \
-      --transform="s|${entry#*|}|${name}|" \
-      "${entry#*|}"
+    # Exclude node_modules; install runs `npm ci` at the destination. Emit the
+    # direct content (no top-level <name>/ wrapper) so install-opencode.sh's
+    # `tar -xzf ... -C $dest` lands package.json/server.js at $dest directly.
+    tar -czf "$tarball" -C "$src" --exclude='node_modules' .
     echo "[publish] wrote ${tarball}"
   done
 }
