@@ -1,0 +1,24 @@
+---
+title: Local Truth is not Ground Truth — how to apply
+description: A CWD shows one worktree's branch. Ground truth is the repo: `git rev-parse --git-common-dir`, `git worktree list`, `git ls-files`, with hidden paths included. Never conclude absence from a CWD-only scan.
+sidebarTitle: Local Truth is not Ground Truth
+---
+
+# Local Truth is not Ground Truth
+
+**Scope:** A CWD shows one worktree's branch. Ground truth is the repo: `git rev-parse --git-common-dir`, `git worktree list`, `git ls-files`, with hidden paths included. Never conclude absence from a CWD-only scan.
+
+## When to apply it
+
+You are checking the real state of a repository.
+
+## Why
+
+The standard keeps the work consistent, reviewable, and traceable across the
+project. Applying it at the right time avoids rework and keeps the codebase
+healthy.
+
+## Procedure
+
+The detailed procedure, commands, and enforcement for this standard live in
+`shared/references/engineering-standards/local-vs-ground-truth.md` in the repository.

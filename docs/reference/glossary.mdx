@@ -1,8 +1,41 @@
 ---
 title: Glossary
-description: Placeholder. Glossary
+description: Terms used across these toolkits and the OpenSpec pipeline.
+sidebarTitle: Glossary
 ---
 
 # Glossary
 
-Glossary content pending.
+This is a reference of terms used across the toolkits.
+
+## OpenSpec
+
+| Term | Meaning |
+| --- | --- |
+| Change | a unit of proposed work under `openspec/changes/<slug>/` |
+| Delta spec | the spec changes carried by a change |
+| Main spec | the consolidated spec in `openspec/specs/` after sync/archive |
+| Proposal | the "why" document of a change |
+| Tasks | the actionable checklist of a change |
+
+## Process
+
+| Term | Meaning |
+| --- | --- |
+| Worktree | an isolated git checkout (`.agents/worktrees/<slug>`) |
+| Parity | 1 issue = 1 worktree = 1 PR |
+| RTRM | ready-to-review-mergeable, the readiness pipeline |
+| HITL | human-in-the-loop; the merge gate |
+| Dogfood | verify the work responds with real configuration |
+| Jidoka | stop on anomaly; record boundary + root-cause hypothesis |
+| StS | stderr/stream standards — never send a stream to null |
+
+## Documentation
+
+| Term | Meaning |
+| --- | --- |
+| Runbook | the "how" of a trigger-driven procedure |
+| Playbook | the "when/why" of choosing a path |
+| SOP | a recurring company process |
+| Diátaxis | the four content types: tutorial, how-to, reference, explanation |
+| SSOT | single source of truth |
