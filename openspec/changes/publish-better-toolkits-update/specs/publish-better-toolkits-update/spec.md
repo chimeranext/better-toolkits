@@ -7,7 +7,7 @@
 El comando `/publish-better-toolkits-update` SHALL generar un tarball por cada MCP
 server local (`notion-chimeranext`, `posthog-chimeranext`, `google-workspace-apps`,
 `social-media-ads-mcp`, `stitch-chimeranext`) desde su fuente en `shared/mcp/` y
-`shared/google-workspace-apps/`, y colocarlo en `apps/web/public/mcp/<name>.tar.gz`.
+`shared/mcp/google-workspace-apps/`, y colocarlo en `apps/web/public/mcp/<name>.tar.gz`.
 
 #### Scenario: Los 5 assets se generan
 
