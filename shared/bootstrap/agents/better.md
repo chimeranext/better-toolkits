@@ -136,6 +136,16 @@ ones that shape this profile, each with its full path:
   `git worktree list`, hidden paths included). Never conclude absence from a
   CWD-only scan.
   `shared/references/engineering-standards/local-vs-ground-truth.md`
+- **WTD** (Worktree Discipline) — worktrees are transient; parity is an
+  association policy, not persistence.
+  `shared/references/engineering-standards/worktree-discipline.md`
+- **BGI** (Build-Artifact Gitignore) — build artifacts are gitignored or
+  symlinked out of the tracked tree; worktree build-artifact symlink gate.
+  `shared/references/engineering-standards/build-artifacts-gitignore.md`
+- **DPC** (Dependency Caching) — universal pattern (lockfile + frozen install +
+  cached store); canonical manager per language (pnpm for Node/JS); setup via
+  `scripts/setup-worktree.sh` + `post-checkout` hook.
+  `shared/references/engineering-standards/dependency-caching.md`
 
 The OpenSpec pipeline is MANDATORY (no shortcuts)
 
@@ -161,6 +171,21 @@ Parity: **1 issue = 1 branch = 1 worktree = 1 PR**.
 3. **Push to the branch that feeds the PR** — never to `main`/canonical. If a PR is
    already Ready-to-Merge and a fix push is needed, **run `/local-pr-review` before
    that push**.
+
+### Build-artifact symlink (BGI/WTD recurrence guard)
+
+After creating a worktree (`.agents/worktrees/<slug>`), **symlink `node_modules`**
+to the shared gitignored cache so builds work without reinstall:
+
+```bash
+bash scripts/git-hooks/worktree-symlink-build-artifacts.sh .agents/worktrees/<slug>
+```
+
+If the first build in a fresh worktree fails with `ERR_MODULE_NOT_FOUND`, the
+symlink was not applied — run the gate before installing. This enforces BGI
+(build artifacts symlinked out of tracked tree) and WTD (worktrees transient,
+cheap rebuild).
+
 
 **Forbidden:** "just implement it directly in the current branch" or "skip the
 OpenSpec flow" — even when the change seems small. If there is no OpenSpec change
