@@ -32,3 +32,17 @@ A worktree is ignorable because it is rebuildable from its branch. If a worktree
 - Every repo's `.gitignore` SHALL include the worktree dirs.
 - `git status` in a repo with active worktrees SHALL show the repos, not a forest of untracked `.agents/`.
 - The parity invariant is audited by checking branch→PR association, never by whether `.agents/` appears in git.
+
+## Recurrence guard: build-artifact symlink
+
+A fresh worktree lacks `node_modules`/`dist`. The BGI doctrine
+(`build-artifacts-gitignore.md`) allows symlinking build artifacts out of the
+tracked tree. To keep worktrees cheap and builds green, a gate symlinks the new
+worktree's `node_modules` to a shared gitignored cache:
+
+- **Gate:** `scripts/git-hooks/worktree-symlink-build-artifacts.sh`
+  (`~/.cache/better-toolkits/node_modules-<hash>`).
+- **Trigger:** `post-checkout` / `post-worktree` hook.
+- **Relation to BGI:** WTD declares worktrees transient/rebuildable (the *why*);
+  BGI + this gate make rebuild cheap by sharing `node_modules` across worktrees
+  (the *how*). They are complementary, not competing.
