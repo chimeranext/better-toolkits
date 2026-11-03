@@ -4,14 +4,51 @@
 
 Claude Code plugin with SOPs, contracts, and guided workflows for freelance and fractional CTOs.
 
-## Engagement Lifecycle
+## Engagement orchestration
 
-```
-1. PRE-ENGAGEMENT     /contract-nda           NDA signed before sharing info
-2. ASSESSMENT          /takeover-assessment    Risk evaluation + SPA wizard
-3. TAKEOVER            /project-takeover       4 SOP documents for execution
-4. PROJECT WORK        /contract-psa           Project-Specific Agreement
-5. ONGOING             /contract-retainer      Retainer or Advisory+Equity
+The toolkit's commands/skills chain across the full client engagement. Complete
+orchestration (all commands and skills, grouped by pipeline):
+
+```mermaid
+flowchart TD
+    subgraph ENG[Engagement Lifecycle]
+        A[/"/contract-nda"/] --> B[/"/takeover-assessment"/]
+        B --> C[/"/project-takeover"/]
+        C --> D[/"/contract-psa"/]
+        D --> E[/"/contract-retainer"/]
+    end
+    subgraph STD[Engineering Standards]
+        F[/"/engineering-standards-audit"/] --> G[/"/engineering-standards-setup"/]
+    end
+    subgraph PROC[Process Engineering]
+        H[/"/process-standardization"/] --> I[/"/automation-triage"/]
+        I --> J[/"/sop-authoring"/]
+        J --> K[/"/playbook-authoring"/]
+        J --> L[/"/runbook-authoring"/]
+        J --> R[/"/document-it" | "/document-this"/]
+    end
+    subgraph REQ[Requirements-First]
+        M[/"/requirements-authoring"/] --> N["/opsx-* flow"]
+    end
+    subgraph FAM[CTO Domain Families — FFF]
+        S1[Strategy: roadmap · portfolio · rnd-alignment]
+        S2[Architecture: decision · stack-evaluation · migration]
+        S3[Metrics: dora · reliability · velocity · team-health · exec-reporting]
+        S4[Risk: audit · incident-response · disaster-recovery · resilience]
+        S5[GRC: universal 12 · regional 38 (USMCA/LATAM/APAC/EMEA)]
+        S6[Threat/Defense: owasp-top10 · owasp-nhi-top10 · mitre-* · ai-defense]
+        S7[Handover: risk-to-cro · grc-to-cco · … · standards-to-vpeng]
+        S1 ~~~ S2 ~~~ S3 ~~~ S4 ~~~ S5 ~~~ S6 ~~~ S7
+    end
+    C --> F
+    F --> G
+    G --> D
+    G --> H
+    G --> M
+    G --> FAM
+    D --> O[/"/oauth2-setup"/]
+    D --> P[/"/pentest-playbook-setup"/]
+    E --> Q[/"/business-brain-setup"/]
 ```
 
 ## Process-Engineering Pipeline
@@ -79,12 +116,24 @@ OpenSpec specs/changes  →  Linear issue (Bilingual Layer)  →  /opsx-* flow
 | 11 | `runbook-authoring` | "write a runbook", "incident runbook", "release runbook", "on-call procedure", "runbook de release" | Trigger-driven runbook (incident or operational) + paired diagnose/repair scripts + executable form |
 | 12 | `requirements-authoring` (shared: `shared/skills/requirements-authoring/`) | "PRD", "SRS", "requisitos", "29148", "IEEE 830", "spec for this feature" | Versioned PRD/SRS per ISO/IEEE 830 + ISO/IEC/IEEE 29148:2018 + OpenSpec derived + Linear Bilingual brief |
 
+### CTO domain families (authored per FFF — families × internal taxonomy)
+
+| Family | Skills | Purpose |
+|--------|--------|---------|
+| `strategy/` | roadmap · portfolio · rnd-alignment | Tech vision, roadmapping, portfolio, R&D alignment |
+| `architecture/` | decision · stack-evaluation · migration | ADRs, stack tradeoffs, migration guidance |
+| `metrics/` | dora · reliability · velocity · team-health · exec-reporting | DORA, SLO/SLI, engineering velocity, team health, exec narrative |
+| `risk/` | audit · incident-response · disaster-recovery · resilience | Security audit framing, IR, DR, resilience |
+| `handover/` | risk-to-cro · grc-to-cco · metrics-to-vpeng · architecture-to-principal · strategy-to-board · engagement-to-board · process-to-ops · requirements-to-cpo · standards-to-vpeng | Ownership transfer to organic executives (CRO/CCO/VP Eng/...) |
+| `grc/` | universal (12) + regional USMCA/LATAM/APAC/EMEA (38) | Compliance frameworks: ISO/NIST/SOC2/PCI/SWIFT/CIS/WCAG + jurisdiction-specific |
+| `threat-defense/` | owasp-top10 · owasp-nhi-top10 · mitre-atlas · mitre-attack · mitre-d3fend · ai-defense | Threat & defense: OWASP Top10/NHI, MITRE ATLAS/ATT&CK/D3FEND, AI-defense controls |
+
 ## Commands
 
 | Command | Purpose | Output |
 |---------|---------|--------|
-| `/clean-code-standards-setup` | Adopt the 6 engineering standards in a client repo (incremental scaffold) | `AGENTS.md` pointers, `docs/process/engineering-standards.md`, PR template (PRDS), QT4L stub |
-| `/clean-code-standards-audit` | Measure adoption of DSMS, IFS, CPS, PRDS, BrS, QT4L, OST; optional open-PR review | Findings report; optional `docs/process/clean-code-standards-audit-<date>.md` |
+| `/engineering-standards-setup` | Adopt the engineering standards (index of 32) in a client repo (incremental scaffold) | `AGENTS.md` pointers, `docs/process/engineering-standards.md`, PR template (PRDS), QT4L stub |
+| `/engineering-standards-audit` | Measure adoption of the standards index (all 32, parallelizable per family); optional open-PR review | Findings report; optional `docs/process/engineering-standards-audit-<date>.md` |
 | `/pentest-playbook-setup` | Author a stack-tailored security playbook for an authorized engagement (Cyber Kill Chain + OWASP). Gated on written authorization + scope | `PENTEST-PLAYBOOK.md` (+ optional DevSecOps `security-scan.yml`); executed afterwards by `/make-no-mistakes:pentest-runner` |
 
 ## Contract Templates
