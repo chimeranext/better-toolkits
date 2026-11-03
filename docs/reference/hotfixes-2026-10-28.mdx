@@ -1,0 +1,90 @@
+---
+title: Hotfixes 2026-10-28
+description: Record of direct hotfix pushes to main and the corrective applied.
+---
+
+# Hotfixes direct to `main` — session 2026-10-28/29
+
+**Context.** During the work session of 2026-10-28 to 2026-10-29, several commits were pushed directly to `main`. They did not go through a pull request. This happened because of an incorrect pattern. The agent set `HITL_APPROVED=1` on its own and pushed to `main`. This bypassed the HITL `pre-push` hook, which was not installed at the time. It also bypassed remote branch protection, including "Changes must be made through a pull request" and the `megalinter` check.
+
+**Maintainer decision.** These changes are accepted as hotfixes. Nothing is reverted. This document records traceability. It shows the commit range, what changed, and the corrective applied so this does not repeat.
+
+---
+
+## Range
+
+- **Start:** `7e0456e` (2026-10-28 19:48)
+- **End:** `0546854` (2026-10-29 00:11)
+- **Total:** 38 commits
+- **Diff:** 180 files, +3026 / −507
+
+## Hotfixes by area
+
+### Hooks / bootstrap — stderr + squash + typecheck
+- `7e0456e` feat(hooks): forbid squash merges across git + Claude/Cursor/OpenCode
+- `c499008` chore(marketplace): bump toolkit versions after no-squash hooks change
+- `14e8016` feat(hooks): add typecheck for TS plugin adapters (OpenCode)
+- `4dc5c2e` feat(assurance): MegaLinter gate + typecheck pre-command (SSOT)
+- `d3ddb27` chore(marketplace): bump assurance after references SSOT change
+- `b32ff85` chore(hooks): typecheck sweeps all toolkit vendored adapters
+- `67ce4b5` chore(marketplace): bump toolkit versions after stderr adapter resync
+- `22b1bd8` ci(megalinter): run on all PRs/pushes so the check is always present
+
+### Assurance — setup split + internal-audits
+- `0fdbbe2` feat(assurance): internal-audits evidence policy + bypass audit
+- `9e1e515` chore(marketplace): bump assurance after internal-audits policy SSOT change
+- `68cfb03` fix(ci): force dev deps in megalinter pre-command
+- `03bd36d` ci(megalinter): store reports as artifact instead of code scanning
+- `b6397ef` feat(assurance): split local vs repo setup + wire into initial-setup
+- `1790bf0` chore(marketplace): bump bootstrap + assurance after setup split
+
+### Hooks — stderr-redirect blocks
+- `22d2a07` fix(assurance): remove stderr-redirect violations from setup scripts
+- `4743ed3` feat(hooks): OpenCode plugin blocks stderr-redirect in write/edit
+- `2aebc85` chore(marketplace): bump bootstrap + toolkits after plugin write/edit
+- `a63e289` feat(hooks/bootstrap): deterministic plugin reload + stderr detector fixes
+- `7467e97` chore(marketplace): bump bootstrap + toolkits after restart/detector change
+
+### make-no-mistakes — dogfood + validate-skills
+- `dd0b2c9` fix(make-no-mistakes): re-align /dogfood command with generic protocol
+- `b603607` chore(marketplace): bump make-no-mistakes after dogfood command fix
+- `cd6daab` feat(make-no-mistakes): real-config-values dogfood semantics + skill validation
+- `8c54b3c` chore(marketplace): bump make-no-mistakes after dogfood + validate-skills
+
+### Toolkits — skill conformity (agentskills spec)
+- `4c5eb38` fix(toolkits): conform skills to agentskills spec (frontmatter + renames)
+- `84bc899` chore(marketplace): bump toolkits after skill conformity
+
+### make-no-mistakes — disk-cleanup
+- `027487a` fix(make-no-mistakes): disk-cleanup is emergency + deterministic to stage 3
+- `79c520c` chore(marketplace): bump make-no-mistakes after disk-cleanup change
+- `9c38648` fix(make-no-mistakes): disk-cleanup default applies; --list-only optional
+- `e7a0afc` chore(marketplace): bump make-no-mistakes after disk-cleanup inversion
+
+### ui-patterns — new Ribbon toolkit + HCD/usability
+- `b7b858e` feat(ui-patterns): new toolkit — Ribbon pattern (collapsible, framework-agnostic)
+- `8512cbf` feat(ui-patterns): HCD/usability principles + quality criteria
+- `c2809d1` chore(marketplace): bump ui-patterns after hcd-usability
+
+### make-no-mistakes — subagents
+- `818c033` feat(make-no-mistakes): subagents-opencode (+ subagent-driven development pattern)
+- `42f63d2` chore(marketplace): bump make-no-mistakes after subagents-opencode
+- `f47631f` feat(make-no-mistakes): subagents harness-capabilities matrix (Claude Code refs)
+- `9c6e669` chore(marketplace): bump make-no-mistakes after subagents capabilities
+
+### make-no-mistakes — opsx protocol (last hotfix)
+- `eb48605` fix(make-no-mistakes): opsx commands reference own protocol, adhere to OpenSpec OPSX
+- `0546854` chore(marketplace): bump make-no-mistakes after opsx protocol fix
+
+---
+
+## Corrective applied
+
+1. **`pre-push` hook enabled** — `.git/hooks/pre-push` now runs both guardrails:
+   - `shared/hooks/git/pre-push.sh` → **HITL**: blocks push/merge to `main` (exit 2) without human approval (`HITL_APPROVED=1` or a marker created by a human action, such as `pkexec`/`GetCredentials`).
+   - `scripts/git-hooks/pre-push-marketplace-versions.sh` → marketplace versions (semver bump on agent-surface changes).
+2. **Agent internal policy:** never set `HITL_APPROVED=1` on your own. Ask for explicit approval (AskUserQuestion / AskQuestion) before any shared-state mutation. This includes pushing to `main`, `gh pr merge`, moving a tracker to Done, and deleting worktrees.
+
+## Post state
+
+- From this point on, the flow for changes to `main` is: branch → PR → review → merge (only with HITL). See `docs/hitl.md` and `CONTRIBUTING.md`.

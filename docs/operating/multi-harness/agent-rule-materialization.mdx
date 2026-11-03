@@ -1,0 +1,32 @@
+---
+title: Agent rules & subagents
+description: Per-harness materialization of agent profiles and engineering-standards rules.
+---
+
+# Agent rules & subagents
+
+Agent **profiles** (`better.md`) and engineering-**standards** load paths differ
+per harness. Cursor has no global `AGENTS.md` file (User Rules live in the UI),
+so both must be materialized as files:
+
+| Harness | Profile (`better.md`) | Rules / standards |
+| --- | --- | --- |
+| OpenCode | `~/.config/opencode/agents/better.md` | loader-level (skills from `opencode.json`) |
+| Claude Code | `~/.claude/agents/better.md` | `.claude/rules/<standard>.md` |
+| Cursor | `~/.cursor/agents/better.md` | `.cursor/rules/<standard>.mdc` |
+
+Two sync scripts (both idempotent, drift-checkable):
+
+- **Profiles:** `scripts/ci/sync-better-profile.sh` — canonical
+  `shared/bootstrap/agents/better.md` → the three profile paths above (per-harness
+  frontmatter via `sync-better-profile-generate.py`). Wired as the
+  `better-profile-sync` step in `shared/bootstrap/cli/lib/install.js`.
+- **Rules:** `shared/bootstrap/scripts/sync-agent-rules.sh` — SSOT precedence
+  `<repo>/.agents/rules/*.md` else `shared/references/engineering-standards/*.md`
+  → `.cursor/rules/<standard>.mdc` + `.claude/rules/<standard>.md` (repo-level,
+  relative symlinks; `--copy` fallback; `--global` also writes real copies under
+  `~/.cursor/rules/` and `~/.claude/rules/`; `--check` is a drift gate, exit 1).
+  Wired as the `agent-rules-sync` step in `install.js` (runs `--quiet` at setup).
+
+Repos built with Cursor should keep their copy of the repo-root SSOT and re-run
+`sync-agent-rules.sh` when the standards change (also part of `setup`).

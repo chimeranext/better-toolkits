@@ -1,0 +1,32 @@
+---
+title: Profiles
+description: Agent profiles per harness. OpenCode, Claude, Cursor, Antigravity, and Codex.
+---
+
+# Profiles
+
+Each harness surfaces the SSOT through different entry points. This page maps agent behavior per harness.
+
+## Claude
+
+- Hand-written slash commands live in `commands/*.md`. They carry `argument-hint` and dispatch text that the skill entry does not.
+- Each toolkit `hooks/hooks.json` registers a `PreToolUse Bash` hook. It routes to the Claude stderr and PRDS adapters.
+- The `marketplace.json` manifest is the plugin adapter.
+- Opt out of stderr blocking with `MNM_DISABLE_STDERR_HOOK=1` or `.claude/config/stderr-hooks.json` with `preserve_stderr: false`.
+- Opt out of PRDS gating with `FCTO_DISABLE_PRDS_HOOK=1` or `.claude/config/prds-hooks.json` set to `{"enforce_prds": false}`.
+
+## Cursor
+
+- A skill appears as `skills/*/SKILL.md` when `/` must surface it.
+- Install stderr and PRDS hooks through `beforeShellExecution`.
+- Use the same environment-variable opt-outs as Claude.
+
+## OpenCode
+
+- Hooks live in a file plugin named `opencode-plugin.ts`.
+- Disable the plugin to opt out of stderr blocking.
+- The PRDS hook registers `local.fcto-prds-prepush`.
+
+## Antigravity and Codex
+
+- Run gate checks directly with `detect.py --command`.

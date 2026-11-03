@@ -1,0 +1,143 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "better-toolkits",
+  "logo": {
+    "dark": "/logo-dark.svg",
+    "light": "/logo-light.svg"
+  },
+  "navigation": [
+    {
+      "tab": "Docs",
+      "groups": [
+        {
+          "group": "Quickstart",
+          "pages": [
+            "quickstart"
+          ]
+        },
+        {
+          "group": "Engineering standards",
+          "pages": [
+            "engineering-standards-index",
+            "engineering-standards/afif",
+            "engineering-standards/bgi",
+            "engineering-standards/bib",
+            "engineering-standards/brs",
+            "engineering-standards/ccc",
+            "engineering-standards/chh",
+            "engineering-standards/cis",
+            "engineering-standards/clg",
+            "engineering-standards/clh",
+            "engineering-standards/codeowners-replication",
+            "engineering-standards/cps",
+            "engineering-standards/cvc",
+            "engineering-standards/ddd",
+            "engineering-standards/dpc",
+            "engineering-standards/dsms",
+            "engineering-standards/fff",
+            "engineering-standards/ggt",
+            "engineering-standards/ifs",
+            "engineering-standards/jidoka",
+            "engineering-standards/ltgt",
+            "engineering-standards/mph",
+            "engineering-standards/no-deprecated-agent-shims",
+            "engineering-standards/nsq",
+            "engineering-standards/odt",
+            "engineering-standards/ost",
+            "engineering-standards/pch",
+            "engineering-standards/prds",
+            "engineering-standards/qt4l",
+            "engineering-standards/rdp",
+            "engineering-standards/rel",
+            "engineering-standards/semver",
+            "engineering-standards/sts",
+            "engineering-standards/tas",
+            "engineering-standards/tfm",
+            "engineering-standards/wtd"
+          ]
+        },
+        {
+          "group": "Development & Quality",
+          "pages": [
+            "development-quality/make-no-mistakes",
+            "development-quality/assurance",
+            "development-quality/atomic-design",
+            "development-quality/ui-patterns"
+          ]
+        },
+        {
+          "group": "Product & Growth",
+          "pages": [
+            "product-growth/business-model",
+            "product-growth/revenue-growth",
+            "product-growth/app-gtm-release",
+            "product-growth/instructional-design",
+            "product-growth/ux-research",
+            "product-growth/game-theory"
+          ]
+        },
+        {
+          "group": "Startup & Studio",
+          "pages": [
+            "startup-studio/startup-lifecycle",
+            "startup-studio/venture-studio",
+            "startup-studio/fractional-cto",
+            "startup-studio/digital-nomad"
+          ]
+        },
+        {
+          "group": "Engineering & Manufacturing",
+          "pages": [
+            "engineering-manufacturing/manufacturing-robotics",
+            "engineering-manufacturing/schematics-pcb",
+            "engineering-manufacturing/3d-graphics-cad",
+            "engineering-manufacturing/logistics"
+          ]
+        },
+        {
+          "group": "Operating",
+          "pages": [
+            "operating/multi-harness/overview",
+            "operating/multi-harness/profiles",
+            "operating/multi-harness/ssot-rules",
+            "operating/multi-harness/agent-rule-materialization",
+            "operating/multi-harness/hooks",
+            "operating/standards"
+          ]
+        }
+      ]
+    },
+    {
+      "tab": "Reference",
+      "groups": [
+        {
+          "group": "Reference",
+          "pages": [
+            "reference/install",
+            "reference/anatomy",
+            "reference/command-index",
+            "reference/glossary",
+            "reference/hitl",
+            "reference/opencode-stderr",
+            "reference/git-merge-policy",
+            "reference/evaluate-agent-skills",
+            "reference/hotfixes-2026-10-28",
+            "reference/skill-card-template",
+            "reference/skills-trust-pipeline"
+          ]
+        },
+        {
+          "group": "Legal",
+          "pages": [
+            "legal/pre-existing-ip-clause"
+          ]
+        }
+      ]
+    }
+  ],
+  "footer": {
+    "socials": {
+      "github": "https://github.com/chimeranext/better-toolkits"
+    }
+  }
+}

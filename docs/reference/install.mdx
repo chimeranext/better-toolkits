@@ -1,0 +1,44 @@
+---
+title: Install
+description: How to install better-toolkits into your environment.
+sidebarTitle: Install
+---
+
+# Install
+
+This guide shows you how to install the `better-toolkits` toolkits into your
+environment. It is a how-to: a set of concrete steps for an already-configured
+machine.
+
+## Prerequisites
+
+- Node.js 20 or newer.
+- Either the Claude Code CLI, the OpenCode CLI, or a compatible harness.
+
+## Install via Claude Code
+
+Add the marketplace and install the bootstrap plugin:
+
+```bash
+claude plugin marketplace add chimeranext/better-toolkits
+claude plugin install better-toolkits-bootstrap@better-toolkits
+```
+
+Then run the interactive setup:
+
+```bash
+/toolkits-initial-setup
+```
+
+## Install via OpenCode
+
+```bash
+npx @chimeranext/better-toolkits setup
+```
+
+## After install
+
+- The setup configures hooks (stderr, PRDS), the agent profile, and the OpenSpec
+  pipeline.
+- Run `/opsx:propose` to start a change, or see the
+  [Quickstart](../quickstart) for a first end-to-end pass.

@@ -1,0 +1,48 @@
+---
+title: Make No Mistakes
+description: The disciplined dev lifecycle — implement issues, review PRs, sync releases, test E2E, and manage sessions. When/why to use each skill.
+sidebarTitle: Make No Mistakes
+---
+
+# Make No Mistakes
+
+The disciplined dev lifecycle toolkit. Use it when you run an engineering workflow
+that must avoid mistakes: implement issues, review pull requests, sync releases,
+and manage sessions.
+
+This is a **playbook**: it explains *when and why* to use each skill. For the
+executable steps, open the skill itself (the runbook).
+
+## When to use this toolkit
+
+Use Make No Mistakes when the work is software engineering process:
+
+- You implement or review code changes.
+- You need to merge pull requests safely.
+- You manage releases, branches, or sessions.
+- You must verify a change actually works before you call it done.
+
+It is the default toolkit for AI-assisted engineering delivery.
+
+## Core skills — when and why
+
+| Skill | When to use it | Why |
+| --- | --- | --- |
+| **implement** | you are starting work on an issue | it creates a worktree, isolates work, and runs review loops before merge |
+| **apply** | an OpenSpec change has approved tasks | it executes the change's tasks in order |
+| **propose** | you want to propose a change | it scaffolds proposal + design + specs + tasks |
+| **review-open-prs** | you want to know which PRs need attention | it cross-references PRs with issues and flags merge conflicts |
+| **merge-advisor** | you have several PRs to merge | it computes a safe merge order to avoid conflicts |
+| **sync-advisor** | you are unsure if your branch is behind | it measures drift and recommends the smallest sync |
+| **dogfood** | a change is ready to verify | it confirms the product works with real configuration |
+| **verify-evidence** | a claim must be proven | it runs real verification tools and returns a verdict |
+| **ishikawa** | something went wrong | it runs structured root-cause analysis (fishbone, 5-whys) |
+| **returnmortem** | a plan must be stress-tested | it assumes failure and works backward to find risks |
+| **subagents-opencode** | you have independent parallel tasks | it orchestrates subagent-driven development with herdr |
+| **worktree-cleanup** | worktrees are eating disk | it reclaims space, refusing any worktree that still holds work |
+
+## When NOT to use this toolkit
+
+- For business modeling, growth, or strategy — use the business-model or revenue-growth toolkits instead.
+- For domain-specific engineering (e.g. PCB, manufacturing) — use the domain toolkit.
+- A single quick question does not need a full implementation flow.

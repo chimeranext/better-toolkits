@@ -1,5 +1,6 @@
 {
   "name": "@chimeranext/better-toolkits-shared",
+  "version": "0.1.0",
   "private": true,
   "description": "Transversal skills for the better-toolkits monorepo.",
   "license": "BSL-1.1",
