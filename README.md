@@ -21,7 +21,7 @@ Inspired by the "pick-your-stack" experience of
 
 The monorepo vendors engineering standards; the **canonical index** (adoption
 order, scope, SSOT links) lives at
-[`shared/references/engineering-standards/README.md`](shared/references/engineering-standards/README.md).
+[`shared/references/engineering-standards/index.md`](shared/references/engineering-standards/index.md).
 Adopted in order:
 
 1. [Domain-Sliced Module Structure (DSMS)](shared/references/engineering-standards/dsms-ifs-cps.md#dsms—domain-sliced-module-structure)
