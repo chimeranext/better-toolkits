@@ -13,7 +13,7 @@ install consumes:
 
 1. **Slash command** `/publish-better-toolkits-update` (thin entry → `references/.../protocol.md`).
 2. **MCP assets** — generate tarballs for the 5 local MCP servers from `shared/mcp/`
-   and `shared/google-workspace-apps/`, placed at `apps/web/public/mcp/<name>.tar.gz`.
+   and `shared/mcp/google-workspace-apps/`, placed at `apps/web/public/mcp/<name>.tar.gz`.
 3. **Marketplace update** — bump plugin versions in `.claude-plugin/marketplace.json`
    when release-relevant changes exist (same gate as pre-push).
 4. **Site deploy** — rebuild/deploy `apps/web` so the new assets land on

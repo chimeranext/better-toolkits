@@ -26,7 +26,7 @@ For each of the 5 MCP servers, build a tarball from its source:
 | --- | --- |
 | `notion-chimeranext` | `shared/mcp/notion-chimeranext/` |
 | `posthog-chimeranext` | `shared/mcp/posthog-chimeranext/` |
-| `google-workspace-apps` | `shared/google-workspace-apps/` |
+| `google-workspace-apps` | `shared/mcp/google-workspace-apps/` |
 | `social-media-ads-mcp` | `shared/mcp/social-media-ads-mcp/` |
 | `stitch-chimeranext` | `shared/mcp/stitch-chimeranext/` |
 
