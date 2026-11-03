@@ -18,7 +18,7 @@ skill. This is a **dispatcher**, not an author. It resolves the ambiguity of "I 
 document X" into a concrete type + home, then hands off.
 
 The single source of truth for the taxonomy is
-[`references/documentation-taxonomy.md`](../../references/documentation-taxonomy.md). Read it first.
+[`references/authoring-taxonomy.md`](../../references/authoring-taxonomy.md). Read it first.
 
 ```
 document-this → decides the type → routes to the matching authoring skill
@@ -33,7 +33,7 @@ engagement's working language (English default, Spanish for Costa Rica engagemen
 
 ### Paso 1 — Load the taxonomy
 
-Read `references/documentation-taxonomy.md` (three-way taxonomy + placement rule + quick decision tree).
+Read `references/authoring-taxonomy.md` (three-way taxonomy + placement rule + quick decision tree).
 
 ### Paso 2 — Ask what the user wants to document
 
@@ -43,7 +43,7 @@ playbook).
 
 ### Paso 3 — Run the decision tree
 
-Walk the tree from `references/documentation-taxonomy.md`:
+Walk the tree from `references/authoring-taxonomy.md`:
 
 1. **Does it require engineering/technical context to execute?** (needs repo, code, infra)
    - **No** → it is a recurring business process with no code required → **SOP**.

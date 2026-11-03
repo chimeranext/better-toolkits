@@ -17,13 +17,13 @@ This is an alias of the **`document-this`** skill. It exists for discoverability
 for callers that prefer `/document-it`. It behaves exactly like `document-this`.
 
 The single source of truth is [`document-this/SKILL.md`](../document-this/SKILL.md)
-and [`references/documentation-taxonomy.md`](../../references/documentation-taxonomy.md).
+and [`references/authoring-taxonomy.md`](../../references/authoring-taxonomy.md).
 
 ## Behavior
 
 Follow `document-this` verbatim:
 
-1. Load the taxonomy (`references/documentation-taxonomy.md`).
+1. Load the taxonomy (`references/authoring-taxonomy.md`).
 2. Capture the user's intent (not the file name).
 3. Run the decision tree: SOP / playbook / runbook (or Diátaxis for a site/handbook).
 4. Name the type, canonical home, and the authoring skill to invoke.

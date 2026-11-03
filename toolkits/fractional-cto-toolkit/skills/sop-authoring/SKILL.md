@@ -46,7 +46,7 @@ Resolve the pipeline directory `{sops-dir}` first, in this order:
 
 Before writing, confirm the thing is actually an Operational SOP. An SOP documents *how the
 **company** operates a recurring process*, no code required to understand it. Use the shared
-three-way ops taxonomy in [`references/documentation-taxonomy.md`](../../references/documentation-taxonomy.md)
+three-way ops taxonomy in [`references/authoring-taxonomy.md`](../../references/authoring-taxonomy.md)
 (playbook / runbook / SOP) plus the usual product-docs cases.
 
 Rule of thumb (from the taxonomy): if a **software engineer must understand it to execute it**,
