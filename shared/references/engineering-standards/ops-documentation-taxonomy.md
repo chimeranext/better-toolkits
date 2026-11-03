@@ -123,7 +123,7 @@ by domain or task, not by internal product folders.
 
 ## Vendored SSOT
 
-- `toolkits/fractional-cto-toolkit/references/documentation-taxonomy.md` (diagram,
+- `toolkits/fractional-cto-toolkit/references/authoring-taxonomy.md` (diagram,
   templates, examples).
 - Templates: `references/08-runbook-template.md`, `references/09-playbook-template.md`,
   `references/01-takeover-sop-template.md`.
