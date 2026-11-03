@@ -1,0 +1,48 @@
+---
+title: Command index
+description: Reference index of the slash commands provided by these toolkits.
+sidebarTitle: Command index
+---
+
+# Command index
+
+This is a reference. It lists the commands you can invoke. For the procedure of
+a command, open its protocol in `toolkits/<name>/references/`.
+
+## OpenSpec pipeline
+
+| Command | Purpose |
+| --- | --- |
+| `/opsx:propose` | create an OpenSpec change (proposal + design + specs + tasks) |
+| `/opsx:apply` | execute a change's tasks |
+| `/opsx:sync` | sync delta specs into main specs |
+| `/opsx:archive` | archive a completed change |
+| `/opsx-explore` | think through a topic before changing anything |
+| `/opsx-living` | build the living spec overlay for a feature |
+
+## Sweep and readiness
+
+| Command | Purpose |
+| --- | --- |
+| `/sweep-unstaged` | audit worktrees for dirty/unpushed/PR coverage |
+| `/sweep-pending-opsx` | find changes with pending OpenSpec work |
+| `/ready-to-review-mergeable <issue>` | run the readiness pipeline (human handoff) |
+| `/merge-advisor` | compute a safe merge order for open PRs |
+| `/pending-left` | list everything pending from the session |
+
+## Verification and debugging
+
+| Command | Purpose |
+| --- | --- |
+| `/dogfood` | confirm the work responds with real configuration |
+| `/verify-evidence` | prove a claim against real evidence |
+| `/ishikawa` | structured root-cause analysis |
+| `/local-pr-review` | local AI code review of the current branch |
+
+## Operations
+
+| Command | Purpose |
+| --- | --- |
+| `/subagents-opencode` | orchestrate subagent-driven work |
+| `/worktree-cleanup` | reclaim disk from merged worktrees |
+| `/document-this` | decide runbook vs playbook vs SOP |

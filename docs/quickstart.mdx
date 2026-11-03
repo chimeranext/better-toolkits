@@ -1,0 +1,49 @@
+---
+title: Quickstart
+description: A first end-to-end pass through the OpenSpec pipeline with these toolkits.
+sidebarTitle: Quickstart
+---
+
+# Quickstart
+
+This tutorial walks you through your first change end-to-end. It is a tutorial:
+you build a small thing and learn the flow. Do not use it as a reference.
+
+## 1. Pick a repo
+
+Start in a repository that already ran the install.
+
+## 2. Propose a change
+
+```bash
+/opsx:propose
+```
+
+Answer the prompts. You get a change folder under `openspec/changes/<slug>/`.
+
+## 3. Apply the change
+
+```bash
+/opsx:apply <slug>
+```
+
+The tasks inside the change get executed one by one.
+
+## 4. Verify
+
+```bash
+/dogfood
+```
+
+This confirms the work responds with real configuration values.
+
+## 5. Sweep and review
+
+```bash
+/sweep-unstaged
+/ready-to-review-mergeable <issue-id>
+```
+
+The readiness pipeline ends in a human handoff. Merge is manual.
+
+That is the whole loop. From proposal to a reviewed, mergeable change.

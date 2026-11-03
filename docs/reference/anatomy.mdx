@@ -1,0 +1,41 @@
+---
+title: Anatomy of a toolkit
+description: What a toolkit contains and how it is organized.
+sidebarTitle: Anatomy
+---
+
+# Anatomy of a toolkit
+
+This page explains how a toolkit is structured. It is an explanation: it
+describes the design, not step-by-step procedures.
+
+## The shape
+
+Every toolkit lives in `toolkits/<name>/`. It has a consistent layout:
+
+| Path | Purpose |
+| --- | --- |
+| `README.md` | the toolkit's overview and install instructions |
+| `commands/` | slash commands (e.g. `/opsx-apply`) |
+| `skills/` | skills, each with a `SKILL.md` (thin shim) |
+| `references/` | protocol SSOTs referenced by commands/skills |
+| `hooks/` | adapter hooks (stderr, PRDS) |
+| `package.json` | the toolkit's manifest and skill catalog |
+
+## Why this shape
+
+- **Thin entries**: `commands/` and `skills/` are dispatchers. The body lives in
+  `references/` (the SSOT). This avoids duplicating logic.
+- **One source of truth**: the skill catalog in `package.json` drives discovery.
+- **Harness-agnostic**: the same layout works for Claude Code, Cursor, and
+  OpenCode. Per-harness adapters live in `hooks/`.
+
+## The pipeline
+
+The toolkit drives an OpenSpec pipeline:
+
+```
+propose → apply → verify → sweep → ready-to-review-mergeable
+```
+
+Each step is a command you invoke at the right time.

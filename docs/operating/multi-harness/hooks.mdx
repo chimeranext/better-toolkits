@@ -1,0 +1,24 @@
+---
+title: Hooks
+description: Stderr and PRDS runtime hooks per harness.
+---
+
+# Hooks
+
+Runtime hooks enforce the SSOT at execution time. This page covers stderr hooks and PRDS hooks.
+
+## Runtime stderr rules
+
+1. Canonical tree: `shared/hooks/stderr/` (`detect.py` + adapters + tests).
+2. Every toolkit Claude `hooks/hooks.json` registers `PreToolUse Bash` → claude adapter.
+3. OpenCode: file plugin `opencode-plugin.ts`. Cursor: `beforeShellExecution`. Antigravity/Codex: `detect.py --command`.
+4. Opt-out: `MNM_DISABLE_STDERR_HOOK=1`, `.claude/config/stderr-hooks.json` `preserve_stderr: false`, OpenCode disable plugin.
+5. Done criterion: a session with only toolkit T installed still blocks stderr discards.
+
+## Runtime PRDS rules
+
+1. Canonical tree: `shared/hooks/prds/` (`detect.py` + adapters + tests).
+2. Fractional-cto Claude `hooks/hooks.json` registers `PreToolUse Bash` → PRDS adapter alongside stderr.
+3. OpenCode: file plugin `opencode-plugin.ts` (`local.fcto-prds-prepush`). Cursor: `beforeShellExecution`.
+4. Opt-out: `FCTO_DISABLE_PRDS_HOOK=1`, `.claude/config/prds-hooks.json` → `{"enforce_prds": false}`, or `# hook-bypass: prds-body-deferred`.
+5. Progressive `git push` before any PR exists is allowed. Body is enforced once a PR exists and on `gh pr create|edit`.
