@@ -64,4 +64,44 @@ slack-config.json
 - The catalog `vendored-gitignore.toml` (referenced by the standards index).
 - Related: `worktree-discipline.md` (worktrees transient), `checksum-hygiene.md`
   (release artifacts verified, not committed).
+- **DPC** (`dependency-caching.md`): how the pnpm store (shared across
+  worktrees/CI) realizes this symlink-out-of-tree doctrine via pnpm's native
+  symlinked `node_modules`. BGI governs *what* is ignored/symlinked; DPC
+  governs *how* the dependency store is shared and cached.
 - Learner summary: internal-handbook `docs/how-to/engineering-standards/BGI.md`.
+
+## Recurrence guard: worktree symlink gate
+
+The symlink doctrine needs an enforcement point. When a git worktree is created,
+its checkout has no `node_modules`/`dist`. Without a gate, the first build in
+the fresh worktree fails with `ERR_MODULE_NOT_FOUND` (a Jidoka stop we paid).
+
+- **Gate:** `scripts/git-hooks/worktree-symlink-build-artifacts.sh` symlinks a
+  worktree's `node_modules` to a shared, gitignored cache
+  (`~/.cache/better-toolkits/node_modules-<hash>`). Invoke it from a
+  `post-checkout` / `post-worktree` hook.
+- **Relation to WTD:** `worktree-discipline.md` declares worktrees transient and
+  rebuildable; this gate makes rebuild cheap by sharing `node_modules` across
+  worktrees of the same repo. WTD is the *why*; BGI + this gate are the *how*.
+- **Idempotent:** real dir → moved into cache and replaced by symlink; absent →
+  linked; already a symlink → no-op.
+
+### Git symlink limit: root-level symlink pointing outside the repo
+
+Git does **not** ignore a root-level symlink that points outside the work tree
+with normal `.gitignore` patterns (`node_modules/`, `dist/`). `git check-ignore`
+reports "path is behind a symbolic link" and the symlink shows as untracked
+(`?? node_modules`). This is a git behavior limit, not a config mistake.
+
+**Resolution:** ignore the symlinks in the **local** `$(git rev-parse
+--git-common-dir)/info/exclude` (per-repo, not committed). Because the symlink
+target lives outside the repo (shared cache), it is never tracked; excluding the
+link name locally keeps `git status` clean without altering the versioned
+`.gitignore`. This is per-repo-local: it does not propagate to clones, which is
+correct (each machine has its own cache path).
+
+**Key insight:** `.gitignore` (versioned) governs what is ignored for all
+clones; `info/exclude` (local) governs per-machine exceptions. A symlinked build
+artifact is a per-machine concern, so `info/exclude` is the right home. Keep the
+two aligned: `.gitignore` still carries the standard `node_modules/`, `dist/`,
+etc. for the non-symlinked case.

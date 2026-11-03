@@ -214,7 +214,12 @@ agent profile (`agents/better.md`) references them. The hooks enforce the key on
 - **RDP** (`repository-drift-prevention.md`) — Repository Drift Prevention. The
   seven `audit-engine` detector families (SCH/CDC/DDD/ARC/STR/ENF/OWN) and
   their canonical-source rationale.
-- **PRDS / BrS / WTD / QT4L / OST / NSQ / TFM** — the other indexed standards.
+- **PRDS / BrS / WTD / QT4L / OST / NSQ / TFM / BGI / DPC** — the other indexed
+  standards. DPC (Dependency Caching) standardizes installs: lockfile + frozen
+  install + cached store, per language (pnpm for Node/JS). This setup installs
+  `scripts/setup-worktree.sh` and wires it to a `post-checkout` hook so every
+  worktree bootstraps dependencies identically, plus the build-artifact symlink
+  gate (`worktree-symlink-build-artifacts.sh`).
 
 The setup also installs the scripts/hooks that enforce StS (stderr adapter), the
 OpenSpec pipeline discipline, and the GGT audit. `sync-better-profile.sh` syncs
@@ -239,7 +244,10 @@ agent profile (`agents/better.md`) references them; the hooks enforce the key on
 - **StS** (`stderr-stream-standards.md`) — no stream to null; fold stderr into the
   same sink; `2> file` forbidden (enforced by the stderr hook this setup installs).
 - **CLG** (`commit-logic-groups.md`) — commit intermediate work in semantic groups.
-- **PRDS / BrS / DSMS / IFS / CPS / QT4L / OST** — the other indexed standards.
+- **PRDS / BrS / DSMS / IFS / CPS / QT4L / OST / WTD / BGI / DPC** — the other
+  indexed standards. WTD (worktree discipline) + BGI (build-artifact symlink) +
+  DPC (dependency caching) govern worktree rebuilds: `setup-worktree.sh` +
+  `post-checkout` hook + `worktree-symlink-build-artifacts.sh`.
 
 The setup also installs the scripts/hooks that enforce StS (stderr adapter) and
 the OpenSpec pipeline discipline.
