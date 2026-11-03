@@ -1,4 +1,4 @@
-# Engineering standards — index (32 practices) — SSOT
+# Engineering standards — index (35 practices) — SSOT
 
 > SSOT at monorepo level: `shared/references/engineering-standards/index.md`.
 > Are you an agent? Reference these standards by monorepo-relative path
@@ -42,6 +42,7 @@
 | **32. codeowners-replication** | CODEOWNERS replication | Org admin App workflow replicates CODEOWNERS; single source, no drift. | [codeowners-replication-workflow.md](codeowners-replication-workflow.md) |
 | **33. BIB** | Bilingual Issue Brief | Every issue (GitHub o Linear) redactado en formato Bilingual ANTES de abrirlo — Human Layer + Agent Layer (HUMAN LAYER / AGENT LAYER / Acceptance Criteria / Context Files). Gate determinístico `shared/hooks/bilingual/detect.py`. | [bilingual-issue-brief.md](bilingual-issue-brief.md) |
 | **34. TAS** | Test Assertion Standards | Aserciones de contrato e invariantes, no snapshots: nunca conteos literales de registros que crecen; derivar del source of truth (p.ej. `NPM_PACKAGES.length`). | [test-assertion-standards.md](test-assertion-standards.md) |
+| **35. DPC** | Dependency Caching | Universal pattern (lockfile + frozen install + cached store). Canonical manager per language (pnpm for Node/JS). CI caches store by lockfile hash; local uses per-user store. | [dependency-caching.md](dependency-caching.md) |
 
 The **clean code quartet** is DSMS + IFS + CPS + PRDS. BrS + WTD govern branching
 and worktree hygiene. QT4L and **OST** (when the client uses an OpenSpec store)
@@ -85,11 +86,12 @@ flowchart TD
     S31[codeowners-replication]
     S32[BIB — Bilingual Issue Brief]
     S33[TAS — Test Assertion Standards]
+    S34[DPC — Dependency Caching]
     S0 --> S1 --> S2 --> S3 --> S4 --> S5 --> S6 --> S7 --> S8 --> S9
     S9 --> S10 --> S11 --> S12 --> S13 --> S14 --> S15
     S15 --> S16 --> S17 --> S18 --> S19 --> S20 --> S21 --> S22
     S22 --> S23 --> S24 --> S25 --> S26 --> S27 --> S28 --> S29
-    S29 --> S30 --> S31 --> S32 --> S33
+    S29 --> S30 --> S31 --> S32 --> S33 --> S34
 ```
 
 **Day-to-day priority:** IFS, PRDS, QT4L (reading rhythm, review rhythm, req→test trace), Jidoka, StS.
