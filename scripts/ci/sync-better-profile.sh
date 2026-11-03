@@ -81,15 +81,6 @@ win_userprofile() {
   echo "$p"
 }
 
-# Map a POSIX-style $HOME path to the Windows-native equivalent when running in WSL.
-# Used so better.md syncs to the path the native OpenCode Desktop reads.
-win_publish_target() {
-  local profile
-  profile=$(win_userprofile)
-  [ -z "$profile" ] && return 1
-  printf '%s/.config/opencode/agents/better.md' "$profile"
-}
-
 # By default, keep the POSIX path. When WSL is detected AND a Windows profile is
 # resolvable, publish the OpenCode profile to the Windows-native path instead.
 if is_wsl; then
