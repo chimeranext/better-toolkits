@@ -6,7 +6,7 @@
 
 - [ ] T1: Create `toolkits/3d-graphics-cad-toolkit/` scaffold structure
 - [ ] T2: Write `plugin.json`, `README.md`, `CHANGELOG.md`, `package.json` (skills catalog)
-- [ ] T3: Implement MCP server `mcp/docs-to-glb/` with stateless architecture
+- [ ] T3: Implement MCP server `shared/mcp/docs-to-glb/` with stateless architecture
 - [ ] T4: Write `src/server.rs` (vitemcp stateless, protocolVersion "2024-11-05")
 - [ ] T5: Write `src/cli.rs` (argument parsing from operation definitions)
 - [ ] T6: Write `src/operations.rs` (20+ operation defs, rv-ODT schema validation)
