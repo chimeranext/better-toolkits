@@ -1,4 +1,4 @@
-# notion-batch — custom Notion MCP (REST, sin pérdida)
+# notion-chimeranext — custom Notion MCP (REST, sin pérdida)
 
 Local stdio MCP server que se salta el límite del MCP nativo de Notion
 (`https://mcp.notion.com/mcp` renderiza bookmarks como `<unknown
@@ -12,15 +12,17 @@ markdown con inventario de URLs.
 2. Guarda el secret `ntn_…` con `/secret-input` → `NOTION_API_KEY` en `mcp-secrets.env` (nunca en claro).
 3. En Notion: Share de cada página/DB a extraer → invita a la integration.
 
-## OpenCode (opt-in — no es parte del set canónico)
+## OpenCode (server oficial del better-toolkits)
 
 ```json
 {
   "mcp": {
-    "notion-batch": {
-      "type": "local",
-      "command": ["node", "/ABS/better-toolkits/toolkits/instructional-design-toolkit/mcp/notion-batch/server.js"],
-      "environment": { "NOTION_API_KEY": "{env:NOTION_API_KEY}" }
+    "servers": {
+      "notion-chimeranext": {
+        "type": "local",
+        "command": ["node", "/ABS/better-toolkits/shared/mcp/notion-chimeranext/server.js"],
+        "environment": { "NOTION_API_KEY": "{env:NOTION_API_KEY}" }
+      }
     }
   }
 }
@@ -30,7 +32,7 @@ PATH de node: el proceso server necesita `node` resoluble (misma regla que
 `chrome-devtools-mcp` en `setup-opencode.md`: si falla con `Connection
 closed`, pinea `environment.PATH` con el dir del binario de node).
 
-Verificar: `opencode mcp list` → `✓ notion-batch connected`.
+Verificar: `opencode mcp list` → `✓ notion-chimeranext connected`.
 
 ## Tools
 
