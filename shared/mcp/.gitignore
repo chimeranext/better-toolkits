@@ -1,1 +1,14 @@
+# Local MCP servers — build artifacts & runtime deps.
+# Each server is an independent package; deps are never committed.
+# viteMCP emits to dist/ at build; bun/npm install materializes node_modules/.
+
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Lockfiles are per-server and not part of the monorepo contract
+# (root has no Nx/bun workspace); keep them local.
 bun.lock
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
