@@ -1,0 +1,66 @@
+# Makefile.windows — Windows twin of Makefile (PowerShell recipes).
+#
+# Requires: make for Windows (e.g. `choco install make`), node, and Git Bash
+# (bash) for the Part R scripts. Local phases run through the cross-platform
+# node CLI; prompts use `Read-Host`.
+#
+# Usage (same as Makefile):
+#   make -f Makefile.windows setup          # Part L only, prompting between phases
+#   make -f Makefile.windows repo-setup     # Part R (admin + gh + bash)
+#   make -f Makefile.windows doctor
+
+SHELL := powershell.exe
+.SHELLFLAGS := -NoProfile -NonInteractive -Command
+
+BETTER := & node shared/bootstrap/cli/bin/better-toolkits.js
+PROMPT := powershell -NoProfile -File shared/bootstrap/scripts/make-prompt.ps1
+HARNESS ?=
+REPO ?= $(shell gh repo view --json nameWithOwner -q .nameWithOwner)
+
+.PHONY: help setup doctor verify local-detect local-audit local-propose local-install local-verify repo-audit repo-setup
+
+help:
+	@Write-Host "LOCAL (Part L): setup, local-audit, local-install, local-verify, doctor"
+	@Write-Host "REPO (Part R): repo-audit, repo-setup (admin; requiere Git Bash)"
+
+local-detect:
+	@Write-Host "[Part L][phase 1] detectar harnesses (HARNESS='$(HARNESS)')"
+
+local-audit:
+	@Write-Host "[Part L][phase 2] audit (read-only)"
+	$(BETTER) setup --phases audit --harness $(HARNESS)
+
+local-propose:
+	@Write-Host "[Part L][phase 3] propose — revisa los diffs propuestos (HITL)"
+
+local-install:
+	@Write-Host "[Part L][phase 5] install"
+	$(BETTER) setup --phases install --harness $(HARNESS)
+
+local-verify:
+	@Write-Host "[Part L][phase 6] verify"
+	$(BETTER) setup --phases verify --harness $(HARNESS)
+
+doctor:
+	$(BETTER) doctor
+
+verify: local-verify
+
+setup:
+	@$phases = @('detect','audit','propose','install','verify'); \
+	foreach ($ph in $phases) { \
+	  & $(MAKE) -f Makefile.windows local-$ph; if ($LASTEXITCODE -ne 0) { exit 1 }; \
+	  if ($ph -ne 'verify') { & $(PROMPT) "tras fase $ph"; if ($LASTEXITCODE -ne 0) { exit 1 } } \
+	}; \
+	Write-Host "bootstrap LOCAL completo"
+
+repo-audit:
+	@if (-not $(REPO)) { Write-Host "define REPO=owner/repo (o necesitas gh)"; exit 1 }
+	@Write-Host "[Part R] audit GGT (read-only) — repo $(REPO)"
+	bash scripts/ci/audit-repo-gitflow.sh --repo $(REPO)
+
+repo-setup: repo-audit
+	@Write-Host "[Part R] provisioning de protección (ruleset/GGT/CODEOWNERS) — requiere admin"
+	& $(PROMPT) "aplicar políticas REPO (admin)"; if ($LASTEXITCODE -ne 0) { exit 1 }
+	bash toolkits/assurance-toolkit/scripts/assurance-repo-setup/ensure-rule-set.sh
+	bash toolkits/assurance-toolkit/scripts/assurance-repo-setup/ensure-audit-repo.sh

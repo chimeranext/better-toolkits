@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { track } from "@/lib/track";
 import { COPY, LINKS, METHOD_GROUPS, STATS, VENTURES, type Lang } from "@/lib/copy";
 import { MARKETPLACE_ADD, TOOLKITS } from "@/lib/toolkits";
+import BlueprintMotion from "@/components/BlueprintMotion";
 
 // --- small building blocks --------------------------------------------------
 
@@ -59,7 +60,7 @@ function Terminal({ cmd, label, copied }: { cmd: string; label: string; copied: 
 /** Signature element: the hero terminal "installs" the ten real toolkits. */
 function HeroTerminal({ label, copied, readyLine }: { label: string; copied: string; readyLine: string }) {
   return (
-    <div className="terminal-dark w-full overflow-hidden rounded-xl border border-primary/25 text-left shadow-[0_0_80px_-12px_rgba(124,92,255,0.45)]">
+    <div className="terminal-dark w-full overflow-hidden rounded-xl border border-primary/25 text-left shadow-[0_0_80px_-12px_rgba(245,158,11,0.30)]">
       <div className="flex items-center justify-between gap-3 border-b border-white/10 px-5 py-3">
         <div className="flex items-center gap-1.5">
           <span className="h-3 w-3 rounded-full bg-destructive/80" />
@@ -118,6 +119,16 @@ function CtaLink({
 /** Fluid container: ~1440px at 1080p, breathes up to 4K instead of pinning at 1024. */
 const CONTAINER = "mx-auto w-full max-w-[min(90rem,94vw)]";
 const H2 = "text-center font-heading font-bold text-[clamp(1.75rem,1.1rem+1.7vw,3.25rem)] leading-tight";
+
+/** Section heading with a GSAP-drawn gold "rule" underline (blueprint style). */
+function SectionHeading({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="bp-heading">
+      <h2 className={H2}>{children}</h2>
+      <span aria-hidden className="bp-heading-line mx-auto mt-4 block h-[3px] w-20 rounded-full bg-[hsl(var(--primary))]" />
+    </div>
+  );
+}
 
 function Section({ id, tone = "dark", className, children }: { id?: string; tone?: "dark" | "light"; className?: string; children: React.ReactNode }) {
   return (
@@ -254,8 +265,10 @@ export default function Page() {
 
   return (
     <main>
+      <BlueprintMotion />
+
       {/* S1 — persistent bar */}
-      <div className="sticky top-0 z-50 bg-brand-gradient px-4 py-2 text-center text-xs font-semibold text-white sm:text-sm">
+      <div className="sticky top-0 z-50 bg-brand-gradient px-4 py-2 text-center text-xs font-semibold text-[hsl(var(--primary-foreground))] sm:text-sm">
         {t.s1}
       </div>
 
@@ -288,19 +301,41 @@ export default function Page() {
       <Section id="top" className="relative overflow-hidden pb-[clamp(3rem,6vh,5rem)] pt-[clamp(1.5rem,4vh,3.5rem)] text-center">
         {/* brand glow field */}
         <div aria-hidden className="pointer-events-none absolute inset-0">
-          <div className="absolute left-1/2 top-[6%] h-[55vh] w-[85vw] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(124,92,255,0.30),transparent_62%)] blur-2xl" />
-          <div className="absolute right-[-12%] top-[28%] h-[45vh] w-[45vw] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(34,211,238,0.16),transparent_60%)] blur-3xl" />
-          <div className="absolute bottom-[-18%] left-[-12%] h-[45vh] w-[45vw] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(236,72,153,0.14),transparent_60%)] blur-3xl" />
+          <div className="absolute left-1/2 top-[6%] h-[55vh] w-[85vw] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(245,158,11,0.16),transparent_62%)] blur-2xl" />
+          <div className="absolute right-[-12%] top-[28%] h-[45vh] w-[45vw] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(251,191,36,0.10),transparent_60%)] blur-3xl" />
+          <div className="absolute bottom-[-18%] left-[-12%] h-[45vh] w-[45vw] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(180,83,9,0.12),transparent_60%)] blur-3xl" />
         </div>
+
+        {/* architectural-blueprint grid + registration ticks (fades in via GSAP) */}
+        <div aria-hidden className="blueprint-overlay bp-grid pointer-events-none absolute inset-0 opacity-0" />
 
         {/* Hero fills the viewport (minus sticky bar + header) so the next section never peeks in half-cut. */}
         <div className="relative flex min-h-[calc(100svh-8.5rem)] flex-col justify-center">
           {/* Full-bleed: the display headline escapes the content container so each sentence fits one line at display size. */}
           <h1 className="relative left-1/2 w-[94vw] -translate-x-1/2 font-heading font-extrabold leading-[1.08] tracking-tight text-[clamp(2.1rem,0.8rem+3.1vw,4.5rem)]">
-            <span className="block text-foreground/85">{t.s2.h1a}</span>
-            <span className="block bg-brand-gradient bg-clip-text text-transparent">{t.s2.h1b}</span>
+            <span className="block text-foreground/85">
+              {t.s2.h1a.split(/(\s+)/).map((part, i) =>
+                /^startups$/i.test(part.trim()) ? (
+                  <span key={i} className="bg-brand-gradient bg-clip-text text-transparent">{part}</span>
+                ) : (
+                  <span key={i}>{part}</span>
+                ),
+              )}
+            </span>
+            <span className="block bg-brand-gradient bg-clip-text text-transparent [filter:drop-shadow(0_0_22px_rgba(245,158,11,0.35))]">{t.s2.h1b}</span>
           </h1>
-          <p className="mt-3 text-xs uppercase tracking-[0.2em] text-muted-foreground sm:text-sm">{t.s2.source}</p>
+          <p className="mt-3 text-xs uppercase tracking-[0.2em] text-muted-foreground sm:text-sm">
+            <a
+              href={t.s2.sourceUrl}
+              target="_blank"
+              rel="noreferrer"
+              data-event="cta_source"
+              onClick={() => track("cta_source", { url: t.s2.sourceUrl })}
+              className="underline decoration-muted-foreground/40 underline-offset-4 transition-colors hover:text-foreground hover:decoration-foreground/60"
+            >
+              {t.s2.source}
+            </a>
+          </p>
           <p className="mx-auto mt-5 max-w-[58ch] text-[clamp(1rem,0.92rem+0.4vw,1.3rem)] leading-relaxed text-foreground/90">{t.s2.sub}</p>
           <div className="mx-auto mt-7 w-full max-w-[min(56rem,94vw)]">
             <HeroTerminal label={t.s2.copy} copied={t.s2.copied} readyLine={readyLine} />
@@ -310,7 +345,7 @@ export default function Page() {
               href="#stack"
               data-event="cta_learn_more"
               onClick={() => track("cta_learn_more")}
-              className="inline-flex items-center justify-center rounded-lg bg-[hsl(var(--primary-strong))] px-9 py-4 text-base font-bold text-white shadow-[0_10px_40px_-8px_rgba(124,92,255,0.65)] transition-transform hover:-translate-y-0.5 hover:bg-primary/90 sm:text-lg"
+              className="inline-flex items-center justify-center rounded-lg bg-[hsl(var(--primary-strong))] px-9 py-4 text-base font-bold text-white shadow-[0_10px_40px_-8px_rgba(245,158,11,0.45)] transition-transform hover:-translate-y-0.5 hover:bg-primary/90 sm:text-lg"
             >
               {t.s2.learnMore}
             </a>
@@ -337,7 +372,7 @@ export default function Page() {
 
       {/* S4 — problems / solutions: zigzag CARD // VISUAL rows with artifact illustrations */}
       <Section tone="light">
-        <h2 className={H2}>{t.s4.title}</h2>
+        <SectionHeading>{t.s4.title}</SectionHeading>
         <div className="mt-14 space-y-12 lg:space-y-16">
           {t.s4.pairs.map((p, i) => (
             <div key={i} className="grid items-center gap-8 lg:grid-cols-2 lg:gap-14">
@@ -358,7 +393,7 @@ export default function Page() {
 
       {/* S5 — the stack, at a glance */}
       <Section id="stack">
-        <h2 className={H2}>{t.s5.title}</h2>
+        <SectionHeading>{t.s5.title}</SectionHeading>
         <div className="mt-10 hidden overflow-x-auto rounded-xl border border-border sm:block">
           <table className="w-full text-left text-sm lg:text-[15px]">
             <thead className="bg-muted/50 text-muted-foreground">
@@ -414,20 +449,18 @@ export default function Page() {
 
       {/* S7 — process */}
       <Section id="process" tone="light">
-        <h2 className={H2}>{t.s7.title}</h2>
+        <SectionHeading>{t.s7.title}</SectionHeading>
         {/* One full-width row per step, stacked — the hero terminal already is the live demo. */}
-        <ol className="mx-auto mt-12 max-w-[80rem] space-y-5">
+        <ol data-bp-steps className="mx-auto mt-12 max-w-[80rem] space-y-5">
           {t.s7.steps.map((s, i) => (
             <li key={i} className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6 lg:flex-row lg:items-center">
               <div className="flex shrink-0 items-center gap-3 lg:w-[24rem]">
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[hsl(var(--primary-strong))] text-base font-bold text-white">{i + 1}</span>
-                <div>
-                  <span className="font-heading text-lg font-semibold text-card-foreground">{s.title}</span>
-                  {s.note && <p className="text-sm text-muted-foreground">{s.note}</p>}
-                </div>
+                <span className="font-heading text-lg font-semibold text-card-foreground">{s.title}</span>
               </div>
-              <div className="terminal-dark min-w-0 flex-1 rounded-md p-3.5">
+              <div className="terminal-dark min-w-0 flex-1 rounded-md p-3.5 space-y-1">
                 <code className="block whitespace-pre-wrap font-mono text-sm leading-relaxed [overflow-wrap:anywhere]"><span className="select-none text-brand-tertiary">$ </span>{s.cmd}</code>
+                <code className="block whitespace-pre-wrap font-mono text-sm leading-relaxed [overflow-wrap:anywhere]"><span className="select-none text-brand-accent">PS&gt; </span>{s.cmdPs}</code>
               </div>
             </li>
           ))}
@@ -455,10 +488,10 @@ export default function Page() {
 
       {/* S9 — social proof (cards-as-artifacts treatment) */}
       <Section tone="light">
-        <h2 className={H2}>{t.s9.title}</h2>
+        <SectionHeading>{t.s9.title}</SectionHeading>
 
         {/* stats: gradient numbers */}
-        <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+        <div data-bp-stats className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
           {STATS.map((s) => (
             <div key={s.value} className="rounded-xl border border-border bg-card p-5 text-center transition-transform hover:-translate-y-0.5">
               <div className="bg-brand-gradient bg-clip-text font-heading font-extrabold text-transparent text-[clamp(1.75rem,1.2rem+1.4vw,3rem)]">{s.value}</div>
@@ -506,12 +539,12 @@ export default function Page() {
             </Link>
           </p>
           {/* Bento: spans tile the 6-col grid exactly — the 10-framework card anchors 2 rows. */}
-          <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-6">
+          <div data-bp-bento className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-6">
             {METHOD_GROUPS.map((g, gi) => {
               // Brand accents re-tuned for contrast on the light surface (same
               // treatment as the canonical light theme: darker, same hues).
-              const accents = ["#6D4AF5", "#2563EB", "#0E93B5", "#DB2777", "#0F9D6B", "#D97706"];
-              const spans = ["lg:col-span-3 lg:row-span-2", "lg:col-span-3", "lg:col-span-3", "lg:col-span-2", "lg:col-span-2", "lg:col-span-2"];
+              const accents = ["#6D4AF5", "#2563EB", "#0E93B5", "#DB2777", "#0F9D6B", "#D97706", "#EA580C", "#C026D3"];
+              const spans = ["lg:col-span-3 lg:row-span-2", "lg:col-span-3", "lg:col-span-3", "lg:col-span-2", "lg:col-span-2", "lg:col-span-2", "lg:col-span-2", "lg:col-span-2"];
               const accent = accents[gi % accents.length];
               return (
                 <div
@@ -541,9 +574,9 @@ export default function Page() {
 
       {/* S10 — FAQ */}
       <Section tone="light">
-        <h2 className={H2}>{t.s10.title}</h2>
+        <SectionHeading>{t.s10.title}</SectionHeading>
         {/* Masonry, answers always visible — reading a FAQ must not cost a click. */}
-        <div className="mt-10 columns-1 gap-5 md:columns-2 xl:columns-3">
+        <div data-bp-faq className="mt-10 columns-1 gap-5 md:columns-2 xl:columns-3">
           {t.s10.faqs.map((f, i) => (
             <div key={i} className="mb-5 break-inside-avoid rounded-xl border border-border bg-card p-6">
               <h3 className="font-heading text-base font-semibold text-primary">{f.q}</h3>
@@ -556,8 +589,10 @@ export default function Page() {
       {/* S11 — final CTA */}
       <Section className="relative overflow-hidden text-center">
         <div aria-hidden className="pointer-events-none absolute inset-0">
-          <div className="absolute left-1/2 top-1/2 h-[60vh] w-[70vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(124,92,255,0.18),transparent_62%)] blur-2xl" />
+          <div className="absolute left-1/2 top-1/2 h-[60vh] w-[70vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(245,158,11,0.12),transparent_62%)] blur-2xl" />
         </div>
+        {/* architectural-blueprint grid + registration ticks */}
+        <div aria-hidden className="blueprint-overlay bp-grid pointer-events-none absolute inset-0 opacity-0" />
         <div className="relative">
           <h2 className="relative left-1/2 w-[94vw] -translate-x-1/2 font-heading font-extrabold leading-tight text-[clamp(2rem,1rem+2.9vw,4.5rem)]">{t.s11.h2}</h2>
           <p className="mt-4 text-[clamp(1.05rem,0.95rem+0.4vw,1.35rem)] text-foreground/90">{t.s11.sub}</p>

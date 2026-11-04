@@ -1,34 +1,35 @@
 # convention: php
+
 id: php · version: 0.1.0 · status: draft · level: language
 extracted_at: 2026-10-13 · ttl_expires: 2027-01-11
 parent: none
 
 ## GOAL
 
-PHP 8.4+ con tipos explícitos, namespaces PSR-4 y estilo consistente antes de
-cualquier framework: el intérprete y el analizador estático no deben sorprender
-en CI.
+PHP 8.4+ with explicit types, PSR-4 namespaces, and consistent style before any
+framework: the interpreter and the static analyzer must not surprise in CI.
 
 ## SOURCES
 
-| # | kind | ref | weight | para qué |
+| # | kind | ref | weight | purpose |
 |---|------|-----|--------|----------|
-| S1 | docs | php.net `language.types.declarations` + `strict` | load-bearing | `strict_types`, firmas |
-| S2 | docs | PSR-12 (via framework formatter en hijo Laravel) | context | estilo cuando no hay hijo |
-| S3 | docs | phpstan.org user guide (nivel pineado en el repo) | context | análisis estático opcional |
+| S1 | docs | php.net `language.types.declarations` + `strict` | load-bearing | `strict_types`, signatures |
+| S2 | docs | PSR-12 (via framework formatter in child Laravel) | context | style when there is no child |
+| S3 | docs | phpstan.org user guide (level pinned in the repo) | context | optional static analysis |
 
 ## RULES
 
-- P1 [strict] `declare(strict_types=1);` en archivos nuevos bajo `app/` y
+- P1 [strict] `declare(strict_types=1);` in new files under `app/` and
   `src/` → S1.
-- P2 [types] Parámetros y retornos tipados en APIs públicas; sin `mixed` salvo
-  frontera documentada → S1.
-- P3 [psr4] Autoload PSR-4 en `composer.json`; un namespace raíz por bounded
+- P2 [types] Typed parameters and returns on public APIs. No `mixed` except at
+  a documented boundary → S1.
+- P3 [psr4] PSR-4 autoload in `composer.json`. One root namespace per bounded
   context → S1.
-- P4 [static] Cuando el repo declara PHPStan/Psalm, el nivel pineado pasa en CI
-  (no solo en IDE) → S3.
-- P5 [errors] Mensajes de error **prescriptivos** (sugieren alternativa), salvo `[SECRECY]`
-  en el PHPDoc (seguridad por secrecía). No usar excepciones para flujo esperado →
+- P4 [static] When the repo declares PHPStan/Psalm, the pinned level passes in CI
+  (not only in the IDE) → S3.
+- P5 [errors] **Prescriptive** error messages (suggest an alternative), except
+  `[SECRECY]` in the PHPDoc (security through obscurity). Do not use exceptions
+  for expected flow →
   `conventions/prescriptive-error-messages.md`.
 
 ## COUNTEREXAMPLES
@@ -70,16 +71,17 @@ function login(string $u, string $p): void {
 
 ## GATES
 
-- local: `php -l` en archivos PHP tocados.
-- CI: lo local + analizador estático cuando esté declarado en el record del
-  repo (nivel fijado en `phpstan.neon` o equivalente).
-- P5 (prescriptivo): **warn no-block** — `conventions-warn-recorder.sh php/P5 <file> @<author>`; no bloquea, registra en `internal-audits`.
+- local: `php -l` on touched PHP files.
+- CI: local plus static analyzer when the repo declares it in its record (level
+  fixed in `phpstan.neon` or equivalent).
+- P5 (prescriptive): **warn no-block** — `conventions-warn-recorder.sh php/P5 <file> @<author>`. It does not block. It records in `internal-audits`.
 
 ## LESSONS
 
-- L1 (sesión actual) Mensaje prohibitivo sin alternativa confunde al agente; la cura es
-  prescriptivo o `[SECRECY]` en PHPDoc → P5 (ref: `conventions/prescriptive-error-messages.md`).
+- L1 (current session) A prohibitive message without an alternative confuses the
+  agent. The cure is prescriptive or `[SECRECY]` in PHPDoc → P5 (ref:
+  `conventions/prescriptive-error-messages.md`).
 
 ## RECEIPT
 
-Ver hijo `laravel` y `_exemplars/php/` para gates ejecutables del stack web.
+See child `laravel` and `_exemplars/php/` for executable gates of the web stack.

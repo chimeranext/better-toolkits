@@ -9,6 +9,7 @@ export type LandingEvent =
   | "cta_calendar"
   | "cta_github"
   | "cta_learn_more"
+  | "cta_source"
   | "scroll_depth"
   | "faq_expand"
   | "lang_toggle";

@@ -11,7 +11,7 @@ import {
   resolveAdapterPath,
   resolveConfigDir,
 } from "../lib/paths.js";
-import { planInstall } from "../lib/install.js";
+import { planInstall, NPM_PACKAGES } from "../lib/install.js";
 import {
   toolkitSkillsDirs,
   installSkillsDirs,
@@ -94,7 +94,10 @@ describe("install plan", () => {
     try {
       const plan = planInstall({ alsoNpm: true });
       const npm = plan.steps.filter((s) => s.kind === "npm");
-      assert.equal(npm.length, 4);
+      assert.equal(npm.length, NPM_PACKAGES.length); // relación con la fuente, no literal
+      for (const step of npm) {
+        assert.match(step.detail, /@chimeranext\//);
+      }
     } finally {
       process.chdir(cwd);
     }
@@ -127,14 +130,19 @@ describe("mcp phase", () => {
 describe("skills wiring", () => {
   it("finds toolkit skills dirs in the real repo", () => {
     const dirs = toolkitSkillsDirs(REAL_ROOT);
-    assert.equal(dirs.length, 12);
+    assert.ok(dirs.length > 0);
+    assert.equal(new Set(dirs).size, dirs.length); // sin duplicados
     assert.ok(dirs.some((d) => d.endsWith("venture-studio-toolkit/skills")));
   });
 
-  it("installSkillsDirs includes shared/skills (transversal)", () => {
-    const dirs = installSkillsDirs(REAL_ROOT);
-    assert.equal(dirs.length, 13);
-    assert.ok(dirs.some((d) => d.endsWith("shared/skills")));
+  it("installSkillsDirs = toolkit dirs + shared/skills (transversal)", () => {
+    const tk = toolkitSkillsDirs(REAL_ROOT);
+    const all = installSkillsDirs(REAL_ROOT);
+    const tkSet = new Set(tk);
+    const allSet = new Set(all);
+    for (const d of tk) assert.ok(allSet.has(d), `falta ${d}`);
+    assert.ok(all.some((d) => d.endsWith("shared/skills")));
+    assert.equal(allSet.size, tkSet.size + 1);
   });
 
   it("missingSkills detects unwired dirs", () => {

@@ -19,6 +19,26 @@ SHARED_PKG = ROOT / "shared" / "package.json"
 CANONICAL_SOURCE = "chimeranext/better-toolkits"
 
 
+def _collect_skills(skills_dir: pathlib.Path) -> list[str]:
+    """Collect skill names recursively (one level of family nesting supported).
+
+    A skill is any dir containing a SKILL.md. Family dirs (e.g. `strategy/`)
+    contribute their children (`strategy/roadmap`). Direct skills keep their
+    flat name (`automation-triage`).
+    """
+    out: list[str] = []
+    for p in sorted(skills_dir.iterdir()):
+        if not p.is_dir():
+            continue
+        if (p / "SKILL.md").exists():
+            out.append(p.name)
+            continue
+        for child in sorted(p.iterdir()):
+            if child.is_dir() and (child / "SKILL.md").exists():
+                out.append(f"{p.name}/{child.name}")
+    return out
+
+
 def check_unit(
     label: str,
     skills_dir: pathlib.Path,
@@ -27,9 +47,7 @@ def check_unit(
 ) -> None:
     if not skills_dir.is_dir():
         return
-    names = sorted(
-        p.name for p in skills_dir.iterdir() if p.is_dir() and (p / "SKILL.md").exists()
-    )
+    names = sorted(_collect_skills(skills_dir))
     if not pkg_path.exists():
         problems.append(f"{label}: NO package.json ({len(names)} skills sin listar)")
         return

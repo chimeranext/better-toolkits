@@ -30,6 +30,11 @@ repos:
         entry: python3 scripts/lint/detect_hardcoded_checksum.py
         language: system
         files: ^shared/bootstrap/scripts/setup-.*\.sh$
+      - id: code-smells
+        name: cross-language code smells (HARD on changed files)
+        entry: python3 scripts/lint/detect_code_smells.py
+        language: system
+        pass_filenames: true
       - id: skills-catalog-check
         name: skills catalog matches on-disk skill folders
         entry: python3 scripts/ci/check-skills-catalog.py

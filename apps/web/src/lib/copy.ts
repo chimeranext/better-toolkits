@@ -1,6 +1,7 @@
 // Bilingual copy (EN default + ES toggle) — mirrors
 // business/04-landing-pages/b2b-better-toolkits-landing-copy.md
 import { REPO_URL } from "@/lib/toolkits";
+import stats from "@/data/stats.json";
 
 // --- Contact / external links -----------------------------------------------
 // PLACEHOLDERS — real values wired at launch (task #12) / instrumentation change.
@@ -15,13 +16,15 @@ export const LINKS = {
 export type Lang = "en" | "es";
 
 // --- Shared (language-neutral) data -----------------------------------------
+// Stats are computed at build time from the monorepo by scripts/gen-stats.mjs
+// (source of truth = the repo). No hardcoded numbers.
 export const STATS = [
-  { value: "10", label: { en: "toolkits", es: "toolkits" } },
-  { value: "75", label: { en: "commands", es: "comandos" } },
-  { value: "96", label: { en: "skills", es: "skills" } },
-  { value: "22", label: { en: "agents", es: "agentes" } },
-  { value: "131", label: { en: "templates", es: "plantillas" } },
-  { value: "65,000", label: { en: "lines of methodology", es: "líneas de metodología" } },
+  { value: String(stats.toolkits), label: { en: "toolkits", es: "toolkits" } },
+  { value: String(stats.commands), label: { en: "commands", es: "comandos" } },
+  { value: String(stats.skills), label: { en: "skills", es: "skills" } },
+  { value: String(stats.agents), label: { en: "agents", es: "agentes" } },
+  { value: String(stats.templates), label: { en: "templates", es: "plantillas" } },
+  { value: Number(stats.linesOfMethodology).toLocaleString("en-US"), label: { en: "lines of methodology", es: "líneas de metodología" } },
 ];
 
 export const VENTURES: { name: string; industry: string }[] = [
@@ -39,6 +42,7 @@ export const METHOD_GROUPS: { label: { en: string; es: string }; items: string[]
     items: [
       "Strangler Fig (Fowler)", "DDD (Evans)", "Explicit Architecture (Graça)", "Hexagonal (Cockburn)",
       "Onion (Palermo)", "Clean (Martin)", "CQRS (Young)", "Conway's Law", "1NF (Codd)", "Premortem (Klein, HBR)",
+      "ADR (Architecture Decision Records)", "BDD (Given/When/Then)",
     ],
   },
   {
@@ -46,6 +50,7 @@ export const METHOD_GROUPS: { label: { en: string; es: string }; items: string[]
     items: [
       "Atomic Design (Frost)", "NN/g Zone Model", "Service Blueprint (Shostack)", "User Story Mapping (Patton)",
       "Jobs-to-be-Done", "16+ design systems (Material 3, HIG, Carbon, Polaris…)",
+      "Brand Steering Wheel", "Limbic Map (Haeusel)",
     ],
   },
   {
@@ -53,6 +58,7 @@ export const METHOD_GROUPS: { label: { en: string; es: string }; items: string[]
     items: [
       "Lean Canvas (Maurya)", "Business Model Canvas (Osterwalder)", "Lean Startup (Ries)",
       "4 Customer Forces (Moesta & Spiek)", "Beyond Budgeting (Bogsnes)", "MoSCoW", "RICE (Intercom)",
+      "OKR", "North Star Metric",
     ],
   },
   {
@@ -68,6 +74,7 @@ export const METHOD_GROUPS: { label: { en: string; es: string }; items: string[]
     items: [
       "SAM (Allen Interactions)", "Bloom's Taxonomy (Anderson & Krathwohl)", "Backward Design (Wiggins & McTighe)",
       "Kirkpatrick L1-L4", "cmi5 / xAPI (ADL)", "Atomic Habits (Clear)",
+      "ADDIE", "Irby coach/mentor/tutor framework",
     ],
   },
   {
@@ -78,18 +85,33 @@ export const METHOD_GROUPS: { label: { en: string; es: string }; items: string[]
       "Skip-CR / Delaware Tostada / Cayman Sandwich (LATAM venture structuring)",
     ],
   },
+  {
+    label: { en: "Manufacturing & Operations", es: "Manufactura y operaciones" },
+    items: [
+      "Toyota Production System — Jidoka · JIT · Heijunka", "5S (Hirano)", "SMED",
+      "Total Productive Maintenance (TPM)", "Six Sigma / DMAIC", "Ishikawa (fishbone)",
+      "Kraljic Matrix", "INCOTERMS 2020", "Muda · Mura · Muri",
+    ],
+  },
+  {
+    label: { en: "Game Theory & Mechanics", es: "Teoría de juegos y mecánicas" },
+    items: [
+      "Nash Equilibrium", "Zero-Sum vs Cooperative Design", "Mechanism Design",
+      "Progression & Reward Schedules",
+    ],
+  },
 ];
 
 // --- Per-language section copy ----------------------------------------------
 type Content = {
   nav: { install: string; langOther: string; doctrine: string };
   s1: string;
-  s2: { h1a: string; h1b: string; source: string; sub: string; copy: string; copied: string; github: string; audit: string; trust: string; learnMore: string };
+  s2: { h1a: string; h1b: string; sourceUrl: string; source: string; sub: string; copy: string; copied: string; github: string; audit: string; trust: string; learnMore: string };
   s3: { a: string; b: string };
   s4: { title: string; fixLead: string; pairs: { problem: string; solution: string; toolkit: string }[] };
   s5: { title: string; jumpProcess: string; jumpPricing: string; cols: { n: string; toolkit: string; what: string; license: string; status: string } };
   s6: { a: string; b: string };
-  s7: { title: string; steps: { title: string; cmd: string; note?: string }[]; demo: string };
+  s7: { title: string; steps: { title: string; cmd: string; cmdPs: string }[]; demo: string };
   s8: { title: string; col1: { name: string; price: string; body: string }; col2: { name: string; body: string; whatsapp: string; calendar: string } };
   s9: { title: string; dogfooding: string; sibling: string; dogfoodingTail: string; venturesLabel: string; methodTitle: string; methodTagline: string };
   s10: { title: string; faqs: { q: string; a: string }[] };
@@ -100,15 +122,16 @@ type Content = {
 export const COPY: Record<Lang, Content> = {
   en: {
     nav: { install: "GitHub", langOther: "ES", doctrine: "Multi-harness SSOT" },
-    s1: "10 battle-tested toolkits · One command · Source-available",
+    s1: `${stats.toolkits} battle-tested toolkits · One command · Source-available`,
     s2: {
-      h1a: "62% of startups now ship AI-written code.",
+      h1a: "61% of startups now have most of their code written by AI.",
       h1b: "The winning ones operate with a system.",
-      source: "Supabase Startups Survey 2026 — 2,000+ founders",
+      sourceUrl: "https://supabase.com/state-of-startups",
+      source: "Supabase — State of Startups 2026 (2,000 builders)",
       sub: "Every week without an operating system is runway spent reinventing one. Install yours in 60 seconds ↓",
       copy: "Copy", copied: "Copied ✓",
       github: "View on GitHub →", audit: "Audit before you install", learnMore: "Learn more ↓",
-      trust: "Source-available · BSL-1.1 · 75 commands · 96 skills · 22 agents · 0 lock-in",
+      trust: `Source-available · BSL-1.1 · ${stats.commands} commands · ${stats.skills} skills · ${stats.agents} agents · 0 lock-in`,
     },
     s3: { a: "You wouldn't build your product without a framework.", b: "Why build your company without one?" },
     s4: {
@@ -128,11 +151,11 @@ export const COPY: Record<Lang, Content> = {
     },
     s6: { a: "This is the stack ChimeraNext uses to run its own ventures.", b: "Now it's yours." },
     s7: {
-      title: "From zero to operating system in three commands",
+      title: "One command per harness — your stack in seconds",
       steps: [
-        { title: "Add the marketplace", cmd: "claude plugin marketplace add chimeranext/better-toolkits" },
-        { title: "Install what you need", cmd: "claude plugin install make-no-mistakes@better-toolkits", note: "or all ten" },
-        { title: "Run your first audit", cmd: "/make-no-mistakes:audit", note: "repo-health report in minutes" },
+        { title: "OpenCode", cmd: "curl -fsSL https://toolkits.chimeranext.dev/install-opencode.sh | bash", cmdPs: "irm https://toolkits.chimeranext.dev/install-opencode.ps1 | iex" },
+        { title: "Claude Code", cmd: "curl -fsSL https://toolkits.chimeranext.dev/install-claude.sh | bash", cmdPs: "irm https://toolkits.chimeranext.dev/install-claude.ps1 | iex" },
+        { title: "Cursor", cmd: "curl -fsSL https://toolkits.chimeranext.dev/install-cursor.sh | bash", cmdPs: "irm https://toolkits.chimeranext.dev/install-cursor.ps1 | iex" },
       ],
       demo: "Animated terminal demo coming here",
     },
@@ -155,7 +178,7 @@ export const COPY: Record<Lang, Content> = {
       faqs: [
         { q: "Is it really free?", a: "Yes. BSL-1.1 lets you read, audit, modify and use everything freely. The only restriction: don't resell it as a competing SaaS. Each version converts to full open source after five years — the date is fixed in the license text." },
         { q: "Is this like what HashiCorp did?", a: "No. better-toolkits was born BSL on day one — there's no license rug-pull, and the terms can only relax over time (a fixed date in the legal text)." },
-        { q: "Do I need all 10 toolkits?", a: "No. Each is an independent plugin in the same marketplace. Install one, install all — your call." },
+        { q: `Do I need all ${stats.toolkits} toolkits?`, a: "No. Each is an independent plugin in the same marketplace. Install one, install all — your call." },
         { q: "How is this different from awesome-lists and plugin collections?", a: "Those are fragments. This is an integrated system: the toolkits share conventions and hand work to each other — audit → implement → release → grow." },
         { q: "What is Multi-harness SSOT?", a: "One protocol contract in markdown (references/ + thin entries) and one stderr baseline across Claude Code, Cursor, OpenCode2, and Antigravity — not a Cursor-vs-Claude split. See /doctrine or docs/multi-harness-ssot.md." },
         { q: "Does it work with my stack?", a: "Releases cover Flutter, KMP, .NET MAUI, Swift and PWA. Strategy and process toolkits are framework-agnostic. Built for Claude Code first — and four of the ten (make-no-mistakes, atomic-design, business-model, app-gtm-release) also install into OpenCode via their npm CLIs. Stderr baseline wires into Claude, Cursor, and OpenCode2." },
@@ -174,15 +197,16 @@ export const COPY: Record<Lang, Content> = {
   },
   es: {
     nav: { install: "GitHub", langOther: "EN", doctrine: "Multi-harness SSOT" },
-    s1: "10 toolkits probados en batalla · Un comando · Source-available",
+    s1: `${stats.toolkits} toolkits probados en batalla · Un comando · Source-available`,
     s2: {
-      h1a: "El 62% de las startups ya shippea código escrito por IA.",
+      h1a: "El 61% de las startups ya tiene la mayoría del código escrito por IA.",
       h1b: "Las que ganan operan con un sistema.",
-      source: "Supabase Startups Survey 2026 — más de 2,000 founders",
+      sourceUrl: "https://supabase.com/state-of-startups",
+      source: "Supabase — State of Startups 2026 (2.000 builders)",
       sub: "Cada semana sin un sistema operativo de empresa es runway quemado reinventando uno. Instala el tuyo en 60 segundos ↓",
       copy: "Copiar", copied: "Copiado ✓",
       github: "Ver en GitHub →", audit: "Audita antes de instalar", learnMore: "Conoce más ↓",
-      trust: "Source-available · BSL-1.1 · 75 comandos · 96 skills · 22 agentes · 0 lock-in",
+      trust: `Source-available · BSL-1.1 · ${stats.commands} comandos · ${stats.skills} skills · ${stats.agents} agentes · 0 lock-in`,
     },
     s3: { a: "No construirías tu producto sin un framework.", b: "¿Por qué construyes tu empresa sin uno?" },
     s4: {
@@ -202,11 +226,11 @@ export const COPY: Record<Lang, Content> = {
     },
     s6: { a: "Este es el stack con el que ChimeraNext opera sus propios ventures.", b: "Ahora es tuyo." },
     s7: {
-      title: "De cero a sistema operativo en tres comandos",
+      title: "Un comando por harness — tu stack en segundos",
       steps: [
-        { title: "Agrega el marketplace", cmd: "claude plugin marketplace add chimeranext/better-toolkits" },
-        { title: "Instala lo que necesites", cmd: "claude plugin install make-no-mistakes@better-toolkits", note: "o los diez" },
-        { title: "Corre tu primer audit", cmd: "/make-no-mistakes:audit", note: "reporte de salud del repo en minutos" },
+        { title: "OpenCode", cmd: "curl -fsSL https://toolkits.chimeranext.dev/install-opencode.sh | bash", cmdPs: "irm https://toolkits.chimeranext.dev/install-opencode.ps1 | iex" },
+        { title: "Claude Code", cmd: "curl -fsSL https://toolkits.chimeranext.dev/install-claude.sh | bash", cmdPs: "irm https://toolkits.chimeranext.dev/install-claude.ps1 | iex" },
+        { title: "Cursor", cmd: "curl -fsSL https://toolkits.chimeranext.dev/install-cursor.sh | bash", cmdPs: "irm https://toolkits.chimeranext.dev/install-cursor.ps1 | iex" },
       ],
       demo: "Demo de terminal animada aquí",
     },
@@ -229,7 +253,7 @@ export const COPY: Record<Lang, Content> = {
       faqs: [
         { q: "¿De verdad es gratis?", a: "Sí. BSL-1.1 te deja leer, auditar, modificar y usar todo libremente. Única restricción: no revenderlo como SaaS competidor. Cada versión convierte a open source pleno a los cinco años — la fecha está fija en el texto legal." },
         { q: "¿Es como lo que hizo HashiCorp?", a: "No. better-toolkits nació BSL desde el día uno — no hay rug-pull de licencia, y los términos solo pueden relajarse con el tiempo (fecha fija en el texto legal)." },
-        { q: "¿Necesito los 10 toolkits?", a: "No. Cada uno es un plugin independiente del mismo marketplace. Instala uno o instala todos." },
+        { q: `¿Necesito los ${stats.toolkits} toolkits?`, a: "No. Cada uno es un plugin independiente del mismo marketplace. Instala uno o instala todos." },
         { q: "¿En qué se diferencia de las awesome-lists?", a: "Esas son fragmentos. Esto es un sistema integrado: los toolkits comparten convenciones y se pasan el trabajo — audita → implementa → lanza → crece." },
         { q: "¿Qué es Multi-harness SSOT?", a: "Un contrato de protocolo en markdown (references/ + entries finos) y un stderr baseline en Claude Code, Cursor, OpenCode2 y Antigravity — no una dicotomía Cursor vs Claude. Ver /doctrine o docs/multi-harness-ssot.md." },
         { q: "¿Funciona con mi stack?", a: "Releases: Flutter, KMP, .NET MAUI, Swift y PWA. Estrategia y proceso: agnósticos. Construido primero para Claude Code — y cuatro de los diez (make-no-mistakes, atomic-design, business-model, app-gtm-release) también se instalan en OpenCode vía sus CLIs de npm. El stderr baseline se cablea en Claude, Cursor y OpenCode2." },

@@ -15,6 +15,10 @@ vez y se verifique en cualquier lenguaje, sin duplicar la narrativa.
 - La verificación real es el assert nativo; la afirmación BDD es el lenguaje que le da
   significado.
 
+**Estabilidad del assert:** el matcher nativo debe seguir **TAS**
+(`shared/references/engineering-standards/test-assertion-standards.md`): afrimar
+contratos, no snapshots; nunca conteos literales de registros en crecimiento.
+
 ## Mini-lenguaje de matchers
 
 | Declaración | Significado |

@@ -41,7 +41,8 @@ index 4444444..0000000
 
 test("parseGitDiff mapea numstat+diff a archivos con additions/deletions/patch", () => {
   const files = parseGitDiff(NUMSTAT, RAW_DIFF)
-  expect(files).toHaveLength(3)
+  const EXPECTED_FILES = ["src/foo.ts", "src/bar.ts", "src/gone.ts"]
+  expect(files).toHaveLength(EXPECTED_FILES.length)
 
   const foo = files.find((f) => f.filename === "src/foo.ts")
   expect(foo).toBeDefined()
@@ -69,7 +70,8 @@ test("parseGitDiff devuelve lista vacía cuando no hay cambios", () => {
 test("parseGitDiff trata additions/deletions binarias ('-') como 0", () => {
   const numstat = "-\t-\tassets/logo.png\0"
   const files = parseGitDiff(numstat, "")
-  expect(files).toHaveLength(1)
+  const EXPECTED_BINARIES = ["assets/logo.png"]
+  expect(files).toHaveLength(EXPECTED_BINARIES.length)
   expect(files[0].additions).toBe(0)
   expect(files[0].deletions).toBe(0)
 })

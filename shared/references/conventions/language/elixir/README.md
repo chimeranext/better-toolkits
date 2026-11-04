@@ -1,44 +1,45 @@
 # convention: elixir
+
 id: elixir · version: 0.1.0 · status: draft · level: language
 extracted_at: 2026-10-13 · ttl_expires: 2027-01-11
 parent: none
 
 ## GOAL
 
-Código Elixir que el compilador, el formatter, Credo y Dialyzer aceptan sin
-observaciones: cero warnings, estilo consistente, complejidad acotada.
+Elixir code that the compiler, the formatter, Credo, and Dialyzer accept without
+objections: zero warnings, consistent style, bounded complexity.
 
 ## SOURCES
 
-| # | kind | ref | weight | para qué |
+| # | kind | ref | weight | why |
 |---|------|-----|--------|----------|
 | S1 | repo | `rrrene/credo` ~> 1.7 @ `90c5541` (MIT), dep `only: [:dev, :test], runtime: false` | load-bearing | checks + `mix credo` |
-| S2 | docs | hexdocs.pm/credo v1.7.19 — lista exacta de checks verificada 2026-10-13 | load-bearing | cada check citado abajo existe en esa versión |
-| S3 | docs | elixir-lang.org getting-started mix-otp + `introduction`/`learning` | context | toolchain y flujo mix |
+| S2 | docs | hexdocs.pm/credo v1.7.19 — exact list of checks verified 2026-10-13 | load-bearing | each check cited below exists in that version |
+| S3 | docs | elixir-lang.org getting-started mix-otp + `introduction`/`learning` | context | toolchain and mix flow |
 
 ## RULES
 
-- R1 [compiler] Cero warnings: `mix compile --warnings-as-errors` → S1/S3.
-- R2 [format] `mix format --check` limpio antes de cada commit → S3.
-- R3 [pipes] Pipes lineales: `Readability.SinglePipe`, `OnePipePerLine`,
+- R1 [compiler] Zero warnings: `mix compile --warnings-as-errors` → S1/S3.
+- R2 [format] `mix format --check` clean before each commit → S3.
+- R3 [pipes] Linear pipes: `Readability.SinglePipe`, `OnePipePerLine`,
   `BlockPipe`, `PipeIntoAnonymousFunctions`, `Refactor.PipeChainStart`,
   `Refactor.SingleFunctionToBlockPipe` → S2.
 - R4 [naming] `Readability.FunctionNames`, `PredicateFunctionNames`,
   `VariableNames`, `ModuleNames`, `AliasOrder`, `MaxLineLength` → S2.
-- R5 [warnings] Nada entregado de `Warning.IoInspect`, `IExPry`, `Dbg`,
+- R5 [warnings] Nothing delivered from `Warning.IoInspect`, `IExPry`, `Dbg`,
   `UnsafeToAtom`, `UnsafeExec`, `MixEnv`, `LazyLogging` → S2.
-- R6 [complexity] Techos: `Refactor.ABCSize`, `CyclomaticComplexity`,
+- R6 [complexity] Ceilings: `Refactor.ABCSize`, `CyclomaticComplexity`,
   `PerceivedComplexity`, `Nesting`, `FunctionArity` → S2.
-- R7 [with] `with` sobre `case` anidado: `Refactor.WithClauses`,
+- R7 [with] `with` over nested `case`: `Refactor.WithClauses`,
   `RedundantWithClauseResult`, `Readability.WithSingleClause`,
-  `WithCustomTaggedTuple`; bordes con `{:ok,_}/{:error,_}` → S2.
+  `WithCustomTaggedTuple`. Edges with `{:ok,_}/{:error,_}` → S2.
 - R8 [design] `Design.TagTODO`, `TagFIXME`, `AliasUsage`,
   `SkipTestWithoutComment` → S2.
-- R9 [types] `@spec` (`Readability.Specs`) + Dialyzer limpio → S2.
+- R9 [types] `@spec` (`Readability.Specs`) + clean Dialyzer → S2.
 - R10 [consistency] `Consistency.SpaceAroundOperators`, `TabsOrSpaces`,
   `LineEndings`, `MultiAliasImportRequireUse` → S2.
-- R11 [errors] Mensajes de error **prescriptivos** (sugieren alternativa), salvo `[SECRECY]`
-  en `@doc` (seguridad por secrecía). `{:error, _}` para fallos esperados, no `raise` →
+- R11 [errors] Error messages **prescriptive** (suggest an alternative), except `[SECRECY]`
+  in `@doc` (security through obscurity). `{:error, _}` for expected failures, not `raise` →
   `conventions/prescriptive-error-messages.md`.
 
 ## COUNTEREXAMPLES
@@ -89,17 +90,17 @@ def login(u, p), do: {:error, :invalid_credentials}
 
 - local: `mix compile --warnings-as-errors` + `mix format --check` +
   `mix credo --strict` (Credo `~> 1.7`).
-- CI: lo local + Dialyzer vía `dialyxir` (`mix dialyzer`) + toolchain
-  Elixir/OTP fijada en `.tool-versions` (versiones exactas se fijan en el
-  dogfood 3.1 con el sandbox; sin pin no hay receipt).
-- R11 (prescriptivo): **warn no-block** — `conventions-warn-recorder.sh elixir/R11 <file> @<author>`; no bloquea, registra en `internal-audits`.
+- CI: Run the local checks and Dialyzer via `dialyxir` (`mix dialyzer`). Pin the
+  Elixir/OTP toolchain in `.tool-versions`. We pin exact versions in dogfood 3.1
+  with the sandbox. Without a pin, there is no receipt.
+- R11 (prescriptive): **warn non-blocking** — `conventions-warn-recorder.sh elixir/R11 <file> @<author>`. It does not block and records in `internal-audits`.
 
 ## LESSONS
 
-- L1 (sesión actual) Mensaje prohibitivo sin alternativa confunde al agente; la cura es
-  prescriptivo o `[SECRECY]` en `@doc` → R11 (ref: `conventions/prescriptive-error-messages.md`).
+- L1 (current session) A prohibitive message without an alternative confuses the agent. The cure is
+  prescriptive or `[SECRECY]` in `@doc` → R11 (ref: `conventions/prescriptive-error-messages.md`).
 
 ## RECEIPT
 
-Formato: `candidate_sha` + risk tier + lenses + verdict + tree-check-at-commit.
-El ejemplar emitido del dogfood vive junto al sample (ver tarea 3.2).
+Format: `candidate_sha` + risk tier + lenses + verdict + tree-check-at-commit.
+The issued dogfood specimen lives next to the sample (see task 3.2).

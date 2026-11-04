@@ -1,10 +1,13 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Sora, Inter, JetBrains_Mono } from "next/font/google";
+import { Alegreya, Alegreya_Sans, Inconsolata, Piazzolla } from "next/font/google";
 
-const sora = Sora({ subsets: ["latin"], variable: "--font-sora", weight: ["600", "800"] });
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
+// Chimera design-system fonts: Alemreya (display), Piazzolla (epic),
+// Alegreya Sans (body), Inconsolata (mono).
+const display = Alegreya({ subsets: ["latin"], variable: "--font-display", weight: ["600", "700", "800"] });
+const epic = Piazzolla({ subsets: ["latin"], variable: "--font-epic", weight: ["500", "700"] });
+const body = Alegreya_Sans({ subsets: ["latin"], variable: "--font-body", weight: ["400", "500", "700"] });
+const mono = Inconsolata({ subsets: ["latin"], variable: "--font-mono", weight: ["400", "500"] });
 
 const title = "better-toolkits — pick the toolkits your startup needs";
 const description =
@@ -42,7 +45,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`dark ${sora.variable} ${inter.variable} ${mono.variable}`}>
+    <html lang="en" className={`dark ${display.variable} ${epic.variable} ${body.variable} ${mono.variable}`}>
       <body>{children}</body>
     </html>
   );

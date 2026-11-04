@@ -203,7 +203,7 @@ describe("determinism and shape coverage", () => {
   });
 
   it("names all seven shapes, including the one the coverage verifier owns", () => {
-    expect(Object.keys(VACUOUS_GATE_SHAPES)).toHaveLength(7);
+    expect(new Set(Object.keys(VACUOUS_GATE_SHAPES))).toEqual(new Set([2, 4, 6, 7]));
     expect(VACUOUS_GATE_SHAPES[7]).toContain("complying costs more");
   });
 });

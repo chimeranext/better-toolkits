@@ -16,14 +16,14 @@ fi
 # -> {"enforce_no_squash": false}
 REPO_ROOT="${CLAUDE_PROJECT_DIR:-$(pwd)}"
 CFG="$REPO_ROOT/.claude/config/no-squash-hooks.json"
-if [ -r "$CFG" ] && command -v jq >/dev/null; then
+if [ -r "$CFG" ] && command -v jq | grep -q .; then
   ENABLED="$(jq -r '.enforce_no_squash // true' "$CFG")" || ENABLED="true"
   if [ "$ENABLED" = "false" ]; then
     exit 0
   fi
 fi
 
-if ! command -v python3 >/dev/null; then
+if ! command -v python3 | grep -q .; then
   exit 0
 fi
 if [ ! -f "$DETECT" ]; then
