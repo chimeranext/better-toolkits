@@ -64,6 +64,10 @@ slack-config.json
 - The catalog `vendored-gitignore.toml` (referenced by the standards index).
 - Related: `worktree-discipline.md` (worktrees transient), `checksum-hygiene.md`
   (release artifacts verified, not committed).
+- **DPC** (`dependency-caching.md`): how the pnpm store (shared across
+  worktrees/CI) realizes this symlink-out-of-tree doctrine via pnpm's native
+  symlinked `node_modules`. BGI governs *what* is ignored/symlinked; DPC
+  governs *how* the dependency store is shared and cached.
 - Learner summary: internal-handbook `docs/how-to/engineering-standards/BGI.md`.
 
 ## Recurrence guard: worktree symlink gate
