@@ -23,5 +23,5 @@ if [ ! -f "${CONFIG_FILE}" ]; then
   exit 1
 fi
 
-echo "gdrive-mcp: running rclone ls gdrive: (no 2>/dev/null, exit visible)"
+echo "gdrive-mcp: running rclone ls gdrive: (no dev-null redirect, exit visible)"
 exec "${RCLONE_BIN}" --drive-client-id "${CID}" --drive-client-secret "${CS}" ls gdrive:
