@@ -172,7 +172,8 @@ test("getGithubAppToken resuelve config, firma JWT y devuelve el token", async (
   // El Bearer debe ser un JWT con 3 segmentos (header.payload.signature).
   expect(authSeen.startsWith("Bearer ")).toBe(true)
   const jwt = authSeen.slice("Bearer ".length)
-  expect(jwt.split(".")).toHaveLength(3)
+  const JWT_SEGMENTS = 3 // header.payload.signature
+  expect(jwt.split(".")).toHaveLength(JWT_SEGMENTS)
 })
 
 test("getGithubAppToken lanza error claro cuando la App no está configurada", async () => {

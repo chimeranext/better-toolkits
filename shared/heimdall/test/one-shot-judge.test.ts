@@ -20,7 +20,8 @@ test("parseJudgeReviewPayload accepts valid judge JSON", () => {
   )
   expect(payload.status).toBe("APPROVE")
   expect(payload.confidence).toBe(4.2)
-  expect(payload.comments).toHaveLength(1)
+  const EXPECTED_COMMENTS = 1 // el fixture declara un comentario
+  expect(payload.comments).toHaveLength(EXPECTED_COMMENTS)
 })
 
 test("parseJudgeReviewPayload rejects missing summary", () => {

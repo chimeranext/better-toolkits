@@ -1,6 +1,7 @@
 /** Install phase: copy adapter (idempotent) + wire commands + skills + optional npm. */
 import { existsSync, mkdirSync, readFileSync, copyFileSync, writeFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
+import * as path from "node:path";
 import { join, dirname } from "node:path";
 import {
   resolveRepoRoot,
@@ -17,6 +18,7 @@ import {
   installSkillsDirs,
   readSkills,
   missingSkills,
+  canonicalCloneRoot,
 } from "./skills.js";
 import { planMcpStep, applyMcpStep, planShellEnvStep, applyShellEnvStep } from "./mcp.js";
 import { applyAgentSkillsInstall, planAgentSkillsInstall } from "./agent-skills.js";
@@ -58,8 +60,36 @@ function planBetterProfileSyncStep(repoRoot) {
 function planTooluseGuardsStep(repoRoot) {
   return {
     kind: "tooluse-guards",
-    detail: "install tool-use guards (PRDS / admin-merge)",
+    detail: "install tool-use guards (PRDS / admin-merge / bilingual fallback)",
     repoRoot,
+  };
+}
+
+function planBilingualPluginStep(repoRoot, configDir) {
+  const dir = join(configDir, "plugins", "local.mnm-bilingual");
+  const indexSource = join(repoRoot, "shared", "hooks", "bilingual", "adapters", "opencode-bilingual.ts");
+  const detectSource = join(repoRoot, "shared", "hooks", "bilingual", "detect.py");
+  if (!existsSync(indexSource) || !existsSync(detectSource)) {
+    return { kind: "skip", detail: "bilingual plugin source missing (no shared/hooks/bilingual)" };
+  }
+  const indexTarget = join(dir, "index.ts");
+  const detectTarget = join(dir, "detect.py");
+  const indexInstalled = readBytesOrNull(indexTarget);
+  const detectInstalled = readBytesOrNull(detectTarget);
+  const stale =
+    indexInstalled === null ||
+    Buffer.compare(indexInstalled, readFileSync(indexSource)) !== 0 ||
+    detectInstalled === null ||
+    Buffer.compare(detectInstalled, readFileSync(detectSource)) !== 0;
+  return {
+    kind: "bilingual-plugin",
+    detail: stale ? `install bilingual plugin -> ${dir}` : `bilingual plugin up to date (${dir})`,
+    dir,
+    indexSource,
+    detectSource,
+    indexTarget,
+    detectTarget,
+    stale,
   };
 }
 
@@ -84,6 +114,7 @@ export function planWiringSteps(opts = {}, repoRoot = resolveRepoRoot()) {
   if (skillsStep) steps.push(skillsStep);
   steps.push(planBetterProfileSyncStep(repoRoot));
   steps.push(planTooluseGuardsStep(repoRoot));
+  steps.push(planBilingualPluginStep(repoRoot, configDir));
   steps.push(planAutoUpdateStep(opts, repoRoot, configDir));
   return { adapter, steps };
 }
@@ -170,7 +201,8 @@ function applyAutoUpdateStep(step) {
  */
 export function planSkillsStep(opts, repoRoot) {
   const configDir = resolveConfigDir(opts);
-  const wanted = installSkillsDirs(repoRoot);
+  const canonical = canonicalCloneRoot(repoRoot);
+  const wanted = installSkillsDirs(canonical);
   if (!wanted.length) return null;
   const current = readSkills(configDir);
   if (current.unparseable) {
@@ -179,16 +211,19 @@ export function planSkillsStep(opts, repoRoot) {
       detail: `${current.file} has comments (jsonc) — add "skills" entries by hand: ${wanted.join(", ")}`,
     };
   }
-  const missing = missingSkills(current.skills, wanted);
-  if (!missing.length) {
+  const have = Array.isArray(current.skills) ? [...current.skills].sort() : [];
+  const sortedWanted = [...wanted].sort();
+  const same = have.length === sortedWanted.length && have.every((v, i) => v === sortedWanted[i]);
+  if (same) {
     return { kind: "skip", detail: `skills entries up to date in ${current.file}` };
   }
   const target = current.file ?? join(configDir, "opencode.json");
+  const removed = have.filter((v) => !sortedWanted.includes(v));
   return {
     kind: "skills",
-    detail: `${current.file ? "merge" : "create"} ${missing.length} skills entries in ${target}`,
+    detail: `${current.file ? "consolidate" : "create"} skills entries in ${target} (${wanted.length} canonical; ${removed.length} stale removed)`,
     target,
-    missing,
+    wanted: sortedWanted,
   };
 }
 
@@ -201,9 +236,7 @@ function applySkillsStep(step) {
     doc = {};
   }
   if (!doc.$schema) doc.$schema = "https://opencode.ai/config.json";
-  const have = new Set(Array.isArray(doc.skills) ? doc.skills : []);
-  for (const m of step.missing) have.add(m);
-  doc.skills = [...have].sort();
+  doc.skills = step.wanted; // consolidate: full canonical list, no stale entries
   writeFileSync(step.target, `${JSON.stringify(doc, null, 2)}\n`);
   console.log(`  done: ${step.detail}`);
 }
@@ -250,6 +283,13 @@ export function applyInstall(plan, opts = {}) {
       } else {
         console.log("  warn: sync-better-profile.sh missing, skipping");
       }
+    } else if (s.kind === "bilingual-plugin") {
+      mkdirSync(s.dir, { recursive: true });
+      if (s.stale) {
+        copyFileSync(s.indexSource, s.indexTarget);
+        copyFileSync(s.detectSource, s.detectTarget);
+      }
+      console.log(`  done: ${s.detail}`);
     } else if (s.kind === "auto-update") {
       applyAutoUpdateStep(s);
     } else if (s.kind === "mcp") {

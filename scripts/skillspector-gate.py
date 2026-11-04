@@ -10,13 +10,32 @@ Usage: python3 scripts/skillspector-gate.py [--no-llm]
 """
 
 import json
-import subprocess
+# subprocess is required to run the real scanner CLI (bandit B404).
+import subprocess  # nosec
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 REPORT = ROOT / "skillspector-report.sarif"
 THRESHOLD = 50
+
+# Literal rule descriptions from the official SkillSpector README (NVIDIA/skillspector).
+# Included so a finding is self-explanatory in CI logs/SARIF: the rule id alone
+# (e.g. "TR2") was not evident enough. TR1/TR2/TR3 are the Trigger Abuse family.
+RULE_DESCRIPTIONS = {
+    "TR1": (
+        "Trigger Abuse — Overly Broad Trigger (MEDIUM): "
+        "trigger patterns matching common words"
+    ),
+    "TR2": (
+        "Trigger Abuse — Shadow Command Trigger (HIGH): "
+        "triggers that shadow built-in commands or other skills"
+    ),
+    "TR3": (
+        "Trigger Abuse — Keyword Baiting Trigger (MEDIUM): "
+        "generic triggers designed to maximize activation"
+    ),
+}
 
 ARGS = [a for a in sys.argv[1:] if a != "--python"]
 
@@ -41,7 +60,10 @@ def scan(d: Path, extra: list[str]) -> dict:
     if baseline.exists():
         cmd += ["--baseline", str(baseline)]
     cmd += extra
-    r = subprocess.run(cmd, capture_output=True, text=True)
+    # cmd is built from fixed args/paths, not untrusted input (bandit B603).
+    r = subprocess.run(  # nosec
+        cmd, capture_output=True, text=True
+    )
     try:
         return json.loads(r.stdout or "{}")
     except json.JSONDecodeError:
@@ -70,17 +92,31 @@ def main() -> int:
             bad.append((score, rel))
         for i in rep.get("issues", []):
             loc = i.get("location", {}) or {}
+            rule_id = i.get("id", "?")
+            rule_desc = RULE_DESCRIPTIONS.get(rule_id, "")
+            severity = i.get("severity", "")
+            if rule_desc:
+                print(f"  [{rule_id}] {rule_desc}")
+                finding_text = str(i.get("finding", i.get("message", "")))[:200]
+                loc_s = f"{rel}/{loc.get('file', '')}:{loc.get('start_line', 1)}"
+                print(f"      at {loc_s} — {finding_text}")
+            finding_text = str(i.get("finding", i.get("message", "")))[:200]
+            msg = f"{rel}: {i.get('category', '')} — {finding_text}"
+            if rule_desc:
+                msg += f" | {rule_desc}"
             sarif_runs.append(
                 {
-                    "ruleId": i.get("id", "?"),
+                    "ruleId": rule_id,
                     "level": "error"
-                    if i.get("severity") in ("HIGH", "CRITICAL")
+                    if severity in ("HIGH", "CRITICAL")
                     else "warning",
-                    "message": {"text": f"{rel}: {i.get('category','')} — {str(i.get('finding', i.get('message','')))[:200]}"},
+                    "message": {"text": msg},
                     "locations": [
                         {
                             "physicalLocation": {
-                                "artifactLocation": {"uri": f"{rel}/{loc.get('file','')}"},
+                                "artifactLocation": {
+                                    "uri": f"{rel}/{loc.get('file', '')}"
+                                },
                                 "region": {"startLine": loc.get("start_line", 1)},
                             }
                         }

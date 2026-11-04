@@ -1,0 +1,14 @@
+{
+  "id": "01-insight-not-observation",
+  "prompt": "Here is the insight for our deck: 'Latin American developers are undervalued by the global market.' Our problem slide says Latin American engineers build world-class software and get paid a fraction of the US rate. Can you sharpen the wording of the insight so it lands harder?",
+  "expected_behavior": "Refuses the framing of the request. The insight is a restatement of the problem (failure mode F2, the double P), so sharpening the wording is the wrong operation. Regenerates candidates instead.",
+  "assertions": [
+    "Names the failure as a restatement of the problem rather than editing the sentence as given",
+    "Does not deliver a polished version of the original sentence as the answer",
+    "Generates at least three new candidates using different moves from the insight forge",
+    "Scores candidates on non-obviousness and refuses to ship anything under 9",
+    "Applies at least the inversion and ownership tests explicitly",
+    "The winning candidate contains no brand name and is one sentence",
+    "Contains no em dashes"
+  ]
+}

@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
 
-// Theme inherited from better-microservices/apps/web (Chimera brand).
+// Theme migrated to the Chimera design-system (OR/gold palette) — apps/web
+// depends on CSS variables defined in src/app/globals.css.
 const config: Config = {
   darkMode: ["class"],
   content: ["./src/**/*.{ts,tsx}"],
@@ -17,12 +18,18 @@ const config: Config = {
         success: "hsl(var(--success))",
         warning: "hsl(var(--warning))",
         card: { DEFAULT: "hsl(var(--card))", foreground: "hsl(var(--card-foreground))" },
-        // Chimera brand (raw hues for gradients/pills)
-        brand: { primary: "#7C5CFF", secondary: "#3B82F6", tertiary: "#22D3EE", accent: "#EC4899" },
+        // Chimera brand (gold / violet / goldLight) — kept as CSS vars so light
+        // surfaces re-tune them via `.surface-light`.
+        brand: { primary: "hsl(var(--brand-primary))", secondary: "hsl(var(--brand-accent))", tertiary: "hsl(var(--brand-tertiary))", accent: "hsl(var(--brand-accent))" },
       },
-      fontFamily: { heading: ["var(--font-sora)"], body: ["var(--font-inter)"], mono: ["var(--font-mono)"] },
+      fontFamily: {
+        heading: ["var(--font-display)"],
+        epic: ["var(--font-epic)"],
+        body: ["var(--font-body)"],
+        mono: ["var(--font-mono)"],
+      },
       borderRadius: { lg: "10px", md: "8px", sm: "6px" },
-      backgroundImage: { "brand-gradient": "linear-gradient(90deg,#7C5CFF,#3B82F6,#22D3EE)" },
+      backgroundImage: { "brand-gradient": "var(--brand-gradient)" },
     },
   },
   plugins: [require("tailwindcss-animate")],

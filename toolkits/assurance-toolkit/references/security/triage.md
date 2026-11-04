@@ -45,6 +45,12 @@ sequenceDiagram
 
 1. Read PR CI / security workflows (SAST, SCA, container scan, dependency review —
    whatever the repo wires). Align with [`references/security/protocol.md`](../security/protocol.md).
+   Map the wired gates against the vendored ci-checks catalog
+   (`shared/references/ci/ci-checks.yml`) and its gap analysis
+   (`shared/references/ci/security-tooling-gap.md`): the triage PASS requires the
+   repo's SAST/SCA/container/dep-review gates to cover the catalog baseline
+   (CodeQL/SAST, Trivy/SCA+container, dependency-review). Coverage gaps are
+   findings, not silent skips.
 2. **PASS** when no **critical** (or repo-defined blocking) security findings remain
    open for this PR head SHA.
 3. When findings exist but are triageable, stay in this mode. Follow

@@ -26,6 +26,12 @@ development; do not turn this into a competing product.**
 
 1. Prefer issues and PRs against [chimeranext/better-toolkits](https://github.com/chimeranext/better-toolkits).
 2. Branch names: `feat/…`, `fix/…`, `docs/…` — no employer-specific ticket prefixes in public branch names.
+2a. **CI checks** follow the canonical 10-phase catalog
+    (`shared/references/ci/ci-checks.yml`). When a PR's CI surface is involved,
+    use `/ci-checks-setup` to generate/restructure checks, `/ci-checks-verify
+    <check>` to diagnose a failing check, and `/ci-checks-audit` to compare the
+    repo's workflow jobs against the catalog. New check names must match the
+    `verb-type-subject` regex (`scripts/ci/check-ci-naming.py`).
 3. Keep commits focused. If you touch `hooks/`, add or update the relevant synthetic tests.
 3a. **Marketplace versions:** agent-facing toolkit edits must bump the plugin version in `.claude-plugin/marketplace.json` and `toolkits/*/.claude-plugin/plugin.json`. Install `pre-commit install --hook-type pre-push` or symlink `scripts/git-hooks/pre-push-marketplace-versions.sh` → `.git/hooks/pre-push`. Helper: `python3 scripts/ci/marketplace_versioning.py write --range origin/main..HEAD`.
 3b. **Merge PRs with merge commits only** — [`docs/git-merge-policy.md`](docs/git-merge-policy.md). Squash and rebase merges are **forbidden** on this repo (`gh pr merge --merge`). Toolkit docs that show `gh pr merge` must not use `--squash` for better-toolkits.

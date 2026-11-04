@@ -1,0 +1,1557 @@
+{
+  "skills": [
+    {
+      "name": "accelerator-launchpad",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "additive-manufacturing",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "alt-distribution",
+      "version": "1",
+      "files": [
+        "SKILL.md",
+        "references/fdroid.md"
+      ]
+    },
+    {
+      "name": "animacion-digital",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "app-security",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "apply",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "archive",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "assurance",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "assurance-testing-audit",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "attached-fund-structure",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "attribution-readout",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "audit-engine",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "automation-triage",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "b2g",
+      "version": "1",
+      "files": [
+        "SKILL.md",
+        "references/compliance.md",
+        "references/procurement-platforms.md",
+        "references/public-private-partnership.md",
+        "references/rfp-requirements.md",
+        "references/unspsc.md"
+      ]
+    },
+    {
+      "name": "bevy-iced-integration",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "bim",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "blooms-taxonomy",
+      "version": "1",
+      "files": [
+        "SKILL.md",
+        "references/verb-tables.md"
+      ]
+    },
+    {
+      "name": "brainstorming-visual-companion",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "brand-identity",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "budget-pacing",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "bulk-archive",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "business-brain-setup",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "cad",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "cad-cam-handoff",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "cae",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "cam",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "cap-table-per-venture",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "ci-checks-audit",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "ci-checks-setup",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "ci-checks-verify",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "cicd-argocd",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "cicd-github-actions",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "cicd-setup",
+      "version": "1",
+      "files": [
+        "SKILL.md",
+        "references/codemagic.md",
+        "references/github-actions.md"
+      ]
+    },
+    {
+      "name": "coaching-session",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "code-push",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "continue",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "contract-nda",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "contract-psa",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "contract-retainer",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "cost-of-delay-cd3",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "course-audit",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "course-diff",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "course-retro",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "course-revise",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "course-visualize",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "creative-testing",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "customer-interview-system",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "customer-journey-map",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "deep-research",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "design-studio",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "design-system-analyzer",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "desktop-signing",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "dfm",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "digital-nomad",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "document-it",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "document-this",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "dogfood",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "domain-driven-advisor",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "evaluate-agent-skills",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "evidence-explicit-attribution",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "execution-plan",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "experience-map",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "explore-exploit",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "ff",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "fidelity-guide",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "five-s",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "flatpak-build",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "flutter-accessibility",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "flutter-error-tracking",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "flutter-mobile-testing",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "flutter-performance",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "flutter-security",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "flutter-testing-strategy",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "game-design",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "gemelos-digitales",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "github-app-setup",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "graphics-cad-3d-toolkit",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "growth-acceleration",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "gtm-fit",
+      "version": "1",
+      "files": [
+        "SKILL.md",
+        "references/organic-presence.md",
+        "references/product-company-gap.md"
+      ]
+    },
+    {
+      "name": "implement",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "implement-advisor",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "improvement-kata",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "innovation-scorecard",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "ishikawa",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "jidoka-verification",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "kill-rules",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "kmp-build",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "kraljic-matrix",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "landing-instrumentation",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "landing-page-design",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "launch-plan",
+      "version": "1",
+      "files": [
+        "SKILL.md",
+        "references/timeline-24h.md"
+      ]
+    },
+    {
+      "name": "learning-evaluation",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "liability-contagion-analysis",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "local-pr-review",
+      "version": "1",
+      "files": [
+        "SKILL.md",
+        "skill-card.md"
+      ]
+    },
+    {
+      "name": "logistics-deep-research",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "logistics-supply-chain",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "map-workshop",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "maui-publishing",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "media-plan",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "mensarius-oath-adoption",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "mentoring-session",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "merge-advisor",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "meta-graph-api",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "model-operations-3d",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "modeling-3d",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "monetization",
+      "version": "1",
+      "files": [
+        "SKILL.md",
+        "references/lemonsqueezy.md",
+        "references/revenuecat.md"
+      ]
+    },
+    {
+      "name": "msstore-submission",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "new",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "new-course",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "new-path",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "notion-content-ingestion",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "oauth2-setup",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "onboard",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "parallel-subagents",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "piber-narrative-architect",
+      "version": "1",
+      "files": [
+        "CHANGELOG.md",
+        "SKILL.md",
+        "assets/case-board-skeleton.md",
+        "assets/refused-lines.txt",
+        "evaluations/01-insight-not-observation.json",
+        "evaluations/02-transposition-invisible.json",
+        "evaluations/03-audit-not-rewrite.json",
+        "evaluations/README.md",
+        "references/compression-ladder.md",
+        "references/failure-modes.md",
+        "references/idcf-pairing.md",
+        "references/insight-forge.md",
+        "references/transposition.md",
+        "references/worked-examples.md",
+        "scripts/piber_gate.py"
+      ]
+    },
+    {
+      "name": "pitch-deck",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "pitch-script",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "playbook-authoring",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "player-psychology",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "pre-launch-checklist",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "premortem",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "pricing-strategist",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "prioritize",
+      "version": "1",
+      "files": [
+        "SKILL.md",
+        "references/frameworks/ice.md",
+        "references/frameworks/kano.md",
+        "references/frameworks/moscow-rice.md",
+        "references/frameworks/moscow.md",
+        "references/frameworks/rice.md",
+        "references/frameworks/wsjf.md",
+        "references/linear-mutations.md",
+        "references/prompts/llm-fallback-bucket.md",
+        "references/scoring-rules.md"
+      ]
+    },
+    {
+      "name": "problem-validation",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "process-standardization",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "product-vision-audit",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "production",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "project-takeover",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "propose",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "prototype-to-production",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "pwa-quality",
+      "version": "1",
+      "files": [
+        "SKILL.md",
+        "references/lighthouse-pwa-checks.md",
+        "references/manifest-schema.md",
+        "references/workbox-recipes.md"
+      ]
+    },
+    {
+      "name": "requirements-authoring",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "research-cadence",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "research-methodology",
+      "version": "1",
+      "files": [
+        "SKILL.md",
+        "resources/framework-extraction.md",
+        "resources/research-template.md",
+        "resources/source-quality.md"
+      ]
+    },
+    {
+      "name": "resolve-open-questions",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "revenue-growth-landing-page-design",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "revenue-ops",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "revenue-ops-triage",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "revenue-strategy",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "review-active-issues",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "review-open-prs",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "ribbon-ui",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "runbook-authoring",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "rv-otd-schema-management",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "schematics-pcb-design",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "schematics-pcb-design-deep-research",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "secret-sauce",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "service-blueprint",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "services-hub-setup",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "session-plan-audit",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "session-planner-1on1",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "session-replay",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "shared-services-ledger",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "ship-first-design",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "six-sigma",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "slides-generate",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "slides-preview",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "snap-build",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "social-publishing",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "solution-design",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "sop-authoring",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "spec-recommend",
+      "version": "1",
+      "files": [
+        "SKILL.md",
+        "references/anti-examples-block.md",
+        "references/bilingual-format.md"
+      ]
+    },
+    {
+      "name": "spike-recommend",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "sre-alerting-incident-management",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "sre-chaos-engineering",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "sre-container-security",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "sre-database-reliability",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "sre-disaster-recovery-business-continuity",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "sre-load-testing-performance",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "sre-logging-log-aggregation",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "sre-network-policies-security",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "sre-observability-stack",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "sre-security-compliance-automation",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "sre-slo-sli-sla",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "startup-lifecycle",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "static-analysis",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "store-listing",
+      "version": "1",
+      "files": [
+        "SKILL.md",
+        "references/screenshot-specs.md"
+      ]
+    },
+    {
+      "name": "store-setup",
+      "version": "1",
+      "files": [
+        "SKILL.md",
+        "references/app-store.md",
+        "references/google-play.md"
+      ]
+    },
+    {
+      "name": "storyboard",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "structure-decision",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "structure-evolution-roadmap",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "studio-archetype-selector",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "studio-focus",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "studio-thesis",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "subagents-claude",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "subagents-opencode",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "sweat-equity-agreement",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "sync",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "sync-advisor",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "systematic-debugging",
+      "version": "1",
+      "files": [
+        "SKILL.md",
+        "condition-based-waiting.md",
+        "defense-in-depth.md",
+        "root-cause-tracing.md"
+      ]
+    },
+    {
+      "name": "takeover-assessment",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "teaching-context",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "testing-tracks",
+      "version": "1",
+      "files": [
+        "SKILL.md",
+        "references/google-play-tracks.md",
+        "references/real-device-testing.md",
+        "references/testflight.md"
+      ]
+    },
+    {
+      "name": "three-horizons",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "tolerances-fits",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "tpm-smed",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "tps",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "tutoring-session",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "update",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "user-story-map",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "venture-spin-out-playbook",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "verify",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "verify-evidence",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "versioning-management",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "vertical-charter",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "vfx",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "videojuegos",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "visual-storytelling",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "vr-ar",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "waste",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "when-to-become-studio",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "widget-decomposition",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "workbook-generate",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    },
+    {
+      "name": "worktree-cleanup",
+      "version": "1",
+      "files": [
+        "SKILL.md"
+      ]
+    }
+  ]
+}

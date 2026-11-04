@@ -18,6 +18,7 @@ HARNESS_HOOKS="$HARNESS_HOME/hooks"
 
 mkdir -p "$HARNESS_HOOKS"
 cp "$ROOT/shared/hooks/tooluse/enforce-prds.sh" "$HARNESS_HOOKS/enforce-prds.sh"
+cp "$ROOT/shared/hooks/tooluse/enforce-bilingual.sh" "$HARNESS_HOOKS/enforce-bilingual.sh"
 cp "$ROOT/shared/hooks/tooluse/approve-admin-merge.sh" "$HARNESS_HOOKS/approve-admin-merge.sh"
 STOP_SRC="$ROOT/shared/hooks/tooluse/stop-prs-green.sh"
 [ -f "$STOP_SRC" ] || STOP_SRC="$ROOT/toolkits/make-no-mistakes-toolkit/hooks/hygiene/stop-prs-green.sh"

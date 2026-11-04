@@ -66,13 +66,14 @@ test("postReview arma el POST correcto y fuerza event=COMMENT", async () => {
     }
     expect(body.event).toBe("COMMENT")
     expect(body.body).toBe(REVIEW.body)
-    expect(body.comments).toHaveLength(1)
-    expect(body.comments?.[0]).toEqual({
+    const EXPECTED_VALID_COMMENTS = [{
       path: "src/a.ts",
       line: 12,
       side: "RIGHT",
       body: "nit: naming",
-    })
+    }]
+    expect(body.comments).toHaveLength(EXPECTED_VALID_COMMENTS.length)
+    expect(body.comments).toEqual(EXPECTED_VALID_COMMENTS)
 
     // Resultado mapeado desde la respuesta.
     expect(result.review_id).toBe(999)

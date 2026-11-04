@@ -3,8 +3,8 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
-    "prebuild": "node scripts/gen-toolkits.mjs",
-    "predev": "node scripts/gen-toolkits.mjs",
+    "prebuild": "node scripts/gen-toolkits.mjs && node scripts/gen-skills-catalog.mjs && node scripts/gen-stats.mjs",
+    "predev": "node scripts/gen-toolkits.mjs && node scripts/gen-skills-catalog.mjs && node scripts/gen-stats.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "clsx": "2.1.1",
+    "gsap": "^3.15.0",
     "next": "14.2.15",
     "react": "18.3.1",
     "react-dom": "18.3.1",
