@@ -15,14 +15,14 @@ fi
 # Per-repo opt-out: .claude/config/stderr-hooks.json → {"preserve_stderr": false}
 REPO_ROOT="${CLAUDE_PROJECT_DIR:-$(pwd)}"
 CFG="$REPO_ROOT/.claude/config/stderr-hooks.json"
-if [ -r "$CFG" ] && command -v jq >/dev/null; then
+if [ -r "$CFG" ] && command -v jq | grep -q .; then
   ENABLED="$(jq -r '.preserve_stderr // true' "$CFG" )" || ENABLED="true"
   if [ "$ENABLED" = "false" ]; then
     exit 0
   fi
 fi
 
-if ! command -v python3 >/dev/null; then
+if ! command -v python3 | grep -q .; then
   echo "[claude-pre-bash.sh] WARN: python3 not found; failing open." >&2
   exit 0
 fi
