@@ -75,8 +75,8 @@ win_userprofile() {
   local p=""
   if [ -n "${USERPROFILE:-}" ]; then
     p="$USERPROFILE"
-  elif command -v powershell.exe >/dev/null 2>&1; then
-    p=$(powershell.exe -NoProfile -NonInteractive -Command '[Environment]::GetFolderPath("UserProfile")' 2>/dev/null | tr -d '\r')
+  elif command -v powershell.exe | grep -q .; then
+    p=$(powershell.exe -NoProfile -NonInteractive -Command '[Environment]::GetFolderPath("UserProfile")' 2>>"${TMPDIR:-/tmp}/sync-better-profile-pwsh.err" | tr -d '\r')
   fi
   echo "$p"
 }

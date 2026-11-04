@@ -83,7 +83,7 @@ elif [ -f build.zig.zon ]; then
 	INSTALL=(zig build)
 elif [ -f shard.lock ]; then
 	INSTALL=(shards install --production)
-elif compgen -G "*.nimble.lock" >/dev/null; then
+elif compgen -G "*.nimble.lock" | grep -q .; then
 	INSTALL=(nimble install -y)
 else
 	echo "setup-worktree: no known lockfile found — no install step (language may not use a package manager)"

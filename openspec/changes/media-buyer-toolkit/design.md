@@ -173,7 +173,7 @@ Deliberately excluded here, with the reason, so the review can disagree explicit
 
 ## D17 — Transport is a stateless stdio MCP
 
-The `mcp/ads-multi-network/` server implements the **stateless** MCP transport from the start, following `vitemcp/server#migrating-from-the-session-based-api` — the same contract already validated on `shared/google-workspace-apps/google-for-rclone.ts`.
+The `mcp/ads-multi-network/` server implements the **stateless** MCP transport from the start, following `vitemcp/server#migrating-from-the-session-based-api` — the same contract already validated on `shared/mcp/google-workspace-apps/google-for-rclone.ts`.
 
 Rules:
 
