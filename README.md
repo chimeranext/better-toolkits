@@ -458,9 +458,9 @@ vitemcp pattern (protocol revision 2024-11-05 / 2026-07-28, no `Mcp-Session-Id`)
 
 | Server | Toolkit | Transport | Protocol | What it exposes |
 | --- | --- | --- | --- | --- |
-| `notion-batch` | `instructional-design-toolkit/mcp/notion-batch` | stdio (Node) | stateless vitemcp | `fetch_tree`, `query_database` — recursive Notion crawl with verbatim bookmark URLs |
+| `notion-chimeranext` | `shared/mcp/notion-chimeranext` | stdio (Node) | stateless vitemcp | `fetch_tree`, `query_database` — recursive Notion crawl with verbatim bookmark URLs |
 | `ads-multi-network` | `media-buyer-toolkit/mcp/ads-multi-network` | stdio (Node/tsx) | stateless vitemcp | 20 paid-media operations (Meta/TikTok/LinkedIn/Google/YouTube/Spotify) with guardrails |
-| `docs-to-glb` | `3d-graphics-cad-toolkit/mcp/docs-to-glb` | stdio (Rust) | stateless vitemcp | 3D model / rv-ODT operations scaffold |
+| `docs-to-glb` | `shared/mcp/docs-to-glb` | stdio (Rust) | stateless vitemcp | 3D model / rv-ODT operations scaffold |
 
 Consumer-registered MCP servers (e.g. `context7`, `slack`, `linear-project`, `stitch`,
 `notion`, `dart`, `chrome-devtools-mcp`) live in the consumer's `opencode.json` / global

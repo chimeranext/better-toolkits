@@ -77,7 +77,7 @@ No `client_id` embedded in `.ts`; `.json` file is the single source of truth for
 - `.worktrees/test_catalog_verify/test_catalog_raw_final.sh` (catalog assertions script, Hurl-style, bash)
 - `.worktrees/test_catalog_verify/test_catalog_assertions.sh` (PASS/FAIL assertions)
 - `shared/google-workspace-apps-mcp/google-for-rclone.ts` (5-tool catalog: upload, list, download, delete, mkdir; English; stdio MCP; verify/loadRemote/handshake; no embedded client_id)
-- `shared/google-workspace-apps/gdrive.sh` (CLI wrapper, verify `.json` → loadRemote `.rclone-config`, no embedded client_id, exit visible, `2>/dev/null` absent)
+- `shared/mcp/google-workspace-apps/gdrive.sh` (CLI wrapper, verify `.json` → loadRemote `.rclone-config`, no embedded client_id, exit visible, `2>/dev/null` absent)
 - `.worktrees/test_catalog_verify/test_catalog_raw.sh` (raw stdio test script)
 - `toolkits/make-no-mistakes-toolkit/scripts/rotate_google_cloud_console_oauth_client_secret.py` (rotation helper, versioned, `097cc22`)
 
