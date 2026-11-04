@@ -241,11 +241,31 @@ def scan_test_assertions(path: Path) -> list[tuple[str, str]]:
     return out
 
 
+# Vendored stderr/no-squash/prds detection adapters must contain the exact
+# redirect patterns they block (they grep and reject `2>/dev/null` etc.), so
+# the dev-null scan is a false positive there. Skip them for the shell scan.
+_DETECTOR_ADAPTER_HOOKS = {"stderr", "no-squash", "prds"}
+
+
+def _is_detector_adapter(path: Path) -> bool:
+    parts = path.parts
+    try:
+        idx = parts.index("hooks")
+    except ValueError:
+        return False
+    return (
+        idx + 1 < len(parts)
+        and parts[idx + 1] in _DETECTOR_ADAPTER_HOOKS
+        and "adapters" in parts[idx:]
+    )
+
+
 def scan_one(path: Path) -> list[tuple[str, str]]:
     name = path.name.lower()
     out: list[tuple[str, str]] = []
     if path.suffix == ".sh":
-        out.extend(scan_shell(path))
+        if not _is_detector_adapter(path):
+            out.extend(scan_shell(path))
     elif path.suffix == ".py":
         out.extend(scan_python(path))
     elif path.suffix in (".ts", ".tsx", ".js", ".jsx"):
