@@ -95,6 +95,7 @@
         "merge-advisor",
         "new",
         "onboard",
+        "parallel-subagents",
         "premortem",
         "prioritize",
         "propose",
@@ -103,16 +104,16 @@
         "review-open-prs",
         "spec-recommend",
         "spike-recommend",
+        "subagents-claude",
         "subagents-opencode",
+        "sweep-pending-opsx",
         "sync",
         "sync-advisor",
         "systematic-debugging",
         "update",
         "verify",
         "verify-evidence",
-        "worktree-cleanup",
-        "subagents-claude",
-        "parallel-subagents"
+        "worktree-cleanup"
       ]
     }
   ]

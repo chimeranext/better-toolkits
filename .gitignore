@@ -38,3 +38,10 @@ __pycache__/
 
 # Graphify (generated analysis artifacts — never committed)
 graphify-out/
+
+# Runtime-generated agent rules (sync-agent-rules.sh) — never commit the
+# materialized load paths; the SSOT lives in shared/references/engineering-
+# standards/ (or repo .agents/rules/). Track only harness-authored rules.
+.claude/rules/
+.cursor/rules/*
+!.cursor/rules/hitl-doctrine.mdc
