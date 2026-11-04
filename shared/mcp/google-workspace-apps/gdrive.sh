@@ -15,7 +15,7 @@ fi
 CID=$(python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); c=d.get("installed") or d; print(c.get("client_id",""))' "${JSON_FILE}")
 CS=$(python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); c=d.get("installed") or d; print(c.get("client_secret",""))' "${JSON_FILE}")
 
-echo "gdrive-mcp: verify() .json (${JSON_FILE}, $(ls -l "${JSON_FILE}" | awk '{print $5}') B) -> loadRemote() .rclone-config (${CONFIG_FILE})"
+echo "gdrive-mcp: verify() .json (${JSON_FILE}, $(stat -c %s "${JSON_FILE}") B) -> loadRemote() .rclone-config (${CONFIG_FILE})"
 echo "client_id prefix: ${CID:0:15}... secret prefix: ${CS:0:10}..."
 
 if [ ! -f "${CONFIG_FILE}" ]; then
