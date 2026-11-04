@@ -20,7 +20,7 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --dry-run) DRY_RUN=1; shift ;;
     --deploy) DEPLOY=1; shift ;;
-    --only) ONLYLY="${2:-}"; shift 2 ;;
+    --only) ONLY="${2:-}"; shift 2 ;;
     -h|--help) sed -n '2,14p' "$0"; exit 0 ;;
     *) echo "ERROR: unknown flag: $1 (see --help)" >&2; exit 64 ;;
   esac
