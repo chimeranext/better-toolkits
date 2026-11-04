@@ -56,6 +56,43 @@ DST[opencode]="${HOME}/.config/opencode/agents/better.md"
 DST[claude]="${HOME}/.claude/agents/better.md"
 DST[cursor]="${HOME}/.cursor/agents/better.md"
 
+# --- Windows (WSL) native desktop app support --------------------------------
+# OpenCode Desktop (native Windows) reads its config from %USERPROFILE%\.config\
+# opencode\agents\better.md. When running inside WSL, the Windows user profile is
+# not $HOME; detect WSL and resolve the Windows path so the agent profile lands
+# where the native desktop app can read it.
+is_wsl() {
+  [ -n "${WSL_DISTRO_NAME:-}" ] && return 0
+  if [ -f /proc/version ]; then
+    grep -qi "microsoft" /proc/version && return 0
+  fi
+  return 1
+}
+
+# Resolve the Windows user profile dir from WSL via powershell.exe (authoritative).
+# Falls back to reading USERPROFILE env if already exposed (e.g. detached).
+win_userprofile() {
+  local p=""
+  if [ -n "${USERPROFILE:-}" ]; then
+    p="$USERPROFILE"
+  elif command -v powershell.exe >/dev/null 2>&1; then
+    p=$(powershell.exe -NoProfile -NonInteractive -Command '[Environment]::GetFolderPath("UserProfile")' 2>/dev/null | tr -d '\r')
+  fi
+  echo "$p"
+}
+
+# By default, keep the POSIX path. When WSL is detected AND a Windows profile is
+# resolvable, publish the OpenCode profile to the Windows-native path instead.
+if is_wsl; then
+  wprofile=$(win_userprofile)
+  if [ -n "$wprofile" ]; then
+    DST[opencode]="$wprofile/.config/opencode/agents/better.md"
+    say "[better-profile] WSL detected — OpenCode target: $wprofile/.config/opencode/agents/better.md"
+  else
+    say "[better-profile] WSL detected but no Windows profile resolvable — using POSIX \$HOME"
+  fi
+fi
+
 TMPDIR_PROF="$(mktemp -d)"
 trap 'rm -rf "$TMPDIR_PROF"' EXIT
 
