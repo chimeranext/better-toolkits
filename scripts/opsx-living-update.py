@@ -194,7 +194,7 @@ def load_capabilities(feature: str) -> list[str]:
             in_caps = True
             continue
         if in_caps and re.match(
-            r"^\s+(excluded:|exclude_change_id_substrings:|include_change_id_substrings:|vista_drop_titles:|vista_drop_scenarios:)",
+            r"^\s+(excluded:|exclude_change_id_substrings:|include_change_id_substrings:|vista_drop_titles:|vista_drop_scenarios:)",  # noqa: E501
             line,
         ):
             break
@@ -551,7 +551,7 @@ def audit_table_rows(records: list[dict[str, str]]) -> list[str]:
         caps = [rec["capability"] for rec in group]
         iso, ieee, risk = assess_change(change_id, caps).cells()
         rows.append(
-            f"| `{change_id}` | {c['date']} | `{c['commit']}` | {proposal} | {design} | {spec} | {tasks} | {iso} | {ieee} | {risk} |"
+            f"| `{change_id}` | {c['date']} | `{c['commit']}` | {proposal} | {design} | {spec} | {tasks} | {iso} | {ieee} | {risk} |"  # noqa: E501
         )
     return rows
 
@@ -767,9 +767,9 @@ def build_audit_section(existing_audit: str, all_records: list[dict[str, str]]) 
     lines = [
         "## Parte 1 — Registro de auditoría",
         "",
-        "Tabla **append-only**: cada corrida añade filas para changes nuevos; **no se quitan** filas pasadas (como un changelog).",
+        "Tabla **append-only**: cada corrida añade filas para changes nuevos; **no se quitan** filas pasadas (como un changelog).",  # noqa: E501
         "",
-        "| Change | Fecha | Commit en `main` | Proposal | Design | Spec delta | Tasks | ISO 29148 | IEEE 29119-3 | ISO 31000 |",
+        "| Change | Fecha | Commit en `main` | Proposal | Design | Spec delta | Tasks | ISO 29148 | IEEE 29119-3 | ISO 31000 |",  # noqa: E501
         "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
     # Preserve existing rows in order, then append new. ISO cells are recomputed each run.
@@ -954,7 +954,7 @@ def build_header(feature: str, run_date: str) -> str:
     title = feature.replace("-", " ").title()
     return f"""# {title} — living spec
 
-Documento vivo del feature **{title}**. Generado y ampliado por `/opsx-living {feature}`. Catálogo: [`feature-catalog.yaml`](../../feature-catalog.yaml).
+Documento vivo del feature **{title}**. Generado y ampliado por `/opsx-living {feature}`. Catálogo: [`feature-catalog.yaml`](../../feature-catalog.yaml).  # noqa: E501
 
 **Última corrida `/opsx-living`:** {run_date}
 
