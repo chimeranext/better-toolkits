@@ -5,7 +5,7 @@
 # `shared/references/engineering-standards/build-artifacts-gitignore.md`.
 
 [meta]
-version = "1.0.0"
+version = "1.1.0"
 note = "Add a group per language/tool; never delete a group used by a client repo."
 
 [[group]]
@@ -61,6 +61,158 @@ globs = [
   "_build/",
   "deps/",
   "cover/",
+]
+
+[[group]]
+id = "go"
+label = "Go"
+globs = [
+  "bin/",
+  "vendor/",
+  "*.exe",
+  "*.test",
+  "*.out",
+]
+
+[[group]]
+id = "java"
+label = "Java/Kotlin (JVM)"
+globs = [
+  "target/",
+  "build/",
+  ".gradle/",
+  ".settings/",
+  "*.class",
+  "*.jar",
+  "*.war",
+]
+
+[[group]]
+id = "csharp"
+label = "C#/.NET"
+globs = [
+  "bin/",
+  "obj/",
+  "*.user",
+  "*.suo",
+]
+
+[[group]]
+id = "ruby"
+label = "Ruby"
+globs = [
+  "vendor/bundle/",
+  ".bundle/",
+  "Gemfile.lock.bak",
+]
+
+[[group]]
+id = "php"
+label = "PHP"
+globs = [
+  "vendor/",
+  "composer.lock.bak",
+  "*.cache",
+]
+
+[[group]]
+id = "cpp"
+label = "C/C++"
+globs = [
+  "build/",
+  "*.o",
+  "*.obj",
+  "*.exe",
+  "*.a",
+  "*.so",
+  "*.dylib",
+  "*.dll",
+]
+
+[[group]]
+id = "swift"
+label = "Swift/Objective-C"
+globs = [
+  ".build/",
+  "DerivedData/",
+  "*.xcodeproj/xcuserdata/",
+  "*.xcodeproj/project.xcworkspace/xcuserdata/",
+]
+
+[[group]]
+id = "scala"
+label = "Scala"
+globs = [
+  "target/",
+  "project/target/",
+  "project/project/",
+]
+
+[[group]]
+id = "lua"
+label = "Lua"
+globs = [
+  "luac.out",
+  "*.rock",
+  "rocks/",
+]
+
+[[group]]
+id = "r"
+label = "R"
+globs = [
+  ".Rhistory",
+  ".RData",
+  ".Ruserdata",
+  "*.Rcheck/",
+]
+
+[[group]]
+id = "haskell"
+label = "Haskell"
+globs = [
+  "dist-newstyle/",
+  ".stack-work/",
+  "*.hi",
+  "*.o",
+]
+
+[[group]]
+id = "julia"
+label = "Julia"
+globs = [
+  "Manifest.toml.bak",
+  "*.cov",
+  "*.mem",
+  ".julia/",
+]
+
+[[group]]
+id = "zig"
+label = "Zig"
+globs = [
+  "zig-cache/",
+  ".zig-cache/",
+  "zig-out/",
+]
+
+[[group]]
+id = "crystal"
+label = "Crystal"
+globs = [
+  "lib/",
+  ".shards/",
+  "bin/",
+]
+
+[[group]]
+id = "nim"
+label = "Nim"
+globs = [
+  "nimcache/",
+  "*.exe",
+  "*.out",
+  ".nimble/",
 ]
 
 [[group]]

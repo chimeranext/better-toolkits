@@ -56,7 +56,7 @@ Resolve `{playbooks-dir}` first, in this order:
 ### Paso 1 — Routing test (three-way ops taxonomy + docs)
 
 Confirm the thing is actually a playbook. Use the shared three-way ops taxonomy in
-[`references/documentation-taxonomy.md`](../../references/documentation-taxonomy.md) (playbook / runbook / SOP)
+[`references/authoring-taxonomy.md`](../../references/authoring-taxonomy.md) (playbook / runbook / SOP)
 plus the usual product-docs cases.
 
 Rule of thumb: if the reader must **choose among branches** before acting, it is a
