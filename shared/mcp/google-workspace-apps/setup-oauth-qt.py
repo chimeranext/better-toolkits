@@ -3,6 +3,7 @@
 /google-workspace-oauth-setup — UI prompt con evidencia TOS + paso a paso.
 No usa enumerate; pasos debajo de cada input. Versión tkinter (python3 nativo).
 """
+
 import tkinter as tk
 from tkinter import messagebox
 
@@ -27,74 +28,168 @@ def run():
     left.grid(row=0, column=0, sticky="nsw", padx=4)
 
     def _card(parent, title, emoji, title_color, body_color, title_txt, body_txt):
-        card = tk.Frame(parent, bg=title_color, highlightbackground=body_color,
-                        highlightthickness=2)
+        card = tk.Frame(
+            parent, bg=title_color, highlightbackground=body_color, highlightthickness=2
+        )
         card.pack(anchor="w", fill="x", pady=3)
-        tk.Label(card, text=f"{emoji}  {title_txt}", bg=title_color, fg="white",
-                 font=("Ubuntu", 11, "bold"), anchor="w", wraplength=400).pack(anchor="w", padx=8, pady=(4, 1))  # noqa: E501
-        tk.Label(card, text=body_txt, bg=title_color, fg="#e5e7eb", font=("Ubuntu", 11),
-                 anchor="w", justify="left", wraplength=400).pack(anchor="w", padx=8, pady=(0, 4))  # noqa: E501
+        tk.Label(
+            card,
+            text=f"{emoji}  {title_txt}",
+            bg=title_color,
+            fg="white",
+            font=("Ubuntu", 11, "bold"),
+            anchor="w",
+            wraplength=400,
+        ).pack(
+            anchor="w", padx=8, pady=(4, 1)
+        )  # noqa: E501
+        tk.Label(
+            card,
+            text=body_txt,
+            bg=title_color,
+            fg="#e5e7eb",
+            font=("Ubuntu", 11),
+            anchor="w",
+            justify="left",
+            wraplength=400,
+        ).pack(
+            anchor="w", padx=8, pady=(0, 4)
+        )  # noqa: E501
         return card
 
-    _card(left, "", "✅", "#1b5e20", "#2e7d32",
-          "¿Qué estoy solicitándote?",
-          "Configurar tu propio OAuth client_id + remote rclone (gdrive) para que el MCP "  # noqa: E501
-          "'google-workspace-apps' sincronice sin exponer credenciales.")
-    _card(left, "", "ℹ️", "#0d47a1", "#1565c0",
-          "¿Por qué motivo?",
-          "Google obliga (TOS y políticas OAuth) a que cada aplicación tenga su propio OAuth client "  # noqa: E501
-          "para acceder a Drive. No puedes usar credenciales compartidas ni embebidas (ver evidencia "  # noqa: E501
-          "TOS a continuación). Por eso debes ir a console.cloud.google.com y crear tu propio proyecto "  # noqa: E501
-          "para sincronizar con rclone.")
+    _card(
+        left,
+        "",
+        "✅",
+        "#1b5e20",
+        "#2e7d32",
+        "¿Qué estoy solicitándote?",
+        "Configurar tu propio OAuth client_id + remote rclone (gdrive) para que el MCP "  # noqa: E501
+        "'google-workspace-apps' sincronice sin exponer credenciales.",
+    )
+    _card(
+        left,
+        "",
+        "ℹ️",
+        "#0d47a1",
+        "#1565c0",
+        "¿Por qué motivo?",
+        "Google obliga (TOS y políticas OAuth) a que cada aplicación tenga su propio OAuth client "  # noqa: E501
+        "para acceder a Drive. No puedes usar credenciales compartidas ni embebidas (ver evidencia "  # noqa: E501
+        "TOS a continuación). Por eso debes ir a console.cloud.google.com y crear tu propio proyecto "  # noqa: E501
+        "para sincronizar con rclone.",
+    )
 
     # Derecha: referencias compactas clickeables (APA)
     import webbrowser
+
     # Col=1: advertencia UX (entre preguntas y referencias APA)
-    warn = tk.Frame(top, bg="#4a2d00", highlightbackground="#f59e0b",
-                    highlightthickness=2)
+    warn = tk.Frame(
+        top, bg="#4a2d00", highlightbackground="#f59e0b", highlightthickness=2
+    )
     warn.grid(row=0, column=1, sticky="nse", padx=6)
-    tk.Label(warn, text="⚠  ADVERTENCIA — Google Cloud (trial / 2FA)", bg="#4a2d00", fg="#f59e0b",  # noqa: E501
-             font=("Ubuntu", 9, "bold"), anchor="w", justify="left", wraplength=260).pack(anchor="w", padx=8, pady=(4, 1))  # noqa: E501
-    for wline in ["• Trial gratuito: requiere tarjeta (crédito ~USD 30, 90 días; no se cobra si cancelas antes).",  # noqa: E501
-                  "• Google exige 2FA (MFA) para console.cloud.google.com; prepara Authenticator.",  # noqa: E501
-                  "• Esto es para crear tu propio OAuth client. El MCP NO funciona sin ese paso."]:  # noqa: E501
-        tk.Label(warn, text=wline, bg="#4a2d00", fg="#e5e7eb", font=("Ubuntu", 11),
-                 anchor="w", justify="left", wraplength=260).pack(anchor="w", padx=8)
+    tk.Label(
+        warn,
+        text="⚠  ADVERTENCIA — Google Cloud (trial / 2FA)",
+        bg="#4a2d00",
+        fg="#f59e0b",  # noqa: E501
+        font=("Ubuntu", 9, "bold"),
+        anchor="w",
+        justify="left",
+        wraplength=260,
+    ).pack(
+        anchor="w", padx=8, pady=(4, 1)
+    )  # noqa: E501
+    for wline in [
+        "• Trial gratuito: requiere tarjeta (crédito ~USD 30, 90 días; no se cobra si cancelas antes).",  # noqa: E501
+        "• Google exige 2FA (MFA) para console.cloud.google.com; prepara Authenticator.",  # noqa: E501
+        "• Esto es para crear tu propio OAuth client. El MCP NO funciona sin ese paso.",
+    ]:  # noqa: E501
+        tk.Label(
+            warn,
+            text=wline,
+            bg="#4a2d00",
+            fg="#e5e7eb",
+            font=("Ubuntu", 11),
+            anchor="w",
+            justify="left",
+            wraplength=260,
+        ).pack(anchor="w", padx=8)
     ref_right = tk.Frame(top, bg="#181818")
     ref_right.grid(row=0, column=2, sticky="nse", padx=4)
     ref_content = tk.Frame(ref_right, bg="#181818")
     ref_content.pack(expand=True, pady=0)
-    tk.Label(ref_content, text="Referencias Legales", bg="#181818", fg="#ddd",
-             font=("Ubuntu", 9, "bold"), anchor="w").pack(anchor="w", pady=1)
+    tk.Label(
+        ref_content,
+        text="Referencias Legales",
+        bg="#181818",
+        fg="#ddd",
+        font=("Ubuntu", 9, "bold"),
+        anchor="w",
+    ).pack(anchor="w", pady=1)
     for ut, url in [
-        ("• Google APIs Terms (§b.1): 'Developer credentials ... may not be embedded in open source projects.'",  # noqa: E501
-         "https://dev.google.com/terms"),
+        (
+            "• Google APIs Terms (§b.1): 'Developer credentials ... may not be embedded in open source projects.'",  # noqa: E501
+            "https://dev.google.com/terms",
+        ),
         ("→ dev.google.com/terms", "https://dev.google.com/terms"),
-        ("• OAuth 2.0 Policies: 'Every app must have its own OAuth client.'",
-         "https://developers.google.com/identity/protocols/oauth2"),
-        ("→ developers.google.com/identity/protocols/oauth2",
-         "https://developers.google.com/identity/protocols/oauth2"),
-        ("• rclone.org/drive — Making your own client-id",
-         "https://rclone.org/drive/#making-your-own-client-id"),
-        ("→ rclone.org/drive/#making-your-own-client-id",
-         "https://rclone.org/drive/#making-your-own-client-id"),
-        ("• newscrewdriver — Limiting Google client-id exposure",
-         "https://newscydriver.com/2016/12/27/limiting-google-client-id-exposure/"),
-        ("→ newscydriver.com/2016/12/27/limiting-google-client-id-exposure/",
-         "https://newscydriver.com/2016/12/27/limiting-google-client-id-exposure/"),
+        (
+            "• OAuth 2.0 Policies: 'Every app must have its own OAuth client.'",
+            "https://developers.google.com/identity/protocols/oauth2",
+        ),
+        (
+            "→ developers.google.com/identity/protocols/oauth2",
+            "https://developers.google.com/identity/protocols/oauth2",
+        ),
+        (
+            "• rclone.org/drive — Making your own client-id",
+            "https://rclone.org/drive/#making-your-own-client-id",
+        ),
+        (
+            "→ rclone.org/drive/#making-your-own-client-id",
+            "https://rclone.org/drive/#making-your-own-client-id",
+        ),
+        (
+            "• newscrewdriver — Limiting Google client-id exposure",
+            "https://newscydriver.com/2016/12/27/limiting-google-client-id-exposure/",
+        ),
+        (
+            "→ newscydriver.com/2016/12/27/limiting-google-client-id-exposure/",
+            "https://newscydriver.com/2016/12/27/limiting-google-client-id-exposure/",
+        ),
     ]:
         if ut.startswith("• "):
-            lbl = tk.Label(ref_content, text=ut, bg="#181818", fg="#ccc", font=(
-                "Ubuntu", 11), wraplength=300, anchor="w", justify="left")
+            lbl = tk.Label(
+                ref_content,
+                text=ut,
+                bg="#181818",
+                fg="#ccc",
+                font=("Ubuntu", 11),
+                wraplength=300,
+                anchor="w",
+                justify="left",
+            )
         else:
-            lbl = tk.Label(ref_content, text=ut, bg="#181818", fg="#55aaff", font=(
-                "Ubuntu", 11, "underline"), cursor="hand2", anchor="w")
+            lbl = tk.Label(
+                ref_content,
+                text=ut,
+                bg="#181818",
+                fg="#55aaff",
+                font=("Ubuntu", 11, "underline"),
+                cursor="hand2",
+                anchor="w",
+            )
             lbl.bind("<Button-1>", lambda e, u=url: webbrowser.open(u))
         lbl.pack(anchor="center", expand=True, fill="x", pady=0)
 
-# 3. FORMULARIO — 4 campos manuales, paso DEBAJO de cada input
-    form = tk.LabelFrame(root, text="  Configuración paso a paso (cada paso debajo del campo)  ",  # noqa: E501
-                         bg="#181818", fg="#ccc", font=("Ubuntu", 11, "bold"))
+    # 3. FORMULARIO — 4 campos manuales, paso DEBAJO de cada input
+    form = tk.LabelFrame(
+        root,
+        text="  Configuración paso a paso (cada paso debajo del campo)  ",  # noqa: E501
+        bg="#181818",
+        fg="#ccc",
+        font=("Ubuntu", 11, "bold"),
+    )
     form.pack(pady=8, padx=10, fill="x")
     for i in range(4):
         form.grid_columnconfigure(i, weight=1, uniform="step")
@@ -102,114 +197,342 @@ def run():
     # Campo 1 — CLIENT_ID (paso / input / instrucciones verticales)
     r1 = tk.Frame(form, bg="#181818")
     r1.grid(row=0, column=0, sticky="new", pady=6, padx=4)
-    tk.Label(r1, text="› Paso 1: Crear proyecto/aplicación de Google Cloud", bg="#181818",  # noqa: E501
-             fg="#ddd", font=("Ubuntu", 11, "bold"), anchor="w").pack(anchor="w", pady=2)  # noqa: E501
+    tk.Label(
+        r1,
+        text="› Paso 1: Crear proyecto/aplicación de Google Cloud",
+        bg="#181818",  # noqa: E501
+        fg="#ddd",
+        font=("Ubuntu", 11, "bold"),
+        anchor="w",
+    ).pack(
+        anchor="w", pady=2
+    )  # noqa: E501
     sb1 = tk.Frame(r1, bg="#181818")
     sb1.pack(anchor="w", pady=1)
 
-    tk.Label(sb1, text="→ Crea un proyecto en la consola de Google Cloud accediendo a ",
-             bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb1, text="https://console.cloud.google.com/", bg="#181818", fg="#55aaff",
-             font=("Ubuntu", 11, "underline"), cursor="hand2", anchor="w").pack(anchor="w")  # noqa: E501
-    sb1.children[list(sb1.children.keys())[-1]].bind("<Button-1>",
-                                                     lambda e: __import__("webbrowser").open("https://console.cloud.google.com/"))  # noqa: E501
+    tk.Label(
+        sb1,
+        text="→ Crea un proyecto en la consola de Google Cloud accediendo a ",
+        bg="#181818",
+        fg="#aaa",
+        font=("Ubuntu", 11),
+        anchor="w",
+    ).pack(anchor="w")
+    tk.Label(
+        sb1,
+        text="https://console.cloud.google.com/",
+        bg="#181818",
+        fg="#55aaff",
+        font=("Ubuntu", 11, "underline"),
+        cursor="hand2",
+        anchor="w",
+    ).pack(
+        anchor="w"
+    )  # noqa: E501
+    sb1.children[list(sb1.children.keys())[-1]].bind(
+        "<Button-1>",
+        lambda e: __import__("webbrowser").open("https://console.cloud.google.com/"),
+    )  # noqa: E501
 
-    tk.Label(sb1, text="→ Activa APIs y Credenciales", bg="#181818",
-             fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    tk.Label(
+        sb1,
+        text="→ Activa APIs y Credenciales",
+        bg="#181818",
+        fg="#aaa",
+        font=("Ubuntu", 11),
+        anchor="w",
+    ).pack(anchor="w")
 
-    tk.Label(sb1, text="→ Crea el OAuth client ID en la URL:", bg="#181818",
-             fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb1, text="https://console.cloud.google.com/auth/overview/create", bg="#181818",  # noqa: E501
-             fg="#55aaff", font=("Ubuntu", 11, "underline"), cursor="hand2", anchor="w").pack(anchor="w")  # noqa: E501
-    sb1.children[list(sb1.children.keys())[-1]].bind("<Button-1>", lambda e,
-                                                     url="https://console.cloud.google.com/auth/overview/create": __import__("webbrowser").open(url))  # noqa: E501
+    tk.Label(
+        sb1,
+        text="→ Crea el OAuth client ID en la URL:",
+        bg="#181818",
+        fg="#aaa",
+        font=("Ubuntu", 11),
+        anchor="w",
+    ).pack(anchor="w")
+    tk.Label(
+        sb1,
+        text="https://console.cloud.google.com/auth/overview/create",
+        bg="#181818",  # noqa: E501
+        fg="#55aaff",
+        font=("Ubuntu", 11, "underline"),
+        cursor="hand2",
+        anchor="w",
+    ).pack(
+        anchor="w"
+    )  # noqa: E501
+    sb1.children[list(sb1.children.keys())[-1]].bind(
+        "<Button-1>",
+        lambda e, url="https://console.cloud.google.com/auth/overview/create": __import__(  # noqa: E501
+            "webbrowser"
+        ).open(
+            url
+        ),
+    )  # noqa: E501
 
-    tk.Label(sb1, text="→ Ingrese el nombre de la aplicación:", bg="#181818",
-             fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb1, text="Google Drive MCP", bg="#181818", fg="#aaa",
-             font=("DejaVu Sans Mono", 11), anchor="w").pack(anchor="w")
+    tk.Label(
+        sb1,
+        text="→ Ingrese el nombre de la aplicación:",
+        bg="#181818",
+        fg="#aaa",
+        font=("Ubuntu", 11),
+        anchor="w",
+    ).pack(anchor="w")
+    tk.Label(
+        sb1,
+        text="Google Drive MCP",
+        bg="#181818",
+        fg="#aaa",
+        font=("DejaVu Sans Mono", 11),
+        anchor="w",
+    ).pack(anchor="w")
 
-    tk.Label(sb1, text="→ Seleccione su correo electrónico de la lista desplegable",
-             bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb1, text="→ Dar click en Siguiente", bg="#181818",
-             fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb1, text="→ Selecciona la opción de Público: 'Interno'",
-             bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb1, text="→ Dar click en Siguiente", bg="#181818",
-             fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb1, text="→ Ingrese nuevamente su correo electrónico",
-             bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    tk.Label(
+        sb1,
+        text="→ Seleccione su correo electrónico de la lista desplegable",
+        bg="#181818",
+        fg="#aaa",
+        font=("Ubuntu", 11),
+        anchor="w",
+    ).pack(anchor="w")
+    tk.Label(
+        sb1,
+        text="→ Dar click en Siguiente",
+        bg="#181818",
+        fg="#aaa",
+        font=("Ubuntu", 11),
+        anchor="w",
+    ).pack(anchor="w")
+    tk.Label(
+        sb1,
+        text="→ Selecciona la opción de Público: 'Interno'",
+        bg="#181818",
+        fg="#aaa",
+        font=("Ubuntu", 11),
+        anchor="w",
+    ).pack(anchor="w")
+    tk.Label(
+        sb1,
+        text="→ Dar click en Siguiente",
+        bg="#181818",
+        fg="#aaa",
+        font=("Ubuntu", 11),
+        anchor="w",
+    ).pack(anchor="w")
+    tk.Label(
+        sb1,
+        text="→ Ingrese nuevamente su correo electrónico",
+        bg="#181818",
+        fg="#aaa",
+        font=("Ubuntu", 11),
+        anchor="w",
+    ).pack(anchor="w")
 
-    tk.Label(sb1, text="→ Acepte la ", bg="#181818", fg="#aaa",
-             font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb1, text="Política de Datos del Usuario de los Servicios de las APIs de Google", bg="#181818",  # noqa: E501
-             fg="#55aaff", font=("Ubuntu", 11, "underline"), cursor="hand2", anchor="w").pack(anchor="w")  # noqa: E501
+    tk.Label(
+        sb1,
+        text="→ Acepte la ",
+        bg="#181818",
+        fg="#aaa",
+        font=("Ubuntu", 11),
+        anchor="w",
+    ).pack(anchor="w")
+    tk.Label(
+        sb1,
+        text="Política de Datos del Usuario de los Servicios de las APIs de Google",
+        bg="#181818",  # noqa: E501
+        fg="#55aaff",
+        font=("Ubuntu", 11, "underline"),
+        cursor="hand2",
+        anchor="w",
+    ).pack(
+        anchor="w"
+    )  # noqa: E501
 
-    sb1.children[list(sb1.children.keys())[-1]].bind("<Button-1>", lambda e,
-                                                     url="https://developers.google.com/terms/api-services-user-data-policy": __import__("webbrowser").open(url))  # noqa: E501
+    sb1.children[list(sb1.children.keys())[-1]].bind(
+        "<Button-1>",
+        lambda e, url="https://developers.google.com/terms/api-services-user-data-policy": __import__(  # noqa: E501
+            "webbrowser"
+        ).open(
+            url
+        ),
+    )  # noqa: E501
 
     r2 = tk.Frame(form, bg="#181818")
     r2.grid(row=0, column=1, sticky="new", pady=6, padx=4)
 
-    tk.Label(r2, text="› Paso 2: Configure el cliente OAuth para la app", bg="#181818",
-             fg="#ddd", font=("Ubuntu", 11, "bold"), anchor="w").pack(anchor="w", pady=2)  # noqa: E501
+    tk.Label(
+        r2,
+        text="› Paso 2: Configure el cliente OAuth para la app",
+        bg="#181818",
+        fg="#ddd",
+        font=("Ubuntu", 11, "bold"),
+        anchor="w",
+    ).pack(
+        anchor="w", pady=2
+    )  # noqa: E501
 
     sb2 = tk.Frame(r2, bg="#181818")
     sb2.pack(anchor="w", pady=1)
 
-    tk.Label(sb2, text="→ Selecciona tipo Desktop app", bg="#181818",
-             fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb2, text="→ Selecciona tipo Desktop app", bg="#181818",
-             fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    tk.Label(
+        sb2,
+        text="→ Selecciona tipo Desktop app",
+        bg="#181818",
+        fg="#aaa",
+        font=("Ubuntu", 11),
+        anchor="w",
+    ).pack(anchor="w")
+    tk.Label(
+        sb2,
+        text="→ Selecciona tipo Desktop app",
+        bg="#181818",
+        fg="#aaa",
+        font=("Ubuntu", 11),
+        anchor="w",
+    ).pack(anchor="w")
 
-    tk.Label(sb2, text="→ Selecciona tipo Desktop app", bg="#181818",
-             fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    tk.Label(
+        sb2,
+        text="→ Selecciona tipo Desktop app",
+        bg="#181818",
+        fg="#aaa",
+        font=("Ubuntu", 11),
+        anchor="w",
+    ).pack(anchor="w")
 
-    tk.Label(sb2, text="→ Copie aquí el valor del GOOGLE_CLIENT_ID", bg="#181818",
-             fg="#ddd", font=("Ubuntu", 11, "bold"), anchor="w").pack(anchor="w", pady=2)  # noqa: E501
-    ent_client = tk.Entry(sb2, bg="#222", fg="#fff", insertbackground="#fff", font=(
-        "DejaVu Sans Mono", 11), width=55)
+    tk.Label(
+        sb2,
+        text="→ Copie aquí el valor del GOOGLE_CLIENT_ID",
+        bg="#181818",
+        fg="#ddd",
+        font=("Ubuntu", 11, "bold"),
+        anchor="w",
+    ).pack(
+        anchor="w", pady=2
+    )  # noqa: E501
+    ent_client = tk.Entry(
+        sb2,
+        bg="#222",
+        fg="#fff",
+        insertbackground="#fff",
+        font=("DejaVu Sans Mono", 11),
+        width=55,
+    )
     ent_client.pack(anchor="w", pady=2)
 
-    tk.Label(sb2, text="→ Copie aquí el valor del GOOGLE_CLIENT_SECRET", bg="#181818",
-             fg="#ddd", font=("Ubuntu", 11, "bold"), anchor="w").pack(anchor="w", pady=2)  # noqa: E501
-    ent_secret = tk.Entry(sb2, bg="#222", fg="#fff", insertbackground="#fff", font=(
-        "DejaVu Sans Mono", 11), show="*", width=55)
+    tk.Label(
+        sb2,
+        text="→ Copie aquí el valor del GOOGLE_CLIENT_SECRET",
+        bg="#181818",
+        fg="#ddd",
+        font=("Ubuntu", 11, "bold"),
+        anchor="w",
+    ).pack(
+        anchor="w", pady=2
+    )  # noqa: E501
+    ent_secret = tk.Entry(
+        sb2,
+        bg="#222",
+        fg="#fff",
+        insertbackground="#fff",
+        font=("DejaVu Sans Mono", 11),
+        show="*",
+        width=55,
+    )
     ent_secret.pack(anchor="w", pady=2)
 
-    tk.Label(sb2, text="→ Guarde éstos valores en un lugar seguro", bg="#181818",
-             fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    tk.Label(
+        sb2,
+        text="→ Guarde éstos valores en un lugar seguro",
+        bg="#181818",
+        fg="#aaa",
+        font=("Ubuntu", 11),
+        anchor="w",
+    ).pack(anchor="w")
 
     # Campo 3 — REMOTE (vertical)
     r3 = tk.Frame(form, bg="#181818")
     r3.grid(row=0, column=2, sticky="new", pady=6, padx=4)
-    tk.Label(r3, text="› Paso 3: Definir RCLONE_REMOTE (default: gdrive)", bg="#181818",
-             fg="#ddd", font=("Ubuntu", 11, "bold"), anchor="w").pack(anchor="w", pady=2)  # noqa: E501
-    ent_remote = tk.Entry(r3, bg="#222", fg="#fff", insertbackground="#fff", font=(
-        "DejaVu Sans Mono", 11), width=55)
+    tk.Label(
+        r3,
+        text="› Paso 3: Definir RCLONE_REMOTE (default: gdrive)",
+        bg="#181818",
+        fg="#ddd",
+        font=("Ubuntu", 11, "bold"),
+        anchor="w",
+    ).pack(
+        anchor="w", pady=2
+    )  # noqa: E501
+    ent_remote = tk.Entry(
+        r3,
+        bg="#222",
+        fg="#fff",
+        insertbackground="#fff",
+        font=("DejaVu Sans Mono", 11),
+        width=55,
+    )
     ent_remote.insert(0, "gdrive")
     ent_remote.pack(anchor="w", pady=2)
     sb3 = tk.Frame(r3, bg="#181818")
     sb3.pack(anchor="w", pady=1)
-    tk.Label(sb3, text="• rclone config", bg="#181818", fg="#aaa",
-             font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb3, text="→ Configurar remote = gdrive (interactivo)",
-             bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    tk.Label(
+        sb3,
+        text="• rclone config",
+        bg="#181818",
+        fg="#aaa",
+        font=("Ubuntu", 11),
+        anchor="w",
+    ).pack(anchor="w")
+    tk.Label(
+        sb3,
+        text="→ Configurar remote = gdrive (interactivo)",
+        bg="#181818",
+        fg="#aaa",
+        font=("Ubuntu", 11),
+        anchor="w",
+    ).pack(anchor="w")
 
     # Campo 4 — FOLDER_ID + Paso 4 (texto izquierda / input derecha)
     r4 = tk.Frame(form, bg="#181818")
     r4.grid(row=0, column=3, sticky="new", pady=6, padx=4)
-    tk.Label(r4, text="› Paso 4: Verificar GOOGLE_DRIVE_FOLDER_ID", bg="#181818",
-             fg="#ddd", font=("Ubuntu", 11, "bold"), anchor="w").pack(anchor="w", pady=2)  # noqa: E501
-    ent_folder = tk.Entry(r4, bg="#222", fg="#fff", insertbackground="#fff", font=(
-        "DejaVu Sans Mono", 11), width=55)
+    tk.Label(
+        r4,
+        text="› Paso 4: Verificar GOOGLE_DRIVE_FOLDER_ID",
+        bg="#181818",
+        fg="#ddd",
+        font=("Ubuntu", 11, "bold"),
+        anchor="w",
+    ).pack(
+        anchor="w", pady=2
+    )  # noqa: E501
+    ent_folder = tk.Entry(
+        r4,
+        bg="#222",
+        fg="#fff",
+        insertbackground="#fff",
+        font=("DejaVu Sans Mono", 11),
+        width=55,
+    )
     ent_folder.pack(anchor="w", pady=2)
     sb4 = tk.Frame(r4, bg="#181818")
     sb4.pack(anchor="w", pady=1)
-    tk.Label(sb4, text="• Verificar: rclone lsf gdrive:", bg="#181818",
-             fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
-    tk.Label(sb4, text="→ Exportar ENV: export RCLONE_REMOTE=gdrive",
-             bg="#181818", fg="#aaa", font=("Ubuntu", 11), anchor="w").pack(anchor="w")
+    tk.Label(
+        sb4,
+        text="• Verificar: rclone lsf gdrive:",
+        bg="#181818",
+        fg="#aaa",
+        font=("Ubuntu", 11),
+        anchor="w",
+    ).pack(anchor="w")
+    tk.Label(
+        sb4,
+        text="→ Exportar ENV: export RCLONE_REMOTE=gdrive",
+        bg="#181818",
+        fg="#aaa",
+        font=("Ubuntu", 11),
+        anchor="w",
+    ).pack(anchor="w")
     form.grid_columnconfigure(0, weight=1)
 
     # 5. BOTONES
@@ -219,13 +542,17 @@ def run():
     def load_json():
         from tkinter import filedialog
         import json
+
         path = filedialog.askopenfilename(
-            title="Selecciona archivo .json de Google OAuth", filetypes=[("JSON", "*.json")])  # noqa: E501
+            title="Selecciona archivo .json de Google OAuth",
+            filetypes=[("JSON", "*.json")],
+        )  # noqa: E501
         if not path:
             return
         try:
             import shutil
             import os
+
             target_dir = os.path.expanduser("~/.config/google-workspace")
             os.makedirs(target_dir, exist_ok=True)
             target_path = os.path.join(target_dir, "google-oauth-client.json")
@@ -240,8 +567,11 @@ def run():
             remote = ent_remote.get().strip() or "gdrive"
             with open(os.path.join(target_dir, ".rclone-config.json"), "w") as f:
                 json.dump({"remote": remote}, f)
-            msg = "Archivo reubicado a: " + target_path + \
-                "\n.rclone-config actualizado. NO compartir archivo."
+            msg = (
+                "Archivo reubicado a: "
+                + target_path
+                + "\n.rclone-config actualizado. NO compartir archivo."
+            )
             messagebox.showinfo("OK", msg)
         except Exception as e:
             messagebox.showerror("Error", str(e))
@@ -249,26 +579,54 @@ def run():
     def save():
         import os
         import json
+
         try:
             os.makedirs(os.path.expanduser("~/.config/google-workspace"), exist_ok=True)
-            with open(os.path.expanduser("~/.config/google-workspace/client_id"), "w") as f:  # noqa: E501
+            with open(
+                os.path.expanduser("~/.config/google-workspace/client_id"), "w"
+            ) as f:  # noqa: E501
                 f.write(ent_client.get().strip())
-            with open(os.path.expanduser("~/.config/google-workspace/client_secret"), "w") as f:  # noqa: E501
+            with open(
+                os.path.expanduser("~/.config/google-workspace/client_secret"), "w"
+            ) as f:  # noqa: E501
                 f.write(ent_secret.get().strip())
             remote = ent_remote.get().strip() or "gdrive"
-            with open(os.path.expanduser("~/.config/google-workspace/.rclone-config.json"), "w") as f:  # noqa: E501
+            with open(
+                os.path.expanduser("~/.config/google-workspace/.rclone-config.json"),
+                "w",
+            ) as f:  # noqa: E501
                 json.dump({"remote": remote}, f)
             messagebox.showinfo(
-                "OK", "Guardado local (NO repo). Luego: rclone config (si aún no configurado) o verificar con rclone lsf gdrive:")  # noqa: E501
+                "OK",
+                "Guardado local (NO repo). Luego: rclone config (si aún no configurado) o verificar con rclone lsf gdrive:",  # noqa: E501
+            )  # noqa: E501
             root.destroy()
         except Exception as e:
             messagebox.showerror("Error", str(e))
-    tk.Button(btns, text="📁 Cargar .json Google OAuth", command=load_json,
-              bg="#2e7d32", fg="#fff", font=("Ubuntu", 9, "bold")).pack(side="left", padx=4)  # noqa: E501
-    tk.Button(btns, text="Aceptar — guardar local", command=save,
-              bg="#0a84ff", fg="#fff", font=("Ubuntu", 11, "bold")).pack(side="left", padx=6)  # noqa: E501
-    tk.Button(btns, text="Cancelar", command=root.destroy,
-              bg="#333", fg="#fff").pack(side="left", padx=6)
+
+    tk.Button(
+        btns,
+        text="📁 Cargar .json Google OAuth",
+        command=load_json,
+        bg="#2e7d32",
+        fg="#fff",
+        font=("Ubuntu", 9, "bold"),
+    ).pack(
+        side="left", padx=4
+    )  # noqa: E501
+    tk.Button(
+        btns,
+        text="Aceptar — guardar local",
+        command=save,
+        bg="#0a84ff",
+        fg="#fff",
+        font=("Ubuntu", 11, "bold"),
+    ).pack(
+        side="left", padx=6
+    )  # noqa: E501
+    tk.Button(btns, text="Cancelar", command=root.destroy, bg="#333", fg="#fff").pack(
+        side="left", padx=6
+    )
 
     root.mainloop()
 
