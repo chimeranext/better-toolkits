@@ -5,15 +5,28 @@
 # - No dependency on a developer clone under Documents/GitHub.
 # - Custom MCPs: SSOT is shared/mcp in the monorepo; published as
 #   https://toolkits.chimeranext.dev/mcp/<name>.tar.gz (same assets as OpenCode).
-#   Installed under ~/.local/share/better-toolkits/mcp and registered in
-#   ~/.cursor/mcp.json — not from agent marketplace cache.
-# - Optional shallow clone under ~/.local/share/better-toolkits/src for hooks +
-#   /refresh (BETTER_TOOLKITS_ROOT override supported).
+#   Share root is OS-native (not a hardcoded ~/.local/share path):
+#     Windows → %LOCALAPPDATA%\better-toolkits  (AppData\Local)
+#     else    → ~/.local/share/better-toolkits  (XDG)
+#   MCPs under <share>/mcp; registered in ~/.cursor/mcp.json — not marketplace cache.
+# - Optional shallow clone under <share>/src for hooks + /refresh
+#   (BETTER_TOOLKITS_ROOT override supported).
 # - Never silence stderr (/dev/null, Out-Null on failures, 2>$null).
 $ErrorActionPreference = "Stop"
 
 $MarketplaceUrl = "https://github.com/chimeranext/better-toolkits"
-$ShareRoot = Join-Path $HOME ".local/share/better-toolkits"
+# Resolve share root for this OS — never assume Unix ~/.local/share on Windows.
+if ($env:BETTER_TOOLKITS_SHARE) {
+  $ShareRoot = $env:BETTER_TOOLKITS_SHARE
+} elseif ($IsWindows -or ($env:OS -eq "Windows_NT") -or ([System.Environment]::OSVersion.Platform -eq "Win32NT")) {
+  $localAppData = $env:LOCALAPPDATA
+  if (-not $localAppData) {
+    $localAppData = Join-Path $HOME "AppData/Local"
+  }
+  $ShareRoot = Join-Path $localAppData "better-toolkits"
+} else {
+  $ShareRoot = Join-Path $HOME ".local/share/better-toolkits"
+}
 $CloneDir = if ($env:BETTER_TOOLKITS_ROOT) { $env:BETTER_TOOLKITS_ROOT } else { Join-Path $ShareRoot "src" }
 $McpBase = "https://toolkits.chimeranext.dev/mcp"
 $McpDest = Join-Path $ShareRoot "mcp"
