@@ -1,17 +1,16 @@
 ---
-title: "Plan de tratamiento de riesgo · {{risk_id}} · {{project_name}}"
+title: "Risk treatment plan · {{risk_id}} · {{project_name}}"
 date: "{{date}}"
 tags: [project, risk, iso-16085, treatment]
-status: borrador
+status: draft
 standard: ISO/IEC/IEEE 16085:2021
 template_id: iso-16085-risk-treatment-plan
-ssot: fractional-cto-toolkit/references/software-project-management-plan
 ---
 
-# Plan de tratamiento de riesgo · {{risk_id}}
+# Risk treatment plan · {{risk_id}}
 
 Outline aligned to ISO/IEC/IEEE 16085:2021 §8.2.2. One plan may cover multiple
-risks that share pertinent characteristics. Empty sections: N/A + reason.
+risks that share pertinent characteristics. Empty sections: N/A plus reason.
 
 ## 1. Introduction
 
@@ -51,6 +50,7 @@ action request.
 | Field | Value |
 | --- | --- |
 | Risk id(s) | {{risk_id}} |
+| Eisenhower class | Critical / Only important / Only urgent |
 | Option | mitigate / transfer / avoid / accept / share / other |
 | Rationale | {{rationale}} |
 | Residual risk target | {{residual_target}} |
@@ -65,7 +65,7 @@ Tasks, resources, schedule, success criteria, and unintended-consequence watch.
 
 ## 5. Monitoring of treatment
 
-How effectiveness is measured; triggers to revise treatment; reporting cadence.
+How the owner measures effectiveness. Triggers to revise treatment. Reporting cadence.
 
 {{treatment_monitoring}}
 
