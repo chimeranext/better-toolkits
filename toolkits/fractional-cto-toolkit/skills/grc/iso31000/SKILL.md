@@ -6,8 +6,8 @@ description: >
   framework, and process, producing a gap assessment and a risk-analysis register shaped
   for ISO 9001:2015 risk/opportunity thinking. Use when a client needs enterprise risk
   governance (not a software-project risk management plan). For systems/software project
-  risk that satisfies ISO/IEC/IEEE 16326, use /software-project-management-plan with the
-  ISO/IEC/IEEE 16085 companion instead.
+  risk that satisfies ISO/IEC/IEEE 16326, use
+  /software-project-management-plan/risk-authoring (ISO/IEC/IEEE 16085 templates).
 ---
 
 # ISO 31000
