@@ -71,8 +71,9 @@ function generateSOP() {
   const industryLabel = lookupLabel(INDUSTRIES, industry);
 
   return [
-    `# SOP: Project Takeover — ${name}`,
+    `# Playbook: Project Takeover — ${name}`,
     '',
+    `> **Artifact type:** playbook (when/why). Not an SOP. Execute via diagnose/recover runbooks.`,
     `> **Nivel de riesgo:** ${level}`,
     `> **Industria:** ${industryLabel}`,
     `> **Tipo tecnico:** ${technicalType}`,
@@ -81,6 +82,8 @@ function generateSOP() {
     description ? `**Descripcion:** ${description}` : '',
     '',
     '---',
+    '',
+    '> Prefer SSOT: fractional-cto-toolkit `references/01-takeover-playbook.md` (not a template).',
     '',
     '## Contexto',
     '',
@@ -109,23 +112,48 @@ function generateSOP() {
 function generateGuia() {
   const { name, description } = state.context;
   const level = state.riskLevel;
+  const factors = (state.riskFactors || []).map(f => `- ${f.text}`).join('\n')
+    || '- (sin factores listados)';
 
   return [
-    `# Guia de Transicion Tecnologica — ${name}`,
+    `# Guía de transición tecnológica — ${name}`,
     '',
-    '> Este documento explica, en lenguaje no-tecnico, el proceso que',
-    '> vamos a seguir para tomar control de tu proyecto de software.',
+    '> **Diátaxis ×4 en un archivo** (Explanation → Tutorial → How-to → Reference).',
+    '> Un solo documento para el lead; en un handbook cada sección sería una página.',
     '',
     description ? `**Proyecto:** ${description}` : '',
     '',
-    `## Nivel de Riesgo: ${level}`,
+    '## 1. Explanation — ¿Por qué un proceso formal?',
     '',
-    ...state.riskFactors.map(f => `- ${f.text}`),
+    `### Nivel de riesgo: ${level}`,
+    '',
+    factors,
+    '',
+    '## 2. Tutorial — Recorrido de la transición',
+    '',
+    'Fases 1–4 (proteger → inventario → seguridad → verificación).',
+    'Primera lectura: mapa, no checklist. Detalle en SSOT',
+    '`02-client-guide.md` (bare: `02-client-guide-bare.md`).',
+    '',
+    '## 3. How-to — Qué hacer',
+    '',
+    '1. Decidir tema legal (cesión de IP).',
+    '2. Dar acceso a sistemas que ya controlás.',
+    '3. Revisar legal-template-delivery-request antes de la reunión.',
+    '',
+    '## 4. Reference — Cronograma, FAQ, documentos',
+    '',
+    '| Archivo | Uso |',
+    '|---|---|',
+    `| client-guide | Lead |`,
+    `| playbook (CTO) | Rama de riesgo |`,
+    `| legal-template-delivery-request | Firma en reunión |`,
+    `| legal-template-breach-notice | Solo abogado si incumple |`,
     '',
     '---',
     '',
-    `*Generado el ${today()} — fractional-cto-toolkit v1.0.0*`
-  ].filter(line => line !== undefined).join('\n');
+    `*Generado el ${today()} — fractional-cto-toolkit*`
+  ].filter(line => line !== undefined && line !== '').join('\n');
 }
 
 function generateSolicitud() {
@@ -205,17 +233,19 @@ function generateUltimatum() {
 // ── Public API ─────────────────────────────────────────────────────
 
 const GENERATORS = {
-  sop: generateSOP,
+  sop: generateSOP, // legacy key; UI still passes data-download="sop"
+  playbook: generateSOP,
   guia: generateGuia,
   solicitud: generateSolicitud,
   ultimatum: generateUltimatum
 };
 
-const FILE_SUFFIXES = {
-  sop: 'takeover-sop',
-  guia: 'guia-cliente',
-  solicitud: 'solicitud-entrega',
-  ultimatum: 'ultimatum-template'
+const FILE_NAMES = {
+  sop: (s) => `playbook-${s}.md`,
+  playbook: (s) => `playbook-${s}.md`,
+  guia: (s) => `client-guide-${s}.md`,
+  solicitud: (s) => `legal-template-delivery-request-${s}.md`,
+  ultimatum: (s) => `legal-template-breach-notice-${s}.md`
 };
 
 export function downloadDocument(type) {
@@ -223,7 +253,8 @@ export function downloadDocument(type) {
   const blob = new Blob([content], { type: 'text/markdown' });
   const anchor = document.createElement('a');
   anchor.href = URL.createObjectURL(blob);
-  anchor.download = `${slug(state.context.name)}-${FILE_SUFFIXES[type]}.md`;
+  const nameFn = FILE_NAMES[type] || ((s) => `${s}-${type}.md`);
+  anchor.download = nameFn(slug(state.context.name));
   document.body.appendChild(anchor);
   anchor.click();
   document.body.removeChild(anchor);
