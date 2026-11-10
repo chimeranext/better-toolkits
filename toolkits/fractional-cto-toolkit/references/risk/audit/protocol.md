@@ -27,6 +27,9 @@ applies to any of them.
 2. **Map to frameworks.** Identify the frameworks that apply (contractual,
    regulatory, or target certifications). Use the GRC skills to resolve which
    controls apply. Do not invent requirements beyond the chosen frameworks.
+   Org risk principles → `grc/iso31000`. Software project SPMP / lifecycle risk
+   → `/software-project-management-plan/audit` with ISO/IEC/IEEE 16085 (not a
+   substitute for 31000, and not conflated with AppSec framework audits).
 3. **Define the control list.** Translate framework requirements into a
    verifiable control set, each with a success criterion.
 4. **Collect evidence.** For each control, gather evidence from the actual

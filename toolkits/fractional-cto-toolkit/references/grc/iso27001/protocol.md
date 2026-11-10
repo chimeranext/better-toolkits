@@ -75,6 +75,12 @@ control marked applicable / not applicable with rationale.
   controls (AI policies, AI risk assessment, AI system lifecycle). A 27001
   ISMS provides the foundation for 42001, which in turn links to the
   threat-defense AI skills (ai-defense, mitre-atlas).
+- **ISO 27001 → ISO 31000**: organizational risk principles/framework/process
+  (`grc/iso31000`). ISMS Clause 6 risk work should stay consistent with the
+  enterprise risk criteria when a 31000 program exists. For
+  **systems/software project** risk plans that satisfy ISO/IEC/IEEE 16326,
+  use ISO/IEC/IEEE 16085 via `/software-project-management-plan` (16085
+  applies 31000 in the lifecycle context — see `iso-mss-family.md`).
 
 ## Method
 

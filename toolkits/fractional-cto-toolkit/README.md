@@ -115,6 +115,13 @@ OpenSpec specs/changes  →  Linear issue (Bilingual Layer)  →  /opsx-* flow
 | 10 | `playbook-authoring` | "write a playbook", "ops playbook", "decision tree", "playbook vs runbook", "escribe un playbook" | When/why playbook (decision tree + options) linking diagnose/recover runbooks |
 | 11 | `runbook-authoring` | "write a runbook", "incident runbook", "release runbook", "on-call procedure", "runbook de release" | Trigger-driven runbook (incident or operational) + paired diagnose/repair scripts + executable form |
 | 12 | `requirements-authoring` (shared: `shared/skills/requirements-authoring/`) | "PRD", "SRS", "requisitos", "29148", "IEEE 830", "spec for this feature" | Versioned PRD/SRS per ISO/IEEE 830 + ISO/IEC/IEEE 29148:2018 + OpenSpec derived + Linear Bilingual brief |
+| 13 | `software-project-management-plan/authoring` (alias: `project-plan/authoring`) | "SPMP", "plan de proyecto", "plan de gestión", "16326", "project management plan" | SPMP per ISO/IEC/IEEE 16326:2019 + default risk companion ISO/IEC/IEEE 16085:2021 |
+| 14 | `software-project-management-plan/audit` (alias: `project-plan/audit`) | "audit project plan", "auditar SPMP", "16326 gap", "16085 risk audit" | Gap matrix vs 16326 §7 + 16085 §8; optional PMBOK 8 domain overlay |
+
+Project-governance templates (SSOT under `references/software-project-management-plan/`,
+plus `references/grc/iso31000/` for org risk) export into `business-brain-template` via
+`scripts/export-spmp-templates.sh` — do not author lasting copies only in the brain
+template. Atomic `_templates/riesgo.md` stays PMBOK-oriented and is not overwritten.
 
 ### CTO domain families (authored per FFF — families × internal taxonomy)
 
@@ -125,7 +132,7 @@ OpenSpec specs/changes  →  Linear issue (Bilingual Layer)  →  /opsx-* flow
 | `metrics/` | dora · reliability · velocity · team-health · exec-reporting | DORA, SLO/SLI, engineering velocity, team health, exec narrative |
 | `risk/` | audit · incident-response · disaster-recovery · resilience | Security audit framing, IR, DR, resilience |
 | `handover/` | risk-to-cro · grc-to-cco · metrics-to-vpeng · architecture-to-principal · strategy-to-board · engagement-to-board · process-to-ops · requirements-to-cpo · standards-to-vpeng | Ownership transfer to organic executives (CRO/CCO/VP Eng/...) |
-| `grc/` | universal (12) + regional USMCA/LATAM/APAC/EMEA (38) | Compliance frameworks: ISO/NIST/SOC2/PCI/SWIFT/CIS/WCAG + jurisdiction-specific |
+| `grc/` | universal (incl. `iso31000`) + regional USMCA/LATAM/APAC/EMEA | Compliance frameworks: ISO/NIST/SOC2/PCI/SWIFT/CIS/WCAG + jurisdiction-specific; see `references/grc/iso-mss-family.md` |
 | `threat-defense/` | owasp-top10 · owasp-nhi-top10 · mitre-atlas · mitre-attack · mitre-d3fend · ai-defense | Threat & defense: OWASP Top10/NHI, MITRE ATLAS/ATT&CK/D3FEND, AI-defense controls |
 
 ## Commands
