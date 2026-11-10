@@ -41,5 +41,5 @@ templates. Output a findings brief only.
 - Every finding cites a checklist row and evidence location.
 - Short quotes or `not found` only — no wholesale reproduction of client docs.
 - Rubric severity rules in `audit-rubric.md` are binding.
-- Eval fixture (read-only): VainillaCode `business-brain` EVP SPMP on `main` —
+- Eval fixture (read-only): engagement brain EVP SPMP on the default branch —
   **never modify** `plans/2026-11-05-plan-proyecto-evp.md` during audit.
