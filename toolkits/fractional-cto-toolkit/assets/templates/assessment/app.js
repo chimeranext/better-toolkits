@@ -539,8 +539,8 @@ function renderDocumentsStep() {
       <div class="dg">
         <div class="dc">
           <div class="dch"><div class="dn">01</div><span class="da ac">CTO</span></div>
-          <div class="dti">SOP Operativo</div>
-          <div class="dde">Checklist tecnico con matriz de amenazas y secuencia de ejecucion.</div>
+          <div class="dti">Playbook CTO</div>
+          <div class="dde">Cuando/por que del handover: rama alto/medio/bajo y pointers a runbooks.</div>
           <div class="das">
             <button class="btn bp" data-download="sop">Descargar MD</button>
             <button class="btn bo" data-print="sop">PDF</button>
@@ -549,8 +549,8 @@ function renderDocumentsStep() {
 
         <div class="dc">
           <div class="dch"><div class="dn">02</div><span class="da al">Lead</span></div>
-          <div class="dti">Guia para el Cliente</div>
-          <div class="dde">Proceso en lenguaje no-tecnico para tu lead.</div>
+          <div class="dti">Guía cliente (Diátaxis ×4)</div>
+          <div class="dde">Explanation, Tutorial, How-to y Reference en un solo MD para el lead.</div>
           <div class="das">
             <button class="btn bp" data-download="guia">Descargar MD</button>
             <button class="btn bo" data-print="guia">PDF</button>
@@ -559,8 +559,8 @@ function renderDocumentsStep() {
 
         <div class="dc">
           <div class="dch"><div class="dn">03</div><span class="da ad">Dev anterior</span></div>
-          <div class="dti">Solicitud de Entrega</div>
-          <div class="dde">Plazos firmes, clausula legal integrada, bloque de firmas.</div>
+          <div class="dti">Delivery request</div>
+          <div class="dde">legal-template-delivery-request: plazos firmes, clausula, firmas.</div>
           <div class="das">
             <button class="btn bd" data-download="solicitud">Descargar MD</button>
             <button class="btn bo" data-print="solicitud">PDF</button>
@@ -569,8 +569,8 @@ function renderDocumentsStep() {
 
         <div class="dc">
           <div class="dch"><div class="dn">04</div><span class="da ae">Abogado</span></div>
-          <div class="dti">Template de Ultimatum</div>
-          <div class="dde">Borrador para el abogado si el dev incumple.</div>
+          <div class="dti">Breach notice</div>
+          <div class="dde">legal-template-breach-notice: borrador counsel si incumple.</div>
           <div class="das">
             <button class="btn bo" data-download="ultimatum">Descargar MD</button>
             <button class="btn bo" data-print="ultimatum">PDF</button>
