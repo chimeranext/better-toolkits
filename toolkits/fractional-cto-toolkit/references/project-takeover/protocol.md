@@ -54,7 +54,7 @@ work.
   template.
 - Emitted client guide and legal files default to Spanish for Costa Rica
   engagements. Keep common technical terms in English.
-- Fill SSOTs keep `{{PLACEHOLDER}}` tokens.
+- Fill SSOTs keep English `{{PLACEHOLDER}}` tokens.
 - Emitted `playbook-{slug}.md` follows the engagement language. Keep branches
   §A / §B / §C.
 
@@ -229,7 +229,7 @@ to the client folder.
 #### 4.2 Client guide — Diátaxis ×4
 
 1. Fill SSOT: `02-client-guide.md` (bare: `02-client-guide-bare.md`)
-2. Fill `{{NOMBRE_PROYECTO}}`, `{{BLOQUE_RIESGO}}`, `{{BLOQUE_CRONOGRAMA}}`
+2. Fill `{{PROJECT_NAME}}`, `{{RISK_BLOCK}}`, `{{TIMELINE_BLOCK}}`
 3. Tone: HIGH urgent-calm. MEDIUM professional. LOW routine. Keep FAQ out of
    How-to. Drop N/A rows.
 4. Write: `./fractional-cto/takeover/client-guide-{slug}.md`

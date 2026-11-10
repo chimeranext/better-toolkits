@@ -1,224 +1,218 @@
-# Formal Delivery Request / Solicitud Formal de Entrega — {{NOMBRE_PROYECTO}}
+<!--
+  Fill SSOT: formal delivery request (handover legal pack).
+  English ASD-STE100. Engagement emit may be Spanish for Costa Rica.
+  Placeholders {{DOUBLE_CURLY}}. Counsel must review before use.
+-->
 
-**Fecha:** {{FECHA}}
-**De:** {{NOMBRE_LEAD}} (propietario / representante legal de {{NOMBRE_PROYECTO}})
-**Para:** {{NOMBRE_DEV}} (desarrollador)
+# Formal Delivery Request — {{PROJECT_NAME}}
 
----
-
-## Contexto
-
-Como parte de una reestructuracion en la gestion tecnica de {{NOMBRE_PROYECTO}}, se
-formaliza la transferencia completa del proyecto. Este documento enumera los elementos
-que deben ser entregados, los plazos establecidos, y las consecuencias en caso de
-incumplimiento.
-
-Las partes acuerdan que la firma de este documento constituye un compromiso formal
-de entrega dentro de los plazos aqui indicados.
+**Date:** {{DATE}}  
+**From:** {{LEAD_NAME}} (owner / legal representative of {{PROJECT_NAME}})  
+**To:** {{PRIOR_DEVELOPER_NAME}} (prior developer)
 
 ---
 
-## 1. Codigo fuente y repositorio
+## Context
 
-**Plazo: {{PLAZO_CODIGO}}**
+As part of a restructuring of technical management for {{PROJECT_NAME}}, the
+parties formalize full project transfer. This document lists deliverables,
+deadlines, and consequences of non-compliance.
 
-- [ ] Transferencia del repositorio a la organizacion/cuenta indicada por el propietario
-- [ ] Confirmacion de que el repositorio contiene TODO el codigo fuente del proyecto
-  (sin ramas eliminadas, historial truncado, o commits revertidos)
-- [ ] Si existen repositorios adicionales (microservicios, scripts, herramientas de deploy),
-  incluirlos en la transferencia
-- [ ] Acceso completo al historial de commits y branches
+By signing, the parties agree this document is a formal delivery commitment
+within the deadlines stated here.
 
 ---
 
-## 2. Cuentas y servicios de terceros
+## 1. Source code and repository
 
-**Plazo: {{PLAZO_SERVICIOS}}**
+**Deadline:** {{DEADLINE_CODE}}
 
-Transferencia de ownership o credenciales de administrador para cada servicio externo:
-
-- [ ] **Hosting / servidor de produccion** — proveedor: __________ | transferir ownership
-- [ ] **Base de datos** — proveedor y tipo: __________ | transferir acceso admin
-- [ ] **Dominio(s)** — registrar: __________ | transferir dominio
-- [ ] **Autenticacion** — servicio: __________ | transferir ownership del tenant
-- [ ] **Email transaccional** — servicio: __________ | transferir cuenta
-- [ ] **Procesamiento de pagos** — servicio: __________ | transferir cuenta
-- [ ] **Analytics** — servicio: __________ | transferir acceso
-- [ ] **Monitoreo de errores** — servicio: __________ | transferir acceso
-- [ ] **Almacenamiento de archivos** — servicio: __________ | transferir acceso
-- [ ] **CDN / SSL** — servicio: __________ | transferir acceso
-- [ ] **Otros servicios:** __________
-
-Para cada servicio se requiere: nombre, URL del dashboard, email de la cuenta, y
-transferencia de ownership a la cuenta que se indicara.
+- [ ] Transfer the repository to the owner org or account named by the owner
+- [ ] Confirm the repository holds ALL project source (no truncated history,
+      deleted branches, or reverted commits that hide work)
+- [ ] Include any extra repositories (microservices, deploy scripts, tools)
+- [ ] Full access to commit history and branches
 
 ---
 
-## 3. Infraestructura y ambientes
+## 2. Third-party accounts and services
 
-**Plazo: {{PLAZO_INFRA}}**
+**Deadline:** {{DEADLINE_SERVICES}}
 
-- [ ] Lista de ambientes existentes (desarrollo, staging, produccion) con URLs
-- [ ] Variables de entorno — lista completa por ambiente con descripcion de cada una
-- [ ] CI/CD — acceso a configuracion y secrets del pipeline
-- [ ] Infraestructura como codigo (Terraform, Docker, scripts de deploy) — confirmar
-  que esta incluida en el repositorio
+Transfer ownership or admin credentials for each external service:
 
----
+- [ ] **Hosting / production server** — provider: __________ | transfer ownership
+- [ ] **Database** — provider and type: __________ | transfer admin access
+- [ ] **Domain(s)** — registrar: __________ | transfer domain
+- [ ] **Authentication** — service: __________ | transfer tenant ownership
+- [ ] **Transactional email** — service: __________ | transfer account
+- [ ] **Payments** — service: __________ | transfer account
+- [ ] **Analytics** — service: __________ | transfer access
+- [ ] **Error monitoring** — service: __________ | transfer access
+- [ ] **File storage** — service: __________ | transfer access
+- [ ] **CDN / SSL** — service: __________ | transfer access
+- [ ] **Other services:** __________
 
-## 4. Base de datos
-
-**Plazo: {{PLAZO_DB}}**
-
-- [ ] Acceso de administrador a la base de datos de produccion
-- [ ] Esquema actual (dump de esquema si las migraciones no estan en el repo)
-- [ ] Procedimiento de backup — donde se almacenan, como restaurarlos
-- [ ] Seed data / scripts de datos de prueba (si existen)
-
----
-
-## 5. Documentacion y conocimiento
-
-**Plazo: {{PLAZO_DOCS}}**
-
-- [ ] Toda documentacion existente: especificaciones, diagramas, notas tecnicas,
-  decisiones de arquitectura, flujos de usuario
-- [ ] Credenciales documentadas (password manager, documentos compartidos)
-- [ ] Backlog / roadmap / lista de bugs conocidos
-- [ ] Video walkthrough de 15-30 min recorriendo funcionalidades principales y
-  proceso de deploy (o sesion en vivo equivalente)
+For each service provide: name, dashboard URL, account email, and ownership
+transfer to the account we name.
 
 ---
 
-## 6. Diseño y assets
+## 3. Infrastructure and environments
 
-**Plazo: {{PLAZO_DISENO}}**
+**Deadline:** {{DEADLINE_INFRA}}
 
-- [ ] Archivos de diseño (Figma, Sketch, etc.) — transferir ownership
-- [ ] Assets graficos: logo, iconos, ilustraciones — indicar licencias
-- [ ] Guia de marca / branding (si existe)
+- [ ] List of environments (dev, staging, production) with URLs
+- [ ] Environment variables — full list per environment with a short description
+- [ ] CI/CD — access to pipeline config and secrets
+- [ ] Infrastructure as code (Terraform, Docker, deploy scripts) — confirm it is
+      in the repository
 
 ---
 
-{{BLOQUE_ITEMS_ADICIONALES}}
+## 4. Database
 
-<!-- El skill agrega items especificos segun tipo de proyecto:
-- Mobile: Apple Developer Account, Google Play Console, app signing keys,
-  keystore (.jks), iOS certificates, TestFlight, bundle identifiers
-- SaaS: cuentas de facturacion, webhooks, integraciones con terceros
+**Deadline:** {{DEADLINE_DB}}
+
+- [ ] Admin access to the production database
+- [ ] Current schema (schema dump if migrations are not in the repo)
+- [ ] Backup procedure — where backups live and how to restore them
+- [ ] Seed data / test data scripts (if any)
+
+---
+
+## 5. Documentation and knowledge
+
+**Deadline:** {{DEADLINE_DOCS}}
+
+- [ ] All existing docs: specs, diagrams, technical notes, architecture decisions,
+      user flows
+- [ ] Documented credentials (password manager, shared docs)
+- [ ] Backlog / roadmap / known bugs
+- [ ] 15–30 min walkthrough video of main features and deploy (or live session)
+
+---
+
+## 6. Design and assets
+
+**Deadline:** {{DEADLINE_DESIGN}}
+
+- [ ] Design files (Figma, Sketch, etc.) — transfer ownership
+- [ ] Graphic assets: logo, icons, illustrations — note licenses
+- [ ] Brand guide (if any)
+
+---
+
+{{ADDITIONAL_ITEMS_BLOCK}}
+
+<!-- Skill adds items by project type:
+- Mobile: Apple Developer, Google Play, signing keys, keystore, iOS certs,
+  TestFlight, bundle IDs
+- SaaS: billing accounts, webhooks, third-party integrations
 -->
 
 ---
 
-## Plazos y calendario
+## Deadlines table
 
-| Entrega | Plazo |
-|---------|-------|
-| Codigo fuente (Seccion 1) | {{PLAZO_CODIGO}} |
-| Cuentas y servicios (Seccion 2) | {{PLAZO_SERVICIOS}} |
-| Infraestructura (Seccion 3) | {{PLAZO_INFRA}} |
-| Base de datos (Seccion 4) | {{PLAZO_DB}} |
-| Documentacion (Seccion 5) | {{PLAZO_DOCS}} |
-| Diseño y assets (Seccion 6) | {{PLAZO_DISENO}} |
+| Delivery | Deadline |
+|---|---|
+| Section 1 Source code | {{DEADLINE_CODE}} |
+| Section 2 Accounts and services | {{DEADLINE_SERVICES}} |
+| Section 3 Infrastructure | {{DEADLINE_INFRA}} |
+| Section 4 Database | {{DEADLINE_DB}} |
+| Section 5 Documentation | {{DEADLINE_DOCS}} |
+| Section 6 Design and assets | {{DEADLINE_DESIGN}} |
 
-Los plazos establecidos son contados a partir de la fecha de firma de este documento.
+Deadlines count from the signature date of this document.
 
 ---
 
-## Clausula de consecuencias
+## Consequences clause
 
-{{BLOQUE_CLAUSULA_LEGAL}}
+{{LEGAL_CLAUSE_BLOCK}}
 
-<!-- El skill reemplaza segun nivel de riesgo:
+<!-- Skill fills by risk:
 
-### BAJO:
-El incumplimiento de los plazos establecidos podra derivar en las acciones legales
-que el propietario considere pertinentes para la proteccion de sus derechos.
+### LOW:
+Failure to meet these deadlines may lead to legal actions the owner finds
+appropriate to protect their rights.
 
-### MEDIO:
-El incumplimiento de los plazos aqui acordados constituye una retencion indebida
-de propiedad intelectual. El propietario se reserva el derecho de iniciar las
-acciones legales correspondientes bajo la legislacion de propiedad intelectual
-vigente, incluyendo la reclamacion de daños y perjuicios derivados de la
-interrupcion del servicio y cualquier perdida de datos o funcionalidad.
+### MEDIUM:
+Failure to meet these deadlines is undue retention of intellectual property.
+The owner may start legal actions under applicable IP law, including damages
+from service interruption and any loss of data or function.
 
-### ALTO:
-Las partes reconocen que {{NOMBRE_PROYECTO}} y todo su codigo fuente, base de datos,
-configuraciones, y activos digitales son propiedad de {{NOMBRE_LEAD}}, habiendo sido
-desarrollados bajo relacion contractual de prestacion de servicios.
+### HIGH:
+The parties recognize that {{PROJECT_NAME}} and all its source code, database,
+configuration, and digital assets are property of {{LEAD_NAME}}, built under a
+services contract.
 
-La retencion, destruccion, o manipulacion no autorizada de estos activos digitales
-tras la firma de este documento podra constituir:
+Unauthorized retention, destruction, or manipulation of these assets after
+signature of this document may constitute:
 
-1. **Retencion indebida de propiedad intelectual** — sujeta a reclamacion civil
-   por daños y perjuicios, incluyendo lucro cesante por interrupcion del servicio
-   a usuarios activos.
+1. **Undue retention of intellectual property** — civil claim for damages,
+   including lost profits from interruption of service to live users.
 
-2. **Delito informatico** — la destruccion, alteracion, o inutilizacion de datos
-   o sistemas informaticos ajenos esta tipificada en la legislacion penal vigente.
-   [En Costa Rica: Codigo Penal, articulos 196 bis (violacion de datos personales),
-   217 bis (estafa informatica), y 229 bis (daño informatico), Ley 9048.]
+2. **Computer crime** — destruction, alteration, or disablement of third-party
+   data or systems under applicable criminal law.
+   [Costa Rica note: Criminal Code arts. 196 bis, 217 bis, 229 bis, Law 9048.]
 
-3. **Denuncia ante autoridad competente** — en caso de destruccion o sabotaje de
-   datos, el propietario procedera a interponer la denuncia correspondiente ante
-   la autoridad de investigacion de delitos informaticos.
-   [En Costa Rica: Unidad de Delitos Informaticos del Organismo de Investigacion
-   Judicial (OIJ).]
+3. **Complaint to competent authority** — if data is destroyed or sabotaged,
+   the owner will file with the cybercrime investigation unit.
+   [Costa Rica note: OIJ Unidad de Delitos Informaticos.]
 
-Adicionalmente, toda evidencia de pagos realizados por el desarrollo del proyecto
-sera presentada como prueba del derecho de propiedad del contratante.
+Payment evidence for project development will support the owner's property claim.
 
-El propietario se reserva el derecho de solicitar medidas cautelares para la
-preservacion de los activos digitales mientras se resuelve cualquier disputa.
+The owner may seek precautionary measures to preserve digital assets while any
+dispute is resolved.
 -->
 
 ---
 
-## Contacto para coordinacion
+## Coordination contact
 
-- **Nombre:** {{NOMBRE_CTO}}
-- **Email:** {{EMAIL_CTO}}
-- **Rol:** Director Tecnico / CTO designado por {{NOMBRE_LEAD}}
+- **Name:** {{CTO_NAME}}
+- **Email:** {{CTO_EMAIL}}
+- **Role:** Designated technical lead for {{LEAD_NAME}}
 
-Toda comunicacion relacionada con esta entrega debe dirigirse al contacto indicado.
-
----
-
-## Firmas
-
-Al firmar este documento, ambas partes acuerdan los terminos, plazos, y condiciones
-aqui establecidos.
-
-&nbsp;
-
-**{{NOMBRE_LEAD}}** — Propietario / Representante legal
-
-Nombre completo: _________________________________
-
-Cedula / ID: _________________________________
-
-Firma: _________________________________
-
-Fecha: _________________________________
-
-&nbsp;
-
-**{{NOMBRE_DEV}}** — Desarrollador
-
-Nombre completo: _________________________________
-
-Cedula / ID: _________________________________
-
-Firma: _________________________________
-
-Fecha: _________________________________
+Route all delivery coordination to this contact.
 
 ---
 
-*Este documento tiene caracter de acuerdo formal entre las partes. Una copia firmada
-sera entregada a cada parte.*
+## Signatures
 
-<!-- NOTA PARA EL CTO: Este documento fue generado automaticamente y debe ser
-revisado por un abogado antes de ser utilizado, especialmente la clausula de
-consecuencias. Las referencias legales son orientativas y deben verificarse
-segun la jurisdiccion aplicable. -->
+By signing, both parties agree to the terms, deadlines, and conditions here.
+
+&nbsp;
+
+**{{LEAD_NAME}}** — Owner / legal representative
+
+Full name: _________________________________
+
+ID: _________________________________
+
+Signature: _________________________________
+
+Date: _________________________________
+
+&nbsp;
+
+**{{PRIOR_DEVELOPER_NAME}}** — Prior developer
+
+Full name: _________________________________
+
+ID: _________________________________
+
+Signature: _________________________________
+
+Date: _________________________________
+
+---
+
+*This document is a formal agreement between the parties. Each party receives a
+signed copy.*
+
+<!-- NOTE FOR CTO: Auto-generated draft. Counsel must review before use,
+especially the consequences clause. Legal cites are orientation only. Confirm
+them against the applicable jurisdiction. -->

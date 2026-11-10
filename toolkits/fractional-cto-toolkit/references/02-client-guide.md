@@ -1,155 +1,159 @@
-# Guía de transición tecnológica — {{NOMBRE_PROYECTO}}
-
-> **Tipo de documento:** guía cliente (pack de `/project-takeover`).
-> Un solo archivo para el lead. Internamente sigue **Diátaxis** en cuatro
-> secciones etiquetadas (Explanation → Tutorial → How-to → Reference).
-> En un sitio de docs cada sección sería una página; aquí viajan juntas
-> porque el lead recibe un documento, no un handbook.
->
-> Léelo antes de contactar al desarrollador anterior. Lenguaje no técnico.
-
-| Sección Diátaxis | Necesidad del lead | Qué encontrarás |
-|---|---|---|
-| **Explanation** | Entender *por qué* | Riesgo, costos de un handover informal |
-| **Tutorial** | Orientarse la primera vez | Recorrido de las fases (qué verás) |
-| **How-to** | Resolver tareas concretas | Qué hacer vos / qué hace el CTO |
-| **Reference** | Consultar datos | Cronograma, FAQ, documentos del pack |
-
----
-
-## 1. Explanation — ¿Por qué un proceso formal?
-
-Cuando un proyecto de software cambia de manos sin orden, pueden pasar cosas costosas:
-
-- **Pérdida de acceso:** si el desarrollador anterior es el único que conoce las
-  contraseñas, perder su cooperación puede significar perder acceso a tu propio producto.
-- **Riesgo legal:** sin un documento firmado que diga que el código es tuyo, el
-  desarrollador podría argumentar que él es el dueño — aunque le hayas pagado por hacerlo.
-- **Tiempo muerto:** si no sabemos dónde está cada pieza, reconstruir lo que debería
-  tomar días puede tomar semanas.
-
-Este proceso existe para proteger tu inversión y reducir esos riesgos. No sustituye el
-contrato comercial ni los planes de gobernanza (SPMP / riesgos) que arrancan después
-con el PSA.
-
-### Nivel de riesgo de tu proyecto
-
-{{BLOQUE_RIESGO}}
-
-<!-- El skill reemplaza esto con el nivel (ALTO / MEDIO / BAJO) y una explicación
-     en lenguaje de negocio: qué implica para plazos, abogado y urgencia. -->
-
----
-
-## 2. Tutorial — Recorrido de la transición (primera lectura)
-
-Leé esta sección de punta a punta la primera vez. No es una lista de tareas
-(eso está en How-to). Es el mapa de lo que va a pasar.
-
-### Fase 1 — Proteger lo que ya tienes
-
-Nos aseguramos de que el código, los datos y las cuentas queden bajo **tu** control.
-Hasta entonces dependés de la buena voluntad del desarrollador anterior.
-
-### Fase 2 — Inventario completo
-
-Listamos todas las piezas del producto: código, servidores, bases de datos,
-servicios externos, diseños. Como comprar un restaurante sin saber que el contrato
-del gas vence en dos semanas: el software también tiene costos y cuentas invisibles.
-
-### Fase 3 — Seguridad
-
-Cambiamos las “llaves” del proyecto. Aunque la relación sea amigable, es buena
-práctica — igual que cambiar la cerradura al comprar una casa.
-
-### Fase 4 — Verificación
-
-Confirmamos que todo funciona después del cambio de manos. Tener las llaves no basta:
-hay que abrir cada puerta.
-
-Al final del recorrido deberías poder explicar a otra persona, en dos minutos,
-por qué hay reunión de entrega firmada y por qué el CTO hace copia de seguridad
-*antes* de hablar con el desarrollador anterior.
-
----
-
-## 3. How-to — Qué hacer (tareas)
-
-Objetivo: completar lo que el lead debe decidir o entregar. Pasos concretos.
-Si aún no leíste Explanation + Tutorial, volvé atrás.
-
-### Qué necesito de vos AHORA
-
-1. **Decidir el tema legal** — ¿tenés un contrato que diga que el código es tuyo?
-   Si no, necesitás abogado antes de avanzar (sobre todo en riesgo ALTO / MEDIO).
-2. **Dar acceso** a los sistemas que ya controlás (email, cuentas cloud que conozcas).
-3. **Revisar la solicitud de entrega** — es la lista de lo que pediremos al
-   desarrollador anterior en la reunión.
-
-### Por fase — vos vs el CTO
-
-| Fase | Vos (lead / cliente) | CTO (takeover lead) |
-|---|---|---|
-| 1 Proteger | Abogado si falta cesión de IP. Lista de cuentas que conozcas. | Copia de seguridad / fork **antes** de la reunión. Verificar entregables. |
-| 2 Inventario | Facturas, recibos, emails de servicios. Acceso al email corporativo. | Mapa de servicios, quién paga, qué pasa si cae. Costos recurrentes. |
-| 3 Seguridad | Nada operativo (salvo aprobar ventanas si el producto está en vivo). | Rotar accesos, remover al desarrollador anterior, 2FA en cuentas críticas. |
-| 4 Verificación | Probar el producto como usuario. Reportar rarezas. | Build/deploy desde cero, backups, documentación para no depender de una sola persona. |
-
-### Reunión de entrega
-
-1. Confirmar fecha con el desarrollador anterior.
-2. Presentar `{{NOMBRE_PROYECTO}} — Solicitud de entrega`.
-3. Firmar de aceptado (ambas partes).
-4. Si incumple plazos firmados → llevar el firmado + plantilla de ultimátum al abogado.
-   El ultimátum **no** lo envía el CTO sin abogado.
-
----
-
-## 4. Reference — Cronograma, FAQ, documentos
-
-### Cronograma estimado
-
-{{BLOQUE_CRONOGRAMA}}
-
-<!-- Sustituir según riesgo:
-ALTO:  Fase 1 (día 1-2), Fase 2 (día 3-4), Fase 3 (día 2), Fase 4 (día 5-7)
-MEDIO: Fase 1 (semana 1), Fase 2 (semana 1-2), Fase 3 (semana 2), Fase 4 (semana 2-3)
-BAJO:  Fases 1-4 en 2-3 semanas a ritmo normal
+<!--
+  Fill SSOT: client takeover guide (Diátaxis ×4 in one file).
+  English ASD-STE100. Engagement emit may be Spanish for Costa Rica.
+  Placeholders: {{DOUBLE_CURLY}}. Not Obsidian wikilinks.
 -->
 
-### Documentos del pack (consulta rápida)
+# Client guide — {{PROJECT_NAME}}
 
-| Archivo | Quién lo usa | Cuándo |
+> **Artifact type:** client guide for `/project-takeover`.
+> One file for the lead. Four Diátaxis sections in this page
+> (Explanation → Tutorial → How-to → Reference).
+> On a docs site each section would be its own page. Here they travel together
+> because the lead gets one document, not a handbook.
+>
+> Read this before you contact the prior developer. Non-technical language.
+
+| Diátaxis section | Lead need | What you find |
 |---|---|---|
-| Esta guía | Lead / cliente | Antes y durante la transición |
-| `playbook-{{SLUG}}.md` | CTO | Elegir rama alto / medio / bajo (interno) |
-| `legal-template-delivery-request-{{SLUG}}.md` | Lead + desarrollador | Reunión — se firma |
-| `legal-template-breach-notice-{{SLUG}}.md` | Abogado del lead | Solo si hay incumplimiento |
-
-### Preguntas frecuentes
-
-**¿Y si el desarrollador se niega a entregar?**
-Depende del contrato. Con cesión de IP tenés respaldo. Sin contrato, un abogado de
-propiedad intelectual asesora. Mientras tanto el CTO evalúa qué es recuperable sin
-cooperación.
-
-**¿Puedo seguir usando el producto durante la transición?**
-Sí. La transición no apaga el servicio. Los cambios de seguridad (Fase 3) se hacen
-para que el producto siga funcionando.
-
-**¿Cuánto cuesta esto?**
-La transición forma parte del servicio de CTO. Costos adicionales típicos: abogado
-(si hace falta) y servicios cloud que haya que migrar a tu cuenta.
-
-**¿Qué pasa si el código es de mala calidad?**
-Es posible. Tras el inventario, el CTO entrega un reporte honesto: qué funciona,
-qué mejorar, opciones. Ese análisis cierra la Fase 4.
-
-**¿Esto reemplaza SPMP / planes de riesgo?**
-No. Tras el pack, el siguiente paso comercial/gobernanza es `/contract-psa`
-(Hito 1 Discovery).
+| **Explanation** | Why | Risk of an informal handover |
+| **Tutorial** | First orientation | Phase tour |
+| **How-to** | Tasks | Lead vs CTO actions |
+| **Reference** | Look-up | Timeline, FAQ, pack files |
 
 ---
 
-> **Siguiente paso:** revisá "{{NOMBRE_PROYECTO}} — Solicitud de entrega" y confirmá
-> si estás de acuerdo con enviársela al desarrollador.
+## 1. Explanation — Why a formal process
+
+When software changes hands without order, costly failures appear:
+
+- **Access loss:** if only the prior developer knows the passwords, losing their
+  help can mean losing access to your own product.
+- **Legal risk:** without a signed record that the code is yours, the developer
+  may claim ownership — even if you paid for the work.
+- **Downtime:** if nobody knows where each piece lives, rebuild work that should
+  take days can take weeks.
+
+This process protects your investment and cuts those risks. It does not replace
+the commercial contract or the governance plans (SPMP / risk) that start later
+with the PSA.
+
+### Project risk level
+
+{{RISK_BLOCK}}
+
+<!-- Skill fills HIGH / MEDIUM / LOW in business terms: timeline, counsel, urgency. -->
+
+---
+
+## 2. Tutorial — Transition tour (first read)
+
+Read this section end to end the first time. It is not a task list (see How-to).
+It is the map of what will happen.
+
+### Phase 1 — Protect what you already have
+
+We make sure code, data, and accounts sit under **your** control. Until then you
+depend on the prior developer's goodwill.
+
+### Phase 2 — Full inventory
+
+We list every piece of the product: code, servers, databases, external services,
+designs. Like buying a restaurant without knowing the gas contract ends in two
+weeks. Software also hides costs and accounts.
+
+### Phase 3 — Security
+
+We change the "keys" of the project. Even when the relationship is friendly, this
+is good practice — like changing locks when you buy a house.
+
+### Phase 4 — Verification
+
+We confirm everything works after the handoff. Keys alone are not enough. You
+must open each door.
+
+At the end you should explain two things to another person in two minutes. Why
+there is a signed delivery meeting. Why the CTO backs up **before** talking to
+the prior developer.
+
+---
+
+## 3. How-to — What to do (tasks)
+
+Goal: finish what the lead must decide or deliver. Concrete steps.
+If you have not read Explanation + Tutorial, go back first.
+
+### What I need from you NOW
+
+1. **Decide the legal topic** — Do you have a contract that says the code is
+   yours? If not, you need counsel before you move (especially HIGH / MEDIUM).
+2. **Grant access** to systems you already control (email, cloud accounts you
+   know).
+3. **Review the delivery request** — the list we will ask the prior developer
+   to complete at the meeting.
+
+### By phase — you vs the CTO
+
+| Phase | You (lead / client) | CTO (takeover lead) |
+|---|---|---|
+| 1 Protect | Counsel if IP assignment is missing. List accounts you know. | Backup / fork **before** the meeting. Confirm deliverables. |
+| 2 Inventory | Invoices, receipts, service emails. Corporate email access. | Service map, who pays, what fails if it drops. Recurring costs. |
+| 3 Security | Nothing operational (except approve windows if the product is live). | Rotate access, remove prior developer, 2FA on critical accounts. |
+| 4 Verification | Test the product as a user. Report odd behavior. | Build/deploy from scratch, backups, docs so one person is not a single point. |
+
+### Delivery meeting
+
+1. Confirm a date with the prior developer.
+2. Present `legal-template-delivery-request-{{SLUG}}.md`.
+3. Sign acceptance (both parties).
+4. If they miss signed deadlines → take the signed request + breach notice to
+   counsel. The CTO does **not** send the breach notice without counsel.
+
+---
+
+## 4. Reference — Timeline, FAQ, documents
+
+### Estimated timeline
+
+{{TIMELINE_BLOCK}}
+
+<!-- Replace by risk. HIGH: Phase 1 days 1-2. Phase 2 days 3-4. Phase 3 day 2.
+Phase 4 days 5-7. MEDIUM: Phase 1 week 1. Phase 2 weeks 1-2. Phase 3 week 2.
+Phase 4 weeks 2-3. LOW: Phases 1-4 in 2-3 weeks at normal pace. -->
+
+### Pack documents (quick look-up)
+
+| File | Who uses it | When |
+|---|---|---|
+| This guide | Lead / client | Before and during the transition |
+| `playbook-{{SLUG}}.md` | CTO | Choose high / medium / low branch (internal) |
+| `legal-template-delivery-request-{{SLUG}}.md` | Lead + prior developer | Meeting — signed |
+| `legal-template-breach-notice-{{SLUG}}.md` | Lead counsel | Only on breach |
+
+### FAQ
+
+**What if the developer refuses to deliver?**
+It depends on the contract. With IP assignment you have legal backing. Without a
+contract, IP counsel advises. Meanwhile the CTO assesses what is recoverable
+without cooperation.
+
+**Can I keep using the product during the transition?**
+Yes. The transition does not shut the service down. Security changes (Phase 3)
+keep the product running.
+
+**What does this cost?**
+The transition is part of the CTO service. Typical extra costs: counsel (if
+needed) and cloud services that must move to your account.
+
+**What if the code is poor quality?**
+Possible. After inventory, the CTO delivers an honest report: what works, what
+to improve, options. That analysis closes Phase 4.
+
+**Does this replace SPMP / risk plans?**
+No. After the pack, the next commercial/governance step is `/contract-psa`
+(Milestone 1 Discovery).
+
+---
+
+> **Next step:** review "{{PROJECT_NAME}} — Formal Delivery Request" and confirm
+> you agree to send it to the prior developer.
