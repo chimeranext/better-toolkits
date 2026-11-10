@@ -16,14 +16,14 @@ ambiguous; defaults are marked.
 
 ## Risk companion templates (choose with the SPMP)
 
-**Writer skill:** `/software-project-management-plan/risk-authoring` (alias
-`/project-plan/risk-authoring`) consumes the 16085 rows. `/iso31000` consumes the
-31000 row. Do not leave these templates without a skill that emits the deliverable.
+**Writer skill:** `/software-risks-authoring-16085` consumes the 16085 rows.
+`/iso31000` consumes the 31000 row. Do not leave these templates without a skill
+that emits the deliverable.
 
 | id | When to use | Normative base | Path | Consumed by |
 | --- | --- | --- | --- | --- |
-| `iso-16085-risk-management-plan` | **Default** risk companion for a 16326 SPMP. A plan following 16085 §8.1.2 should satisfy 16326 Clause 7 risk-management plan content | ISO/IEC/IEEE 16085:2021 §8.1 | `templates/iso-16085-risk-management-plan.md` | `risk-authoring` |
-| `iso-16085-risk-treatment-plan` | When a risk is unacceptable and needs a treatment plan (16085 §8.2) | ISO/IEC/IEEE 16085:2021 §8.2 | `templates/iso-16085-risk-treatment-plan.md` | `risk-authoring` |
+| `iso-16085-risk-management-plan` | **Default** risk companion for a 16326 SPMP. A plan following 16085 §8.1.2 should satisfy 16326 Clause 7 risk-management plan content | ISO/IEC/IEEE 16085:2021 §8.1 | `templates/iso-16085-risk-management-plan.md` | `software-risks-authoring-16085` |
+| `iso-16085-risk-treatment-plan` | When a risk needs a treatment plan (16085 §8.2) — gated by Eisenhower in that skill | ISO/IEC/IEEE 16085:2021 §8.2 | `templates/iso-16085-risk-treatment-plan.md` | `software-risks-authoring-16085` |
 | `pmbok-risk-note` | Atomic per-risk note in a business brain | PMBOK 8 Risk domain (lightweight) | Brain `_templates/riesgo.md` — **not overwritten by export** | vault / Holocron (not this export) |
 | `iso-31000-risk-analysis` | Org-wide GRC risk/opportunity register (ISO 9001 thinking + 31000 process) | ISO 31000:2018 + ISO 9001:2015 | `../grc/iso31000/templates/analisis-riesgos-iso31000.md` | `/iso31000` |
 

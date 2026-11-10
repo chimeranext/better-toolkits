@@ -1,24 +1,28 @@
-# Skill `software-project-management-plan/risk-authoring` — protocol SSOT
+# Skill `software-risks-authoring-16085` — protocol SSOT
 
 ## Purpose
 
 Produce the **ISO/IEC/IEEE 16085:2021** project risk deliverables that accompany a
-16326 SPMP:
+16326 SPMP (and that constitute the risk half of PSA **Hito 1** Discovery when that
+milestone is in force):
 
 1. Risk management plan (§8.1.2) — template `iso-16085-risk-management-plan`
 2. Risk treatment plan(s) (§8.2.2) — template `iso-16085-risk-treatment-plan`
-   when a risk (or risk class) crosses the treatment threshold
+   according to the Eisenhower rule below
 
-This skill **consumes** those catalog templates. It is the writer for project
-lifecycle risk docs. Org-wide ISO 31000 registers stay under `/iso31000`.
+This skill **consumes** those catalog templates. It is the writer for **software /
+systems project** lifecycle risk docs. Org-wide ISO 31000 registers stay under
+`/iso31000`. Operational framing (`risk/audit`, IR, DR, resilience) is a different
+family.
 
 ## When to use
 
 - User asks for a plan de gestión de riesgos / risk management plan for a
   software or systems **project** (16085, not 31000).
-- User asks for a plan de tratamiento / risk treatment plan for one or more
-  unacceptable risks.
+- User asks for a plan de tratamiento / risk treatment plan.
 - SPMP authoring needs the default risk companion emitted or refreshed.
+- Executing PSA Hito 1 (Discovery): fill definitive SPMP companions from bare
+  preventa drafts.
 - Remediating an SPMP audit finding that §8.3 is thin vs 16085 strategy/profile.
 
 ## When not to use
@@ -30,17 +34,28 @@ lifecycle risk docs. Org-wide ISO 31000 registers stay under `/iso31000`.
 
 ## Method
 
-1. **Load** `catalog.md`. Confirm risk template ids (defaults above).
+1. **Load** `references/software-project-management-plan/catalog.md`. Confirm risk
+   template ids (defaults above).
 2. **Locate the SPMP** (path from user, or create stub link if authoring both).
    Cite ISO/IEC/IEEE 16085 in the SPMP §2 when the companion is adopted.
-3. **Emit the RM plan** from `templates/iso-16085-risk-management-plan.md`:
+3. **Emit the RM plan** from
+   `references/software-project-management-plan/templates/iso-16085-risk-management-plan.md`:
    purpose/policies, strategy (criteria, thresholds, measures, improvement),
    context, roles, process (ID → analysis → priority → treatment → monitor →
    profile → communication), resources schedule. Empty required sections: N/A +
    reason.
-4. **Decide treatment:** any risk at/above the stated threshold gets a §8.2
-   treatment plan (one plan may cover risks that share characteristics).
-5. **Emit treatment plan(s)** from `templates/iso-16085-risk-treatment-plan.md`.
+4. **Classify each profile risk (Eisenhower — urgent × important)** after analysis
+   (ISO likelihood/consequence still live on the profile; Eisenhower gates *when*
+   a §8.2 treatment is a Hito 1 / this-run deliverable):
+   - **Critical (urgent ∧ important)** → emit §8.2 treatment plan (**required**;
+     do not close Hito 1 without it).
+   - **Only important or only urgent** → **offer** to generate a §8.2 treatment
+     in this same run / Hito 1; do not skip silently.
+   - **Neither** → document as **acceptable** in the profile (owner + rationale);
+     no §8.2 plan.
+5. **Emit** required/accepted treatment plans from
+   `templates/iso-16085-risk-treatment-plan.md` (one plan may cover risks that
+   share characteristics).
 6. **Link both ways:** SPMP §8.3 → RM plan; RM plan → SPMP + treatment paths;
    treatment → RM plan.
 7. **Language** = engagement working language. Do not copy copyrighted standard
@@ -55,7 +70,7 @@ lifecycle risk docs. Org-wide ISO 31000 registers stay under `/iso31000`.
 
 ## Contract
 
-- Templates are read from this toolkit SSOT (or an export with banner).
+- Templates are read from the SPMP catalog SSOT (or an export with banner).
 - **Client-facing output:** do **not** put skill names, `generated_by`,
   “Generado por…”, dogfood, or toolkit `ssot:` paths in the emitted Markdown
   body or frontmatter the client reads. Keep `standard`, dates, links, status.
