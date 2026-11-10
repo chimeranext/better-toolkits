@@ -1,37 +1,45 @@
 # Skill `takeover-assessment` — protocol SSOT
 
+English ASD-STE100 SSOT. Run
+`make-no-mistakes-toolkit/references/explain/scripts/ste-lint.py` on this file
+before merge. Engagement chat for Costa Rica may use Spanish. Keep this protocol
+in English.
+
 ---
 
-# Takeover Assessment — Evaluacion de riesgo
+# Takeover assessment — risk evaluation
 
-Evalua el riesgo de asumir un proyecto de software existente mediante una entrevista
-estructurada, calcula el nivel de riesgo, genera un wizard interactivo (SPA) para
-documentar hallazgos, y produce el contrato de assessment listo para firmar.
+Assess the risk of taking over an existing software project. Run a structured
+interview. Compute the risk level. Emit an interactive SPA wizard. Emit the
+assessment contract ready to sign.
 
-## Regla de idioma
+## Language rules
 
-Todo el contenido generado debe estar en **español**. Los terminos tecnicos se mantienen
-en ingles cuando son de uso comun (deploy, commit, CI/CD, backdoor, etc.).
+- This protocol stays English STE100.
+- Generated SPA seed and contract body default to Spanish for Costa Rica
+  engagements. Keep common technical terms in English (deploy, commit, CI/CD,
+  backdoor).
 
-## Directorio de salida
+## Output directory
 
-Todos los archivos van en `./fractional-cto/assessment/{slug}/` dentro del directorio
-de trabajo actual, donde `{slug}` es el nombre del proyecto en kebab-case.
+Write under `./fractional-cto/assessment/{slug}/` in the current working
+directory. `{slug}` is the project name in kebab-case.
 
-## Flujo del skill
+## Skill flow
 
-### Paso 1 — Recopilar contexto (entrevista)
+### Step 1 — Gather context (interview)
 
-Hacer las siguientes preguntas UNA A LA VEZ. Formato preferido: opcion multiple.
-Si el usuario ya proporciono informacion en la conversacion previa, no repetir —
-extraer de lo que ya dijo.
+Ask the following questions **one at a time**. Prefer fixed options. If the human
+already gave a fact, extract it. Do not ask again.
 
-**Pregunta 1: Identidad del proyecto**
-> ¿Como se llama el proyecto, que hace (en una oracion), y cual es la razon social
-> del cliente? (necesito la razon social para los documentos legales)
+**Question 1: Project identity**
 
-**Pregunta 2: Industria / vertical**
-> ¿En que industria opera el proyecto?
+> What is the project name, what does it do (one sentence), and what is the
+> client legal name? (Legal name is required for contract docs.)
+
+**Question 2: Industry / vertical**
+
+> Which industry does the project serve?
 > - a) Fintech
 > - b) Legaltech
 > - c) Healthtech
@@ -40,100 +48,104 @@ extraer de lo que ya dijo.
 > - f) Insurtech
 > - g) Agritech
 > - h) Govtech
-> - i) Logistica / Supply Chain
+> - i) Logistics / Supply Chain
 > - j) Retail / E-commerce
-> - k) Foodtech / Restaurantes
+> - k) Foodtech / Restaurants
 > - l) HRtech / Recruiting
 > - m) Martech / Adtech
-> - n) Traveltech / Turismo
-> - o) Cleantech / Energia
-> - p) Mobility / Transporte
-> - q) Social Impact / ONG
+> - n) Traveltech / Tourism
+> - o) Cleantech / Energy
+> - p) Mobility / Transport
+> - q) Social Impact / NGO
 > - r) Entertainment / Media
 > - s) Cybersecurity
-> - t) SaaS B2B (otro vertical)
-> - u) Consumer / B2C (otro vertical)
-> - v) Otro (describir)
+> - t) SaaS B2B (other)
+> - u) Consumer / B2C (other)
+> - v) Other (describe)
 
-**Pregunta 3: Tipo tecnico**
-> ¿Que tipo de proyecto es y donde esta desplegado?
-> - Tipo: Web app / Mobile app / API-Backend only / Monorepo-Multi servicio / Otro
-> - Cloud provider: AWS / GCP / Azure / DigitalOcean / Vercel-Netlify / On-premise / No se
+**Question 3: Technical type**
 
-**Pregunta 4: Etapa del emprendimiento**
-> ¿En que etapa esta el proyecto?
-> - a) Ideacion (solo concepto)
-> - b) Validacion (prototipos, entrevistas)
-> - c) MVP (producto minimo funcionando)
-> - d) Traccion (usuarios reales, metricas)
-> - e) Crecimiento (revenue, equipo)
-> - f) Escala (expansion, Series A+)
+> What kind of project is it, and where does it run?
+> - Type: Web app / Mobile app / API-Backend only / Monorepo-Multi service / Other
+> - Cloud: AWS / GCP / Azure / DigitalOcean / Vercel-Netlify / On-premise / Unknown
+
+**Question 4: Venture stage**
+
+> Which stage is the project in?
+> - a) Ideation (concept only)
+> - b) Validation (prototypes, interviews)
+> - c) MVP (minimum product running)
+> - d) Traction (real users, metrics)
+> - e) Growth (revenue, team)
+> - f) Scale (expansion, Series A+)
 >
-> ¿Nivel de madurez tecnologica (TRL)?
-> - 1-3: Concepto / prueba de concepto
-> - 4-6: Validacion en entorno real
-> - 7-9: Produccion / optimizacion
+> Technology readiness (TRL)?
+> - 1-3: Concept / proof of concept
+> - 4-6: Validation in a real environment
+> - 7-9: Production / optimization
 
-**Pregunta 5: Relacion con el desarrollador anterior**
-> ¿Como es la relacion con el dev anterior?
-> - a) Cooperativa — dispuesto a ayudar en la transicion
-> - b) Neutral — responde pero no proactivo
-> - c) Contenciosa — no coopera, posible riesgo de sabotaje
-> - d) Sin contacto — el dev desaparecio
+**Question 5: Relationship with the prior developer**
+
+> How is the relationship with the prior developer?
+> - a) Cooperative — willing to help with the transition
+> - b) Neutral — answers but is not proactive
+> - c) Contentious — does not cooperate. Sabotage risk is open
+> - d) No contact — the developer is gone
 >
-> ¿Donde esta el codigo ahora?
-> - a) En una org/cuenta del cliente (el cliente es owner)
-> - b) En cuenta personal del dev anterior
-> - c) No se / no tengo acceso todavia
+> Where is the code now?
+> - a) On a client org/account (client is owner)
+> - b) On the prior developer personal account
+> - c) Unknown / no access yet
 
-**Pregunta 6: Estado legal y operativo**
-> Responde lo que sepas:
-> - ¿Existe un contrato de propiedad intelectual (IP) entre el cliente y el dev anterior?
->   - Si / Ambiguo / No / No se
-> - ¿Hay usuarios activos en produccion?
->   - Si / No / No se
-> - ¿Existe documentacion? (README, diagramas, specs)
->   - Bastante completa / Algo pero incompleta / Nada o casi nada / No se
-> - ¿El proyecto maneja datos sensibles?
->   - Si / No / No se
+**Question 6: Legal and operational state**
+
+> Answer what you know:
+> - Is there an IP assignment contract between client and prior developer?
+>   - Yes / Ambiguous / No / Unknown
+> - Are there live users in production?
+>   - Yes / No / Unknown
+> - Is there documentation? (README, diagrams, specs)
+>   - Fairly complete / Some but incomplete / Almost none / Unknown
+> - Does the project handle sensitive data?
+>   - Yes / No / Unknown
 >
-> *Nota: si la industria es Fintech, Healthtech, Legaltech, Insurtech, o Govtech,
-> asumir datos sensibles = Si a menos que el usuario diga lo contrario.*
+> *Note: for Fintech, Healthtech, Legaltech, Insurtech, or Govtech, assume
+> sensitive data = Yes unless the human says otherwise.*
 
-**Pregunta 7: Amenazas especificas** *(solo si la relacion es contenciosa o sin contacto)*
-> ¿Te preocupa alguno de estos escenarios? (puede ser mas de uno)
-> - a) Que borre el codigo o los datos
-> - b) Que se niegue a entregar y pida mas plata
-> - c) Que copie el codigo para venderlo o usarlo en otro proyecto
-> - d) Que haya dejado trampas en el codigo (backdoors, time bombs)
-> - e) Que acceda a datos de usuarios despues de la transferencia
-> - f) Ninguno en particular
+**Question 7: Specific threats** *(only if relationship is contentious or no contact)*
 
-### Paso 2 — Calcular nivel de riesgo
+> Which of these worry you? (multi-select OK)
+> - a) They delete the code or data
+> - b) They refuse to deliver and demand more money
+> - c) They copy the code to sell or reuse elsewhere
+> - d) They left traps in the code (backdoors, time bombs)
+> - e) They access user data after the transfer
+> - f) None in particular
 
-Basandose en las respuestas, determinar el nivel de riesgo usando la siguiente matriz.
-El nivel se determina por la **PEOR combinacion** entre relacion y ownership:
+### Step 2 — Compute risk level
 
-| Condicion | Riesgo base |
-|-----------|-------------|
-| Relacion contenciosa O sin contacto + codigo en cuenta del dev | **ALTO** |
-| Relacion contenciosa O sin contacto + codigo en cuenta del cliente | **MEDIO-ALTO** |
-| Relacion neutral + codigo en cuenta del dev | **MEDIO** |
-| Relacion cooperativa + codigo en cuenta del dev | **MEDIO-BAJO** |
-| Relacion cooperativa + codigo en cuenta del cliente | **BAJO** |
+Use the **worst** relationship × ownership pair:
 
-**Modificadores que suben el riesgo un nivel:**
-- Usuarios activos en produccion (la urgencia de continuidad lo justifica)
-- Datos sensibles (legales, financieros, medicos) — auto-detectado por industria si aplica
-- 2 o mas amenazas de la Pregunta 7 con probabilidad alta
+| Condition | Base risk |
+|---|---|
+| Contentious OR no contact + code on developer account | **HIGH** |
+| Contentious OR no contact + code on client account | **MEDIUM-HIGH** |
+| Neutral + code on developer account | **MEDIUM** |
+| Cooperative + code on developer account | **MEDIUM-LOW** |
+| Cooperative + code on client account | **LOW** |
 
-Comunicar el nivel de riesgo al usuario con una explicacion breve de por que se asigno
-ese nivel. Incluir los factores que lo subieron si hubo modificadores activos.
+**Modifiers that raise risk one level:**
 
-### Paso 3 — Generar SPA de assessment
+- Live users in production (continuity urgency)
+- Sensitive data (legal, financial, medical) — auto from industry when applicable
+- Two or more Question 7 threats at high probability
 
-1. Copiar los 7 archivos del SPA desde `${CLAUDE_PLUGIN_ROOT}/assets/templates/assessment/`
-   al directorio de salida `./fractional-cto/assessment/{slug}/`:
+State the level to the human with a short reason. Include active modifiers.
+
+### Step 3 — Emit the assessment SPA
+
+1. Copy the seven SPA files from `${CLAUDE_PLUGIN_ROOT}/assets/templates/assessment/`
+   into `./fractional-cto/assessment/{slug}/`:
    - `assessment.html`
    - `app.js`
    - `state.js`
@@ -142,85 +154,85 @@ ese nivel. Incluir los factores que lo subieron si hubo modificadores activos.
    - `utils.js`
    - `styles.css`
 
-2. En el `assessment.html` copiado, inyectar un bloque `<script>` **antes** de la linea
-   `<script type="module" src="app.js">` que pre-pueble el estado con los datos
-   recopilados en Paso 1. El bloque debe:
-   - Crear un objeto `window.__ASSESSMENT_SEED__` con todas las respuestas de la entrevista
-   - Incluir el nivel de riesgo calculado en Paso 2
-   - Incluir el nombre del proyecto, razon social, industria, tipo tecnico, etapa y TRL
-   - Incluir la relacion con el dev anterior, ownership, amenazas seleccionadas
-   - Ejemplo de estructura:
+2. In the copied `assessment.html`, inject a `<script>` block **before**
+   `<script type="module" src="app.js">` that seeds state from Step 1. The block
+   must:
+   - Create `window.__ASSESSMENT_SEED__` with all interview answers
+   - Include the Step 2 risk level
+   - Include project name, legal name, industry, technical type, stage, TRL
+   - Include relationship, ownership, selected threats
+   - Example shape:
      ```html
      <script>
      window.__ASSESSMENT_SEED__ = {
-       projectName: "Nombre del proyecto",
-       legalName: "Razon Social S.A.",
+       projectName: "Project name",
+       legalName: "Legal Name Inc.",
        industry: "fintech",
        projectType: "webapp",
        cloudProvider: "aws",
-       stage: "traccion",
+       stage: "traction",
        trl: 6,
-       devRelationship: "contenciosa",
+       devRelationship: "contentious",
        codeOwnership: "dev",
-       ipContract: "ambiguo",
+       ipContract: "ambiguous",
        activeUsers: true,
-       documentation: "incompleta",
+       documentation: "incomplete",
        sensitiveData: true,
-       threats: ["borrar-codigo", "backdoors"],
-       riskLevel: "ALTO",
-       riskJustification: "Relacion contenciosa + codigo en cuenta del dev + usuarios activos"
+       threats: ["delete-code", "backdoors"],
+       riskLevel: "HIGH",
+       riskJustification: "Contentious relationship + code on developer account + live users"
      };
      </script>
      ```
 
-3. Informar al usuario: "Abre este archivo en Chrome para el wizard interactivo:
-   `{ruta completa al assessment.html}`"
+3. Tell the human: "Open this file in Chrome for the interactive wizard:
+   `{full path to assessment.html}`"
 
-### Paso 4 — Generar contrato de assessment
+### Step 4 — Emit the assessment contract
 
-1. Leer el template de contrato: `${CLAUDE_PLUGIN_ROOT}/references/contracts/02-takeover-assessment.md`
+1. Read `${CLAUDE_PLUGIN_ROOT}/references/contracts/02-takeover-assessment.md`
 
-2. Rellenar los placeholders con los datos recopilados:
-   - `{NOMBRE_PROYECTO}` — nombre del proyecto
-   - `{CLIENTE_NOMBRE}` — razon social del cliente (de Pregunta 1)
-   - Otros datos del cliente: dejar como placeholder para que el CTO complete
-   - Ajustar el alcance (Seccion 3) segun el tipo de proyecto y nivel de riesgo
-   - **Tarifa sugerida** segun nivel de riesgo:
-     - **ALTO:** $1500 - $2000 USD
-     - **MEDIO-ALTO:** $1200 - $1500 USD
-     - **MEDIO:** $800 - $1200 USD
-     - **MEDIO-BAJO:** $500 - $800 USD
-     - **BAJO:** $500 - $800 USD
-   - **Timeline sugerido** segun nivel de riesgo:
-     - **ALTO:** 1-2 dias habiles
-     - **MEDIO-ALTO:** 2-3 dias habiles
-     - **MEDIO:** 2-3 dias habiles
-     - **MEDIO-BAJO:** 3-5 dias habiles
-     - **BAJO:** 3-5 dias habiles
-   - El CTO opera como **persona fisica** (contratista independiente). Nunca usar nombre
-     de empresa en el campo del Profesional.
+2. Fill placeholders with gathered data:
+   - `{NOMBRE_PROYECTO}` — project name
+   - `{CLIENTE_NOMBRE}` — client legal name (Question 1)
+   - Other client fields: leave for the CTO to complete
+   - Adjust scope (Section 3) by project type and risk
+   - **Suggested fee** by risk:
+     - **HIGH:** $1500 - $2000 USD
+     - **MEDIUM-HIGH:** $1200 - $1500 USD
+     - **MEDIUM:** $800 - $1200 USD
+     - **MEDIUM-LOW:** $500 - $800 USD
+     - **LOW:** $500 - $800 USD
+   - **Suggested timeline** by risk:
+     - **HIGH:** 1-2 business days
+     - **MEDIUM-HIGH:** 2-3 business days
+     - **MEDIUM:** 2-3 business days
+     - **MEDIUM-LOW:** 3-5 business days
+     - **LOW:** 3-5 business days
+   - The CTO operates as a **natural person** (independent contractor). Never put
+     a company name in the Professional field.
 
-3. Escribir en `./fractional-cto/contracts/{slug}-assessment-contract.md`
+3. Write `./fractional-cto/contracts/{slug}-assessment-contract.md`
 
-### Paso 5 — Confirmacion
+### Step 5 — Confirmation
 
-Presentar al usuario un resumen con:
+Present:
 
-1. **Nivel de riesgo** + justificacion (los factores que determinaron el nivel)
-2. **Ruta al SPA:** "Abre este archivo en Chrome: `{ruta}`"
-3. **Ruta al contrato:** "Firma este contrato antes de empezar el assessment: `{ruta}`"
-4. **Siguiente paso recomendado:** "Una vez que el cliente firme el contrato y pague,
-   usa `/project-takeover` para generar los SOPs del takeover completo."
+1. **Risk level** + justification (factors that set the level)
+2. **SPA path:** "Open in Chrome: `{path}`"
+3. **Contract path:** "Sign before the assessment starts: `{path}`"
+4. **Recommended next step:** "After the client signs and pays, run
+   `/project-takeover` for the full handover pack (playbook, client guide, legal
+   templates)."
 
-## Notas para el modelo
+## Notes for the model
 
-- Este skill **NO genera SOPs** — eso es `project-takeover`.
-- Este skill **NO genera contratos PSA ni retainer** — esos son skills separados
-  (`contract-psa`, `contract-retainer`).
-- Si el usuario ya proporciono informacion en la conversacion, no volver a preguntar.
-  Extraer los datos y confirmar: "Ya mencionaste que X — ¿correcto?"
-- El SPA es una aplicacion HTML autocontenida (7 archivos estaticos), no requiere servidor.
-- La tarifa y el timeline son sugerencias basadas en el riesgo. El CTO tiene la ultima
-  palabra — si quiere ajustar, respetar su criterio.
-- El contrato se genera con los placeholders del CTO sin rellenar (cedula, email, telefono).
-  Solo se rellenan los datos del proyecto y del cliente que se obtuvieron en la entrevista.
+- This skill does **not** emit the handover pack. That is `/project-takeover`.
+- This skill does **not** emit PSA or retainer contracts. Use `/contract-psa` and
+  `/contract-retainer`.
+- If the human already stated facts, reuse them. Confirm: "You already said X —
+  does this match?"
+- The SPA is seven static files. It needs no server.
+- Fee and timeline are suggestions. Respect the CTO if they adjust.
+- Leave CTO personal fields (ID, email, phone) as placeholders. Fill only project
+  and client facts from the interview.
