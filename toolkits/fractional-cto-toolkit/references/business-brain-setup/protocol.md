@@ -28,23 +28,57 @@ Everything goes in `./business-brain/` within the current working directory (or 
 root itself when the user says the whole repo IS the brain — e.g. a repo renamed from
 `business-model` to `business-brain`). Ask which of the two when ambiguous.
 
+## Topology Selection (Reverse Conway — mandatory gate)
+
+**Before** creating unit folders, choose how the vault mirrors *desired value
+streams*, not the current org chart. A fixed BU tree (`0-gerencia`…
+`4-finanzas`) copies Conway into the knowledge system unless the venture
+explicitly keeps that shape.
+
+Ask the user and record the choice in root `README.md` + `log.md`:
+
+| Topology id | Folder / MOC shape | When |
+| --- | --- | --- |
+| `stream-aligned` | MOC hubs per value stream / product journey (plus thin shared platform notes) | Default for product ventures designing the org around streams |
+| `platform` | Platform capabilities as hubs; streams link in | Shared services / platform teams |
+| `enabling` | Enabling specialties (security, DX, data) as hubs that *support* streams | Consulting/enablement-heavy studios |
+| `legacy-bu` | Numbered BU tree below (`0-gerencia`…`4-finanzas`) | Venture explicitly keeps classic departmental shape |
+
+PARA stays **frontmatter only** (`para: project\|area\|resource\|archive`) — never
+extra PARA folders. SPMP / risk templates from the toolkit must not embed Chimera
+BU numbering; place plans under `plans/` (or project links) after topology is chosen.
+
+If the user picks `stream-aligned`, `platform`, or `enabling`, scaffold MOC hubs for
+that topology and keep `modelo-negocio/`, `identidad-marca/`, `_procedimientos/`,
+`_templates/`, `00-inbox/`, `_sources/` as shared infrastructure. Only use the
+numbered BU table below when topology = `legacy-bu` (or as a transitional map the
+user approved).
+
 ## Canonical vault structure
+
+Shared infrastructure (every topology):
 
 | Folder | Domain | PARA bias |
 |---|---|---|
 | `00-inbox/` | Capture zone ("Limbo") — quick human notes enter here unclassified | capture |
 | `_sources/` | Raw immutable sources (PDFs, transcripts, contracts, raw minutes, web clips). Humans deposit; nobody edits. The agent distills FROM here INTO the unit folders | capture |
+| `modelo-negocio/` | Business Model Canvas modules + corporate purpose | resources → projects |
+| `identidad-marca/` | Brand identity | resources |
+| `_procedimientos/` | SOPs (versioned standards; pairs with /process-standardization) | areas |
+| `_retros-minutas/` | Retrospectives, meeting minutes, daily/weekly logs | archives |
+| `plans/` | Project management plans (ISO/IEC/IEEE 16326 SPMP exports / authored plans) | projects |
+| `_templates/` | Note templates (see below) — SPMP/16085/31000 arrive via toolkit export | infra |
+| `assets/` | Images and binary attachments | infra |
+
+`legacy-bu` unit folders (only when Topology Selection = `legacy-bu`):
+
+| Folder | Domain | PARA bias |
+|---|---|---|
 | `0-gerencia/` | Management: strategy, OKRs, board, legal compliance, alliances | areas + projects |
 | `1-operaciones/` | Operations: procedures in motion, logistics, HR/talent | areas |
 | `2-ingenieria-producto/` | Product engineering **knowledge**: architecture decisions, learnings, internal tooling docs. Work items and spikes do NOT live here — they belong in Linear (see `/make-no-mistakes:linear-projects-setup`) | areas |
 | `3-experiencia-cliente/` | Customer experience: marketing, journeys, research, satisfaction | areas + resources |
 | `4-finanzas/` | Finance: metrics, financial model, tax management | areas |
-| `modelo-negocio/` | Business Model Canvas modules + corporate purpose | resources → projects |
-| `identidad-marca/` | Brand identity | resources |
-| `_procedimientos/` | SOPs (versioned standards; pairs with /process-standardization) | areas |
-| `_retros-minutas/` | Retrospectives, meeting minutes, daily/weekly logs | archives |
-| `_templates/` | Note templates (see below) | infra |
-| `assets/` | Images and binary attachments | infra |
 
 Numbered prefixes impose flow order, not alphabetical order. The folder locates a note;
 the links connect it — cross-unit `[[wikilinks]]` are where the value emerges.
@@ -141,9 +175,13 @@ Look for existing business-model output in the working directory:
 
 Confirm the detected mode and the output location with the user before writing anything.
 
-### Step 2 — Scaffold the structure
+### Step 2 — Topology Selection, then scaffold
 
-Create every folder from the canonical table, each with a `_MOC.md` (type: `moc`) that
+Run **Topology Selection** (above). Confirm `stream-aligned` | `platform` |
+`enabling` | `legacy-bu` before creating unit folders.
+
+Create every folder required by that topology (shared infrastructure always;
+numbered BU folders only for `legacy-bu`), each with a `_MOC.md` (type: `moc`) that
 will serve as its hub: a short purpose line plus empty sections for the notes that will
 link into it. Then the agent-first skeleton:
 
@@ -222,6 +260,23 @@ In `_templates/`, create: `nota-atomica.md`, `decision.md`, `riesgo.md`, `minuta
 using `{{date}}`-style placeholders. Keep them minimal; templates lower capture friction,
 they must never raise it.
 
+**`riesgo.md` stays the PMBOK-oriented atomic risk note** — do not replace it with ISO
+31000 or ISO/IEC/IEEE 16085 content.
+
+Pull project-governance templates from the toolkit SSOT (never invent a parallel
+copy by hand):
+
+```bash
+# from fractional-cto-toolkit
+./scripts/export-spmp-templates.sh
+# optional: BRAIN_TEMPLATE=/path/to/business-brain-template
+```
+
+That export fills `_templates/spmp/` (16326 SPMP + 16085 risk plans + optional PMBOK
+core set) and `_templates/analisis-riesgos-iso31000.md` (+ helpers). It must **not**
+overwrite `riesgo.md`. Authoring/audit: `/software-project-management-plan` (alias
+`/project-plan`); org risk GRC: `/iso31000`.
+
 ### Step 4 — Migrate (migrate mode only)
 
 Map each BMC module file from `./business/` into the vault, as atomic notes linked to
@@ -252,11 +307,13 @@ versioned. The commit history is the venture's auditable decision memory.
 
 Checklist to print at the end:
 
-- [ ] All canonical folders exist, each with its `_MOC.md`
+- [ ] Topology Selection recorded (`stream-aligned` | `platform` | `enabling` | `legacy-bu`)
+- [ ] All folders for that topology exist, each with its `_MOC.md`
 - [ ] Root `CLAUDE.md` written from the operating-manual template + `AGENTS.md` symlink
 - [ ] `index.md` + `log.md` at root and per unit
 - [ ] Feeding SOP present in `_procedimientos/`
-- [ ] Templates present and frontmatter-complete
+- [ ] Templates present and frontmatter-complete (`riesgo.md` PMBOK note intact)
+- [ ] SPMP/16085/31000 templates present via `scripts/export-spmp-templates.sh` (or documented deferral)
 - [ ] (migrate) Every source file mapped, linked, and backed up
 - [ ] Root README + root MOC explain the system in one screen
 - [ ] Initial commit done
