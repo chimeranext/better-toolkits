@@ -2,26 +2,26 @@
 
 ---
 
-# Comunicado de Incumplimiento y Ultimo Requerimiento — {NOMBRE_PROYECTO}
+# Breach Notice / Comunicado de Incumplimiento y Ultimo Requerimiento — {{NOMBRE_PROYECTO}}
 
-**Fecha:** {FECHA_ULTIMATUM}
-**De:** {NOMBRE_LEAD}, representado por [Nombre del abogado / firma legal]
-**Para:** {NOMBRE_DEV}
-**Ref:** Incumplimiento de Solicitud de Entrega firmada el {FECHA_FIRMA_SOLICITUD}
+**Fecha:** {{FECHA_ULTIMATUM}}
+**De:** {{NOMBRE_LEAD}}, representado por [Nombre del abogado / firma legal]
+**Para:** {{NOMBRE_DEV}}
+**Ref:** Incumplimiento de Solicitud de Entrega firmada el {{FECHA_FIRMA_SOLICITUD}}
 
 ---
 
 ## Antecedentes
 
-1. Con fecha {FECHA_FIRMA_SOLICITUD}, las partes firmaron una Solicitud Formal de
-   Entrega del proyecto {NOMBRE_PROYECTO}, en la cual {NOMBRE_DEV} se comprometio
+1. Con fecha {{FECHA_FIRMA_SOLICITUD}}, las partes firmaron una Solicitud Formal de
+   Entrega del proyecto {{NOMBRE_PROYECTO}}, en la cual {{NOMBRE_DEV}} se comprometio
    a entregar la totalidad de los activos del proyecto dentro de los plazos ahi
    establecidos.
 
-2. A la fecha de este comunicado, han transcurrido {DIAS_TRANSCURRIDOS} dias desde
+2. A la fecha de este comunicado, han transcurrido {{DIAS_TRANSCURRIDOS}} dias desde
    la firma, y los siguientes elementos NO han sido entregados:
 
-{BLOQUE_ITEMS_INCUMPLIDOS}
+{{BLOQUE_ITEMS_INCUMPLIDOS}}
 
 <!-- El skill lista los items especificos que no fueron entregados, con su
 plazo original y los dias de atraso. Ejemplo:
@@ -30,25 +30,25 @@ plazo original y los dias de atraso. Ejemplo:
 -->
 
 3. La retencion de estos activos esta causando perjuicio directo al propietario
-   y a los usuarios activos de {NOMBRE_PROYECTO}.
+   y a los usuarios activos de {{NOMBRE_PROYECTO}}.
 
 ---
 
 ## Requerimiento
 
-Se requiere a {NOMBRE_DEV} la entrega COMPLETA de todos los elementos pendientes
+Se requiere a {{NOMBRE_DEV}} la entrega COMPLETA de todos los elementos pendientes
 indicados en la seccion anterior, en un plazo maximo e improrrogable de
-**{PLAZO_FINAL} dias habiles** contados a partir de la recepcion de este comunicado.
+**{{PLAZO_FINAL}} dias habiles** contados a partir de la recepcion de este comunicado.
 
 ---
 
 ## Consecuencias del incumplimiento
 
-{BLOQUE_CONSECUENCIAS_LEGALES}
+{{BLOQUE_CONSECUENCIAS_LEGALES}}
 
 <!-- El skill reemplaza segun jurisdiccion. Default Costa Rica:
 
-De no cumplirse con este requerimiento en el plazo señalado, {NOMBRE_LEAD}
+De no cumplirse con este requerimiento en el plazo señalado, {{NOMBRE_LEAD}}
 procedera a:
 
 1. **Interponer denuncia penal** ante el Ministerio Publico y la Unidad de Delitos
@@ -57,13 +57,13 @@ procedera a:
    - Estafa informatica (art. 217 bis, Codigo Penal), en caso de que se determine
      enriquecimiento indebido mediante la retencion del proyecto
    - Violacion de datos personales (art. 196 bis, Codigo Penal), si los datos de
-     usuarios de {NOMBRE_PROYECTO} fueron accedidos o manipulados indebidamente
+     usuarios de {{NOMBRE_PROYECTO}} fueron accedidos o manipulados indebidamente
    - [ABOGADO: evaluar si aplican otros tipos penales segun los hechos]
 
 2. **Iniciar accion civil** por:
    - Incumplimiento contractual (evidenciado por el documento firmado)
    - Daños y perjuicios, incluyendo:
-     - Lucro cesante por interrupcion del servicio a {NUMERO_USUARIOS} usuarios activos
+     - Lucro cesante por interrupcion del servicio a {{NUMERO_USUARIOS}} usuarios activos
      - Costos de reconstruccion del proyecto (si aplica)
      - Daño reputacional
    - [ABOGADO: cuantificar montos estimados]
@@ -81,7 +81,7 @@ procedera a:
 
 Se adjunta como prueba:
 - Copia del documento de Solicitud de Entrega firmado por ambas partes
-- Evidencia de pagos realizados por el desarrollo de {NOMBRE_PROYECTO}
+- Evidencia de pagos realizados por el desarrollo de {{NOMBRE_PROYECTO}}
 - Registro de comunicaciones previas solicitando la entrega
 - [ABOGADO: listar evidencia adicional disponible]
 -->
@@ -91,7 +91,7 @@ Se adjunta como prueba:
 ## Disposicion
 
 Este comunicado se emite sin perjuicio de cualquier otra accion legal que
-{NOMBRE_LEAD} tenga derecho a ejercer.
+{{NOMBRE_LEAD}} tenga derecho a ejercer.
 
 La intencion de mi representado(a) es resolver esta situacion de manera expedita.
 La entrega dentro del plazo señalado dara por cerrado el asunto sin necesidad de
@@ -104,7 +104,7 @@ recurrir a las instancias legales descritas.
 [Firma legal / bufete]
 [Telefono / email]
 
-En representacion de {NOMBRE_LEAD}
+En representacion de {{NOMBRE_LEAD}}
 
 ---
 
