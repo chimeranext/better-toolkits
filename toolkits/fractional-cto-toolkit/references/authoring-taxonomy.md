@@ -40,6 +40,13 @@ Documentation should be organized around these structures:
 - Navigation/sidebars mirror the quadrants. The compass: *Tutorials* (start), *How-to*
   (do), *Reference* (check), *Explanation* (understand).
 
+**Pack exception (client handoff, not a docs site):** when the reader receives **one**
+file (e.g. `{slug}-guia-cliente.md` from `/project-takeover`), you may keep all four
+Diátaxis modes **in the same document** as labeled top-level sections
+(Explanation → Tutorial → How-to → Reference). Do not blur types inside a paragraph.
+If the same content later moves into a handbook/site, split each section into its
+own page.
+
 ### Mapping the ops types onto Diátaxis
 
 | Ops type | Diátaxis quadrant | Because… |

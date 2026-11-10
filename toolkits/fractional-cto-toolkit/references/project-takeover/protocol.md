@@ -1,190 +1,292 @@
 # Skill `project-takeover` — protocol SSOT
 
+English ASD-STE100 SSOT. Run
+`make-no-mistakes-toolkit/references/explain/scripts/ste-lint.py` on this file
+before merge. Engagement chat for Costa Rica may use Spanish. Keep filenames and
+this protocol in English.
+
 ---
 
-# Project Takeover SOP Generator
+# Project takeover pack generator
 
-Genera los 4 documentos SOP operativos para ejecutar la transferencia de un proyecto
-de software existente. Cubre: SOP tecnico, guia ejecutiva, solicitud formal de entrega,
-y template de ultimatum — calibrados al nivel de riesgo del caso.
+Run a conversational interview. Classify the path. Ask one question at a time.
+Use fixed options when you can list answers as a/b/c/d. Calibrate case risk.
+Emit the handover pack under `./fractional-cto/takeover/` only after an explicit
+yes.
 
-> Este skill es un productor de SOPs **especializado** (transferencias de proyecto). Es un caso
-> particular del pipeline de process-engineering: para estandarizar y documentar cualquier otro
-> proceso operativo del cliente, usar `/process-standardization` → `/automation-triage` →
-> `/sop-authoring`. Los 4 documentos que genera aqui comparten el vocabulario de callouts
-> (`DECISION POINT`, `SCALE NOTE`, `LESSON LEARNED`) y el "bus test" de `/sop-authoring`.
+## Outputs (always four) — slug at the end
 
-## Regla de idioma
+| Emitted file | Type | Audience | Toolkit SSOT |
+|---|---|---|---|
+| `playbook-{slug}.md` | Playbook | CTO | `01-takeover-playbook.md` (bare: `01-takeover-playbook-bare.md`) |
+| `client-guide-{slug}.md` | Diátaxis ×4 | Client lead | `02-client-guide.md` (bare: `02-client-guide-bare.md`) |
+| `legal-template-delivery-request-{slug}.md` | Legal / signature | Prior developer + lead | `legal-template-delivery-request.md` (bare: `…-bare.md`) |
+| `legal-template-breach-notice-{slug}.md` | Legal | Counsel | `legal-template-breach-notice.md` (bare: `…-bare.md`) |
 
-Todo el contenido generado debe estar en **español**. Los terminos tecnicos se mantienen
-en ingles cuando son de uso comun (deploy, commit, CI/CD, etc.).
+**Bare files** are English outlines. Apprentices use them to see expected shape in
+better-toolkits.
 
-## Directorio de salida
+**Fill SSOTs** (`02-client-guide.md`, `legal-template-*.md`) use
+`{{PLACEHOLDERS}}`. Do not use `[[…]]` for fills. Those marks are Obsidian
+wikilinks.
 
-Todos los archivos van en `./fractional-cto/takeover/` dentro del directorio de trabajo actual.
+The playbook SSOT is **not** a template. Click-by-click steps belong in runbooks
+from `/runbook-authoring` (`diagnose-` / `recover-`).
 
-## Flujo del skill
+## Out of scope
 
-### Paso 1 — Obtener contexto de riesgo
+- Do not emit SPMP (ISO/IEC/IEEE 16326) or 16085 risk plans. Handover is not
+  project governance.
+- Do not run a deep risk assessment. That is `/takeover-assessment`.
+- Do not emit commercial contracts. Use `/contract-nda`, `/contract-psa`, or
+  `/contract-retainer`.
+- Do not route the four pack files through `/document-this` or `/document-it`.
 
-Hay dos caminos para obtener el contexto necesario:
+**Next step after the pack:** `/contract-psa`. The PSA anchors Milestone 1
+Discovery (SPMP + 16085). Remediation governance is PSA work. It is not takeover
+work.
 
-**Path A (preferido): Assessment previo disponible**
+## Language rules
 
-Verificar si existe `./fractional-cto/assessment/` con datos de un assessment previo
-(generado por `/takeover-assessment`). Si existe, leer el estado y cargar:
-- Nombre del proyecto
-- Nivel de riesgo
-- Amenazas identificadas
-- Relacion con el dev
-- Ownership del codigo
+- Filenames for SSOT, bare, and emit files stay English.
+- Bare files (`*-bare.md`) stay English STE100 (apprentice reference).
+- Playbook SSOT (`01-takeover-playbook.md`) stays English STE100. It is not a
+  template.
+- Emitted client guide and legal files default to Spanish for Costa Rica
+  engagements. Keep common technical terms in English.
+- Fill SSOTs keep `{{PLACEHOLDER}}` tokens.
+- Emitted `playbook-{slug}.md` follows the engagement language. Keep branches
+  §A / §B / §C.
 
-Confirmar con el usuario:
-> "Encontre tu assessment previo. Riesgo: **{NIVEL}**. ¿Correcto?"
+## Output directory
 
-Si el usuario confirma, continuar al Paso 2.
+Write all four files under `./fractional-cto/takeover/` in the current working
+directory.
 
-**Path B (standalone): Sin assessment previo**
+---
 
-Si no existe assessment previo, hacer una entrevista condensada de 4 preguntas.
-Preguntar UNA A LA VEZ. Si el usuario ya proporciono informacion en la conversacion
-previa, no repetir — extraer de lo que ya dijo.
+## HARD-GATE (mandatory)
 
-**Pregunta 1: Nombre del proyecto**
-> ¿Como se llama el proyecto?
+```
+HARD-GATE
+Do NOT write, scaffold, or overwrite any of the 4 takeover files until you have
+presented the pack plan (Step 3) and the human partner has given an explicit yes.
+Asking questions and classifying risk is allowed. Emitting docs is not.
+```
 
-**Pregunta 2: Relacion con el dev anterior**
-> ¿Como es la relacion con el dev anterior?
-> - a) Cooperativa — dispuesto a ayudar
-> - b) Neutral — responde pero no proactivo
-> - c) Contenciosa — no coopera, posible riesgo
-> - d) Sin contacto — el dev desaparecio
+Never skip the approval gate. Do not present the plan and write files in the same
+message.
 
-**Pregunta 3: Ownership del codigo**
-> ¿Donde esta el codigo?
-> - a) En cuenta del cliente (el cliente es owner)
-> - b) En cuenta personal del dev anterior
-> - c) Desconocido / sin acceso
+---
 
-**Pregunta 4: Usuarios activos**
-> ¿Hay usuarios reales usando el producto en produccion?
-> - a) Si
+## Skill flow
+
+### Step 0 — Classify the path (before the first question)
+
+Inspect `./fractional-cto/assessment/` (output of `/takeover-assessment`). State
+the path out loud so the human can fix it.
+
+- **Path A — assessment-available:** usable prior assessment exists. Confirm and
+  fill gaps. Do not re-ask known facts.
+- **Path B — standalone:** no usable assessment. Run the four-question interview.
+
+If A vs B is unclear, choose B. If Path A later shows a broken or contradictory
+assessment, switch to B and say so.
+
+Example announcement:
+
+> Path A — assessment-available: found `./fractional-cto/assessment/`. I will
+> confirm risk and gaps. I will not redo the full interview.
+
+### Step 1 — Interview (one question per message)
+
+1. Ask one question per message. Split deep topics.
+2. Prefer fixed options (a/b/c/d) when you can list the answers.
+3. If the human already gave a fact, extract it. Do not ask again.
+4. Do not ask about SPMP / 16085 here. That lives under `/contract-psa`.
+
+#### Path A — assessment-available
+
+Load from the assessment: project name, risk level, threats, prior-developer
+relationship, code ownership, live users when present.
+
+Confirm with one fixed-option question:
+
+> I found your prior assessment.
+> - Project: **{NAME}**
+> - Risk: **{LEVEL}**
+> - Relationship / ownership: **{SUMMARY}**
+>
+> Does this match?
+> - a) Yes — continue with this context
+> - b) Adjust — I will say what to change
+> - c) Ignore assessment — switch to standalone interview (Path B)
+
+If **b**, ask one adjustment at a time. If **c**, continue as Path B.
+
+When context is complete, state the risk level with a short business reason
+(money, time, reputation). Then go to Step 2.
+
+#### Path B — standalone
+
+Ask **one at a time** in this order. Skip answers already given.
+
+**Question 1: Project name** (open)
+
+> What is the project name?
+
+**Question 2: Relationship with the prior developer** (fixed)
+
+> How is the relationship with the prior developer?
+> - a) Cooperative — willing to help
+> - b) Neutral — answers but is not proactive
+> - c) Contentious — does not cooperate. Risk is open
+> - d) No contact — the developer is gone
+
+**Question 3: Code ownership** (fixed)
+
+> Where is the code?
+> - a) On the client account (client is owner)
+> - b) On the prior developer personal account
+> - c) Unknown / no access
+
+**Question 4: Live users** (fixed)
+
+> Are real users on the production product?
+> - a) Yes
 > - b) No
 
-**Matriz simplificada de riesgo:**
+**Simplified risk matrix:**
 
-| Relacion | Codigo en cuenta del... | Riesgo base |
-|----------|-------------------------|-------------|
-| Contenciosa / Sin contacto | Dev / Desconocido | **ALTO** |
-| Contenciosa / Sin contacto | Cliente | **MEDIO** |
-| Neutral | Dev / Desconocido | **MEDIO** |
-| Neutral | Cliente | **BAJO** |
-| Cooperativa | Dev / Desconocido | **MEDIO** |
-| Cooperativa | Cliente | **BAJO** |
+| Relationship | Code on account of… | Base risk |
+|---|---|---|
+| Contentious / No contact | Developer / Unknown | **HIGH** |
+| Contentious / No contact | Client | **MEDIUM** |
+| Neutral | Developer / Unknown | **MEDIUM** |
+| Neutral | Client | **LOW** |
+| Cooperative | Developer / Unknown | **MEDIUM** |
+| Cooperative | Client | **LOW** |
 
-**Modificador:** Si hay usuarios activos en produccion, subir un nivel el riesgo.
+**Modifier:** If production users are live, raise risk one level (LOW→MEDIUM,
+MEDIUM→HIGH). HIGH stays HIGH.
 
-Comunicar el nivel de riesgo al usuario con una explicacion breve.
+State the level with a short reason. Then Step 2.
 
-### Paso 2 — Generar SOP tecnico (para el CTO)
+### Step 2 — Optional scope (only if it changes the pack)
 
-1. Leer el template base: `${CLAUDE_PLUGIN_ROOT}/references/01-takeover-sop-template.md`
-2. Personalizar el SOP:
-   - Rellenar la tabla de riesgo con los datos obtenidos en Paso 1
-   - Completar la threat matrix con las amenazas identificadas
-   - Ajustar la secuencia de ejecucion segun el nivel de riesgo
-   - Eliminar secciones que no aplican (ej. si no hay mobile, eliminar Apple Developer / Google Play)
-   - Reemplazar marcadores genericos con el nombre del proyecto y contexto especifico
-   - Usar los callouts estandar para lo que el CTO no puede pasar por alto:
-     `> DECISION POINT:` (una decision requerida, quien la toma), `> SCALE NOTE:` (como cambia por
-     tamaño/riesgo del proyecto), `> LESSON LEARNED:` (consejo de ejecuciones previas)
-3. Escribir en `./fractional-cto/takeover/{slug}-takeover-sop.md`
+If platforms are still unclear (web / mobile / infra), ask one optional fixed
+question. Skip when already known.
 
-### Paso 3 — Generar guia ejecutiva (para el lead/cliente)
+> Which surfaces are in scope for the takeover? (multi-select is OK)
+> - a) Backend / API / web
+> - b) Mobile (Apple Developer / Google Play)
+> - c) Infra / cloud accounts
+> - d) Not sure — assume typical web+infra. Mark mobile N/A
 
-1. Leer el template: `${CLAUDE_PLUGIN_ROOT}/references/02-executive-sop-template.md`
-2. Personalizar:
-   - Reemplazar `{NOMBRE_PROYECTO}` con el nombre real
-   - Reemplazar `{BLOQUE_RIESGO}` con el nivel calculado, explicado en terminos de
-     negocio (dinero, tiempo, reputacion), no tecnicos
-   - Reemplazar `{BLOQUE_CRONOGRAMA}` con el timeline segun el nivel de riesgo
-   - Ajustar tono segun nivel de riesgo:
-     - **ALTO** → urgente, sin ser alarmista
-     - **MEDIO** → moderado, profesional
-     - **BAJO** → calmado, rutinario
-   - Eliminar preguntas frecuentes que no apliquen al caso
-3. Escribir en `./fractional-cto/takeover/{slug}-guia-cliente.md`
+Use the answer to **drop** playbook branches that do not apply. Do not add
+complexity.
 
-### Paso 4 — Generar solicitud formal de entrega (para firma en reunion)
+### Step 3 — Pack plan + approval gate
 
-Este documento se presenta al desarrollador en una reunion presencial o videollamada.
-El lead/cliente y el dev lo revisan juntos. El dev firma de aceptado.
-El documento firmado se convierte en evidencia vinculante en caso de incumplimiento.
+Before any write, present a short plan in chat and **STOP**:
 
-1. Leer el template: `${CLAUDE_PLUGIN_ROOT}/references/03-solicitud-entrega-template.md`
-2. Personalizar:
-   - Reemplazar todos los placeholders con datos reales del proyecto
-   - Ajustar items de entrega segun tipo de proyecto
-   - Los plazos deben ser FIRMES — son el compromiso que el dev firma
-   - Calibrar la clausula legal segun nivel de riesgo:
-     - **BAJO** → clausula ligera: "incumplimiento podra derivar en acciones legales"
-     - **MEDIO** → clausula moderada: referencia a legislacion de propiedad intelectual aplicable
-     - **ALTO** → clausula completa: referencia a Codigo Penal arts. 196 bis, 217 bis,
-       229 bis, Ley 9048, Unidad de Delitos Informaticos del OIJ
-   - Incluir bloque de firma: nombre, cedula/ID, fecha, firma de ambas partes
-   - NO incluir secciones de seguridad (rotacion de secrets, fork, auditorias)
-   - NO revelar la estrategia de mitigacion del CTO
-3. Escribir en `./fractional-cto/takeover/{slug}-solicitud-entrega.md`
+> I will generate the handover pack under `./fractional-cto/takeover/`:
+>
+> 1. `playbook-{slug}.md` — CTO playbook (when/why)
+> 2. `client-guide-{slug}.md` — Diátaxis guide for the lead
+> 3. `legal-template-delivery-request-{slug}.md` — signed at the meeting
+> 4. `legal-template-breach-notice-{slug}.md` — counsel draft if they breach
+>
+> Calibration: risk **{LEVEL}** · project **{NAME}** · path **{A|B}**
+>
+> This is operational handover. It is not project governance (SPMP / 16085).
+> That starts later with `/contract-psa` (Milestone 1).
+>
+> Generate the four files now?
+> - a) Yes — generate now
+> - b) Adjust something first (say what)
+> - c) Cancel
 
-### Paso 5 — Generar template de ultimatum (para el abogado)
+Only **a)** (or an unambiguous yes) continues to Step 4. For **b)**, ask one
+adjustment at a time. Then show the plan again. For **c)**, stop with no writes.
 
-Este documento es un template pre-armado que el abogado del lead personaliza y envia
-SOLO si el dev incumple los plazos firmados en el Paso 4. No se envia directamente.
+### Step 4 — Emit the four documents (post-approval only)
 
-**IMPORTANTE:** Siempre generar este documento, incluso para riesgo BAJO — es un template,
-mejor tenerlo y no necesitarlo.
+Create `./fractional-cto/takeover/` if needed. Emit in sequence from
+`${CLAUDE_PLUGIN_ROOT}/references/`. Replace every `{{PLACEHOLDER}}`. Leave no
+`{{…}}` in the emit. Point apprentices at bare files. Do **not** copy bare files
+to the client folder.
 
-1. Leer el template: `${CLAUDE_PLUGIN_ROOT}/references/04-ultimatum-template.md`
-2. Personalizar:
-   - Reemplazar placeholders con datos del proyecto
-   - Referenciar los plazos especificos firmados en la solicitud de entrega
-   - Ajustar las referencias legales segun la jurisdiccion (por defecto: Costa Rica)
-   - Mantener intactos los marcadores `[ABOGADO: ...]` — son indicaciones para el abogado
-   - Marcar claramente las secciones que el abogado debe revisar/adaptar
-3. Escribir en `./fractional-cto/takeover/{slug}-ultimatum-template.md`
+#### 4.1 CTO playbook
 
-Incluir un disclaimer visible al inicio: "BORRADOR — Requiere revision y aprobacion de un
-abogado antes de enviar."
+1. SSOT: `01-takeover-playbook.md` (apprentice bare: `01-takeover-playbook-bare.md`)
+2. Adapt branches §A / §B / §C. Drop N/A rows. Use roles. Never use person names.
+   Keep dated callouts as evidence only.
+3. Write: `./fractional-cto/takeover/playbook-{slug}.md`
+4. Run the 3 AM lead test. If diagnose/recover scripts are missing, leave stubs
+   and offer `/runbook-authoring`.
 
-### Paso 6 — Confirmacion
+#### 4.2 Client guide — Diátaxis ×4
 
-Presentar al usuario los 4 documentos con su audiencia y momento de uso:
+1. Fill SSOT: `02-client-guide.md` (bare: `02-client-guide-bare.md`)
+2. Fill `{{NOMBRE_PROYECTO}}`, `{{BLOQUE_RIESGO}}`, `{{BLOQUE_CRONOGRAMA}}`
+3. Tone: HIGH urgent-calm. MEDIUM professional. LOW routine. Keep FAQ out of
+   How-to. Drop N/A rows.
+4. Write: `./fractional-cto/takeover/client-guide-{slug}.md`
 
-1. `{slug}-takeover-sop.md` → "Tu SOP operativo (solo para vos)"
-2. `{slug}-guia-cliente.md` → "Para tu lead — que entienda el proceso"
-3. `{slug}-solicitud-entrega.md` → "Para la reunion con el dev — se firma de aceptado"
-4. `{slug}-ultimatum-template.md` → "Para el abogado — solo si el dev incumple"
+#### 4.3 Formal delivery request
 
-**Secuencia recomendada:**
-1. Lead lee la guia-cliente
-2. CTO hace fork/backup del repo ANTES de la reunion
-3. Reunion con el dev → presentar solicitud → firma de aceptado
-4. Si incumple → lead lleva el firmado al abogado + template de ultimatum
+1. Fill SSOT: `legal-template-delivery-request.md` (bare: `…-bare.md`)
+2. Firm deadlines. Legal clause by risk (LOW / MEDIUM / HIGH. Default Costa Rica).
+3. Signature block for both parties. Do not reveal CTO strategy (fork / secrets).
+4. Write: `./fractional-cto/takeover/legal-template-delivery-request-{slug}.md`
 
-**Siguiente paso sugerido:**
-> "Para formalizar el proyecto de remediacion, usa `/contract-psa`"
+#### 4.4 Breach notice (counsel)
 
-## Notas para el modelo
+Always emit (even LOW). Only counsel sends it after a signed-deadline breach.
 
-- Este skill NO hace evaluacion de riesgo — eso es `/takeover-assessment`.
-- Este skill NO genera contratos — eso es `/contract-nda`, `/contract-psa`, o `/contract-retainer`.
-- La solicitud-entrega SIEMPRE incluye una clausula legal (por defecto = Enfoque B, integrada).
-- El ultimatum SIEMPRE se genera, incluso para riesgo bajo — es un template, mejor tenerlo.
-- El SOP template es comprehensivo por diseño. La personalizacion es ELIMINAR lo que no aplica,
-  no agregar complejidad innecesaria.
-- Si el usuario ya menciono detalles especificos (ej. "el repo esta en GitHub bajo la cuenta
-  del dev anterior"), usarlos directamente sin volver a preguntar.
-- El tono del SOP es profesional pero directo — es un documento operativo, no academico.
-- Aplicar el "bus test" antes de entregar el SOP tecnico: si el CTO se cayera de la escena mañana,
-  ¿podria un colega leer el SOP y ejecutar el takeover? Si no, agregar detalle (pasos vagos, owners
-  sin nombrar por rol, umbrales faltantes son las brechas tipicas).
+1. Fill SSOT: `legal-template-breach-notice.md` (bare: `…-bare.md`)
+2. Keep the DRAFT disclaimer. Keep `[COUNSEL: …]` markers. Default jurisdiction:
+   Costa Rica.
+3. Write: `./fractional-cto/takeover/legal-template-breach-notice-{slug}.md`
+
+### Step 5 — Post-emit confirmation
+
+1. `playbook-{slug}.md` → CTO playbook
+2. `client-guide-{slug}.md` → client lead
+3. `legal-template-delivery-request-{slug}.md` → meeting / signature
+4. `legal-template-breach-notice-{slug}.md` → counsel on breach
+
+**Sequence:** lead reads the guide. CTO picks the branch and runs recover
+**before** the meeting. Sign the delivery request. On breach, counsel uses the
+breach notice.
+
+**Required close line:**
+
+> Handover pack is ready. To formalize remediation and project governance
+> (SPMP 16326 + 16085 risks in Milestone 1), use `/contract-psa`. This pack does
+> not replace that step.
+
+---
+
+## Notes for the model
+
+- Classify the path before the first question. Announce it.
+- One question per message. Prefer fixed options when you can list answers as
+  a/b/c/d.
+- HARD-GATE: without an explicit yes to the Step 3 plan, write zero files.
+- This skill does not deep-assess risk. That is `/takeover-assessment`.
+- This skill does not emit SPMP or 16085. `/contract-psa` anchors Milestone 1.
+  Fill authors are `/software-project-management-plan/authoring` and
+  `/software-risks-authoring-16085`.
+- This skill does not emit contracts. Use `/contract-nda`, `/contract-psa`,
+  `/contract-retainer`.
+- Always include a legal clause in the delivery request (Approach B).
+- Always emit the breach notice. Even for low risk.
+- English filenames. Slug at the end of emits. Do not copy bare files to the
+  client.
+- Playbook SSOT is not a template. Adapt by dropping unused branches. Do not
+  invent placeholders or click-by-click steps.
+- If the human already stated facts, reuse them. Do not re-ask.
+- Playbook tone: direct judgment under uncertainty. Not a script.
+- Apply the 3 AM lead test before you close Step 4.1.
