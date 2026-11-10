@@ -1,8 +1,8 @@
 {
   "name": "fractional-cto-toolkit",
-  "version": "1.4.10",
+  "version": "1.4.17",
   "private": true,
-  "description": "Operational toolkit for freelance and fractional CTOs — contracts, project-takeover SOPs, process-engineering + requirements-first pipelines, ops playbook/runbook authoring, clean-code standards (DSMS/IFS/CPS/PRDS/BrS/QT4L), and multi-harness PRDS pre-push hooks.",
+  "description": "Operational toolkit for freelance and fractional CTOs \u2014 contracts, project-takeover SOPs, process-engineering + requirements-first pipelines, ops playbook/runbook authoring, clean-code standards (DSMS/IFS/CPS/PRDS/BrS/QT4L), and multi-harness PRDS pre-push hooks.",
   "license": "BSL-1.1",
   "skills": [
     {
