@@ -3,186 +3,188 @@ title: "{{title}}"
 aliases: []
 date: "{{date}}"
 tags: [project, plan, spmp]
-status: borrador
+status: draft
 standard: ISO/IEC/IEEE 16326:2019
 risk_companion: ISO/IEC/IEEE 16085:2021
 template_id: iso-16326-spmp
-ssot: fractional-cto-toolkit/references/software-project-management-plan
 ---
 
-# Plan de gestión del proyecto · {{project_name}}
+# Software Project Management Plan · {{project_name}}
 
-> [!warning] Borrador
-> Completar identificación, firmas y puntos abiertos antes de aprobación.
+> [!warning] Draft
+> Complete identification, signatures, and open issues before approval.
 
-## Portada
+## Cover
 
-| Campo | Valor |
+| Field | Value |
 | --- | --- |
-| Identificador | {{spmp_id}} |
-| Versión | {{version}} |
-| Fecha de emisión | {{date}} |
-| Estado | Borrador |
-| Proyecto | {{project_name}} |
-| Emisor | {{issuer}} |
-| Cliente | {{customer}} |
-| Representante del cliente | {{customer_rep}} |
-| Norma | ISO/IEC/IEEE 16326:2019 |
-| Riesgos (companion) | ISO/IEC/IEEE 16085:2021 |
+| Identifier | {{spmp_id}} |
+| Version | {{version}} |
+| Issue date | {{date}} |
+| Status | Draft |
+| Project | {{project_name}} |
+| Issuer | {{issuer}} |
+| Customer | {{customer}} |
+| Customer representative | {{customer_rep}} |
+| Standard | ISO/IEC/IEEE 16326:2019 |
+| Risk companion | ISO/IEC/IEEE 16085:2021 |
 
-El contenido sigue las secciones que ISO/IEC/IEEE 16326:2019 exige en un plan de gestión de proyecto. Si una sección no tiene plan propio, el texto dice por qué (`N/A` + motivo).
+This plan follows the ISO/IEC/IEEE 16326:2019 project management plan content.
+If a required section has no plan, write `N/A` and the reason.
 
-## Historial de cambios
+## Change history
 
-| Versión | Fecha | Cambio | Motivo |
+| Version | Date | Change | Reason |
 | --- | --- | --- | --- |
-| 0.1 | {{date}} | Primera redacción | Arranque del plan |
+| 0.1 | {{date}} | First draft | Plan start |
 
-## Registro de aprobación
+## Approval record
 
-| Rol | Nombre | Firma | Fecha |
+| Role | Name | Signature | Date |
 | --- | --- | --- | --- |
-| Autor del plan | | | |
-| Representante del cliente | | | |
+| Plan author | | | |
+| Customer representative | | | |
 
-## 1. Visión general del proyecto
+## 1. Project overview
 
-### 1.1 Resumen
+### 1.1 Summary
 
 {{summary}}
 
-### 1.2 Propósito, alcance y objetivos
+### 1.2 Purpose, scope, and objectives
 
 {{purpose_scope_objectives}}
 
-## 2. Referencias
+## 2. References
 
-| Ref | Documento |
+| Ref | Document |
 | --- | --- |
 | R1 | ISO/IEC/IEEE 16326:2019 |
-| R2 | ISO/IEC/IEEE 16085:2021 (gestión de riesgos del proyecto) |
+| R2 | ISO/IEC/IEEE 16085:2021 (project risk management) |
 | R3 | {{prd_or_spec_link}} |
 
-## 3. Definiciones
+## 3. Definitions
 
-| Término | Definición |
+| Term | Definition |
 | --- | --- |
 | SPMP | Software / Systems Project Management Plan |
-| Línea base | Alcance aprobado para esta versión del plan |
+| Baseline | Approved scope for this plan version |
 
-## 4. Contexto del proyecto
+## 4. Project context
 
-### 4.1 Modelo de proceso
+### 4.1 Process model
 
 {{process_model}}
 
-### 4.2 Restricciones
+### 4.2 Constraints
 
 {{constraints}}
 
-### 4.3 Supuestos
+### 4.3 Assumptions
 
 {{assumptions}}
 
-### 4.4 Métodos, herramientas y técnicas
+### 4.4 Methods, tools, and techniques
 
 {{methods_tools}}
 
-### 4.5 Aceptación del producto
+### 4.5 Product acceptance
 
 {{acceptance}}
 
-### 4.6 Estructura organizativa e interfaces
+### 4.6 Organization and interfaces
 
 {{org_interfaces}}
 
-> No copiar el organigrama del cliente como ley de carpetas del vault. Interfaces van aquí como datos; la topología del brain se elige en `/business-brain-setup` (Reverse Conway).
+> Do not copy the customer org chart as vault folder law. Put interfaces here as
+> data. Choose brain topology in `/business-brain-setup` (Reverse Conway).
 
-## 5. Planificación del proyecto
+## 5. Project planning
 
-### 5.1 Estimaciones
+### 5.1 Estimates
 
 {{estimates}}
 
-### 5.2 Dotación / staffing
+### 5.2 Staffing
 
 {{staffing}}
 
-### 5.3 Actividades (EDT / WBS)
+### 5.3 Activities (WBS)
 
 {{wbs}}
 
-### 5.4 Calendario e hitos
+### 5.4 Schedule and milestones
 
 {{schedule}}
 
-### 5.5 Presupuesto y recursos
+### 5.5 Budget and resources
 
 {{budget_resources}}
 
-## 6. Evaluación y control
+## 6. Evaluation and control
 
-### 6.1 Monitoreo
+### 6.1 Monitoring
 
 {{monitoring}}
 
-### 6.2 Umbrales de control
+### 6.2 Control thresholds
 
 {{control_thresholds}}
 
-### 6.3 Informes
+### 6.3 Reporting
 
 {{reporting}}
 
-### 6.4 Acción correctiva / órdenes de cambio
+### 6.4 Corrective action / change orders
 
 {{corrective_action}}
 
-## 7. Entrega del producto
+## 7. Product delivery
 
 {{product_delivery}}
 
-## 8. Procesos de soporte
+## 8. Supporting processes
 
-### 8.1 Aseguramiento de la calidad
+### 8.1 Quality assurance
 
 {{qa}}
 
-### 8.2 Verificación, validación y pruebas
+### 8.2 Verification and test
 
 {{vv_test}}
 
-### 8.3 Gestión de riesgos
+### 8.3 Risk management
 
-Companion por defecto: **ISO/IEC/IEEE 16085:2021** — ver plantilla
-`iso-16085-risk-management-plan.md` (inline o documento enlazado).
+Default companion: **ISO/IEC/IEEE 16085:2021** — see
+`iso-16085-risk-management-plan.md` (inline or linked document). Emit with
+`/software-risks-authoring-16085`.
 
 {{risk_management_summary_or_link}}
 
-Registro / perfil de riesgos (resumen):
+Risk profile summary:
 
-| Id | Categoría | Riesgo | Probabilidad | Impacto | Tratamiento |
+| Id | Category | Risk | Likelihood | Consequence | Treatment |
 | --- | --- | --- | --- | --- | --- |
 | R-01 | | | | | |
 
-### 8.4 Gestión de configuración
+### 8.4 Configuration management
 
 {{configuration_management}}
 
-### 8.5 Gestión de la información
+### 8.5 Information management
 
 {{information_management}}
 
-### 8.6 Comunicación
+### 8.6 Communication
 
 {{communication}}
 
-## 9. Planes adicionales
+## 9. Additional plans
 
 This section is not applicable to this plan — {{additional_plans_na_reason}}
 
-## Anexo A. Puntos abiertos
+## Annex A. Open issues
 
-| Id | Punto | Dueño | Estado |
+| Id | Issue | Owner | State |
 | --- | --- | --- | --- |
-| A-01 | | | abierto |
+| A-01 | | | open |

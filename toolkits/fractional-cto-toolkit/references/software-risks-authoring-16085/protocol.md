@@ -58,8 +58,10 @@ family.
    share characteristics).
 6. **Link both ways:** SPMP §8.3 → RM plan; RM plan → SPMP + treatment paths;
    treatment → RM plan.
-7. **Language** = engagement working language. Do not copy copyrighted standard
-   prose — clause citations only.
+7. **Language:** toolkit templates are English SSOT. Fill the client copy in the
+   engagement working language. Do not copy copyrighted standard prose — clause
+   citations only. Keep `templates/*.md` STE100-clean
+   (`ste-lint.py` in make-no-mistakes explain scripts).
 
 ## Artifact
 

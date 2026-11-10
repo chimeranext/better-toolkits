@@ -50,4 +50,10 @@ companion: ISO/IEC/IEEE 16085:2021.
 - **Client-facing output:** no skill names, `generated_by`, dogfood, or toolkit
   `ssot:` paths in the emitted body/frontmatter the client reads.
 - No copyrighted standard PDF text is copied into the artifact.
-- Language follows the engagement working language; frontmatter keys stay stable.
+- Toolkit SSOT templates under `templates/` are **English**. When you emit a
+  client plan, write the filled body in the engagement working language.
+  Frontmatter keys stay stable (`status: draft` in SSOT. Map to local labels
+  only in the client copy if the vault requires it).
+- All `templates/*.md` (bare and fill) must pass
+  `make-no-mistakes-toolkit/references/explain/scripts/ste-lint.py` (ASD-STE100
+  structural rules) before merge.

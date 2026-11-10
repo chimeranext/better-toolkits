@@ -1,21 +1,20 @@
 ---
-title: "Plan de gestión de riesgos · {{project_name}}"
+title: "Risk management plan · {{project_name}}"
 date: "{{date}}"
 tags: [project, risk, iso-16085]
-status: borrador
+status: draft
 standard: ISO/IEC/IEEE 16085:2021
 satisfies: ISO/IEC/IEEE 16326:2019 Clause 7 risk-management plan content
 template_id: iso-16085-risk-management-plan
-ssot: fractional-cto-toolkit/references/software-project-management-plan
 ---
 
-# Plan de gestión de riesgos · {{project_name}}
+# Risk management plan · {{project_name}}
 
-Outline aligned to ISO/IEC/IEEE 16085:2021 §8.1.2 (original prose; clause citations
-only). Empty sections use: `This section is not applicable to this plan` + reason
-(or Spanish equivalent).
+Outline aligned to ISO/IEC/IEEE 16085:2021 §8.1.2 (original prose. Clause citations
+only). Empty sections use: `This section is not applicable to this plan` plus a
+reason.
 
-Process activities behind this plan: §6.4 — plan risk management → manage the
+Process activities behind this plan (§6.4): plan risk management → manage the
 risk profile → analyze risks → treat risks → monitor risks → evaluate the risk
 management process.
 
@@ -39,13 +38,13 @@ management process.
 | --- | --- |
 | SPMP | {{spmp_link}} (ISO/IEC/IEEE 16326) |
 | 16085 | ISO/IEC/IEEE 16085:2021 |
-| 31000 | ISO 31000:2018 (org principles; GRC — does not replace this plan) |
+| 31000 | ISO 31000:2018 (org principles. GRC. Does not replace this plan) |
 
 ### 1.5 Glossary
 
 | Term | Meaning |
 | --- | --- |
-| Risk profile | Current + historical view of project risks and treatments |
+| Risk profile | Current and historical view of project risks and treatments |
 | Risk threshold | Exposure level that triggers accept / monitor / treat |
 
 ## 2. Risk management overview
@@ -57,7 +56,7 @@ Document at least:
 - Scope of risk management
 - Sources of risk
 - Risk criteria
-- How risks are organized, categorized, compared, consolidated
+- How the team organizes, categorizes, compares, and consolidates risks
 - Parameters for action (likelihood, consequence, thresholds)
 - Risk measures / rating scales
 - Treatment techniques
@@ -67,8 +66,8 @@ Document at least:
 
 ### 2.2 Risk management context
 
-Stakeholders, categories (e.g. technical, security, schedule, budget, supply
-chain), objectives/assumptions/constraints that affect risk work.
+Stakeholders, categories (for example technical, security, schedule, budget,
+supply chain), and objectives or assumptions that affect risk work.
 
 {{context}}
 
@@ -96,7 +95,11 @@ chain), objectives/assumptions/constraints that affect risk work.
 
 {{treatment_approach}}
 
-Unacceptable risks get a **risk treatment plan** (`iso-16085-risk-treatment-plan`).
+Risks that need treatment get a **risk treatment plan**
+(`iso-16085-risk-treatment-plan`). Gate with Eisenhower: critical (urgent and
+important) requires a treatment plan in PSA Milestone 1. Only-urgent or
+only-important: offer a treatment plan in the same milestone. Neither: document
+as acceptable.
 
 ### 4.5 Risk monitoring and reporting
 
@@ -104,21 +107,21 @@ Unacceptable risks get a **risk treatment plan** (`iso-16085-risk-treatment-plan
 
 ### 4.6 Risk profile
 
-Where the profile lives, what fields it captures, and thresholds/conditions.
+Where the profile lives, which fields it captures, and which thresholds apply.
 
-Profile fields (minimum): description; likely causes/events; possible
-consequences; severity; likelihood; likelihood of detection; thresholds;
-current state; current treatment/contingency; history.
+Profile fields (minimum): description. Likely causes or events. Possible
+consequences. Severity. Likelihood. Likelihood of detection. Thresholds.
+Current state. Current treatment or contingency. History.
 
-| Id | Description | Category | Likelihood | Consequence | Threshold | State | Treatment |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| R-01 | | | | | | | |
+| Id | Description | Category | Likelihood | Consequence | Detection | Threshold | State | Treatment |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| R-01 | | | | | | | | |
 
 Profile location: {{risk_profile_path}}
 
 ### 4.7 Risk communication
 
-Who receives what, escalation path, coordination with interested parties.
+Who receives what, escalation path, and coordination with interested parties.
 
 {{communication}}
 
