@@ -112,7 +112,7 @@ and runbooks belong to each startup's own repo.
 | *How* it is built technically (stack, schema, infra, APIs) | **ADR** (Architecture Decision Record) | `openspec/changes/{date-slug}/design.md` |
 | How an end user *uses* the finished product | **Product Documentation** | product docs |
 | How to security-test a system (authorized engagement) | **Security playbook** | `/pentest-playbook-setup` |
-| How a **software/systems project** is managed (schedule, org, risk, delivery) | **SPMP** (project governance — not SOP/playbook/runbook) | `/software-project-management-plan/authoring` (alias `/project-plan/authoring`); audit via `/software-project-management-plan/audit`. Risk companion: ISO/IEC/IEEE 16085. Org-wide ISO 31000 → `/iso31000` |
+| How a **software/systems project** is managed (schedule, org, risk, delivery) | **SPMP** (project governance — not SOP/playbook/runbook) | `/software-project-management-plan/authoring` (alias `/project-plan/authoring`); audit via `/software-project-management-plan/audit`. Project risk plans (ISO/IEC/IEEE 16085): `/software-risks-authoring-16085`. Org-wide ISO 31000 → `/iso31000` |
 
 ---
 
