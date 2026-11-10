@@ -15,7 +15,10 @@ flowchart TD
         A[/"/contract-nda"/] --> B[/"/takeover-assessment"/]
         B --> C[/"/project-takeover"/]
         C --> D[/"/contract-psa"/]
-        D --> E[/"/contract-retainer"/]
+        D --> H1["Hito 1 Discovery: SPMP 16326 + 16085"]
+        H1 --> SPMP[/"/software-project-management-plan/authoring"/]
+        H1 --> R16085[/"/software-risks-authoring-16085"/]
+        H1 --> E[/"/contract-retainer"/]
     end
     subgraph STD[Engineering Standards]
         F[/"/engineering-standards-audit"/] --> G[/"/engineering-standards-setup"/]
@@ -50,6 +53,14 @@ flowchart TD
     D --> P[/"/pentest-playbook-setup"/]
     E --> Q[/"/business-brain-setup"/]
 ```
+
+**Project governance (not sueltos):** `/contract-psa` makes SPMP + ISO/IEC/IEEE 16085
+**Milestone 1 (Discovery)** on the standard path. Preventa ships `*-bare.md` outlines only.
+After signature, invoke `/software-project-management-plan/authoring` and
+`/software-risks-authoring-16085` to fill them (Eisenhower gates §8.2 treatments).
+High-governance pre-signature fill is opt-in and **not recommended** for Fractional CTOs
+without prior preventa negotiation experience (unpaid engineering risk). Org GRC stays
+`/iso31000`. Operational `risk/*` is a different family.
 
 ## Process-Engineering Pipeline
 
