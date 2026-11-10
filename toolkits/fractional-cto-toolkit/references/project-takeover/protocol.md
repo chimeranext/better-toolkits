@@ -223,8 +223,9 @@ to the client folder.
 2. Adapt branches §A / §B / §C. Drop N/A rows. Use roles. Never use person names.
    Keep dated callouts as evidence only.
 3. Write: `./fractional-cto/takeover/playbook-{slug}.md`
-4. Run the 3 AM lead test. If diagnose/recover scripts are missing, leave stubs
-   and offer `/runbook-authoring`.
+4. Run the 3 AM lead test. Link
+   `references/project-takeover/diagnose-project-takeover.sh`,
+   `recover-project-takeover.sh`, and `project-takeover-runbook.md`.
 
 #### 4.2 Client guide — Diátaxis ×4
 

@@ -36,8 +36,9 @@
 | Layer | File | When |
 |---|---|---|
 | **Playbook** (this doc) | `references/01-takeover-playbook.md` (bare: `01-takeover-playbook-bare.md`) | Choose high / medium / low branch |
-| **Diagnose** | `diagnose-project-takeover.sh` (stub under `references/project-takeover/`) | Read-only probes |
-| **Recover** | `recover-project-takeover.sh` (stub under `references/project-takeover/`) | Fork/backup, rotate credentials, move DNS |
+| **Diagnose** | `references/project-takeover/diagnose-project-takeover.sh` | Read-only probes |
+| **Recover** | `references/project-takeover/recover-project-takeover.sh` | Fork/backup, rotate credentials, move DNS |
+| **Runbook** | `references/project-takeover/project-takeover-runbook.md` | Sequential how after the tree picks a branch |
 | **Bootstrap** | `/takeover-assessment` under `./fractional-cto/assessment/` | Risk context before this tree |
 | **Mitigate** | Signed delivery request + credentials on client accounts | Prevent hostage or wipe |
 | **Legal (pack)** | `legal-template-delivery-request-{slug}.md`, `legal-template-breach-notice-{slug}.md` | Meeting signature. Counsel on breach |
