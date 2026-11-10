@@ -1,14 +1,14 @@
-# Solicitud Formal de Entrega — {NOMBRE_PROYECTO}
+# Formal Delivery Request / Solicitud Formal de Entrega — {{NOMBRE_PROYECTO}}
 
-**Fecha:** {FECHA}
-**De:** {NOMBRE_LEAD} (propietario / representante legal de {NOMBRE_PROYECTO})
-**Para:** {NOMBRE_DEV} (desarrollador)
+**Fecha:** {{FECHA}}
+**De:** {{NOMBRE_LEAD}} (propietario / representante legal de {{NOMBRE_PROYECTO}})
+**Para:** {{NOMBRE_DEV}} (desarrollador)
 
 ---
 
 ## Contexto
 
-Como parte de una reestructuracion en la gestion tecnica de {NOMBRE_PROYECTO}, se
+Como parte de una reestructuracion en la gestion tecnica de {{NOMBRE_PROYECTO}}, se
 formaliza la transferencia completa del proyecto. Este documento enumera los elementos
 que deben ser entregados, los plazos establecidos, y las consecuencias en caso de
 incumplimiento.
@@ -20,7 +20,7 @@ de entrega dentro de los plazos aqui indicados.
 
 ## 1. Codigo fuente y repositorio
 
-**Plazo: {PLAZO_CODIGO}**
+**Plazo: {{PLAZO_CODIGO}}**
 
 - [ ] Transferencia del repositorio a la organizacion/cuenta indicada por el propietario
 - [ ] Confirmacion de que el repositorio contiene TODO el codigo fuente del proyecto
@@ -33,7 +33,7 @@ de entrega dentro de los plazos aqui indicados.
 
 ## 2. Cuentas y servicios de terceros
 
-**Plazo: {PLAZO_SERVICIOS}**
+**Plazo: {{PLAZO_SERVICIOS}}**
 
 Transferencia de ownership o credenciales de administrador para cada servicio externo:
 
@@ -56,7 +56,7 @@ transferencia de ownership a la cuenta que se indicara.
 
 ## 3. Infraestructura y ambientes
 
-**Plazo: {PLAZO_INFRA}**
+**Plazo: {{PLAZO_INFRA}}**
 
 - [ ] Lista de ambientes existentes (desarrollo, staging, produccion) con URLs
 - [ ] Variables de entorno — lista completa por ambiente con descripcion de cada una
@@ -68,7 +68,7 @@ transferencia de ownership a la cuenta que se indicara.
 
 ## 4. Base de datos
 
-**Plazo: {PLAZO_DB}**
+**Plazo: {{PLAZO_DB}}**
 
 - [ ] Acceso de administrador a la base de datos de produccion
 - [ ] Esquema actual (dump de esquema si las migraciones no estan en el repo)
@@ -79,7 +79,7 @@ transferencia de ownership a la cuenta que se indicara.
 
 ## 5. Documentacion y conocimiento
 
-**Plazo: {PLAZO_DOCS}**
+**Plazo: {{PLAZO_DOCS}}**
 
 - [ ] Toda documentacion existente: especificaciones, diagramas, notas tecnicas,
   decisiones de arquitectura, flujos de usuario
@@ -92,7 +92,7 @@ transferencia de ownership a la cuenta que se indicara.
 
 ## 6. Diseño y assets
 
-**Plazo: {PLAZO_DISENO}**
+**Plazo: {{PLAZO_DISENO}}**
 
 - [ ] Archivos de diseño (Figma, Sketch, etc.) — transferir ownership
 - [ ] Assets graficos: logo, iconos, ilustraciones — indicar licencias
@@ -100,7 +100,7 @@ transferencia de ownership a la cuenta que se indicara.
 
 ---
 
-{BLOQUE_ITEMS_ADICIONALES}
+{{BLOQUE_ITEMS_ADICIONALES}}
 
 <!-- El skill agrega items especificos segun tipo de proyecto:
 - Mobile: Apple Developer Account, Google Play Console, app signing keys,
@@ -114,12 +114,12 @@ transferencia de ownership a la cuenta que se indicara.
 
 | Entrega | Plazo |
 |---------|-------|
-| Codigo fuente (Seccion 1) | {PLAZO_CODIGO} |
-| Cuentas y servicios (Seccion 2) | {PLAZO_SERVICIOS} |
-| Infraestructura (Seccion 3) | {PLAZO_INFRA} |
-| Base de datos (Seccion 4) | {PLAZO_DB} |
-| Documentacion (Seccion 5) | {PLAZO_DOCS} |
-| Diseño y assets (Seccion 6) | {PLAZO_DISENO} |
+| Codigo fuente (Seccion 1) | {{PLAZO_CODIGO}} |
+| Cuentas y servicios (Seccion 2) | {{PLAZO_SERVICIOS}} |
+| Infraestructura (Seccion 3) | {{PLAZO_INFRA}} |
+| Base de datos (Seccion 4) | {{PLAZO_DB}} |
+| Documentacion (Seccion 5) | {{PLAZO_DOCS}} |
+| Diseño y assets (Seccion 6) | {{PLAZO_DISENO}} |
 
 Los plazos establecidos son contados a partir de la fecha de firma de este documento.
 
@@ -127,7 +127,7 @@ Los plazos establecidos son contados a partir de la fecha de firma de este docum
 
 ## Clausula de consecuencias
 
-{BLOQUE_CLAUSULA_LEGAL}
+{{BLOQUE_CLAUSULA_LEGAL}}
 
 <!-- El skill reemplaza segun nivel de riesgo:
 
@@ -143,8 +143,8 @@ vigente, incluyendo la reclamacion de daños y perjuicios derivados de la
 interrupcion del servicio y cualquier perdida de datos o funcionalidad.
 
 ### ALTO:
-Las partes reconocen que {NOMBRE_PROYECTO} y todo su codigo fuente, base de datos,
-configuraciones, y activos digitales son propiedad de {NOMBRE_LEAD}, habiendo sido
+Las partes reconocen que {{NOMBRE_PROYECTO}} y todo su codigo fuente, base de datos,
+configuraciones, y activos digitales son propiedad de {{NOMBRE_LEAD}}, habiendo sido
 desarrollados bajo relacion contractual de prestacion de servicios.
 
 La retencion, destruccion, o manipulacion no autorizada de estos activos digitales
@@ -176,9 +176,9 @@ preservacion de los activos digitales mientras se resuelve cualquier disputa.
 
 ## Contacto para coordinacion
 
-- **Nombre:** {NOMBRE_CTO}
-- **Email:** {EMAIL_CTO}
-- **Rol:** Director Tecnico / CTO designado por {NOMBRE_LEAD}
+- **Nombre:** {{NOMBRE_CTO}}
+- **Email:** {{EMAIL_CTO}}
+- **Rol:** Director Tecnico / CTO designado por {{NOMBRE_LEAD}}
 
 Toda comunicacion relacionada con esta entrega debe dirigirse al contacto indicado.
 
@@ -191,7 +191,7 @@ aqui establecidos.
 
 &nbsp;
 
-**{NOMBRE_LEAD}** — Propietario / Representante legal
+**{{NOMBRE_LEAD}}** — Propietario / Representante legal
 
 Nombre completo: _________________________________
 
@@ -203,7 +203,7 @@ Fecha: _________________________________
 
 &nbsp;
 
-**{NOMBRE_DEV}** — Desarrollador
+**{{NOMBRE_DEV}}** — Desarrollador
 
 Nombre completo: _________________________________
 
