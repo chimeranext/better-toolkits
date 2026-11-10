@@ -109,13 +109,13 @@ segun lo descrito en este documento.
 
 | # | Entregable (Deliverable) | Descripcion | Incluido / Tarifa (Included / Rate) |
 |---|---|---|---|
-| E-01 | {ENTREGABLE_01} | {DESCRIPCION_E01} | {INCLUIDO_O_TARIFA_E01} |
-| E-02 | {ENTREGABLE_02} | {DESCRIPCION_E02} | {INCLUIDO_O_TARIFA_E02} |
-| E-03 | {ENTREGABLE_03} | {DESCRIPCION_E03} | {INCLUIDO_O_TARIFA_E03} |
+| E-01 | Plan de Gestion del Proyecto (SPMP) — ISO/IEC/IEEE 16326 | Version definitiva y ejecutable del SPMP. En preventa solo se muestra el bare template. | Incluido en Hito 1 |
+| E-02 | Plan de Gestion de Riesgos — ISO/IEC/IEEE 16085 §8.1 | Version definitiva del companion de riesgos del proyecto. | Incluido en Hito 1 |
+| E-03 | Plan(es) de Tratamiento de Riesgos — ISO/IEC/IEEE 16085 §8.2 | Obligatorios para riesgos criticos (urgente e importante). Ofrecidos para solo-urgente o solo-importante. Riesgos ni urgentes ni importantes se documentan como aceptables. | Incluido en Hito 1 segun matriz |
 | E-04 | {ENTREGABLE_04} | {DESCRIPCION_E04} | {INCLUIDO_O_TARIFA_E04} |
 | E-05 | {ENTREGABLE_05} | {DESCRIPCION_E05} | {INCLUIDO_O_TARIFA_E05} |
 
-> Agregar o eliminar filas segun corresponda.
+> E-01, E-02 y E-03 (segun matriz Eisenhower) son **obligatorios** en el Hito 1 salvo path de alta gobernanza pre-firma (ver Seccion 7.4). Agregar o eliminar filas adicionales segun corresponda.
 
 ### 3.3. Exclusiones Explicitas (Out of Scope)
 
@@ -252,18 +252,50 @@ Duracion total estimada: **{DURACION}** semanas / meses.
 
 | # | Milestone | Entregables Asociados | Fecha Objetivo (Target Date) | Pago Asociado |
 |---|---|---|---|---|
-| M-01 | {MILESTONE_01} | E-01, E-02 | {FECHA_M01} | {PAGO_M01} |
-| M-02 | {MILESTONE_02} | E-03 | {FECHA_M02} | {PAGO_M02} |
-| M-03 | {MILESTONE_03} | E-04, E-05 | {FECHA_M03} | {PAGO_M03} |
+| M-01 | Fase de Descubrimiento y Planificacion de Ingenieria (Discovery) | E-01, E-02, E-03 (segun Eisenhower) | Dentro de **{DIAS_HITO1}** dias habiles desde la Fecha de Entrada en Vigor | {PAGO_M01} |
+| M-02 | {MILESTONE_02} | {ENTREGABLES_M02} | {FECHA_M02} | {PAGO_M02} |
+| M-03 | {MILESTONE_03} | {ENTREGABLES_M03} | {FECHA_M03} | {PAGO_M03} |
 | M-04 | Transferencia de Conocimiento (Knowledge Transfer) | Documentacion + sesiones | {FECHA_M04} | Incluido |
 
-> Agregar o eliminar filas segun corresponda.
+> **M-01 es obligatorio** en el path estandar (post-firma). Agregar o eliminar filas posteriores segun corresponda.
 
 ### 7.3. Reuniones de Seguimiento (Status Meetings)
 
 Las Partes realizaran reuniones de seguimiento cada **{FRECUENCIA_REUNIONES}**
 mediante {MEDIO_REUNIONES}. El Consultor proporcionara un reporte breve de avance
 antes de cada reunion.
+
+### 7.4. Gobernanza del Proyecto — SPMP y Riesgos 16085 (Project Governance)
+
+**Path estandar (recomendado): Hito 1 post-firma.**
+
+7.4.1. Dentro de los primeros **{DIAS_HITO1}** dias habiles posteriores a la Fecha de
+Entrada en Vigor, el Consultor desarrollara y entregara al Cliente los artefactos
+E-01, E-02 y, segun la matriz Eisenhower aplicada al perfil de riesgos, E-03.
+
+7.4.2. La entrega y aprobacion formal por escrito de E-01 y E-02 (y de todo E-03
+requerido para riesgos criticos) constituye la finalizacion del Hito 1 y habilita
+la facturacion asociada segun la Seccion 5.
+
+7.4.3. **Condicion de precedencia.** La aprobacion por escrito del SPMP (E-01) y del
+Plan de Gestion de Riesgos (E-02) por el Cliente es requisito indispensable antes
+del inicio de diseno detallado, desarrollo, codificacion o despliegue. El Consultor
+no iniciara esas fases ni sera responsable por retrasos si el Cliente demora la
+revision mas alla de **{DIAS_REVISION}** dias habiles desde la entrega del Hito 1.
+
+7.4.4. **Linea base.** Una vez aprobado, el SPMP constituye la Linea Base del
+Proyecto. Todo cambio de alcance, plazos o recursos descritos en el SPMP requiere
+Orden de Cambio firmada por ambas Partes.
+
+**Path alta gobernanza (pre-firma) — no recomendado por defecto.**
+
+7.4.5. Solo si las Partes marcan expresamente este path, el SPMP y el Plan de
+Gestion de Riesgos definitivos se anexan **antes** de la firma y forman parte de
+la propuesta tecnica. Este path **no es recomendado** para Fractional CTOs sin
+experiencia previa en negociaciones de preventa: exige inversion sustancial de
+ingenieria antes de haber asegurado el contrato y el financiamiento, y expone al
+equipo al riesgo de trabajo no pagado si el PSA no se firma. Preferir bare
+templates en preventa y el Hito 1 pagadero del path estandar.
 
 ---
 
@@ -635,4 +667,5 @@ Fecha / Date: ___________________________________________
 - [ ] Anexo A: Detalle Tecnico de Entregables (Technical Deliverable Specifications)
 - [ ] Anexo B: Addendum de Equity (si Modelo C aplica)
 - [ ] Anexo C: Inventario de Accesos e Infraestructura (Access & Infrastructure Inventory)
-- [ ] Anexo D: {ANEXO_ADICIONAL}
+- [ ] Anexo D: Bare templates preventa (SPMP 16326 + RM 16085 + treatment bare) — no sustituyen E-01/E-02/E-03
+- [ ] Anexo E: {ANEXO_ADICIONAL} (path alta gobernanza: SPMP/RM definitivos pre-firma, si aplica)
