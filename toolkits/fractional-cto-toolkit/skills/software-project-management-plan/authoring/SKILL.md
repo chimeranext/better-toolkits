@@ -29,7 +29,10 @@ first and let the user choose the template id (default: `iso-16326-spmp`).
 - Optional overlay: PMBOK 8 domains (Governance, Scope, Schedule, Finance, Stakeholders, Resources, Risk)
 - Atomic PMBOK risk notes stay at `_templates/riesgo.md` (do not replace with 16085/31000)
 - Org-wide risk analysis (ISO 31000) is a separate GRC choice — `/iso31000`
-- Client-facing SPMP: no skill/`generated_by`/dogfood attribution
+- Customer-facing SPMP: no skill/`generated_by`/dogfood attribution; descriptive
+  executive voice per
+  `shared/references/engineering-standards/customer-facing-management-docs.md` (not STE
+  procedure imperatives)
 
 ## Alias
 

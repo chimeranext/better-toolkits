@@ -3,6 +3,7 @@
   Style: bare outline (empty sections + HTML fill hints).
   Fill after PSA signature as Milestone 1 (Discovery). Use /software-project-management-plan/authoring.
   Cite clauses only. Do not paste copyrighted standard text.
+  When filling: shared/references/engineering-standards/customer-facing-management-docs.md (descriptive executive prose; no STE imperatives).
 -->
 
 # Software Project Management Plan

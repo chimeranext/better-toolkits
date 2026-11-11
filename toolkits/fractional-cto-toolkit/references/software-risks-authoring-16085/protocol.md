@@ -60,8 +60,13 @@ family.
    treatment → RM plan.
 7. **Language:** toolkit templates are English SSOT. Fill the client copy in the
    engagement working language. Do not copy copyrighted standard prose — clause
-   citations only. Keep `templates/*.md` STE100-clean
-   (`ste-lint.py` in make-no-mistakes explain scripts).
+   citations only. Keep `templates/*.md` STE100-clean for **structural** SSOT
+   (`ste-lint.py` in make-no-mistakes explain scripts). Filled RM / treatment
+   plans use **customer-facing voice**
+   (`shared/references/engineering-standards/customer-facing-management-docs.md`):
+   descriptive prose, not STE procedure imperatives; risk “Treatment” /
+   “Response” cells say “Mitigation: … / Ongoing monitoring … / Risk accepted
+   …” rather than “Mitigate. / Monitor. / Accept.”
 
 ## Artifact
 
@@ -73,8 +78,11 @@ family.
 ## Contract
 
 - Templates are read from the SPMP catalog SSOT (or an export with banner).
-- **Client-facing output:** do **not** put skill names, `generated_by`,
+- **Customer-facing output:** do **not** put skill names, `generated_by`,
   “Generado por…”, dogfood, or toolkit `ssot:` paths in the emitted Markdown
   body or frontmatter the client reads. Keep `standard`, dates, links, status.
+- **Customer-facing voice:** follow
+  `shared/references/engineering-standards/customer-facing-management-docs.md` for
+  filled 16085 bodies (same rules as the SPMP).
 - Catalog choice is explicit before writing.
 - Does not replace `/iso31000` and does not claim 31000 alone satisfies 16326.

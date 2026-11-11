@@ -3,6 +3,7 @@
   Style: bare outline (empty sections + HTML fill hints).
   Copy one file per risk or risk class. Fill in PSA Milestone 1 when Eisenhower requires or offers treatment.
   Use /software-risks-authoring-16085. Cite clauses only. Do not paste copyrighted standard text.
+  When filling: shared/references/engineering-standards/customer-facing-management-docs.md (descriptive executive prose; no STE imperatives).
 -->
 
 # Risk Treatment Plan

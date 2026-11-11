@@ -14,6 +14,12 @@ Outline aligned to ISO/IEC/IEEE 16085:2021 §8.1.2 (original prose. Clause citat
 only). Empty sections use: `This section is not applicable to this plan` plus a
 reason.
 
+> [!note] Customer-facing voice
+> Filled body: descriptive / executive prose
+> (`shared/references/engineering-standards/customer-facing-management-docs.md`). No bare STE imperatives. Profile / treatment
+> wording: “Mitigation: …”, “Ongoing monitoring …”, “Risk accepted …” — not
+> “Mitigate.” / “Monitor.” / “Accept.” Table cells: no `[[path|alias]]`.
+
 Process activities behind this plan (§6.4): plan risk management → manage the
 risk profile → analyze risks → treat risks → monitor risks → evaluate the risk
 management process.

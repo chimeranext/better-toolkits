@@ -14,6 +14,12 @@ template_id: iso-16326-spmp
 > [!warning] Draft
 > Complete identification, signatures, and open issues before approval.
 
+> [!note] Customer-facing voice
+> Fill this plan in **descriptive / executive** prose for the customer
+> representative (see `shared/references/engineering-standards/customer-facing-management-docs.md`). Do **not** use bare STE
+> imperatives (“Direct…”, “Keep…”, “Measure…”). In Markdown tables use
+> `[[path]]` or `[label](path)` — never `[[path|alias]]` (the `|` breaks cells).
+
 ## Cover
 
 | Field | Value |
@@ -161,7 +167,8 @@ Default companion: **ISO/IEC/IEEE 16085:2021** — see
 
 {{risk_management_summary_or_link}}
 
-Risk profile summary:
+Risk profile summary (Treatment cells: “Mitigation: … / Ongoing monitoring … /
+Risk accepted …” — not “Mitigate. / Monitor. / Accept.”):
 
 | Id | Category | Risk | Likelihood | Consequence | Treatment |
 | --- | --- | --- | --- | --- | --- |

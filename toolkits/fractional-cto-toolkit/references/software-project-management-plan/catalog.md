@@ -11,7 +11,7 @@ ambiguous; defaults are marked.
 
 | id | When to use | Normative base | Path |
 | --- | --- | --- | --- |
-| `iso-16326-spmp` | **Default** fill template for systems/software project management plans (PSA Hito 1) | ISO/IEC/IEEE 16326:2019 §7 | `templates/iso-16326-spmp.md` |
+| `iso-16326-spmp` | **Default** fill template for systems/software project management plans (PSA Hito 1). Filled customer copy: [CFM — Customer-facing management docs](../../../../shared/references/engineering-standards/customer-facing-management-docs.md) | ISO/IEC/IEEE 16326:2019 §7 | `templates/iso-16326-spmp.md` |
 | `iso-16326-spmp-bare` | **Preventa** empty outline (show methodology; do not fill as unpaid engineering) | ISO/IEC/IEEE 16326:2019 §7 | `templates/iso-16326-spmp-bare.md` |
 | `pmbok8-core-set` | Engagement wants separate charter/scope/WBS/schedule/risks artifacts instead of one SPMP body | PMBOK 8 teaching structure (summary crosswalk; not PMBOK 5 PDF) | `templates/pmbok8-core-set/` |
 
@@ -41,4 +41,5 @@ that emits the deliverable.
 1. Software/systems project → start with `iso-16326-spmp` + `iso-16085-risk-management-plan`.
 2. Do **not** substitute `iso-31000-risk-analysis` for 16085 on an SPMP; 31000 is organizational GRC (16085 §5.2.3 bridge).
 3. Keep `pmbok-risk-note` for atomic vault notes; link them from the risk profile, do not replace the RM plan.
-4. Empty required sections use: `This section is not applicable to this plan` (or Spanish equivalent) **plus reason** — same convention as 16326/16085/EVP.
+4. Empty required sections use: `This section is not applicable to this plan` (or Spanish equivalent) **plus reason** — same convention as 16326/16085 engagement fills.
+5. Filled customer SPMP / 16085 plans follow [CFM — Customer-facing management docs](../../../../shared/references/engineering-standards/customer-facing-management-docs.md).
