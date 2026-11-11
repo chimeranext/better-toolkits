@@ -113,6 +113,13 @@ Operational docs are classified into three types before authoring:
 - Playbook → How-to (+ explanation flavor).
 - SOP → Reference quadrant.
 
+### Management plans (SPMP, 16085 risk) — not runbooks
+
+Signed project management and risk plans are **customer-facing management
+documents**. They use descriptive / executive voice for the customer
+representative — not STE procedure imperatives. See **CFM**:
+[customer-facing-management-docs.md](customer-facing-management-docs.md).
+
 ## Navigation vs content
 
 Diátaxis guides **content type per page**. It does not dictate the sidebar shape.

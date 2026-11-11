@@ -12,6 +12,10 @@ template_id: iso-16085-risk-treatment-plan
 Outline aligned to ISO/IEC/IEEE 16085:2021 §8.2.2. One plan may cover multiple
 risks that share pertinent characteristics. Empty sections: N/A plus reason.
 
+> [!note] Customer-facing voice
+> Describe the treatment for human readers (`shared/references/engineering-standards/customer-facing-management-docs.md`). Prefer
+> “The owner implements …” over “Implement …”. No `[[path|alias]]` inside tables.
+
 ## 1. Introduction
 
 ### 1.1 Purpose and scope
