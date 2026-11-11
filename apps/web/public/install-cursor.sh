@@ -29,7 +29,7 @@ if [[ "${BETTER_TOOLKITS_AUTO_UPDATE:-1}" == "0" ]]; then
 fi
 for arg in "$@"; do
 	case "${arg}" in
-		--no-auto-update) SKIP_AUTO_UPDATE=1 ;;
+	--no-auto-update) SKIP_AUTO_UPDATE=1 ;;
 	esac
 done
 
@@ -154,7 +154,7 @@ install_mcps() {
 			tar -xzf "${dest}/server.tar.gz" -C "${dest}"
 			rm -f "${dest}/server.tar.gz"
 			if [[ -f "${dest}/package.json" ]]; then
-				( cd "${dest}" && npm ci --no-audit --no-fund --silent )
+				(cd "${dest}" && npm ci --no-audit --no-fund --silent)
 			fi
 			echo "[cursor] MCP ${server} installed at ${dest}"
 		else

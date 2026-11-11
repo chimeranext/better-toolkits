@@ -1,4 +1,4 @@
-# Install the better-toolkits layer for Cursor (harness already installed).
+﻿# Install the better-toolkits layer for Cursor (harness already installed).
 # One-liner (PowerShell): irm https://toolkits.chimeranext.dev/install-cursor.ps1 | iex
 #
 # Design (parity with install-cursor.sh):
@@ -48,14 +48,14 @@ foreach ($arg in $args) {
   if ($arg -eq "--no-auto-update") { $SkipAutoUpdate = $true }
 }
 
-function Test-CommandExists {
+function Test-CommandExist {
   param([Parameter(Mandatory = $true)][string]$Name)
   # Prefer Get-Command exit via $null check; do not redirect stderr to $null.
   return [bool](Get-Command $Name -ErrorAction SilentlyContinue)
 }
 
-function Ensure-Marketplace {
-  if (-not (Test-CommandExists "agent")) {
+function Initialize-Marketplace {
+  if (-not (Test-CommandExist "agent")) {
     Write-Output "[cursor] WARN: 'agent' CLI not on PATH — skip marketplace registration"
     Write-Output "[cursor]        Add marketplace in Cursor Desktop: $MarketplaceUrl"
     return
@@ -92,7 +92,7 @@ function Ensure-Marketplace {
   Write-Output "[cursor] WARN: marketplace add/update failed — add $MarketplaceUrl in Desktop UI"
 }
 
-function Ensure-Clone {
+function Initialize-Clone {
   $parent = Split-Path -Parent $CloneDir
   if (-not (Test-Path $parent)) {
     [void](New-Item -ItemType Directory -Force -Path $parent)
@@ -106,7 +106,7 @@ function Ensure-Clone {
     Write-Output "[cursor] WARN: $CloneDir exists but is not a git clone — set BETTER_TOOLKITS_ROOT"
     return $false
   }
-  if (-not (Test-CommandExists "git")) {
+  if (-not (Test-CommandExist "git")) {
     Write-Output "[cursor] WARN: git not on PATH — cannot shallow clone"
     return $false
   }
@@ -139,7 +139,7 @@ function Install-HooksFromClone {
   }
 }
 
-function Wire-WorkspaceOpen {
+function Register-WorkspaceOpen {
   if ($SkipAutoUpdate) {
     Write-Output "[cursor] skip workspaceOpen auto-update (--no-auto-update / BETTER_TOOLKITS_AUTO_UPDATE=0)"
     return
@@ -195,7 +195,7 @@ function Wire-WorkspaceOpen {
   Write-Output "[cursor] wired workspaceOpen -> $cmd"
 }
 
-function Install-Mcps {
+function Install-Mcp {
   if (-not (Test-Path $McpDest)) {
     [void](New-Item -ItemType Directory -Force -Path $McpDest)
   }
@@ -219,7 +219,7 @@ function Install-Mcps {
       Write-Output "[cursor] WARN: failed to download MCP server $server — $($_.Exception.Message)"
       continue
     }
-    if (-not (Test-CommandExists "tar")) {
+    if (-not (Test-CommandExist "tar")) {
       Write-Output "[cursor] WARN: tar not on PATH — cannot extract $server"
       continue
     }
@@ -230,7 +230,7 @@ function Install-Mcps {
     }
     Remove-Item -Force $tarball
     if (Test-Path $pkg) {
-      if (Test-CommandExists "npm") {
+      if (Test-CommandExist "npm") {
         Push-Location $dest
         try {
           & npm ci --no-audit --no-fund
@@ -253,7 +253,7 @@ function Register-McpJson {
   # Prefer python for stable JSON merge (parity with install-cursor.sh).
   $python = $null
   foreach ($cand in @("python3", "python", "py")) {
-    if (Test-CommandExists $cand) { $python = $cand; break }
+    if (Test-CommandExist $cand) { $python = $cand; break }
   }
   if ($python) {
     $py = @'
@@ -380,12 +380,12 @@ print(f"[cursor] mcp.json updated ({path}): " + ",".join(actions))
 }
 
 Write-Output "[cursor] share root: $ShareRoot"
-Ensure-Marketplace
+Initialize-Marketplace
 
 Write-Output "[cursor] NOTE: product toolkits (bootstrap, make-no-mistakes, …) — Add them in Cursor Desktop"
 Write-Output "[cursor]       Marketplace → better-toolkits. (agent CLI 2026.11+ has no 'plugin install')"
 
-if (Test-CommandExists "npx") {
+if (Test-CommandExist "npx") {
   Write-Output "[cursor] install agent-agnostic skills (global)"
   try {
     & npx --yes skills add chimeranext/better-toolkits --all -g -y
@@ -399,12 +399,12 @@ if (Test-CommandExists "npx") {
   Write-Output "[cursor] WARN: npx not on PATH — skip skills add"
 }
 
-Install-Mcps
+Install-Mcp
 Register-McpJson
 
-if (Ensure-Clone) {
+if (Initialize-Clone) {
   Install-HooksFromClone
-  Wire-WorkspaceOpen
+  Register-WorkspaceOpen
   $env:BETTER_TOOLKITS_ROOT = $CloneDir
   Write-Output "[cursor] BETTER_TOOLKITS_ROOT=$CloneDir (use for /refresh)"
 } else {
