@@ -9,7 +9,7 @@ description: >
   It is a thin dispatcher: it runs the three-way ops taxonomy routing, names the type
   and its canonical home, and hands off to /sop-authoring, /playbook-authoring, or
   /runbook-authoring. NOT an authoring skill itself — it never writes the document.
-  NOT for security-test plans (that is /pentest-playbook-setup).
+  NOT for security-test plans (that is /assurance:pentest-playbook-setup).
 ---
 # Document-This
 

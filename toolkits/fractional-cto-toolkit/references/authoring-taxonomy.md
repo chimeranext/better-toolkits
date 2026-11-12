@@ -40,6 +40,13 @@ Documentation should be organized around these structures:
 - Navigation/sidebars mirror the quadrants. The compass: *Tutorials* (start), *How-to*
   (do), *Reference* (check), *Explanation* (understand).
 
+**Pack exception (client handoff, not a docs site):** when the reader receives **one**
+file (e.g. `{slug}-guia-cliente.md` from `/project-takeover`), you may keep all four
+Diátaxis modes **in the same document** as labeled top-level sections
+(Explanation → Tutorial → How-to → Reference). Do not blur types inside a paragraph.
+If the same content later moves into a handbook/site, split each section into its
+own page.
+
 ### Mapping the ops types onto Diátaxis
 
 | Ops type | Diátaxis quadrant | Because… |
@@ -111,7 +118,8 @@ and runbooks belong to each startup's own repo.
 | *What* to build, for whom, and why | **PDR** (Product Decision Record) | `openspec/changes/{date-slug}/proposal.md` |
 | *How* it is built technically (stack, schema, infra, APIs) | **ADR** (Architecture Decision Record) | `openspec/changes/{date-slug}/design.md` |
 | How an end user *uses* the finished product | **Product Documentation** | product docs |
-| How to security-test a system (authorized engagement) | **Security playbook** | `/pentest-playbook-setup` |
+| How to security-test a system (authorized engagement) | **Security playbook** | `/assurance:pentest-playbook-setup` |
+| How a **software/systems project** is managed (schedule, org, risk, delivery) | **SPMP** (project governance — not SOP/playbook/runbook) | `/software-project-management-plan-authoring-ieee16326` (alias `/project-plan/authoring`); audit via `/software-project-management-plan/audit`. Project risk plans (ISO/IEC/IEEE 16085): `/software-risks-authoring-ieee16085`. Org-wide ISO 31000 → `/iso31000` |
 
 ---
 

@@ -1,103 +1,71 @@
 # fractional-cto-toolkit
 
-[![Version](https://img.shields.io/badge/version-1.4.7-blue)](.claude-plugin/plugin.json) [![License: BSL-1.1](https://img.shields.io/badge/license-BSL--1.1-important)](LICENSE)
+[![Version](https://img.shields.io/badge/version-1.4.17-blue)](.claude-plugin/plugin.json) [![License: BSL-1.1](https://img.shields.io/badge/license-BSL--1.1-important)](LICENSE)
 
-Claude Code plugin with SOPs, contracts, and guided workflows for freelance and fractional CTOs.
+Claude Code plugin with playbooks, contracts, and guided workflows for freelance
+and fractional CTOs.
 
-## Engagement orchestration
+## Pipelines
 
-The toolkit's commands/skills chain across the full client engagement. Complete
-orchestration (all commands and skills, grouped by pipeline):
+The engagement flowchart is the reference for this toolkit:
 
-```mermaid
-flowchart TD
-    subgraph ENG[Engagement Lifecycle]
-        A[/"/contract-nda"/] --> B[/"/takeover-assessment"/]
-        B --> C[/"/project-takeover"/]
-        C --> D[/"/contract-psa"/]
-        D --> E[/"/contract-retainer"/]
-    end
-    subgraph STD[Engineering Standards]
-        F[/"/engineering-standards-audit"/] --> G[/"/engineering-standards-setup"/]
-    end
-    subgraph PROC[Process Engineering]
-        H[/"/process-standardization"/] --> I[/"/automation-triage"/]
-        I --> J[/"/sop-authoring"/]
-        J --> K[/"/playbook-authoring"/]
-        J --> L[/"/runbook-authoring"/]
-        J --> R[/"/document-it" | "/document-this"/]
-    end
-    subgraph REQ[Requirements-First]
-        M[/"/requirements-authoring"/] --> N["/opsx-* flow"]
-    end
-    subgraph FAM[CTO Domain Families — FFF]
-        S1[Strategy: roadmap · portfolio · rnd-alignment]
-        S2[Architecture: decision · stack-evaluation · migration]
-        S3[Metrics: dora · reliability · velocity · team-health · exec-reporting]
-        S4[Risk: audit · incident-response · disaster-recovery · resilience]
-        S5[GRC: universal 12 · regional 38 (USMCA/LATAM/APAC/EMEA)]
-        S6[Threat/Defense: owasp-top10 · owasp-nhi-top10 · mitre-* · ai-defense]
-        S7[Handover: risk-to-cro · grc-to-cco · … · standards-to-vpeng]
-        S1 ~~~ S2 ~~~ S3 ~~~ S4 ~~~ S5 ~~~ S6 ~~~ S7
-    end
-    C --> F
-    F --> G
-    G --> D
-    G --> H
-    G --> M
-    G --> FAM
-    D --> O[/"/oauth2-setup"/]
-    D --> P[/"/pentest-playbook-setup"/]
-    E --> Q[/"/business-brain-setup"/]
-```
+- [`references/engagement-orchestration.md`](references/engagement-orchestration.md)
+- [`references/engagement-orchestration.preview.html`](references/engagement-orchestration.preview.html) (Pele)
 
-## Process-Engineering Pipeline
+Pipelines in that diagram:
 
-Beyond project takeovers, the toolkit turns any of a client's operational processes into a versioned,
-optionally-executable SOP. One pipeline over one shared artifact (`./fractional-cto/sops/{slug}/`):
+1. Engagement pipeline
+2. Standards pipeline
+3. Process pipeline
+4. Requirements pipeline
+5. Linear/OPSX pipeline
+6. Handover pipeline
+
+Rectangles are processes. Diamonds are yes/no decisions. Parallelograms labeled `Output:` are the files.
+
+### Engagement pipeline
+
+`/contract-nda` → `/takeover-assessment` → `/project-takeover`. After the questionnaire, `/project-takeover` invokes `/maintenance-plan-ieee14764` and then `/transition-plan-ieee12207`. Then `/contract-psa`.
+
+`/contract-psa` makes the software project management plan and the ISO/IEC/IEEE 16085 risk plan **Milestone 1 (Discovery)** on the standard path. Preventa ships `*-bare.md` outlines only. After signature, invoke `/software-project-management-plan-authoring-ieee16326` and `/software-risks-authoring-ieee16085`. The operator, using the urgent-and-important matrix, decides whether a treatment plan is required. High-governance pre-signature fill is opt-in and not recommended for fractional CTOs without prior preventa negotiation experience. Org GRC stays `/iso31000`. Operational `risk/*` is a different family.
+
+`/business-brain-setup` is part of this pipeline. It creates the vault. Process skills write into `_procedimientos/` when that folder already exists.
+
+### Standards pipeline
+
+`/engineering-standards-audit` → `/engineering-standards-setup`.
+
+Setup does not invoke `/requirements-authoring-ieee29148`. Its own scaffold ends at the commit. In this orchestration, setup starts the Linear/OPSX pipeline.
+
+### Process pipeline
 
 ```
 /process-standardization  →  /automation-triage  →  /sop-authoring
    discover + capture           decide the how         write the SOP
-   (inventory + capture)      (human/RPA/AI/hybrid)   (+ executable form)
 ```
 
-- **process-standardization** — inventory a team's processes (Frequency × Variability × Pain) and
-  capture the current state of the ones worth standardizing.
-- **automation-triage** — decide, step by step, what stays human vs. RPA vs. AI agent vs. hybrid,
-  with an executive-legible rationale.
-- **sop-authoring** — write the structured Operational SOP from a template; when a step is
-  automatable, also emit a runnable executable SOP (proceda-style) with human-approval gates.
-- **playbook-authoring** — when/why/judgment under uncertainty: decision tree, options, and
-  links to execute scripts. Not a click-by-click recover script.
-- **runbook-authoring** — sibling for the *execute* case: an incident/recovery runbook
-  (paired diagnose/repair scripts) or an operational/release runbook, plus an executable
-  form. Three-way: **playbook** = decide; **runbook** = execute; **SOP** = recurring
-  company process.
+Also: `/playbook-authoring` (when/why), `/runbook-authoring` (how),
+`/document-it` or `/document-this`. Shared artifact home:
+`./fractional-cto/sops/{slug}/`.
 
-## Requirements-First Pipeline
+The Handover pipeline starts after this pipeline finishes.
 
-Beyond operational processes, the toolkit formalizes a client's **product requirements
-before any code is written** — the PRD is the source of truth, everything else derives.
+### Requirements pipeline
 
-```
-PRD / SRS (Product Owner, ISO/IEEE 830 + ISO/IEC/IEEE 29148:2018, bare template)
-   │  derive (NOT the reverse)
-   ▼
-OpenSpec specs/changes  →  Linear issue (Bilingual Layer)  →  /opsx-* flow
-   /opsx-explore → /opsx-propose → human review → /opsx-apply → PR → /opsx-sync → /opsx-archive
-```
+`/requirements-authoring-ieee29148` writes `software-requirements-specification.md` (ISO/IEC/IEEE 29148:2018). M-02 is `/architecture-description-ieee42010`. When M-02 evaluates, it invokes `/architecture-evaluation-ieee42030`. `/architecture-decision-ieee42010` writes the decision record.
 
-- **requirements-authoring** — write a versioned PRD/SRS per the standards (vendored bare
-  template from `jam01/SRS-Template`, CC0) with 29148 quality checklists and a
-  verification traceability table. Shared home: `shared/skills/requirements-authoring/`
-  + `shared/references/requirements-authoring/` (deduped, like engineering-standards).
-- Any client adopting this can bootstrap the **6 engineering standards**
-  (DSMS, IFS, CPS, PRDS, BrS, QT4L) from day one — see `shared/references/engineering-standards/`
-  (SSOT compartido a nivel monorepo). Clients with an OpenSpec **store** repo also adopt
-  **OST** (one tracker issue → one change folder → one store PR → one merge).
-  The **clean code quartet** is DSMS + IFS + CPS + PRDS; BrS, QT4L, and OST complete
-  branching, QA traceability, and spec promotion discipline.
+Shared home: `shared/skills/requirements-authoring-ieee29148/` +
+`shared/references/requirements-authoring-ieee29148/`.
+
+This pipeline does not start `/opsx-*`.
+
+### Linear/OPSX pipeline
+
+`/engineering-standards-setup` starts `/opsx-*`. The command order stays explore, propose, human review, apply, PR, optional sync, archive only with a human yes. Deployment releases the system into the client environment. That release does not start M-04.
+
+### Handover pipeline
+
+Entry is `/handover-process-to-ops`. The chain ends at `/handover-engagement-to-board`, then M-04 Knowledge transfer. Each handover command emits its own output. The commands and outputs are in the flowchart.
 
 ## Skills
 
@@ -105,36 +73,43 @@ OpenSpec specs/changes  →  Linear issue (Bilingual Layer)  →  /opsx-* flow
 |---|-------|----------|--------|
 | 1 | `contract-nda` | "NDA", "confidencialidad" | Bilingual NDA |
 | 2 | `takeover-assessment` | "assessment", "evaluacion de riesgo", "threat matrix" | SPA wizard + assessment contract |
-| 3 | `project-takeover` | "takeover", "handover", "el dev anterior" | 4 SOPs (tecnico, guia cliente, solicitud, ultimatum) |
+| 3 | `project-takeover` | "takeover", "handover", "el dev anterior" | Playbook + Diátaxis client guide + delivery request + breach notice (slug at end). Bares in `references/` for apprentices |
 | 4 | `contract-psa` | "contrato de proyecto", "PSA", "scope of work" | PSA with shared risk model (A/B/C) |
 | 5 | `contract-retainer` | "retainer", "mensual", "equity", "advisory" | Retainer or Advisory+Equity contract |
 | 6 | `process-standardization` | "standardize a process", "document how we do X", "process inventory" | Ranked inventory + current-state capture |
 | 7 | `automation-triage` | "should we automate this", "RPA vs AI", "attended vs unattended" | Per-step verdict (human/RPA/AI/hybrid) + rationale |
 | 8 | `sop-authoring` | "write an SOP", "operational procedure", "make this SOP executable" | Structured SOP + executable SOP when automatable |
 | 9 | `business-brain-setup` | "business brain", "cerebro de negocio", "convert our business model folder" | Git/Obsidian knowledge vault (scaffold or BMC migration) |
-| 10 | `playbook-authoring` | "write a playbook", "ops playbook", "decision tree", "playbook vs runbook", "escribe un playbook" | When/why playbook (decision tree + options) linking diagnose/recover runbooks |
-| 11 | `runbook-authoring` | "write a runbook", "incident runbook", "release runbook", "on-call procedure", "runbook de release" | Trigger-driven runbook (incident or operational) + paired diagnose/repair scripts + executable form |
-| 12 | `requirements-authoring` (shared: `shared/skills/requirements-authoring/`) | "PRD", "SRS", "requisitos", "29148", "IEEE 830", "spec for this feature" | Versioned PRD/SRS per ISO/IEEE 830 + ISO/IEC/IEEE 29148:2018 + OpenSpec derived + Linear Bilingual brief |
+| 10 | `playbook-authoring` | "write a playbook", "ops playbook", "decision tree", "playbook vs runbook" | When/why playbook linking diagnose/recover runbooks |
+| 11 | `runbook-authoring` | "write a runbook", "incident runbook", "release runbook", "on-call procedure" | Trigger-driven runbook + diagnose/repair scripts |
+| 12 | `requirements-authoring-ieee29148` (shared) | "SRS", "requisitos", "29148" | software-requirements-specification.md |
+| 13 | `software-project-management-plan-authoring-ieee16326` | "SPMP", "16326", "plan de gestión" | SPMP per ISO/IEC/IEEE 16326:2019 |
+| 14 | `software-risks-authoring-ieee16085` | "16085", "risk management plan", "Milestone 1 Discovery" | 16085 risk plan. The operator decides the treatment plan with the urgent-and-important matrix |
+| 15 | `software-project-management-plan/audit` | "audit project plan", "16326 gap", "16085 risk audit" | Gap matrix vs 16326 §7 + 16085 §8 |
+
+Project-governance templates (SSOT under `references/software-project-management-plan/`,
+plus `references/grc/iso31000/` for org risk) export into `business-brain-template` via
+`scripts/export-spmp-templates.sh` — do not author lasting copies only in the brain
+template. Atomic `_templates/riesgo.md` stays PMBOK-oriented and is not overwritten.
 
 ### CTO domain families (authored per FFF — families × internal taxonomy)
 
 | Family | Skills | Purpose |
 |--------|--------|---------|
 | `strategy/` | roadmap · portfolio · rnd-alignment | Tech vision, roadmapping, portfolio, R&D alignment |
-| `architecture/` | decision · stack-evaluation · migration | ADRs, stack tradeoffs, migration guidance |
+| `architecture/` | architecture-description-ieee42010 · architecture-evaluation-ieee42030 · architecture-decision-ieee42010 · stack-evaluation · migration | Architecture description, architecture evaluation, architecture decisions, stack tradeoffs, migration guidance |
 | `metrics/` | dora · reliability · velocity · team-health · exec-reporting | DORA, SLO/SLI, engineering velocity, team health, exec narrative |
 | `risk/` | audit · incident-response · disaster-recovery · resilience | Security audit framing, IR, DR, resilience |
-| `handover/` | risk-to-cro · grc-to-cco · metrics-to-vpeng · architecture-to-principal · strategy-to-board · engagement-to-board · process-to-ops · requirements-to-cpo · standards-to-vpeng | Ownership transfer to organic executives (CRO/CCO/VP Eng/...) |
-| `grc/` | universal (12) + regional USMCA/LATAM/APAC/EMEA (38) | Compliance frameworks: ISO/NIST/SOC2/PCI/SWIFT/CIS/WCAG + jurisdiction-specific |
-| `threat-defense/` | owasp-top10 · owasp-nhi-top10 · mitre-atlas · mitre-attack · mitre-d3fend · ai-defense | Threat & defense: OWASP Top10/NHI, MITRE ATLAS/ATT&CK/D3FEND, AI-defense controls |
+| Handover pipeline | `handover-process-to-ops` · `handover-risk-to-cro` · `handover-grc-to-cco` · `handover-metrics-to-vpeng` · `handover-architecture-to-principal` · `handover-strategy-to-board` · `handover-requirements-to-cpo` · `handover-standards-to-vpeng` · `handover-engagement-to-board` | Ownership transfer to organic executives |
+| `grc/` | universal (incl. `iso31000`) + regional USMCA/LATAM/APAC/EMEA | Compliance frameworks |
+| `threat-defense/` | owasp-top10 · owasp-nhi-top10 · mitre-atlas · mitre-attack · mitre-d3fend · ai-defense | Threat and defense controls |
 
 ## Commands
 
 | Command | Purpose | Output |
 |---------|---------|--------|
-| `/engineering-standards-setup` | Adopt the engineering standards (index of 32) in a client repo (incremental scaffold) | `AGENTS.md` pointers, `docs/process/engineering-standards.md`, PR template (PRDS), QT4L stub |
-| `/engineering-standards-audit` | Measure adoption of the standards index (all 32, parallelizable per family); optional open-PR review | Findings report; optional `docs/process/engineering-standards-audit-<date>.md` |
-| `/pentest-playbook-setup` | Author a stack-tailored security playbook for an authorized engagement (Cyber Kill Chain + OWASP). Gated on written authorization + scope | `PENTEST-PLAYBOOK.md` (+ optional DevSecOps `security-scan.yml`); executed afterwards by `/make-no-mistakes:pentest-runner` |
+| `/engineering-standards-setup` | Adopt the engineering standards (index of 32) in a client repo | `AGENTS.md` pointers, standards doc, PR template, QT4L stub |
+| `/engineering-standards-audit` | Measure adoption of the standards index | Findings report |
 
 ## Contract Templates
 
@@ -150,14 +125,15 @@ All contracts include a **Section 0: Shared Risk Model** with compensation varia
 
 ## Features
 
-- Requirements-first pipeline: PRD/SRS per ISO/IEEE 830 + ISO/IEC/IEEE 29148:2018 (bare template vendored from jam01/SRS-Template, CC0), OpenSpec derived from the PRD, Linear Bilingual-brief issues, and the full `/opsx-*` workflow
-- 6 engineering standards bootstrap for any client (DSMS, IFS, CPS, PRDS, BrS, QT4L) + **OST** when using an OpenSpec store
-- Bilingual templates (Spanish primary, English key terms)
-- Costa Rica legal framework (Ley 8968, Codigo Penal, Camara de Comercio arbitration)
-- 7-threat risk matrix (destruction, retention, exfiltration, sabotage, data theft, disruption, extortion)
-- Interactive SPA assessment wizard (vanilla JS, dark theme)
+- Six pipelines: Engagement, Standards, Process, Requirements, Linear/OPSX, Handover. The flowchart is `references/engagement-orchestration.preview.html`
+- Takeover pack: playbook + Diátaxis client guide + two legal templates (`{{placeholders}}`). Bares for apprentices
+- Requirements pipeline: `software-requirements-specification.md`. `/opsx-*` starts in the Linear/OPSX pipeline
+- 6 engineering standards bootstrap + **OST** when using an OpenSpec store
+- Bilingual engagement emits (Spanish primary for CR). English toolkit SSOT + STE100 where required
+- Costa Rica legal framework notes (Ley 8968, Codigo Penal, Camara de Comercio arbitration)
+- 7-threat risk matrix
+- Interactive SPA assessment wizard
 - 22 industry verticals (Startups 506 taxonomy)
-- CTO operates as persona fisica (independent contractor)
 
 ## Install
 
@@ -168,7 +144,6 @@ claude plugin add lapc506/fractional-cto-toolkit
 ## License
 
 BSL-1.1
-
 
 ## Install (OpenCode) — stderr + PRDS
 
@@ -186,7 +161,7 @@ Register **both** file plugins ([OpenCode plugins](https://opencode.ai/docs/plug
 }
 ```
 
-- **stderr** — block `2>/dev/null` / bare `2>&1` without a log sink  
+- **stderr** — block `2>/dev/null` / bare `2>&1` without a log sink
 - **PRDS** — block `gh pr create|edit` (and `git push` when a PR already exists)
   without the four always-on PRDS sections
 
