@@ -102,10 +102,10 @@ supply chain), and objectives or assumptions that affect risk work.
 {{treatment_approach}}
 
 Risks that need treatment get a **risk treatment plan**
-(`iso-16085-risk-treatment-plan`). Gate with Eisenhower: critical (urgent and
-important) requires a treatment plan in PSA Milestone 1. Only-urgent or
-only-important: offer a treatment plan in the same milestone. Neither: document
-as acceptable.
+(`iso-16085-risk-treatment-plan`). The operator uses the urgent-and-important
+matrix. A risk that is both urgent and important requires a treatment plan in
+PSA Milestone 1. Only-urgent or only-important: the operator may accept a
+treatment plan in the same milestone. Neither: document as acceptable.
 
 ### 4.5 Risk monitoring and reporting
 

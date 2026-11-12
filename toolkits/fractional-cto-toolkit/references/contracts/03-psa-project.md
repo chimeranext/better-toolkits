@@ -109,13 +109,13 @@ segun lo descrito en este documento.
 
 | # | Entregable (Deliverable) | Descripcion | Incluido / Tarifa (Included / Rate) |
 |---|---|---|---|
-| E-01 | Plan de Gestion del Proyecto (SPMP) — ISO/IEC/IEEE 16326 | Version definitiva y ejecutable del SPMP. En preventa solo se muestra el bare template. | Incluido en Hito 1 |
-| E-02 | Plan de Gestion de Riesgos — ISO/IEC/IEEE 16085 §8.1 | Version definitiva del companion de riesgos del proyecto. | Incluido en Hito 1 |
-| E-03 | Plan(es) de Tratamiento de Riesgos — ISO/IEC/IEEE 16085 §8.2 | Obligatorios para riesgos criticos (urgente e importante). Ofrecidos para solo-urgente o solo-importante. Riesgos ni urgentes ni importantes se documentan como aceptables. | Incluido en Hito 1 segun matriz |
+| E-01 | Plan de Gestion del Proyecto (SPMP) — ISO/IEC/IEEE 16326 | Version definitiva y ejecutable del SPMP. En preventa solo se muestra el bare template. | Incluido en Milestone 1 |
+| E-02 | Plan de Gestion de Riesgos — ISO/IEC/IEEE 16085 §8.1 | Version definitiva del companion de riesgos del proyecto. | Incluido en Milestone 1 |
+| E-03 | Plan(es) de Tratamiento de Riesgos — ISO/IEC/IEEE 16085 §8.2 | Obligatorios para riesgos criticos (urgente e importante). Ofrecidos para solo-urgente o solo-importante. Riesgos ni urgentes ni importantes se documentan como aceptables. | Incluido en Milestone 1 segun matriz |
 | E-04 | {ENTREGABLE_04} | {DESCRIPCION_E04} | {INCLUIDO_O_TARIFA_E04} |
 | E-05 | {ENTREGABLE_05} | {DESCRIPCION_E05} | {INCLUIDO_O_TARIFA_E05} |
 
-> E-01, E-02 y E-03 (segun matriz Eisenhower) son **obligatorios** en el Hito 1 salvo path de alta gobernanza pre-firma (ver Seccion 7.4). Agregar o eliminar filas adicionales segun corresponda.
+> E-01, E-02 y E-03 (segun matriz Eisenhower) son **obligatorios** en el Milestone 1 salvo path de alta gobernanza pre-firma (ver Seccion 7.4). Agregar o eliminar filas adicionales segun corresponda.
 
 ### 3.3. Exclusiones Explicitas (Out of Scope)
 
@@ -267,21 +267,21 @@ antes de cada reunion.
 
 ### 7.4. Gobernanza del Proyecto — SPMP y Riesgos 16085 (Project Governance)
 
-**Path estandar (recomendado): Hito 1 post-firma.**
+**Path estandar (recomendado): Milestone 1 post-firma.**
 
 7.4.1. Dentro de los primeros **{DIAS_HITO1}** dias habiles posteriores a la Fecha de
 Entrada en Vigor, el Consultor desarrollara y entregara al Cliente los artefactos
 E-01, E-02 y, segun la matriz Eisenhower aplicada al perfil de riesgos, E-03.
 
 7.4.2. La entrega y aprobacion formal por escrito de E-01 y E-02 (y de todo E-03
-requerido para riesgos criticos) constituye la finalizacion del Hito 1 y habilita
+requerido para riesgos criticos) constituye la finalizacion del Milestone 1 y habilita
 la facturacion asociada segun la Seccion 5.
 
 7.4.3. **Condicion de precedencia.** La aprobacion por escrito del SPMP (E-01) y del
 Plan de Gestion de Riesgos (E-02) por el Cliente es requisito indispensable antes
 del inicio de diseno detallado, desarrollo, codificacion o despliegue. El Consultor
 no iniciara esas fases ni sera responsable por retrasos si el Cliente demora la
-revision mas alla de **{DIAS_REVISION}** dias habiles desde la entrega del Hito 1.
+revision mas alla de **{DIAS_REVISION}** dias habiles desde la entrega del Milestone 1.
 
 7.4.4. **Linea base.** Una vez aprobado, el SPMP constituye la Linea Base del
 Proyecto. Todo cambio de alcance, plazos o recursos descritos en el SPMP requiere
@@ -295,7 +295,7 @@ la propuesta tecnica. Este path **no es recomendado** para Fractional CTOs sin
 experiencia previa en negociaciones de preventa: exige inversion sustancial de
 ingenieria antes de haber asegurado el contrato y el financiamiento, y expone al
 equipo al riesgo de trabajo no pagado si el PSA no se firma. Preferir bare
-templates en preventa y el Hito 1 pagadero del path estandar.
+templates en preventa y el Milestone 1 pagadero del path estandar.
 
 ---
 

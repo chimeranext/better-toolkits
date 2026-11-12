@@ -11,7 +11,7 @@ description: >
   (steady-state company process). A runbook answers HOW to execute after the path is
   chosen. NOT for decision-tree playbooks (that is /playbook-authoring), NOT for
   steady-state processes (that is /sop-authoring), and NOT for security-test plans
-  (that is /pentest-playbook-setup).
+  (that is /assurance:pentest-playbook-setup).
 ---
 
 # Runbook Authoring
