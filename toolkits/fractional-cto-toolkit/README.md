@@ -5,52 +5,39 @@
 Claude Code plugin with playbooks, contracts, and guided workflows for freelance
 and fractional CTOs.
 
-## Pipeline (single)
+## Pipelines
 
-One engagement spine. Branches cover process engineering, requirements-first
-product work, standards, and domain families.
+The engagement flowchart is the reference for this toolkit:
 
-```text
-/contract-nda
-   → /takeover-assessment
-   → /project-takeover
-        emits: playbook-{slug}.md
-               client-guide-{slug}.md
-               legal-template-delivery-request-{slug}.md
-               legal-template-breach-notice-{slug}.md
-               (bares in toolkit refs = apprentice expected shape)
-   → /contract-psa
-        Hito 1 Discovery: SPMP 16326 + 16085
-           → /software-project-management-plan/authoring
-           → /software-risks-authoring-16085
-        → /contract-retainer
-        → /oauth2-setup · /pentest-playbook-setup
-        → /business-brain-setup
+- [`references/engagement-orchestration.md`](references/engagement-orchestration.md)
+- [`references/engagement-orchestration.preview.html`](references/engagement-orchestration.preview.html) (Pele)
 
-After takeover (or in parallel once standards apply):
-   /engineering-standards-audit → /engineering-standards-setup
-        → /process-standardization → /automation-triage
-             → /sop-authoring | /playbook-authoring | /runbook-authoring
-             → /document-it | /document-this
-        → /requirements-authoring → /opsx-* flow
-        → CTO domain families (strategy · architecture · metrics · risk ·
-          GRC · threat-defense · handover)
-```
+Pipelines in that diagram:
 
-**Full Mermaid flowchart:** [`references/engagement-orchestration.md`](references/engagement-orchestration.md)
-(kept out of this README so GitHub render stays stable).
+1. Engagement pipeline
+2. Standards pipeline
+3. Process pipeline
+4. Requirements pipeline
+5. Linear/OPSX pipeline
+6. Handover pipeline
 
-### Governance note
+Rectangles are processes. Diamonds are yes/no decisions. Parallelograms labeled `Output:` are the files.
 
-`/contract-psa` makes SPMP + ISO/IEC/IEEE 16085 **Milestone 1 (Discovery)** on
-the standard path. Preventa ships `*-bare.md` outlines only. After signature,
-invoke `/software-project-management-plan/authoring` and
-`/software-risks-authoring-16085` to fill them (Eisenhower gates §8.2 treatments).
-High-governance pre-signature fill is opt-in and **not recommended** for
-Fractional CTOs without prior preventa negotiation experience (unpaid engineering
-risk). Org GRC stays `/iso31000`. Operational `risk/*` is a different family.
+### Engagement pipeline
 
-### Process engineering (branch)
+`/contract-nda` → `/takeover-assessment` → `/project-takeover`. After the questionnaire, `/project-takeover` invokes `/maintenance-plan-ieee14764` and then `/transition-plan-ieee12207`. Then `/contract-psa`.
+
+`/contract-psa` makes the software project management plan and the ISO/IEC/IEEE 16085 risk plan **Milestone 1 (Discovery)** on the standard path. Preventa ships `*-bare.md` outlines only. After signature, invoke `/software-project-management-plan-authoring-ieee16326` and `/software-risks-authoring-ieee16085`. The operator, using the urgent-and-important matrix, decides whether a treatment plan is required. High-governance pre-signature fill is opt-in and not recommended for fractional CTOs without prior preventa negotiation experience. Org GRC stays `/iso31000`. Operational `risk/*` is a different family.
+
+`/business-brain-setup` is part of this pipeline. It creates the vault. Process skills write into `_procedimientos/` when that folder already exists.
+
+### Standards pipeline
+
+`/engineering-standards-audit` → `/engineering-standards-setup`.
+
+Setup does not invoke `/requirements-authoring-ieee29148`. Its own scaffold ends at the commit. In this orchestration, setup starts the Linear/OPSX pipeline.
+
+### Process pipeline
 
 ```
 /process-standardization  →  /automation-triage  →  /sop-authoring
@@ -58,18 +45,27 @@ risk). Org GRC stays `/iso31000`. Operational `risk/*` is a different family.
 ```
 
 Also: `/playbook-authoring` (when/why), `/runbook-authoring` (how),
-`/document-this` (route the type). Shared artifact home:
+`/document-it` or `/document-this`. Shared artifact home:
 `./fractional-cto/sops/{slug}/`.
 
-### Requirements-first (branch)
+The Handover pipeline starts after this pipeline finishes.
 
-```
-PRD / SRS (ISO/IEEE 830 + ISO/IEC/IEEE 29148:2018, bare template)
-   → OpenSpec specs/changes → Linear Bilingual brief → /opsx-* flow
-```
+### Requirements pipeline
 
-Shared home: `shared/skills/requirements-authoring/` +
-`shared/references/requirements-authoring/`.
+`/requirements-authoring-ieee29148` writes `software-requirements-specification.md` (ISO/IEC/IEEE 29148:2018). M-02 is `/architecture-description-ieee42010`. When M-02 evaluates, it invokes `/architecture-evaluation-ieee42030`. `/architecture-decision-ieee42010` writes the decision record.
+
+Shared home: `shared/skills/requirements-authoring-ieee29148/` +
+`shared/references/requirements-authoring-ieee29148/`.
+
+This pipeline does not start `/opsx-*`.
+
+### Linear/OPSX pipeline
+
+`/engineering-standards-setup` starts `/opsx-*`. The command order stays explore, propose, human review, apply, PR, optional sync, archive only with a human yes. Deployment releases the system into the client environment. That release does not start M-04.
+
+### Handover pipeline
+
+Entry is `/handover-process-to-ops`. The chain ends at `/handover-engagement-to-board`, then M-04 Knowledge transfer. Each handover command emits its own output. The commands and outputs are in the flowchart.
 
 ## Skills
 
@@ -86,9 +82,9 @@ Shared home: `shared/skills/requirements-authoring/` +
 | 9 | `business-brain-setup` | "business brain", "cerebro de negocio", "convert our business model folder" | Git/Obsidian knowledge vault (scaffold or BMC migration) |
 | 10 | `playbook-authoring` | "write a playbook", "ops playbook", "decision tree", "playbook vs runbook" | When/why playbook linking diagnose/recover runbooks |
 | 11 | `runbook-authoring` | "write a runbook", "incident runbook", "release runbook", "on-call procedure" | Trigger-driven runbook + diagnose/repair scripts |
-| 12 | `requirements-authoring` (shared) | "PRD", "SRS", "requisitos", "29148", "IEEE 830" | Versioned PRD/SRS + OpenSpec + Linear brief |
-| 13 | `software-project-management-plan/authoring` | "SPMP", "16326", "plan de gestión" | SPMP per ISO/IEC/IEEE 16326:2019 |
-| 14 | `software-risks-authoring-16085` | "16085", "risk management plan", "Hito 1 Discovery" | 16085 §8.1 RM + §8.2 treatments (Eisenhower) |
+| 12 | `requirements-authoring-ieee29148` (shared) | "SRS", "requisitos", "29148" | software-requirements-specification.md |
+| 13 | `software-project-management-plan-authoring-ieee16326` | "SPMP", "16326", "plan de gestión" | SPMP per ISO/IEC/IEEE 16326:2019 |
+| 14 | `software-risks-authoring-ieee16085` | "16085", "risk management plan", "Milestone 1 Discovery" | 16085 risk plan. The operator decides the treatment plan with the urgent-and-important matrix |
 | 15 | `software-project-management-plan/audit` | "audit project plan", "16326 gap", "16085 risk audit" | Gap matrix vs 16326 §7 + 16085 §8 |
 
 Project-governance templates (SSOT under `references/software-project-management-plan/`,
@@ -101,10 +97,10 @@ template. Atomic `_templates/riesgo.md` stays PMBOK-oriented and is not overwrit
 | Family | Skills | Purpose |
 |--------|--------|---------|
 | `strategy/` | roadmap · portfolio · rnd-alignment | Tech vision, roadmapping, portfolio, R&D alignment |
-| `architecture/` | decision · stack-evaluation · migration | ADRs, stack tradeoffs, migration guidance |
+| `architecture/` | architecture-description-ieee42010 · architecture-evaluation-ieee42030 · architecture-decision-ieee42010 · stack-evaluation · migration | Architecture description, architecture evaluation, architecture decisions, stack tradeoffs, migration guidance |
 | `metrics/` | dora · reliability · velocity · team-health · exec-reporting | DORA, SLO/SLI, engineering velocity, team health, exec narrative |
 | `risk/` | audit · incident-response · disaster-recovery · resilience | Security audit framing, IR, DR, resilience |
-| `handover/` | risk-to-cro · grc-to-cco · metrics-to-vpeng · architecture-to-principal · strategy-to-board · engagement-to-board · process-to-ops · requirements-to-cpo · standards-to-vpeng | Ownership transfer to organic executives |
+| Handover pipeline | `handover-process-to-ops` · `handover-risk-to-cro` · `handover-grc-to-cco` · `handover-metrics-to-vpeng` · `handover-architecture-to-principal` · `handover-strategy-to-board` · `handover-requirements-to-cpo` · `handover-standards-to-vpeng` · `handover-engagement-to-board` | Ownership transfer to organic executives |
 | `grc/` | universal (incl. `iso31000`) + regional USMCA/LATAM/APAC/EMEA | Compliance frameworks |
 | `threat-defense/` | owasp-top10 · owasp-nhi-top10 · mitre-atlas · mitre-attack · mitre-d3fend · ai-defense | Threat and defense controls |
 
@@ -114,7 +110,6 @@ template. Atomic `_templates/riesgo.md` stays PMBOK-oriented and is not overwrit
 |---------|---------|--------|
 | `/engineering-standards-setup` | Adopt the engineering standards (index of 32) in a client repo | `AGENTS.md` pointers, standards doc, PR template, QT4L stub |
 | `/engineering-standards-audit` | Measure adoption of the standards index | Findings report |
-| `/pentest-playbook-setup` | Author a stack-tailored security playbook (authorized engagement) | `PENTEST-PLAYBOOK.md` |
 
 ## Contract Templates
 
@@ -130,9 +125,9 @@ All contracts include a **Section 0: Shared Risk Model** with compensation varia
 
 ## Features
 
-- Single engagement pipeline (takeover → PSA Hito 1 → retainer / standards / requirements branches)
+- Six pipelines: Engagement, Standards, Process, Requirements, Linear/OPSX, Handover. The flowchart is `references/engagement-orchestration.preview.html`
 - Takeover pack: playbook + Diátaxis client guide + two legal templates (`{{placeholders}}`). Bares for apprentices
-- Requirements-first: PRD/SRS bare + OpenSpec + `/opsx-*`
+- Requirements pipeline: `software-requirements-specification.md`. `/opsx-*` starts in the Linear/OPSX pipeline
 - 6 engineering standards bootstrap + **OST** when using an OpenSpec store
 - Bilingual engagement emits (Spanish primary for CR). English toolkit SSOT + STE100 where required
 - Costa Rica legal framework notes (Ley 8968, Codigo Penal, Camara de Comercio arbitration)

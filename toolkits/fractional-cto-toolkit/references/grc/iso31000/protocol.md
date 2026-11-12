@@ -8,7 +8,7 @@ register compatible with ISO 9001:2015 risk/opportunity thinking.
 
 This is **not** the systems/software project risk management plan. For project
 risks that satisfy ISO/IEC/IEEE 16326 Clause 7 content, use
-`/software-risks-authoring-16085` (consumes the ISO/IEC/IEEE 16085 templates).
+`/software-risks-authoring-ieee16085` (consumes the ISO/IEC/IEEE 16085 templates).
 16085 §5.2.3 positions 31000 as overarching principles.
 
 ## When to use

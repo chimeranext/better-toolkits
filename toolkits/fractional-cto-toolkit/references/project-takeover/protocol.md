@@ -251,7 +251,16 @@ Always emit (even LOW). Only counsel sends it after a signed-deadline breach.
    Costa Rica.
 3. Write: `./fractional-cto/takeover/legal-template-breach-notice-{slug}.md`
 
-### Step 5 — Post-emit confirmation
+### Step 5 — Maintenance plan, then transition plan
+
+The questionnaire is finished. The four files are written. Invoke the next two skills in this order. Do not start them during the questions.
+
+1. Invoke `/maintenance-plan-ieee14764`. It writes `./fractional-cto/takeover/maintenance-plan-{slug}.md` (ISO/IEC/IEEE 14764:2022).
+2. When that file exists, invoke `/transition-plan-ieee12207`. It writes `./fractional-cto/takeover/transition-plan-{slug}.md` (ISO/IEC/IEEE 12207:2026).
+
+This skill does not write those two files itself.
+
+### Step 6 — Post-emit confirmation
 
 1. `playbook-{slug}.md` → CTO playbook
 2. `client-guide-{slug}.md` → client lead
@@ -278,8 +287,9 @@ breach notice.
 - HARD-GATE: without an explicit yes to the Step 3 plan, write zero files.
 - This skill does not deep-assess risk. That is `/takeover-assessment`.
 - This skill does not emit SPMP or 16085. `/contract-psa` anchors Milestone 1.
-  Fill authors are `/software-project-management-plan/authoring` and
-  `/software-risks-authoring-16085`.
+- After the questionnaire and the four files, invoke `/maintenance-plan-ieee14764`, then `/transition-plan-ieee12207`. This skill does not write those two plans.
+  Fill authors are `/software-project-management-plan-authoring-ieee16326` and
+  `/software-risks-authoring-ieee16085`.
 - This skill does not emit contracts. Use `/contract-nda`, `/contract-psa`,
   `/contract-retainer`.
 - Always include a legal clause in the delivery request (Approach B).

@@ -8,7 +8,7 @@ description: >
   that runs the three-way ops taxonomy routing, names the type and its canonical home,
   and hands off to /sop-authoring, /playbook-authoring, or /runbook-authoring. NOT an
   authoring skill itself — it never writes the document. NOT for security-test plans
-  (that is /pentest-playbook-setup).
+  (that is /assurance:pentest-playbook-setup).
 ---
 
 # Document-It (alias)

@@ -111,7 +111,7 @@ Takeover required?
 
 | Symptom | Action |
 |---|---|
-| SPMP / 16085 | `/contract-psa` Hito 1 |
+| SPMP / 16085 | `/contract-psa` Milestone 1 |
 | Org GRC | `/iso31000` |
 | Live outage | IR runbooks |
 | Recurring HR process | `/sop-authoring` |

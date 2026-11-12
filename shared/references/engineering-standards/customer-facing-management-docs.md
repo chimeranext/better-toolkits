@@ -4,8 +4,10 @@
 
 How **management plans** the customer representative signs must read — especially
 ISO/IEC/IEEE **16326** SPMPs and ISO/IEC/IEEE **16085** risk management /
-treatment plans. Complements **ODT** ([ops-documentation-taxonomy.md](ops-documentation-taxonomy.md)):
-those plans are explanation / commitment documents for humans, **not** how-to
+treatment plans. The same voice applies to the filled software requirements
+specification, architecture description, architecture decision, and architecture
+evaluation. Complements **ODT** ([ops-documentation-taxonomy.md](ops-documentation-taxonomy.md)):
+those documents are explanation / commitment documents for humans, **not** how-to
 runbooks for agents.
 
 Toolkit English templates may stay short. The **emitted customer copy** follows
@@ -16,6 +18,7 @@ these rules in the engagement working language.
 | Document type | Voice |
 | --- | --- |
 | SPMP, risk management plan, risk treatment plan, similar signed management plans | Descriptive / executive. Named subjects. |
+| Software requirements specification, architecture description, architecture decision, architecture evaluation | Descriptive / executive. Named subjects. |
 | Runbook, protocol step for an agent, skill procedure | Imperative STE (ASD-STE100) is appropriate |
 
 Do **not** apply procedure-imperative STE to management-plan body text just
@@ -72,4 +75,9 @@ for structural English SSOT. **Filled customer plans** use the voice below.
 
 - [ODT — Ops Documentation Taxonomy](ops-documentation-taxonomy.md)
 - Fractional CTO SPMP authoring:
-  `toolkits/fractional-cto-toolkit/references/software-project-management-plan/protocol-authoring.md`
+  `toolkits/fractional-cto-toolkit/references/software-project-management-plan-authoring-ieee16326/protocol.md`
+- Requirements pipeline:
+  `shared/references/requirements-authoring-ieee29148/protocol.md`,
+  `toolkits/fractional-cto-toolkit/references/architecture-description-ieee42010/protocol.md`,
+  `toolkits/fractional-cto-toolkit/references/architecture-decision-ieee42010/protocol.md`,
+  `toolkits/fractional-cto-toolkit/references/architecture-evaluation-ieee42030/protocol.md`

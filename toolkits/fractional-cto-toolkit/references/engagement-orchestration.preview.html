@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Engagement orchestration — Pele preview</title>
+  <style>
+    body { margin: 0; background: #eef3fb; color: #131a2a; font-family: sans-serif; }
+    header { padding: 16px 24px 0; }
+    #diagram { padding: 16px 24px 48px; overflow: auto; }
+    .pele { --pele-bg: #eef3fb; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Engagement orchestration</h1>
+    <p>Preview con Pele. Los rectángulos son procesos. Los paralelogramos son salidas.</p>
+  </header>
+  <div id="diagram"></div>
+  <script type="text/plain" id="source">flowchart TD
+  subgraph ENG[Engagement pipeline]
+    A["/contract-nda"] --> B["/takeover-assessment"]
+    B --> C["/project-takeover"]
+    C --> Maint["/maintenance-plan-ieee14764"]
+    Maint --> MaintenanceOutput@{ shape: lean-r, label: "Output: maintenance-plan-slug.md | ISO/IEC/IEEE 14764:2022" }
+    Maint --> Trans["/transition-plan-ieee12207"]
+    Trans --> TransitionOutput@{ shape: lean-r, label: "Output: transition-plan-slug.md | ISO/IEC/IEEE 12207:2026" }
+    C --> D["/contract-psa"]
+    D --> M01["M-01 Discovery: write the project plan and the risk plan"]
+    M01 --> SPMP["/software-project-management-plan-authoring-ieee16326"]
+    M01 --> R16085["/software-risks-authoring-ieee16085"]
+    SPMP --> PlanOutput@{ shape: lean-r, label: "Output: software-project-management-plan.md | ISO/IEC/IEEE 16326:2019" }
+    R16085 --> RiskOutput@{ shape: lean-r, label: "Output: risk-management-plan.md | ISO/IEC/IEEE 16085:2021" }
+    R16085 --> Eisen@{ shape: diam, label: "Operator: using the urgent-and-important matrix, do you require a treatment plan?" }
+    Eisen -->|yes| TreatOutput@{ shape: lean-r, label: "Output: risk-treatment-plan.md | ISO/IEC/IEEE 16085:2021" }
+    PlanOutput --> Gate@{ shape: diam, label: "Client accepted the software project management plan, the risk management plan, and any required risk treatment plan in writing?" }
+    RiskOutput --> Gate
+    TreatOutput --> Gate
+    Eisen -->|no| Gate
+    Gate -->|no| M01
+    Brain["/business-brain-setup"]
+  end
+  subgraph STD[Standards pipeline]
+    F["/engineering-standards-audit"] --> G["/engineering-standards-setup"]
+  end
+  subgraph PROC[Process pipeline]
+    H["/process-standardization"] --> I["/automation-triage"]
+    I --> J["/sop-authoring"]
+    J --> K["/playbook-authoring"]
+    J --> L["/runbook-authoring"]
+    J --> R["/document-it or /document-this"]
+  end
+  subgraph REQ[Requirements pipeline]
+    M["/requirements-authoring-ieee29148"] --> ReqOutput@{ shape: lean-r, label: "Output: software-requirements-specification.md | ISO/IEC/IEEE 29148:2018" }
+    ReqOutput --> AuthorDesc["M-02 Detailed design: /architecture-description-ieee42010"]
+    AuthorDesc --> DescOutput@{ shape: lean-r, label: "Output: architecture-description.md | ISO/IEC/IEEE 42010:2022" }
+    AuthorDesc --> Eval["/architecture-evaluation-ieee42030"]
+    Eval --> EvalOutput@{ shape: lean-r, label: "Output: architecture-evaluation.md | ISO/IEC/IEEE 42030:2019" }
+    AuthorDecision["/architecture-decision-ieee42010"] --> DecisionOutput@{ shape: lean-r, label: "Output: architecture-decision-NNNN-title.md | ISO/IEC/IEEE 42010:2022" }
+    DecisionOutput -.-> DescOutput
+  end
+  subgraph OPSX["Linear/OPSX pipeline"]
+    N["/opsx-* flow"] --> CodeOutput@{ shape: lean-r, label: "Output: implemented software | ISO/IEC/IEEE 12207:2026" }
+    CodeOutput --> Dep["Deployment: release the system into the client environment"]
+    Dep --> DepOutput@{ shape: lean-r, label: "Output: system operating in the client environment | ISO/IEC/IEEE 12207:2026" }
+  end
+  subgraph HAND[Handover pipeline]
+    h8["/handover-process-to-ops"] --> h8Out@{ shape: lean-r, label: "Output: operational runbooks" }
+    h8 --> h1["/handover-risk-to-cro"]
+    h1 --> h1Out@{ shape: lean-r, label: "Output: risk posture packet" }
+    h1 --> h2["/handover-grc-to-cco"]
+    h2 --> h2Out@{ shape: lean-r, label: "Output: compliance obligations and evidence" }
+    h2 --> h4["/handover-metrics-to-vpeng"]
+    h4 --> h4Out@{ shape: lean-r, label: "Output: metric dictionary and data sources" }
+    h4 --> h5["/handover-architecture-to-principal"]
+    h5 --> h5Out@{ shape: lean-r, label: "Output: architecture documentation" }
+    h5 --> h6["/handover-strategy-to-board"]
+    h6 --> h6Out@{ shape: lean-r, label: "Output: technology strategy for the board" }
+    h6 --> h9["/handover-requirements-to-cpo"]
+    h9 --> h9Out@{ shape: lean-r, label: "Output: requirements and acceptance criteria" }
+    h9 --> h3["/handover-standards-to-vpeng"]
+    h3 --> h3Out@{ shape: lean-r, label: "Output: standards adoption and audit baseline" }
+    h3 --> h7["/handover-engagement-to-board"]
+    h7 --> h7Out@{ shape: lean-r, label: "Output: README, setup guides, access inventory, and recorded sessions" }
+    h7 --> M04["M-04 Knowledge transfer"]
+  end
+  C --> F
+  G --> H
+  G --> N
+  Gate -->|yes| M
+  K --> h8
+  L --> h8
+  R --> h8
+</script>
+  <script type="module">
+    import { mount } from "https://cdn.jsdelivr.net/npm/pele@1.13.0/dist/pele.js";
+    const source = document.querySelector("#source").textContent;
+    const diagram = document.querySelector("#diagram");
+    const mounted = mount(diagram, source);
+    console.log("pele-mount", { error: mounted.error || null, width: diagram.scrollWidth, height: diagram.scrollHeight });
+  </script>
+</body>
+</html>

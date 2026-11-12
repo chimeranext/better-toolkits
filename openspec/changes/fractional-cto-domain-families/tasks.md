@@ -91,15 +91,15 @@
 
 ## Handover procedures
 
-- [x] Author `skills/handover/risk-to-cro` (Risk & Resilience → Chief Risk Officer).
-- [x] Author `skills/handover/grc-to-cco` (GRC Universal/Regional → Chief Compliance Officer).
-- [x] Author `skills/handover/metrics-to-vpeng` (Metrics → VP Engineering).
-- [x] Author `skills/handover/architecture-to-principal` (Architecture → Principal Architect).
-- [x] Author `skills/handover/strategy-to-board` (Strategy → CEO / Board).
-- [x] Author `skills/handover/engagement-to-board` (Engagement → CEO / Board).
-- [x] Author `skills/handover/process-to-ops` (Process Engineering → Ops / COO).
-- [x] Author `skills/handover/requirements-to-cpo` (Requirements → CPO / Product).
-- [x] Author `skills/handover/standards-to-vpeng` (Standards → VP Engineering).
+- [x] Author `skills/handover-risk-to-cro` (Risk & Resilience → Chief Risk Officer).
+- [x] Author `skills/handover-grc-to-cco` (GRC Universal/Regional → Chief Compliance Officer).
+- [x] Author `skills/handover-metrics-to-vpeng` (Metrics → VP Engineering).
+- [x] Author `skills/handover-architecture-to-principal` (Architecture → Principal Architect).
+- [x] Author `skills/handover-strategy-to-board` (Strategy → CEO / Board).
+- [x] Author `skills/handover-engagement-to-board` (Engagement → CEO / Board).
+- [x] Author `skills/handover-process-to-ops` (Process Engineering → Ops / COO).
+- [x] Author `skills/handover-requirements-to-cpo` (Requirements → CPO / Product).
+- [x] Author `skills/handover-standards-to-vpeng` (Standards → VP Engineering).
 
 ## Integration
 

@@ -99,8 +99,8 @@ Preguntar UNA vez (default = path estandar):
 
 > ¿Como anclamos el SPMP (ISO/IEC/IEEE 16326) y el plan de riesgos (ISO/IEC/IEEE 16085)?
 >
-> **A) Path estandar — Hito 1 post-firma (recomendado).** En preventa solo bare
-> templates. Tras la firma, el Hito 1 (Discovery) entrega SPMP + RM 16085 definitivos
+> **A) Path estandar — Milestone 1 post-firma (recomendado).** En preventa solo bare
+> templates. Tras la firma, el Milestone 1 (Discovery) entrega SPMP + RM 16085 definitivos
 > (y treatments segun Eisenhower). Pagadero. Sin aprobacion de E-01/E-02 no arranca
 > diseno/desarrollo.
 >
@@ -115,8 +115,8 @@ Preguntar UNA vez (default = path estandar):
 Si elige B, documentar la eleccion en Seccion 7.4.5 y Anexo E. Si elige A (default),
 dejar E-01/E-02/E-03 + M-01 del template y copiar bares a preventa / Anexo D.
 
-Tras la firma en path A, el trabajo del Hito 1 se ejecuta con
-`/software-project-management-plan/authoring` y `/software-risks-authoring-16085`
+Tras la firma en path A, el trabajo del Milestone 1 se ejecuta con
+`/software-project-management-plan-authoring-ieee16326` y `/software-risks-authoring-ieee16085`
 (no preguntar si hacen falta).
 
 ### Paso 4 — Scope of Work (Alcance del trabajo)
@@ -139,12 +139,12 @@ development, security remediation, etc.). No borrar E-01/E-02/E-03 del template.
 > Ahora el cronograma:
 >
 > 1. **Fecha de inicio** (o "al firmar")
-> 2. **{DIAS_HITO1}** — dias habiles del Hito 1 Discovery (default: 15)
+> 2. **{DIAS_HITO1}** — dias habiles del Milestone 1 Discovery (default: 15)
 > 3. **Milestones posteriores a M-01** — nombre, entregables, fecha, pago
 > 4. **Duracion total estimada** (semanas o meses)
 > 5. **Proceso de aceptacion** — ¿Cuantos dias de revision para el cliente? (default: 5-10 dias habiles)
 
-M-01 queda fijo como Discovery (E-01, E-02, E-03 segun Eisenhower) en path estandar.
+M-01 queda fijo como Discovery en el path estandar. El operador escribe el plan de gestión del proyecto y el plan de gestión de riesgos. Con la matriz de urgente e importante, el operador decide si también exige el plan de tratamiento. En el template del contrato esas filas siguen llamándose E-01, E-02 y E-03.
 Si el usuario solo da fecha de inicio y duracion, ayudar a repartir M-02+ de forma
 logica. Default `{DIAS_HITO1}`: 15.
 
@@ -206,7 +206,7 @@ Presentar al usuario un resumen claro:
    - Modelo A: monto total, estructura de pago
    - Modelo B: tarifa reducida, bono, milestone trigger
    - Modelo C: tarifa, equity %, vesting, cliff, aceleracion
-2. **Path de gobernanza** (estandar Hito 1 vs alta gobernanza) y **advertencia** si eligio B
+2. **Path de gobernanza** (estandar Milestone 1 vs alta gobernanza) y **advertencia** si eligio B
 3. **Cantidad de entregables** y **milestones** definidos (M-01 Discovery incluido en path estandar)
 4. **Duracion estimada** del proyecto
 5. **Ruta del archivo generado**: `./fractional-cto/contracts/{slug}-psa.md`
@@ -214,7 +214,7 @@ Presentar al usuario un resumen claro:
 7. **Disclaimer obligatorio:**
    > "Requiere revision de un abogado. Ambas partes deben tener revision legal independiente antes de firmar."
 8. **Siguiente paso sugerido (path estandar, tras firma):**
-   > "Ejecuta Hito 1 con `/software-project-management-plan/authoring` y `/software-risks-authoring-16085` (rellenan los bares). Luego, al cerrar el proyecto, considera `/contract-retainer`."
+   > "Ejecuta Milestone 1 con `/software-project-management-plan-authoring-ieee16326` y `/software-risks-authoring-ieee16085`. Esos comandos escriben el plan de gestión del proyecto y el plan de gestión de riesgos. Si el operador, con la matriz de urgente e importante, exige un plan de tratamiento, escribe `risk-treatment-plan.md`. Si el cliente no acepta por escrito esos planes, se revisan y no arranca el diseño, la codificación ni el despliegue. Si los acepta, `/contract-psa` invoca `/requirements-authoring-ieee29148`. M-02 es `/architecture-description-ieee42010`. Si M-02 evalúa la arquitectura, invoca `/architecture-evaluation-ieee42030`. `/architecture-decision-ieee42010` escribe el registro de decisión. `/engineering-standards-setup` arranca `/opsx-*`: ahí están el desarrollo, la codificación y el despliegue. M-04 cierra el Handover pipeline, después de `/handover-engagement-to-board`. Los documentos de la transferencia los escriben los comandos de handover."
 
 Si existe un assessment previo en `./fractional-cto/assessment/`, mencionar que el
 contexto de riesgo del assessment se tuvo en cuenta al definir el scope.

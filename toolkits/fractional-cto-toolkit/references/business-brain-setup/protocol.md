@@ -66,7 +66,8 @@ Shared infrastructure (every topology):
 | `identidad-marca/` | Brand identity | resources |
 | `_procedimientos/` | SOPs (versioned standards; pairs with /process-standardization) | areas |
 | `_retros-minutas/` | Retrospectives, meeting minutes, daily/weekly logs | archives |
-| `plans/` | Project management plans (ISO/IEC/IEEE 16326 SPMP exports / authored plans) | projects |
+| `plans/` | Project management plans the client reads (ISO/IEC/IEEE 16326 SPMP and ISO/IEC/IEEE 16085 risk plans) | projects |
+| `projects/<slug>/` | One folder per product. Requirements and architecture the client reads live in `requirements/` and `architecture/` inside it, and they wikilink the plan in `plans/` | projects |
 | `_templates/` | Note templates (see below) — SPMP/16085/31000 arrive via toolkit export | infra |
 | `assets/` | Images and binary attachments | infra |
 
