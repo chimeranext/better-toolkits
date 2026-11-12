@@ -1,0 +1,78 @@
+---
+title: "Risk treatment plan · {{risk_id}} · {{project_name}}"
+date: "{{date}}"
+tags: [project, risk, iso-16085, treatment]
+status: draft
+standard: ISO/IEC/IEEE 16085:2021
+template_id: iso-16085-risk-treatment-plan
+---
+
+# Risk treatment plan · {{risk_id}}
+
+Outline aligned to ISO/IEC/IEEE 16085:2021 §8.2.2. One plan may cover multiple
+risks that share pertinent characteristics. Empty sections: N/A plus reason.
+
+> [!note] Customer-facing voice
+> Describe the treatment for human readers (`shared/references/engineering-standards/customer-facing-management-docs.md`). Prefer
+> “The owner implements …” over “Implement …”. No `[[path|alias]]` inside tables.
+
+## 1. Introduction
+
+### 1.1 Purpose and scope
+
+{{purpose_scope}}
+
+### 1.2 Assumptions and constraints
+
+{{assumptions_constraints}}
+
+### 1.3 Risk treatment policies
+
+{{policies}}
+
+### 1.4 Related documents and standards
+
+| Ref | Document |
+| --- | --- |
+| RM plan | {{risk_management_plan_link}} |
+| Risk profile entry | {{risk_id}} |
+| SPMP | {{spmp_link}} |
+
+### 1.5 Glossary
+
+{{glossary}}
+
+## 2. Risk treatment overview
+
+Approach and level of treatment for the selected alternative from the risk
+action request.
+
+{{treatment_overview}}
+
+## 3. Selected treatment
+
+| Field | Value |
+| --- | --- |
+| Risk id(s) | {{risk_id}} |
+| Eisenhower class | Critical / Only important / Only urgent |
+| Option | mitigate / transfer / avoid / accept / share / other |
+| Rationale | {{rationale}} |
+| Residual risk target | {{residual_target}} |
+| Owner | {{owner}} |
+| Approver | {{approver}} |
+
+## 4. Implementation
+
+Tasks, resources, schedule, success criteria, and unintended-consequence watch.
+
+{{implementation}}
+
+## 5. Monitoring of treatment
+
+How the owner measures effectiveness. Triggers to revise treatment. Reporting cadence.
+
+{{treatment_monitoring}}
+
+## 6. Communication and escalation
+
+{{communication}}

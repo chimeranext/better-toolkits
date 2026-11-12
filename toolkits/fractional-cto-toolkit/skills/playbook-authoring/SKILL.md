@@ -11,144 +11,138 @@ description: >
   (execute-under-pressure steps) and /sop-authoring (steady-state company process).
   NOT for sequential recover/deploy procedures (that is /runbook-authoring), NOT for
   recurring business SOPs (that is /sop-authoring), and NOT for authorized security-test
-  plans (that is /pentest-playbook-setup).
+  plans (that is /assurance:pentest-playbook-setup).
 ---
 
-# Playbook Authoring
+# Playbook authoring
 
-Turns a class of operational uncertainty — which path to take, when, and why — into a
-reusable playbook a lead can use under pressure. Sibling of `/runbook-authoring` and
-`/sop-authoring`. This skill writes **judgment**, not an execute script.
+English ASD-STE100 skill body. Turns a class of operational uncertainty into a
+reusable playbook. A lead uses it under pressure. This skill writes **judgment**.
+It does not write an execute script.
+
+Sibling skills:
+
+- `/runbook-authoring` — how to execute after the choice
+- `/sop-authoring` — steady company process with no engineering context
 
 ```
-Playbook = WHEN / WHY / strategy / judgment under uncertainty; narrative + options
-           (this skill). Not a click-by-click execute script.
-Runbook  = trigger-driven, sequential, testable steps an operator/engineer executes
-           (incident, deploy, recovery, scheduled ops). Bus-factor-1. Repo/infra
-           context OK.                                            (/runbook-authoring)
-SOP      = steady-state recurring COMPANY process; roles not named people; no code
-           required to understand.                                (/sop-authoring)
+Playbook = WHEN / WHY / judgment under uncertainty. Narrative + options.
+Runbook  = trigger-driven sequential steps. Bus-factor-1. Repo/infra OK.
+SOP      = recurring company process. Roles, not named people. No code required.
 ```
 
-A playbook answers *which* runbook or script to run and *when*. A runbook performs
-*how* with guardrails. An SOP documents how the company operates a repeatable
-business process. Dated post-mortems record one incident; they are not playbooks —
-promote the reusable decision tree here, leave the timeline in the post-mortem.
+A playbook answers which runbook or script to run and when. A runbook performs
+how with guardrails. An SOP documents how the company runs a repeatable business
+process. Dated post-mortems record one incident. They are not playbooks. Promote
+the reusable decision tree here. Leave the timeline in the post-mortem.
 
 ## Language rule
 
-The skill's questions and working notes are in **English**. Generated playbooks follow
-the **engagement's working language** — English by default (public-facing ops docs are
-usually English), Spanish for Costa Rica engagements. Confirm if unclear.
+Skill questions and working notes stay in **English**. Generated playbooks follow
+the engagement language. Default English for public ops docs. Spanish for Costa
+Rica engagements. Ask if unclear.
 
 ## Output directory
 
-Resolve `{playbooks-dir}` first, in this order:
+Resolve `{playbooks-dir}` in this order:
 
-1. If a business brain exists (a `business-brain/` folder or a vault root with
-   `_procedimientos/` — see `/business-brain-setup`), then
-   `{playbooks-dir}` = `<brain-root>/_procedimientos/playbooks/`. Playbooks live with
-   the other living procedures.
-2. Otherwise, `{playbooks-dir}` = `./fractional-cto/playbooks/`.
+1. If a business brain exists (`business-brain/` or a vault with `_procedimientos/`),
+   use `<brain-root>/_procedimientos/playbooks/`.
+2. Otherwise use `./fractional-cto/playbooks/`.
 
-## Flujo del skill
+## Skill flow
 
-### Paso 1 — Routing test (three-way ops taxonomy + docs)
+### Step 1 — Routing test
 
-Confirm the thing is actually a playbook. Use the shared three-way ops taxonomy in
-[`references/authoring-taxonomy.md`](../../references/authoring-taxonomy.md) (playbook / runbook / SOP)
-plus the usual product-docs cases.
+Confirm the artifact is a playbook. Use
+[`references/authoring-taxonomy.md`](../../references/authoring-taxonomy.md).
 
-Rule of thumb: if the reader must **choose among branches** before acting, it is a
-playbook. If they must **execute numbered steps** after the choice is made, it is a
-runbook. If a software engineer is not required to understand it, it is an SOP.
+Rule of thumb:
+
+- Reader must choose among branches first → **playbook**
+- Reader must run numbered steps after the choice → **runbook**
+- No software engineer needed to understand it → **SOP**
+
 Never treat "playbook" as a synonym for runbook or post-mortem.
 
-If the type is ambiguous, run `/document-this` to resolve it before continuing.
+If the type is unclear, run `/document-this` before you continue.
 
-### Paso 2 — Confirm the reusable class of problem
+### Step 2 — Confirm the reusable class of problem
 
-Ask (or infer) the class of situation the playbook covers — not one dated ticket.
+Ask or infer the class of situation. Do not bind the playbook to one dated ticket.
 
 Capture:
 
-- **Trigger class** — the family of symptoms (e.g. "public edge timeout while origin is healthy").
-- **Decision the reader must make** — diagnose vs recover vs escalate vs wait for mitigation.
-- **Linked execute artifacts** — diagnose script, recover/repair script, optional
-  bootstrap prerequisite, optional mitigate/guard that should make manual recover rare.
-- **Roles** — who decides, who executes, who is informed. Roles, not named people.
+- **Trigger class** — family of symptoms
+- **Decision** — diagnose vs recover vs escalate vs wait for mitigation
+- **Linked execute artifacts** — diagnose script, recover script, optional bootstrap,
+  optional mitigate guard
+- **Roles** — who decides, who executes, who receives notice. Roles, not people
 
-If there is no execute artifact yet, say so and offer `/runbook-authoring` for the
-*how* after this playbook names the branches. Do not invent a full runbook here.
+If no execute artifact exists yet, say so. Offer `/runbook-authoring` for the how
+after this playbook names the branches. Do not invent a full runbook here.
 
-### Paso 3 — Author the playbook
+### Step 3 — Author the playbook
 
-1. Read the template: `${CLAUDE_PLUGIN_ROOT}/references/09-playbook-template.md`.
-2. Fill it. Writing discipline (the DNA of a real playbook):
-   - **Artifact-type callout** — state this page is a playbook (when/why). Scripts and
-     numbered recover steps belong in runbooks.
+1. Read `${CLAUDE_PLUGIN_ROOT}/references/09-playbook-template.md`.
+2. Fill it. Keep this discipline:
+   - **Artifact-type callout** — this page is a playbook (when/why). Scripts belong
+     in runbooks.
    - **Header + reader's summary** — a lead who reads nothing else can pick a branch.
-   - **Artifact table by layer** — playbook (this doc) · diagnose (read-only) ·
-     recover/repair (state change) · bootstrap (prerequisite) · mitigate (prevent
-     recurrence). Filename pattern: `playbook-{slug}.md`, `diagnose-{slug}.sh`,
-     `recover-{slug}.sh` (or `repair-`). Do not name a new markdown `runbook-*.md`
-     when it is actually a playbook.
-   - **Symptoms table** — healthy vs broken probes, just enough to *choose a branch*.
-     Do not paste a full diagnose script.
-   - **Decision tree** — the heart. Present-tense. Each leaf points at a section or
-     a runbook, not a wall of commands.
-   - **Option sections (§A, §B, …)** — *when this branch applies*, what it means,
-     short read-only hints, then a pointer to the runbook/script. Short diagnose
-     hints are OK; a click-by-click recover script is not.
-   - **Verification gate** — how you know the *chosen path* succeeded (sustained
-     healthy signal), not that a command exited 0.
-   - **Out of scope** — follow-ups that look related but are a different class.
-   - **Name owners by role, not person.**
-   - **Dated incident callouts** as evidence for a branch (`> Seen YYYY-MM-DD: …`),
-     not as a substitute post-mortem.
-   - **Playbooks do not replace scripts.** If the how is missing, link a stub and
-     send the execute work to `/runbook-authoring`.
-   - **Mitigation is the goal** — after a durable guard exists, manual recover
-     should become break-glass. The playbook stays for new root causes.
+   - **Artifact table by layer** — playbook, diagnose, recover, bootstrap, mitigate.
+     Names: `playbook-{slug}.md`, `diagnose-{slug}.sh`, `recover-{slug}.sh`.
+     Do not name a playbook `runbook-*.md`.
+   - **Symptoms table** — healthy vs broken. Enough to choose a branch. No full
+     diagnose script paste.
+   - **Decision tree** — present tense. Each leaf points to a section or runbook.
+   - **Option sections (§A, §B, …)** — when it applies, what it means, short
+     read-only hints, then a runbook pointer. No click-by-click recover script.
+   - **Verification gate** — sustained healthy signal. Not "command exited 0".
+   - **Out of scope** — related follow-ups that are a different class.
+   - **Owners by role**, not by person.
+   - **Dated callouts** as branch evidence (`> Seen YYYY-MM-DD: …`). Not a
+     post-mortem substitute.
+   - **Playbooks do not replace scripts.** Link a stub. Send execute work to
+     `/runbook-authoring`.
+   - **Mitigation is the goal.** After a durable guard exists, manual recover
+     becomes break-glass. The playbook stays for new root causes.
    - **Bilingual** (EN + ES) when the operating team is bilingual.
 3. Write to `{playbooks-dir}/{slug}/playbook-{slug}.md`.
 
-### Paso 4 — Quality checklist + 3 AM lead test
+### Step 4 — Quality checklist + 3 AM lead test
 
-Run the **3 AM lead test**: "could an on-call lead who has never seen this system
-pick the right branch from the decision tree + reader's summary alone, then hand
-the execute work to the linked runbook?" If not, the gaps are usually a missing
-branch, symptoms that do not discriminate, unnamed roles, or commands that belong
-in a runbook. Fix them before finishing.
+Run the **3 AM lead test**. Could an on-call lead who never saw this system pick
+the right branch from the decision tree and reader's summary alone? Then hand
+execute work to the linked runbook?
 
-A playbook fails the test if it is secretly a runbook (numbered execute steps with
-no decision tree) or secretly a post-mortem (one date, no reusable branches).
+If not, close the gaps. Usual gaps: missing branch, weak symptoms, unnamed roles,
+or commands that belong in a runbook.
 
-### Paso 5 — Confirmación
+A playbook fails the test if it is secretly a runbook (numbered steps, no tree)
+or secretly a post-mortem (one date, no reusable branches).
 
-Present the deliverables and how to use them:
+### Step 5 — Confirmation
 
-1. `playbook-{slug}.md` → "The playbook — when/why and which path to take."
-2. Linked `diagnose-{slug}.sh` / `recover-{slug}.sh` (if they exist) → "The runbooks
-   — execute after the tree picks a branch. Author or update them with
-   `/runbook-authoring`."
-3. Post-mortem pointer (if this class already fired once) → "The dated narrative
-   stays in the post-mortem; reusable judgment lives here."
+Present the deliverables:
+
+1. `playbook-{slug}.md` → when/why and which path to take
+2. Linked `diagnose-{slug}.sh` / `recover-{slug}.sh` (if present) → execute after
+   the tree picks a branch. Author or update with `/runbook-authoring`
+3. Post-mortem pointer (if this class already fired) → dated narrative stays there.
+   Reusable judgment lives here
 
 **Suggested next step:**
-> "After the next real firing, fold the new branch or the wrong-path lesson back
-> into the decision tree — a playbook improves every time someone almost chose
-> the wrong option."
 
-## Notas para el modelo
+> After the next real firing, fold the new branch or the wrong-path lesson back
+> into the decision tree. A playbook improves every time someone almost chose the
+> wrong option.
+
+## Notes for the model
 
 - `/playbook-authoring` (judgment), `/runbook-authoring` (execute), and
-  `/sop-authoring` (company process) are siblings. The routing test is what
-  separates them.
-- `/pentest-playbook-setup` is a **security-test plan**, not an ops playbook.
-  Do not fold pentest methodology into this template.
+  `/sop-authoring` (company process) are siblings. The routing test separates them.
+- `/assurance:pentest-playbook-setup` is a security-test plan. It is not an ops playbook.
 - Do not invent hostnames, vendor tickets, chat channels, or employee names.
-  Use the Acme universe for examples (e.g. "AcmePay public-edge timeout playbook",
-  "RapidEats checkout-queue playbook").
+  Use the Acme universe for examples.
 - Prefer linking versioned diagnose/recover scripts over pasting probe blocks
-  into chat. The playbook names them; the runbook owns the commands.
+  into chat. The playbook names them. The runbook owns the commands.
