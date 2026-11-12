@@ -111,7 +111,7 @@ weeks.
 → Legal checklist + signed delivery request (pack)
 → Security freeze (credential rotation, access revoke) before broad notice
 → Client guide with urgent but calm tone
-→ After pack: /contract-psa (Hito 1 SPMP + 16085) — not part of this playbook
+→ After pack: /contract-psa (Milestone 1 SPMP + 16085) — not part of this playbook
 ```
 
 > DECISION POINT: Who signs the delivery request for the client, and who holds
@@ -182,7 +182,7 @@ Not enough: “we had a friendly call” or “they promised to send a zip.”
 
 | Symptom | Why it is not this playbook | Action |
 |---|---|---|
-| Need SPMP / ISO/IEC/IEEE 16085 plans | Project governance after commercial close | `/contract-psa` Hito 1 → `/software-project-management-plan/authoring` + `/software-risks-authoring-16085` |
+| Need SPMP / ISO/IEC/IEEE 16085 plans | Project governance after commercial close | `/contract-psa` Milestone 1 → `/software-project-management-plan-authoring-ieee16326` + `/software-risks-authoring-ieee16085` |
 | Org-wide risk register | Enterprise GRC, not project handover | `/iso31000` |
 | Incident while production is already on fire | Different class (live outage) | `/runbook-authoring` / IR playbooks |
 | Recurring company hiring or offboarding process | Steady-state HR/ops, not a project event | `/sop-authoring` |

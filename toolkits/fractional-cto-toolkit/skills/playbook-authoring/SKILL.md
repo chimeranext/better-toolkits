@@ -11,7 +11,7 @@ description: >
   (execute-under-pressure steps) and /sop-authoring (steady-state company process).
   NOT for sequential recover/deploy procedures (that is /runbook-authoring), NOT for
   recurring business SOPs (that is /sop-authoring), and NOT for authorized security-test
-  plans (that is /pentest-playbook-setup).
+  plans (that is /assurance:pentest-playbook-setup).
 ---
 
 # Playbook authoring
@@ -141,7 +141,7 @@ Present the deliverables:
 
 - `/playbook-authoring` (judgment), `/runbook-authoring` (execute), and
   `/sop-authoring` (company process) are siblings. The routing test separates them.
-- `/pentest-playbook-setup` is a security-test plan. It is not an ops playbook.
+- `/assurance:pentest-playbook-setup` is a security-test plan. It is not an ops playbook.
 - Do not invent hostnames, vendor tickets, chat channels, or employee names.
   Use the Acme universe for examples.
 - Prefer linking versioned diagnose/recover scripts over pasting probe blocks

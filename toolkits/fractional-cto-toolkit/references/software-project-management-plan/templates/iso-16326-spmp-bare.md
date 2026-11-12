@@ -1,7 +1,7 @@
 <!--
   Bare preventa draft for ISO/IEC/IEEE 16326:2019 SPMP.
   Style: bare outline (empty sections + HTML fill hints).
-  Fill after PSA signature as Milestone 1 (Discovery). Use /software-project-management-plan/authoring.
+  Fill after PSA signature as Milestone 1 (Discovery). Use /software-project-management-plan-authoring-ieee16326.
   Cite clauses only. Do not paste copyrighted standard text.
   When filling: shared/references/engineering-standards/customer-facing-management-docs.md (descriptive executive prose; no STE imperatives).
 -->

@@ -163,7 +163,7 @@ If a required section has no plan, write `N/A` and the reason.
 
 Default companion: **ISO/IEC/IEEE 16085:2021** — see
 `iso-16085-risk-management-plan.md` (inline or linked document). Emit with
-`/software-risks-authoring-16085`.
+`/software-risks-authoring-ieee16085`.
 
 {{risk_management_summary_or_link}}
 

@@ -959,7 +959,7 @@
       ]
     },
     {
-      "name": "requirements-authoring",
+      "name": "requirements-authoring-ieee29148",
       "version": "1",
       "files": [
         "SKILL.md"

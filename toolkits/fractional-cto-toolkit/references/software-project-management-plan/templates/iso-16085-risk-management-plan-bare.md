@@ -1,7 +1,7 @@
 <!--
   Bare preventa draft for ISO/IEC/IEEE 16085:2021 risk management plan (§8.1.2).
   Style: bare outline (empty sections + HTML fill hints).
-  Fill after PSA signature as Milestone 1 (Discovery). Use /software-risks-authoring-16085.
+  Fill after PSA signature as Milestone 1 (Discovery). Use /software-risks-authoring-ieee16085.
   Cite clauses only. Do not paste copyrighted standard text.
   When filling: shared/references/engineering-standards/customer-facing-management-docs.md (descriptive executive prose; no STE imperatives).
 -->
@@ -81,7 +81,7 @@ Linked SPMP: {{spmp_path}}
 <!-- State order rules for treatment. -->
 
 ### 4.4 Risk treatment
-<!-- Point to §8.2 treatment plans. Apply Eisenhower: critical risks need a treatment plan in Milestone 1. -->
+<!-- Point to §8.2 treatment plans. The operator, using the urgent-and-important matrix, requires a treatment plan in Milestone 1 when a risk is both urgent and important. -->
 
 ### 4.5 Risk monitoring and reporting
 <!-- State cadence, history, and triggers. -->

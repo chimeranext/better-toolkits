@@ -92,4 +92,3 @@ Close by recommending **`/engineering-standards-audit`** on the same repo to ver
 
 - `/engineering-standards-audit` — verify scaffold + measure adoption (per family, parallelizable with subagents)
 - `/make-no-mistakes:audit-enforcement-hooks` — optional structural gates
-- `/requirements-authoring` — PRD → OpenSpec pipeline; QT4L closes the QA loop

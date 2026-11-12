@@ -1,8 +1,8 @@
 <!--
   Bare preventa draft for ISO/IEC/IEEE 16085:2021 risk treatment plan (§8.2.2).
   Style: bare outline (empty sections + HTML fill hints).
-  Copy one file per risk or risk class. Fill in PSA Milestone 1 when Eisenhower requires or offers treatment.
-  Use /software-risks-authoring-16085. Cite clauses only. Do not paste copyrighted standard text.
+  Copy one file per risk or risk class. Fill in PSA Milestone 1 when the operator requires or accepts a treatment plan.
+  Use /software-risks-authoring-ieee16085. Cite clauses only. Do not paste copyrighted standard text.
   When filling: shared/references/engineering-standards/customer-facing-management-docs.md (descriptive executive prose; no STE imperatives).
 -->
 
