@@ -90,8 +90,9 @@ write evidence or fix an anomaly:
   `shared/references/engineering-standards/stderr-stream-standards.md`
 - **Jidoka**: stop on anomaly and record boundary + hypothesis before continuing.
   `shared/references/engineering-standards/jidoka.md`
-- **/explain §4.5 (ASD-STE100)**: write the dogfood report with controlled
-  language (short sentences, active voice, one meaning per word).
+- **/explain §4.5 (controlled language)**: write the dogfood report with
+  controlled language (short sentences, active voice, one meaning per word).
+  English → `asd-ste100-lint.py`; Spanish → `esp-ts-lint.py` (see explain §4.5).
 - **Verification chain**: `/verify-evidence` runs the real tool and
   `/evidence-explicit-attribution` formats the evidence (observed vs inferred).
   A dogfood PASS is only as strong as its observable evidence.

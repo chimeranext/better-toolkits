@@ -1,7 +1,7 @@
 # Skill `project-takeover` — protocol SSOT
 
 English ASD-STE100 SSOT. Run
-`make-no-mistakes-toolkit/references/explain/scripts/ste-lint.py` on this file
+`shared/references/asd-ste100/scripts/asd-ste100-lint.py` on this file
 before merge. Engagement chat for Costa Rica may use Spanish. Keep filenames and
 this protocol in English.
 

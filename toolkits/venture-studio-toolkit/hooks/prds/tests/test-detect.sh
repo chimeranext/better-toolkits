@@ -28,18 +28,18 @@ assert_exit() {
 }
 
 GOOD_BODY='## Summary
-- what
-- why
+- Add login endpoint for the auth service
+- Why now: ticket ABC-1 blocks the checkout flow
 
 ## Tracker
 Fixes ABC-1
 - Issue: https://example.com/ABC-1
 
 ## Test plan
-- [x] unit
+- [x] unit tests for login
 
 ## Scope boundaries (out of scope)
-- not this
+- password reset flow
 
 ## Risk / rollout
 N/A
@@ -50,6 +50,19 @@ N/A
 
 BAD_BODY='## Summary
 only summary
+'
+
+STE_BAD_BODY='## Summary
+- Spin up the robust auth flow; then verify and check the seamless login
+
+## Tracker
+Fixes ABC-1
+
+## Test plan
+- [x] unit
+
+## Scope boundaries
+- none
 '
 
 # Non-trigger → allow
@@ -66,7 +79,7 @@ only"'
 assert_exit 0 "bypass flag" --command 'gh pr create --title x  # hook-bypass: prds-body-deferred'
 
 REF_BODY='## Summary
-- what
+- Document the Ref tracker path for devel PRs
 
 ## Tracker
 Ref SCRT-998
@@ -87,7 +100,13 @@ assert_exit 2 "gh pr create --body-file bad" --command "gh pr create --body-file
 printf '%s' "$REF_BODY" >"$TMP"
 assert_exit 0 "gh pr create devel + Ref tracker" --command "gh pr create --base devel --body-file $TMP"
 assert_exit 2 "gh pr create main + Ref only" --command "gh pr create --base main --body-file $TMP"
-printf '%s' "# hook-bypass: prds-body-deferred\n$REF_BODY" >"$TMP"
+printf '%s' "$STE_BAD_BODY" >"$TMP"
+assert_exit 2 "gh pr create STE prose hard fail" --command "gh pr create --body-file $TMP"
+printf '%s' "# hook-bypass: ste-prose-deferred
+$STE_BAD_BODY" >"$TMP"
+assert_exit 0 "STE prose bypass" --command "gh pr create --body-file $TMP"
+printf '%s' "# hook-bypass: prds-body-deferred
+$REF_BODY" >"$TMP"
 assert_exit 0 "body-file hook-bypass" --command "gh pr create --base main --body-file $TMP"
 rm -f "$TMP"
 

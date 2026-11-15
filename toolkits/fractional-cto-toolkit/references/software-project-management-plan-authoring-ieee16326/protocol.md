@@ -64,6 +64,21 @@ companion: ISO/IEC/IEEE 16085:2021.
   Frontmatter keys stay stable (`status: draft` in SSOT. Map to local labels
   only in the client copy if the vault requires it).
 - All `templates/*.md` (bare and fill) must pass
-  `make-no-mistakes-toolkit/references/explain/scripts/ste-lint.py` (ASD-STE100
+  `shared/references/asd-ste100/scripts/asd-ste100-lint.py` (ASD-STE100
   **structural** rules) before merge. That lint does **not** authorize STE
   procedure-imperative voice in the **filled client** SPMP or risk plans.
+- **Filled client copy — language-routed lint:** English CFM →
+  `asd-ste100-lint.py`. Spanish CFM →
+  `shared/references/esp-ts/scripts/esp-ts-lint.py` (ESP-TS;
+  `shared/references/esp-ts/vocabulary.yml`). Both keep descriptive / executive
+  voice (no bare imperatives). See
+  [CFM](../../../../shared/references/engineering-standards/customer-facing-management-docs.md).
+- **PDF export (when the operator asks for a client PDF):** resolve the Pandoc
+  template with
+  `shared/references/pandoc-export/resolve-template.sh --root <vault>` —
+  **prefer the destination brain’s `_templates/export/*.tex` brand pack** (the
+  same look used for client plan drafts). Fall back to seeded/`better.tex` /
+  `~/.config/better-toolkits/pandoc-export/` / shared SSOT only when the vault
+  has no brand template. Do not hard-code only `better.tex` when a vault export
+  template exists. See
+  [`shared/references/pandoc-export/README.md`](../../../../shared/references/pandoc-export/README.md).

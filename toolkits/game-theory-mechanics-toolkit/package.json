@@ -1,6 +1,6 @@
 {
   "name": "game-theory-mechanics-toolkit",
-  "version": "0.1.0",
+  "version": "0.1.8",
   "description": "Game theory and game development toolkit (skills only)",
   "private": true,
   "type": "module",

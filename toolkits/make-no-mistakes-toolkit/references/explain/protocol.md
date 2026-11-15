@@ -43,7 +43,7 @@ If verification is impossible: state `"this was not verified"` at the point wher
 flowchart TD
   start(["/explain [subject | file-ref]"])
   s1["§1 Read argument + available evidence"]
-  s2["§2 Resolve language (SSOT: Spanish prose to user; English identifiers/code/commit/PR/Linear) — see protocol.md §Step -1"]
+  s2["§2 Resolve language (prompt → config → English; identifiers/code/commit/PR/Linear stay repo convention) — see protocol.md §2"]
   s3["§3 Layer 1 — prose (plain, no jargon, no file paths, answers 'what'/'why' — not 'how exactly')"]
   s4["§4 Layer 2 — technical (file:line, real names, minimal snippet proving claim, tables for before/after; no recollections without measurement command)"]
   s5["§5 Non-obvious insight (★ Insight block) — backed by evidence; NOT a recap"]
@@ -67,9 +67,20 @@ flowchart TD
 
 ## §2 Resolve language (SSOT — see `docs/hitl.md`)
 
-Read `make-no-mistakes.config.json` at repo root (see `make-no-mistakes.config.example.json`). If it exists, use its `language`; otherwise default to **English** for all protocol files (per harness SSOT: `docs/hitl.md` — protocol files in English; anti-mojibake; anti-boilerplate; no hidden redirects).
+Resolve the **user-facing prose language** in this order:
 
-The language governs **only the prose layer** (layer 1, this protocol file). Identifiers, code, commit messages, PR titles/bodies, and Linear issue titles follow the destination repo's convention (typically English). A command that writes in GitHub or Linear does not translate that output based on this key.
+1. Language of the user's prompt (and follow-ups for the same request).
+2. Else `make-no-mistakes.config.json` → `language` when present
+   (`make-no-mistakes.config.example.json`).
+3. Else **English**.
+
+Protocol files in the toolkit stay English (harness SSOT: `docs/hitl.md` —
+anti-mojibake; anti-boilerplate; no hidden redirects).
+
+The resolved language governs user-facing prose (both layers under §4.5).
+Identifiers, code, commit messages, PR titles/bodies, and Linear issue titles
+follow the destination repo's convention (typically English). A command that
+writes in GitHub or Linear does not translate that output based on this key.
 
 ---
 
@@ -98,41 +109,60 @@ Reference concrete artifacts:
 
 ---
 
-## §4.5 ASD-STE100 output discipline (before emitting either layer)
+## §4.5 Controlled-language output discipline (before emitting either layer)
 
-The explanation output SHALL follow **controlled-language discipline** (the ASD-STE100 principle), applied to the **output language resolved in §2** — English, Spanish, or any other language. Both layers are consumed by a human AND by downstream agents, so misreading has a cost in every language. ASD-STE100 is the canonical source (English); its *principles* (one word, one meaning; active voice; short sentences; no ambiguity; preserve modality) apply to any language — the mechanics are per-language, the discipline is universal.
+The explanation output SHALL follow **controlled-language discipline**, applied to
+the **output language resolved in §2**. Both layers are consumed by a human AND
+by downstream agents, so misreading has a cost in every language.
+
+**Principles (universal — any language):** one word, one meaning; active voice;
+short sentences; no ambiguity; preserve modality. ASD-STE100 is the English
+canonical source of those principles; ESP-TS is the Spanish mechanical pack.
+The discipline is universal; the linter is per language.
 
 **Structural rules — apply (both layers, in the resolved output language):**
-- Active voice: "The agent deletes the file." not "The file is deleted." (or the equivalent active construction in the output language).
-- No phrasal verbs: "start", not "spin up"; "remove", not "take off".
-- One instruction per sentence; no semicolons; noun clusters ≤3 words.
+- Active voice: "The agent deletes the file." / "El agente elimina el archivo."
+  — not a passive that hides the actor.
+- Prefer single plain verbs over soft phrasal / calque forms.
+- One idea per sentence; avoid semicolon as a clause joiner; noun clusters ≤3 words.
 - Sentence length ≤25 words (descriptions), ≤20 (instructions).
-- No ellipsis: keep subject/verb explicit.
-- **Keep modality**: never promote a hedge to a fact. "The request may have failed" stays as-is.
+- Keep subject/verb explicit.
+- **Keep modality**: never promote a hedge to a fact.
 
 **Lexical rules — direction of travel:**
 - One word, one meaning per document (don't rotate synonyms for the same thing).
-- Prefer the verb over the noun form ("analyze" over "perform an analysis of").
+- Prefer the verb over the noun form.
 - Define domain terms once if not common in the output language.
 
 **Scan checklist (run before emitting):**
 1. Synonym rotation — pick one name, use it every time.
-2. Hedge stacking — state the claim or delete it; never let qualifiers pile up until nothing is asserted.
+2. Hedge stacking — state the claim or delete it; never let qualifiers pile up.
 3. Nominalization — use the verb.
-4. Marketing adjectives (seamless, robust, powerful…) — delete or replace with the measurement.
+4. Marketing adjectives — delete or replace with the measurement.
 5. Run-on sentences — one idea per sentence.
-6. Soft phrasal verbs — use the single plain verb.
+6. Soft / vague verbs — use the single plain verb.
 
-If a rewrite would drop necessary precision (a safety condition, a scope qualifier, a number), keep the longer phrasing and flag it — never silently simplify. Never add a fact the source did not state.
+If a rewrite would drop necessary precision, keep the longer phrasing and flag
+it — never silently simplify. Never add a fact the source did not state.
 
-**Mechanical gate (when available):** run `scripts/ste-lint.py` on the final
-output (semicolons, sentence length, phrasal verbs, nominalization, marketing
-adjectives, synonym rotation, passive voice, compound tenses). It never flags
-hedges/modality (confidence is content). Exit 1 only on hard violations above
-baseline; advisory findings (passive voice, compound tenses) never fail.
-Vendored reference: `references/writing-rules.md` (53-rule summary with
-sources), `examples/before-after.md`, `examples/linter-edge-cases.md` (see
-`STE100-ATTRIBUTION.txt` — MIT, vendored from `danyuchn/asd-ste100-skill`).
+**Mechanical gate (when available) — route by §2 language:**
+
+| §2 language | Linter | Lexical SSOT |
+| --- | --- | --- |
+| English | `shared/references/asd-ste100/scripts/asd-ste100-lint.py` | `shared/references/asd-ste100/vocabulary.yml` |
+| Spanish | `shared/references/esp-ts/scripts/esp-ts-lint.py` | `shared/references/esp-ts/vocabulary.yml` |
+| Other | Apply principles manually | No mechanical gate yet |
+
+Run the matching linter on the final output (write a temp `.md` if needed). Do
+**not** cross-run languages (no English STE lint on Spanish prose; no ESP-TS on
+English). Exit 1 only on hard (`advisory-free`) violations above `--baseline`
+(default 0). Advisory findings never fail the run. Hedges/modality are never
+forced out.
+
+English reference pack under this skill tree: `references/writing-rules.md`,
+`examples/before-after.md`, `examples/linter-edge-cases.md`,
+`STE100-ATTRIBUTION.txt`. Spanish pack:
+`shared/references/esp-ts/` (see its README).
 
 ## §5 Non-obvious insight (`★ Insight` block)
 

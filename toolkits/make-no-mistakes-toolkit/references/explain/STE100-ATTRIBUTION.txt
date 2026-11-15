@@ -4,10 +4,17 @@ The following files were vendored from `github.com/danyuchn/asd-ste100-skill`
 (author: Dustin Yuchen Teng, copyright (c) 2026), distributed under the MIT
 License:
 
-- scripts/ste-lint.py
 - references/writing-rules.md
 - examples/before-after.md
 - examples/linter-edge-cases.md
+
+The structural linter and synonym vocabulary live in shared (paired with
+ESP-TS):
+
+- `shared/references/asd-ste100/scripts/asd-ste100-lint.py`
+- `shared/references/asd-ste100/vocabulary.yml`
+
+See `shared/references/asd-ste100/ASD-STE100-ATTRIBUTION.txt`.
 
 MIT License
 

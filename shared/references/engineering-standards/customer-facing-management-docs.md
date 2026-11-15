@@ -19,11 +19,25 @@ these rules in the engagement working language.
 | --- | --- |
 | SPMP, risk management plan, risk treatment plan, similar signed management plans | Descriptive / executive. Named subjects. |
 | Software requirements specification, architecture description, architecture decision, architecture evaluation | Descriptive / executive. Named subjects. |
-| Runbook, protocol step for an agent, skill procedure | Imperative STE (ASD-STE100) is appropriate |
+| Runbook, protocol step for an agent, skill procedure | Imperative controlled language is appropriate (ASD-STE100 in English; ESP-TS in Spanish) |
 
-Do **not** apply procedure-imperative STE to management-plan body text just
-because toolkit SSOT templates pass `ste-lint.py`. Lint on `templates/*.md` is
-for structural English SSOT. **Filled customer plans** use the voice below.
+Do **not** apply procedure-imperative STE / ESP-TS to management-plan body text
+just because toolkit SSOT templates pass a structural linter. Lint on
+`templates/*.md` is for structural English SSOT. **Filled customer plans** use
+the voice below — descriptive / executive, **no** bare imperatives.
+
+## Mechanical gate (filled customer-facing copy)
+
+Route by the **language of the file the client reads** (engagement working
+language). Do not run the English STE linter on Spanish CFM prose, and do not
+run ESP-TS on English CFM prose.
+
+| Filled CFM language | Linter | Notes |
+| --- | --- | --- |
+| English | `shared/references/asd-ste100/scripts/asd-ste100-lint.py` (ASD-STE100 structural) | Voice stays descriptive; passing STE does not authorize procedure imperatives in CFM |
+| Spanish | `shared/references/esp-ts/scripts/esp-ts-lint.py` (ESP-TS; lexical SSOT `vocabulary.yml`) | Same voice rule: descriptive / executive, no bare imperatives |
+
+ESP-TS = Español Técnico Simplificado. See [`../esp-ts/README.md`](../esp-ts/README.md).
 
 ## Required voice
 
@@ -74,6 +88,7 @@ for structural English SSOT. **Filled customer plans** use the voice below.
 ## Related
 
 - [ODT — Ops Documentation Taxonomy](ops-documentation-taxonomy.md)
+- [ESP-TS — Español Técnico Simplificado](../esp-ts/README.md)
 - Fractional CTO SPMP authoring:
   `toolkits/fractional-cto-toolkit/references/software-project-management-plan-authoring-ieee16326/protocol.md`
 - Requirements pipeline:

@@ -60,7 +60,7 @@ repos:
       - id: trailing-whitespace
       - id: end-of-file-fixer
 
-  # Conventional Commits (CvC)
+  # Conventional Commits (CvC) — format
   - repo: https://github.com/compilerla/conventional-pre-commit
     rev: v4.0.0
     hooks:
@@ -78,6 +78,14 @@ repos:
           - ci
           - chore
           - revert
+
+  # Conventional Commits (CvC) — ASD-STE100 prose (better-toolkits / monorepos
+  # that vendor shared/references/asd-ste100). Local hook example:
+  # - id: asd-ste100-commit-prose
+  #   name: ASD-STE100 prose on commit message
+  #   entry: python3 shared/references/asd-ste100/scripts/prose_gate.py commit-msg
+  #   language: system
+  #   stages: [commit-msg]
 ```
 
 ## Vendored script — `scripts/validate-mermaid.sh`

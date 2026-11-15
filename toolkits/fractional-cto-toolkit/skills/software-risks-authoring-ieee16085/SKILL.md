@@ -30,3 +30,7 @@ Consume:
 - Treatments: **required** for critical (urgent ∧ important); **offer** for only-urgent or only-important; **acceptable** (no §8.2) when neither
 - Link from/to the SPMP §8.3; cite 16085 in SPMP §2 when adopting the companion
 - Client-facing artifacts: no skill/`generated_by`/dogfood attribution in body or frontmatter
+- Customer-facing voice per
+  `shared/references/engineering-standards/customer-facing-management-docs.md`
+  (not STE/ESP-TS procedure imperatives; English filled copy →
+  `asd-ste100-lint.py`, Spanish → `esp-ts-lint.py`)

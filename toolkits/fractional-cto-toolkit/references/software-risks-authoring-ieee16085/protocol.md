@@ -61,10 +61,11 @@ family.
 7. **Language:** toolkit templates are English SSOT. Fill the client copy in the
    engagement working language. Do not copy copyrighted standard prose — clause
    citations only. Keep `templates/*.md` STE100-clean for **structural** SSOT
-   (`ste-lint.py` in make-no-mistakes explain scripts). Filled RM / treatment
+   (`asd-ste100-lint.py` in `shared/references/asd-ste100/scripts`). Filled RM / treatment
    plans use **customer-facing voice**
    (`shared/references/engineering-standards/customer-facing-management-docs.md`):
-   descriptive prose, not STE procedure imperatives; risk “Treatment” /
+   descriptive prose, not STE / ESP-TS procedure imperatives; English filled
+   copy → `asd-ste100-lint.py`, Spanish → `esp-ts-lint.py`; risk “Treatment” /
    “Response” cells say “Mitigation: … / Ongoing monitoring … / Risk accepted
    …” rather than “Mitigate. / Monitor. / Accept.”
 

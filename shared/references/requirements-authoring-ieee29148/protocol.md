@@ -84,27 +84,59 @@ descriptive prose, named subjects, no procedure imperatives. The file carries no
 skill names, no `generated_by`, no dogfood, and no toolkit `ssot:` paths. A table
 cell does not use `[[path|alias]]`.
 
+**Mechanical gates (filled client SRS / checklist / verification), in order:**
+
+1. **EARS** on requirement statements (FR/NFR lines and behavioral acceptance
+   criteria): `shared/references/ears/scripts/ears-lint.py --markdown FILE.md`.
+   English uses `shall` templates; Spanish uses `debe` templates. See
+   [`../ears/README.md`](../ears/README.md).
+2. **BDD** on Given/When/Then (or Dado/Cuando/Entonces) scenarios in
+   `verification.md` (and any embedded scenario blocks):
+   `shared/references/bdd/scripts/bdd-lint.py --markdown FILE.md`. See
+   [`../bdd/README.md`](../bdd/README.md).
+3. **Controlled prose** on the full customer-facing file: English →
+   `shared/references/asd-ste100/scripts/asd-ste100-lint.py`; Spanish →
+   `shared/references/esp-ts/scripts/esp-ts-lint.py` (ESP-TS). Do not
+   cross-run languages.
+
+Do not skip EARS (and BDD when scenarios exist) and rely only on STE/ESP-TS —
+structure first, then voice.
+
 ## Output directory
 
-Preference, when the vault follows `business-brain-template` or was scaffolded
-from it:
+**Default (always try first):** under the engagement vault / business-brain
+layout, write only these three client files:
 
 ```
-plans/<YYYY-MM-DD>-plan-proyecto-<slug>.md          # SPMP, already its own file
 projects/<slug>/requirements/
     ├── software-requirements-specification.md
     ├── requirements-checklist.md
     └── verification.md
 ```
 
-Cross-links are Obsidian wikilinks, `[[plans/...]]` and
-`[[projects/<slug>/requirements/...]]`. Inside a table cell, do not add an
-alias: `[[path]]` only, because `|` splits the cell.
+If the vault also keeps an SPMP plan, it stays outside that folder (for
+example `plans/<YYYY-MM-DD>-plan-proyecto-<slug>.md`). Cross-links are
+Obsidian wikilinks `[[projects/<slug>/requirements/...]]`. Inside a table
+cell, do not add an alias: `[[path]]` only, because `|` splits the cell.
 
-Fallback: a venture may refuse that template, or may not keep a separate brain
-repo. Then write the filled files next to the customer documents that already
-exist. Do not create a directory named `fractional-cto`. If neither the
-template layout nor an existing customer folder is obvious, ask before writing.
+**Fallback:** when there is no brain vault, or `projects/<slug>/requirements/`
+cannot be created there, write the same three files under the customer's
+existing document tree — typically
+`Documentos/<cliente-o-engagement>/projects/<slug>/requirements/` (or next to
+the source draft the user pointed at). Do not invent a `fractional-cto/`
+directory. Ask only when neither the default nor a clear `Documentos/*` folder
+is available.
+
+This skill emits **documents only**. It does not create or edit Linear or
+GitHub Issues. Tracker write-back belongs to later workflow steps after human
+approval of the specification.
+
+**PDF export (optional):** after Markdown gates pass, resolve the Pandoc
+template with
+[`../pandoc-export/resolve-template.sh`](../pandoc-export/resolve-template.sh)
+(**vault `_templates/export/*.tex` first** — the engagement brand pack when
+present; then seeded/`better.tex` / setup cache / shared SSOT). Standalone CLI;
+no Obsidian required. See [`../pandoc-export/README.md`](../pandoc-export/README.md).
 
 ## Skill flow
 
@@ -129,9 +161,11 @@ Confirm with the user the minimum needed to write:
 
 Use `srs-bare-template.md` as the section shell. Fill each section per 29148:
 
-- Verifiable requirements: `El sistema debe <observable behavior>` plus an
-  acceptance criterion per requirement. When the engagement language is English,
-  the form is `The system shall`.
+- Verifiable requirements in **EARS** form: Spanish
+  `El sistema debe <observable behavior>` (or Cuando/Mientras/Si/Donde …);
+  English `The system shall …` (or When/While/If/Where …). Run
+  `ears-lint.py` on those lines before the CFM prose linter. Plus an
+  acceptance criterion per requirement.
 - No implementation jargon in §3.2 (functional). Technical decisions go to §3.5
   (Design and Implementation) and to OpenSpec `design.md`.
 - Each important functional requirement carries an ID (for example `FR-001`) for
@@ -187,7 +221,8 @@ the evidence. Paths of the files. Next action (step 5).
 ## Final checklist
 
 - [ ] Specification written from the bare template (830 structure), version 0.1
-- [ ] Requirements with an ID, an obligation word in the engagement language, and an acceptance criterion (29148)
+- [ ] Requirements with an ID, EARS form (`ears-lint.py` PASS), obligation word in the engagement language, and an acceptance criterion (29148)
+- [ ] Filled client file passes language-routed STE/ESP-TS after EARS
 - [ ] Checklist unique / atomic / verifiable / traceable / unambiguous / implementation-free
 - [ ] Verification table Requirement × Method × Evidence filled
 - [ ] Human review of the specification before deriving OpenSpec

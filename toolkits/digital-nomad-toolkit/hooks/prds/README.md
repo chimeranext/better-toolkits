@@ -18,6 +18,7 @@ on agent shell tools that push or write PR bodies.
 | Tracker ticket link | **Fixes/Closes/Resolves** by default; **`Ref TEAM-N`** allowed in ## Tracker when `--base` is an integration branch (`devel`, `stage`, …) or on `gh pr edit` when the open PR targets one |
 | `git push` with open PR for branch | **Block** if live PR body fails the same check (`gh pr view`) |
 | `git push` with **no** PR yet | **Allow** (PRDS progressive-push / draft workflow) |
+| After sections pass | **ASD-STE100** hard prose gate on the body (`prose_gate.py`) |
 | Unrelated shell | Allow |
 
 Soft warns (stderr only): PR title shape, diff ≳ 400 lines.
@@ -26,7 +27,11 @@ Soft warns (stderr only): PR title shape, diff ≳ 400 lines.
 
 - `FCTO_DISABLE_PRDS_HOOK=1`
 - `.claude/config/prds-hooks.json` → `{"enforce_prds": false}`
-- One-shot: `# hook-bypass: prds-body-deferred` in the shell command **or** at the top of the PR body (`--body-file`)
+- STE prose: `FCTO_DISABLE_STE_PROSE_HOOK=1` or
+  `.claude/config/prds-hooks.json` → `{"enforce_ste_prose": false}`
+- One-shot: `# hook-bypass: prds-body-deferred` or
+  `# hook-bypass: ste-prose-deferred` in the shell command **or** at the top of
+  the PR body (`--body-file`)
 
 ## Install
 

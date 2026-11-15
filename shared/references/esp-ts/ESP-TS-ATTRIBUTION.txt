@@ -1,0 +1,15 @@
+ESP-TS (Español Técnico Simplificado) materials — attribution
+
+Vendored from https://github.com/esadrian/este-skill (v0.1.0, `spec/`):
+
+- vocabulary.yml
+- principles.md
+- rules.md
+- examples/before-after.md
+- LICENSE (MIT)
+
+The Python linter `scripts/esp-ts-lint.py` is original to better-toolkits.
+It mirrors the structural mechanism of `asd-ste100-lint.py` (ASD-STE100) and loads
+`vocabulary.yml` as the lexical SSOT for synonym / false-friend checks.
+
+MIT License text: see LICENSE in this directory.

@@ -47,6 +47,8 @@ Frontmatter triggers unchanged.
 
 ## Defaults
 
-- Customer-facing specification, checklist, and verification: no skill/`generated_by`/dogfood attribution; descriptive executive voice per `shared/references/engineering-standards/customer-facing-management-docs.md` (not STE procedure imperatives)
+- **Documents only** — write `software-requirements-specification.md`, `requirements-checklist.md`, and `verification.md`. Do not create or edit Linear / GitHub Issues from this skill.
+- **Output path:** default `projects/<slug>/requirements/` in the engagement vault; fallback `Documentos/<…>/projects/<slug>/requirements/` (or next to the user draft). See protocol.
+- Customer-facing specification, checklist, and verification: no skill/`generated_by`/dogfood attribution; descriptive executive voice per `shared/references/engineering-standards/customer-facing-management-docs.md` (not STE/ESP-TS procedure imperatives). Gates in order: EARS → BDD (when scenarios exist) → English `asd-ste100-lint.py` / Spanish `esp-ts-lint.py`. Optional PDF: resolve via `shared/references/pandoc-export/resolve-template.sh` (vault brand `_templates/export/*.tex` first; `better.tex` only as fallback).
 - The filled file says the engineering standards index is implemented as added value of the deliverable. It does not say the client already operates them, and it does not attribute them to an internal team codename. It does not list four code practices as that index.
 - Filled body in the engagement working language. Default Spanish: Preparado por, Versión, debe / no debe / debería / puede. The bare template stays English.

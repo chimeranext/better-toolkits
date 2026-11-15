@@ -2,13 +2,13 @@
   {
     "plugin": "better-toolkits-bootstrap",
     "dir": "./shared/bootstrap",
-    "version": "0.2.10",
+    "version": "0.2.15",
     "category": "workflow"
   },
   {
     "plugin": "make-no-mistakes",
     "dir": "make-no-mistakes-toolkit",
-    "version": "1.39.25",
+    "version": "1.39.30",
     "category": "workflow"
   },
   {
@@ -38,7 +38,7 @@
   {
     "plugin": "fractional-cto-toolkit",
     "dir": "fractional-cto-toolkit",
-    "version": "1.4.9",
+    "version": "1.4.20",
     "category": "productivity"
   },
   {

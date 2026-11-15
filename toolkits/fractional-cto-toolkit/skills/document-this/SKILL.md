@@ -29,6 +29,11 @@ document-this → decides the type → routes to the matching authoring skill
 Questions and working notes are in **English**. The generated document follows the
 engagement's working language (English default, Spanish for Costa Rica engagements).
 
+**Mechanical gate (emitted doc):** English →
+`shared/references/asd-ste100/scripts/asd-ste100-lint.py`; Spanish →
+`shared/references/esp-ts/scripts/esp-ts-lint.py`. Route by the language of the
+file written. Do not cross-run languages.
+
 ## Flujo del skill
 
 ### Paso 1 — Load the taxonomy

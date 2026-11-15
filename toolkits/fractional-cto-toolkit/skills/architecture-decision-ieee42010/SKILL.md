@@ -9,5 +9,5 @@ Read and follow [`references/architecture-decision-ieee42010/protocol.md`](../..
 
 ## Defaults
 
-- Customer-facing decision: no skill/`generated_by`/dogfood attribution; descriptive executive voice per `shared/references/engineering-standards/customer-facing-management-docs.md` (not STE procedure imperatives)
+- Customer-facing decision: no skill/`generated_by`/dogfood attribution; descriptive executive voice per `shared/references/engineering-standards/customer-facing-management-docs.md` (not STE/ESP-TS procedure imperatives; English → `asd-ste100-lint.py`, Spanish → `esp-ts-lint.py`)
 - Heading order stays the MADR order. The filled client file writes those headings in the engagement working language.

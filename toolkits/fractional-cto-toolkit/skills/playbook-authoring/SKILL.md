@@ -42,6 +42,11 @@ Skill questions and working notes stay in **English**. Generated playbooks follo
 the engagement language. Default English for public ops docs. Spanish for Costa
 Rica engagements. Ask if unclear.
 
+**Mechanical gate (emitted playbook):** English →
+`shared/references/asd-ste100/scripts/asd-ste100-lint.py`; Spanish →
+`shared/references/esp-ts/scripts/esp-ts-lint.py`. Procedure imperatives are
+allowed in ops playbooks. Do not cross-run languages.
+
 ## Output directory
 
 Resolve `{playbooks-dir}` in this order:

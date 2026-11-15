@@ -45,6 +45,19 @@ A brief passes only if it contains all four markers, in order:
 Stubs ("TBD", "TODO", `N/A` everywhere, empty bullets, placeholder paths) fail
 the substantive check — a brief with headers but no content is NOT accepted.
 
+## Acceptance Criteria — EARS for behavioral lines
+
+Behavioral AC (system obligations) use **EARS** before write-back:
+
+- English: `When` / `While` / `If` / `Where` / ubiquitous `The <system> shall …`
+- Spanish: `Cuando` / `Mientras` / `Si` / `Donde` / ubiquitous `El <sistema> debe …`
+
+Mechanical gate: `shared/references/ears/scripts/ears-lint.py` (also invoked
+from `detect.py` on AC candidates). Informal bullets ("unit tests pass",
+"docs updated") are **not** EARS candidates. Pipeline for requirement prose:
+**EARS →** ASD-STE100 (EN) / ESP-TS (ES). Practice note:
+[Kiro Specs best practices](https://kiro.dev/docs/specs/best-practices/).
+
 ## Deterministic enforcement (harness-agnostic, MANDATORY)
 
 El gate **no es opt-in**: se dispara siempre que se CREA un issue (Linear MCP
@@ -76,3 +89,4 @@ No existe opt-out por config. Único bypass explícito y logueado:
 - [PRDS](prds.md) — PR body standards (Summary/Tracker/Test plan/Scope). BIB governs the **issue**; PRDS governs the **PR**.
 - [QA traceability (QT4L)](qa-traceability-four-layers.md) — scenario → verification in `tasks.md`.
 - Fill-in template + markers: `toolkits/make-no-mistakes-toolkit/templates/bilingual-issue-brief.md`, `docs/bilingual-format-standard.md`.
+- EARS pack: [`../ears/README.md`](../ears/README.md).

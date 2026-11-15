@@ -129,7 +129,12 @@ All contracts include a **Section 0: Shared Risk Model** with compensation varia
 - Takeover pack: playbook + Diátaxis client guide + two legal templates (`{{placeholders}}`). Bares for apprentices
 - Requirements pipeline: `software-requirements-specification.md`. `/opsx-*` starts in the Linear/OPSX pipeline
 - 6 engineering standards bootstrap + **OST** when using an OpenSpec store
-- Bilingual engagement emits (Spanish primary for CR). English toolkit SSOT + STE100 where required
+- Bilingual engagement emits (Spanish primary for CR). English toolkit SSOT +
+  `asd-ste100-lint.py`; Spanish emits + `esp-ts-lint.py`. Requirements /
+  behavioral issue AC: EARS first (`shared/references/ears/`), then STE/ESP-TS.
+  Client PDFs (SPMP, SRS, …): vault `_templates/export/*.tex` first via
+  `shared/references/pandoc-export/resolve-template.sh`; `better.tex` only as
+  fallback / new-brain seed.
 - Costa Rica legal framework notes (Ley 8968, Codigo Penal, Camara de Comercio arbitration)
 - 7-threat risk matrix
 - Interactive SPA assessment wizard

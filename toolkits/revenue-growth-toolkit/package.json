@@ -1,7 +1,7 @@
 {
   "name": "revenue-growth-toolkit",
-  "version": "0.1.0",
-  "description": "Revenue growth toolkit — fuses AAARRR funnel/flywheel strategy (from aaarrr-flywheel) with multi-network paid-media execution (Meta/TikTok/LinkedIn/Google/YouTube/Spotify) via the shared social-media-ads-mcp MCP; PostHog (self-hosted) analytics; Python derived metrics.",
+  "version": "0.1.8",
+  "description": "Revenue growth toolkit \u2014 fuses AAARRR funnel/flywheel strategy (from aaarrr-flywheel) with multi-network paid-media execution (Meta/TikTok/LinkedIn/Google/YouTube/Spotify) via the shared social-media-ads-mcp MCP; PostHog (self-hosted) analytics; Python derived metrics.",
   "type": "module",
   "private": true,
   "scripts": {

@@ -23,7 +23,7 @@ A decision that is not an architecture decision uses the minimal shape and omits
 5. **Record consequences** under Decision Outcome, as Good and Bad. More Information holds the rest of the rationale: evidence, when to revisit, and links.
 6. **Trace the decision to the description** in YAML front matter, and repeat that trace in More Information. The description indexes this file. This file does not replace the description.
 7. **Check the shape.** If `jbang` is on the path, run madrlint against an English structural copy. If it is not, check the heading order and the 2022 YAML by hand. Do not add a JDK to CI for this check. Do not put English headings into the file the client reads when the engagement working language is not English.
-8. **Write the filled client file in customer-facing voice.** See [CFM — Customer-facing management docs](../../../../shared/references/engineering-standards/customer-facing-management-docs.md). Descriptive executive prose. No STE procedure imperatives. No skill names, `generated_by`, dogfood, or toolkit `ssot:` paths in the file the client reads.
+8. **Write the filled client file in customer-facing voice.** See [CFM — Customer-facing management docs](../../../../shared/references/engineering-standards/customer-facing-management-docs.md). Descriptive executive prose. No STE / ESP-TS procedure imperatives. Lint: English → `asd-ste100-lint.py`; Spanish → `shared/references/esp-ts/scripts/esp-ts-lint.py`. No skill names, `generated_by`, dogfood, or toolkit `ssot:` paths in the file the client reads.
 
 ## Headings
 

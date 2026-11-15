@@ -150,7 +150,7 @@ For each SRD task (or group of related tasks):
    - Each task as a checkbox that `/opsx:apply` can execute
 
 5. **Create/link tracker issue** — apply [`references/tracker-selection.md`](../references/tracker-selection.md):
-   - **Linear-mapped:** create/link via Linear MCP (`save_issue`) with title, project (from `linear-setup.json`), priority, labels, description; link the OpenSpec change path. If the issue exists, add a comment with the change reference.
+   - **Linear-mapped:** create/link via Linear MCP (`save_issue`) with title, project (from `linear-setup.json`), priority, labels, description; link the OpenSpec change path. If the issue exists, add a comment with the change reference. Behavioral Acceptance Criteria in the description MUST pass EARS (`shared/references/ears/scripts/ears-lint.py --markdown`) before `save_issue` / `gh issue create|edit` — same gate as `spike-recommend` / BIB `detect.py`.
    - **GitHub-native or `gh` fallback:** `gh issue create` / link in the owning repo with the same content when selection resolves to GitHub per the SSOT.
    - Cross-reference existing tracker issues (search by title/description match) before creating duplicates.
 
@@ -383,7 +383,7 @@ Stack-agnostic heuristics to check:
 
 ### Acceptance Criteria
 
-{Checkboxes. Each must be independently testable. Derive from the spec content.}
+{Checkboxes. Each must be independently testable. Derive from the spec content. Behavioral system obligations use EARS (`When/While/If/Where … shall` / `Cuando/Mientras/Si/Donde … debe`); informal checks stay plain. Gate: `ears-lint.py --markdown` before tracker write.}
 
 - [ ] {criterion}
 - [ ] {criterion}

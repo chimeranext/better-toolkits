@@ -1,6 +1,6 @@
 {
   "name": "3d-graphics-cad-toolkit",
-  "version": "0.1.0",
+  "version": "0.1.8",
   "description": "3D graphics and CAD toolkit (skills only)",
   "private": true,
   "type": "module",

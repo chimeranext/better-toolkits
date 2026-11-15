@@ -5,16 +5,20 @@ Checks only rules verifiable without ASD's dictionary. Deliberately never
 flags hedges or modality (may/might/could): the skill treats confidence as
 content, and a linter that pressures hedges out would rewrite claims.
 
+Synonym-rotation groups load from ../vocabulary.yml (lexical SSOT). Same
+pattern as ESP-TS `esp-ts-lint.py` + its vocabulary.yml.
+
 Usage:
-    ste-lint.py FILE [FILE ...]
-    echo "text" | ste-lint.py [--json]
-    ste-lint.py --baseline 5 FILE      # pass unless hard violations exceed 5
-    ste-lint.py --disable passive-voice,present-perfect FILE
-    ste-lint.py --selftest
+    asd-ste100-lint.py FILE [FILE ...]
+    echo "text" | asd-ste100-lint.py [--json]
+    asd-ste100-lint.py --baseline 5 FILE      # pass unless hard violations exceed 5
+    asd-ste100-lint.py --disable passive-voice,present-perfect FILE
+    asd-ste100-lint.py --selftest
 
 Exit 1 when hard ("advisory-free") violations exceed the baseline (default 0).
 Advisory findings (passive voice, compound tenses) never fail the run.
-Exit 2 on a usage error (unknown flag, bad value, unknown rule, unreadable file).
+Exit 2 on a usage error (unknown flag, bad value, unknown rule, unreadable
+file, or missing PyYAML / vocabulary.yml).
 """
 import argparse
 import bisect
@@ -25,6 +29,13 @@ import os
 import re
 import sys
 import tempfile
+from pathlib import Path
+
+try:
+    import yaml
+except ImportError:
+    print("PyYAML required: pip install pyyaml", file=sys.stderr)
+    sys.exit(2)
 
 # ponytail: regex heuristics, not a parser. No noun-cluster rule — needs POS
 # tagging to avoid constant false positives; add spaCy-backed rule if ever needed.
@@ -102,21 +113,37 @@ RULES = [
      "point (then keep and flag)."),
 ]
 
+VOCAB_PATH = Path(__file__).resolve().parent.parent / "vocabulary.yml"
+
+
+def load_synonym_groups(path=VOCAB_PATH):
+    """Load synonym-rotation groups from vocabulary.yml."""
+    try:
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    except OSError as e:
+        print(f"cannot read vocabulary {path}: {e}", file=sys.stderr)
+        sys.exit(2)
+    if not isinstance(data, dict):
+        print(f"vocabulary {path} is not a mapping", file=sys.stderr)
+        sys.exit(2)
+    groups = []
+    for entry in data.get("synonym_groups") or []:
+        if isinstance(entry, dict):
+            members = entry.get("members") or []
+        else:
+            members = entry
+        cleaned = tuple(str(m).strip() for m in members if str(m).strip())
+        if len(cleaned) > 1:
+            groups.append(cleaned)
+    if not groups:
+        print(f"vocabulary {path} has no synonym_groups", file=sys.stderr)
+        sys.exit(2)
+    return groups
+
+
 # One word, one meaning: groups of verbs commonly rotated for the same action.
-# Only pairs where the members are genuinely interchangeable — error/fault/failure
-# are distinct concepts and stay out.
-SYNONYM_GROUPS = [
-    ("check", "verify", "confirm", "validate"),
-    ("delete", "remove", "erase"),
-    ("start", "launch", "begin", "initiate"),
-    ("stop", "halt", "terminate"),
-    ("show", "display"),
-    ("use", "utilize", "employ"),
-    ("fix", "repair", "correct"),
-    ("send", "transmit"),
-    ("get", "retrieve", "fetch", "obtain"),
-    ("change", "modify", "alter"),
-]
+# Lexical SSOT: ../vocabulary.yml (not the ASD dictionary).
+SYNONYM_GROUPS = load_synonym_groups()
 
 MAX_WORDS = 25  # descriptions cap; instructions cap is 20 but undetectable
 # without context
@@ -1191,7 +1218,7 @@ def _non_negative_int(value):
 
 def main(argv):
     parser = argparse.ArgumentParser(
-        prog="ste-lint.py", allow_abbrev=False,
+        prog="asd-ste100-lint.py", allow_abbrev=False,
         description="Deterministic linter for the structural STE rules. "
                     "Reads stdin when no FILE is given.")
     parser.add_argument("paths", nargs="*", metavar="FILE")

@@ -14,10 +14,10 @@
 | **4. CPS** | Categorized Public Surface | How public barrels export | [dsms-ifs-cps.md](dsms-ifs-cps.md) §3 |
 | **5. CCC** | Code Comment Convention | Meaningful non-obvious comments; no redundant "how" comments | [code-comment-convention.md](code-comment-convention.md) |
 | **6. CLH** | Copyright/License Header | Headers per repo LICENSE.md; not a global rule | [copyright-license-header.md](copyright-license-header.md) |
-| **7. CvC** | Conventional Commits | Commit message format `type(scope): description`; machine-readable history and changelog generation | [conventional-commits.md](conventional-commits.md) |
+| **7. CvC** | Conventional Commits | Commit message format `type(scope): description`; English subject/body pass ASD-STE100 (`prose_gate.py`); machine-readable history and changelog generation | [conventional-commits.md](conventional-commits.md) |
 | **8. CLG** | Commit Logic Groups | Commit intermediate work in semantic groups; each commit is self-contained and reviewable | [commit-logic-groups.md](commit-logic-groups.md) |
 | **9. PCH** | Pre-Commit Hooks | Vendored canonical pre-commit config + shared Mermaid validator; hooks enforced repo-wide | [pre-commit-hooks.md](pre-commit-hooks.md) |
-| **10. PRDS** | Pull Request Description Standards | PR body + reviewable size | [prds.md](prds.md) |
+| **10. PRDS** | Pull Request Description Standards | PR body + reviewable size; English body prose passes ASD-STE100 (`prose_gate.py` via `shared/hooks/prds`) | [prds.md](prds.md) |
 | **11. BrS** | Branching Strategy | Branches, naming, protection | [branching-strategy.md](branching-strategy.md) |
 | **12. WTD** | Worktree Discipline | Worktrees are transient and never committed. Parity (1 issue = 1 worktree = 1 PR) is an association policy, not persistence. | [worktree-discipline.md](worktree-discipline.md) |
 | **13. Jidoka** | Stop-on-Anomaly | Stop on any anomaly; record the owning boundary and a root-cause hypothesis before continuing. Never "see if the rest works" after a failure. | [jidoka.md](jidoka.md) |
@@ -43,7 +43,12 @@
 | **33. BIB** | Bilingual Issue Brief | Every issue (GitHub o Linear) redactado en formato Bilingual ANTES de abrirlo — Human Layer + Agent Layer (HUMAN LAYER / AGENT LAYER / Acceptance Criteria / Context Files). Gate determinístico `shared/hooks/bilingual/detect.py`. | [bilingual-issue-brief.md](bilingual-issue-brief.md) |
 | **34. TAS** | Test Assertion Standards | Aserciones de contrato e invariantes, no snapshots: nunca conteos literales de registros que crecen; derivar del source of truth (p.ej. `NPM_PACKAGES.length`). | [test-assertion-standards.md](test-assertion-standards.md) |
 | **35. DPC** | Dependency Caching | Universal pattern (lockfile + frozen install + cached store). Canonical manager per language (pnpm for Node/JS). CI caches store by lockfile hash; local uses per-user store. | [dependency-caching.md](dependency-caching.md) |
-| **36. CFM** | Customer-Facing Management Docs | SPMP / 16085 risk plans and similar signed management docs: descriptive executive voice for the customer representative — not STE procedure imperatives for agents. Complements ODT. | [customer-facing-management-docs.md](customer-facing-management-docs.md) |
+| **36. CFM** | Customer-Facing Management Docs | SPMP / 16085 risk plans and similar signed management docs: descriptive executive voice for the customer representative — not STE/ESP-TS procedure imperatives for agents. English CFM → `asd-ste100-lint.py`; Spanish CFM → `esp-ts-lint.py`. Complements ODT. | [customer-facing-management-docs.md](customer-facing-management-docs.md) |
+| **37. ESP-TS** | Español Técnico Simplificado | Controlled Spanish for Spanish customer-facing copy (and Spanish procedures when applicable). Lexical SSOT `shared/references/esp-ts/vocabulary.yml`; mechanical gate `esp-ts-lint.py`. Complements ASD-STE100 for English. | [../esp-ts/README.md](../esp-ts/README.md) |
+| **38. ASD-STE100** | ASD Simplified Technical English (structural gate) | English controlled-language linter + synonym vocabulary in shared (paired with ESP-TS). Lexical SSOT `shared/references/asd-ste100/vocabulary.yml`; mechanical gate `asd-ste100-lint.py`. Not the proprietary ASD dictionary. | [../asd-ste100/README.md](../asd-ste100/README.md) |
+| **39. EARS** | Easy Approach to Requirements Syntax | Structure gate for requirement statements and behavioral issue AC (`shall` / `debe`). Run **before** STE/ESP-TS. Pack `shared/references/ears/`; mechanical gate `ears-lint.py`; BIB `detect.py` lints AC candidates. | [../ears/README.md](../ears/README.md) |
+| **40. BDD-assert** | BDD scenario lint | Given/When/Then (Dado/Cuando/Entonces) structure for verification / dogfood / OpenSpec scenarios. Pack `shared/references/bdd/`; mechanical gate `bdd-lint.py`. After EARS, before STE/ESP-TS when scenarios are present. | [../bdd/README.md](../bdd/README.md) |
+| **41. Pandoc-export** | Vault-first PDF export | Client PDFs: engagement `_templates/export/*.tex` first; neutral `better.tex` as SSOT/fallback (+ setup cache). Resolver `resolve-template.sh`. | [../pandoc-export/README.md](../pandoc-export/README.md) |
 
 The **clean code quartet** is DSMS + IFS + CPS + PRDS. BrS + WTD govern branching
 and worktree hygiene. QT4L and **OST** (when the client uses an OpenSpec store)

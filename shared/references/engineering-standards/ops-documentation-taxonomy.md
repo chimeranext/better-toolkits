@@ -117,7 +117,8 @@ Operational docs are classified into three types before authoring:
 
 Signed project management and risk plans are **customer-facing management
 documents**. They use descriptive / executive voice for the customer
-representative — not STE procedure imperatives. See **CFM**:
+representative — not STE / ESP-TS procedure imperatives. English CFM →
+`asd-ste100-lint.py`; Spanish CFM → `esp-ts-lint.py`. See **CFM**:
 [customer-facing-management-docs.md](customer-facing-management-docs.md).
 
 ## Navigation vs content

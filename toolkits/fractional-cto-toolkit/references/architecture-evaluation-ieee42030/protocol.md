@@ -16,7 +16,7 @@ After `projects/<slug>/architecture/architecture-description.md` exists, and onl
 2. **Use concerns as the criteria.** Take them from the description. Do not invent a concern that the description does not frame.
 3. **Record the evidence examined**, the findings, and what must change in the description or in an `architecture-decision-{NNNN}-{title}.md`.
 4. **Point back at the description.** Do not copy the views into this file.
-5. **Write the filled client file in customer-facing voice.** See [CFM — Customer-facing management docs](../../../../shared/references/engineering-standards/customer-facing-management-docs.md). Descriptive executive prose in the engagement working language. No STE procedure imperatives. No skill names, `generated_by`, dogfood, or toolkit `ssot:` paths in the file the client reads.
+5. **Write the filled client file in customer-facing voice.** See [CFM — Customer-facing management docs](../../../../shared/references/engineering-standards/customer-facing-management-docs.md). Descriptive executive prose in the engagement working language. No STE / ESP-TS procedure imperatives. Lint: English → `asd-ste100-lint.py`; Spanish → `shared/references/esp-ts/scripts/esp-ts-lint.py`. No skill names, `generated_by`, dogfood, or toolkit `ssot:` paths in the file the client reads.
 
 ## Artifact
 

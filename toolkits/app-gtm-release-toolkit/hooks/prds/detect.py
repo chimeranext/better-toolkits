@@ -16,6 +16,8 @@ Policy (v1):
     (Summary, Tracker, Test plan, Scope boundaries) with non-empty content.
   - Tracker: `Fixes|Closes|Resolves TICKET` (default). PRs targeting integration
     branches (`devel`, `stage`, …) may use `Ref TICKET` in ## Tracker instead.
+  - After sections pass: ASD-STE100 hard prose gate on the body
+    (`shared/references/asd-ste100/scripts/prose_gate.py`).
   - `git push` with an open PR for the current branch → same body check via
     `gh pr view`. Progressive push before any PR exists → allow (PRDS draft workflow).
   - Soft signals (title shape, ~400-line size) are warnings on stderr but do not deny.
@@ -24,13 +26,17 @@ Opt-out (checked by adapters):
   FCTO_DISABLE_PRDS_HOOK=1
   CLAUDE_DISABLE_PLUGIN_HOOKS=1
   .claude/config/prds-hooks.json → {"enforce_prds": false}
+  FCTO_DISABLE_STE_PROSE_HOOK=1
+  .claude/config/prds-hooks.json → {"enforce_ste_prose": false}
 
 Bypass (explicit, logged as finding):
   # hook-bypass: prds-body-deferred
+  # hook-bypass: ste-prose-deferred
 """
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import os
 import re
@@ -40,6 +46,74 @@ import sys
 from pathlib import Path
 
 BYPASS = re.compile(r"#\s*hook-bypass:\s*prds-body-deferred\b", re.I)
+STE_BYPASS = re.compile(r"#\s*hook-bypass:\s*ste-prose-deferred\b", re.I)
+
+_PROSE_GATE = None
+
+
+def _find_prose_gate_path() -> Path | None:
+    """Locate prose_gate.py from shared/hooks or a vendored toolkit hooks tree."""
+    here = Path(__file__).resolve()
+    # shared/hooks/prds → shared/references/asd-ste100/...
+    direct = (
+        here.parents[2] / "references" / "asd-ste100" / "scripts" / "prose_gate.py"
+    )
+    if direct.is_file():
+        return direct
+    for parent in here.parents:
+        cand = (
+            parent / "shared" / "references" / "asd-ste100" / "scripts" / "prose_gate.py"
+        )
+        if cand.is_file():
+            return cand
+    return None
+
+
+def _prose_gate():
+    """Lazy-load shared ASD-STE100 prose_gate (CvC/PRDS)."""
+    global _PROSE_GATE
+    if _PROSE_GATE is not None:
+        return _PROSE_GATE
+    gate_path = _find_prose_gate_path()
+    if gate_path is None:
+        _PROSE_GATE = False
+        return _PROSE_GATE
+    spec = importlib.util.spec_from_file_location("asd_ste100_prose_gate", gate_path)
+    if spec is None or spec.loader is None:
+        _PROSE_GATE = False
+        return _PROSE_GATE
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    _PROSE_GATE = mod
+    return _PROSE_GATE
+
+
+def ste_prose_enabled() -> bool:
+    if os.environ.get("FCTO_DISABLE_STE_PROSE_HOOK", "").strip() in {
+        "1", "true", "yes",
+    }:
+        return False
+    cfg = Path.cwd() / ".claude" / "config" / "prds-hooks.json"
+    if cfg.is_file():
+        try:
+            data = json.loads(cfg.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            data = {}
+        if data.get("enforce_ste_prose", True) is False:
+            return False
+    return True
+
+
+def ste_prose_deny(body: str) -> str | None:
+    """Return ASD-STE100 deny reason for PR body, or None."""
+    if not ste_prose_enabled():
+        return None
+    if STE_BYPASS.search(body or ""):
+        return None
+    gate = _prose_gate()
+    if not gate:
+        return None
+    return gate.check_markdown(body, context="PRDS body")
 
 # Triggers
 GIT_PUSH = re.compile(r"(^|[\s;|&])git\s+push\b", re.I)
@@ -244,6 +318,9 @@ def evaluate(command: str, cwd: str | None = None) -> str | None:
         missing = missing_prds_sections(body, integration_base=integration)
         if missing:
             return deny_message(missing, "gh pr create|edit body")
+        ste_reason = ste_prose_deny(body)
+        if ste_reason:
+            return ste_reason
         return None
 
     if GIT_PUSH.search(command):
@@ -261,6 +338,9 @@ def evaluate(command: str, cwd: str | None = None) -> str | None:
         if missing:
             url = pr.get("url") or "current PR"
             return deny_message(missing, f"git push while PR exists ({url})")
+        ste_reason = ste_prose_deny(body)
+        if ste_reason:
+            return ste_reason
         # Soft size warn
         try:
             size = int(pr.get("additions") or 0) + int(pr.get("deletions") or 0)

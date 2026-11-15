@@ -31,8 +31,12 @@ first and let the user choose the template id (default: `iso-16326-spmp`).
 - Org-wide risk analysis (ISO 31000) is a separate GRC choice — `/iso31000`
 - Customer-facing SPMP: no skill/`generated_by`/dogfood attribution; descriptive
   executive voice per
-  `shared/references/engineering-standards/customer-facing-management-docs.md` (not STE
-  procedure imperatives)
+  `shared/references/engineering-standards/customer-facing-management-docs.md`
+  (not STE/ESP-TS procedure imperatives; English filled copy →
+  `asd-ste100-lint.py`, Spanish → `esp-ts-lint.py`)
+- Client PDF (when requested): `shared/references/pandoc-export/resolve-template.sh`
+  — **vault `_templates/export/*.tex` brand pack first** (same look as client plan
+  drafts); `better.tex` / setup cache only as fallback
 
 ## Alias
 

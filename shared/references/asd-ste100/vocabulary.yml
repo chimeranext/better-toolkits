@@ -1,0 +1,24 @@
+# STE structural synonym groups for asd-ste100-lint.py — lexical SSOT
+# One word, one meaning: members of a group are interchangeable for the same
+# action. First occurrence in a document is the keeper; later members flag
+# synonym-rotation. Not the ASD-STE100 dictionary (~900 words) — that is not
+# redistributed. Extend per project when the engagement needs domain terms.
+
+version: "0.1.0"
+
+meta:
+  note: >
+    Only pairs where the members are genuinely interchangeable.
+    Distinct concepts (error / fault / failure) stay out.
+
+synonym_groups:
+  - [check, verify, confirm, validate]
+  - [delete, remove, erase]
+  - [start, launch, begin, initiate]
+  - [stop, halt, terminate]
+  - [show, display]
+  - [use, utilize, employ]
+  - [fix, repair, correct]
+  - [send, transmit]
+  - [get, retrieve, fetch, obtain]
+  - [change, modify, alter]

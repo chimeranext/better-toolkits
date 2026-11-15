@@ -1,7 +1,8 @@
 <!--
   Fill SSOT: breach / final demand notice (counsel-only send).
-  English ASD-STE100. Engagement emit may be Spanish for Costa Rica.
-  Placeholders {{DOUBLE_CURLY}}. Always DRAFT until counsel approves.
+  English structural SSOT: asd-ste100-lint.py.
+  Engagement emit in working language — English → asd-ste100-lint.py;
+  Spanish → esp-ts-lint.py. Placeholders {{DOUBLE_CURLY}}. Always DRAFT until counsel approves.
 -->
 
 # DRAFT — Counsel review and approval required before send

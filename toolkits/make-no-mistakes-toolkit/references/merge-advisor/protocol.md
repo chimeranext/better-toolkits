@@ -617,9 +617,16 @@ because its own PR is already closed and green.
 
 ## Output language
 
-Plan prose follows `make-no-mistakes.config.json` → `language` (default `es` in
-this monorepo). Command names, flags, refs, paths, and raw git/`gh` output stay
+Plan prose follows the **language of the user's prompt** in this turn (and
+follow-ups that continue the same request). If the prompt mixes languages,
+prefer the language of the actionable ask. If the prompt does not establish a
+language, fall back to `make-no-mistakes.config.json` → `language`, then
+English. Command names, flags, refs, paths, and raw git/`gh` output stay
 literal — never translated.
+
+**Mechanical gate (plan prose before emit):** English →
+`shared/references/asd-ste100/scripts/asd-ste100-lint.py`; Spanish →
+`shared/references/esp-ts/scripts/esp-ts-lint.py`. Do not cross-run languages.
 
 ## Position in the chain
 

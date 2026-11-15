@@ -21,7 +21,7 @@ After `/requirements-authoring-ieee29148` has written `software-requirements-spe
 5. **Write a view only for a concern that exists.** The toolkit menu below is a catalog, not a delivery list. Copy the pair whose concern exists and drop the `-bare` suffix. Do not create the other files.
 6. **Index decisions. Do not rewrite them.** `architecture-description-design-record.md` points at `projects/<slug>/architecture/decisions/`. It is not a second decision format. `/architecture-decision-ieee42010` writes those files. The description only links them. Cross-links in the client vault are Obsidian wikilinks. Inside a table cell, use `[[path]]` with no alias.
 7. **Invoke the evaluation skill when M-02 evaluates.** Call `/architecture-evaluation-ieee42030`. Do not write `architecture-evaluation.md` from this skill. Skip the call when no evaluation is done.
-8. **Write the filled client files in customer-facing voice.** See [CFM — Customer-facing management docs](../../../../shared/references/engineering-standards/customer-facing-management-docs.md). Descriptive executive prose in the engagement working language. No STE procedure imperatives. No skill names, `generated_by`, dogfood, or toolkit `ssot:` paths in the file the client reads.
+8. **Write the filled client files in customer-facing voice.** See [CFM — Customer-facing management docs](../../../../shared/references/engineering-standards/customer-facing-management-docs.md). Descriptive executive prose in the engagement working language. No STE / ESP-TS procedure imperatives. Lint: English → `asd-ste100-lint.py`; Spanish → `shared/references/esp-ts/scripts/esp-ts-lint.py`. No skill names, `generated_by`, dogfood, or toolkit `ssot:` paths in the file the client reads.
 
 ## Views
 

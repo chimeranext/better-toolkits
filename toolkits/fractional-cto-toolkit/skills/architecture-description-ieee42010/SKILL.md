@@ -9,5 +9,5 @@ Read and follow [`references/architecture-description-ieee42010/protocol.md`](..
 
 ## Defaults
 
-- Customer-facing description and views: no skill/`generated_by`/dogfood attribution; descriptive executive voice per `shared/references/engineering-standards/customer-facing-management-docs.md` (not STE procedure imperatives)
+- Customer-facing description and views: no skill/`generated_by`/dogfood attribution; descriptive executive voice per `shared/references/engineering-standards/customer-facing-management-docs.md` (not STE/ESP-TS procedure imperatives; English → `asd-ste100-lint.py`, Spanish → `esp-ts-lint.py`)
 - Filled body in the engagement working language. The protocol shell stays English.

@@ -1,7 +1,8 @@
 <!--
   Fill SSOT: client takeover guide (Diátaxis ×4 in one file).
-  English ASD-STE100. Engagement emit may be Spanish for Costa Rica.
-  Placeholders: {{DOUBLE_CURLY}}. Not Obsidian wikilinks.
+  English structural SSOT: asd-ste100-lint.py.
+  Engagement emit in working language — English → asd-ste100-lint.py;
+  Spanish → esp-ts-lint.py. Placeholders: {{DOUBLE_CURLY}}. Not Obsidian wikilinks.
 -->
 
 # Client guide — {{PROJECT_NAME}}

@@ -43,6 +43,11 @@ The skill's questions and working notes are in **English**. Generated runbooks f
 **engagement's working language** — English by default (public-facing ops docs are
 usually English), Spanish for Costa Rica engagements. Confirm if unclear.
 
+**Mechanical gate (emitted runbook):** English →
+`shared/references/asd-ste100/scripts/asd-ste100-lint.py`; Spanish →
+`shared/references/esp-ts/scripts/esp-ts-lint.py`. Procedure imperatives are
+allowed in runbooks. Do not cross-run languages.
+
 ## Output directory
 
 Resolve `{runbooks-dir}` first, in this order:
