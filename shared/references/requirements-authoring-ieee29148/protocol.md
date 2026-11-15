@@ -232,8 +232,8 @@ treatments):
    (discard as product IDs; optional trace only). Secondary phase labels are
    **not** SPMP stages.
 4. **Do not** run Jidoka drift enumeration against a dirty secondary-ID SRS.
-   Drift HITL compares **secondary claims** to the **clean SPMP + risk
-   baseline**, after the clean file exists.
+   Conflict HITL compares an annex claim with what the **clean SPMP + risk
+   baseline** affirms, after the clean file exists. Silence is not a conflict.
 
 **ID precedence (hard rule):**
 
@@ -243,9 +243,9 @@ treatments):
    bind product behavior enter that same series when they are requirements.
    Profile rows without a required treatment do not invent §3 behavior beyond
    what the SPMP already states.
-2. **Only after** that baseline Markdown exists **and** the human has answered
-   Jidoka HITL (a)/(b)/(c) for every secondary claim, **append / concatenate**
-   accepted new EARS from secondary sources into §3. Assignment rule (mandatory):
+2. **Only after** that baseline Markdown exists, **append / concatenate**
+   annex cases the SPMP does not contradict. A **conflict** (defined below)
+   waits for Jidoka HITL (a)/(b)/(c) before it enters §3. Assignment rule (mandatory):
    - For **each** SPMP prefix independently, take
      `last = max(existing numbers in that prefix)` in the clean SRS.
    - The first accepted append for that prefix is `{PREFIX}-{last+1}`; each
@@ -259,28 +259,34 @@ treatments):
    item only).
 4. Within each SRS table, sort by the SPMP-derived ID numerically within prefix.
 
-**Annex case missing from an SPMP requirement (hard rule):**
+**Annex is first-additive (hard rule):**
 
-Do not copy each annex requirement into §3 as its own ID.
+When the SPMP does not affirm the contrary, the annex is first-additive. Silence, a missing number, or “the plan does not fix this” is not a discrepancy. Append that annex case as the next `{PREFIX}-nnn`.
+
+A discrepancy is only a **conflict**: the SPMP affirms one thing and the annex affirms the contrary. Compare the annex sentence with what the SPMP affirms. Do not compare it with the absence of a sentence.
+
+Do not copy each annex requirement into §3 as its own ID when that case is already included.
 
 Take each requirement already extracted from the SPMP. Compare it with each annex sentence about the same behavior.
 
 1. Read that requirement and its acceptance criterion.
 2. Read the particular case in the annex sentence.
 3. If that case is already included in the requirement, do not add an ID.
-4. If that case is not included, the requirement is **incomplete** for that case. Append one next `{PREFIX}-nnn` that states that case.
-5. Name the result with the Glossary. Documented is priority 1: the case is written as a requirement because it was extracted first from the SPMP. Analyzed: the requirement was compared with the annex case. Covered: that case is already included; do not add an ID. Incomplete: that case is not included; append one next `{PREFIX}-nnn`.
-6. Secondary **should** and **could** do not become **shall** until the human accepts that priority for this baseline. **Won't** does not enter §3.
+4. If that case is not included, and the SPMP does not affirm the contrary, the requirement is **incomplete** for that case, or the case is a new additive row. Append one next `{PREFIX}-nnn`.
+5. If the SPMP affirms the contrary, the case is a **conflict**. Do not append it. Stop under the conflict rule below.
+6. Name the result with the Glossary. Documented is priority 1: the case is written as a requirement because it was extracted first from the SPMP. Analyzed: the requirement was compared with the annex case. Covered: that case is already included; do not add an ID. Incomplete: that case is not included; append one next `{PREFIX}-nnn`.
+7. Secondary **should** and **could** do not become **shall** until the human accepts that priority for this baseline. **Won't** does not enter §3.
 
-**Conflict / drift rule — Jidoka HITL (hard stop):**
+**Conflict rule — Jidoka HITL (hard stop):**
 
 **Prerequisite:** clean SPMP-series Markdown already exists (see above). Then,
-when a secondary **claim** (not its ID scheme) diverges from the SPMP, the risk
-plan, a loaded **treatment**, or an SPMP-derived EARS, **STOP**. Do **not** write a separate
+when an annex **claim** (not its ID scheme) conflicts with what the SPMP, the risk
+plan, or a loaded **treatment** affirms, **STOP**. Do **not** stop because the
+plan is silent. Do **not** write a separate
 divergences file, do **not** auto-resolve, do **not** summarize, do **not**
 batch into themes, do **not** drip “one question at a time”, and do **not** use
 AskQuestion / questionnaire UI. In **one** chat reply, **enumerate every
-divergence as its own numbered item** (full list, complete text; secondary IDs
+conflict as its own numbered item** (full list, complete text; secondary IDs
 optional as trace only) and, on **each** item, state the same three dispositions
 so the human can answer per ID (e.g. `D-012: b`):
 
@@ -291,8 +297,7 @@ so the human can answer per ID (e.g. `D-012: b`):
 - **(c)** Keep both only if they are not contradictory and do not create an
   incongruent state or race condition — state how they coexist.
 
-Do not continue appending to §3.2 until the human has answered for the open
-items.
+Do not append a conflict to §3 until the human has answered for that item. An additive case does not wait.
 
 ### Step 1 — Get the product context
 
@@ -389,7 +394,7 @@ the evidence. Paths of the files. Next action (step 5).
 5. **Writing the specification already as implementation** — §3.2 is functional, not design; the "how" goes to §3.5 and to OpenSpec `design.md`.
 6. **Generating the specification after the issues** — the order is software-requirements-specification.md → OpenSpec → issues → PRs.
 7. **Adopting secondary-source ID schemes or draft row order as the SRS scheme** — SPMP-derived IDs first; secondary sources (docx, MoSCoW, …) only append after `max(ID)` **per prefix** (`last+1`, contiguous); leave secondary IDs as trace only.
-8. **Auto-resolving SPMP ↔ secondary-source divergences** — or dumping them into a side file without HITL. Forbidden. Enumerate one-by-one; ask (a)/(b)/(c) per item; wait.
+8. **Treating plan silence as a conflict** — or auto-resolving a real conflict, or dumping conflicts into a side file without HITL. Forbidden. If the SPMP does not affirm the contrary, append the annex case. Enumerate only conflicts, one-by-one; ask (a)/(b)/(c) per item; wait.
 9. **Dirty SRS with secondary ID schemes** — emitting or keeping a parallel SRS whose governing IDs are docx/workshop prefixes. Forbidden. Delete it; clean SPMP-series Markdown first.
 10. **Skipping the engagement risk management plan (16085)** — SPMP without its risk companion. Forbidden.
 11. **Skipping required risk treatment plans** — using only the profile table when the risk plan / SPMP links a written treatment. Forbidden.
@@ -401,7 +406,7 @@ the evidence. Paths of the files. Next action (step 5).
 
 - [ ] SPMP, engagement risk management plan (16085), and required risk **treatment** plans loaded and cited (§1.4 + revision history)
 - [ ] Clean SPMP-series Markdown exists at `projects/<slug>/requirements/` before any secondary append; dirty secondary-ID drafts deleted
-- [ ] Every secondary **claim** ↔ clean baseline divergence enumerated one-by-one after the clean file exists; human answered (a)/(b)/(c) per item before append
+- [ ] Annex cases the SPMP does not contradict were appended. Only conflicts (the SPMP affirms one thing and the annex affirms the contrary) were enumerated one-by-one; human answered (a)/(b)/(c) per conflict before that conflict enters §3
 - [ ] Baseline IDs and order come from the SPMP-derived series; secondary prefixes never governing; tables sorted by SPMP-derived ID within prefix (`srs-id-order-lint.py` PASS)
 - [ ] Each §3 requirement table has columns ID, requirement, class, justification, acceptance. Class is Functional or Non-functional. The justification applies that test to the row. The requirement statement stays the first cell after the ID.
 - [ ] Each generated file opens with a Glossary table. Documented is priority 1 and the first row (the case is written as a requirement because it was extracted first from the SPMP). Then covered, analyzed, incomplete, waived, deferred, functional, and non-functional (Spanish file: documentado, cubierto, analizado, incompleto, excluido, diferido, funcional, no funcional). Covered = the annex case is already included in the SPMP requirement; analyzed = that comparison was made; incomplete = the case is not included and is the next ID; waived = outside this baseline, return by change order, recorded as `DW-`; deferred = still in the product problem, fact or number still open, recorded as `DW-`
