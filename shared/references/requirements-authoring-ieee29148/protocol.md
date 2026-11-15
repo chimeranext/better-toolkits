@@ -283,12 +283,12 @@ Take each requirement already extracted from the SPMP. Compare it with each anne
 when an annex **claim** (not its ID scheme) conflicts with what the SPMP, the risk
 plan, or a loaded **treatment** affirms, **STOP**. Do **not** stop because the
 plan is silent. Do **not** write a separate
-divergences file, do **not** auto-resolve, do **not** summarize, do **not**
-batch into themes, do **not** drip “one question at a time”, and do **not** use
-AskQuestion / questionnaire UI. In **one** chat reply, **enumerate every
-conflict as its own numbered item** (full list, complete text; secondary IDs
-optional as trace only) and, on **each** item, state the same three dispositions
-so the human can answer per ID (e.g. `D-012: b`):
+divergences file, do **not** auto-resolve, do **not** summarize, and do **not**
+batch unrelated conflicts into one theme. In **one** round, open **AskQuestion**
+with **one question per conflict** (full annex sentence in the prompt; secondary
+IDs optional as trace only). Do **not** ask an additive case. Do **not** leave
+the choices only in prose. On **each** question, the options are the same three
+dispositions (the human answers in that round, e.g. `D-012: b`):
 
 - **(a)** Correct the SPMP (and risk plan / treatments if needed) and request a
   new version that absorbs the external source.
@@ -394,7 +394,7 @@ the evidence. Paths of the files. Next action (step 5).
 5. **Writing the specification already as implementation** — §3.2 is functional, not design; the "how" goes to §3.5 and to OpenSpec `design.md`.
 6. **Generating the specification after the issues** — the order is software-requirements-specification.md → OpenSpec → issues → PRs.
 7. **Adopting secondary-source ID schemes or draft row order as the SRS scheme** — SPMP-derived IDs first; secondary sources (docx, MoSCoW, …) only append after `max(ID)` **per prefix** (`last+1`, contiguous); leave secondary IDs as trace only.
-8. **Treating plan silence as a conflict** — or auto-resolving a real conflict, or dumping conflicts into a side file without HITL. Forbidden. If the SPMP does not affirm the contrary, append the annex case. Enumerate only conflicts, one-by-one; ask (a)/(b)/(c) per item; wait.
+8. **Treating plan silence as a conflict** — or auto-resolving a real conflict, or dumping conflicts into a side file without HITL. Forbidden. If the SPMP does not affirm the contrary, append the annex case. Open one AskQuestion round with one question per conflict; wait.
 9. **Dirty SRS with secondary ID schemes** — emitting or keeping a parallel SRS whose governing IDs are docx/workshop prefixes. Forbidden. Delete it; clean SPMP-series Markdown first.
 10. **Skipping the engagement risk management plan (16085)** — SPMP without its risk companion. Forbidden.
 11. **Skipping required risk treatment plans** — using only the profile table when the risk plan / SPMP links a written treatment. Forbidden.
@@ -406,7 +406,7 @@ the evidence. Paths of the files. Next action (step 5).
 
 - [ ] SPMP, engagement risk management plan (16085), and required risk **treatment** plans loaded and cited (§1.4 + revision history)
 - [ ] Clean SPMP-series Markdown exists at `projects/<slug>/requirements/` before any secondary append; dirty secondary-ID drafts deleted
-- [ ] Annex cases the SPMP does not contradict were appended. Only conflicts, when the SPMP affirms one thing and the annex affirms the contrary, were enumerated one-by-one; human answered (a)/(b)/(c) per conflict before that conflict enters §3
+- [ ] Annex cases the SPMP does not contradict were appended. Only conflicts, when the SPMP affirms one thing and the annex affirms the contrary, were asked in one AskQuestion round, one question per conflict; human answered (a)/(b)/(c) before that conflict enters §3
 - [ ] Baseline IDs and order come from the SPMP-derived series; secondary prefixes never governing; tables sorted by SPMP-derived ID within prefix (`srs-id-order-lint.py` PASS)
 - [ ] Each §3 requirement table has columns ID, requirement, class, justification, acceptance. Class is Functional or Non-functional. The justification applies that test to the row. The requirement statement stays the first cell after the ID.
 - [ ] Each generated file opens with a Glossary table. Documented is priority 1 and the first row (the case is written as a requirement because it was extracted first from the SPMP). Then covered, analyzed, incomplete, waived, deferred, functional, and non-functional (Spanish file: documentado, cubierto, analizado, incompleto, excluido, diferido, funcional, no funcional). Covered = the annex case is already included in the SPMP requirement; analyzed = that comparison was made; incomplete = the case is not included and is the next ID; waived = outside this baseline, return by change order, recorded as `DW-`; deferred = still in the product problem, fact or number still open, recorded as `DW-`
