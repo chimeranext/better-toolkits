@@ -21,10 +21,12 @@ before scoring.
 
 ## Defaults
 
+- **Engagement brain** = the engagement knowledge vault from `/business-brain-setup` (scaffold: [`chimeranext/business-brain-template`](https://github.com/chimeranext/business-brain-template)). Pipeline vocabulary, not a client product name. SPMP path shape: `plans/<YYYY-MM-DD>-plan-proyecto-<slug>.md` inside that vault. Protocol SSOT defines the term.
 - Score the SPMP body against ISO/IEC/IEEE 16326:2019 §7
 - Score risk section / linked RM plan against ISO/IEC/IEEE 16085:2021 §8.1.2 (treatment plans against §8.2.2 when claimed)
 - Optional PMBOK 8 domain overlay from `pmbok8-crosswalk.md`
 - If the engagement claims an org ISO 31000 program, score it via `/iso31000` — not as a substitute for 16085 on a software project plan
+- Never commit client plans into this toolkit; never modify the engagement-brain fixture during audit
 
 ## Alias
 

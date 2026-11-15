@@ -140,26 +140,117 @@ no Obsidian required. See [`../pandoc-export/README.md`](../pandoc-export/README
 
 ## Skill flow
 
+### Step 0 — Required inputs (hard stop)
+
+**Mandatory inputs before any SRS write or rewrite:**
+
+1. **SPMP** — engagement Software Project Management Plan.
+2. **Risk management plan (ISO/IEC/IEEE 16085)** — the engagement companion from
+   the same pipeline (linked from the SPMP). Load it for constraints, treatments
+   that become product obligations, and what must **not** become an invented
+   SLA. If missing → **STOP** and point the user to the risk-plan authoring
+   skill / existing vault path before continuing.
+
+**Shared pack rule:** this protocol and its skill stay **brand-neutral**. Do not
+embed client names, product codenames, or engagement-specific filenames here.
+
+Resolve the SPMP, in order:
+
+1. Vault plan: `plans/<YYYY-MM-DD>-plan-proyecto-<slug>.md` (or the dated SPMP
+   path the engagement already uses).
+2. Path the user names explicitly.
+3. If none exists → **STOP**. Tell the user to run
+   `/software-project-management-plan-authoring-ieee16326` (or point at the
+   existing SPMP) before this skill continues. Do not invent scope, phases, or
+   out-of-scope lists without the SPMP.
+
+Resolve the risk plan from the SPMP reference, then the vault
+`plans/` companion for the same engagement (16085 / risk-management naming the
+engagement uses), then a path the user names. Cite both SPMP and risk plan in
+§1.4.
+
+Also load, when present (never instead of SPMP + risk plan):
+
+- Prior `projects/<slug>/requirements/software-requirements-specification.md`
+  only if it already uses the SPMP-derived ID series (clean).
+- Inventory / workshop drafts the user attaches (MoSCoW tables, prior-system
+  reviews) — **after** the clean baseline Markdown exists.
+
+**Clean baseline before secondary sources (hard rule):**
+
+1. **Generate** a **new clean** `software-requirements-specification.md` from
+   the SPMP first, then fold in risk-plan constraints/treatments that bind
+   product behavior. §3 IDs are **only** the SPMP-derived series (`EI-` /
+   `FR-` / `QS-` …). Path: `projects/<slug>/requirements/` in the engagement
+   vault. Do not skip this emit by “confirming” a dirty file.
+2. **Delete** any dirty draft that adopted secondary-source prefixes as
+   governing IDs. Do not keep it as a parallel SRS.
+3. **Only after** that clean Markdown exists, **re-read** secondary sources and
+   consider **append-only** candidates (next free SPMP-series ID). Secondary
+   prefixes are **never** governing (discard as product IDs; optional trace
+   only). Secondary phase labels are **not** SPMP stages.
+4. **Do not** run Jidoka drift enumeration against a dirty secondary-ID SRS.
+   Drift HITL compares **secondary claims** to the **clean SPMP + risk
+   baseline**, after the clean file exists.
+
+**ID precedence (hard rule):**
+
+1. Derive the SRS ID scheme and baseline requirements **from the SPMP first**
+   (engagement series such as `EI-` / `FR-` / `QS-`, starting at the next free
+   number in that series). Risk-plan treatments that bind product behavior enter
+   that same series when they are requirements.
+2. **Only after** that baseline Markdown exists, **append / concatenate** new
+   EARS from secondary sources (workshop MoSCoW, docx inventory, prior-system
+   review). New rows take the **next** ID in the SPMP-derived series.
+3. **Never** adopt the secondary source’s ID prefixes or row order as the SRS
+   scheme. Secondary IDs are irrelevant as product IDs.
+4. Within each SRS table, sort by the SPMP-derived ID numerically within prefix.
+
+**Conflict / drift rule — Jidoka HITL (hard stop):**
+
+**Prerequisite:** clean SPMP-series Markdown already exists (see above). Then,
+when a secondary **claim** (not its ID scheme) diverges from the SPMP, the risk
+plan, or an SPMP-derived EARS, **STOP**. Do **not** write a separate
+divergences file, do **not** auto-resolve, do **not** summarize, do **not**
+batch into themes, do **not** drip “one question at a time”, and do **not** use
+AskQuestion / questionnaire UI. In **one** chat reply, **enumerate every
+divergence as its own numbered item** (full list, complete text; secondary IDs
+optional as trace only) and, on **each** item, state the same three dispositions
+so the human can answer per ID (e.g. `D-012: b`):
+
+- **(a)** Correct the SPMP (and risk plan if needed) and request a new version
+  that absorbs the external source.
+- **(b)** Keep the EARS derived from the SPMP; discard the conflicting claim
+  from the secondary source for this SRS version.
+- **(c)** Keep both only if they are not contradictory and do not create an
+  incongruent state or race condition — state how they coexist.
+
+Do not continue appending to §3.2 until the human has answered for the open
+items.
+
 ### Step 1 — Get the product context
 
-Check whether the engagement vault already holds prior context (assessment, business
-model vault, project folder, and so on). If it does, load that state and extract product purpose,
-users, domain, constraints, and assumptions. If it does not, ask the user (Step 1b).
+From the **SPMP first**, extract product purpose, baseline stages, in/out of
+scope, users/roles, assumptions, constraints, deliverables, and acceptance.
+Then enrich with assessment / business-model / project folder context and any
+draft inventory. If the SPMP is loaded but product facts are still thin, ask
+the user (Step 1b) — do not skip the SPMP.
 
 ### Step 1b — Gather input (when it is missing)
 
-Confirm with the user the minimum needed to write:
+Confirm with the user only what the SPMP and vault still leave open:
 
-- Product name and version
-- Purpose and boundaries (what it does / what it does not do)
-- Users, roles, and access
+- Product name and version (if not already in the SPMP)
+- Purpose and boundaries deltas vs the SPMP (change-order material)
+- Users, roles, and access gaps
 - External integrations (APIs, prior systems)
 - Compliance constraints (regulatory, accounting, privacy)
-- Deadline / MVP milestones
+- Deadline / MVP milestones vs SPMP stages
 
 ### Step 2 — Write software-requirements-specification.md
 
-Use `srs-bare-template.md` as the section shell. Fill each section per 29148:
+Use `srs-bare-template.md` as the section shell. Fill each section per 29148.
+Cite the SPMP in §1.4 References and in the revision history (version, path).
 
 - Verifiable requirements in **EARS** form: Spanish
   `El sistema debe <observable behavior>` (or Cuando/Mientras/Si/Donde …);
@@ -169,9 +260,11 @@ Use `srs-bare-template.md` as the section shell. Fill each section per 29148:
 - No implementation jargon in §3.2 (functional). Technical decisions go to §3.5
   (Design and Implementation) and to OpenSpec `design.md`.
 - Each important functional requirement carries an ID (for example `FR-001`) for
-  the verification table.
+  the verification table. Keep a stable ID scheme for the engagement; map draft
+  inventory IDs in an annex when they differ.
 - Explicit quality-of-service requirements: performance, security, reliability,
-  availability, observability.
+  availability, observability — only when the SPMP or stakeholder input gives a
+  measurable criterion (do not invent SLAs the SPMP does not support).
 
 ### Step 3 — 29148 checklist and verification table
 
@@ -212,24 +305,32 @@ the evidence. Paths of the files. Next action (step 5).
 
 ## Anti-patterns
 
-1. **OpenSpec as the requirements source of truth** — the specification governs; OpenSpec is derived.
-2. **Vague or unverifiable requirements** ("the system must be fast" violates 29148).
-3. **Skipping the checklist** — each requirement passes unique / atomic / verifiable / traceable.
-4. **Writing the specification already as implementation** — §3.2 is functional, not design; the "how" goes to §3.5 and to OpenSpec `design.md`.
-5. **Generating the specification after the issues** — the order is software-requirements-specification.md → OpenSpec → issues → PRs.
+1. **Writing the SRS from a workshop draft alone** — skipping the SPMP. Forbidden.
+2. **OpenSpec as the requirements source of truth** — the specification governs; OpenSpec is derived.
+3. **Vague or unverifiable requirements** ("the system must be fast" violates 29148).
+4. **Skipping the checklist** — each requirement passes unique / atomic / verifiable / traceable.
+5. **Writing the specification already as implementation** — §3.2 is functional, not design; the "how" goes to §3.5 and to OpenSpec `design.md`.
+6. **Generating the specification after the issues** — the order is software-requirements-specification.md → OpenSpec → issues → PRs.
+7. **Adopting secondary-source ID schemes or draft row order as the SRS scheme** — SPMP-derived IDs first; secondary sources only append with the next free ID and leave their own IDs as trace.
+8. **Auto-resolving SPMP ↔ secondary-source divergences** — or dumping them into a side file without HITL. Forbidden. Enumerate one-by-one; ask (a)/(b)/(c) per item; wait.
+9. **Dirty SRS with secondary ID schemes** — emitting or keeping a parallel SRS whose governing IDs are docx/workshop prefixes. Forbidden. Delete it; clean SPMP-series Markdown first.
+10. **Skipping the engagement risk management plan (16085)** — SPMP without its risk companion. Forbidden.
 
 ## Final checklist
 
-- [ ] Specification written from the bare template (830 structure), version 0.1
+- [ ] SPMP and engagement risk management plan (16085) loaded and cited (§1.4 + revision history)
+- [ ] Clean SPMP-series Markdown exists at `projects/<slug>/requirements/` before any secondary append; dirty secondary-ID drafts deleted
+- [ ] Every secondary **claim** ↔ clean baseline divergence enumerated one-by-one after the clean file exists; human answered (a)/(b)/(c) per item before append
+- [ ] Baseline IDs and order come from the SPMP-derived series; secondary prefixes never governing; tables sorted by SPMP-derived ID within prefix
+- [ ] Specification written from the bare template (830 structure); version per engagement (0.1 only on first emit)
 - [ ] Requirements with an ID, EARS form (`ears-lint.py` PASS), obligation word in the engagement language, and an acceptance criterion (29148)
-- [ ] Filled client file passes language-routed STE/ESP-TS after EARS
+- [ ] Filled client file passes language-routed STE/ESP-TS after EARS (and BDD when scenarios exist)
 - [ ] Checklist unique / atomic / verifiable / traceable / unambiguous / implementation-free
 - [ ] Verification table Requirement × Method × Evidence filled
 - [ ] Human review of the specification before deriving OpenSpec
 - [ ] OpenSpec derived from the specification (the proposal cites the specification as the upstream source)
-- [ ] Linear issue with a Bilingual Layer brief plus taxonomy (Type / Size / Strategy)
-- [ ] Workflow /opsx-propose → review → /opsx-apply → PR → /opsx-archive (with a human yes)
-- [ ] The client file says the engineering standards (index of 36) are implemented as value of the deliverable, and that the client does not operate them yet
+- [ ] Tracker issues only after human approval of the specification (this skill does not open them)
+- [ ] The client file says the engineering standards index is implemented as value of the deliverable, and that the client does not operate them yet
 
 ## Related
 

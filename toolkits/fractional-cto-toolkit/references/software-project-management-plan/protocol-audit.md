@@ -5,6 +5,17 @@
 Gap-audit an existing SPMP (and its risk companion) against the chosen catalog
 templates. Output a findings brief only.
 
+## Engagement brain (term)
+
+**Engagement brain** = the Git/Obsidian knowledge vault for this engagement,
+created by `/business-brain-setup` in the engagement pipeline (see
+`references/engagement-orchestration.md`). Layout and seed come from the public
+template [`chimeranext/business-brain-template`](https://github.com/chimeranext/business-brain-template)
+(or a local clone / `BRAIN_TEMPLATE` override). SPMP and risk companions live
+under that vault’s `plans/`; product requirements under `projects/<slug>/`.
+Do **not** treat “engagement brain” as a client product name — it is pipeline
+vocabulary for that vault.
+
 ## When to use
 
 - Before approval of a project plan.
@@ -41,6 +52,8 @@ templates. Output a findings brief only.
 - Every finding cites a checklist row and evidence location.
 - Short quotes or `not found` only — no wholesale reproduction of client docs.
 - Rubric severity rules in `audit-rubric.md` are binding.
-- Optional local eval fixture: operator-provided vault SPMP path (never commit
-  client plans into this toolkit; never modify the client's vault copy during
-  audit). Example shape only: `plans/<YYYY-MM-DD>-plan-proyecto-<slug>.md`.
+- Eval fixture (read-only): SPMP in the **engagement brain** (vault from
+  `/business-brain-setup` / `chimeranext/business-brain-template`) on that
+  vault’s default branch — **never modify**
+  `plans/<YYYY-MM-DD>-plan-proyecto-<slug>.md` during audit. Do not commit
+  client plans into this toolkit.

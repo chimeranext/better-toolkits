@@ -47,8 +47,18 @@ Frontmatter triggers unchanged.
 
 ## Defaults
 
+- **Mandatory inputs** — (1) SPMP; (2) engagement **risk management plan** (ISO/IEC/IEEE 16085), same pipeline / linked from the SPMP. Paths come from the vault / user — **never** hard-code client or product names in this skill. If SPMP missing → STOP → `/software-project-management-plan-authoring-ieee16326`. If risk plan missing → STOP until the vault companion exists. Cite both in §1.4. Protocol Step 0 is SSOT.
+- **Clean baseline first** — **generate a new** `software-requirements-specification.md` from the SPMP (+ risk plan), SPMP-series IDs only (`EI-` / `FR-` / `QS-` …), at `projects/<slug>/requirements/`. **Do not** read secondary inventories for append until that clean file exists. **Delete** dirty drafts that used secondary prefixes as governing IDs. Secondary prefixes are not the SRS scheme.
+- **ID precedence** — SPMP-derived series first. Secondary sources only **append** the next free ID after the clean file exists. Never adopt secondary prefixes or row order.
+- **Jidoka HITL** — only **after** the clean baseline exists, and only on secondary **claims** vs that baseline (+ risk constraints). In **one** reply, list **every** divergence as its own numbered item (full text; no summary; no themes; no side file; no AskQuestion; no paso-a-paso; no drift dump against a dirty SRS). On each item:
+  - **(a)** Correct the SPMP (and risk plan if needed) and request a new version from the external source?
+  - **(b)** Keep the SPMP-derived EARS and discard the conflicting secondary claim for this SRS version?
+  - **(c)** Keep both only if not contradictory and with no incongruent state / race — explain coexistence?
+  Human answers per ID (e.g. `D-012: b`). Do not append to §3.2 until answers land.
+- **Brand-neutral pack** — shared protocol/skill must not name clients, products, or engagement-specific filenames.
 - **Documents only** — write `software-requirements-specification.md`, `requirements-checklist.md`, and `verification.md`. Do not create or edit Linear / GitHub Issues from this skill.
 - **Output path:** default `projects/<slug>/requirements/` in the engagement vault; fallback `Documentos/<…>/projects/<slug>/requirements/` (or next to the user draft). See protocol.
+- Sort SPMP-derived requirement IDs numerically within each prefix in every table.
 - Customer-facing specification, checklist, and verification: no skill/`generated_by`/dogfood attribution; descriptive executive voice per `shared/references/engineering-standards/customer-facing-management-docs.md` (not STE/ESP-TS procedure imperatives). Gates in order: EARS → BDD (when scenarios exist) → English `asd-ste100-lint.py` / Spanish `esp-ts-lint.py`. Optional PDF: resolve via `shared/references/pandoc-export/resolve-template.sh` (vault brand `_templates/export/*.tex` first; `better.tex` only as fallback).
 - The filled file says the engineering standards index is implemented as added value of the deliverable. It does not say the client already operates them, and it does not attribute them to an internal team codename. It does not list four code practices as that index.
 - Filled body in the engagement working language. Default Spanish: Preparado por, Versión, debe / no debe / debería / puede. The bare template stays English.

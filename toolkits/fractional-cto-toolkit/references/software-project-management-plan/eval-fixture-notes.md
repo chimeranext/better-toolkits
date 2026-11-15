@@ -1,7 +1,13 @@
-# Eval fixture notes — sample SPMP (read-only)
+# Eval fixture notes — engagement SPMP (read-only)
 
-**Fixture path (do not modify):** operator-provided engagement vault path
-`plans/<YYYY-MM-DD>-plan-proyecto-<slug>.md` on that vault's default branch
+**Engagement brain:** vault created by `/business-brain-setup` for this
+engagement; scaffold from
+[`chimeranext/business-brain-template`](https://github.com/chimeranext/business-brain-template).
+Pipeline term — not a client product name. See `protocol-audit.md` § Engagement
+brain.
+
+**Fixture path (do not modify):** engagement brain
+`plans/<YYYY-MM-DD>-plan-proyecto-<slug>.md` on that vault’s default branch
 (read-only eval). Do not commit client plans into this toolkit.
 
 **Templates scored:** `iso-16326-spmp` + risk companion `iso-16085-risk-management-plan`.
