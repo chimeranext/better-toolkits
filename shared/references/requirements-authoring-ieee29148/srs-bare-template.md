@@ -27,12 +27,12 @@ These words mean only what this table says.
 | Covered | The particular annex case is already included in the requirement taken from the SPMP. No further ID is added. |
 | Analyzed | That requirement was compared with the annex case. |
 | Incomplete | The requirement taken from the SPMP does not include that particular case. That case is the next ID. The annex is not copied row by row. |
-| Waived | The SPMP places it outside this baseline. It returns only by change order. The annex records it as `DW-`. It is not a §3 requirement. |
-| Deferred | It stays in the product problem. A fact or a number is still open, so this version cannot verify it. When that input exists, it is appended as the next ID of its prefix. The annex records the wait as `DW-`. |
+| Waived | The SPMP places it outside this baseline. It returns only by change order. Record it in the Appendixes, section 5.2 Postponed, as the next `PS-nnn`. It is not a §3 requirement. |
+| Anomaly | The case stays in the product problem and a fact or a number is missing. Do not postpone it. Keep one open row in the anomaly appendix. That row states what is missing, whether the gap is on our side or in what the client said, and the deviation type in plain language: waste, inconsistency, or unreasonable load. Do not use a jargon name for that type. The row does not use the Postponed series. Stop and run /ishikawa, then ask the human for the criterion on that row. Do not close the row before that answer. Do not invent the missing fact as a §3 requirement. |
 | Functional | The requirement states what the system does: a task, an input, an output, or an interaction, including a prohibition. If the row is absent, that task does not exist. |
 | Non-functional | The requirement states how the system operates: a quality attribute or a constraint. If the row is absent, the task can still exist and fail that quality. |
 | Pending | The conflict waits for the client to clarify it. This SRS version records it in the Pending section. |
-| Postponed | The conflicting claim waits for the next version of the SPMP deliverable. This SRS version records it in the Postponed section. |
+| Postponed | The claim waits for the next version of the SPMP deliverable. This SRS version records it in the Appendixes, section 5.2, as the next `PS-nnn`. Out-of-baseline items use that same series. |
 
 ## Table of Contents
 <!-- TOC -->
@@ -226,7 +226,9 @@ Conflicts that wait for the client to clarify them. This section belongs to this
 
 ### 5.2 Postponed
 
-Conflicting claims that wait for the next version of the SPMP deliverable.
+Claims that wait for the next version of the SPMP deliverable, including items the SPMP places outside this baseline. Number the rows `PS-001`, `PS-002`, and so on. That series belongs to this table. Open anomalies do not use it.
+
+In the column headings below, **annex** means the document the client delivered for review. This section is an appendix.
 
 | ID | Claim | What the SPMP affirms | What the annex affirms |
 | --- | --- | --- | --- |

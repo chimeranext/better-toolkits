@@ -126,9 +126,9 @@ table defines the status words that file uses. Every output glossary table
 shall include these words, in this order. Documented is priority 1 and is
 always the first row: the case is written as a requirement because it was
 extracted first from the SPMP. The words are documented, covered, analyzed,
-incomplete, waived, deferred, functional, non-functional, pending, and
+incomplete, waived, anomaly, functional, non-functional, pending, and
 postponed. A Spanish file writes them as documentado, cubierto, analizado,
-incompleto, excluido, diferido, funcional, no funcional, pendiente, and
+incompleto, excluido, anomalía, funcional, no funcional, pendiente, and
 postergado. The English table is:
 
 | Word | Meaning in that file |
@@ -137,12 +137,14 @@ postergado. The English table is:
 | Covered | The particular annex case is already included in the requirement taken from the SPMP. No further ID is added. |
 | Analyzed | That requirement was compared with the annex case. |
 | Incomplete | The requirement taken from the SPMP does not include that particular case. That case is the next ID. The annex is not copied row by row. |
-| Waived | The SPMP places it outside this baseline. It returns only by change order. The annex records it as `DW-`. It is not a §3 requirement. |
-| Deferred | It stays in the product problem. A fact or a number is still open, so this version cannot verify it. When that input exists, it is appended as the next ID of its prefix. The annex records the wait as `DW-`. |
+| Waived | The SPMP places it outside this baseline. It returns only by change order. Record it in the Appendixes, section 5.2 Postponed, as the next `PS-nnn`. It is not a §3 requirement. |
+| Anomaly | The case stays in the product problem and a fact or a number is missing. Do not postpone it. Keep one open row in the anomaly appendix. That row states what is missing, whether the gap is on our side or in what the client said, and the deviation type in plain language: waste, inconsistency, or unreasonable load. Do not use a jargon name for that type. The row does not use the Postponed series. Stop and run /ishikawa, then ask the human for the criterion on that row. Do not close the row before that answer. Do not invent the missing fact as a §3 requirement. |
 | Functional | The requirement states what the system does: a task, an input, an output, or an interaction, including a prohibition. If the row is absent, that task does not exist. |
 | Non-functional | The requirement states how the system operates: a quality attribute or a constraint (performance, security, reliability, availability, usability, compatibility, scalability, maintainability). If the row is absent, the task can still exist and fail that quality. |
 | Pending | The conflict waits for the client to clarify it. This SRS version records it in the Pending section. |
-| Postponed | The conflicting claim waits for the next version of the SPMP deliverable. This SRS version records it in the Postponed section. |
+| Postponed | The claim waits for the next version of the SPMP deliverable. This SRS version records it in the Appendixes, section 5.2, as the next `PS-nnn`. Out-of-baseline items use that same series. |
+
+**Annex** means a document the client delivered for review, such as a docx. **Appendixes** means section 5 of the SRS this skill writes. Do not use one word for the other.
 
 If the vault also keeps an SPMP plan, it stays outside that folder (for
 example `plans/<YYYY-MM-DD>-plan-proyecto-<slug>.md`). Cross-links are
@@ -342,13 +344,16 @@ Cite the SPMP in §1.4 References and in the revision history (version, path).
   Keep that scheme stable; sort IDs numerically within each prefix in every
   table (`srs-id-order-lint.py` PASS); map draft inventory IDs in an annex
   when they differ.
-- **Do not drop** a known candidate that is outside this baseline or blocked on
-  an open fact. Record it in the SRS annex (non-governing prefix `DW-`, never
-  a §3 prefix): **WAIVED** when the SPMP places it outside the baseline
-  (re-entry = change order); **DEFERRED** when it stays in the product problem
-  but this version cannot verify it yet (re-entry = append `last+1` on the
-  governing prefix once the fact or number exists). Platform and hosting
-  choices stay constraints, not DW rows and not §3 requirements.
+- **Do not drop** a known candidate that the SPMP places outside this baseline.
+  Record it in the Appendixes, section 5.2 Postponed, as the next `PS-nnn`.
+  That series is not a §3 prefix. When the case stays in the product problem
+  and a fact or a number is missing, that is an **anomaly**: keep one open
+  row in the anomaly appendix. That row does not use the Postponed series.
+  Run /ishikawa and ask the human for the criterion on that row. Do not close
+  the row before that answer. Do not invent the missing fact as a §3
+  requirement. Do not put postponed items and open anomalies under one prefix.
+  Platform and hosting choices stay constraints, not `PS-` rows and not §3
+  requirements.
 - Explicit quality-of-service requirements: performance, security, reliability,
   availability, observability — only when the SPMP or stakeholder input gives a
   measurable criterion (do not invent SLAs the SPMP does not support).
@@ -404,7 +409,7 @@ the evidence. Paths of the files. Next action (step 5).
 10. **Skipping the engagement risk management plan (16085)** — SPMP without its risk companion. Forbidden.
 11. **Skipping required risk treatment plans** — using only the profile table when the risk plan / SPMP links a written treatment. Forbidden.
 12. **Skipping `srs-id-order-lint.py`** — unsorted, duplicate, or gapped IDs within a prefix in any requirement table. Forbidden. Delete/retire by renumbering the series; do not leave holes.
-13. **Dropping out-of-baseline or open-fact candidates** — omitting them from the SRS because they are not §3 yet. Forbidden. Record **WAIVED** or **DEFERRED** (`DW-`) in the annex.
+13. **Dropping an out-of-baseline candidate, or closing a missing fact** — omitting an out-of-baseline item, or closing a missing fact or number before the human gives the criterion. Forbidden. Record the out-of-baseline item in the Appendixes, section 5.2, as the next `PS-nnn`. A missing fact or number, while the case stays in the product problem, stays one open row in the anomaly appendix: run /ishikawa and ask the human. Do not close that row first. Do not put that row on the Postponed series.
 14. **Copying the annex row by row into §3** — or adding an ID when the particular case is already included in the SPMP requirement. Forbidden. Append only the case that requirement does not include.
 
 ## Final checklist
@@ -414,12 +419,12 @@ the evidence. Paths of the files. Next action (step 5).
 - [ ] Annex cases the SPMP does not contradict were appended. Only conflicts, when the SPMP affirms one thing and the annex affirms the contrary, were asked in one AskQuestion round, one question per conflict; human answered (a)/(b)/(c)/(d)/(e) before that conflict enters §3
 - [ ] Baseline IDs and order come from the SPMP-derived series; secondary prefixes never governing; tables sorted by SPMP-derived ID within prefix (`srs-id-order-lint.py` PASS)
 - [ ] Each §3 requirement table has columns ID, requirement, class, justification, acceptance. Class is Functional or Non-functional. The justification applies that test to the row. The requirement statement stays the first cell after the ID.
-- [ ] Each generated file opens with a Glossary table. Documented is priority 1 and the first row (the case is written as a requirement because it was extracted first from the SPMP). Then covered, analyzed, incomplete, waived, deferred, functional, and non-functional (Spanish file: documentado, cubierto, analizado, incompleto, excluido, diferido, funcional, no funcional). Covered = the annex case is already included in the SPMP requirement; analyzed = that comparison was made; incomplete = the case is not included and is the next ID; waived = outside this baseline, return by change order, recorded as `DW-`; deferred = still in the product problem, fact or number still open, recorded as `DW-`
+- [ ] Each generated file opens with a Glossary table. Documented is priority 1 and the first row (the case is written as a requirement because it was extracted first from the SPMP). Then covered, analyzed, incomplete, waived, anomaly, functional, and non-functional (Spanish file: documentado, cubierto, analizado, incompleto, excluido, anomalía, funcional, no funcional). Covered = the annex case is already included in the SPMP requirement; analyzed = that comparison was made; incomplete = the case is not included and is the next ID; waived = outside this baseline, return by change order, recorded in the Appendixes section 5.2 as the next `PS-nnn`; anomaly = the case stays in the product problem and a fact or a number is missing, so one row stays open in the anomaly appendix until /ishikawa and the human's criterion on that row, and that row does not use the Postponed series
 - [ ] An annex case already included in an SPMP requirement did not get a new ID; a case that is not included was appended as the next `{PREFIX}-nnn` only
 - [ ] Specification written from the bare template (830 structure); version per engagement (0.1 only on first emit)
 - [ ] Requirements with an ID, EARS form (`ears-lint.py` PASS), obligation word in the engagement language, and an acceptance criterion (29148)
 - [ ] Filled client file passes gates in order: `srs-id-order-lint.py` → EARS → BDD (when scenarios exist) → language-routed STE/ESP-TS
-- [ ] Out-of-baseline items are **WAIVED** and open-fact items are **DEFERRED** in the SRS annex (`DW-`); neither list is dropped
+- [ ] Out-of-baseline items are **WAIVED** in the SRS appendixes, section 5.2, as `PS-nnn`, and are not dropped. A missing fact or number, while the case stays in the product problem, remains one open row in the anomaly appendix until /ishikawa and the human's criterion on that row. That row does not use the Postponed series
 - [ ] Checklist unique / atomic / verifiable / traceable / unambiguous / implementation-free
 - [ ] Verification table Requirement × Method × Evidence filled
 - [ ] Human review of the specification before deriving OpenSpec
