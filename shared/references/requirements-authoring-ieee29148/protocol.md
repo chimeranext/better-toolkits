@@ -245,7 +245,7 @@ treatments):
    what the SPMP already states.
 2. **Only after** that baseline Markdown exists, **append / concatenate**
    annex cases the SPMP does not contradict. A **conflict** (defined below)
-   waits for Jidoka HITL (a)/(b)/(c) before it enters §3. Assignment rule (mandatory):
+   waits for Jidoka HITL (a)/(b)/(c)/(d)/(e) before it enters §3. Assignment rule (mandatory):
    - For **each** SPMP prefix independently, take
      `last = max(existing numbers in that prefix)` in the clean SRS.
    - The first accepted append for that prefix is `{PREFIX}-{last+1}`; each
@@ -296,6 +296,10 @@ dispositions (the human answers in that round, e.g. `D-012: b`):
   from the secondary source for this SRS version.
 - **(c)** Keep both only if they are not contradictory and do not create an
   incongruent state or race condition — state how they coexist.
+- **(d)** Pending confirmation with the client, to clarify the conflict. Do not
+  append the conflicting claim in this version.
+- **(e)** Defer the conflicting claim to the next version of the deliverable.
+  Do not append it in this version.
 
 Do not append a conflict to §3 until the human has answered for that item. An additive case does not wait.
 
@@ -406,7 +410,7 @@ the evidence. Paths of the files. Next action (step 5).
 
 - [ ] SPMP, engagement risk management plan (16085), and required risk **treatment** plans loaded and cited (§1.4 + revision history)
 - [ ] Clean SPMP-series Markdown exists at `projects/<slug>/requirements/` before any secondary append; dirty secondary-ID drafts deleted
-- [ ] Annex cases the SPMP does not contradict were appended. Only conflicts, when the SPMP affirms one thing and the annex affirms the contrary, were asked in one AskQuestion round, one question per conflict; human answered (a)/(b)/(c) before that conflict enters §3
+- [ ] Annex cases the SPMP does not contradict were appended. Only conflicts, when the SPMP affirms one thing and the annex affirms the contrary, were asked in one AskQuestion round, one question per conflict; human answered (a)/(b)/(c)/(d)/(e) before that conflict enters §3
 - [ ] Baseline IDs and order come from the SPMP-derived series; secondary prefixes never governing; tables sorted by SPMP-derived ID within prefix (`srs-id-order-lint.py` PASS)
 - [ ] Each §3 requirement table has columns ID, requirement, class, justification, acceptance. Class is Functional or Non-functional. The justification applies that test to the row. The requirement statement stays the first cell after the ID.
 - [ ] Each generated file opens with a Glossary table. Documented is priority 1 and the first row (the case is written as a requirement because it was extracted first from the SPMP). Then covered, analyzed, incomplete, waived, deferred, functional, and non-functional (Spanish file: documentado, cubierto, analizado, incompleto, excluido, diferido, funcional, no funcional). Covered = the annex case is already included in the SPMP requirement; analyzed = that comparison was made; incomplete = the case is not included and is the next ID; waived = outside this baseline, return by change order, recorded as `DW-`; deferred = still in the product problem, fact or number still open, recorded as `DW-`

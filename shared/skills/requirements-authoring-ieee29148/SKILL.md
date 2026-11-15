@@ -57,6 +57,8 @@ Frontmatter triggers unchanged.
   - **(a)** Correct the SPMP (and risk plan / treatments if needed) and request a new version from the external source?
   - **(b)** Keep the SPMP-derived EARS and discard the conflicting secondary claim for this SRS version?
   - **(c)** Keep both only if not contradictory and with no incongruent state / race — explain coexistence?
+  - **(d)** Pending confirmation with the client, to clarify the conflict. Do not append it in this version.
+  - **(e)** Defer the conflicting claim to the next version of the deliverable. Do not append it in this version.
   Human answers per ID (e.g. `D-012: b`). Do not append that conflict until the answer lands. An additive case does not wait.
 - **Brand-neutral pack** — shared protocol/skill must not name clients, products, engagement-specific filenames, or an engagement's requirement-ID prefixes. Examples use `{PREFIX}-001` only.
 - **Documents only** — write `software-requirements-specification.md`, `requirements-checklist.md`, and `verification.md`. Do not create or edit Linear / GitHub Issues from this skill.
