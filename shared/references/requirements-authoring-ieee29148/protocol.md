@@ -287,7 +287,7 @@ divergences file, do **not** auto-resolve, do **not** summarize, and do **not**
 batch unrelated conflicts into one theme. In **one** round, open **AskQuestion**
 with **one question per conflict** (full annex sentence in the prompt; secondary
 IDs optional as trace only). Do **not** ask an additive case. Do **not** leave
-the choices only in prose. On **each** question, the options are the same three
+the choices only in prose. On **each** question, the options are these
 dispositions (the human answers in that round, e.g. `D-012: b`):
 
 - **(a)** Correct the SPMP (and risk plan / treatments if needed) and request a
@@ -296,10 +296,8 @@ dispositions (the human answers in that round, e.g. `D-012: b`):
   from the secondary source for this SRS version.
 - **(c)** Keep both only if they are not contradictory and do not create an
   incongruent state or race condition — state how they coexist.
-- **(d)** Pending confirmation with the client, to clarify the conflict. Do not
-  append the conflicting claim in this version.
+- **(d)** Pending confirmation with the client, to clarify the conflict.
 - **(e)** Defer the conflicting claim to the next version of the deliverable.
-  Do not append it in this version.
 
 Do not append a conflict to §3 until the human has answered for that item. An additive case does not wait.
 
