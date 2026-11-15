@@ -126,9 +126,10 @@ table defines the status words that file uses. Every output glossary table
 shall include these words, in this order. Documented is priority 1 and is
 always the first row: the case is written as a requirement because it was
 extracted first from the SPMP. The words are documented, covered, analyzed,
-incomplete, waived, deferred, functional, and non-functional. A Spanish file
-writes them as documentado, cubierto, analizado, incompleto, excluido,
-diferido, funcional, and no funcional. The English table is:
+incomplete, waived, deferred, functional, non-functional, pending, and
+postponed. A Spanish file writes them as documentado, cubierto, analizado,
+incompleto, excluido, diferido, funcional, no funcional, pendiente, and
+postergado. The English table is:
 
 | Word | Meaning in that file |
 | --- | --- |
@@ -140,6 +141,8 @@ diferido, funcional, and no funcional. The English table is:
 | Deferred | It stays in the product problem. A fact or a number is still open, so this version cannot verify it. When that input exists, it is appended as the next ID of its prefix. The annex records the wait as `DW-`. |
 | Functional | The requirement states what the system does: a task, an input, an output, or an interaction, including a prohibition. If the row is absent, that task does not exist. |
 | Non-functional | The requirement states how the system operates: a quality attribute or a constraint (performance, security, reliability, availability, usability, compatibility, scalability, maintainability). If the row is absent, the task can still exist and fail that quality. |
+| Pending | The conflict waits for the client to clarify it. This SRS version records it in the Pending section. |
+| Postponed | The conflicting claim waits for the next version of the SPMP deliverable. This SRS version records it in the Postponed section. |
 
 If the vault also keeps an SPMP plan, it stays outside that folder (for
 example `plans/<YYYY-MM-DD>-plan-proyecto-<slug>.md`). Cross-links are
@@ -296,8 +299,8 @@ dispositions (the human answers in that round, e.g. `D-012: b`):
   from the secondary source for this SRS version.
 - **(c)** Keep both only if they are not contradictory and do not create an
   incongruent state or race condition — state how they coexist.
-- **(d)** Pending confirmation with the client, to clarify the conflict.
-- **(e)** Defer the conflicting claim to the next version of the deliverable.
+- **(d)** Pending confirmation with the client, to clarify the conflict. Record the claim in the Pending section of this SRS version.
+- **(e)** Postponed to the next version of the SPMP deliverable. Record the claim in the Postponed section of this SRS.
 
 Do not append a conflict to §3 until the human has answered for that item. An additive case does not wait.
 

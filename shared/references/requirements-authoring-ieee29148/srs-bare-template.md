@@ -31,6 +31,8 @@ These words mean only what this table says.
 | Deferred | It stays in the product problem. A fact or a number is still open, so this version cannot verify it. When that input exists, it is appended as the next ID of its prefix. The annex records the wait as `DW-`. |
 | Functional | The requirement states what the system does: a task, an input, an output, or an interaction, including a prohibition. If the row is absent, that task does not exist. |
 | Non-functional | The requirement states how the system operates: a quality attribute or a constraint. If the row is absent, the task can still exist and fail that quality. |
+| Pending | The conflict waits for the client to clarify it. This SRS version records it in the Pending section. |
+| Postponed | The conflicting claim waits for the next version of the SPMP deliverable. This SRS version records it in the Postponed section. |
 
 ## Table of Contents
 <!-- TOC -->
@@ -213,3 +215,19 @@ These words mean only what this table says.
 |                |                     |                    |        |          |
 
 ## 5. Appendixes
+
+### 5.1 Pending
+
+Conflicts that wait for the client to clarify them. This section belongs to this SRS version.
+
+| ID | Claim | What the SPMP affirms | What the annex affirms |
+| --- | --- | --- | --- |
+|  |  |  |  |
+
+### 5.2 Postponed
+
+Conflicting claims that wait for the next version of the SPMP deliverable.
+
+| ID | Claim | What the SPMP affirms | What the annex affirms |
+| --- | --- | --- | --- |
+|  |  |  |  |
