@@ -37,7 +37,7 @@ Cuando la especificación esté **aprobado** por revisión humana, generar desde
 
 Reglas de derivación:
 
-1. Cada requisito de la especificación (`FR-xxx`, `NFR-xxx`) se traduce a requisito OpenSpec con
+1. Cada requisito de la especificación (`{PREFIX}-nnn`, el prefijo que fija el SPMP) se traduce a requisito OpenSpec con
    `MUST`/`SHALL` (RFC 2119) y escenarios `GIVEN/WHEN/THEN`.
 2. Si un requisito de la especificación **no** aparece en la spec derivada, es un error de derivación.
 3. El `proposal.md` del cambio DEBE citar la especificación como fuente upstream (`src: software-requirements-specification.md vX.Y`).

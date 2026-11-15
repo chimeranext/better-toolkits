@@ -86,21 +86,27 @@ cell does not use `[[path|alias]]`.
 
 **Mechanical gates (filled client SRS / checklist / verification), in order:**
 
-1. **EARS** on requirement statements (FR/NFR lines and behavioral acceptance
-   criteria): `shared/references/ears/scripts/ears-lint.py --markdown FILE.md`.
+1. **SRS ID order** on requirement tables (numeric ascending within each
+   prefix per table; duplicates fail; series contiguous from `001` with **no
+   gaps**):
+   `shared/references/requirements-authoring-ieee29148/scripts/srs-id-order-lint.py --markdown FILE.md`.
+   Optional `--cross-section` compares verification / characteristics tables to
+   the §3 ID set.
+2. **EARS** on requirement statements (SPMP-series ID lines and behavioral
+   acceptance criteria): `shared/references/ears/scripts/ears-lint.py --markdown FILE.md`.
    English uses `shall` templates; Spanish uses `debe` templates. See
    [`../ears/README.md`](../ears/README.md).
-2. **BDD** on Given/When/Then (or Dado/Cuando/Entonces) scenarios in
+3. **BDD** on Given/When/Then (or Dado/Cuando/Entonces) scenarios in
    `verification.md` (and any embedded scenario blocks):
    `shared/references/bdd/scripts/bdd-lint.py --markdown FILE.md`. See
    [`../bdd/README.md`](../bdd/README.md).
-3. **Controlled prose** on the full customer-facing file: English →
+4. **Controlled prose** on the full customer-facing file: English →
    `shared/references/asd-ste100/scripts/asd-ste100-lint.py`; Spanish →
    `shared/references/esp-ts/scripts/esp-ts-lint.py` (ESP-TS). Do not
    cross-run languages.
 
-Do not skip EARS (and BDD when scenarios exist) and rely only on STE/ESP-TS —
-structure first, then voice.
+Do not skip `srs-id-order-lint.py`, EARS (and BDD when scenarios exist) and rely
+only on STE/ESP-TS — ID order and structure first, then voice.
 
 ## Output directory
 
@@ -113,6 +119,27 @@ projects/<slug>/requirements/
     ├── requirements-checklist.md
     └── verification.md
 ```
+
+Each of those three files opens with a **Glossary** section before the
+introduction (heading `Glossary` in English, `Glosario` in Spanish). The
+table defines the status words that file uses. Every output glossary table
+shall include these words, in this order. Documented is priority 1 and is
+always the first row: the case is written as a requirement because it was
+extracted first from the SPMP. The words are documented, covered, analyzed,
+incomplete, waived, deferred, functional, and non-functional. A Spanish file
+writes them as documentado, cubierto, analizado, incompleto, excluido,
+diferido, funcional, and no funcional. The English table is:
+
+| Word | Meaning in that file |
+| --- | --- |
+| Documented | The case is written as a requirement because it was extracted first from the SPMP. Priority 1. Always the first row. |
+| Covered | The particular annex case is already included in the requirement taken from the SPMP. No further ID is added. |
+| Analyzed | That requirement was compared with the annex case. |
+| Incomplete | The requirement taken from the SPMP does not include that particular case. That case is the next ID. The annex is not copied row by row. |
+| Waived | The SPMP places it outside this baseline. It returns only by change order. The annex records it as `DW-`. It is not a §3 requirement. |
+| Deferred | It stays in the product problem. A fact or a number is still open, so this version cannot verify it. When that input exists, it is appended as the next ID of its prefix. The annex records the wait as `DW-`. |
+| Functional | The requirement states what the system does: a task, an input, an output, or an interaction, including a prohibition. If the row is absent, that task does not exist. |
+| Non-functional | The requirement states how the system operates: a quality attribute or a constraint (performance, security, reliability, availability, usability, compatibility, scalability, maintainability). If the row is absent, the task can still exist and fail that quality. |
 
 If the vault also keeps an SPMP plan, it stays outside that folder (for
 example `plans/<YYYY-MM-DD>-plan-proyecto-<slug>.md`). Cross-links are
@@ -144,12 +171,23 @@ no Obsidian required. See [`../pandoc-export/README.md`](../pandoc-export/README
 
 **Mandatory inputs before any SRS write or rewrite:**
 
-1. **SPMP** — engagement Software Project Management Plan.
+1. **SPMP (ISO/IEC/IEEE 16326)** — engagement Software Project Management Plan
+   authored under `/software-project-management-plan-authoring-ieee16326`
+   (16326:2019 §7). If missing → **STOP** and run that skill (or point at the
+   existing vault SPMP) before continuing.
 2. **Risk management plan (ISO/IEC/IEEE 16085)** — the engagement companion from
-   the same pipeline (linked from the SPMP). Load it for constraints, treatments
-   that become product obligations, and what must **not** become an invented
-   SLA. If missing → **STOP** and point the user to the risk-plan authoring
-   skill / existing vault path before continuing.
+   the same pipeline (linked from the SPMP), authored under
+   `/software-risks-authoring-ieee16085`. Load the risk **profile** (e.g.
+   R-01…) for constraints, priorities, and what must **not** become an invented
+   SLA. If missing → **STOP** and point the user to that skill / existing vault
+   path before continuing.
+3. **Risk treatment plans (16085 §8.2)** — every written treatment the risk plan
+   (or SPMP) links for risks over the treatment threshold (same 16085 skill /
+   `iso-16085-risk-treatment-plan`). Load them for product obligations that
+   become EARS (mitigations that bind observable system behavior). If the risk
+   plan says a treatment exists and the file is missing → **STOP** and obtain it
+   before writing §3. Do **not** invent treatment behavior from the profile row
+   alone when a treatment document is required.
 
 **Shared pack rule:** this protocol and its skill stay **brand-neutral**. Do not
 embed client names, product codenames, or engagement-specific filenames here.
@@ -164,12 +202,14 @@ Resolve the SPMP, in order:
    existing SPMP) before this skill continues. Do not invent scope, phases, or
    out-of-scope lists without the SPMP.
 
-Resolve the risk plan from the SPMP reference, then the vault
-`plans/` companion for the same engagement (16085 / risk-management naming the
-engagement uses), then a path the user names. Cite both SPMP and risk plan in
-§1.4.
+Resolve the risk plan from the SPMP reference, then the vault `plans/` companion
+for the same engagement (16085 / risk-management naming the engagement uses),
+then a path the user names. Resolve **treatment** paths from links in that risk
+plan / SPMP (and any path the user names). Cite SPMP, risk plan, and each loaded
+treatment in §1.4.
 
-Also load, when present (never instead of SPMP + risk plan):
+Also load, when present (never instead of SPMP + risk plan + required
+treatments):
 
 - Prior `projects/<slug>/requirements/software-requirements-specification.md`
   only if it already uses the SPMP-derived ID series (clean).
@@ -179,16 +219,18 @@ Also load, when present (never instead of SPMP + risk plan):
 **Clean baseline before secondary sources (hard rule):**
 
 1. **Generate** a **new clean** `software-requirements-specification.md` from
-   the SPMP first, then fold in risk-plan constraints/treatments that bind
-   product behavior. §3 IDs are **only** the SPMP-derived series (`EI-` /
-   `FR-` / `QS-` …). Path: `projects/<slug>/requirements/` in the engagement
+   the SPMP first, then the risk **profile**, then each **treatment** that binds
+   product behavior. §3 IDs are **only** the prefixes the SPMP defines for
+   that engagement (`{PREFIX}-001`, contiguous). Do not copy prefixes from
+   another engagement or from this protocol. Path: `projects/<slug>/requirements/` in the engagement
    vault. Do not skip this emit by “confirming” a dirty file.
 2. **Delete** any dirty draft that adopted secondary-source prefixes as
    governing IDs. Do not keep it as a parallel SRS.
-3. **Only after** that clean Markdown exists, **re-read** secondary sources and
-   consider **append-only** candidates (next free SPMP-series ID). Secondary
-   prefixes are **never** governing (discard as product IDs; optional trace
-   only). Secondary phase labels are **not** SPMP stages.
+3. **Only after** that clean Markdown exists, **re-read** secondary sources
+   (workshop MoSCoW, **docx** inventory, prior-system review, …) and consider
+   **append-only** candidates. Secondary prefixes are **never** governing
+   (discard as product IDs; optional trace only). Secondary phase labels are
+   **not** SPMP stages.
 4. **Do not** run Jidoka drift enumeration against a dirty secondary-ID SRS.
    Drift HITL compares **secondary claims** to the **clean SPMP + risk
    baseline**, after the clean file exists.
@@ -196,21 +238,45 @@ Also load, when present (never instead of SPMP + risk plan):
 **ID precedence (hard rule):**
 
 1. Derive the SRS ID scheme and baseline requirements **from the SPMP first**
-   (engagement series such as `EI-` / `FR-` / `QS-`, starting at the next free
-   number in that series). Risk-plan treatments that bind product behavior enter
-   that same series when they are requirements.
-2. **Only after** that baseline Markdown exists, **append / concatenate** new
-   EARS from secondary sources (workshop MoSCoW, docx inventory, prior-system
-   review). New rows take the **next** ID in the SPMP-derived series.
+   (whatever prefixes the SPMP names, each contiguous from `001`). Do not
+   reuse another engagement's prefixes as the default. Risk-profile constraints and **treatment-plan** obligations that
+   bind product behavior enter that same series when they are requirements.
+   Profile rows without a required treatment do not invent §3 behavior beyond
+   what the SPMP already states.
+2. **Only after** that baseline Markdown exists **and** the human has answered
+   Jidoka HITL (a)/(b)/(c) for every secondary claim, **append / concatenate**
+   accepted new EARS from secondary sources into §3. Assignment rule (mandatory):
+   - For **each** SPMP prefix independently, take
+     `last = max(existing numbers in that prefix)` in the clean SRS.
+   - The first accepted append for that prefix is `{PREFIX}-{last+1}`; each
+     further accepted append increments by one (`last+2`, `last+3`, …).
+   - **Never** insert into a hole, renumber the baseline to make room, or
+     reuse / translate the secondary source’s own IDs as governing product IDs.
+   - After append, the series for that prefix remains contiguous `001..N`
+     (`srs-id-order-lint.py` PASS).
 3. **Never** adopt the secondary source’s ID prefixes or row order as the SRS
-   scheme. Secondary IDs are irrelevant as product IDs.
+   scheme. Secondary IDs are irrelevant as product IDs (trace in annex / HITL
+   item only).
 4. Within each SRS table, sort by the SPMP-derived ID numerically within prefix.
+
+**Annex case missing from an SPMP requirement (hard rule):**
+
+Do not copy each annex requirement into §3 as its own ID.
+
+Take each requirement already extracted from the SPMP. Compare it with each annex sentence about the same behavior.
+
+1. Read that requirement and its acceptance criterion.
+2. Read the particular case in the annex sentence.
+3. If that case is already included in the requirement, do not add an ID.
+4. If that case is not included, the requirement is **incomplete** for that case. Append one next `{PREFIX}-nnn` that states that case.
+5. Name the result with the Glossary. Documented is priority 1: the case is written as a requirement because it was extracted first from the SPMP. Analyzed: the requirement was compared with the annex case. Covered: that case is already included; do not add an ID. Incomplete: that case is not included; append one next `{PREFIX}-nnn`.
+6. Secondary **should** and **could** do not become **shall** until the human accepts that priority for this baseline. **Won't** does not enter §3.
 
 **Conflict / drift rule — Jidoka HITL (hard stop):**
 
 **Prerequisite:** clean SPMP-series Markdown already exists (see above). Then,
 when a secondary **claim** (not its ID scheme) diverges from the SPMP, the risk
-plan, or an SPMP-derived EARS, **STOP**. Do **not** write a separate
+plan, a loaded **treatment**, or an SPMP-derived EARS, **STOP**. Do **not** write a separate
 divergences file, do **not** auto-resolve, do **not** summarize, do **not**
 batch into themes, do **not** drip “one question at a time”, and do **not** use
 AskQuestion / questionnaire UI. In **one** chat reply, **enumerate every
@@ -218,8 +284,8 @@ divergence as its own numbered item** (full list, complete text; secondary IDs
 optional as trace only) and, on **each** item, state the same three dispositions
 so the human can answer per ID (e.g. `D-012: b`):
 
-- **(a)** Correct the SPMP (and risk plan if needed) and request a new version
-  that absorbs the external source.
+- **(a)** Correct the SPMP (and risk plan / treatments if needed) and request a
+  new version that absorbs the external source.
 - **(b)** Keep the EARS derived from the SPMP; discard the conflicting claim
   from the secondary source for this SRS version.
 - **(c)** Keep both only if they are not contradictory and do not create an
@@ -252,16 +318,27 @@ Confirm with the user only what the SPMP and vault still leave open:
 Use `srs-bare-template.md` as the section shell. Fill each section per 29148.
 Cite the SPMP in §1.4 References and in the revision history (version, path).
 
+- **Class and justification.** Every §3 requirement table uses these columns, in this order: ID, requirement statement, class, justification, acceptance criterion. The requirement statement stays the first cell after the ID. Class is **Functional** or **Non-functional** (Spanish file: **Funcional** or **No funcional**). Functional: the row states what the system does, including a prohibition. If that row is absent, the task does not exist. Non-functional: the row states how the system operates, a quality attribute or a constraint (performance, security, reliability, availability, usability, compatibility, scalability, maintainability). If that row is absent, the task can still exist and fail that quality. The justification applies that test to the row and does not repeat the class word: the class column already states it. The section heading does not decide the class: a quality-of-service row is Functional when it states a task.
 - Verifiable requirements in **EARS** form: Spanish
   `El sistema debe <observable behavior>` (or Cuando/Mientras/Si/Donde …);
-  English `The system shall …` (or When/While/If/Where …). Run
-  `ears-lint.py` on those lines before the CFM prose linter. Plus an
-  acceptance criterion per requirement.
+  English `The system shall …` (or When/While/If/Where …). Run mechanical
+  gates in order on the filled file: `srs-id-order-lint.py` (table ID order
+  within each prefix), then `ears-lint.py` on requirement lines, then the CFM
+  prose linter (STE/ESP-TS). Plus an acceptance criterion per requirement.
 - No implementation jargon in §3.2 (functional). Technical decisions go to §3.5
   (Design and Implementation) and to OpenSpec `design.md`.
-- Each important functional requirement carries an ID (for example `FR-001`) for
-  the verification table. Keep a stable ID scheme for the engagement; map draft
-  inventory IDs in an annex when they differ.
+- Each important functional requirement carries an ID (`{PREFIX}-001`, prefix
+  taken from the SPMP, not from this protocol) for the verification table.
+  Keep that scheme stable; sort IDs numerically within each prefix in every
+  table (`srs-id-order-lint.py` PASS); map draft inventory IDs in an annex
+  when they differ.
+- **Do not drop** a known candidate that is outside this baseline or blocked on
+  an open fact. Record it in the SRS annex (non-governing prefix `DW-`, never
+  a §3 prefix): **WAIVED** when the SPMP places it outside the baseline
+  (re-entry = change order); **DEFERRED** when it stays in the product problem
+  but this version cannot verify it yet (re-entry = append `last+1` on the
+  governing prefix once the fact or number exists). Platform and hosting
+  choices stay constraints, not DW rows and not §3 requirements.
 - Explicit quality-of-service requirements: performance, security, reliability,
   availability, observability — only when the SPMP or stakeholder input gives a
   measurable criterion (do not invent SLAs the SPMP does not support).
@@ -311,20 +388,28 @@ the evidence. Paths of the files. Next action (step 5).
 4. **Skipping the checklist** — each requirement passes unique / atomic / verifiable / traceable.
 5. **Writing the specification already as implementation** — §3.2 is functional, not design; the "how" goes to §3.5 and to OpenSpec `design.md`.
 6. **Generating the specification after the issues** — the order is software-requirements-specification.md → OpenSpec → issues → PRs.
-7. **Adopting secondary-source ID schemes or draft row order as the SRS scheme** — SPMP-derived IDs first; secondary sources only append with the next free ID and leave their own IDs as trace.
+7. **Adopting secondary-source ID schemes or draft row order as the SRS scheme** — SPMP-derived IDs first; secondary sources (docx, MoSCoW, …) only append after `max(ID)` **per prefix** (`last+1`, contiguous); leave secondary IDs as trace only.
 8. **Auto-resolving SPMP ↔ secondary-source divergences** — or dumping them into a side file without HITL. Forbidden. Enumerate one-by-one; ask (a)/(b)/(c) per item; wait.
 9. **Dirty SRS with secondary ID schemes** — emitting or keeping a parallel SRS whose governing IDs are docx/workshop prefixes. Forbidden. Delete it; clean SPMP-series Markdown first.
 10. **Skipping the engagement risk management plan (16085)** — SPMP without its risk companion. Forbidden.
+11. **Skipping required risk treatment plans** — using only the profile table when the risk plan / SPMP links a written treatment. Forbidden.
+12. **Skipping `srs-id-order-lint.py`** — unsorted, duplicate, or gapped IDs within a prefix in any requirement table. Forbidden. Delete/retire by renumbering the series; do not leave holes.
+13. **Dropping out-of-baseline or open-fact candidates** — omitting them from the SRS because they are not §3 yet. Forbidden. Record **WAIVED** or **DEFERRED** (`DW-`) in the annex.
+14. **Copying the annex row by row into §3** — or adding an ID when the particular case is already included in the SPMP requirement. Forbidden. Append only the case that requirement does not include.
 
 ## Final checklist
 
-- [ ] SPMP and engagement risk management plan (16085) loaded and cited (§1.4 + revision history)
+- [ ] SPMP, engagement risk management plan (16085), and required risk **treatment** plans loaded and cited (§1.4 + revision history)
 - [ ] Clean SPMP-series Markdown exists at `projects/<slug>/requirements/` before any secondary append; dirty secondary-ID drafts deleted
 - [ ] Every secondary **claim** ↔ clean baseline divergence enumerated one-by-one after the clean file exists; human answered (a)/(b)/(c) per item before append
-- [ ] Baseline IDs and order come from the SPMP-derived series; secondary prefixes never governing; tables sorted by SPMP-derived ID within prefix
+- [ ] Baseline IDs and order come from the SPMP-derived series; secondary prefixes never governing; tables sorted by SPMP-derived ID within prefix (`srs-id-order-lint.py` PASS)
+- [ ] Each §3 requirement table has columns ID, requirement, class, justification, acceptance. Class is Functional or Non-functional. The justification applies that test to the row. The requirement statement stays the first cell after the ID.
+- [ ] Each generated file opens with a Glossary table. Documented is priority 1 and the first row (the case is written as a requirement because it was extracted first from the SPMP). Then covered, analyzed, incomplete, waived, deferred, functional, and non-functional (Spanish file: documentado, cubierto, analizado, incompleto, excluido, diferido, funcional, no funcional). Covered = the annex case is already included in the SPMP requirement; analyzed = that comparison was made; incomplete = the case is not included and is the next ID; waived = outside this baseline, return by change order, recorded as `DW-`; deferred = still in the product problem, fact or number still open, recorded as `DW-`
+- [ ] An annex case already included in an SPMP requirement did not get a new ID; a case that is not included was appended as the next `{PREFIX}-nnn` only
 - [ ] Specification written from the bare template (830 structure); version per engagement (0.1 only on first emit)
 - [ ] Requirements with an ID, EARS form (`ears-lint.py` PASS), obligation word in the engagement language, and an acceptance criterion (29148)
-- [ ] Filled client file passes language-routed STE/ESP-TS after EARS (and BDD when scenarios exist)
+- [ ] Filled client file passes gates in order: `srs-id-order-lint.py` → EARS → BDD (when scenarios exist) → language-routed STE/ESP-TS
+- [ ] Out-of-baseline items are **WAIVED** and open-fact items are **DEFERRED** in the SRS annex (`DW-`); neither list is dropped
 - [ ] Checklist unique / atomic / verifiable / traceable / unambiguous / implementation-free
 - [ ] Verification table Requirement × Method × Evidence filled
 - [ ] Human review of the specification before deriving OpenSpec

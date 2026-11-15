@@ -17,6 +17,21 @@ Prepared by {{author}}
 > **Keywords (RFC 2119):** SHALL / SHALL NOT / SHOULD / MAY. Every requirement is
 > atomic, unique (ID), verifiable, and implementation-free (§3.2 functional only).
 
+## Glossary
+
+These words mean only what this table says.
+
+| Word | Meaning in this file |
+| --- | --- |
+| Documented | The case is written as a requirement because it was extracted first from the SPMP. Priority 1. Always the first row. |
+| Covered | The particular annex case is already included in the requirement taken from the SPMP. No further ID is added. |
+| Analyzed | That requirement was compared with the annex case. |
+| Incomplete | The requirement taken from the SPMP does not include that particular case. That case is the next ID. The annex is not copied row by row. |
+| Waived | The SPMP places it outside this baseline. It returns only by change order. The annex records it as `DW-`. It is not a §3 requirement. |
+| Deferred | It stays in the product problem. A fact or a number is still open, so this version cannot verify it. When that input exists, it is appended as the next ID of its prefix. The annex records the wait as `DW-`. |
+| Functional | The requirement states what the system does: a task, an input, an output, or an interaction, including a prohibition. If the row is absent, that task does not exist. |
+| Non-functional | The requirement states how the system operates: a quality attribute or a constraint. If the row is absent, the task can still exist and fail that quality. |
+
 ## Table of Contents
 <!-- TOC -->
 * [1. Introduction](#1-introduction)
@@ -111,7 +126,9 @@ Prepared by {{author}}
 
 ### 3.2 Functions
 <!-- externally observable behaviors organized by feature/use case. Express each as:
-     FR-001 | The system SHALL <observable behavior>. Acceptance: <testable criterion>. -->
+     {PREFIX}-001 | The system SHALL <observable behavior> | Functional or Non-functional | <why this row is that class> | Acceptance: <testable criterion>.
+     The requirement statement stays the first cell after the ID.
+     PREFIX comes from that engagement's SPMP. Do not copy another engagement's prefixes. -->
 
 ### 3.3 Quality of Service
 <!-- measurable non-functional attributes section -->
