@@ -41,5 +41,6 @@ templates. Output a findings brief only.
 - Every finding cites a checklist row and evidence location.
 - Short quotes or `not found` only — no wholesale reproduction of client docs.
 - Rubric severity rules in `audit-rubric.md` are binding.
-- Eval fixture (read-only): engagement brain engagement SPMP on the default branch —
-  **never modify** `plans/2026-11-05-plan-proyecto-<slug>.md` during audit.
+- Optional local eval fixture: operator-provided vault SPMP path (never commit
+  client plans into this toolkit; never modify the client's vault copy during
+  audit). Example shape only: `plans/<YYYY-MM-DD>-plan-proyecto-<slug>.md`.

@@ -1,7 +1,8 @@
-# Eval fixture notes — engagement SPMP (read-only)
+# Eval fixture notes — sample SPMP (read-only)
 
-**Fixture path (do not modify):** engagement brain
-`plans/2026-11-05-plan-proyecto-<slug>.md` on the brain default branch (read-only eval).
+**Fixture path (do not modify):** operator-provided engagement vault path
+`plans/<YYYY-MM-DD>-plan-proyecto-<slug>.md` on that vault's default branch
+(read-only eval). Do not commit client plans into this toolkit.
 
 **Templates scored:** `iso-16326-spmp` + risk companion `iso-16085-risk-management-plan`.
 **Date of dry-run:** 2026-11-10.
