@@ -29,6 +29,10 @@ The skill's questions and working notes are in **English**. Generated deliverabl
 **engagement's working language** — English by default, Spanish for Costa Rica engagements (matching
 the contract skills). Confirm with the user if unclear.
 
+**Mechanical gate (emitted deliverables):** English →
+`shared/references/asd-ste100/scripts/asd-ste100-lint.py`; Spanish →
+`shared/references/esp-ts/scripts/esp-ts-lint.py`. Do not cross-run languages.
+
 ## Output directory
 
 Resolve the pipeline directory `{sops-dir}` first, in this order:

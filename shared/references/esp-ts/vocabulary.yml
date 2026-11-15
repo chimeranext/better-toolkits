@@ -1,0 +1,138 @@
+# Vocabulario inicial de ESTE — v0.1
+# Principio: un concepto → un término preferido.
+# NO es el diccionario oficial de STE. Amplíalo por proyecto.
+# status: preferred | avoid | domain
+#
+# Notes use block scalars so inline quotes/colons stay valid YAML.
+# Upstream source: github.com/esadrian/este-skill (spec/vocabulary.yml).
+
+version: "0.1.0"
+
+meta:
+  note: >
+    Prefiere el término "preferred" para el sentido indicado. Conserva
+    inglés de dominio solo si el glosario del proyecto ya lo estandariza.
+
+terms:
+  - concept: verificar_estado
+    preferred: verificar
+    avoid: [chequear, checkear, mirar, revisar, validar]
+    note: >-
+      Usa "validar" solo para validación de esquema/formato, no para
+      comprobaciones generales.
+    status: preferred
+
+  - concept: eliminar
+    preferred: eliminar
+    avoid: [borrar, quitar, remover, deletear]
+    note: >-
+      "borrar" vale en UI si el producto ya lo usa; entonces mantén solo esa forma.
+    status: preferred
+
+  - concept: iniciar
+    preferred: iniciar
+    avoid: [arrancar, lanzar, spinear, kickoff]
+    status: preferred
+
+  - concept: detener
+    preferred: detener
+    avoid: [parar, matar, stoppear]
+    status: preferred
+
+  - concept: actualizar
+    preferred: actualizar
+    avoid: [updatear, refrescar]
+    note: >-
+      Usa "refrescar" solo para recargar en UI datos ya en pantalla.
+    status: preferred
+
+  - concept: desplegar
+    preferred: desplegar
+    avoid: [deployar, hacer_deploy]
+    note: >-
+      Si el glosario del equipo usa "deploy", usa solo "deploy" y documéntalo.
+    status: preferred
+
+  - concept: error
+    preferred: error
+    avoid: [fallo_ambiguo, issue, problema]
+    note: >-
+      Prefiere "error" para fallos; "problema" solo en issues suaves orientados
+      al usuario.
+    status: preferred
+
+  - concept: usuario
+    preferred: usuario
+    avoid: [cliente, persona, cuenta]
+    note: >-
+      Reserva "cliente" para cliente API/HTTP o cliente de negocio cuando ese
+      sea el concepto real.
+    status: preferred
+
+  - concept: archivo
+    preferred: archivo
+    avoid: [fichero, file]
+    note: >-
+      "fichero" vale en prosa sysadmin ES-ES si se elige una vez y se mantiene.
+    status: preferred
+
+  - concept: servicio
+    preferred: servicio
+    avoid: [proceso_ambiguo, demonio]
+    status: preferred
+
+  - concept: token_acceso
+    preferred: token de acceso
+    avoid: [token, clave_temporal]
+    note: >-
+      Defínelo en el primer uso; luego reutiliza la frase completa o la forma
+      corta del glosario de forma consistente.
+    status: domain
+
+  - concept: actual_falso_amigo
+    preferred: este / vigente / en sesión
+    avoid: [actual]
+    note: >-
+      En español "actual" no equivale de forma fiable a "current" en inglés.
+      Prefiere formas unívocas.
+    status: avoid
+
+  - concept: soportar_falso_amigo
+    preferred: admitir / ser compatible con / resistir
+    avoid: [soportar]
+    note: >-
+      Distingue: compatibilidad vs resistencia de carga vs apoyo.
+    status: avoid
+
+  - concept: eventualmente_falso_amigo
+    preferred: en algún caso / a veces / al final
+    avoid: [eventualmente]
+    note: >-
+      No lo uses como el inglés "eventually".
+    status: avoid
+
+  - concept: realizar_vago
+    preferred: "<verbo concreto>"
+    avoid:
+      - realizar
+      - llevar a cabo
+      - proceder a
+    note: >-
+      Sustitúyelo por el verbo de la acción concreta.
+    status: avoid
+
+phrases:
+  - bad: se procede a
+    good: "<sujeto> + <verbo>"
+  - bad: es importante señalar que
+    good: "(eliminar) o afirmar el hecho"
+  - bad: a la hora de
+    good: al / cuando
+  - bad: de cara a
+    good: para
+  - bad: en base a
+    good: según / a partir de
+  - bad: mismo / dicha / referido
+    good: repetir el sustantivo
+  - bad: generando / provocando (consecuencia)
+    good: y + verbo finito / nueva oración

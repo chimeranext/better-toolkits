@@ -48,3 +48,8 @@ repos:
         pass_filenames: false
         always_run: true
         stages: [post-commit]
+      - id: asd-ste100-commit-prose
+        name: ASD-STE100 prose on commit message (CvC)
+        entry: python3 shared/references/asd-ste100/scripts/prose_gate.py commit-msg
+        language: system
+        stages: [commit-msg]

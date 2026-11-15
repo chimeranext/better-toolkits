@@ -74,6 +74,23 @@ Use the tracker configured for the target repository:
 
 **Branch:** `type/<issue-ref>-slug`. For GitHub Issues use the numeric issue number (for example `feat/43-native-tracking`); for external trackers use the lowercased native key (for example `feat/team-123-summary`). Prefer the configured tracker's suggested branch name when available.
 
+### Controlled English (ASD-STE100)
+
+PR title and body prose are **English** (same rule as **CvC** — do not translate
+commits/PR text because `make-no-mistakes.config.json` → `language` is Spanish).
+Before `gh pr create|edit` (and before `git push` when a PR already exists), the
+body SHALL pass the structural ASD-STE100 gate:
+
+```bash
+python3 shared/references/asd-ste100/scripts/prose_gate.py markdown pr-body.md
+```
+
+Runtime: [`shared/hooks/prds/detect.py`](../../hooks/prds/detect.py) runs the same
+gate after the section checks. Hard findings deny. Soft (advisory) findings do
+not. Bypass: `# hook-bypass: ste-prose-deferred` in the body or command, or
+`FCTO_DISABLE_STE_PROSE_HOOK=1`, or
+`.claude/config/prds-hooks.json` → `{"enforce_ste_prose": false}`.
+
 ---
 
 ## Size and scope limits
@@ -157,7 +174,7 @@ This document is the **protocol** (what belongs in a PR body). **Runtime** gates
 
 | Policy | Runtime SSOT | What it blocks |
 | --- | --- | --- |
-| **PRDS** (this doc) | [`shared/hooks/prds/`](../../../../shared/hooks/prds/) | `gh pr create\|edit` without Summary / Tracker / Test plan / Scope boundaries; `git push` when an open PR body is non-compliant |
+| **PRDS** (this doc) | [`shared/hooks/prds/`](../../../../shared/hooks/prds/) | `gh pr create\|edit` without Summary / Tracker / Test plan / Scope boundaries; ASD-STE100 hard prose findings on the body; `git push` when an open PR body is non-compliant |
 | **stderr preserve** | [`shared/hooks/stderr/`](../../../../shared/hooks/stderr/) | Agent shell that silences streams to `/dev/null` or folds stderr with bare `2>&1` without a file/`tee` sink |
 
 | Harness | PRDS adapter | stderr adapter |
@@ -168,6 +185,9 @@ This document is the **protocol** (what belongs in a PR body). **Runtime** gates
 
 **PRDS behavior:** Progressive `git push` **before** any PR exists remains allowed (draft
 workflow). Opt-out: `FCTO_DISABLE_PRDS_HOOK=1` or `# hook-bypass: prds-body-deferred`.
+STE prose opt-out: `FCTO_DISABLE_STE_PROSE_HOOK=1`,
+`{"enforce_ste_prose": false}` in `prds-hooks.json`, or
+`# hook-bypass: ste-prose-deferred`.
 **stderr opt-out:** `MNM_DISABLE_STDERR_HOOK=1` or `.claude/config/stderr-hooks.json` →
 `{"preserve_stderr": false}`.
 
@@ -194,6 +214,7 @@ When auditing with `--focus prds` or `--prs`:
 
 - [ ] Title follows `<type>(<scope>): outcome (TICKET-N)`
 - [ ] Body has Summary, Tracker, Test plan, Scope boundaries (minimum)
+- [ ] Body (and title prose) pass ASD-STE100 hard gate (`prose_gate.py markdown`)
 - [ ] Soft cap ~400 lines; flag mega-diffs
 - [ ] One intent — no unrelated file churn
 - [ ] Draft workflow respected (undraft only when checks green + human OK)

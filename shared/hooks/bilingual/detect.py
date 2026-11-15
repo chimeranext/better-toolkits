@@ -18,6 +18,11 @@ Agent Layer). Required markers (order-aware):
   ### Acceptance Criteria        (under AGENT LAYER)
   ### Context Files              (under AGENT LAYER)
 
+Behavioral Acceptance Criteria (shall/debe / EARS openers) are also checked
+with `shared/references/ears/scripts/ears-lint.py` when that pack is present.
+Informal AC bullets are ignored. Pipeline: EARS structure, then STE/ESP-TS
+at the producer skill (not in this detector).
+
 Exit codes when run as CLI:
   0 — allow
   2 — deny (print reason to stderr)
@@ -25,9 +30,11 @@ Exit codes when run as CLI:
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import re
 import sys
 from pathlib import Path
+from typing import Any, Callable, cast
 
 BYPAASS = re.compile(r"#\s*hook-bypass:\s*bilingual-body-deferred\b", re.I)
 
@@ -43,6 +50,44 @@ NEXT_TOP = re.compile(r"(?m)^[ \t]*##(?![ \t]*#)[ \t]+")
 NEXT_SUB = re.compile(r"(?m)^[ \t]*#{2,3}[ \t]+")
 
 STUB = re.compile(r"(?i)\b(TBD|TODO)\b|^\s*[?…N/A]{1,4}\s*$")
+
+HERE = Path(__file__).resolve().parent
+
+
+def _find_ears_lint() -> Path | None:
+    """Locate ears-lint.py: monorepo shared/, or bundled next to this detector."""
+    candidates = [
+        HERE / "ears-lint.py",
+        HERE / "ears" / "ears-lint.py",
+        HERE / "ears" / "scripts" / "ears-lint.py",
+    ]
+    for parent in [HERE, *HERE.parents]:
+        candidates.append(
+            parent / "shared" / "references" / "ears" / "scripts" / "ears-lint.py"
+        )
+        candidates.append(
+            parent / "references" / "ears" / "scripts" / "ears-lint.py"
+        )
+    seen: set[Path] = set()
+    for path in candidates:
+        if path in seen:
+            continue
+        seen.add(path)
+        if path.is_file():
+            return path
+    return None
+
+
+def _load_ears():
+    path = _find_ears_lint()
+    if path is None:
+        return None
+    spec = importlib.util.spec_from_file_location("ears_lint_bib", path)
+    if spec is None or spec.loader is None:
+        return None
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
 
 
 def _capture(markdown: str, heading: re.Pattern[str], stop: re.Pattern[str]) -> str | None:
@@ -102,6 +147,33 @@ def substantive_check(body: str) -> list[str]:
     return issues
 
 
+def ears_ac_check(body: str) -> list[str]:
+    """Lint behavioral AC bullets with EARS when the pack is available.
+
+    Informal AC (tests pass, docs updated) are not candidates. Missing pack
+    → no findings (fail-open for lean plugin installs without shared/).
+    """
+    ears = _load_ears()
+    if ears is None:
+        return []
+    extract = getattr(ears, "extract_from_markdown", None)
+    validate = getattr(ears, "validate_requirement", None)
+    if not callable(extract) or not callable(validate):
+        return []
+    # callable() is the runtime guard. Pylint does not narrow getattr results.
+    extract_fn = cast(Callable[[str], list[Any]], extract)
+    validate_fn = cast(Callable[[Any], dict[str, Any]], validate)
+    candidates = extract_fn(body)  # pylint: disable=not-callable
+    findings: list[str] = []
+    for cand in candidates:
+        result = validate_fn(cand)  # pylint: disable=not-callable
+        if result.get("valid"):
+            continue
+        issues = "; ".join(result.get("issues") or ["invalid EARS form"])
+        findings.append(f"AC EARS FAIL: {cand} ({issues})")
+    return findings
+
+
 def evaluate(body: str) -> str | None:
     if BYPAASS.search(body):
         return None
@@ -117,6 +189,16 @@ def evaluate(body: str) -> str | None:
     stub = substantive_check(body)
     if stub:
         return "BILINGUAL: " + "; ".join(stub) + " (stub ≠ brief sustantivo)"
+    ears = ears_ac_check(body)
+    if ears:
+        return (
+            "BILINGUAL+EARS: "
+            + " | ".join(ears)
+            + ". Reescribe criterios de comportamiento en forma EARS "
+            "(When/While/If/Where … shall / Cuando/Mientras/Si/Donde … debe). "
+            "Ver shared/references/ears/README.md. Informal AC (tests, docs) sin "
+            "shall/debe se dejan igual."
+        )
     return None
 
 

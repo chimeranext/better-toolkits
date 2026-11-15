@@ -6,7 +6,7 @@ sidebarTitle: Pull Request Description Standards
 
 # Pull Request Description Standards
 
-**Scope:** PR body + reviewable size
+**Scope:** PR body + reviewable size; English body prose passes ASD-STE100
 
 ## When to apply it
 
@@ -22,3 +22,5 @@ healthy.
 
 The detailed procedure, commands, and enforcement for this standard live in
 `shared/references/engineering-standards/prds.md` in the repository.
+Prose gate: `shared/references/asd-ste100/scripts/prose_gate.py markdown`
+(also enforced by `shared/hooks/prds/detect.py`).

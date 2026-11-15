@@ -83,7 +83,8 @@ The verdict + evidence chain is machine-auditable, but for a human reader the
 raw chain is dense. When the explanation is for a person (not just an agent),
 format the verdict's story via `/explain` — two layers (plain prose + technical
 evidence), a non-obvious insight, and ranked actionables — and apply the
-ASD-STE100 output discipline (see `/explain` protocol §4.5). The evidence chain
+controlled-language output discipline (see `/explain` protocol §4.5 —
+English → `asd-ste100-lint.py`, Spanish → `esp-ts-lint.py`). The evidence chain
 remains the source of truth; `/explain` is the presentation layer over it.
 
 **Explicit tool-and-verb sentence (mandatory in the prose layer):** the prose

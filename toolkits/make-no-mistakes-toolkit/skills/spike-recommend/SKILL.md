@@ -100,6 +100,14 @@ You do NOT have an existing issue to read. Instead:
 
 Use [`templates/bilingual-issue-brief.md`](../../templates/bilingual-issue-brief.md) verbatim. The content rules, label taxonomy, validation, and analysis frameworks (Five Whys / MECE / Minto / Pareto / Second-Order Thinking) are unchanged.
 
+**EARS on behavioral AC:** Acceptance Criteria that state system behavior MUST use EARS (`shall` / `debe` templates — see `shared/references/ears/patterns.md`). Before Step 4, stage the brief and run:
+
+```bash
+python3 shared/references/ears/scripts/ears-lint.py --markdown "$BRIEF_FILE"
+```
+
+Fix FAIL lines before write-back. Informal AC (unit tests, docs) need not be EARS. Order for requirement prose: EARS → ASD-STE100 (EN) / ESP-TS (ES). The BIB detector also enforces EARS on AC candidates at `save_issue` / `gh issue create|edit`.
+
 ## Step 4 — Write back to the tracker
 
 ### If mode = `update`

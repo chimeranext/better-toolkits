@@ -1,0 +1,15 @@
+EARS (Easy Approach to Requirements Syntax) materials — attribution
+
+`scripts/ears-lint.py` is adapted from the `ears-requirements` skill's
+`validate_ears.py` (OpenAI / community skill packaging). Pattern definitions
+follow the public EARS literature (Mavin et al., INCOSE) and the pattern
+templates commonly published with that skill.
+
+Spanish obligation forms (`debe`) are original to better-toolkits so Spanish
+customer-facing SRS and bilingual issue AC can share one gate.
+
+Related practice notes (WHEN / THEN / SHALL CONTINUE TO for unchanged
+behavior) align with public Specs guidance such as
+https://kiro.dev/docs/specs/best-practices/ — not a redistribution of that site.
+
+This pack does not claim INCOSE certification.

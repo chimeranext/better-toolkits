@@ -93,32 +93,60 @@ Segun la seleccion, hacer las preguntas de seguimiento correspondientes:
 - Milestone de aceleracion (acceleration) y porcentaje adicional que desbloquea
 - Dias para firmar el addendum de equity despues del PSA (default: 30)
 
-### Paso 3 — Scope of Work (Alcance del trabajo)
+### Paso 3 — Path de gobernanza (SPMP / 16085)
+
+Preguntar UNA vez (default = path estandar):
+
+> ¿Como anclamos el SPMP (ISO/IEC/IEEE 16326) y el plan de riesgos (ISO/IEC/IEEE 16085)?
+>
+> **A) Path estandar — Milestone 1 post-firma (recomendado).** En preventa solo bare
+> templates. Tras la firma, el Milestone 1 (Discovery) entrega SPMP + RM 16085 definitivos
+> (y treatments segun Eisenhower). Pagadero. Sin aprobacion de E-01/E-02 no arranca
+> diseno/desarrollo.
+>
+> **B) Path alta gobernanza — anexos definitivos pre-firma.** El SPMP y el RM
+> definitivos van como anexo tecnico **antes** de firmar.
+>
+> **Advertencia (B):** No recomendado para Fractional CTOs sin experiencia previa en
+> negociaciones de preventa. Exige inversion fuerte de ingenieria antes de asegurar
+> contrato y financiamiento, y expone al equipo a trabajo no pagado si el PSA no se
+> firma. Preferir A.
+
+Si elige B, documentar la eleccion en Seccion 7.4.5 y Anexo E. Si elige A (default),
+dejar E-01/E-02/E-03 + M-01 del template y copiar bares a preventa / Anexo D.
+
+Tras la firma en path A, el trabajo del Milestone 1 se ejecuta con
+`/software-project-management-plan-authoring-ieee16326` y `/software-risks-authoring-ieee16085`
+(no preguntar si hacen falta).
+
+### Paso 4 — Scope of Work (Alcance del trabajo)
 
 Recopilar en una sola interaccion:
 
 > Describime el alcance del proyecto:
 >
 > 1. **Descripcion general** — ¿Que se va a hacer? (en 2-3 oraciones)
-> 2. **Entregables** — Lista de lo que entregas (el template usa una tabla con #, nombre, descripcion, incluido/tarifa)
+> 2. **Entregables adicionales** — Ademas de E-01/E-02/E-03 (gobernanza), ¿que mas entregas?
 > 3. **Exclusiones** — ¿Que NO esta incluido? (importante para poner limites)
 > 4. **Supuestos y dependencias** — ¿Que asumis que el cliente va a proveer o que condiciones deben cumplirse?
 
 Si el usuario da una descripcion general sin detallar, ayudarle a desglosar en
 entregables concretos basandose en el tipo de proyecto (takeover, migracion, feature
-development, security remediation, etc.).
+development, security remediation, etc.). No borrar E-01/E-02/E-03 del template.
 
-### Paso 4 — Timeline y Milestones
+### Paso 5 — Timeline y Milestones
 
 > Ahora el cronograma:
 >
 > 1. **Fecha de inicio** (o "al firmar")
-> 2. **Milestones** — Lista con: nombre del milestone, entregables asociados, fecha objetivo, pago asociado
-> 3. **Duracion total estimada** (semanas o meses)
-> 4. **Proceso de aceptacion** — ¿Cuantos dias de revision para el cliente? (default: 5-10 dias habiles)
+> 2. **{DIAS_HITO1}** — dias habiles del Milestone 1 Discovery (default: 15)
+> 3. **Milestones posteriores a M-01** — nombre, entregables, fecha, pago
+> 4. **Duracion total estimada** (semanas o meses)
+> 5. **Proceso de aceptacion** — ¿Cuantos dias de revision para el cliente? (default: 5-10 dias habiles)
 
-Si el usuario proporciona solo una fecha de inicio y duracion total, ayudarle a
-distribuir los milestones de forma logica segun los entregables del Paso 3.
+M-01 queda fijo como Discovery en el path estandar. El operador escribe el plan de gestión del proyecto y el plan de gestión de riesgos. Con la matriz de urgente e importante, el operador decide si también exige el plan de tratamiento. En el template del contrato esas filas siguen llamándose E-01, E-02 y E-03.
+Si el usuario solo da fecha de inicio y duracion, ayudar a repartir M-02+ de forma
+logica. Default `{DIAS_HITO1}`: 15.
 
 Valores por defecto si el usuario no especifica:
 - Dias de aviso por atraso del consultor: 5
@@ -128,10 +156,10 @@ Valores por defecto si el usuario no especifica:
 - Dias para correcciones: 5
 - Frecuencia de reuniones de seguimiento: semanal
 
-### Paso 5 — Generar PSA
+### Paso 6 — Generar PSA
 
 1. Leer el template base: `${CLAUDE_PLUGIN_ROOT}/references/contracts/03-psa-project.md`
-2. Rellenar todos los placeholders con la informacion recopilada en los Pasos 1-4.
+2. Rellenar todos los placeholders con la informacion recopilada en los Pasos 1-5.
 3. En la Seccion 0 (Modelo de Compensacion):
    - Marcar con `[x]` el modelo seleccionado.
    - Dejar los modelos no seleccionados con `[ ]` pero **mantenerlos visibles**
@@ -139,7 +167,10 @@ Valores por defecto si el usuario no especifica:
    - Rellenar SOLO los campos del modelo seleccionado con datos reales.
    - Los campos de los modelos no seleccionados quedan con los placeholders originales.
 4. Rellenar la tabla de pagos de la Seccion 5 alineada al modelo seleccionado.
-5. Rellenar valores por defecto razonables para campos que el usuario no especifico:
+5. Conservar E-01/E-02/E-03 y M-01 / Seccion 7.4 del template. Ajustar 7.4.5 solo
+   si eligio path alta gobernanza.
+6. Rellenar valores por defecto razonables para campos que el usuario no especifico:
+   - `{DIAS_HITO1}`: 15
    - `{DIAS_ELIMINACION_DATOS}`: 15
    - `{DIAS_FACTURACION}`: 5
    - `{DIAS_PAGO}`: 10
@@ -160,10 +191,14 @@ Valores por defecto si el usuario no especifica:
    - `{HORAS_NOTIFICACION_BRECHA}`: 48
    - `{CANAL_SOPORTE}`: correo electronico
    - `{VERSION}`: 1.0
-6. Generar un slug a partir del nombre del proyecto (minusculas, guiones, sin tildes).
-7. Escribir en `./fractional-cto/contracts/{slug}-psa.md`
+7. Generar un slug a partir del nombre del proyecto (minusculas, guiones, sin tildes).
+8. Escribir en `./fractional-cto/contracts/{slug}-psa.md`
+9. En path estandar, copiar los bare templates
+   `iso-16326-spmp-bare.md`, `iso-16085-risk-management-plan-bare.md`,
+   `iso-16085-risk-treatment-plan-bare.md` a
+   `./fractional-cto/presales/{slug}/` (Anexo D).
 
-### Paso 6 — Confirmacion
+### Paso 7 — Confirmacion
 
 Presentar al usuario un resumen claro:
 
@@ -171,13 +206,15 @@ Presentar al usuario un resumen claro:
    - Modelo A: monto total, estructura de pago
    - Modelo B: tarifa reducida, bono, milestone trigger
    - Modelo C: tarifa, equity %, vesting, cliff, aceleracion
-2. **Cantidad de entregables** y **milestones** definidos
-3. **Duracion estimada** del proyecto
-4. **Ruta del archivo generado**: `./fractional-cto/contracts/{slug}-psa.md`
-5. **Disclaimer obligatorio:**
+2. **Path de gobernanza** (estandar Milestone 1 vs alta gobernanza) y **advertencia** si eligio B
+3. **Cantidad de entregables** y **milestones** definidos (M-01 Discovery incluido en path estandar)
+4. **Duracion estimada** del proyecto
+5. **Ruta del archivo generado**: `./fractional-cto/contracts/{slug}-psa.md`
+6. **Bares preventa** (path estandar): `./fractional-cto/presales/{slug}/`
+7. **Disclaimer obligatorio:**
    > "Requiere revision de un abogado. Ambas partes deben tener revision legal independiente antes de firmar."
-6. **Siguiente paso sugerido:**
-   > "Despues de completar el proyecto, considera /contract-retainer para formalizar una gestion ongoing como Fractional CTO."
+8. **Siguiente paso sugerido (path estandar, tras firma):**
+   > "Ejecuta Milestone 1 con `/software-project-management-plan-authoring-ieee16326` y `/software-risks-authoring-ieee16085`. Esos comandos escriben el plan de gestión del proyecto y el plan de gestión de riesgos. Si el operador, con la matriz de urgente e importante, exige un plan de tratamiento, escribe `risk-treatment-plan.md`. Si el cliente no acepta por escrito esos planes, se revisan y no arranca el diseño, la codificación ni el despliegue. Si los acepta, `/contract-psa` invoca `/requirements-authoring-ieee29148`. M-02 es `/architecture-description-ieee42010`. Si M-02 evalúa la arquitectura, invoca `/architecture-evaluation-ieee42030`. `/architecture-decision-ieee42010` escribe el registro de decisión. `/engineering-standards-setup` arranca `/opsx-*`: ahí están el desarrollo, la codificación y el despliegue. M-04 cierra el Handover pipeline, después de `/handover-engagement-to-board`. Los documentos de la transferencia los escriben los comandos de handover."
 
 Si existe un assessment previo en `./fractional-cto/assessment/`, mencionar que el
 contexto de riesgo del assessment se tuvo en cuenta al definir el scope.

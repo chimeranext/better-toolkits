@@ -3,11 +3,11 @@
 
   "_boundary": "This file answers HOW THE TOOLKIT BEHAVES. The two domain configs answer WHERE THINGS GO: `slack-config.json` (channel IDs, repo display names, emoji) and `linear-setup.json` (team key, project mapping, SRD/OpenSpec paths). Do not add a channel or a Linear project here, and do not add a preference there — a preference that lives in a domain config is invisible to every command that does not touch that domain.",
 
-  "language": "es",
-  "_language": "Output language for commands that address the user in prose. BCP-47 or a bare two-letter code ('es', 'en', 'pt-BR'). Default: 'es'. This governs PROSE ONLY — code, identifiers, commit messages, PR titles/bodies, and Linear issues follow the target repo's own convention, which is usually English. A command that writes to GitHub or Linear must not translate that output just because this key is set.",
+  "language": "en",
+  "_language": "Engagement fallback for user-facing prose when the prompt does not establish a language. Interactive commands (e.g. /merge-advisor, /explain) prefer the prompt language first, then this key, then English. Use 'es' for Spanish engagements (Costa Rica and other LATAM), 'en' for English, or another BCP-47 / two-letter code ('pt-BR', …). Spanish prose is a first-class path: mechanical gate ESP-TS (`shared/references/esp-ts/scripts/esp-ts-lint.py`); English prose → ASD-STE100 (`shared/references/asd-ste100/scripts/asd-ste100-lint.py`). Governs PROSE ONLY — code, identifiers, commit messages, PR titles/bodies, and Linear issues follow the target repo's own convention (usually English).",
 
   "diacritics": true,
-  "_diacritics": "Keep full orthographic correctness for the chosen language — accents, tildes, cedillas. Never substitute ASCII lookalikes ('nao' for 'não', 'anos' for 'años'). Default: true.",
+  "_diacritics": "Keep full orthographic correctness for the chosen language — Spanish tildes/accents (migración, años), Portuguese cedillas (não), etc. Never substitute ASCII lookalikes. Default: true.",
 
 
   "explain": {

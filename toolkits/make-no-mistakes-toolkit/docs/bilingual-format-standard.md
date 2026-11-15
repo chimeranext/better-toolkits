@@ -44,6 +44,16 @@ For programmatic detection where emoji parsing is unreliable, a brief is **proba
 
 For a stricter gate, verify all four headers are present in the expected order and that each section has content beyond stub markers (see "Substantive vs stub" below).
 
+### Behavioral Acceptance Criteria (EARS)
+
+Bullets under `### Acceptance Criteria` that express **system behavior** must use EARS form (English `shall` / Spanish `debe`, with When/While/If/Where or ubiquitous subject). Run before tracker write:
+
+```bash
+python3 shared/references/ears/scripts/ears-lint.py --markdown "$BRIEF_FILE"
+```
+
+`shared/hooks/bilingual/detect.py` also lints those candidates on create/edit. Informal AC (tests, docs, process) without `shall`/`debe` / EARS openers are skipped. After EARS, route full-file voice through ASD-STE100 (EN) or ESP-TS (ES) when the producer emits customer-facing requirement prose. See `shared/references/ears/README.md`.
+
 ---
 
 ## Substantive vs. stub

@@ -9,7 +9,7 @@ description: >
   It is a thin dispatcher: it runs the three-way ops taxonomy routing, names the type
   and its canonical home, and hands off to /sop-authoring, /playbook-authoring, or
   /runbook-authoring. NOT an authoring skill itself — it never writes the document.
-  NOT for security-test plans (that is /pentest-playbook-setup).
+  NOT for security-test plans (that is /assurance:pentest-playbook-setup).
 ---
 # Document-This
 
@@ -28,6 +28,11 @@ document-this → decides the type → routes to the matching authoring skill
 
 Questions and working notes are in **English**. The generated document follows the
 engagement's working language (English default, Spanish for Costa Rica engagements).
+
+**Mechanical gate (emitted doc):** English →
+`shared/references/asd-ste100/scripts/asd-ste100-lint.py`; Spanish →
+`shared/references/esp-ts/scripts/esp-ts-lint.py`. Route by the language of the
+file written. Do not cross-run languages.
 
 ## Flujo del skill
 

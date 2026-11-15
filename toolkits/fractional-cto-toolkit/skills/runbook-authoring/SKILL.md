@@ -11,7 +11,7 @@ description: >
   (steady-state company process). A runbook answers HOW to execute after the path is
   chosen. NOT for decision-tree playbooks (that is /playbook-authoring), NOT for
   steady-state processes (that is /sop-authoring), and NOT for security-test plans
-  (that is /pentest-playbook-setup).
+  (that is /assurance:pentest-playbook-setup).
 ---
 
 # Runbook Authoring
@@ -42,6 +42,11 @@ as a runbook or a post-mortem.
 The skill's questions and working notes are in **English**. Generated runbooks follow the
 **engagement's working language** — English by default (public-facing ops docs are
 usually English), Spanish for Costa Rica engagements. Confirm if unclear.
+
+**Mechanical gate (emitted runbook):** English →
+`shared/references/asd-ste100/scripts/asd-ste100-lint.py`; Spanish →
+`shared/references/esp-ts/scripts/esp-ts-lint.py`. Procedure imperatives are
+allowed in runbooks. Do not cross-run languages.
 
 ## Output directory
 

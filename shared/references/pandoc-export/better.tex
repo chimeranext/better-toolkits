@@ -1,0 +1,247 @@
+% better.tex — brand-neutral Pandoc LaTeX template for client-facing docs
+% (SRS, SPMP, checklists). Based on Pandoc 3 default latex structure.
+% Standalone CLI; does not require Obsidian.
+%
+% Usage:
+%   pandoc INPUT.md -o OUT.pdf --pdf-engine=xelatex \
+%     --template=shared/references/pandoc-export/better.tex \
+%     --data-dir=/usr/share/pandoc/data \
+%     -V documentclass=article \
+%     --toc --toc-depth=2
+%
+% Optional metadata (YAML front matter or -V):
+%   title, subtitle, shorttitle, version, status, client, issuer, standard,
+%   identifier, abstract, logo (path to PNG/PDF for header + title page)
+$passoptions.latex()$
+\documentclass[
+$for(babel-otherlangs)$
+  $babel-otherlangs$,
+$endfor$
+$if(babel-lang)$
+  $babel-lang$,
+$endif$
+$if(fontsize)$
+  $fontsize$,
+$else$
+  11pt,
+$endif$
+$if(papersize)$
+  $papersize$paper,
+$else$
+  a4paper,
+$endif$
+$for(classoption)$
+  $classoption$$sep$,
+$endfor$
+]{$documentclass$}
+$if(beamerarticle)$
+\usepackage{beamerarticle}
+$endif$
+\usepackage{xcolor}
+\definecolor{DocInk}{HTML}{222222}
+\definecolor{DocMuted}{HTML}{5A5A5A}
+\definecolor{DocWord}{HTML}{8A8A8A}
+\definecolor{DocAccent}{HTML}{2F5D8C}
+\definecolor{DocSurface}{HTML}{F4F4F4}
+\definecolor{DocRule}{HTML}{2F5D8C}
+\usepackage[margin=2.3cm,top=2.26cm,headheight=32pt,headsep=20pt,bottom=2.1cm]{geometry}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{colortbl}
+\renewcommand{\arraystretch}{1.08}
+\rowcolors{2}{DocSurface}{white}
+\usepackage{amsmath,amssymb}
+$if(cancel)$
+\usepackage{cancel}
+$endif$
+$if(numbersections)$
+\setcounter{secnumdepth}{$if(secnumdepth)$$secnumdepth$$else$5$endif$}
+$else$
+\setcounter{secnumdepth}{-\maxdimen}
+$endif$
+\usepackage{fancyhdr}
+\usepackage{framed}
+\usepackage{titlesec}
+\titleformat{\section}
+  {\Large\bfseries\color{DocInk}}
+  {}
+  {0pt}
+  {}
+  [\vspace{0.28em}{\color{DocRule}\titlerule}]
+\titleformat{\subsection}
+  {\large\bfseries\color{DocInk}}
+  {}
+  {0pt}
+  {}
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{DocInk}}
+  {}
+  {0pt}
+  {}
+\titlespacing*{\section}{0pt}{1.35em}{0.55em}
+\titlespacing*{\subsection}{0pt}{1.05em}{0.35em}
+\titlespacing*{\subsubsection}{0pt}{0.9em}{0.25em}
+$fonts.latex()$
+$font-settings.latex()$
+$common.latex()$
+\newcommand{\DocStatus}[1]{#1}
+\usepackage{microtype}
+\usepackage{ragged2e}
+\renewcommand{\raggedright}{%
+  \justifying
+  \emergencystretch=2em\relax
+}
+$for(header-includes)$
+$header-includes$
+$endfor$
+$after-header-includes.latex()$
+$hypersetup.latex()$
+\hypersetup{
+  colorlinks=true,
+  linkcolor=DocAccent,
+  urlcolor=DocAccent,
+  citecolor=DocAccent
+}
+\urlstyle{same}
+\pagestyle{fancy}
+\fancyhf{}
+$if(logo)$
+\newlength{\headerlogoh}
+\settoheight{\headerlogoh}{\includegraphics[width=2.35cm]{$logo$}}
+\fancyhead[L]{\includegraphics[width=2.35cm]{$logo$}}
+\fancyhead[R]{\raisebox{\dimexpr(\headerlogoh-\height+\depth)/2\relax}{\small\color{DocWord}$if(shorttitle)$$shorttitle$$else$$if(title)$$title$$endif$$endif$}}
+$else$
+\fancyhead[L]{\small\color{DocWord}$if(issuer)$$issuer$$else$Document$endif$}
+\fancyhead[R]{\small\color{DocWord}$if(shorttitle)$$shorttitle$$else$$if(title)$$title$$endif$$endif$}
+$endif$
+\fancyfoot[L]{\small\color{DocWord}$if(client)$$client$$endif$}
+\fancyfoot[R]{\small\color{DocWord}\thepage}
+\renewcommand{\headrulewidth}{1.6pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{DocRule}\leaders\hrule height 1.6pt\hfill}}
+\renewcommand{\footrulewidth}{0pt}
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyfoot[L]{\small\color{DocWord}$if(client)$$client$$endif$}%
+  \fancyfoot[R]{\small\color{DocWord}\thepage}%
+  \renewcommand{\headrulewidth}{0pt}%
+}
+\renewenvironment{quote}{%
+  \par\vspace{0.35em}%
+  \def\FrameCommand{\textcolor{DocAccent}{\vrule width 3pt}\hspace{0.7em}}%
+  \MakeFramed{\advance\hsize-\width\FrameRestore}%
+  \color{DocInk}\ignorespaces
+}{%
+  \endMakeFramed\par\vspace{0.7em}%
+}
+$if(pdf-trailer-id)$
+\ifXeTeX
+\special{pdf:trailerid [ $pdf-trailer-id$ ]}
+\fi
+\ifPDFTeX
+\pdftrailerid{}
+\pdftrailer{/ID [ $pdf-trailer-id$ ]}
+\fi
+\ifLuaTeX
+\pdfvariable trailerid {[ $pdf-trailer-id$ ]}
+\fi
+$endif$
+
+\begin{document}
+\color{DocInk}
+$if(has-frontmatter)$
+\frontmatter
+$endif$
+$if(title)$
+\begin{titlepage}
+\thispagestyle{empty}
+\RaggedRight
+$if(logo)$
+\noindent\includegraphics[width=9.4cm]{$logo$}\par
+$endif$
+\vfill
+$if(identifier)$
+{\small\color{DocMuted}$identifier$}\par
+\vspace{0.75em}
+$endif$
+{\fontsize{28}{34}\selectfont\bfseries\color{DocInk}$title$\par}
+$if(subtitle)$
+\vspace{0.35em}
+{\Large\color{DocInk}$subtitle$\par}
+$endif$
+\vspace{0.95em}
+\noindent{\color{DocRule}\rule{\linewidth}{3pt}}\par
+\vspace{1.35em}
+{\large
+\rowcolors{2}{white}{white}%
+\begin{tabular}{@{}l@{\hspace{1.6em}}l@{}}
+$if(version)$\textcolor{DocMuted}{Version} & $version$ \\[0.45em]$endif$
+$if(status)$\textcolor{DocMuted}{Status} & \DocStatus{$status$} \\[0.45em]$endif$
+$if(client)$\textcolor{DocMuted}{Client} & $client$ \\[0.45em]$endif$
+$if(issuer)$\textcolor{DocMuted}{Issuer} & $issuer$ \\[0.45em]$endif$
+$if(standard)$\textcolor{DocMuted}{Standard} & $standard$ \\$endif$
+\end{tabular}\par
+\rowcolors{2}{DocSurface}{white}}
+$if(abstract)$
+\vspace{1.1em}
+\begin{quote}
+$abstract$
+\end{quote}
+$endif$
+\vspace{1.15em}
+\noindent{\color{DocRule}\rule{\linewidth}{4pt}}
+\end{titlepage}
+$endif$
+$for(include-before)$
+$include-before$
+
+$endfor$
+$if(toc)$
+$if(toc-title)$
+\renewcommand*\contentsname{$toc-title$}
+$endif$
+{
+\setcounter{tocdepth}{$toc-depth$}
+\tableofcontents
+}
+$endif$
+$if(lof)$
+\listoffigures
+$endif$
+$if(lot)$
+\listoftables
+$endif$
+$if(linestretch)$
+\setstretch{$linestretch$}
+$endif$
+$if(has-frontmatter)$
+\mainmatter
+$endif$
+$body$
+$if(has-frontmatter)$
+\backmatter
+$endif$
+$if(nocite-ids)$
+\nocite{$for(nocite-ids)$$it$$sep$, $endfor$}
+$endif$
+$if(natbib)$
+$if(bibliography)$
+$if(biblio-title)$
+$if(has-chapters)$
+\renewcommand\bibname{$biblio-title$}
+$else$
+\renewcommand\refname{$biblio-title$}
+$endif$
+$endif$
+\bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
+
+$endif$
+$endif$
+$if(biblatex)$
+\printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
+
+$endif$
+$for(include-after)$
+$include-after$
+
+$endfor$
+\end{document}

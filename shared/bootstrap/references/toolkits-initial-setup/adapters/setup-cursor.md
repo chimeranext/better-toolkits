@@ -136,6 +136,10 @@ Slash commands SSOT: `shared/bootstrap/commands/` — e.g. `/toolkits-initial-se
 `/prune-better-toolkits-cache`, `/refresh-better-toolkits-cache` (update-only; never purges),
 `/local-pr-review` (default **Heimdall / Kimi / NVIDIA NIM**; skill SSOT `shared/skills/local-pr-review/`).
 
+Controlled-language gates for product toolkits live in shared (not inside bootstrap
+itself): English `shared/references/asd-ste100/`, Spanish `shared/references/esp-ts/`.
+`/make-no-mistakes:explain` §4.5 routes by output language.
+
 ## Verify
 
 ```bash

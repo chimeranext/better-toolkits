@@ -79,6 +79,14 @@ Produce explicit **diffs** and command lists:
   `hooks.json` matcher `mcp__.*linear.*__save_issue`), Cursor `adapters/cursor-before-shell.sh`,
   OpenCode plugin `adapters/opencode-bilingual.ts`, and CLI fallback `tooluse/enforce-bilingual.sh`.
   (MANDATORY: not opt-in. It does not read `.claude/config/hygiene-hooks.json`.)
+- **Pandoc export cache** — seed the brand-neutral PDF pack into
+  `~/.config/better-toolkits/pandoc-export/` via
+  `shared/references/pandoc-export/seed-cache.sh` (HITL OK required for writes
+  outside the workspace). Skills that emit client PDFs resolve **vault
+  `_templates/export/*.tex` first** (engagement brand), then this cache, then
+  shared SSOT (`resolve-template.sh`). When scaffolding a new business-brain
+  without an export pack, pass `--vault <path>` so `better.tex` is seeded under
+  `_templates/export/` without overwriting an existing brand template.
 - **Code-smells detector** — add the `code-smells` pre-commit hook (`scripts/lint/detect_code_smells.py`,
   `pass_filenames: true`) to the consumer repo's `.pre-commit-config.yaml`.
 - **Auto-update plugin (default ON)** — install the OpenCode discovery-dir plugin

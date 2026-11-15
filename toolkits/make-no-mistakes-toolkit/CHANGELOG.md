@@ -18,7 +18,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Pandoc export (neutral):** `shared/references/pandoc-export/better.tex` + `block-id.lua` + `resolve-template.sh` / `seed-cache.sh` — vault brand `_templates/export/*.tex` first; `better.tex` + `~/.config/better-toolkits/pandoc-export/` as fallback/seed.
+- **BDD lint:** `shared/references/bdd/scripts/bdd-lint.py` for Given/When/Then (Dado/Cuando/Entonces).
+- **29148 output path:** default `projects/<slug>/requirements/`; fallback under `Documentos/*`; documents only (no tracker issues).
+- **EARS (shared):** `shared/references/ears/` — `ears-lint.py` + patterns for
+  requirement statements and behavioral issue AC (`shall` / `debe`). Pipeline
+  order: **EARS →** ASD-STE100 (EN) / ESP-TS (ES). Wired into IEEE 29148
+  protocol, BIB doctrine, `bilingual/detect.py` (AC candidates), 
+  `spike-recommend` / `spec-recommend` before Linear/`gh issue` write-back.
+  Practice note: https://kiro.dev/docs/specs/best-practices/
+
 ### Changed
+- **CvC + PRDS:** English commit/PR prose passes ASD-STE100 via
+  `shared/references/asd-ste100/scripts/prose_gate.py` (pre-commit
+  `asd-ste100-commit-prose`; PRDS `detect.py` after section checks).
+- **`/explain` §4.5 + `/merge-advisor`:** prose language follows the **prompt**
+  first (then config `language`, then English). Config example default is `en`
+  (no longer hard-defaults interactive output to `es`). Language-routed gate —
+  English → `asd-ste100-lint.py`; Spanish → `esp-ts-lint.py`. Dogfood +
+  verify-evidence share the same routing.
 - **Local PR review:** bootstrap `/local-pr-review` + skill symlink; Gemini only via
   Heimdall `--provider gemini` / `gemini-direct` (protocol SSOT). Removed
   `/make-no-mistakes:gemini-code-review` command and `gemini-code-review.sh`.

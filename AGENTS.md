@@ -27,7 +27,9 @@ mutations), [`docs/multi-harness-ssot.md`](docs/multi-harness-ssot.md).
 | Runtime | Path | Harnesses |
 | --- | --- | --- |
 | Stderr baseline | [`shared/hooks/stderr/`](shared/hooks/stderr/) | Claude / Cursor / OpenCode |
-| PRDS body gate | [`shared/hooks/prds/`](shared/hooks/prds/) | Claude / Cursor / OpenCode |
+| PRDS body gate (+ ASD-STE100 prose) | [`shared/hooks/prds/`](shared/hooks/prds/) | Claude / Cursor / OpenCode |
+| BIB issue body (+ EARS on behavioral AC) | [`shared/hooks/bilingual/`](shared/hooks/bilingual/) + [`ears-lint.py`](shared/references/ears/scripts/ears-lint.py) | Claude / Cursor / OpenCode |
+| CvC ASD-STE100 commit prose | [`prose_gate.py`](shared/references/asd-ste100/scripts/prose_gate.py) + pre-commit `asd-ste100-commit-prose` | local `commit-msg` |
 | No deprecated shims | [`scripts/lint/check_no_stale_deprecated_shims.py`](scripts/lint/check_no_stale_deprecated_shims.py) | CI, pre-commit, pre-push, Cursor `beforeShellExecution` on `git commit` |
 
 Renames of slash commands or bootstrap scripts are **clean-cut** — update references and delete the old path. Do not add “MOVED (shim)” commands or `exec` wrapper scripts. Policy: [`shared/references/engineering-standards/no-deprecated-agent-shims.md`](shared/references/engineering-standards/no-deprecated-agent-shims.md).

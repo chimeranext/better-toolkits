@@ -62,9 +62,11 @@ As a **{role}**, I want **{X}** so that **{Y}**.
 
 {Checkboxes. Each must be independently testable. Derive from the issue description, comments, and your understanding of the requirement.}
 
-- [ ] {criterion}
-- [ ] {criterion}
-- [ ] {criterion}
+{Behavioral criteria (system obligations) use EARS: English `When/While/If/Where …, the <system> shall …` or ubiquitous `The <system> shall …`; Spanish `Cuando/Mientras/Si/Donde …, el <sistema> debe …` or `El <sistema> debe …`. Informal checks (tests pass, docs updated) stay plain. Gate: `shared/references/ears/scripts/ears-lint.py --markdown` before write-back.}
+
+- [ ] {EARS or informal criterion}
+- [ ] {EARS or informal criterion}
+- [ ] {EARS or informal criterion}
 
 ### Technical Constraints
 

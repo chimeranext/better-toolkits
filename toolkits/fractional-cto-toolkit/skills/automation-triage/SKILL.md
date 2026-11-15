@@ -30,6 +30,10 @@ The skill's questions and working notes are in **English**. Generated deliverabl
 per-step *rationale* must be legible to a non-technical executive: cost, error rate, brittleness,
 maintenance — not RPA jargon.
 
+**Mechanical gate (emitted deliverables):** English →
+`shared/references/asd-ste100/scripts/asd-ste100-lint.py`; Spanish →
+`shared/references/esp-ts/scripts/esp-ts-lint.py`. Do not cross-run languages.
+
 ## Output directory
 
 Resolve the pipeline directory `{sops-dir}` first, in this order:

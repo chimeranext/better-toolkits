@@ -152,4 +152,4 @@ Always summarize in the response and suggest next step (e.g. open tracker issues
 - `/domain-driven-advisor` (make-no-mistakes-toolkit) — derive here for deep
   structural/code-health findings (routes to audit-engine: SCH/CDC/DDD/ARC/STR/ENF)
 - `/make-no-mistakes:audit-enforcement-hooks` — optional hard gates after docs land
-- `/requirements-authoring` — QT4L closes the loop from PRD → OpenSpec
+- `/requirements-authoring-ieee29148` — QT4L closes the loop from PRD → OpenSpec
