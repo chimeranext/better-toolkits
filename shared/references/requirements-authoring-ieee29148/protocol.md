@@ -263,7 +263,7 @@ treatments):
 
 When the SPMP does not affirm the contrary, the annex is first-additive. Silence, a missing number, or “the plan does not fix this” is not a discrepancy. Append that annex case as the next `{PREFIX}-nnn`.
 
-A discrepancy is only a **conflict**: the SPMP affirms one thing and the annex affirms the contrary. Compare the annex sentence with what the SPMP affirms. Do not compare it with the absence of a sentence.
+A discrepancy is only a **conflict** when the SPMP affirms one thing and the annex affirms the contrary. Compare the annex sentence with what the SPMP affirms. Do not compare it with the absence of a sentence.
 
 Do not copy each annex requirement into §3 as its own ID when that case is already included.
 
@@ -273,7 +273,7 @@ Take each requirement already extracted from the SPMP. Compare it with each anne
 2. Read the particular case in the annex sentence.
 3. If that case is already included in the requirement, do not add an ID.
 4. If that case is not included, and the SPMP does not affirm the contrary, the requirement is **incomplete** for that case, or the case is a new additive row. Append one next `{PREFIX}-nnn`.
-5. If the SPMP affirms the contrary, the case is a **conflict**. Do not append it. Stop under the conflict rule below.
+5. When the SPMP affirms the contrary, the case is a **conflict**. Do not append it. Stop under the conflict rule below.
 6. Name the result with the Glossary. Documented is priority 1: the case is written as a requirement because it was extracted first from the SPMP. Analyzed: the requirement was compared with the annex case. Covered: that case is already included; do not add an ID. Incomplete: that case is not included; append one next `{PREFIX}-nnn`.
 7. Secondary **should** and **could** do not become **shall** until the human accepts that priority for this baseline. **Won't** does not enter §3.
 
@@ -406,7 +406,7 @@ the evidence. Paths of the files. Next action (step 5).
 
 - [ ] SPMP, engagement risk management plan (16085), and required risk **treatment** plans loaded and cited (§1.4 + revision history)
 - [ ] Clean SPMP-series Markdown exists at `projects/<slug>/requirements/` before any secondary append; dirty secondary-ID drafts deleted
-- [ ] Annex cases the SPMP does not contradict were appended. Only conflicts (the SPMP affirms one thing and the annex affirms the contrary) were enumerated one-by-one; human answered (a)/(b)/(c) per conflict before that conflict enters §3
+- [ ] Annex cases the SPMP does not contradict were appended. Only conflicts, when the SPMP affirms one thing and the annex affirms the contrary, were enumerated one-by-one; human answered (a)/(b)/(c) per conflict before that conflict enters §3
 - [ ] Baseline IDs and order come from the SPMP-derived series; secondary prefixes never governing; tables sorted by SPMP-derived ID within prefix (`srs-id-order-lint.py` PASS)
 - [ ] Each §3 requirement table has columns ID, requirement, class, justification, acceptance. Class is Functional or Non-functional. The justification applies that test to the row. The requirement statement stays the first cell after the ID.
 - [ ] Each generated file opens with a Glossary table. Documented is priority 1 and the first row (the case is written as a requirement because it was extracted first from the SPMP). Then covered, analyzed, incomplete, waived, deferred, functional, and non-functional (Spanish file: documentado, cubierto, analizado, incompleto, excluido, diferido, funcional, no funcional). Covered = the annex case is already included in the SPMP requirement; analyzed = that comparison was made; incomplete = the case is not included and is the next ID; waived = outside this baseline, return by change order, recorded as `DW-`; deferred = still in the product problem, fact or number still open, recorded as `DW-`
