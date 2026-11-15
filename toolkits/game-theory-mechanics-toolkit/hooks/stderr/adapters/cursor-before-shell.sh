@@ -8,7 +8,7 @@ if [ -f "$RESTRICTIONS_FILE" ]; then
   python3 -c '
 import json, sys
 try:
-  r=json.load(open("'$RESTRICTIONS_FILE'"))
+  r=json.load(open("'"${RESTRICTIONS_FILE}"'"))
   states=r.get("verified_states",{})
   pending=any(v=="PENDING" for v in states.values())
   blocked=any(v=="BLOCKED" for v in states.values())

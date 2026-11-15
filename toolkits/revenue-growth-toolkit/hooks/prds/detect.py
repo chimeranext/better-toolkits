@@ -115,6 +115,7 @@ def ste_prose_deny(body: str) -> str | None:
         return None
     return gate.check_markdown(body, context="PRDS body")
 
+
 # Triggers
 GIT_PUSH = re.compile(r"(^|[\s;|&])git\s+push\b", re.I)
 GH_PR_WRITE = re.compile(r"(^|[\s;|&])gh\s+pr\s+(create|edit)\b", re.I)
@@ -147,7 +148,7 @@ def section_body(markdown: str, heading_re: re.Pattern[str]) -> str | None:
     m = heading_re.search(markdown)
     if not m:
         return None
-    rest = markdown[m.end() :]
+    rest = markdown[m.end():]
     next_h = re.search(r"(?m)^\s*##\s+", rest)
     if next_h:
         rest = rest[: next_h.start()]

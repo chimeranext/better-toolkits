@@ -35,11 +35,15 @@ AC_HEADING = re.compile(r"(?im)^[ \t]*###[ \t]*Acceptance[ \t]+Criteria\b")
 NEXT_HEADING = re.compile(r"(?m)^[ \t]*#{1,3}[ \t]+")
 BULLET = re.compile(r"^[ \t]*(?:[-*+]|\d+[.)])[ \t]+(?:\[[ xX]\][ \t]+)?(.+)$")
 FR_LINE = re.compile(
-    r"(?im)^[ \t]*(?:\*\*)?(?:FR|NFR|REQ|EI|QS|CLI|SRV|TUR|SUC|DIS|RES|EJE|EXC|CMP|CAN|NOT|INT|REP)[-_]?\d+(?:\*\*)?[ \t]*[:.—\-]*[ \t]*(.+)$"
+    r"(?im)^[ \t]*(?:\*\*)?"
+    r"(?:FR|NFR|REQ|EI|QS|CLI|SRV|TUR|SUC|DIS|RES|EJE|EXC|CMP|CAN|NOT|INT|REP)"
+    r"[-_]?\d+(?:\*\*)?[ \t]*[:.—\-]*[ \t]*(.+)$"
 )
 # Markdown table row: | ID | requirement text | optional acceptance |
 TABLE_REQ = re.compile(
-    r"(?im)^[ \t]*\|[ \t]*((?:FR|NFR|REQ|EI|QS|CLI|SRV|TUR|SUC|DIS|RES|EJE|EXC|CMP|CAN|NOT|INT|REP)[-_]?\d+)[ \t]*\|[ \t]*(.+?)[ \t]*\|"
+    r"(?im)^[ \t]*\|[ \t]*"
+    r"((?:FR|NFR|REQ|EI|QS|CLI|SRV|TUR|SUC|DIS|RES|EJE|EXC|CMP|CAN|NOT|INT|REP)"
+    r"[-_]?\d+)[ \t]*\|[ \t]*(.+?)[ \t]*\|"
 )
 EARS_OPENER = re.compile(
     r"(?i)^(when|while|where|if|the|cuando|mientras|donde|si|el|la|los|las|antes|sin|cada|un|una)\b"
@@ -264,7 +268,7 @@ def extract_from_markdown(md: str) -> list[str]:
 
     ac = AC_HEADING.search(md)
     if ac:
-        rest = md[ac.end() :]
+        rest = md[ac.end():]
         stop = NEXT_HEADING.search(rest)
         block = rest[: stop.start()] if stop else rest
         for line in block.splitlines():

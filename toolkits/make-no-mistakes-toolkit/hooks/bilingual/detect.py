@@ -34,6 +34,7 @@ import importlib.util
 import re
 import sys
 from pathlib import Path
+from typing import Any, Callable, cast
 
 BYPAASS = re.compile(r"#\s*hook-bypass:\s*bilingual-body-deferred\b", re.I)
 
@@ -159,10 +160,13 @@ def ears_ac_check(body: str) -> list[str]:
     validate = getattr(ears, "validate_requirement", None)
     if not callable(extract) or not callable(validate):
         return []
-    candidates = extract(body)
+    # callable() is the runtime guard. Pylint does not narrow getattr results.
+    extract_fn = cast(Callable[[str], list[Any]], extract)
+    validate_fn = cast(Callable[[Any], dict[str, Any]], validate)
+    candidates = extract_fn(body)  # pylint: disable=not-callable
     findings: list[str] = []
     for cand in candidates:
-        result = validate(cand)
+        result = validate_fn(cand)  # pylint: disable=not-callable
         if result.get("valid"):
             continue
         issues = "; ".join(result.get("issues") or ["invalid EARS form"])

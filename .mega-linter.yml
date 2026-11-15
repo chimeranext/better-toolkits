@@ -35,6 +35,13 @@ DISABLE_ERRORS_LINTERS:
   - PYTHON_RUFF
   - YAML_YAMLLINT
 
+# Vendored hooks reuse detect.py in many directories. Without this, mypy
+# treats every detect.py as one module and stops on the first collision.
+# Toolkit directories contain hyphens, so those copies still collapse to one
+# module name. They are generated from shared/hooks; typecheck the source.
+PYTHON_MYPY_ARGUMENTS: "--explicit-package-bases --namespace-packages"
+PYTHON_MYPY_FILTER_REGEX_EXCLUDE: "toolkits/.*/hooks/"
+
 # Excluir artefactos/terceros/vendedores + el catálogo de skills generado
 # (apps/web/public/opencode/ es output del generador, no código fuente del monorepo).
 FILTER_REGEX_EXCLUDE: '(node_modules|vendor|dist|build|\.venv|__pycache__|\.git|.*\.pdf$|\.lock$|package-lock\.json|pnpm-lock\.yaml|\.mega-linter\.yml|apps/web/public/opencode/)'

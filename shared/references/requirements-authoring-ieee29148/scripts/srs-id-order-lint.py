@@ -78,7 +78,7 @@ def extract_tables(md: str) -> list[TableResult]:
     start_line = 0
 
     def flush() -> None:
-        nonlocal buf_lines, start_line
+        nonlocal buf_lines
         if not buf_lines:
             return
         hits: list[IdHit] = []

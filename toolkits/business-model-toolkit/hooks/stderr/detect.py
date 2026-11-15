@@ -175,6 +175,7 @@ def main(argv: list[str] | None = None) -> int:
         cmd = sys.stdin.read()
     else:
         p.error("provide --command or --stdin-command")
+        return 2
 
     reason = deny_reason(cmd)
     if reason:

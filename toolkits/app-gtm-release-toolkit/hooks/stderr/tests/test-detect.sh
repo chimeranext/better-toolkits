@@ -37,7 +37,7 @@ expect_deny 'command -v jq 2>&1 >/dev/null'
 expect_deny 'cmd 2> /tmp/err.log'
 expect_deny 'cmd > /tmp/out.log 2> /tmp/err.log'
 expect_allow 'cmd 2>&1 | tee /tmp/run.log'
-expect_allow 'out=$(command -v jq)'
+expect_allow "out=\$(command -v jq)"
 expect_allow 'cmd > /tmp/out.log 2>&1'
 expect_allow "echo 'use 2>/dev/null in docs'"
 expect_allow 'ls'
