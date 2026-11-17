@@ -105,6 +105,8 @@ ones that shape this profile, each with its full path:
 - **CLG** (Commit Logic Groups) — commit intermediate work in semantic groups.
   `shared/references/engineering-standards/commit-logic-groups.md`
 - **CvC** (Conventional Commits) — commit message format `type(scope): description`.
+  Subject/body prose is English and MUST pass ASD-STE100
+  (`shared/references/asd-ste100/scripts/prose_gate.py commit-msg`).
   `shared/references/engineering-standards/conventional-commits.md`
 - **PCH** (Pre-Commit Hooks) — vendored canonical pre-commit config + shared Mermaid validator.
   `shared/references/engineering-standards/pre-commit-hooks.md`
@@ -113,7 +115,12 @@ ones that shape this profile, each with its full path:
 - **CLH** (Copyright/License Header) — headers per repo LICENSE.md; not a global rule.
   `shared/references/engineering-standards/copyright-license-header.md`
 - **PRDS** (Pull Request Description Standards) — PR body + reviewable size.
+  Body prose is English and MUST pass ASD-STE100 (`prose_gate.py markdown`);
+  runtime gate in `shared/hooks/prds/detect.py`.
   `shared/references/engineering-standards/prds.md`
+- **ASD-STE100** — English controlled-language gate (paired with ESP-TS for Spanish
+  user-facing docs). Commits and PR bodies stay on STE, not ESP-TS.
+  `shared/references/asd-ste100/README.md`
 - **BrS** (Branching Strategy) — branches, naming, protection.
   `shared/references/engineering-standards/branching-strategy.md`
 - **DSMS / IFS / CPS** (Domain-Sliced Module Structure / Intra-File Structure / Categorized Public Surface).

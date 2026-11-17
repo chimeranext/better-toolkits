@@ -6,7 +6,7 @@ readable by humans AND executable by AI agents.
 
 **Provenance:** Field-hardened after issue #177 was opened without the bilingual
 layer (better-toolkits, 2026-11-01). The rule previously lived only in
-requirements-authoring (Linear-scoped) and in prose inside
+requirements-authoring-ieee29148 (Linear-scoped) and in prose inside
 `references/implement/redaction-guard.md` — neither was deterministic nor
 tracker-agnostic.
 

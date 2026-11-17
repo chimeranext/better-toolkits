@@ -1,4 +1,4 @@
-# Engineering standards — index (35 practices) — SSOT
+# Engineering standards — index (36 practices) — SSOT
 
 > SSOT at monorepo level: `shared/references/engineering-standards/index.md`.
 > Are you an agent? Reference these standards by monorepo-relative path
@@ -43,6 +43,7 @@
 | **33. BIB** | Bilingual Issue Brief | Every issue (GitHub o Linear) redactado en formato Bilingual ANTES de abrirlo — Human Layer + Agent Layer (HUMAN LAYER / AGENT LAYER / Acceptance Criteria / Context Files). Gate determinístico `shared/hooks/bilingual/detect.py`. | [bilingual-issue-brief.md](bilingual-issue-brief.md) |
 | **34. TAS** | Test Assertion Standards | Aserciones de contrato e invariantes, no snapshots: nunca conteos literales de registros que crecen; derivar del source of truth (p.ej. `NPM_PACKAGES.length`). | [test-assertion-standards.md](test-assertion-standards.md) |
 | **35. DPC** | Dependency Caching | Universal pattern (lockfile + frozen install + cached store). Canonical manager per language (pnpm for Node/JS). CI caches store by lockfile hash; local uses per-user store. | [dependency-caching.md](dependency-caching.md) |
+| **36. CFM** | Customer-Facing Management Docs | SPMP / 16085 risk plans and similar signed management docs: descriptive executive voice for the customer representative — not STE procedure imperatives for agents. Complements ODT. | [customer-facing-management-docs.md](customer-facing-management-docs.md) |
 
 The **clean code quartet** is DSMS + IFS + CPS + PRDS. BrS + WTD govern branching
 and worktree hygiene. QT4L and **OST** (when the client uses an OpenSpec store)
